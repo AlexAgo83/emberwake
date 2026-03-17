@@ -36,6 +36,8 @@ describe("App", () => {
 
     expect(within(shellMenu).getByRole("button", { name: /Inspecteur/i })).toBeInTheDocument();
     expect(within(shellMenu).getByRole("button", { name: /Diagnostics/i })).toBeInTheDocument();
+    expect(within(shellMenu).getByRole("button", { name: "Free" })).toBeInTheDocument();
+    expect(within(shellMenu).getByRole("button", { name: "Follow entity" })).toBeInTheDocument();
 
     fireEvent.click(within(shellMenu).getByRole("button", { name: /Inspecteur/i }));
 

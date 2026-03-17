@@ -1,9 +1,11 @@
 import { createDefaultCameraState } from "../../game/camera/model/cameraMath";
+import type { CameraMode } from "../../game/camera/model/cameraMode";
 import type { CameraState } from "../../game/camera/model/cameraMath";
 import { officialDebugScenario } from "../../game/debug/data/officialDebugScenario";
 
 export type RuntimeSessionState = {
   cameraState: CameraState;
+  cameraMode: CameraMode;
   worldSeed: string;
 };
 
@@ -30,6 +32,7 @@ export const runtimeSessionContract = {
 
 export const createDefaultRuntimeSessionState = (): RuntimeSessionState => ({
   cameraState: officialDebugScenario.cameraState ?? createDefaultCameraState(),
+  cameraMode: "free",
   worldSeed: officialDebugScenario.worldSeed
 });
 

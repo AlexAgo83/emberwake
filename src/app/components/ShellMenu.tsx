@@ -1,6 +1,9 @@
 import { useEffect, useId, useRef, useState } from "react";
 
+import type { CameraMode } from "../../game/camera/model/cameraMode";
+
 type ShellMenuProps = {
+  cameraMode: CameraMode;
   canInstall: boolean;
   diagnosticsEnabled: boolean;
   diagnosticsVisible: boolean;
@@ -10,11 +13,13 @@ type ShellMenuProps = {
   onEnterFullscreen: () => void;
   onInstall: () => void;
   onResetCamera: () => void;
+  onSetCameraMode: (cameraMode: CameraMode) => void;
   onToggleDiagnostics: () => void;
   onToggleInspecteur: () => void;
 };
 
 export function ShellMenu({
+  cameraMode,
   canInstall,
   diagnosticsEnabled,
   diagnosticsVisible,
@@ -24,6 +29,7 @@ export function ShellMenu({
   onEnterFullscreen,
   onInstall,
   onResetCamera,
+  onSetCameraMode,
   onToggleDiagnostics,
   onToggleInspecteur
 }: ShellMenuProps) {
@@ -129,6 +135,37 @@ export function ShellMenu({
             <span className="shell-menu__item-label">Reset camera</span>
             <span className="shell-menu__item-value">Recenter view</span>
           </button>
+
+          <div className="shell-menu__group" role="group" aria-label="Camera mode">
+            <div className="shell-menu__item shell-menu__item--static">
+              <span className="shell-menu__item-label">Camera mode</span>
+              <span className="shell-menu__item-value">
+                {cameraMode === "free" ? "Free" : "Follow entity"}
+              </span>
+            </div>
+            <div className="shell-menu__choice-grid">
+              <button
+                aria-pressed={cameraMode === "free"}
+                className="shell-menu__choice"
+                onClick={() => {
+                  onSetCameraMode("free");
+                }}
+                type="button"
+              >
+                Free
+              </button>
+              <button
+                aria-pressed={cameraMode === "follow-entity"}
+                className="shell-menu__choice"
+                onClick={() => {
+                  onSetCameraMode("follow-entity");
+                }}
+                type="button"
+              >
+                Follow entity
+              </button>
+            </div>
+          </div>
 
           <button
             className="shell-menu__item shell-menu__item--action"

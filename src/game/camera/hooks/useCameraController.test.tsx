@@ -28,6 +28,39 @@ const dispatchTouchEvent = (element: HTMLElement, type: string, points: TouchPoi
 };
 
 describe("useCameraController", () => {
+  it("locks world position to the followed entity in follow mode", () => {
+    const surfaceElement = document.createElement("div");
+    const surfaceRef = {
+      current: surfaceElement
+    };
+    const { result, rerender } = renderHook(
+      ({ followedWorldPosition }) =>
+        useCameraController({
+          cameraMode: "follow-entity",
+          debugCameraEnabled: false,
+          followedWorldPosition,
+          initialCameraState: createDefaultCameraState(),
+          surfaceRef,
+          viewport: {
+            fitScale: 1
+          }
+        }),
+      {
+        initialProps: {
+          followedWorldPosition: { x: 128, y: -96 }
+        }
+      }
+    );
+
+    expect(result.current.cameraState.worldPosition).toEqual({ x: 128, y: -96 });
+
+    rerender({
+      followedWorldPosition: { x: 256, y: 64 }
+    });
+
+    expect(result.current.cameraState.worldPosition).toEqual({ x: 256, y: 64 });
+  });
+
   it("ignores touch camera gestures outside debug mode", () => {
     const surfaceElement = document.createElement("div");
     const surfaceRef = {
@@ -36,7 +69,9 @@ describe("useCameraController", () => {
     const initialCameraState = createDefaultCameraState();
     const { result } = renderHook(() =>
       useCameraController({
+        cameraMode: "free",
         debugCameraEnabled: false,
+        followedWorldPosition: { x: 0, y: 0 },
         initialCameraState,
         surfaceRef,
         viewport: {
@@ -68,7 +103,9 @@ describe("useCameraController", () => {
     const initialCameraState = createDefaultCameraState();
     const { result } = renderHook(() =>
       useCameraController({
+        cameraMode: "free",
         debugCameraEnabled: true,
+        followedWorldPosition: { x: 0, y: 0 },
         initialCameraState,
         surfaceRef,
         viewport: {

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { RefObject } from "react";
 
 import { cameraContract } from "../constants/cameraContract";
+import type { CameraMode } from "../model/cameraMode";
 import {
   createDefaultCameraState,
   panCamera,
@@ -9,13 +10,16 @@ import {
   zoomCamera
 } from "../model/cameraMath";
 import type { CameraState } from "../model/cameraMath";
+import type { WorldPoint } from "../../world/types";
 
 type ViewportForCamera = {
   fitScale: number;
 };
 
 type UseCameraControllerOptions = {
+  cameraMode: CameraMode;
   debugCameraEnabled: boolean;
+  followedWorldPosition: WorldPoint;
   initialCameraState?: CameraState;
   onCameraStateChange?: (cameraState: CameraState) => void;
   surfaceRef: RefObject<HTMLElement | null>;
@@ -42,7 +46,9 @@ const getTouchAngle = (touches: TouchList) =>
   Math.atan2(touches[1].clientY - touches[0].clientY, touches[1].clientX - touches[0].clientX);
 
 export function useCameraController({
+  cameraMode,
   debugCameraEnabled,
+  followedWorldPosition,
   initialCameraState,
   onCameraStateChange,
   surfaceRef,
@@ -55,6 +61,26 @@ export function useCameraController({
   useEffect(() => {
     onCameraStateChange?.(cameraState);
   }, [cameraState, onCameraStateChange]);
+
+  useEffect(() => {
+    if (cameraMode !== "follow-entity") {
+      return;
+    }
+
+    setCameraState((currentState) => {
+      if (
+        currentState.worldPosition.x === followedWorldPosition.x &&
+        currentState.worldPosition.y === followedWorldPosition.y
+      ) {
+        return currentState;
+      }
+
+      return {
+        ...currentState,
+        worldPosition: { ...followedWorldPosition }
+      };
+    });
+  }, [cameraMode, followedWorldPosition]);
 
   useEffect(() => {
     const surfaceElement = surfaceRef.current;
@@ -70,7 +96,12 @@ export function useCameraController({
     const currentScale = () => viewport.fitScale * cameraState.zoom;
 
     const handlePointerDown = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse" || event.button !== 0 || !event.shiftKey) {
+      if (
+        cameraMode !== "free" ||
+        event.pointerType !== "mouse" ||
+        event.button !== 0 ||
+        !event.shiftKey
+      ) {
         return;
       }
 
@@ -142,6 +173,11 @@ export function useCameraController({
         return;
       }
 
+      if (cameraMode !== "free") {
+        touchGesture = null;
+        return;
+      }
+
       if (event.touches.length === 2) {
         const center = getTouchCenter(event.touches);
         touchGesture = {
@@ -156,6 +192,11 @@ export function useCameraController({
 
     const handleTouchMove = (event: TouchEvent) => {
       if (!debugCameraEnabled) {
+        touchGesture = null;
+        return;
+      }
+
+      if (cameraMode !== "free") {
         touchGesture = null;
         return;
       }
@@ -225,7 +266,7 @@ export function useCameraController({
       surfaceElement.removeEventListener("touchcancel", handleTouchEnd);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [cameraState.zoom, debugCameraEnabled, surfaceRef, viewport.fitScale]);
+  }, [cameraMode, cameraState.zoom, debugCameraEnabled, surfaceRef, viewport.fitScale]);
 
   return {
     cameraState,

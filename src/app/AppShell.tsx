@@ -41,9 +41,12 @@ export function AppShell() {
   const { enterFullscreen, isFullscreen, isSupported, lastError } =
     useFullscreenController(shellRef);
   const viewport = useLogicalViewportModel(shellRef);
-  const { cycleWorldSeed, runtimeSession, setCameraState } = useRuntimeSession();
+  const { cycleWorldSeed, runtimeSession, setCameraMode, setCameraState } = useRuntimeSession();
+  const simulationState = useEntitySimulation({ controlState });
   const { cameraState, resetCamera } = useCameraController({
+    cameraMode: runtimeSession.cameraMode,
     debugCameraEnabled: controlState.debugCameraModifierActive,
+    followedWorldPosition: simulationState.entity.worldPosition,
     initialCameraState: runtimeSession.cameraState,
     onCameraStateChange: setCameraState,
     surfaceRef: runtimeSurfaceRef,
@@ -55,7 +58,6 @@ export function AppShell() {
     surfaceRef: runtimeSurfaceRef,
     viewport
   });
-  const simulationState = useEntitySimulation({ controlState });
   const entityWorld = useEntityWorld({
     primaryEntity: simulationState.entity,
     selectedWorldPoint: worldDiagnostics.selectedWorldPoint,
@@ -108,6 +110,7 @@ export function AppShell() {
 
       <section className="app-shell__overlay" aria-label="Shell status overlay">
         <ShellMenu
+          cameraMode={runtimeSession.cameraMode}
           canInstall={canInstall}
           diagnosticsEnabled={appConfig.diagnosticsEnabled}
           diagnosticsVisible={diagnosticsVisible}
@@ -121,6 +124,7 @@ export function AppShell() {
             void promptInstall();
           }}
           onResetCamera={resetCamera}
+          onSetCameraMode={setCameraMode}
           onToggleDiagnostics={() => {
             setDebugPanelVisible(!preferences.debugPanelVisible);
           }}

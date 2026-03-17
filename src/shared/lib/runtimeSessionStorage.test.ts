@@ -14,6 +14,7 @@ describe("runtimeSessionStorage", () => {
 
   it("round-trips runtime session state through local storage", () => {
     const runtimeSession = {
+      cameraMode: "free" as const,
       cameraState: {
         rotation: 0.5,
         worldPosition: { x: 128, y: -256 },

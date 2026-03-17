@@ -106,6 +106,10 @@
   margin-top: 0.2rem;
 }
 
+.shell-menu__group + .shell-menu__item {
+  margin-top: 0.2rem;
+}
+
 .shell-menu__item-label,
 .shell-menu__item-value {
   display: block;
@@ -148,6 +152,51 @@
   cursor: default;
   opacity: 0.55;
   transform: none;
+}
+
+.shell-menu__item--static {
+  padding-bottom: 0.6rem;
+}
+
+.shell-menu__choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.shell-menu__choice {
+  min-width: 0;
+  min-height: 2.4rem;
+  padding: 0.65rem 0.7rem;
+  border: 1px solid rgba(246, 238, 232, 0.12);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--emberwake-copy-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease,
+    color 140ms ease;
+}
+
+.shell-menu__choice[aria-pressed="true"] {
+  border-color: rgba(76, 226, 255, 0.4);
+  background: rgba(76, 226, 255, 0.08);
+  color: var(--emberwake-copy);
+}
+
+.shell-menu__choice:hover {
+  border-color: rgba(255, 179, 92, 0.4);
+  color: var(--emberwake-copy);
+}
+
+.shell-menu__choice:focus-visible {
+  outline: 2px solid rgba(76, 226, 255, 0.65);
+  outline-offset: 2px;
 }
 
 .panel-dismiss {
@@ -444,6 +493,12 @@
 @media (max-width: 900px) {
   .shell-menu__panel {
     width: min(20rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  }
+
+  .shell-menu__choice {
+    min-height: 2.2rem;
+    padding: 0.55rem 0.5rem;
+    font-size: 0.64rem;
   }
 
   .shell-diagnostics {

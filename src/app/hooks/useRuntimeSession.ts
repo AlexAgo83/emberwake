@@ -7,6 +7,7 @@ import {
   writeRuntimeSessionState
 } from "../../shared/lib/runtimeSessionStorage";
 import type { RuntimeSessionState } from "../../shared/lib/runtimeSessionStorage";
+import type { CameraMode } from "../../game/camera/model/cameraMode";
 import type { CameraState } from "../../game/camera/model/cameraMath";
 
 export function useRuntimeSession() {
@@ -40,9 +41,17 @@ export function useRuntimeSession() {
     }));
   }, []);
 
+  const setCameraMode = useCallback((cameraMode: CameraMode) => {
+    setRuntimeSession((currentSession) => ({
+      ...currentSession,
+      cameraMode
+    }));
+  }, []);
+
   return {
     cycleWorldSeed,
     runtimeSession,
+    setCameraMode,
     setCameraState
   };
 }
