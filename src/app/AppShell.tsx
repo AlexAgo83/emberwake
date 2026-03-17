@@ -3,9 +3,11 @@ import { useRef } from "react";
 import { FullscreenToggleButton } from "./components/FullscreenToggleButton";
 import { useDocumentViewportLock } from "./hooks/useDocumentViewportLock";
 import { useFullscreenController } from "./hooks/useFullscreenController";
+import { useLogicalViewportModel } from "./hooks/useLogicalViewportModel";
 import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards";
 import { RuntimeSurface } from "../game/render/RuntimeSurface";
 import { appConfig } from "../shared/config/appConfig";
+import { runtimeContract } from "../shared/constants/runtimeContract";
 
 export function AppShell() {
   const shellRef = useRef<HTMLElement>(null);
@@ -13,9 +15,15 @@ export function AppShell() {
   useDocumentViewportLock();
   useRuntimeInteractionGuards(runtimeSurfaceRef);
   const { enterFullscreen, isFullscreen, isSupported } = useFullscreenController(shellRef);
+  const viewport = useLogicalViewportModel(shellRef);
 
   return (
-    <main className="app-shell" data-app-ready="true" ref={shellRef}>
+    <main
+      className="app-shell"
+      data-app-ready="true"
+      data-layout-mode={viewport.layoutMode}
+      ref={shellRef}
+    >
       <section className="app-shell__runtime" aria-label="Interactive runtime shell">
         <RuntimeSurface surfaceRef={runtimeSurfaceRef} />
       </section>
@@ -51,6 +59,33 @@ export function AppShell() {
           <div>
             <dt>Target</dt>
             <dd>{appConfig.logicalWidth}px logical width baseline</dd>
+          </div>
+          <div>
+            <dt>Layout mode</dt>
+            <dd>{viewport.layoutMode}</dd>
+          </div>
+          <div>
+            <dt>Fit scale</dt>
+            <dd>{viewport.fitScale.toFixed(3)}x</dd>
+          </div>
+          <div>
+            <dt>Visible world</dt>
+            <dd>
+              {Math.round(viewport.visibleWorldSize.width)} ×{" "}
+              {Math.round(viewport.visibleWorldSize.height)}
+            </dd>
+          </div>
+          <div>
+            <dt>Spaces</dt>
+            <dd>{viewport.spaces.join(" / ")}</dd>
+          </div>
+          <div>
+            <dt>World posture</dt>
+            <dd>{runtimeContract.worldAssumption}</dd>
+          </div>
+          <div>
+            <dt>Shell perf floor</dt>
+            <dd>{viewport.performanceBudget.frameRateFloor}+ FPS target</dd>
           </div>
           <div>
             <dt>Input ownership</dt>

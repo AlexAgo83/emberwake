@@ -158,6 +158,7 @@
   color: var(--emberwake-copy);
   font-size: 0.95rem;
   text-align: right;
+  word-break: break-word;
 }
 
 .runtime-surface {

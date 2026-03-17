@@ -1,9 +1,9 @@
 ## item_002_add_stable_logical_viewport_and_world_space_shell_contract - Add stable logical viewport and world-space shell contract
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 10%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -43,12 +43,12 @@ flowchart LR
 - AC6: This slice leaves map rendering, camera controls, and entity logic out of scope while making them possible without a shell rewrite.
 
 # AC Traceability
-- AC1 -> Scope: Logical viewport rules are explicit across mobile and large-screen layouts. Proof: TODO.
-- AC2 -> Scope: Logical scale and world position remain stable across viewport changes. Proof: TODO.
-- AC3 -> Scope: Shell remains compatible with future large or unbounded world space. Proof: TODO.
-- AC4 -> Scope: Shared vocabulary for later layers is established. Proof: TODO.
-- AC5 -> Scope: Lightweight performance expectation is set for later layers. Proof: TODO.
-- AC6 -> Scope: Slice is limited to shell contract and not map or entity implementation. Proof: TODO.
+- AC1 -> Scope: Logical viewport rules are explicit across mobile and large-screen layouts. Proof: `src/app/hooks/useLogicalViewportModel.ts`, `src/shared/constants/logicalViewport.ts`.
+- AC2 -> Scope: Logical scale and world position remain stable across viewport changes. Proof: `src/app/hooks/useLogicalViewportModel.ts`.
+- AC3 -> Scope: Shell remains compatible with future large or unbounded world space. Proof: `src/shared/constants/runtimeContract.ts`, `src/app/AppShell.tsx`.
+- AC4 -> Scope: Shared vocabulary for later layers is established. Proof: `src/shared/constants/runtimeContract.ts`.
+- AC5 -> Scope: Lightweight performance expectation is set for later layers. Proof: `src/shared/constants/performanceBudget.ts`, `src/app/AppShell.tsx`.
+- AC6 -> Scope: Slice is limited to shell contract and not map or entity implementation. Proof: `src/app/AppShell.tsx`, `src/game/render/RuntimeSurface.tsx`.
 
 # Decision framing
 - Product framing: Required

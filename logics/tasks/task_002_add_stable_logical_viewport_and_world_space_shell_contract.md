@@ -1,9 +1,9 @@
 ## task_002_add_stable_logical_viewport_and_world_space_shell_contract - Add stable logical viewport and world-space shell contract
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 5%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,19 +30,19 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm scope, dependencies, and linked acceptance criteria.
-- [ ] 2. Implement the scoped changes from the backlog item.
-- [ ] 3. Validate the result and update the linked Logics docs.
-- [ ] 4. Create a dedicated git commit for this task scope after validation passes.
-- [ ] FINAL: Update related Logics docs
+- [x] 1. Confirm scope, dependencies, and linked acceptance criteria.
+- [x] 2. Implement the scoped changes from the backlog item.
+- [x] 3. Validate the result and update the linked Logics docs.
+- [x] 4. Create a dedicated git commit for this task scope after validation passes.
+- [x] FINAL: Update related Logics docs
 
 # AC Traceability
-- AC1 -> Scope: The shell defines explicit logical viewport rules that remain stable across mobile and large-screen layouts, with a fit-style baseline rather than cover-style cropping.. Proof: TODO.
-- AC2 -> Scope: Viewport changes do not arbitrarily alter logical scale or world position.. Proof: TODO.
-- AC3 -> Scope: The shell is explicitly compatible with a future large or unbounded scrollable world and does not assume fixed screen-sized gameplay space.. Proof: TODO.
-- AC4 -> Scope: Shared technical vocabulary is documented and consistent for later shell, world, and entity work.. Proof: TODO.
-- AC5 -> Scope: The shell sets a lightweight performance expectation that later map and entity slices can inherit.. Proof: TODO.
-- AC6 -> Scope: This slice leaves map rendering, camera controls, and entity logic out of scope while making them possible without a shell rewrite.. Proof: TODO.
+- AC1 -> Scope: The shell defines explicit logical viewport rules that remain stable across mobile and large-screen layouts, with a fit-style baseline rather than cover-style cropping.. Proof: `src/app/hooks/useLogicalViewportModel.ts`, `src/shared/constants/logicalViewport.ts`.
+- AC2 -> Scope: Viewport changes do not arbitrarily alter logical scale or world position.. Proof: `src/app/hooks/useLogicalViewportModel.ts`.
+- AC3 -> Scope: The shell is explicitly compatible with a future large or unbounded scrollable world and does not assume fixed screen-sized gameplay space.. Proof: `src/shared/constants/runtimeContract.ts`, `src/app/AppShell.tsx`.
+- AC4 -> Scope: Shared technical vocabulary is documented and consistent for later shell, world, and entity work.. Proof: `src/shared/constants/runtimeContract.ts`.
+- AC5 -> Scope: The shell sets a lightweight performance expectation that later map and entity slices can inherit.. Proof: `src/shared/constants/performanceBudget.ts`, `src/app/AppShell.tsx`.
+- AC6 -> Scope: This slice leaves map rendering, camera controls, and entity logic out of scope while making them possible without a shell rewrite.. Proof: `src/game/render/RuntimeSurface.tsx`, `src/app/AppShell.tsx`.
 
 # Decision framing
 - Product framing: Consider
@@ -66,10 +66,18 @@ flowchart LR
 - `npm run build`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated.
-- [ ] A dedicated git commit has been created for the completed task scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated.
+- [x] A dedicated git commit has been created for the completed task scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Added a shared logical viewport model with a stable `fit` baseline, explicit mobile versus large-screen layout mode, and deterministic visible-world sizing derived from shell measurements.
+- Established shared runtime vocabulary for `screen-space`, `world-space`, `chunk-space`, render layers, and the shell's unbounded-world posture.
+- Added a lightweight shell performance contract so later world and entity slices inherit an explicit FPS floor target.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `npm run build`
