@@ -1,9 +1,9 @@
 ## item_018_define_mandatory_frontend_and_logics_quality_gates_in_ci - Define mandatory frontend and Logics quality gates in CI
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
-> Progress: 10%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -36,15 +36,15 @@ flowchart LR
 - AC9: The resulting pipeline foundation is suitable for later extension into deployment or release workflows without requiring a full CI redesign.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a GitHub Actions CI pipeline for the repository rather than a local-only validation approach.. Proof: TODO.
-- AC2 -> Scope: The CI scope remains compatible with the frontend-only static architecture and does not assume backend runtime services.. Proof: TODO.
-- AC3 -> Scope: The pipeline includes the baseline repository checks needed for this stack, such as install, lint, typecheck, and build verification, with tests included when relevant to the project state.. Proof: TODO.
-- AC4 -> Scope: The request treats lint, typecheck, tests, build verification, and Logics lint as the intended baseline mandatory checks for the initial CI workflow.. Proof: TODO.
-- AC5 -> Scope: The request treats `push` and `pull_request` as the default triggering events for the initial CI workflow.. Proof: TODO.
-- AC6 -> Scope: The CI design accounts for dependency caching suitable for the project's package-management setup.. Proof: TODO.
-- AC7 -> Scope: The CI design remains compatible with the delivery direction defined in `req_003_create_render_static_free_plan_blueprint`.. Proof: TODO.
-- AC8 -> Scope: The CI design accounts for Logics validation as part of repository quality rather than treating `logics/` as out-of-band documentation.. Proof: TODO.
-- AC9 -> Scope: The resulting pipeline foundation is suitable for later extension into deployment or release workflows without requiring a full CI redesign.. Proof: TODO.
+- AC1 -> Scope: The request defines a GitHub Actions CI pipeline for the repository rather than a local-only validation approach.. Proof: `.github/workflows/ci.yml`.
+- AC2 -> Scope: The CI scope remains compatible with the frontend-only static architecture and does not assume backend runtime services.. Proof: `.github/workflows/ci.yml`.
+- AC3 -> Scope: The pipeline includes the baseline repository checks needed for this stack, such as install, lint, typecheck, and build verification, with tests included when relevant to the project state.. Proof: `.github/workflows/ci.yml`, `package.json`.
+- AC4 -> Scope: The request treats lint, typecheck, tests, build verification, and Logics lint as the intended baseline mandatory checks for the initial CI workflow.. Proof: `.github/workflows/ci.yml`.
+- AC5 -> Scope: The request treats `push` and `pull_request` as the default triggering events for the initial CI workflow.. Proof: `.github/workflows/ci.yml`.
+- AC6 -> Scope: The CI design accounts for dependency caching suitable for the project's package-management setup.. Proof: `.github/workflows/ci.yml`.
+- AC7 -> Scope: The CI design remains compatible with the delivery direction defined in `req_003_create_render_static_free_plan_blueprint`.. Proof: `.github/workflows/ci.yml`, `render.yaml`.
+- AC8 -> Scope: The CI design accounts for Logics validation as part of repository quality rather than treating `logics/` as out-of-band documentation.. Proof: `.github/workflows/ci.yml`.
+- AC9 -> Scope: The resulting pipeline foundation is suitable for later extension into deployment or release workflows without requiring a full CI redesign.. Proof: `.github/workflows/ci.yml`.
 
 # Decision framing
 - Product framing: Not needed
