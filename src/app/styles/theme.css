@@ -1,0 +1,25 @@
+:root {
+  color-scheme: dark;
+  --emberwake-bg: #09070f;
+  --emberwake-surface: rgba(17, 12, 29, 0.82);
+  --emberwake-surface-strong: rgba(24, 18, 42, 0.94);
+  --emberwake-border: rgba(118, 89, 168, 0.35);
+  --emberwake-copy: #f6eee8;
+  --emberwake-copy-dim: rgba(246, 238, 232, 0.72);
+  --emberwake-accent-hot: #ff7b3f;
+  --emberwake-accent-warm: #ffb35c;
+  --emberwake-accent-cold: #4ce2ff;
+  --emberwake-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  --emberwake-title-font: "Alegreya Sans SC", "Trebuchet MS", sans-serif;
+  --emberwake-body-font: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(243, 66, 125, 0.14), transparent 28%),
+    radial-gradient(circle at 80% 12%, rgba(76, 226, 255, 0.16), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(255, 123, 63, 0.14), transparent 40%),
+    #09070f;
+  color: var(--emberwake-copy);
+  font-family: var(--emberwake-body-font);
+}

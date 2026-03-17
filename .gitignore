@@ -3,6 +3,7 @@ dist/
 dist-ssr/
 coverage/
 .vite/
+*.tsbuildinfo
 playwright-report/
 test-results/
 

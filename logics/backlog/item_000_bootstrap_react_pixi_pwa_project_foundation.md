@@ -1,9 +1,9 @@
 ## item_000_bootstrap_react_pixi_pwa_project_foundation - Bootstrap React Pixi PWA project foundation
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 10%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -43,12 +43,12 @@ flowchart LR
 - AC6: The resulting foundation is suitable to host later fullscreen, world-map, and entity work without replacing the core scaffold.
 
 # AC Traceability
-- AC1 -> Scope: Frontend-only React, TypeScript, PixiJS, and @pixi-react scaffold without backend runtime. Proof: TODO.
-- AC2 -> Scope: PWA baseline and static-friendly shell are configured. Proof: TODO.
-- AC3 -> Scope: Delivery stays at empty shell stage without world or gameplay features. Proof: TODO.
-- AC4 -> Scope: Project structure is separated for later shell, runtime, rendering, and shared work. Proof: TODO.
-- AC5 -> Scope: Lint, typecheck, test, and build workflows are available in a CI-friendly form. Proof: TODO.
-- AC6 -> Scope: Foundation remains reusable for later fullscreen, map, and entity slices. Proof: TODO.
+- AC1 -> Scope: Frontend-only React, TypeScript, PixiJS, and @pixi-react scaffold without backend runtime. Proof: `package.json`, `src/game/render/RuntimeSurface.tsx`.
+- AC2 -> Scope: PWA baseline and static-friendly shell are configured. Proof: `vite.config.ts`, `public/icon.svg`, `index.html`.
+- AC3 -> Scope: Delivery stays at empty shell stage without world or gameplay features. Proof: `src/app/AppShell.tsx`.
+- AC4 -> Scope: Project structure is separated for later shell, runtime, rendering, and shared work. Proof: `src/app`, `src/game`, `src/shared`.
+- AC5 -> Scope: Lint, typecheck, test, and build workflows are available in a CI-friendly form. Proof: `package.json`, `eslint.config.js`, `vitest.config.ts`.
+- AC6 -> Scope: Foundation remains reusable for later fullscreen, map, and entity slices. Proof: `src/shared/constants/logicalViewport.ts`, `src/game/render/RuntimeSurface.tsx`.
 
 # Decision framing
 - Product framing: Required

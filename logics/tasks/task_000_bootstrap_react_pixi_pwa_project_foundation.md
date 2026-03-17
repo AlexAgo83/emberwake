@@ -1,9 +1,9 @@
 ## task_000_bootstrap_react_pixi_pwa_project_foundation - Bootstrap React Pixi PWA project foundation
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 5%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,19 +30,19 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm scope, dependencies, and linked acceptance criteria.
-- [ ] 2. Implement the scoped changes from the backlog item.
-- [ ] 3. Validate the result and update the linked Logics docs.
-- [ ] 4. Create a dedicated git commit for this task scope after validation passes.
-- [ ] FINAL: Update related Logics docs
+- [x] 1. Confirm scope, dependencies, and linked acceptance criteria.
+- [x] 2. Implement the scoped changes from the backlog item.
+- [x] 3. Validate the result and update the linked Logics docs.
+- [x] 4. Create a dedicated git commit for this task scope after validation passes.
+- [x] FINAL: Update related Logics docs
 
 # AC Traceability
-- AC1 -> Scope: The project targets a frontend-only stack based on React, TypeScript, PixiJS, and `@pixi/react`, with no backend service required for local development or production runtime.. Proof: TODO.
-- AC2 -> Scope: The repository includes a working PWA baseline with installable metadata, build integration, and a static-friendly application shell.. Proof: TODO.
-- AC3 -> Scope: The delivered runtime is still an empty shell and does not yet include world-map, camera, or entity behavior.. Proof: TODO.
-- AC4 -> Scope: The project structure separates app shell concerns, runtime concerns, rendering integration, input or debug support, and shared utilities so later requests can add features without a structural rewrite.. Proof: TODO.
-- AC5 -> Scope: Quality gates and developer commands exist for linting, typecheck, testing, and build in a CI-friendly form.. Proof: TODO.
-- AC6 -> Scope: The resulting foundation is suitable to host later fullscreen, world-map, and entity work without replacing the core scaffold.. Proof: TODO.
+- AC1 -> Scope: The project targets a frontend-only stack based on React, TypeScript, PixiJS, and `@pixi/react`, with no backend service required for local development or production runtime.. Proof: `package.json`, `src/game/render/RuntimeSurface.tsx`.
+- AC2 -> Scope: The repository includes a working PWA baseline with installable metadata, build integration, and a static-friendly application shell.. Proof: `vite.config.ts`, `public/icon.svg`, `index.html`.
+- AC3 -> Scope: The delivered runtime is still an empty shell and does not yet include world-map, camera, or entity behavior.. Proof: `src/app/AppShell.tsx`.
+- AC4 -> Scope: The project structure separates app shell concerns, runtime concerns, rendering integration, input or debug support, and shared utilities so later requests can add features without a structural rewrite.. Proof: `src/app`, `src/game`, `src/shared`.
+- AC5 -> Scope: Quality gates and developer commands exist for linting, typecheck, testing, and build in a CI-friendly form.. Proof: `package.json`, `eslint.config.js`, `vitest.config.ts`.
+- AC6 -> Scope: The resulting foundation is suitable to host later fullscreen, world-map, and entity work without replacing the core scaffold.. Proof: `src/shared/constants/logicalViewport.ts`, `src/game/render/RuntimeSurface.tsx`.
 
 # Decision framing
 - Product framing: Consider
@@ -66,10 +66,19 @@ flowchart LR
 - `npm run build`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated.
-- [ ] A dedicated git commit has been created for the completed task scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated.
+- [x] A dedicated git commit has been created for the completed task scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Implemented the initial frontend runtime scaffold with `Vite`, `React`, `TypeScript`, `PixiJS`, `@pixi/react`, `vite-plugin-pwa`, `Vitest`, and `ESLint`.
+- Added an empty Pixi-owned runtime surface plus a thin React-owned shell overlay aligned with the current product identity.
+- Introduced domain-first source folders under `src/app`, `src/game`, and `src/shared` so later shell, world, and entity slices can layer in without a structural rewrite.
+- Added CI-friendly scripts for `lint`, `typecheck`, `test`, `build`, and `logics:lint`.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `npm run build`

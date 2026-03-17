@@ -2,10 +2,10 @@
 
 Static frontend game project built around a fullscreen 2D top-down world, designed for `React + TypeScript + PixiJS`, with `PWA` delivery and no backend runtime.
 
-This repository is currently documentation-first:
+This repository is currently in early implementation:
 - the product, architecture, backlog, and execution flow are already structured
-- the implementation tasks are prepared
-- the runtime codebase is not bootstrapped yet
+- the frontend runtime foundation is now bootstrapped
+- the first shell, viewport, diagnostics, and delivery tasks are being executed incrementally
 
 This README is meant to evolve with the project.
 
@@ -62,12 +62,13 @@ flowchart LR
 
 ## Repository Status
 
-At the moment, this repository mainly contains the project operating model:
+At the moment, this repository contains both the operating model and the first runtime slice:
 - requests
 - backlog items
 - execution tasks
 - ADRs
 - product briefs
+- a Vite + React + PixiJS + PWA frontend foundation
 
 The implementation backbone already starts in:
 - [logics/tasks/task_000_bootstrap_react_pixi_pwa_project_foundation.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_000_bootstrap_react_pixi_pwa_project_foundation.md)
