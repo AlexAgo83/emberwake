@@ -9,6 +9,10 @@ This repository is currently in early implementation:
 
 This README is meant to evolve with the project.
 
+Repository meta:
+- [LICENSE](/Users/alexandreagostini/Documents/emberwake/LICENSE)
+- [CONTRIBUTING.md](/Users/alexandreagostini/Documents/emberwake/CONTRIBUTING.md)
+
 ## Identity
 
 `Emberwake` is the working name and product identity for the game.
