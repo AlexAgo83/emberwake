@@ -175,6 +175,7 @@ For the future Vite frontend:
 - `.env.local` is local-only
 - `.env.production` is local-only and mirrors Render values for reproduction
 - frontend `VITE_*` variables are public build-time configuration, not secrets
+- local `RENDER_*` variables may exist in non-versioned env files for service tooling and operations
 
 Reference ADR:
 - [adr_010_treat_render_build_variables_as_public_frontend_configuration.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_010_treat_render_build_variables_as_public_frontend_configuration.md)
@@ -189,10 +190,11 @@ Static delivery currently assumes:
 - Render-managed build variables as the production source of truth
 
 Operational notes:
-- keep `.env.example` as versioned documentation for expected public `VITE_*` values
+- keep `.env.example` as versioned documentation for expected env shape, especially public `VITE_*` values
 - keep `.env.local` and `.env.production` local-only
 - use `.env.production` only as a local mirror of Render values when reproducing a release build
 - do not put secrets into `VITE_*` variables because they are embedded into the client build
+- keep any local `RENDER_*` values out of version control and treat them as tooling or service-operation inputs rather than frontend config
 - keep PR validation in CI and keep deployable states flowing through `release`
 
 The Render Blueprint lives in:
