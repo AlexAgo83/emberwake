@@ -1,16 +1,16 @@
 ## item_048_define_the_standard_in_app_diagnostics_metric_set - Define the standard in app diagnostics metric set
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 94%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - Runtime diagnostics need a standard metric set rather than per-feature improvisation.
-- This slice defines the in-app metrics that should be visible while developing the shell, world, and first player loop.
+- This slice defines the in-app metrics that should be visible while developing the shell, world, and first player loop, including a fixed first overlay baseline.
 
 # Scope
 - In: Standard runtime metrics, first-loop movement diagnostics, and in-app visibility expectations.
@@ -29,7 +29,7 @@ flowchart LR
 - AC2: The request identifies the first metrics or budgets relevant to shell rendering, world rendering, entity rendering, or loading behavior.
 - AC3: The request defines an explicit minimum-performance target for a mobile-sized reference experience rather than relying only on qualitative language.
 - AC4: The request requires in-app visibility for core diagnostics such as FPS, frame time, and world-load indicators during development.
-- AC5: The request treats controlled-entity position, speed or movement vector, current chunk, and camera state as part of the preferred first in-app diagnostic set.
+- AC5: The request treats camera state, controlled-entity position, controlled-entity speed or movement vector, current chunk, and rendered chunk count as part of the preferred first in-app diagnostic set.
 - AC6: The request remains compatible with the debug overlay and diagnostics direction already anticipated.
 - AC7: The request addresses profiling expectations appropriate for a frontend-only static application.
 - AC8: The request remains compatible with mobile and large-screen usage expectations.

@@ -1,16 +1,16 @@
 ## item_021_define_logical_sizing_pivot_and_orientation_conventions_for_runtime_assets - Define logical sizing pivot and orientation conventions for runtime assets
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 94%
-> Confidence: 91%
-> Progress: 0%
+> Understanding: 95%
+> Confidence: 92%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - Asset rendering needs stable logical dimensions and anchors independent of source pixels.
-- This slice defines pivots, sizing, and orientation conventions so map and entity visuals stay coherent under camera transforms.
+- This slice defines pivots, sizing, and orientation conventions so map and entity visuals stay coherent under camera transforms, with a simple center-based prototype baseline where possible.
 
 # Scope
 - In: Logical tile or sprite sizing, anchor or pivot rules, and orientation conventions.
@@ -30,7 +30,7 @@ flowchart LR
 - AC3: The request defines conventions for source assets and runtime-consumed assets, including at least naming, folder organization, and the expected delivery path inside the static frontend project.
 - AC4: The request defines how placeholder or debug assets fit into the pipeline so early implementation can proceed without waiting for final art.
 - AC5: The request defines a baseline position in which unitary placeholder assets are acceptable initially, while atlases or spritesheets remain the preferred target runtime packaging model.
-- AC6: The request defines stable logical sizing expectations shared across map and entity rendering, including tile or sprite dimensions, anchors or pivots, and orientation compatibility where applicable.
+- AC6: The request defines stable logical sizing expectations shared across map and entity rendering, including tile or sprite dimensions, anchors or pivots, and orientation compatibility where applicable, with a simple center-based pivot baseline for the first prototype unless a stronger convention is justified.
 - AC7: The request remains compatible with the PixiJS-based rendering stack, top-down world rendering, chunk-based map streaming, and camera pan or zoom or rotation already described in earlier requests.
 - AC8: The request addresses runtime asset-loading expectations suitable for a Vite static frontend, including a compatibility stance on build-time bundling versus static asset hosting.
 - AC9: The request addresses asset caching or loading behavior at a level sufficient to stay compatible with PWA static delivery and future performance work.

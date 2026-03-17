@@ -1,16 +1,16 @@
 ## item_045_define_contextual_inspection_panels_across_mobile_and_desktop - Define contextual inspection panels across mobile and desktop
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 94%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - Inspection needs a screen-space presentation model that works on both mobile and desktop.
-- This slice defines contextual inspection surfaces without turning the runtime into a panel-heavy app.
+- This slice defines contextual inspection surfaces without turning the runtime into a panel-heavy app, using a light bottom-sheet posture on mobile as the baseline.
 
 # Scope
 - In: Inspection panel form factor, mobile vs desktop presentation, and contextual reveal behavior.
@@ -29,7 +29,7 @@ flowchart LR
 - AC2: The request distinguishes between world-space visuals and screen-space UI or system overlays.
 - AC3: The request treats fullscreen entry prompts, system prompts, and debug or inspection panels as DOM-owned by default.
 - AC4: The request remains compatible with the fullscreen shell and thin DOM overlay direction already established.
-- AC5: The request addresses mobile and desktop overlay behavior at a product level.
+- AC5: The request addresses mobile and desktop overlay behavior at a product level, with a light bottom sheet as the baseline mobile inspection surface.
 - AC6: The request favors contextual overlays first and keeps permanent HUD expectations intentionally light.
 - AC7: The request stays compatible with debug diagnostics, selection or inspection surfaces, and future gameplay HUD needs.
 - AC8: The request does not prematurely lock final art direction or every future menu flow.

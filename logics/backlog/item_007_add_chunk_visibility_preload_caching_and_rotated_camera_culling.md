@@ -1,9 +1,9 @@
 ## item_007_add_chunk_visibility_preload_caching_and_rotated_camera_culling - Add chunk visibility preload caching and rotated-camera culling
-> From version: 0.1.0
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 94%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 95%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -17,7 +17,7 @@
 - In:
 - Visible chunk resolution from camera and viewport state
 - Rotated-camera-aware culling rules
-- Small preload margin around the visible area
+- Small preload margin around the visible area, with one ring of chunks as the default baseline
 - Bounded active render set and cache or retention policy
 - Out:
 - Camera controls themselves
@@ -35,7 +35,7 @@ flowchart LR
 # Acceptance criteria
 - AC1: Visible chunks are resolved from camera and viewport state rather than assuming a fixed world window.
 - AC2: Culling remains valid when the camera is rotated and does not rely solely on axis-aligned viewport assumptions.
-- AC3: A small preload margin exists around the visible area to reduce popping during movement.
+- AC3: A small preload margin exists around the visible area to reduce popping during movement, with one surrounding chunk ring as the default baseline.
 - AC4: Chunks leaving the active area are eligible to leave the active render set under a bounded cache or retention policy.
 - AC5: The resulting chunk visibility logic remains compatible with an effectively infinite world.
 - AC6: This slice is limited to visibility, preload, cache, and culling behavior rather than map drawing or camera interaction design.
@@ -58,9 +58,9 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_005_make_world_identity_deterministic_from_seed_and_coordinates`
 - Request: `req_001_render_top_down_infinite_chunked_world_map`
-- Primary task(s): `task_XXX_example`
+- Primary task(s): (none yet)
 
 # Priority
 - Impact: High

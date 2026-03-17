@@ -1,9 +1,9 @@
 ## item_009_define_entity_contract_and_generic_archetype_baseline - Define entity contract and generic archetype baseline
-> From version: 0.1.0
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 92%
-> Confidence: 89%
-> Progress: 0%
+> Understanding: 93%
+> Confidence: 90%
+> Progress: 5%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -11,12 +11,14 @@
 # Problem
 - The entity layer needs a minimum shared entity contract before movement, rendering, and lifecycle systems can diverge.
 - The first implementation should start from one generic movable archetype rather than prematurely locking several gameplay-specific families.
+- A player-controlled entity should still fit the same shared contract rather than becoming a special-case data model.
 - Entity identity, footprint, orientation, mutable state, and explicit render ordering need to be part of the baseline contract.
 
 # Scope
 - In:
 - Minimum entity fields and shared contract
 - One generic movable archetype baseline
+- Separation between entity data and whoever currently owns player control
 - Footprint or radius model and orientation field
 - Explicit render ordering or layer priority in the entity contract
 - Out:
@@ -38,7 +40,7 @@ flowchart LR
 - AC3: Entities include a simple footprint model such as a radius or equivalent size indicator.
 - AC4: Entity orientation is part of the baseline contract and is available for rendering and later movement-facing behavior.
 - AC5: Render ordering or layer priority for entities is explicit enough to avoid unstable draw order.
-- AC6: This baseline contract is suitable for later movement, chunk indexing, and inspection slices without being replaced.
+- AC6: This baseline contract is suitable for later movement, chunk indexing, inspection, and player-control slices without being replaced by a special player entity model.
 
 # AC Traceability
 - AC1 -> Scope: Minimum shared entity contract is explicit. Proof: TODO.
@@ -58,9 +60,9 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`
 - Request: `req_002_render_evolving_world_entities_on_the_map`
-- Primary task(s): `task_XXX_example`
+- Primary task(s): (none yet)
 
 # Priority
 - Impact: High

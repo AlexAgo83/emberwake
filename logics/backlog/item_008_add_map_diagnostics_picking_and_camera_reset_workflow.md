@@ -1,9 +1,9 @@
 ## item_008_add_map_diagnostics_picking_and_camera_reset_workflow - Add map diagnostics picking and camera reset workflow
-> From version: 0.1.0
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 94%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 95%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -11,7 +11,7 @@
 # Problem
 - The map layer needs diagnostics that expose camera state, chunk state, and viewport metrics while the world model is still being validated.
 - Screen-to-world conversion and debug picking are needed to inspect the map with intent rather than only visually.
-- Resetting the camera to a known state must be quick so navigation debugging stays efficient.
+- Resetting the camera to a known state must be quick so navigation debugging stays efficient without implicitly mutating entity state.
 
 # Scope
 - In:
@@ -35,7 +35,7 @@ flowchart LR
 # Acceptance criteria
 - AC1: Map diagnostics expose at least camera position, zoom level, rotation state, current chunk, rendered chunk count, and viewport-related metrics.
 - AC2: Screen-to-world conversion is usable for development diagnostics or debug picking.
-- AC3: Camera reset actions can restore position, zoom, and rotation to a known state quickly.
+- AC3: Camera reset actions can restore position, zoom, and rotation to a known state quickly, and stay camera-only in the initial baseline.
 - AC4: Map-level diagnostics plug into the shared shell debug workflow instead of inventing a separate tool path.
 - AC5: This slice improves map inspectability without taking on map rendering, world generation, or entity inspection concerns.
 - AC6: The resulting tooling remains reusable by later entity-layer debugging.
@@ -58,9 +58,9 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_006_standardize_debug_first_runtime_instrumentation`
 - Request: `req_001_render_top_down_infinite_chunked_world_map`
-- Primary task(s): `task_XXX_example`
+- Primary task(s): (none yet)
 
 # Priority
 - Impact: Medium

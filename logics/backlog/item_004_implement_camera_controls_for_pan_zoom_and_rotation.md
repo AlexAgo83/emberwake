@@ -1,9 +1,9 @@
 ## item_004_implement_camera_controls_for_pan_zoom_and_rotation - Implement camera controls for pan zoom and rotation
-> From version: 0.1.0
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 94%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 95%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -11,6 +11,7 @@
 # Problem
 - The world-map layer needs a concrete camera manipulation contract from the start: pan, zoom, and rotation.
 - Desktop and mobile controls must be explicit so map navigation does not become an emergent side effect of trial-and-error gestures.
+- The full camera kit should exist early for debugging and world inspection even if the first player-facing loop keeps zoom and rotation out of its primary controls.
 - Camera behavior needs stable pivot, bounds, and reset rules before chunk visibility and world rendering build on top of it.
 
 # Scope
@@ -38,7 +39,7 @@ flowchart LR
 - AC3: Zoom and rotation behave around a defined pivot rule, preferably the viewport center by default.
 - AC4: Zoom is constrained by explicit minimum and maximum bounds.
 - AC5: Rotation is free-form by default and camera reset actions can restore position, zoom, and rotation to a known state.
-- AC6: The camera contract remains compatible with later chunked-world rendering without requiring a camera rewrite.
+- AC6: The camera contract remains compatible with later chunked-world rendering without requiring a camera rewrite, while still allowing pan, zoom, and rotation to stay debug-oriented in the first player loop.
 
 # AC Traceability
 - AC1 -> Scope: Desktop camera controls are explicit. Proof: TODO.
@@ -58,9 +59,9 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`
 - Request: `req_001_render_top_down_infinite_chunked_world_map`
-- Primary task(s): `task_XXX_example`
+- Primary task(s): (none yet)
 
 # Priority
 - Impact: High

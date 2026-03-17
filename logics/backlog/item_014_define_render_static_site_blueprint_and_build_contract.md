@@ -1,19 +1,19 @@
 ## item_014_define_render_static_site_blueprint_and_build_contract - Define Render static site blueprint and build contract
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 94%
-> Confidence: 91%
-> Progress: 0%
+> Understanding: 95%
+> Confidence: 92%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - Render delivery needs a concrete static-site blueprint instead of an ad hoc dashboard setup.
-- This slice defines the `render.yaml` service contract so the frontend can be deployed reproducibly on the free plan.
+- This slice defines and should produce the `render.yaml` service contract early so the frontend can be deployed reproducibly on the free plan.
 
 # Scope
-- In: Static-site service definition, build command, publish directory, and `main`-driven deployment path.
+- In: Static-site service definition, committed `render.yaml`, build command, publish directory, and `main`-driven deployment path.
 - Out: Dashboard-only configuration, preview environments, backend services, or release operations.
 
 ```mermaid

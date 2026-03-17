@@ -1,23 +1,23 @@
 ## item_013_add_entity_picking_selection_inspection_and_deterministic_debug_scenario - Add entity picking selection inspection and deterministic debug scenario
-> From version: 0.1.0
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 92%
-> Confidence: 89%
-> Progress: 0%
+> Understanding: 93%
+> Confidence: 90%
+> Progress: 5%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - The entity layer needs a reproducible debug scenario so movement, state, chunk crossing, and inspection can be tested consistently.
-- Selecting an entity should immediately expose inspectable state instead of creating separate, fragmented debug flows.
+- Selecting an entity should immediately expose inspectable state instead of creating separate, fragmented debug flows, while remaining primarily a debug tool in the first loop.
 - Map-level picking must connect screen interaction to entity inspection in world space.
 
 # Scope
 - In:
 - Deterministic debug spawn scenario for entities
 - Debug picking from map view into entity inspection
-- Single-entity selection model linked to entity inspection
+- Debug-oriented single-entity selection model linked to entity inspection
 - Inspectable entity state surfaced in the debug workflow
 - Out:
 - Baseline entity contract
@@ -35,7 +35,7 @@ flowchart LR
 # Acceptance criteria
 - AC1: A deterministic debug scenario exists for spawning and observing entities so movement and state changes can be reproduced reliably.
 - AC2: Debug picking or inspection is available so an entity can be selected from the map view.
-- AC3: A simple single-entity selection model is supported and exposes the selected entity's inspectable state directly.
+- AC3: A simple single-entity selection model is supported as a debug-first tool and exposes the selected entity's inspectable state directly.
 - AC4: The debug flow surfaces useful entity inspection data such as identity, position, chunk, facing, velocity, or state.
 - AC5: This slice keeps entity inspection tied to the shared debug workflow rather than inventing a separate tool path.
 - AC6: The resulting debug scenario and selection flow remain reusable for later gameplay and behavior testing.
@@ -58,9 +58,9 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_006_standardize_debug_first_runtime_instrumentation`
 - Request: `req_002_render_evolving_world_entities_on_the_map`
-- Primary task(s): `task_XXX_example`
+- Primary task(s): (none yet)
 
 # Priority
 - Impact: Medium

@@ -1,16 +1,16 @@
 ## item_060_define_post_deployment_smoke_checks_and_rollback_posture - Define post deployment smoke checks and rollback posture
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 94%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - A deployed static build still needs verification and recovery thinking.
-- This slice defines the minimal smoke checks and rollback posture that make release operations trustworthy.
+- This slice defines the minimal smoke checks and rollback posture that make release operations trustworthy, starting from shell-load validation before richer gameplay checks exist.
 
 # Scope
 - In: Post-deploy smoke checks, rollback posture, and failure-response expectations.
@@ -28,7 +28,7 @@ flowchart LR
 - AC1: The request defines a release-workflow scope distinct from raw deployment configuration.
 - AC2: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.
 - AC3: The request treats lightweight semantic versioning and a simple changelog discipline as the intended default release-identification model.
-- AC4: The request addresses at least release readiness, version identification, and operational validation expectations, including a minimal post-deployment smoke check.
+- AC4: The request addresses at least release readiness, version identification, and operational validation expectations, including a minimal post-deployment smoke check focused first on successful app and shell startup.
 - AC5: If preview-style environments are introduced later, the request treats them first as technical validation surfaces rather than as separate product release channels.
 - AC6: The request addresses rollback or recovery thinking appropriate to a static-site deployment.
 - AC7: The request does not assume a backend service topology or an enterprise-grade release-management stack.

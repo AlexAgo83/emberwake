@@ -1,16 +1,16 @@
 ## item_051_define_browser_smoke_strategy_for_runtime_and_first_player_loop - Define browser smoke strategy for runtime and first player loop
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 94%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - The frontend needs a lightweight browser-level safety net before deep end-to-end coverage exists.
-- This slice defines smoke checks for the runtime shell and first player loop once transform math is trusted.
+- This slice defines smoke checks for the runtime shell first, then the first player loop once transform math is trusted.
 
 # Scope
 - In: Browser smoke scenarios, runtime startup validation, and first-loop input-to-movement checks.
@@ -28,7 +28,7 @@ flowchart LR
 - AC1: The request defines a dedicated testing strategy scope for the frontend project.
 - AC2: The request distinguishes between at least some of the relevant test levels, such as unit, integration, browser, or scenario validation.
 - AC3: The request treats camera or transform invariants, chunk-visibility logic, and deterministic simulation behavior as the first high-priority automated targets.
-- AC4: The request includes lightweight browser smoke validation as an early part of the strategy.
+- AC4: The request includes lightweight browser smoke validation as an early part of the strategy, starting with a desktop viewport baseline before mobile emulation expands the matrix.
 - AC5: The request treats world or camera transform math as a higher early automation priority than the first player-loop browser scenario.
 - AC6: Once the first controllable-entity loop exists, the strategy includes a browser-level check that validates directional input leading to visible entity movement.
 - AC7: The request remains compatible with deterministic world or simulation behavior already anticipated in other requests.

@@ -1,9 +1,9 @@
 ## item_003_add_render_diagnostics_fallback_handling_and_shell_preferences - Add render diagnostics fallback handling and shell preferences
-> From version: 0.1.0
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 0%
+> Understanding: 96%
+> Confidence: 93%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -16,7 +16,7 @@
 # Scope
 - In:
 - Standard debug entry point for shell-level rendering diagnostics
-- Dev and preview availability rules for diagnostics
+- Dev and preview availability rules for diagnostics, with dev-time mounting and shortcut-based visibility control
 - Controlled fallback behavior and visible diagnostics when rendering capabilities fail
 - Local persistence of shell-only preferences such as debug visibility and fullscreen preference
 - Out:
@@ -33,8 +33,8 @@ flowchart LR
 ```
 
 # Acceptance criteria
-- AC1: A single standard shell-level debug entry point exists for rendering diagnostics.
-- AC2: Shell-level diagnostics are available in development and preview environments and are hidden or disabled by default in production builds.
+- AC1: A single standard shell-level debug entry point exists for rendering diagnostics and is mounted by default in development without becoming visually noisy.
+- AC2: Shell-level diagnostics are available in development and preview environments, can be toggled through a shortcut or equivalent control, and are hidden or disabled by default in production builds.
 - AC3: If Pixi, WebGL, or true fullscreen cannot initialize correctly, the shell fails in a controlled and diagnosable way rather than silently.
 - AC4: Local shell preferences such as fullscreen preference and debug visibility can be persisted without expanding into gameplay-state persistence.
 - AC5: This slice keeps later map and entity diagnostics compatible with one shared debug workflow instead of fragmenting tooling.
@@ -58,9 +58,9 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_006_standardize_debug_first_runtime_instrumentation`, `adr_009_limit_persistence_to_local_versioned_frontend_storage`
 - Request: `req_000_bootstrap_fullscreen_2d_react_pwa_shell`
-- Primary task(s): `task_XXX_example`
+- Primary task(s): (none yet)
 
 # Priority
 - Impact: High

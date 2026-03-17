@@ -1,9 +1,9 @@
 ## item_024_define_single_entity_control_contract_and_input_ownership_boundaries - Define single entity control contract and input ownership boundaries
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 94%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -27,7 +27,7 @@ flowchart LR
 # Acceptance criteria
 - AC1: The request defines a player interaction scope dedicated to world and entity interactions rather than leaving input behavior implicit across rendering requests.
 - AC2: The request defines the first interaction verbs relevant to the project, including at least selecting, inspecting, commanding, and camera-related interactions where ownership matters.
-- AC3: The request treats selection and inspection as the primary first interaction layer, with command behaviors layered on afterward.
+- AC3: The request treats direct control of a single entity as the primary first interaction layer, while selection and inspection stay secondary and debug-friendly in the first loop.
 - AC4: The request remains compatible with a first mobile-first direct-control slice in which a single entity is steered through the world using a touch drag input similar to a virtual joypad.
 - AC5: The request treats the primary touch-drag gesture in the first player loop as entity steering rather than camera dragging.
 - AC6: The request defines a visible virtual-stick baseline with a small dead zone and clamped proportional magnitude for the first mobile control scheme.

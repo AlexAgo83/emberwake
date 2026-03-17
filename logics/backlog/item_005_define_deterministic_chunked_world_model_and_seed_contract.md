@@ -1,9 +1,9 @@
 ## item_005_define_deterministic_chunked_world_model_and_seed_contract - Define deterministic chunked world model and seed contract
-> From version: 0.1.0
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 94%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 95%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -17,7 +17,7 @@
 - In:
 - Fixed square chunk model and default `16x16` chunk shape
 - Stable world units, tile sizing, and coordinate transforms
-- Deterministic chunk identity and global world-seed contract
+- Deterministic chunk identity and global world-seed contract, with a fixed default seed baseline
 - Support for positive and negative world coordinates
 - Out:
 - Camera controls and gesture mapping
@@ -36,7 +36,7 @@ flowchart LR
 - AC1: The world model uses fixed square chunks with a default target of `16x16` tiles or logical cells per chunk.
 - AC2: World, chunk, and screen coordinates are explicitly distinguished and transform cleanly between one another.
 - AC3: Stable logical world units and tile sizing are defined independently from raw screen pixels.
-- AC4: Chunk identity is deterministic from chunk coordinates and compatible with a global world-seed model.
+- AC4: Chunk identity is deterministic from chunk coordinates and compatible with a global world-seed model, starting from a fixed default seed that can be overridden later.
 - AC5: The world model supports positive and negative coordinates and remains compatible with a future infinite-map approach.
 - AC6: This slice provides the deterministic world contract required by later rendering, culling, and entity indexing work.
 
@@ -58,9 +58,9 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_005_make_world_identity_deterministic_from_seed_and_coordinates`
 - Request: `req_001_render_top_down_infinite_chunked_world_map`
-- Primary task(s): `task_XXX_example`
+- Primary task(s): (none yet)
 
 # Priority
 - Impact: High

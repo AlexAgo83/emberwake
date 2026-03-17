@@ -1,16 +1,16 @@
 ## item_044_define_minimal_player_facing_runtime_feedback_and_onboarding_surfaces - Define minimal player facing runtime feedback and onboarding surfaces
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 94%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - The first player loop needs just enough on-screen feedback to be understandable without clutter.
-- This slice defines the minimal onboarding and runtime feedback surfaces that support the first-minute experience.
+- This slice defines the minimal onboarding and runtime feedback surfaces that support the first-minute experience, including a hint that can disappear once the player has actually moved.
 
 # Scope
 - In: Short onboarding hinting, minimal player-facing runtime feedback, and contextual visibility rules.
@@ -30,7 +30,7 @@ flowchart LR
 - AC3: The request treats fullscreen entry prompts, system prompts, and debug or inspection panels as DOM-owned by default.
 - AC4: The request remains compatible with the fullscreen shell and thin DOM overlay direction already established.
 - AC5: The request addresses mobile and desktop overlay behavior at a product level.
-- AC6: The request favors contextual overlays first and keeps permanent HUD expectations intentionally light.
+- AC6: The request favors contextual overlays first, keeps permanent HUD expectations intentionally light, and allows the first onboarding hint to remain visible until the first successful movement before persisting its dismissal locally.
 - AC7: The request stays compatible with debug diagnostics, selection or inspection surfaces, and future gameplay HUD needs.
 - AC8: The request does not prematurely lock final art direction or every future menu flow.
 

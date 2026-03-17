@@ -1,16 +1,16 @@
 ## item_018_define_mandatory_frontend_and_logics_quality_gates_in_ci - Define mandatory frontend and Logics quality gates in CI
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 94%
-> Confidence: 91%
-> Progress: 0%
+> Understanding: 95%
+> Confidence: 92%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - The repository needs a single baseline pass/fail contract in CI.
-- This slice fixes which frontend and Logics checks are mandatory so regressions are blocked consistently.
+- This slice fixes which frontend and Logics checks are mandatory and blocking from day one so regressions are blocked consistently.
 
 # Scope
 - In: Mandatory lint, typecheck, test, build, and Logics lint gates.
@@ -27,8 +27,8 @@ flowchart LR
 # Acceptance criteria
 - AC1: The request defines a GitHub Actions CI pipeline for the repository rather than a local-only validation approach.
 - AC2: The CI scope remains compatible with the frontend-only static architecture and does not assume backend runtime services.
-- AC3: The pipeline includes the baseline repository checks needed for this stack, such as install, lint, typecheck, and build verification, with tests included when relevant to the project state.
-- AC4: The request treats lint, typecheck, tests, build verification, and Logics lint as the intended baseline mandatory checks for the initial CI workflow.
+- AC3: The pipeline includes the baseline repository checks needed for this stack, such as install, lint, typecheck, tests, and build verification, with tests remaining part of the baseline even if initially lightweight.
+- AC4: The request treats lint, typecheck, tests, build verification, and Logics lint as the initial blocking mandatory checks for the CI workflow.
 - AC5: The request treats `push` and `pull_request` as the default triggering events for the initial CI workflow.
 - AC6: The CI design accounts for dependency caching suitable for the project's package-management setup.
 - AC7: The CI design remains compatible with the delivery direction defined in `req_003_create_render_static_free_plan_blueprint`.
@@ -56,7 +56,7 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_001_enforce_bounded_file_size_and_isolate_react_side_effects`
 - Request: `req_004_prepare_github_actions_ci_pipeline`
 - Primary task(s): (none yet)
 

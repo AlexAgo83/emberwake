@@ -1,16 +1,16 @@
 ## item_040_define_official_debug_scenario_data_model - Define official debug scenario data model
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 94%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - Debug scenarios need to be official shared fixtures rather than throwaway local snippets.
-- This slice defines how reproducible scenarios are represented so product, testing, and runtime can share them.
+- This slice defines how reproducible scenarios are represented so product, testing, and runtime can share them, starting from one canonical scenario rather than many weakly maintained variants.
 
 # Scope
 - In: Scenario data structure, ownership, and reuse expectations across runtime and tests.
@@ -28,7 +28,7 @@ flowchart LR
 - AC1: The request defines a dedicated data and configuration scope rather than leaving content modeling implicit in code.
 - AC2: The request distinguishes between static game data, runtime configuration, debug scenario data, and executable logic.
 - AC3: The request treats typed TypeScript-backed configuration as the intended initial baseline, while leaving room for additional data-file formats later.
-- AC4: The request reserves an explicit place for reproducible debug-scenario data.
+- AC4: The request reserves an explicit place for reproducible debug-scenario data, with one canonical official scenario as the first baseline.
 - AC5: The request remains compatible with the static frontend architecture and deterministic world assumptions.
 - AC6: The request addresses typed or validated data expectations at an appropriate level.
 - AC7: The request stays compatible with future asset, map, and entity systems.

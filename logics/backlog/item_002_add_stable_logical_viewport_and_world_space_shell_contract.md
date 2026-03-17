@@ -1,21 +1,22 @@
 ## item_002_add_stable_logical_viewport_and_world_space_shell_contract - Add stable logical viewport and world-space shell contract
-> From version: 0.1.0
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 0%
+> Understanding: 96%
+> Confidence: 93%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - The shell needs a stable logical viewport contract so rendering scale and world position do not drift across device classes or responsive modes.
+- The default sizing strategy should preserve a stable logical `fit` contract rather than behave like an aggressive cover-style crop.
 - The runtime must establish world-space-ready coordinate assumptions before map and entity work begins.
 - The shell should carry the shared technical vocabulary and performance baseline that later world and entity requests depend on.
 
 # Scope
 - In:
-- Logical viewport sizing rules and stable coordinate assumptions independent from raw pixels
+- Logical viewport sizing rules and stable fit-style coordinate assumptions independent from raw pixels
 - Mobile and large-screen responsive modes around the `900px` breakpoint
 - Future-scrollable-world readiness and world-space compatibility
 - Shared technical vocabulary for world space, chunk space, screen space, camera state, entity state, and render layers
@@ -34,7 +35,7 @@ flowchart LR
 ```
 
 # Acceptance criteria
-- AC1: The shell defines explicit logical viewport rules that remain stable across mobile and large-screen layouts.
+- AC1: The shell defines explicit logical viewport rules that remain stable across mobile and large-screen layouts, with a fit-style baseline rather than cover-style cropping.
 - AC2: Viewport changes do not arbitrarily alter logical scale or world position.
 - AC3: The shell is explicitly compatible with a future large or unbounded scrollable world and does not assume fixed screen-sized gameplay space.
 - AC4: Shared technical vocabulary is documented and consistent for later shell, world, and entity work.
@@ -59,9 +60,9 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`
 - Request: `req_000_bootstrap_fullscreen_2d_react_pwa_shell`
-- Primary task(s): `task_XXX_example`
+- Primary task(s): (none yet)
 
 # Priority
 - Impact: High

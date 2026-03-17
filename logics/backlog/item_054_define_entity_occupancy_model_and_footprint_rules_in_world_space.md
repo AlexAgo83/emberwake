@@ -1,16 +1,16 @@
 ## item_054_define_entity_occupancy_model_and_footprint_rules_in_world_space - Define entity occupancy model and footprint rules in world space
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 94%
+> Confidence: 91%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - Entities need a shared rule for how they occupy and reference world space.
-- This slice defines footprints and occupancy semantics so later movement and interaction rules have a stable base.
+- This slice defines footprints and occupancy semantics so later movement and interaction rules have a stable base, using a simple circular-radius baseline first.
 
 # Scope
 - In: Entity footprints, occupancy meaning, and world-space placement rules.
@@ -26,7 +26,7 @@ flowchart LR
 
 # Acceptance criteria
 - AC1: The request defines a dedicated spatial-rules scope connecting entities and world space.
-- AC2: The request addresses occupancy expectations for entities in relation to tiles or world coordinates.
+- AC2: The request addresses occupancy expectations for entities in relation to tiles or world coordinates, starting from a simple circular-radius footprint baseline.
 - AC3: The request treats world space as continuous by default, with grid or tile structure used as a helper rather than the only movement model.
 - AC4: The request addresses baseline navigation or traversal rules at a product or architecture level.
 - AC5: The request remains compatible with the chunked world model and entity footprint expectations already defined elsewhere.

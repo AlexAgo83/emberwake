@@ -1,22 +1,22 @@
 ## item_001_implement_fullscreen_viewport_ownership_and_input_isolation - Implement fullscreen viewport ownership and input isolation
-> From version: 0.1.0
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 0%
+> Understanding: 96%
+> Confidence: 93%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - The shell must fully own the viewport and prevent browser-page gestures or controls from interfering with the render surface.
-- The runtime needs a user-triggered fullscreen path, a robust non-fullscreen fallback layout, and mobile safe-area handling.
+- The runtime needs an explicit user-triggered fullscreen path, a robust non-fullscreen fallback layout, and mobile safe-area handling.
 - Input ownership on the render surface needs to be explicit so pointer and touch interactions route into the app instead of the page.
 
 # Scope
 - In:
 - Full-viewport app host and overflow ownership for `html`, `body`, and root shell
-- User-triggered Fullscreen API flow and fullscreen-like fallback layout
+- Explicit fullscreen CTA backed by the Fullscreen API and a fullscreen-like fallback layout
 - Page scroll suppression, overscroll isolation, selection prevention, and safe-area handling
 - Pointer and touch ownership rules for the render surface
 - Out:
@@ -34,7 +34,7 @@ flowchart LR
 
 # Acceptance criteria
 - AC1: The shell fills the full visible viewport on desktop and mobile, with document-level scrolling and overflow neutralized.
-- AC2: A user-triggered fullscreen flow exists when supported through the Fullscreen API, with a robust fullscreen-like fallback layout when true fullscreen is unavailable.
+- AC2: An explicit user-triggered fullscreen CTA exists when supported through the Fullscreen API, with a robust fullscreen-like fallback layout when true fullscreen is unavailable.
 - AC3: Page-level interactions that would interfere with the render surface are suppressed where the browser allows it, including scroll chaining and accidental selection.
 - AC4: Mobile safe-area insets are handled so the render shell remains usable on notched or inset devices.
 - AC5: Pointer and touch interactions are treated as first-class on the render surface and do not fall back into browser-page navigation behavior.
@@ -58,9 +58,9 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_007_isolate_runtime_input_from_browser_page_controls`
 - Request: `req_000_bootstrap_fullscreen_2d_react_pwa_shell`
-- Primary task(s): `task_XXX_example`
+- Primary task(s): (none yet)
 
 # Priority
 - Impact: High
