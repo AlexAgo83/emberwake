@@ -1,9 +1,9 @@
 ## item_003_add_render_diagnostics_fallback_handling_and_shell_preferences - Add render diagnostics fallback handling and shell preferences
-> From version: 0.1.2
+> From version: 0.1.3
 > Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 5%
+> Understanding: 97%
+> Confidence: 94%
+> Progress: 10%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -60,7 +60,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_006_standardize_debug_first_runtime_instrumentation`, `adr_009_limit_persistence_to_local_versioned_frontend_storage`
 - Request: `req_000_bootstrap_fullscreen_2d_react_pwa_shell`
-- Primary task(s): (none yet)
+- Primary task(s): `task_003_add_render_diagnostics_fallback_handling_and_shell_preferences`
 
 # Priority
 - Impact: High

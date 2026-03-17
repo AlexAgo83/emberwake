@@ -1,9 +1,9 @@
 ## item_009_define_entity_contract_and_generic_archetype_baseline - Define entity contract and generic archetype baseline
-> From version: 0.1.2
+> From version: 0.1.3
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 5%
+> Understanding: 94%
+> Confidence: 91%
+> Progress: 10%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -62,7 +62,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`
 - Request: `req_002_render_evolving_world_entities_on_the_map`
-- Primary task(s): (none yet)
+- Primary task(s): `task_008_define_entity_contract_and_generic_archetype_baseline`
 
 # Priority
 - Impact: High

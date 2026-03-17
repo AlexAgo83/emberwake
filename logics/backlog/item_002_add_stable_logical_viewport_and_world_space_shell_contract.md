@@ -1,9 +1,9 @@
 ## item_002_add_stable_logical_viewport_and_world_space_shell_contract - Add stable logical viewport and world-space shell contract
-> From version: 0.1.2
+> From version: 0.1.3
 > Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 5%
+> Understanding: 97%
+> Confidence: 94%
+> Progress: 10%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -62,7 +62,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`
 - Request: `req_000_bootstrap_fullscreen_2d_react_pwa_shell`
-- Primary task(s): (none yet)
+- Primary task(s): `task_002_add_stable_logical_viewport_and_world_space_shell_contract`
 
 # Priority
 - Impact: High

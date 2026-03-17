@@ -1,9 +1,9 @@
 ## item_004_implement_camera_controls_for_pan_zoom_and_rotation - Implement camera controls for pan zoom and rotation
-> From version: 0.1.2
+> From version: 0.1.3
 > Status: Ready
-> Understanding: 95%
-> Confidence: 91%
-> Progress: 5%
+> Understanding: 96%
+> Confidence: 92%
+> Progress: 10%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -61,7 +61,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`
 - Request: `req_001_render_top_down_infinite_chunked_world_map`
-- Primary task(s): (none yet)
+- Primary task(s): `task_007_implement_camera_controls_for_pan_zoom_and_rotation`
 
 # Priority
 - Impact: High

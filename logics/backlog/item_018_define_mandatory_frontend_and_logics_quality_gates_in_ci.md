@@ -1,9 +1,9 @@
 ## item_018_define_mandatory_frontend_and_logics_quality_gates_in_ci - Define mandatory frontend and Logics quality gates in CI
-> From version: 0.1.2
+> From version: 0.1.3
 > Status: Ready
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 5%
+> Understanding: 96%
+> Confidence: 93%
+> Progress: 10%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -58,7 +58,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_001_enforce_bounded_file_size_and_isolate_react_side_effects`
 - Request: `req_004_prepare_github_actions_ci_pipeline`
-- Primary task(s): (none yet)
+- Primary task(s): `task_005_define_mandatory_frontend_and_logics_quality_gates_in_ci`
 
 # Priority
 - Impact: High

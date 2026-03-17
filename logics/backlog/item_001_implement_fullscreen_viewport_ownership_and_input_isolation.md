@@ -1,9 +1,9 @@
 ## item_001_implement_fullscreen_viewport_ownership_and_input_isolation - Implement fullscreen viewport ownership and input isolation
-> From version: 0.1.2
+> From version: 0.1.3
 > Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 5%
+> Understanding: 97%
+> Confidence: 94%
+> Progress: 10%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -60,7 +60,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_007_isolate_runtime_input_from_browser_page_controls`
 - Request: `req_000_bootstrap_fullscreen_2d_react_pwa_shell`
-- Primary task(s): (none yet)
+- Primary task(s): `task_001_implement_fullscreen_viewport_ownership_and_input_isolation`
 
 # Priority
 - Impact: High

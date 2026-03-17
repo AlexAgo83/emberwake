@@ -1,9 +1,9 @@
 ## item_010_implement_fixed_step_entity_movement_and_state_update_loop - Implement fixed-step entity movement and state update loop
-> From version: 0.1.2
+> From version: 0.1.3
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 5%
+> Understanding: 94%
+> Confidence: 91%
+> Progress: 10%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -60,7 +60,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_004_run_simulation_on_a_fixed_timestep`
 - Request: `req_002_render_evolving_world_entities_on_the_map`
-- Primary task(s): (none yet)
+- Primary task(s): `task_009_implement_fixed_step_entity_movement_and_state_update_loop`
 
 # Priority
 - Impact: High

@@ -1,9 +1,9 @@
 ## item_024_define_single_entity_control_contract_and_input_ownership_boundaries - Define single entity control contract and input ownership boundaries
-> From version: 0.1.2
+> From version: 0.1.3
 > Status: Ready
-> Understanding: 94%
-> Confidence: 91%
-> Progress: 5%
+> Understanding: 95%
+> Confidence: 92%
+> Progress: 10%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -64,7 +64,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_007_isolate_runtime_input_from_browser_page_controls`
 - Request: `req_006_define_player_interactions_for_world_and_entities`
-- Primary task(s): (none yet)
+- Primary task(s): `task_010_define_single_entity_control_contract_and_input_ownership_boundaries`
 
 # Priority
 - Impact: High
