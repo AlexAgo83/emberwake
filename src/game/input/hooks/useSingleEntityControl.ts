@@ -1,17 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
 
+import { createIdleMovementIntent } from "../model/singleEntityControlContract";
 import {
   createKeyboardMovementIntent,
   singleEntityControlContract
 } from "../model/singleEntityControlContract";
-import type { SingleEntityControlState } from "../model/singleEntityControlContract";
+import type {
+  MovementIntent,
+  SingleEntityControlState
+} from "../model/singleEntityControlContract";
 
 type UseSingleEntityControlOptions = {
   controlledEntityId: string;
+  touchMovementIntent?: MovementIntent;
 };
 
 export function useSingleEntityControl({
-  controlledEntityId
+  controlledEntityId,
+  touchMovementIntent = createIdleMovementIntent("touch")
 }: UseSingleEntityControlOptions): SingleEntityControlState {
   const [debugCameraModifierActive, setDebugCameraModifierActive] = useState(false);
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(() => new Set());
@@ -64,7 +70,10 @@ export function useSingleEntityControl({
   }, []);
 
   return useMemo(() => {
-    const movementIntent = createKeyboardMovementIntent(pressedKeys);
+    const keyboardMovementIntent = createKeyboardMovementIntent(pressedKeys);
+    const movementIntent = touchMovementIntent.isActive
+      ? touchMovementIntent
+      : keyboardMovementIntent;
     const inputOwner = movementIntent.isActive
       ? singleEntityControlContract.ownership.controlledEntity
       : debugCameraModifierActive
@@ -77,5 +86,5 @@ export function useSingleEntityControl({
       inputOwner,
       movementIntent
     };
-  }, [controlledEntityId, debugCameraModifierActive, pressedKeys]);
+  }, [controlledEntityId, debugCameraModifierActive, pressedKeys, touchMovementIntent]);
 }

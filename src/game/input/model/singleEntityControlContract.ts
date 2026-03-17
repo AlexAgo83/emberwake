@@ -18,6 +18,10 @@ export const singleEntityControlContract = {
     desktopFallback: "keyboard-steering",
     mobilePrimaryGesture: "single-touch-drag",
     primaryInteraction: "steer-controlled-entity"
+  },
+  virtualStick: {
+    deadZonePixels: 20,
+    maxRadiusPixels: 88
   }
 } as const;
 

@@ -12,6 +12,8 @@ import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
 import { useDebugPanelHotkey } from "../game/debug/hooks/useDebugPanelHotkey";
 import { useEntitySimulation } from "../game/entities/hooks/useEntitySimulation";
 import { entityContract } from "../game/entities/model/entityContract";
+import { MobileVirtualStickOverlay } from "../game/input/components/MobileVirtualStickOverlay";
+import { useMobileVirtualStick } from "../game/input/hooks/useMobileVirtualStick";
 import { useSingleEntityControl } from "../game/input/hooks/useSingleEntityControl";
 import { singleEntityControlContract } from "../game/input/model/singleEntityControlContract";
 import { RuntimeSurface } from "../game/render/RuntimeSurface";
@@ -28,8 +30,12 @@ export function AppShell() {
   const runtimeSurfaceRef = useRef<HTMLDivElement>(null);
   useDocumentViewportLock();
   useRuntimeInteractionGuards(runtimeSurfaceRef);
+  const mobileVirtualStick = useMobileVirtualStick({
+    surfaceRef: runtimeSurfaceRef
+  });
   const controlState = useSingleEntityControl({
-    controlledEntityId: entityContract.primaryEntityId
+    controlledEntityId: entityContract.primaryEntityId,
+    touchMovementIntent: mobileVirtualStick.movementIntent
   });
   const { enterFullscreen, isFullscreen, isSupported, lastError } =
     useFullscreenController(shellRef);
@@ -218,6 +224,8 @@ export function AppShell() {
           visible={diagnosticsVisible}
         />
       </section>
+
+      <MobileVirtualStickOverlay stickState={mobileVirtualStick} />
     </main>
   );
 }

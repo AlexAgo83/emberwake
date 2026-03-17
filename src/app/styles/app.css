@@ -163,6 +163,38 @@
   line-height: 1.45;
 }
 
+.mobile-virtual-stick {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.mobile-virtual-stick__base,
+.mobile-virtual-stick__knob {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 1px rgba(255, 159, 81, 0.18), 0 16px 32px rgba(5, 10, 15, 0.32);
+}
+
+.mobile-virtual-stick__base {
+  border: 1px solid rgba(255, 159, 81, 0.2);
+  background:
+    radial-gradient(circle, rgba(255, 128, 72, 0.18), rgba(15, 10, 25, 0.08) 65%),
+    rgba(8, 12, 18, 0.14);
+  backdrop-filter: blur(8px);
+}
+
+.mobile-virtual-stick__knob {
+  width: 3.6rem;
+  height: 3.6rem;
+  border: 1px solid rgba(76, 226, 255, 0.28);
+  background:
+    radial-gradient(circle, rgba(255, 196, 129, 0.92), rgba(255, 111, 61, 0.74) 60%),
+    rgba(15, 10, 25, 0.86);
+}
+
 .shell-identity,
 .shell-status {
   width: min(32rem, 100%);
