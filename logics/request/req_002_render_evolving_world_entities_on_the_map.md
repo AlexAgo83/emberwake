@@ -1,8 +1,8 @@
 ## req_002_render_evolving_world_entities_on_the_map - Render evolving world entities on the map
-> From version: 0.1.0
+> From version: 0.1.1
 > Status: Ready
-> Understanding: 92%
-> Confidence: 89%
+> Understanding: 97%
+> Confidence: 94%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -17,6 +17,7 @@
 - Define a minimum entity contract from the start, including at least stable identity, world position, orientation, visual representation, and mutable state.
 - Start with a generic entity model and debug-oriented visual representation rather than a final gameplay taxonomy or final art direction.
 - Begin with one generic movable entity archetype as the default first implementation rather than multiple gameplay-specific families.
+- Treat the first player-controlled entity as an instance of the same shared entity contract rather than a separate special-case foundation model.
 - Give entities a simple physical footprint from the start, such as a radius or equivalent debug-friendly size model.
 - Treat entity movement as deterministic or debug-driven for this first pass so rendering and state evolution can be validated without full AI or pathfinding systems.
 - Use continuous world-space movement with velocity from the start rather than tile-by-tile stepping.
@@ -28,9 +29,10 @@
 - Provide a deterministic debug scenario for spawning and observing entities so movement and state changes can be reproduced reliably across runs.
 - Allow optional debug labels, movement traces, and simple overlap diagnostics to help inspect entity behavior.
 - Support controlled spawn and despawn behavior as part of the first entity lifecycle model.
+- Allow a small optional set of passive or debug entities around the primary controllable one without making multi-entity control part of the first slice.
 - Use a fixed simulation-step mindset for entity updates even if rendering stays frame-based.
 - Keep velocity as the default movement driver in the first pass without requiring acceleration yet.
-- Treat entity orientation as immediately relevant for rendering and preserve it as future movement-facing data rather than cosmetic-only metadata.
+- Treat entity orientation as immediately relevant for rendering and derive it from movement state by default rather than treating it as cosmetic-only metadata.
 - Make selection and inspection part of the same initial debug flow so selecting an entity reveals its inspectable state directly.
 - Define a lightweight performance expectation for the entity layer so debug populations remain usable on a representative mobile-sized screen.
 
@@ -49,6 +51,8 @@ For this phase, entities should follow a minimum shared contract rather than a l
 
 The first implementation should stay intentionally narrow and start from one generic movable archetype. That is enough to validate the entity layer without prematurely designing full families such as units, projectiles, resources, structures, or NPC variants.
 
+The first player-controlled actor should still use that same shared foundation. Control ownership may differ, but the entity model itself should not fork at the base layer.
+
 Entities should not be treated as mathematical points only. Even in a debug-first phase, each entity should have a simple footprint such as a radius or equivalent size indicator so picking, overlap reasoning, rendering, and future motion constraints have a more realistic base.
 
 Movement should remain deterministic or developer-driven in the initial version. That keeps the request focused on the entity/map integration layer rather than introducing full autonomous behavior, pathfinding, or combat logic too early. A good baseline is continuous movement in world space driven by velocity, without requiring acceleration, collision resolution, or pathfinding yet.
@@ -64,6 +68,8 @@ The first pass should also support practical debug inspection. That means at lea
 Selection and inspection should stay simple at first. Single-entity selection is enough for this phase, and selecting an entity should make it easy to inspect its debug data such as identity, state, chunk, position, facing, or velocity.
 
 Orientation should matter immediately for rendering, not exist as dead metadata. Even if the first movement logic does not yet depend heavily on facing, the model should preserve orientation as a real part of the entity contract so later movement, steering, and animation systems can build on it.
+
+The recommended baseline is for orientation to follow actual movement state while the movement model stays simple. That keeps facing, velocity, and rendering aligned early.
 
 The design should also distinguish between entities that are currently rendered and entities that remain tracked outside the current visible area. Rendering visibility and simulation tracking should not be treated as the same concept by default.
 
@@ -94,29 +100,31 @@ flowchart TD
 - AC7: Entity position and state remain stable across viewport changes and do not drift unpredictably when the camera moves, zooms, or rotates.
 - AC8: The first entity layer uses a minimum shared entity contract that includes at least stable identity, world position, orientation, visual representation, and mutable state.
 - AC9: The first implementation starts from one generic movable entity archetype rather than multiple gameplay-specialized entity families.
-- AC10: Entities include a simple footprint model such as a radius or equivalent debug-friendly size indicator.
-- AC11: The initial entity rendering is intentionally debug-friendly, using simple shapes, sprites, labels, direction markers, state colors, or comparable visual aids rather than depending on final art direction.
-- AC12: The first entity layer is debug-friendly and provides enough diagnostics to inspect at least entity position, movement behavior, orientation, and current entity state during development.
-- AC13: Initial entity movement can be deterministic, scripted, or developer-driven so the entity/world integration can be validated without requiring advanced AI or pathfinding.
-- AC14: Entity movement uses continuous world-space motion and supports at least velocity-based updates in the first pass.
-- AC15: Entities can cross chunk boundaries while preserving identity, position continuity, and state continuity.
-- AC16: Entities belong to world space and may be spatially indexed by chunk, but they are not modeled as permanently owned by a single chunk.
-- AC17: The design distinguishes at least two scopes for entities: rendered-visible entities and entities that remain tracked even when they are not currently visible.
-- AC18: Entity state continuity is preserved when entities leave and re-enter the visible area.
-- AC19: Debug picking or inspection is available at least for development purposes so an entity can be selected or inspected from the map view.
-- AC20: A simple single-entity selection model is supported for debug and inspection purposes.
-- AC21: Controlled entity spawning and despawning are supported as part of the first lifecycle model.
-- AC22: A deterministic debug scenario exists for spawning and observing entities so movement and state changes can be reproduced reliably.
-- AC23: Optional debug labels, movement traces, or simple overlap diagnostics are available to help inspect behavior during development.
-- AC24: Render ordering or layer priority for entities is defined explicitly enough to avoid accidental or unstable draw order.
-- AC25: Full collision, combat rules, and advanced animation systems are not required yet and remain out of scope for this request.
-- AC26: The internal design anticipates a separation between entity data or state, entity update logic, and entity rendering so later gameplay features do not require replacing the entity foundation.
-- AC27: Entity updates are compatible with a fixed simulation-step mindset even if rendering remains frame-based.
-- AC28: Velocity is the default first-pass movement driver and acceleration is not required yet.
-- AC29: Entity orientation affects rendering from the first pass and remains available as future movement-facing data.
-- AC30: Selection and inspection are linked in the default debug flow so selecting an entity exposes its inspectable state directly.
-- AC31: The entity layer defines a lightweight performance expectation so a representative debug population remains usable on a mobile-sized screen.
-- AC32: The resulting entity layer is suitable for follow-up requests covering richer movement rules, behaviors, interactions, simulation systems, and future entity categories without forcing a rendering rewrite.
+- AC10: A player-controlled entity, when present, still uses the same shared entity contract as other entities rather than a special-case foundation model.
+- AC11: Entities include a simple footprint model such as a radius or equivalent debug-friendly size indicator.
+- AC12: The initial entity rendering is intentionally debug-friendly, using simple shapes, sprites, labels, direction markers, state colors, or comparable visual aids rather than depending on final art direction.
+- AC13: The first entity layer is debug-friendly and provides enough diagnostics to inspect at least entity position, movement behavior, orientation, and current entity state during development.
+- AC14: Initial entity movement can be deterministic, scripted, or developer-driven so the entity/world integration can be validated without requiring advanced AI or pathfinding.
+- AC15: Entity movement uses continuous world-space motion and supports at least velocity-based updates in the first pass.
+- AC16: Entities can cross chunk boundaries while preserving identity, position continuity, state continuity, and visual continuity.
+- AC17: Entities belong to world space and may be spatially indexed by chunk, but they are not modeled as permanently owned by a single chunk.
+- AC18: The design distinguishes at least two scopes for entities: rendered-visible entities and entities that remain tracked even when they are not currently visible.
+- AC19: Entity state continuity is preserved when entities leave and re-enter the visible area.
+- AC20: Debug picking or inspection is available at least for development purposes so an entity can be selected or inspected from the map view.
+- AC21: A simple single-entity selection model is supported for debug and inspection purposes.
+- AC22: Controlled entity spawning and despawning are supported as part of the first lifecycle model.
+- AC23: A deterministic debug scenario exists for spawning and observing entities so movement and state changes can be reproduced reliably.
+- AC24: Optional passive or debug entities can exist around the primary controlled entity without requiring multi-entity control.
+- AC25: Optional debug labels, movement traces, or simple overlap diagnostics are available to help inspect behavior during development.
+- AC26: Render ordering or layer priority for entities is defined explicitly enough to avoid accidental or unstable draw order.
+- AC27: Full collision, combat rules, and advanced animation systems are not required yet and remain out of scope for this request.
+- AC28: The internal design anticipates a separation between entity data or state, entity update logic, and entity rendering so later gameplay features do not require replacing the entity foundation.
+- AC29: Entity updates are compatible with a fixed simulation-step mindset even if rendering remains frame-based.
+- AC30: Velocity is the default first-pass movement driver and acceleration is not required yet.
+- AC31: Entity orientation affects rendering from the first pass, follows movement state by default, and remains available as future movement-facing data.
+- AC32: Selection and inspection are linked in the default debug flow so selecting an entity exposes its inspectable state directly.
+- AC33: The entity layer defines a lightweight performance expectation so a representative debug population remains usable on a mobile-sized screen.
+- AC34: The resulting entity layer is suitable for follow-up requests covering richer movement rules, behaviors, interactions, simulation systems, and future entity categories without forcing a rendering rewrite.
 
 # Definition of Ready (DoR)
 - [x] Problem statement is explicit and user impact is clear.
@@ -125,8 +133,12 @@ flowchart TD
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
-- Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Product brief(s): `prod_000_initial_single_entity_navigation_loop`
+- Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_001_enforce_bounded_file_size_and_isolate_react_side_effects`
 
 # Backlog
-- (none yet)
+- `item_009_define_entity_contract_and_generic_archetype_baseline`
+- `item_010_implement_fixed_step_entity_movement_and_state_update_loop`
+- `item_011_add_chunk_aware_entity_indexing_tracking_and_chunk_crossing`
+- `item_012_render_debug_entity_layers_with_orientation_footprint_and_ordering`
+- `item_013_add_entity_picking_selection_inspection_and_deterministic_debug_scenario`

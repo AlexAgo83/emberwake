@@ -1,8 +1,8 @@
 ## req_000_bootstrap_fullscreen_2d_react_pwa_shell - Bootstrap fullscreen 2D React Pixi PWA shell
-> From version: 0.1.0
+> From version: 0.1.1
 > Status: Ready
-> Understanding: 95%
-> Confidence: 92%
+> Understanding: 98%
+> Confidence: 96%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -131,7 +131,10 @@ flowchart TD
 
 # Companion docs
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_001_enforce_bounded_file_size_and_isolate_react_side_effects`
 
 # Backlog
-- (none yet)
+- `item_000_bootstrap_react_pixi_pwa_project_foundation`
+- `item_001_implement_fullscreen_viewport_ownership_and_input_isolation`
+- `item_002_add_stable_logical_viewport_and_world_space_shell_contract`
+- `item_003_add_render_diagnostics_fallback_handling_and_shell_preferences`

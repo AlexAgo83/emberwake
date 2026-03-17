@@ -1,0 +1,73 @@
+## item_004_implement_camera_controls_for_pan_zoom_and_rotation - Implement camera controls for pan zoom and rotation
+> From version: 0.1.0
+> Status: Ready
+> Understanding: 94%
+> Confidence: 90%
+> Progress: 0%
+> Complexity: High
+> Theme: World
+> Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
+
+# Problem
+- The world-map layer needs a concrete camera manipulation contract from the start: pan, zoom, and rotation.
+- Desktop and mobile controls must be explicit so map navigation does not become an emergent side effect of trial-and-error gestures.
+- Camera behavior needs stable pivot, bounds, and reset rules before chunk visibility and world rendering build on top of it.
+
+# Scope
+- In:
+- Desktop control mapping for pan, zoom, and rotation
+- Mobile gesture mapping for pan, zoom, and rotation
+- Camera pivot, zoom bounds, free-form rotation, and reset behavior
+- Camera-centered origin and initial navigation contract
+- Out:
+- Chunk identity and world-seed model
+- Map rendering and chunk visibility logic
+- Diagnostics and picking beyond what is strictly needed to validate camera behavior
+
+```mermaid
+flowchart LR
+    Req[Request source] --> Problem[Problem to solve]
+    Problem --> Scope[Scoped delivery]
+    Scope --> AC[Acceptance criteria]
+    AC --> Tasks[Implementation task s]
+```
+
+# Acceptance criteria
+- AC1: The default desktop controls are explicit, with pointer drag for pan, mouse wheel for zoom, and keyboard rotation controls such as `Q` and `E`.
+- AC2: The default mobile controls are explicit, with one-finger pan, pinch-to-zoom, and two-finger rotation as the baseline gesture model.
+- AC3: Zoom and rotation behave around a defined pivot rule, preferably the viewport center by default.
+- AC4: Zoom is constrained by explicit minimum and maximum bounds.
+- AC5: Rotation is free-form by default and camera reset actions can restore position, zoom, and rotation to a known state.
+- AC6: The camera contract remains compatible with later chunked-world rendering without requiring a camera rewrite.
+
+# AC Traceability
+- AC1 -> Scope: Desktop camera controls are explicit. Proof: TODO.
+- AC2 -> Scope: Mobile camera gestures are explicit. Proof: TODO.
+- AC3 -> Scope: Camera pivot rule is defined. Proof: TODO.
+- AC4 -> Scope: Zoom bounds are defined. Proof: TODO.
+- AC5 -> Scope: Free-form rotation and reset behavior are defined. Proof: TODO.
+- AC6 -> Scope: Camera contract remains reusable for later chunked-world slices. Proof: TODO.
+
+# Decision framing
+- Product framing: Required
+- Product signals: conversion journey, navigation and discoverability, engagement loop
+- Product follow-up: Create or link a product brief before implementation moves deeper into delivery.
+- Architecture framing: Required
+- Architecture signals: contracts and integration, runtime and boundaries, delivery and operations
+- Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
+
+# Links
+- Product brief(s): (none yet)
+- Architecture decision(s): (none yet)
+- Request: `req_001_render_top_down_infinite_chunked_world_map`
+- Primary task(s): `task_XXX_example`
+
+# Priority
+- Impact: High
+- Urgency: High
+
+# Notes
+- Derived from request `req_001_render_top_down_infinite_chunked_world_map`.
+- Source file: `logics/request/req_001_render_top_down_infinite_chunked_world_map.md`.
+- Request context seeded into this backlog item from `logics/request/req_001_render_top_down_infinite_chunked_world_map.md`.
+- This slice defines the manipulation contract that later map rendering and chunk visibility depend on.
