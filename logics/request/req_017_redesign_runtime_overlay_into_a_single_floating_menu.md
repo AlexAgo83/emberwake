@@ -1,8 +1,8 @@
 ## req_017_redesign_runtime_overlay_into_a_single_floating_menu - Redesign runtime overlay into a single floating menu
 > From version: 0.1.3
-> Status: Ready
-> Understanding: 92%
-> Confidence: 90%
+> Status: In Progress
+> Understanding: 98%
+> Confidence: 95%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -64,6 +64,7 @@ flowchart TD
 # Companion docs
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`
+- Task(s): `task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu`
 
 # Backlog
 - `item_066_define_floating_shell_menu_actions_for_fullscreen_and_camera_reset`

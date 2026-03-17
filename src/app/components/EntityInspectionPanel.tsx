@@ -6,6 +6,7 @@ type EntityInspectionPanelProps = {
   entitySelectionState: string;
   entityState: string;
   isMobile: boolean;
+  onClose: () => void;
 };
 
 export function EntityInspectionPanel({
@@ -15,16 +16,24 @@ export function EntityInspectionPanel({
   entityPosition,
   entitySelectionState,
   entityState,
-  isMobile
+  isMobile,
+  onClose
 }: EntityInspectionPanelProps) {
   return (
     <aside
       className={`inspection-panel${isMobile ? " inspection-panel--mobile" : ""}`}
-      aria-label="Selected entity inspection"
+      aria-label="Inspecteur"
       data-testid="entity-inspection"
     >
-      <p className="inspection-panel__eyebrow">Inspection</p>
-      <h2>{entityLabel}</h2>
+      <header className="inspection-panel__header">
+        <div>
+          <p className="inspection-panel__eyebrow">Inspecteur</p>
+          <h2>{entityLabel}</h2>
+        </div>
+        <button aria-label="Close inspecteur" className="panel-dismiss" onClick={onClose} type="button">
+          Close
+        </button>
+      </header>
       <dl className="inspection-panel__grid">
         <div>
           <dt>ID</dt>

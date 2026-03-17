@@ -1,8 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 import { EntityInspectionPanel } from "./components/EntityInspectionPanel";
-import { FullscreenToggleButton } from "./components/FullscreenToggleButton";
-import { PlayerHudCard } from "./components/PlayerHudCard";
+import { ShellMenu } from "./components/ShellMenu";
 import { useDocumentViewportLock } from "./hooks/useDocumentViewportLock";
 import { useFullscreenController } from "./hooks/useFullscreenController";
 import { useInstallPrompt } from "./hooks/useInstallPrompt";
@@ -66,29 +65,13 @@ export function AppShell() {
   const {
     preferences,
     setDebugPanelVisible,
-    setMovementOnboardingDismissed,
+    setInspectionPanelVisible,
     setPrefersFullscreen
   } = useShellPreferences({
-    defaultDebugPanelVisible: appConfig.debugOverlayEnabled && appConfig.diagnosticsEnabled
+    defaultDebugPanelVisible: false
   });
   const isMobileLayout = viewport.layoutMode === "mobile";
 
-  useEffect(() => {
-    if (
-      preferences.movementOnboardingDismissed ||
-      !controlState.movementIntent.isActive ||
-      simulationState.entity.state !== "moving"
-    ) {
-      return;
-    }
-
-    setMovementOnboardingDismissed(true);
-  }, [
-    controlState.movementIntent.isActive,
-    preferences.movementOnboardingDismissed,
-    setMovementOnboardingDismissed,
-    simulationState.entity.state
-  ]);
   useDebugPanelHotkey({
     enabled: appConfig.diagnosticsEnabled,
     onToggle: () => {
@@ -96,6 +79,7 @@ export function AppShell() {
     }
   });
   const diagnosticsVisible = appConfig.diagnosticsEnabled && preferences.debugPanelVisible;
+  const inspecteurVisible = preferences.inspectionPanelVisible;
   const handleEnterFullscreen = async () => {
     setPrefersFullscreen(true);
     await enterFullscreen();
@@ -123,58 +107,29 @@ export function AppShell() {
       </section>
 
       <section className="app-shell__overlay" aria-label="Shell status overlay">
-        <header className="shell-topbar">
-          <span className="shell-topbar__mode">Emberwake runtime</span>
-          <div className="shell-topbar__controls">
-            {canInstall ? (
-              <button
-                className="shell-control shell-control--button"
-                onClick={() => {
-                  void promptInstall();
-                }}
-                type="button"
-              >
-                Install app
-              </button>
-            ) : null}
-            {appConfig.diagnosticsEnabled ? (
-              <>
-                <button
-                  className="shell-control shell-control--button"
-                  onClick={() => {
-                    setDebugPanelVisible(!preferences.debugPanelVisible);
-                  }}
-                  type="button"
-                >
-                  {preferences.debugPanelVisible ? "Hide diagnostics" : "Show diagnostics"}
-                </button>
-                <button
-                  className="shell-control shell-control--button"
-                  onClick={resetCamera}
-                  type="button"
-                >
-                  Reset camera
-                </button>
-              </>
-            ) : null}
-            <FullscreenToggleButton
-              isFullscreen={isFullscreen}
-              isSupported={isSupported}
-              onEnterFullscreen={handleEnterFullscreen}
-            />
-          </div>
-        </header>
+        <ShellMenu
+          canInstall={canInstall}
+          diagnosticsEnabled={appConfig.diagnosticsEnabled}
+          diagnosticsVisible={diagnosticsVisible}
+          inspecteurVisible={inspecteurVisible}
+          isFullscreen={isFullscreen}
+          isFullscreenSupported={isSupported}
+          onEnterFullscreen={() => {
+            void handleEnterFullscreen();
+          }}
+          onInstall={() => {
+            void promptInstall();
+          }}
+          onResetCamera={resetCamera}
+          onToggleDiagnostics={() => {
+            setDebugPanelVisible(!preferences.debugPanelVisible);
+          }}
+          onToggleInspecteur={() => {
+            setInspectionPanelVisible(!preferences.inspectionPanelVisible);
+          }}
+        />
 
-        <div className="shell-player-surfaces">
-          <PlayerHudCard
-            isMobile={isMobileLayout}
-            movementHintVisible={!preferences.movementOnboardingDismissed}
-            selectedEntityLabel={
-              entityWorld.selectedEntity.id === entityContract.primaryEntityId
-                ? "Primary entity"
-                : entityWorld.selectedEntity.id.split(":").at(-1) ?? entityWorld.selectedEntity.id
-            }
-          />
+        {inspecteurVisible ? (
           <EntityInspectionPanel
             entityChunk={`${selectedEntityChunk.x}, ${selectedEntityChunk.y}`}
             entityId={entityWorld.selectedEntity.id}
@@ -183,8 +138,11 @@ export function AppShell() {
             entitySelectionState={entityWorld.selectedEntity.isSelected ? "selected" : "not selected"}
             entityState={entityWorld.selectedEntity.state}
             isMobile={isMobileLayout}
+            onClose={() => {
+              setInspectionPanelVisible(false);
+            }}
           />
-        </div>
+        ) : null}
 
         <ShellDiagnosticsPanel
           camera={cameraState}
@@ -214,6 +172,9 @@ export function AppShell() {
           simulationControls={{
             ...simulationState.controls,
             cycleWorldSeed
+          }}
+          onClose={() => {
+            setDebugPanelVisible(false);
           }}
           viewport={viewport}
           visible={diagnosticsVisible}

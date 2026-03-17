@@ -45,6 +45,7 @@ type ShellDiagnosticsPanelProps = {
     stepOnce: () => void;
     togglePaused: () => void;
   };
+  onClose: () => void;
   worldDiagnostics: {
     hoveredChunkCoordinate: ChunkCoordinate | null;
     hoveredWorldPoint: WorldPoint | null;
@@ -73,6 +74,7 @@ export function ShellDiagnosticsPanel({
   renderer,
   simulation,
   simulationControls,
+  onClose,
   worldDiagnostics,
   worldRender,
   visible,
@@ -85,8 +87,18 @@ export function ShellDiagnosticsPanel({
   return (
     <aside className="shell-diagnostics" aria-label="Shell diagnostics">
       <header className="shell-diagnostics__header">
-        <p>Shell diagnostics</p>
-        <span>{renderer.status}</span>
+        <div className="shell-diagnostics__title">
+          <p>Shell diagnostics</p>
+          <span>{renderer.status}</span>
+        </div>
+        <button
+          aria-label="Close diagnostics"
+          className="panel-dismiss"
+          onClick={onClose}
+          type="button"
+        >
+          Close
+        </button>
       </header>
 
       <div className="shell-diagnostics__controls" role="group" aria-label="Simulation controls">

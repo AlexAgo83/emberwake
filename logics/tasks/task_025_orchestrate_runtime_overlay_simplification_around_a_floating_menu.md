@@ -1,9 +1,9 @@
 ## task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu - Orchestrate runtime overlay simplification around a floating menu
 > From version: 0.1.3
-> Status: Ready
-> Understanding: 92%
-> Confidence: 90%
-> Progress: 0%
+> Status: In Progress
+> Understanding: 98%
+> Confidence: 95%
+> Progress: 90%
 > Complexity: High
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -23,11 +23,11 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Replace persistent runtime chrome with a top-right menu trigger and remove redundant always-visible labels and cards from the baseline shell.
-- [ ] 2. Route `fullscreen` and `reset camera` through the floating shell menu while preserving current controller behavior.
-- [ ] 3. Move `diagnostics` and `inspecteur` behind the menu, with debug gating for diagnostics and breakpoint-specific inspection presentation.
-- [ ] 4. Validate the revised shell across mobile and desktop and update linked Logics docs.
-- [ ] FINAL: Update related Logics docs
+- [x] 1. Replace persistent runtime chrome with a top-right menu trigger and remove redundant always-visible labels and cards from the baseline shell.
+- [x] 2. Route `fullscreen` and `reset camera` through the floating shell menu while preserving current controller behavior.
+- [x] 3. Move `diagnostics` and `inspecteur` behind the menu, with debug gating for diagnostics and breakpoint-specific inspection presentation.
+- [x] 4. Validate the revised shell across mobile and desktop and update linked Logics docs.
+- [x] FINAL: Update related Logics docs
 
 # AC Traceability
 - `item_068` -> The baseline runtime becomes menu-first and world-dominant instead of panel-heavy. Proof: `src/app/AppShell.tsx`, `src/app/styles/app.css`.
@@ -57,11 +57,25 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] The runtime exposes one persistent menu trigger and reveals optional tools only on demand.
-- [ ] Linked request/backlog/task docs updated.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] The runtime exposes one persistent menu trigger and reveals optional tools only on demand.
+- [x] Linked request/backlog/task docs updated.
 - [ ] A dedicated git commit has been created for the completed orchestration scope.
 - [ ] Status is `Done` and progress is `100%`.
 
 # Report
+- Replaced the panel-heavy top bar and persistent player HUD with a single top-right `ShellMenu` trigger that owns fullscreen, reset-camera, diagnostics, inspecteur, and optional install actions.
+- Added menu-driven visibility control for the inspecteur and diagnostics, including persisted inspecteur visibility, explicit close actions on both panels, and a default-hidden diagnostics posture even in debug-capable environments.
+- Shifted the shell overlay CSS to a floating-menu model with a desktop inspection card, a mobile bottom-sheet inspection posture, and diagnostics anchored independently from the menu trigger.
+- Updated app-level coverage so the shell test now verifies the menu-first default state and on-demand reveal of inspecteur and diagnostics.
+- Validation:
+  `npm run lint`
+  `npm run typecheck`
+  `npm run test`
+  `npm run build`
+  `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
+- Residual note:
+  `npm run build` still emits the existing `vendor-pixi` chunk-size warning, but the build completes successfully.
+- Pending closure step:
+  Create the dedicated implementation commit before promoting this task to `Done`.
