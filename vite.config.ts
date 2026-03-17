@@ -32,5 +32,30 @@ export default defineConfig({
         sourcemap: true
       }
     })
-  ]
+  ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) {
+            return undefined;
+          }
+
+          if (id.includes("@pixi/") || id.includes("pixi.js")) {
+            return "vendor-pixi";
+          }
+
+          if (
+            id.includes("react-dom") ||
+            id.includes("/react/") ||
+            id.includes("scheduler")
+          ) {
+            return "vendor-react";
+          }
+
+          return "vendor-runtime";
+        }
+      }
+    }
+  }
 });

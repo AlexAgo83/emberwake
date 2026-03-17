@@ -137,6 +137,11 @@ export function useCameraController({
     };
 
     const handleTouchStart = (event: TouchEvent) => {
+      if (!debugCameraEnabled) {
+        touchGesture = null;
+        return;
+      }
+
       if (event.touches.length === 2) {
         const center = getTouchCenter(event.touches);
         touchGesture = {
@@ -150,6 +155,11 @@ export function useCameraController({
     };
 
     const handleTouchMove = (event: TouchEvent) => {
+      if (!debugCameraEnabled) {
+        touchGesture = null;
+        return;
+      }
+
       if (!touchGesture) {
         return;
       }
@@ -187,7 +197,7 @@ export function useCameraController({
     };
 
     const handleTouchEnd = (event: TouchEvent) => {
-      if (event.touches.length === 0) {
+      if (!debugCameraEnabled || event.touches.length === 0) {
         touchGesture = null;
       }
     };
@@ -200,6 +210,7 @@ export function useCameraController({
     surfaceElement.addEventListener("touchstart", handleTouchStart, { passive: true });
     surfaceElement.addEventListener("touchmove", handleTouchMove, { passive: true });
     surfaceElement.addEventListener("touchend", handleTouchEnd, { passive: true });
+    surfaceElement.addEventListener("touchcancel", handleTouchEnd, { passive: true });
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
@@ -211,6 +222,7 @@ export function useCameraController({
       surfaceElement.removeEventListener("touchstart", handleTouchStart);
       surfaceElement.removeEventListener("touchmove", handleTouchMove);
       surfaceElement.removeEventListener("touchend", handleTouchEnd);
+      surfaceElement.removeEventListener("touchcancel", handleTouchEnd);
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [cameraState.zoom, debugCameraEnabled, surfaceRef, viewport.fitScale]);

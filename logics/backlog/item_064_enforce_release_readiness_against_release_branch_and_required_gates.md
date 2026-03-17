@@ -1,9 +1,9 @@
 ## item_064_enforce_release_readiness_against_release_branch_and_required_gates - Enforce release readiness against release branch and required gates
 > From version: 0.1.0
-> Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -32,11 +32,11 @@ flowchart LR
 - AC5: The change stays pragmatic for the current project stage and does not introduce heavy release orchestration.
 
 # AC Traceability
-- AC1 -> Scope: Release readiness aligns with the documented release-branch contract. Proof: TODO.
-- AC2 -> Scope: Required checks are explicitly enforced or verified. Proof: TODO.
-- AC3 -> Scope: The slice remains compatible with changelog, CI, and Render contracts. Proof: TODO.
-- AC4 -> Scope: Advisory and strict readiness modes are clearly separated if both exist. Proof: TODO.
-- AC5 -> Scope: The change stays lightweight for the current delivery model. Proof: TODO.
+- AC1 -> Scope: Release readiness aligns with the documented release-branch contract. Proof: `scripts/release/verifyReleaseReadiness.mjs`, `README.md`, `logics/architecture/adr_013_use_a_dedicated_release_branch_for_deployable_static_releases.md`.
+- AC2 -> Scope: Required checks are explicitly enforced or verified. Proof: `scripts/release/verifyReleaseReadiness.mjs`, `package.json`.
+- AC3 -> Scope: The slice remains compatible with changelog, CI, and Render contracts. Proof: `scripts/release/verifyReleaseReadiness.mjs`, `.github/workflows/ci.yml`, `README.md`.
+- AC4 -> Scope: Advisory and strict readiness modes are clearly separated if both exist. Proof: `package.json`, `scripts/release/verifyReleaseReadiness.mjs`.
+- AC5 -> Scope: The change stays lightweight for the current delivery model. Proof: `scripts/release/verifyReleaseReadiness.mjs`.
 
 # Decision framing
 - Product framing: Not needed
@@ -60,3 +60,4 @@ flowchart LR
 - Derived from request `req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk`.
 - Source file: `logics/request/req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk.md`.
 - Request context seeded into this backlog item from `logics/request/req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk.md`.
+- Completed in `task_024_orchestrate_runtime_hardening_for_input_state_release_and_bundle_risk`.

@@ -1,9 +1,9 @@
 ## item_065_capture_and_reduce_pixi_bundle_warning_risk - Capture and reduce Pixi bundle warning risk
 > From version: 0.1.0
-> Status: Ready
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 0%
+> Status: Done
+> Understanding: 97%
+> Confidence: 94%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -32,11 +32,11 @@ flowchart LR
 - AC5: The work stays scoped to bundle-risk capture and initial mitigation direction rather than broad optimization churn.
 
 # AC Traceability
-- AC1 -> Scope: The Pixi bundle warning is tracked as an explicit residual risk. Proof: TODO.
-- AC2 -> Scope: A first mitigation direction is defined. Proof: TODO.
-- AC3 -> Scope: The slice remains compatible with current performance and delivery contracts. Proof: TODO.
-- AC4 -> Scope: The warning is framed accurately rather than overstated. Proof: TODO.
-- AC5 -> Scope: The work stays limited to risk capture and first mitigation direction. Proof: TODO.
+- AC1 -> Scope: The Pixi bundle warning is tracked as an explicit residual risk. Proof: `README.md`, `logics/tasks/task_024_orchestrate_runtime_hardening_for_input_state_release_and_bundle_risk.md`.
+- AC2 -> Scope: A first mitigation direction is defined. Proof: `vite.config.ts`, `README.md`.
+- AC3 -> Scope: The slice remains compatible with current performance and delivery contracts. Proof: `vite.config.ts`, `README.md`.
+- AC4 -> Scope: The warning is framed accurately rather than overstated. Proof: `README.md`.
+- AC5 -> Scope: The work stays limited to risk capture and first mitigation direction. Proof: `vite.config.ts`, `README.md`.
 
 # Decision framing
 - Product framing: Consider
@@ -60,3 +60,4 @@ flowchart LR
 - Derived from request `req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk`.
 - Source file: `logics/request/req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk.md`.
 - Request context seeded into this backlog item from `logics/request/req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk.md`.
+- Completed in `task_024_orchestrate_runtime_hardening_for_input_state_release_and_bundle_risk`.

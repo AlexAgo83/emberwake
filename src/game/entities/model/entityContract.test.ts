@@ -24,7 +24,7 @@ describe("entityContract", () => {
       id: "entity:test",
       orientation: 1.57,
       renderLayer: 200,
-      state: "selected",
+      state: "moving",
       worldPosition: { x: 512, y: -256 }
     });
 
@@ -32,7 +32,7 @@ describe("entityContract", () => {
       id: "entity:test",
       orientation: 1.57,
       renderLayer: 200,
-      state: "selected",
+      state: "moving",
       worldPosition: { x: 512, y: -256 }
     });
   });

@@ -1,9 +1,9 @@
 ## item_063_separate_entity_selection_presentation_from_simulation_state - Separate entity selection presentation from simulation state
 > From version: 0.1.0
-> Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -32,11 +32,11 @@ flowchart LR
 - AC5: The slice stays focused on state integrity and does not expand into broader gameplay-state redesign.
 
 # AC Traceability
-- AC1 -> Scope: The runtime preserves the real simulation state of selected entities. Proof: TODO.
-- AC2 -> Scope: Selection remains available through a separate presentation mechanism. Proof: TODO.
-- AC3 -> Scope: Diagnostics and browser smoke stay compatible with the corrected state model. Proof: TODO.
-- AC4 -> Scope: The change remains compatible with current entity and inspection contracts. Proof: TODO.
-- AC5 -> Scope: The slice stays limited to state hardening. Proof: TODO.
+- AC1 -> Scope: The runtime preserves the real simulation state of selected entities. Proof: `src/game/entities/hooks/useEntityWorld.ts`, `src/game/entities/hooks/useEntityWorld.test.tsx`.
+- AC2 -> Scope: Selection remains available through a separate presentation mechanism. Proof: `src/game/entities/model/entityContract.ts`, `src/game/entities/render/EntityScene.tsx`, `src/app/components/EntityInspectionPanel.tsx`.
+- AC3 -> Scope: Diagnostics and browser smoke stay compatible with the corrected state model. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `scripts/testing/runBrowserSmoke.mjs`.
+- AC4 -> Scope: The change remains compatible with current entity and inspection contracts. Proof: `src/app/AppShell.tsx`, `src/app/components/EntityInspectionPanel.tsx`, `src/game/entities/render/EntityScene.tsx`.
+- AC5 -> Scope: The slice stays limited to state hardening. Proof: `src/game/entities/hooks/useEntityWorld.ts`.
 
 # Decision framing
 - Product framing: Required
@@ -60,3 +60,4 @@ flowchart LR
 - Derived from request `req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk`.
 - Source file: `logics/request/req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk.md`.
 - Request context seeded into this backlog item from `logics/request/req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk.md`.
+- Completed in `task_024_orchestrate_runtime_hardening_for_input_state_release_and_bundle_risk`.

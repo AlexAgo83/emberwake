@@ -1,9 +1,9 @@
 ## task_024_orchestrate_runtime_hardening_for_input_state_release_and_bundle_risk - Orchestrate runtime hardening for input state release and bundle risk
 > From version: 0.1.0
-> Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -27,18 +27,18 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Fix touch-input ownership so player-facing touch steering cannot invoke camera-debug gestures outside explicit debug mode.
-- [ ] 2. Separate selection or inspection presentation from underlying entity simulation state.
-- [ ] 3. Tighten release-readiness behavior so commands and docs agree on branch and validation-gate semantics.
-- [ ] 4. Record the Pixi bundle-size warning as an explicit residual risk with a first mitigation direction.
-- [ ] 5. Validate runtime, smoke, and release expectations, then update linked Logics docs.
-- [ ] FINAL: Create a dedicated git commit for this orchestration scope.
+- [x] 1. Fix touch-input ownership so player-facing touch steering cannot invoke camera-debug gestures outside explicit debug mode.
+- [x] 2. Separate selection or inspection presentation from underlying entity simulation state.
+- [x] 3. Tighten release-readiness behavior so commands and docs agree on branch and validation-gate semantics.
+- [x] 4. Record the Pixi bundle-size warning as an explicit residual risk with a first mitigation direction.
+- [x] 5. Validate runtime, smoke, and release expectations, then update linked Logics docs.
+- [x] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_062` -> Touch input ownership is hardened against camera debug leakage. Proof: TODO.
-- `item_063` -> Selection presentation is separated from simulation state. Proof: TODO.
-- `item_064` -> Release-readiness behavior matches documented branch and gate semantics. Proof: TODO.
-- `item_065` -> Pixi bundle warning risk is captured with a defined mitigation direction. Proof: TODO.
+- `item_062` -> Touch input ownership is hardened against camera debug leakage. Proof: `src/game/camera/hooks/useCameraController.ts`, `src/game/camera/hooks/useCameraController.test.tsx`.
+- `item_063` -> Selection presentation is separated from simulation state. Proof: `src/game/entities/model/entityContract.ts`, `src/game/entities/hooks/useEntityWorld.ts`, `src/game/entities/hooks/useEntityWorld.test.tsx`, `src/game/entities/render/EntityScene.tsx`, `src/app/components/EntityInspectionPanel.tsx`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- `item_064` -> Release-readiness behavior matches documented branch and gate semantics. Proof: `package.json`, `scripts/release/verifyReleaseReadiness.mjs`, `README.md`.
+- `item_065` -> Pixi bundle warning risk is captured with a defined mitigation direction. Proof: `vite.config.ts`, `README.md`.
 
 # Decision framing
 - Product framing: Required
@@ -61,11 +61,15 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Runtime interaction, state integrity, and release semantics are consistent with the documented contracts.
-- [ ] Residual bundle warning risk is documented with a concrete first mitigation direction.
-- [ ] Linked backlog/task docs are updated with proofs and status.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Runtime interaction, state integrity, and release semantics are consistent with the documented contracts.
+- [x] Residual bundle warning risk is documented with a concrete first mitigation direction.
+- [x] Linked backlog/task docs are updated with proofs and status.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Hardened the camera hook so touch pan, zoom, and rotation stay unavailable unless debug camera mode is explicitly enabled, and added targeted hook coverage for both guarded and allowed touch gestures.
+- Removed `selected` from the entity simulation-state union and moved selection into explicit presentation state so runtime inspection and diagnostics keep reporting the real gameplay state.
+- Strengthened release-readiness operations by making `npm run release:ready` enforce the `release` branch and rerun the required gates, while `npm run release:ready:advisory` preserves feature-branch rehearsal.
+- Added a first bundle-risk mitigation by isolating React, Pixi, and remaining runtime vendor chunks, then documented the remaining `vendor-pixi` warning as an explicit residual delivery risk.

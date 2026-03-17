@@ -2,6 +2,7 @@ import { extend } from "@pixi/react";
 import { Graphics, Text } from "pixi.js";
 
 import type { CameraState } from "../../camera/model/cameraMath";
+import type { PresentedEntity } from "../model/entityContract";
 import type { SimulatedEntity } from "../model/entitySimulation";
 
 extend({
@@ -11,7 +12,7 @@ extend({
 
 type EntitySceneProps = {
   camera: CameraState;
-  entities: SimulatedEntity[];
+  entities: Array<PresentedEntity<SimulatedEntity>>;
   viewport: {
     fitScale: number;
     screenSize: {
@@ -23,9 +24,9 @@ type EntitySceneProps = {
 
 const hexColorToNumber = (color: string) => Number.parseInt(color.replace("#", ""), 16);
 
-const drawEntity = (entity: SimulatedEntity) => (graphics: Graphics) => {
+const drawEntity = (entity: PresentedEntity<SimulatedEntity>) => (graphics: Graphics) => {
   const tint = hexColorToNumber(entity.visual.tint);
-  const isSelected = entity.state === "selected";
+  const isSelected = entity.isSelected;
   const orientationLength = entity.footprint.radius + 16;
 
   graphics.clear();
@@ -77,13 +78,13 @@ export function EntityScene({ camera, entities, viewport }: EntitySceneProps) {
                 color: "#09070f",
                 distance: 1
               },
-              fill: entity.state === "selected" ? "#f6eee8" : entity.visual.tint,
+              fill: entity.isSelected ? "#f6eee8" : entity.visual.tint,
               fontFamily: "monospace",
               fontSize: 15,
               fontWeight: "700",
               letterSpacing: 1
             }}
-            text={`${entity.id.split(":").at(-1)} · ${entity.state}`}
+            text={`${entity.id.split(":").at(-1)} · ${entity.state}${entity.isSelected ? " · selected" : ""}`}
             x={entity.worldPosition.x}
             y={entity.worldPosition.y - entity.footprint.radius - 20}
           />

@@ -10,7 +10,7 @@ export const entityContract = {
   defaultVisualKind: entityArchetypeDefinitions["generic-mover"].defaultVisualKind
 } as const;
 
-export type EntityState = "idle" | "inactive" | "moving" | "selected";
+export type EntityState = "idle" | "inactive" | "moving";
 
 export type WorldEntity = {
   archetype: EntityArchetypeId;
@@ -26,6 +26,10 @@ export type WorldEntity = {
     tint: string;
   };
   worldPosition: WorldPoint;
+};
+
+export type PresentedEntity<T extends WorldEntity = WorldEntity> = T & {
+  isSelected: boolean;
 };
 
 export const createGenericMoverEntity = (

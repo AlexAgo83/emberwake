@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { chunkCoordinateToId } from "../../world/model/worldContract";
 import { createDeterministicDebugEntities } from "../model/entityDebugScenario";
+import type { PresentedEntity } from "../model/entityContract";
 import { detectEntityOverlaps } from "../model/entityOccupancy";
 import {
   filterVisibleEntities,
@@ -21,10 +22,18 @@ type UseEntityWorldOptions = {
 type EntityWorldState = {
   entitiesByChunk: Map<string, SimulatedEntity[]>;
   overlappingPairs: ReturnType<typeof detectEntityOverlaps>;
-  selectedEntity: SimulatedEntity;
+  selectedEntity: PresentedEntity<SimulatedEntity>;
   trackedEntities: SimulatedEntity[];
-  visibleEntities: SimulatedEntity[];
+  visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
 };
+
+const presentEntitySelection = (
+  entity: SimulatedEntity,
+  selectedEntityId: string | null
+): PresentedEntity<SimulatedEntity> => ({
+  ...entity,
+  isSelected: entity.id === selectedEntityId
+});
 
 export function useEntityWorld({
   primaryEntity,
@@ -66,18 +75,8 @@ export function useEntityWorld({
   return {
     entitiesByChunk,
     overlappingPairs,
-    selectedEntity: {
-      ...selectedEntity,
-      state: selectedEntity.id === selectedEntityId ? "selected" : selectedEntity.state
-    },
+    selectedEntity: presentEntitySelection(selectedEntity, selectedEntityId),
     trackedEntities,
-    visibleEntities: visibleEntities.map((entity) =>
-      entity.id === selectedEntityId
-        ? {
-            ...entity,
-            state: "selected"
-          }
-        : entity
-    )
+    visibleEntities: visibleEntities.map((entity) => presentEntitySelection(entity, selectedEntityId))
   };
 }

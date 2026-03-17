@@ -317,10 +317,13 @@ Release-ready baseline:
 
 Operational helpers:
 - `npm run release:ready`
+- `npm run release:ready:advisory`
 - `npm run release:postdeploy:smoke`
 
 Current release operations rules:
 - previews are treated as technical validation surfaces, not a second release channel
+- `npm run release:ready` now enforces the `release` branch and reruns the required gates instead of only printing them
+- `npm run release:ready:advisory` exists for feature-branch rehearsal when the same checks are useful before promotion
 - post-deploy smoke reuses the same browser loop against a deployed URL through `RELEASE_SMOKE_URL`
 - rollback posture is static-hosting friendly: redeploy the last known-good release commit/tag on `release`
 
@@ -350,6 +353,11 @@ Early runtime profiling should stay lightweight, deterministic, and reproducible
 - if the in-app overlay suggests a regression, escalate to a browser trace or devtools recording instead of guessing
 
 This keeps performance review grounded in the same runtime contract used by the shell and diagnostics tasks.
+
+Residual bundle risk:
+- the runtime now splits React and Pixi vendor code into separate Rollup chunks as a first mitigation direction
+- Pixi-heavy startup cost is still treated as a tracked delivery risk while the runtime grows
+- if chunk warnings or cold-start cost return, narrow imports first and then review deeper runtime partitioning
 
 ## Current Execution Order
 

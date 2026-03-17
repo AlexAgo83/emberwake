@@ -1,9 +1,9 @@
 ## item_062_harden_touch_input_ownership_against_camera_debug_gesture_leakage - Harden touch input ownership against camera debug gesture leakage
 > From version: 0.1.0
-> Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -32,11 +32,11 @@ flowchart LR
 - AC5: The change does not broaden input scope into new gesture families or product redesign.
 
 # AC Traceability
-- AC1 -> Scope: Touch steering no longer leaks into camera debug gestures. Proof: TODO.
-- AC2 -> Scope: Camera gestures are explicitly gated for debug use. Proof: TODO.
-- AC3 -> Scope: The mobile steering loop and smoke strategy remain valid. Proof: TODO.
-- AC4 -> Scope: The fix remains aligned with the input and camera contracts. Proof: TODO.
-- AC5 -> Scope: The slice stays a hardening change rather than a control redesign. Proof: TODO.
+- AC1 -> Scope: Touch steering no longer leaks into camera debug gestures. Proof: `src/game/camera/hooks/useCameraController.ts`, `src/game/camera/hooks/useCameraController.test.tsx`.
+- AC2 -> Scope: Camera gestures are explicitly gated for debug use. Proof: `src/game/camera/hooks/useCameraController.ts`.
+- AC3 -> Scope: The mobile steering loop and smoke strategy remain valid. Proof: `src/game/input/hooks/useMobileVirtualStick.ts`, `scripts/testing/runBrowserSmoke.mjs`.
+- AC4 -> Scope: The fix remains aligned with the input and camera contracts. Proof: `src/game/camera/hooks/useCameraController.ts`, `logics/architecture/adr_007_isolate_runtime_input_from_browser_page_controls.md`.
+- AC5 -> Scope: The slice stays a hardening change rather than a control redesign. Proof: `src/game/camera/hooks/useCameraController.ts`.
 
 # Decision framing
 - Product framing: Required
@@ -60,3 +60,4 @@ flowchart LR
 - Derived from request `req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk`.
 - Source file: `logics/request/req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk.md`.
 - Request context seeded into this backlog item from `logics/request/req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk.md`.
+- Completed in `task_024_orchestrate_runtime_hardening_for_input_state_release_and_bundle_risk`.

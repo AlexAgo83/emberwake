@@ -3,6 +3,7 @@ import type { RefObject } from "react";
 
 import { RuntimeSurfaceBoundary } from "./RuntimeSurfaceBoundary";
 import { EntityScene } from "../entities/render/EntityScene";
+import type { PresentedEntity } from "../entities/model/entityContract";
 import { WorldScene } from "../world/render/WorldScene";
 import type { CameraState } from "../camera/model/cameraMath";
 import type { ChunkCoordinate } from "../world/types";
@@ -13,7 +14,7 @@ type RuntimeSurfaceProps = {
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
   surfaceRef?: RefObject<HTMLDivElement | null>;
-  visibleEntities: SimulatedEntity[];
+  visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
   visibleChunks: ChunkCoordinate[];
   viewport: {
     fitScale: number;

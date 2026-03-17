@@ -3,6 +3,7 @@ type EntityInspectionPanelProps = {
   entityId: string;
   entityLabel: string;
   entityPosition: string;
+  entitySelectionState: string;
   entityState: string;
   isMobile: boolean;
 };
@@ -12,6 +13,7 @@ export function EntityInspectionPanel({
   entityId,
   entityLabel,
   entityPosition,
+  entitySelectionState,
   entityState,
   isMobile
 }: EntityInspectionPanelProps) {
@@ -31,6 +33,10 @@ export function EntityInspectionPanel({
         <div>
           <dt>State</dt>
           <dd data-testid="entity-state">{entityState}</dd>
+        </div>
+        <div>
+          <dt>Selection</dt>
+          <dd>{entitySelectionState}</dd>
         </div>
         <div>
           <dt>Chunk</dt>
