@@ -22,6 +22,8 @@ import {
   sampleChunkDebugSignature,
   worldContract
 } from "../game/world/model/worldContract";
+import { useWorldInteractionDiagnostics } from "../game/world/hooks/useWorldInteractionDiagnostics";
+import { useVisibleChunkSet } from "../game/world/hooks/useVisibleChunkSet";
 import { appConfig } from "../shared/config/appConfig";
 import { runtimeContract } from "../shared/constants/runtimeContract";
 
@@ -42,6 +44,12 @@ export function AppShell() {
   const viewport = useLogicalViewportModel(shellRef);
   const { cameraState, resetCamera } = useCameraController({
     debugCameraEnabled: controlState.debugCameraModifierActive,
+    surfaceRef: runtimeSurfaceRef,
+    viewport
+  });
+  const chunkVisibility = useVisibleChunkSet(cameraState, viewport);
+  const worldDiagnostics = useWorldInteractionDiagnostics({
+    camera: cameraState,
     surfaceRef: runtimeSurfaceRef,
     viewport
   });
@@ -71,9 +79,12 @@ export function AppShell() {
     >
       <section className="app-shell__runtime" aria-label="Interactive runtime shell">
         <RuntimeSurface
+          camera={cameraState}
           onRendererError={markFailed}
           onRendererReady={markReady}
           surfaceRef={runtimeSurfaceRef}
+          visibleChunks={chunkVisibility.visibleChunks}
+          viewport={viewport}
         />
       </section>
 
@@ -192,8 +203,34 @@ export function AppShell() {
             </dd>
           </div>
           <div>
+            <dt>Visible chunks</dt>
+            <dd>{chunkVisibility.visibleChunks.length}</dd>
+          </div>
+          <div>
+            <dt>Chunk cache</dt>
+            <dd>
+              {chunkVisibility.cachedChunkIds.length} / preload {chunkVisibility.preloadMargin}
+            </dd>
+          </div>
+          <div>
             <dt>Chunk signature</dt>
             <dd>{sampleChunkDebugSignature({ x: 0, y: 0 })}</dd>
+          </div>
+          <div>
+            <dt>Hover chunk</dt>
+            <dd>
+              {worldDiagnostics.hoveredChunkCoordinate
+                ? `${worldDiagnostics.hoveredChunkCoordinate.x}, ${worldDiagnostics.hoveredChunkCoordinate.y}`
+                : "none"}
+            </dd>
+          </div>
+          <div>
+            <dt>Picked chunk</dt>
+            <dd>
+              {worldDiagnostics.selectedChunkCoordinate
+                ? `${worldDiagnostics.selectedChunkCoordinate.x}, ${worldDiagnostics.selectedChunkCoordinate.y}`
+                : "none"}
+            </dd>
           </div>
           <div>
             <dt>Shell perf floor</dt>
@@ -217,6 +254,12 @@ export function AppShell() {
             isFullscreen,
             isSupported,
             lastError
+          }}
+          worldDiagnostics={worldDiagnostics}
+          worldRender={{
+            cachedChunkIds: chunkVisibility.cachedChunkIds,
+            preloadMargin: chunkVisibility.preloadMargin,
+            visibleChunks: chunkVisibility.visibleChunks
           }}
           preferences={preferences}
           renderer={rendererState}

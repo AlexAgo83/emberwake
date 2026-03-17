@@ -1,9 +1,9 @@
 ## item_008_add_map_diagnostics_picking_and_camera_reset_workflow - Add map diagnostics picking and camera reset workflow
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 91%
-> Progress: 5%
+> Progress: 100%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -41,12 +41,12 @@ flowchart LR
 - AC6: The resulting tooling remains reusable by later entity-layer debugging.
 
 # AC Traceability
-- AC1 -> Scope: Map diagnostics expose camera, chunk, and viewport metrics. Proof: TODO.
-- AC2 -> Scope: Screen-to-world conversion supports debug picking. Proof: TODO.
-- AC3 -> Scope: Camera reset restores a known state quickly. Proof: TODO.
-- AC4 -> Scope: Map diagnostics use the shared shell debug workflow. Proof: TODO.
-- AC5 -> Scope: Slice is limited to inspectability, not rendering or generation behavior. Proof: TODO.
-- AC6 -> Scope: Tooling remains reusable for later entity debugging. Proof: TODO.
+- AC1 -> Scope: Map diagnostics expose camera, chunk, and viewport metrics. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`.
+- AC2 -> Scope: Screen-to-world conversion supports debug picking. Proof: `src/game/world/hooks/useWorldInteractionDiagnostics.ts`, `src/game/world/model/worldViewMath.ts`.
+- AC3 -> Scope: Camera reset restores a known state quickly. Proof: `src/game/camera/hooks/useCameraController.ts`, `src/app/AppShell.tsx`.
+- AC4 -> Scope: Map diagnostics use the shared shell debug workflow. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC5 -> Scope: Slice is limited to inspectability, not rendering or generation behavior. Proof: `src/game/world/hooks/useWorldInteractionDiagnostics.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC6 -> Scope: Tooling remains reusable for later entity debugging. Proof: `src/game/world/hooks/useWorldInteractionDiagnostics.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
 
 # Decision framing
 - Product framing: Required
@@ -57,10 +57,10 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
+- Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_006_standardize_debug_first_runtime_instrumentation`
 - Request: `req_001_render_top_down_infinite_chunked_world_map`
-- Primary task(s): (none yet)
+- Primary task(s): `task_013_orchestrate_world_render_and_chunk_visibility_foundation`
 
 # Priority
 - Impact: Medium

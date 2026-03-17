@@ -1,9 +1,9 @@
 ## item_007_add_chunk_visibility_preload_caching_and_rotated_camera_culling - Add chunk visibility preload caching and rotated-camera culling
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 91%
-> Progress: 5%
+> Progress: 100%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -41,12 +41,12 @@ flowchart LR
 - AC6: This slice is limited to visibility, preload, cache, and culling behavior rather than map drawing or camera interaction design.
 
 # AC Traceability
-- AC1 -> Scope: Visible chunk resolution depends on camera and viewport state. Proof: TODO.
-- AC2 -> Scope: Culling remains valid with rotated camera state. Proof: TODO.
-- AC3 -> Scope: Small preload margin is defined around visible chunks. Proof: TODO.
-- AC4 -> Scope: Off-area chunks leave the active set under a bounded retention policy. Proof: TODO.
-- AC5 -> Scope: Logic remains compatible with effectively infinite world traversal. Proof: TODO.
-- AC6 -> Scope: Slice is limited to visibility, preload, cache, and culling. Proof: TODO.
+- AC1 -> Scope: Visible chunk resolution depends on camera and viewport state. Proof: `src/game/world/model/worldViewMath.ts`, `src/game/world/model/worldViewMath.test.ts`.
+- AC2 -> Scope: Culling remains valid with rotated camera state. Proof: `src/game/world/model/worldViewMath.ts`, `src/game/world/model/worldViewMath.test.ts`.
+- AC3 -> Scope: Small preload margin is defined around visible chunks. Proof: `src/game/world/hooks/useVisibleChunkSet.ts`.
+- AC4 -> Scope: Off-area chunks leave the active set under a bounded retention policy. Proof: `src/game/world/hooks/useVisibleChunkSet.ts`, `src/app/AppShell.tsx`.
+- AC5 -> Scope: Logic remains compatible with effectively infinite world traversal. Proof: `src/game/world/hooks/useVisibleChunkSet.ts`, `src/game/world/model/worldContract.ts`.
+- AC6 -> Scope: Slice is limited to visibility, preload, cache, and culling. Proof: `src/game/world/hooks/useVisibleChunkSet.ts`.
 
 # Decision framing
 - Product framing: Required
@@ -57,10 +57,10 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
+- Product brief(s): `prod_002_readable_world_traversal_and_presence`
 - Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_005_make_world_identity_deterministic_from_seed_and_coordinates`
 - Request: `req_001_render_top_down_infinite_chunked_world_map`
-- Primary task(s): (none yet)
+- Primary task(s): `task_013_orchestrate_world_render_and_chunk_visibility_foundation`
 
 # Priority
 - Impact: High

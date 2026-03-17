@@ -1,9 +1,9 @@
 ## task_013_orchestrate_world_render_and_chunk_visibility_foundation - Orchestrate world render and chunk visibility foundation
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 91%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -27,16 +27,16 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Establish the debug top-down map render layer in Pixi using deterministic chunk content.
-- [ ] 2. Add chunk visibility resolution, preload margin, and rotated-camera-compatible culling.
-- [ ] 3. Add map-facing diagnostics, world picking, and camera reset workflow linked to the visible map.
-- [ ] 4. Validate the runtime and update linked Logics docs.
-- [ ] FINAL: Create a dedicated git commit for this orchestration scope.
+- [x] 1. Establish the debug top-down map render layer in Pixi using deterministic chunk content.
+- [x] 2. Add chunk visibility resolution, preload margin, and rotated-camera-compatible culling.
+- [x] 3. Add map-facing diagnostics, world picking, and camera reset workflow linked to the visible map.
+- [x] 4. Validate the runtime and update linked Logics docs.
+- [x] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_006` -> Visible top-down map layers, chunk boundaries, and coordinate overlays are rendered in world space. Proof: TODO.
-- `item_007` -> Visible chunk set, preload margin, cache posture, and rotated-camera culling are explicit. Proof: TODO.
-- `item_008` -> Map diagnostics, world picking, and reset workflow are integrated with the visible world render. Proof: TODO.
+- `item_006` -> Visible top-down map layers, chunk boundaries, and coordinate overlays are rendered in world space. Proof: `src/game/world/render/WorldScene.tsx`, `.playwright-cli/page-2026-03-17T07-29-32-017Z.png`.
+- `item_007` -> Visible chunk set, preload margin, cache posture, and rotated-camera culling are explicit. Proof: `src/game/world/hooks/useVisibleChunkSet.ts`, `src/game/world/model/worldViewMath.ts`, `src/game/world/model/worldViewMath.test.ts`.
+- `item_008` -> Map diagnostics, world picking, and reset workflow are integrated with the visible world render. Proof: `src/game/world/hooks/useWorldInteractionDiagnostics.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`.
 
 # Decision framing
 - Product framing: Required
@@ -60,11 +60,20 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] The visible world render is present in the runtime and validated under camera transforms.
-- [ ] Linked backlog/task docs are updated with proofs and status.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] The visible world render is present in the runtime and validated under camera transforms.
+- [x] Linked backlog/task docs are updated with proofs and status.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-
+- Added a visible Pixi world scene with deterministic chunk tiles, chunk boundaries, and coordinate labels rendered in stable world space under camera pan, zoom, and rotation.
+- Added rotated-camera-aware visible chunk resolution with preload margin and a bounded recent chunk cache for runtime diagnostics.
+- Added world picking diagnostics for hover and selection on the runtime surface, and surfaced chunk visibility and picking state in the shell diagnostics.
+- Validated with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `npm run build`
+  - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
+  - visual browser verification via Playwright snapshot and screenshot

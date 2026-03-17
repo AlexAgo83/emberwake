@@ -1,9 +1,9 @@
 ## item_006_render_debug_top_down_map_layers_and_coordinate_overlays - Render debug top-down map layers and coordinate overlays
 > From version: 0.1.0
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 90%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -41,12 +41,12 @@ flowchart LR
 - AC6: The rendered output remains compatible with later chunk-visibility and entity-layer work.
 
 # AC Traceability
-- AC1 -> Scope: Top-down debug rendering exposes chunks and tile or cell structure. Proof: TODO.
-- AC2 -> Scope: Deterministic or stubbed chunk content can be rendered. Proof: TODO.
-- AC3 -> Scope: Render layers are explicitly separated. Proof: TODO.
-- AC4 -> Scope: Coordinate overlays or labels support inspection. Proof: TODO.
-- AC5 -> Scope: Slice stays focused on visible map rendering, not camera or culling logic. Proof: TODO.
-- AC6 -> Scope: Output remains reusable for later culling and entity layers. Proof: TODO.
+- AC1 -> Scope: Top-down debug rendering exposes chunks and tile or cell structure. Proof: `src/game/world/render/WorldScene.tsx`.
+- AC2 -> Scope: Deterministic or stubbed chunk content can be rendered. Proof: `src/game/world/model/chunkDebugData.ts`.
+- AC3 -> Scope: Render layers are explicitly separated. Proof: `src/game/world/render/WorldScene.tsx`.
+- AC4 -> Scope: Coordinate overlays or labels support inspection. Proof: `src/game/world/render/WorldScene.tsx`, `.playwright-cli/page-2026-03-17T07-29-32-017Z.png`.
+- AC5 -> Scope: Slice stays focused on visible map rendering, not camera or culling logic. Proof: `src/game/world/render/WorldScene.tsx`.
+- AC6 -> Scope: Output remains reusable for later culling and entity layers. Proof: `src/game/render/RuntimeSurface.tsx`, `src/game/world/render/WorldScene.tsx`.
 
 # Decision framing
 - Product framing: Required
@@ -57,10 +57,10 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_002_readable_world_traversal_and_presence`
+- Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_006_standardize_debug_first_runtime_instrumentation`
 - Request: `req_001_render_top_down_infinite_chunked_world_map`
-- Primary task(s): `task_XXX_example`
+- Primary task(s): `task_013_orchestrate_world_render_and_chunk_visibility_foundation`
 
 # Priority
 - Impact: High

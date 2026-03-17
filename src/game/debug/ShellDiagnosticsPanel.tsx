@@ -10,6 +10,7 @@ import type { ReturnTypeUseLogicalViewportModel } from "./types";
 import type { CameraState } from "../camera/model/cameraMath";
 import type { SimulatedEntity } from "../entities/model/entitySimulation";
 import type { SingleEntityControlState } from "../input/model/singleEntityControlContract";
+import type { ChunkCoordinate, WorldPoint } from "../world/types";
 
 type ShellDiagnosticsPanelProps = {
   camera: CameraState;
@@ -25,6 +26,17 @@ type ShellDiagnosticsPanelProps = {
     message: string;
     status: "degraded" | "failed" | "initializing" | "ready";
   };
+  worldDiagnostics: {
+    hoveredChunkCoordinate: ChunkCoordinate | null;
+    hoveredWorldPoint: WorldPoint | null;
+    selectedChunkCoordinate: ChunkCoordinate | null;
+    selectedWorldPoint: WorldPoint | null;
+  };
+  worldRender: {
+    cachedChunkIds: string[];
+    preloadMargin: number;
+    visibleChunks: ChunkCoordinate[];
+  };
   visible: boolean;
   viewport: ReturnTypeUseLogicalViewportModel;
 };
@@ -36,6 +48,8 @@ export function ShellDiagnosticsPanel({
   fullscreen,
   preferences,
   renderer,
+  worldDiagnostics,
+  worldRender,
   visible,
   viewport
 }: ShellDiagnosticsPanelProps) {
@@ -162,6 +176,48 @@ export function ShellDiagnosticsPanel({
         <div>
           <dt>Chunk signature</dt>
           <dd>{sampleChunkDebugSignature({ x: 0, y: 0 })}</dd>
+        </div>
+        <div>
+          <dt>Visible chunks</dt>
+          <dd>{worldRender.visibleChunks.length}</dd>
+        </div>
+        <div>
+          <dt>Chunk cache</dt>
+          <dd>
+            {worldRender.cachedChunkIds.length} / preload {worldRender.preloadMargin}
+          </dd>
+        </div>
+        <div>
+          <dt>Hover world</dt>
+          <dd>
+            {worldDiagnostics.hoveredWorldPoint
+              ? `${Math.round(worldDiagnostics.hoveredWorldPoint.x)}, ${Math.round(worldDiagnostics.hoveredWorldPoint.y)}`
+              : "none"}
+          </dd>
+        </div>
+        <div>
+          <dt>Hover chunk</dt>
+          <dd>
+            {worldDiagnostics.hoveredChunkCoordinate
+              ? `${worldDiagnostics.hoveredChunkCoordinate.x}, ${worldDiagnostics.hoveredChunkCoordinate.y}`
+              : "none"}
+          </dd>
+        </div>
+        <div>
+          <dt>Picked world</dt>
+          <dd>
+            {worldDiagnostics.selectedWorldPoint
+              ? `${Math.round(worldDiagnostics.selectedWorldPoint.x)}, ${Math.round(worldDiagnostics.selectedWorldPoint.y)}`
+              : "none"}
+          </dd>
+        </div>
+        <div>
+          <dt>Picked chunk</dt>
+          <dd>
+            {worldDiagnostics.selectedChunkCoordinate
+              ? `${worldDiagnostics.selectedChunkCoordinate.x}, ${worldDiagnostics.selectedChunkCoordinate.y}`
+              : "none"}
+          </dd>
         </div>
         <div>
           <dt>Fit scale</dt>
