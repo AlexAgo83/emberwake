@@ -35,6 +35,8 @@ type ShellDiagnosticsPanelProps = {
   worldRender: {
     cachedChunkIds: string[];
     preloadMargin: number;
+    trackedEntities: number;
+    visibleEntities: number;
     visibleChunks: ChunkCoordinate[];
   };
   visible: boolean;
@@ -154,6 +156,13 @@ export function ShellDiagnosticsPanel({
           </dd>
         </div>
         <div>
+          <dt>Entity chunk</dt>
+          <dd>
+            {worldPointToChunkCoordinate(entity.worldPosition).x},{" "}
+            {worldPointToChunkCoordinate(entity.worldPosition).y}
+          </dd>
+        </div>
+        <div>
           <dt>Entity velocity</dt>
           <dd>
             {Math.round(entity.velocity.x)}, {Math.round(entity.velocity.y)}
@@ -180,6 +189,14 @@ export function ShellDiagnosticsPanel({
         <div>
           <dt>Visible chunks</dt>
           <dd>{worldRender.visibleChunks.length}</dd>
+        </div>
+        <div>
+          <dt>Tracked entities</dt>
+          <dd>{worldRender.trackedEntities}</dd>
+        </div>
+        <div>
+          <dt>Visible entities</dt>
+          <dd>{worldRender.visibleEntities}</dd>
         </div>
         <div>
           <dt>Chunk cache</dt>

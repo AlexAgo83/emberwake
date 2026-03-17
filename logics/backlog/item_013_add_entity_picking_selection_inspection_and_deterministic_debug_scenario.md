@@ -1,9 +1,9 @@
 ## item_013_add_entity_picking_selection_inspection_and_deterministic_debug_scenario - Add entity picking selection inspection and deterministic debug scenario
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 93%
 > Confidence: 90%
-> Progress: 5%
+> Progress: 100%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -41,12 +41,12 @@ flowchart LR
 - AC6: The resulting debug scenario and selection flow remain reusable for later gameplay and behavior testing.
 
 # AC Traceability
-- AC1 -> Scope: Deterministic debug spawn scenario is available. Proof: TODO.
-- AC2 -> Scope: Picking and inspection from the map view are supported. Proof: TODO.
-- AC3 -> Scope: Single-entity selection exposes inspectable state directly. Proof: TODO.
-- AC4 -> Scope: Useful entity debug fields are surfaced in inspection. Proof: TODO.
-- AC5 -> Scope: Inspection stays tied to the shared debug workflow. Proof: TODO.
-- AC6 -> Scope: Debug scenario and selection flow remain reusable later. Proof: TODO.
+- AC1 -> Scope: Deterministic debug spawn scenario is available. Proof: `src/game/entities/model/entityDebugScenario.ts`.
+- AC2 -> Scope: Picking and inspection from the map view are supported. Proof: `src/game/entities/hooks/useEntityWorld.ts`, `src/game/world/hooks/useWorldInteractionDiagnostics.ts`.
+- AC3 -> Scope: Single-entity selection exposes inspectable state directly. Proof: `src/game/entities/hooks/useEntityWorld.ts`, `src/app/AppShell.tsx`.
+- AC4 -> Scope: Useful entity debug fields are surfaced in inspection. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC5 -> Scope: Inspection stays tied to the shared debug workflow. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`.
+- AC6 -> Scope: Debug scenario and selection flow remain reusable later. Proof: `src/game/entities/model/entityDebugScenario.ts`, `src/game/entities/hooks/useEntityWorld.ts`.
 
 # Decision framing
 - Product framing: Not needed
@@ -57,10 +57,10 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
+- Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_006_standardize_debug_first_runtime_instrumentation`
 - Request: `req_002_render_evolving_world_entities_on_the_map`
-- Primary task(s): (none yet)
+- Primary task(s): `task_014_orchestrate_entity_world_integration_and_debug_presentation`
 
 # Priority
 - Impact: Medium

@@ -11,6 +11,7 @@ import { useCameraController } from "../game/camera/hooks/useCameraController";
 import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
 import { useDebugPanelHotkey } from "../game/debug/hooks/useDebugPanelHotkey";
 import { useEntitySimulation } from "../game/entities/hooks/useEntitySimulation";
+import { useEntityWorld } from "../game/entities/hooks/useEntityWorld";
 import { entityContract } from "../game/entities/model/entityContract";
 import { MobileVirtualStickOverlay } from "../game/input/components/MobileVirtualStickOverlay";
 import { useMobileVirtualStick } from "../game/input/hooks/useMobileVirtualStick";
@@ -54,6 +55,11 @@ export function AppShell() {
     viewport
   });
   const simulationState = useEntitySimulation({ controlState });
+  const entityWorld = useEntityWorld({
+    primaryEntity: simulationState.entity,
+    selectedWorldPoint: worldDiagnostics.selectedWorldPoint,
+    visibleChunks: chunkVisibility.visibleChunks
+  });
   const { markFailed, markReady, rendererState } = useRendererHealth();
   const { preferences, setDebugPanelVisible, setPrefersFullscreen } = useShellPreferences({
     defaultDebugPanelVisible: appConfig.debugOverlayEnabled && appConfig.diagnosticsEnabled
@@ -83,6 +89,7 @@ export function AppShell() {
           onRendererError={markFailed}
           onRendererReady={markReady}
           surfaceRef={runtimeSurfaceRef}
+          visibleEntities={entityWorld.visibleEntities}
           visibleChunks={chunkVisibility.visibleChunks}
           viewport={viewport}
         />
@@ -197,6 +204,18 @@ export function AppShell() {
             </dd>
           </div>
           <div>
+            <dt>Tracked entities</dt>
+            <dd>{entityWorld.trackedEntities.length}</dd>
+          </div>
+          <div>
+            <dt>Visible entities</dt>
+            <dd>{entityWorld.visibleEntities.length}</dd>
+          </div>
+          <div>
+            <dt>Selected entity</dt>
+            <dd>{entityWorld.selectedEntity?.id ?? "none"}</dd>
+          </div>
+          <div>
             <dt>Chunk baseline</dt>
             <dd>
               {worldContract.chunkSizeInTiles}x{worldContract.chunkSizeInTiles} / {chunkWorldSize}wu
@@ -249,7 +268,7 @@ export function AppShell() {
         <ShellDiagnosticsPanel
           camera={cameraState}
           control={controlState}
-          entity={simulationState.entity}
+          entity={entityWorld.selectedEntity ?? simulationState.entity}
           fullscreen={{
             isFullscreen,
             isSupported,
@@ -258,6 +277,8 @@ export function AppShell() {
           worldDiagnostics={worldDiagnostics}
           worldRender={{
             cachedChunkIds: chunkVisibility.cachedChunkIds,
+            trackedEntities: entityWorld.trackedEntities.length,
+            visibleEntities: entityWorld.visibleEntities.length,
             preloadMargin: chunkVisibility.preloadMargin,
             visibleChunks: chunkVisibility.visibleChunks
           }}

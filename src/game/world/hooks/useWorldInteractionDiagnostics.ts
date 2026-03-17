@@ -56,6 +56,10 @@ export function useWorldInteractionDiagnostics({
     };
 
     const handlePointerMove = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") {
+        return;
+      }
+
       const sample = createWorldPickingSample(
         getRelativeScreenPoint(event.clientX, event.clientY),
         camera,
@@ -78,7 +82,7 @@ export function useWorldInteractionDiagnostics({
     };
 
     const handlePointerDown = (event: PointerEvent) => {
-      if (event.pointerType === "mouse" && event.button !== 0) {
+      if (event.pointerType !== "mouse" || event.button !== 0) {
         return;
       }
 

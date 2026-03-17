@@ -1,9 +1,9 @@
 ## item_012_render_debug_entity_layers_with_orientation_footprint_and_ordering - Render debug entity layers with orientation footprint and ordering
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 93%
 > Confidence: 90%
-> Progress: 5%
+> Progress: 100%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -40,12 +40,12 @@ flowchart LR
 - AC6: The resulting entity rendering layer remains reusable for later gameplay-facing visuals.
 
 # AC Traceability
-- AC1 -> Scope: Entity rendering remains world-space aligned under camera transforms. Proof: TODO.
-- AC2 -> Scope: Debug visuals expose orientation, footprint, and state. Proof: TODO.
-- AC3 -> Scope: Entity draw order is explicit and stable. Proof: TODO.
-- AC4 -> Scope: Optional labels, traces, or overlap diagnostics support debugging. Proof: TODO.
-- AC5 -> Scope: Slice stays limited to visual rendering concerns. Proof: TODO.
-- AC6 -> Scope: Rendering layer remains reusable for later visual upgrades. Proof: TODO.
+- AC1 -> Scope: Entity rendering remains world-space aligned under camera transforms. Proof: `src/game/entities/render/EntityScene.tsx`, `src/game/render/RuntimeSurface.tsx`.
+- AC2 -> Scope: Debug visuals expose orientation, footprint, and state. Proof: `src/game/entities/render/EntityScene.tsx`.
+- AC3 -> Scope: Entity draw order is explicit and stable. Proof: `src/game/entities/model/entitySpatialIndex.ts`, `src/game/entities/model/entitySpatialIndex.test.ts`.
+- AC4 -> Scope: Optional labels, traces, or overlap diagnostics support debugging. Proof: `src/game/entities/render/EntityScene.tsx`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC5 -> Scope: Slice stays limited to visual rendering concerns. Proof: `src/game/entities/render/EntityScene.tsx`.
+- AC6 -> Scope: Rendering layer remains reusable for later visual upgrades. Proof: `src/game/entities/render/EntityScene.tsx`.
 
 # Decision framing
 - Product framing: Not needed
@@ -56,10 +56,10 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
+- Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_008_define_asset_logical_sizing_and_runtime_packaging_rules`
 - Request: `req_002_render_evolving_world_entities_on_the_map`
-- Primary task(s): (none yet)
+- Primary task(s): `task_014_orchestrate_entity_world_integration_and_debug_presentation`
 
 # Priority
 - Impact: Medium

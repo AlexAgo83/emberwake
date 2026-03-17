@@ -1,9 +1,9 @@
 ## task_014_orchestrate_entity_world_integration_and_debug_presentation - Orchestrate entity world integration and debug presentation
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 91%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -27,16 +27,16 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Add chunk-aware entity indexing and continuity across visibility and chunk boundaries.
-- [ ] 2. Render debug entity layers in world space with footprint, facing, state, and stable ordering.
-- [ ] 3. Add picking, selection-friendly inspection, and a deterministic debug scenario tied to the world render.
-- [ ] 4. Validate the runtime and update linked Logics docs.
-- [ ] FINAL: Create a dedicated git commit for this orchestration scope.
+- [x] 1. Add chunk-aware entity indexing and continuity across visibility and chunk boundaries.
+- [x] 2. Render debug entity layers in world space with footprint, facing, state, and stable ordering.
+- [x] 3. Add picking, selection-friendly inspection, and a deterministic debug scenario tied to the world render.
+- [x] 4. Validate the runtime and update linked Logics docs.
+- [x] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_011` -> Entities are tracked in world space with chunk-aware indexing and continuity across chunk crossing. Proof: TODO.
-- `item_012` -> Debug entity visuals render consistently in world space with ordering, footprint, and facing signals. Proof: TODO.
-- `item_013` -> Picking, inspection, and deterministic entity scenarios are available for runtime debugging. Proof: TODO.
+- `item_011` -> Entities are tracked in world space with chunk-aware indexing and continuity across chunk crossing. Proof: `src/game/entities/model/entitySpatialIndex.ts`, `src/game/entities/model/entitySpatialIndex.test.ts`, `src/game/entities/hooks/useEntityWorld.ts`.
+- `item_012` -> Debug entity visuals render consistently in world space with ordering, footprint, and facing signals. Proof: `src/game/entities/render/EntityScene.tsx`, `src/game/render/RuntimeSurface.tsx`.
+- `item_013` -> Picking, inspection, and deterministic entity scenarios are available for runtime debugging. Proof: `src/game/entities/model/entityDebugScenario.ts`, `src/game/entities/hooks/useEntityWorld.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`.
 
 # Decision framing
 - Product framing: Required
@@ -60,11 +60,19 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Entities are visible, inspectable, and continuous across chunk movement in runtime.
-- [ ] Linked backlog/task docs are updated with proofs and status.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Entities are visible, inspectable, and continuous across chunk movement in runtime.
+- [x] Linked backlog/task docs are updated with proofs and status.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-
+- Added a deterministic debug entity scenario, chunk-aware entity indexing, visible-vs-tracked entity separation, and stable render ordering for world-space entity presentation.
+- Added a Pixi entity render layer that shows footprint, facing, selection state, and labels directly in the world render under camera transforms.
+- Wired world picking into entity selection and shell diagnostics so clicking an entity updates the selected inspection target in the shared debug workflow.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `npm run build`
+  - runtime browser verification of entity rendering and click selection
