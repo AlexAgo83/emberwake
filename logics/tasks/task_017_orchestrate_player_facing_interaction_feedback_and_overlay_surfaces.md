@@ -1,9 +1,9 @@
 ## task_017_orchestrate_player_facing_interaction_feedback_and_overlay_surfaces - Orchestrate player-facing interaction feedback and overlay surfaces
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 95%
-> Confidence: 91%
-> Progress: 0%
+> Confidence: 92%
+> Progress: 100%
 > Complexity: High
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -29,19 +29,19 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Refine desktop fallback input and keep debug-only gestures separate from player-facing controls.
-- [ ] 2. Add minimal onboarding, runtime feedback, and contextual inspection surfaces.
-- [ ] 3. Separate system overlays, debug diagnostics, and player-facing HUD ownership.
-- [ ] 4. Validate the runtime and update linked Logics docs.
-- [ ] FINAL: Create a dedicated git commit for this orchestration scope.
+- [x] 1. Refine desktop fallback input and keep debug-only gestures separate from player-facing controls.
+- [x] 2. Add minimal onboarding, runtime feedback, and contextual inspection surfaces.
+- [x] 3. Separate system overlays, debug diagnostics, and player-facing HUD ownership.
+- [x] 4. Validate the runtime and update linked Logics docs.
+- [x] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_026` -> Desktop fallback controls and debug input ownership are explicit and non-conflicting. Proof: TODO.
-- `item_027` -> Selection, inspection, and contextual interactions are readable without diluting the primary movement loop. Proof: TODO.
-- `item_043` -> System overlays own fullscreen/install/system messaging cleanly. Proof: TODO.
-- `item_044` -> Minimal onboarding and player-facing runtime feedback are visible and restrained. Proof: TODO.
-- `item_045` -> Inspection surfaces work across mobile and desktop postures. Proof: TODO.
-- `item_046` -> Debug overlay and player-facing HUD remain explicitly separated. Proof: TODO.
+- `item_026` -> Desktop fallback controls stay player-facing while debug camera controls remain secondary. Proof: `src/game/input/hooks/useSingleEntityControl.ts`, `src/game/camera/hooks/useCameraController.ts`, `src/app/components/PlayerHudCard.tsx`, `src/app/AppShell.tsx`.
+- `item_027` -> Selection and inspection resolve into a contextual panel without interrupting direct movement. Proof: `src/game/entities/hooks/useEntityWorld.ts`, `src/app/components/EntityInspectionPanel.tsx`, `src/app/AppShell.tsx`.
+- `item_043` -> System overlays own fullscreen and install messaging in the DOM shell instead of the world layer. Proof: `src/app/hooks/useInstallPrompt.ts`, `src/app/components/FullscreenToggleButton.tsx`, `src/app/AppShell.tsx`.
+- `item_044` -> Minimal onboarding and runtime feedback persist until first successful movement, then dismiss locally. Proof: `src/app/components/PlayerHudCard.tsx`, `src/app/hooks/useShellPreferences.ts`, `src/shared/lib/shellPreferencesStorage.ts`, `src/app/AppShell.tsx`.
+- `item_045` -> Inspection surfaces adapt between desktop card posture and mobile bottom-sheet posture. Proof: `src/app/components/EntityInspectionPanel.tsx`, `src/app/styles/app.css`, `src/app/AppShell.tsx`.
+- `item_046` -> Debug diagnostics remain toggleable and separate from the default player-facing HUD. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`, `src/app/styles/app.css`.
 
 # Decision framing
 - Product framing: Required
@@ -65,11 +65,21 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] The runtime exposes a minimal but readable player-facing layer distinct from debug tooling.
-- [ ] Linked backlog/task docs are updated with proofs and status.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] The runtime exposes a minimal but readable player-facing layer distinct from debug tooling.
+- [x] Linked backlog/task docs are updated with proofs and status.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-
+- Added a restrained player HUD with movement hints, focus state, and desktop-vs-mobile control messaging without mixing debug diagnostics into the same surface.
+- Added a contextual inspection panel for the selected entity and styled it to collapse into a bottom-sheet posture on mobile while staying compact on desktop.
+- Added local onboarding persistence so the movement hint remains visible until the first confirmed movement and stays dismissed across refreshes afterward.
+- Added install-prompt handling in the DOM shell so fullscreen/install actions remain system-owned overlays rather than world-space widgets.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `npm run build`
+  - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
+  - runtime browser verification of onboarding dismissal, desktop/mobile HUD posture, and debug overlay separation

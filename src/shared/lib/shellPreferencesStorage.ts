@@ -1,5 +1,6 @@
 export type ShellPreferences = {
   debugPanelVisible: boolean;
+  movementOnboardingDismissed: boolean;
   prefersFullscreen: boolean;
 };
 

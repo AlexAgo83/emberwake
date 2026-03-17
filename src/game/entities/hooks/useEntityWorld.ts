@@ -19,7 +19,7 @@ type UseEntityWorldOptions = {
 
 type EntityWorldState = {
   entitiesByChunk: Map<string, SimulatedEntity[]>;
-  selectedEntity: SimulatedEntity | null;
+  selectedEntity: SimulatedEntity;
   trackedEntities: SimulatedEntity[];
   visibleEntities: SimulatedEntity[];
 };

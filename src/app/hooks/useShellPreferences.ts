@@ -16,6 +16,7 @@ export function useShellPreferences({
   const [preferences, setPreferences] = useState<ShellPreferences>(() =>
     readShellPreferences({
       debugPanelVisible: defaultDebugPanelVisible,
+      movementOnboardingDismissed: false,
       prefersFullscreen: false
     })
   );
@@ -36,6 +37,12 @@ export function useShellPreferences({
       setPreferences((currentPreferences) => ({
         ...currentPreferences,
         prefersFullscreen
+      }));
+    },
+    setMovementOnboardingDismissed: (movementOnboardingDismissed: boolean) => {
+      setPreferences((currentPreferences) => ({
+        ...currentPreferences,
+        movementOnboardingDismissed
       }));
     }
   };
