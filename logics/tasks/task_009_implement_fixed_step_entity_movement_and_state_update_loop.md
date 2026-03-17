@@ -1,9 +1,9 @@
 ## task_009_implement_fixed_step_entity_movement_and_state_update_loop - Implement fixed-step entity movement and state update loop
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 91%
-> Progress: 5%
+> Progress: 100%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,19 +30,19 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm scope, dependencies, and linked acceptance criteria.
-- [ ] 2. Implement the scoped changes from the backlog item.
-- [ ] 3. Validate the result and update the linked Logics docs.
-- [ ] 4. Create a dedicated git commit for this task scope after validation passes.
-- [ ] FINAL: Update related Logics docs
+- [x] 1. Confirm scope, dependencies, and linked acceptance criteria.
+- [x] 2. Implement the scoped changes from the backlog item.
+- [x] 3. Validate the result and update the linked Logics docs.
+- [x] 4. Create a dedicated git commit for this task scope after validation passes.
+- [x] FINAL: Update related Logics docs
 
 # AC Traceability
-- AC1 -> Scope: Entity updates are compatible with a fixed simulation-step mindset even if rendering remains frame-based.. Proof: TODO.
-- AC2 -> Scope: Entity movement uses continuous world-space motion and supports direct velocity-based updates in the first pass.. Proof: TODO.
-- AC3 -> Scope: Initial movement remains deterministic, scripted, or developer-driven without requiring advanced AI or pathfinding.. Proof: TODO.
-- AC4 -> Scope: Entities can expose or transition through evolving state over time, even if the first implementation uses simple placeholder states.. Proof: TODO.
-- AC5 -> Scope: Acceleration, collision resolution, combat, and advanced animation remain out of scope for this slice.. Proof: TODO.
-- AC6 -> Scope: The resulting movement and state loop is reusable by later indexing, rendering, and behavior slices.. Proof: TODO.
+- AC1 -> Scope: Entity updates are compatible with a fixed simulation-step mindset even if rendering remains frame-based.. Proof: `src/game/entities/hooks/useEntitySimulation.ts`, `src/game/entities/model/entitySimulation.ts`.
+- AC2 -> Scope: Entity movement uses continuous world-space motion and supports direct velocity-based updates in the first pass.. Proof: `src/game/entities/model/entitySimulation.ts`, `src/game/entities/model/entitySimulation.test.ts`.
+- AC3 -> Scope: Initial movement remains deterministic, scripted, or developer-driven without requiring advanced AI or pathfinding.. Proof: `src/game/entities/model/entitySimulation.ts`, `src/game/entities/model/entitySimulation.test.ts`.
+- AC4 -> Scope: Entities can expose or transition through evolving state over time, even if the first implementation uses simple placeholder states.. Proof: `src/game/entities/model/entitySimulation.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC5 -> Scope: Acceleration, collision resolution, combat, and advanced animation remain out of scope for this slice.. Proof: `src/game/entities/model/entitySimulation.ts`.
+- AC6 -> Scope: The resulting movement and state loop is reusable by later indexing, rendering, and behavior slices.. Proof: `src/game/entities/hooks/useEntitySimulation.ts`, `src/app/AppShell.tsx`.
 
 # Decision framing
 - Product framing: Not needed
@@ -66,10 +66,19 @@ flowchart LR
 - `npm run build`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated.
-- [ ] A dedicated git commit has been created for the completed task scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated.
+- [x] A dedicated git commit has been created for the completed task scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Added a fixed-step entity simulation contract and deterministic scripted movement phases that evolve entity velocity, position, state, and orientation in world space.
+- Added a reusable React simulation hook that advances the entity loop independently from render cadence while keeping the current simulation state available to the shell.
+- Replaced the static entity diagnostics preview with live simulation-backed entity data in the shell and diagnostics overlay.
+- Added unit coverage for deterministic phases, continuous movement, and orientation updates.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `npm run build`

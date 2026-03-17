@@ -10,6 +10,7 @@ import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards
 import { useCameraController } from "../game/camera/hooks/useCameraController";
 import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
 import { useDebugPanelHotkey } from "../game/debug/hooks/useDebugPanelHotkey";
+import { useEntitySimulation } from "../game/entities/hooks/useEntitySimulation";
 import { RuntimeSurface } from "../game/render/RuntimeSurface";
 import {
   chunkWorldSize,
@@ -31,6 +32,7 @@ export function AppShell() {
     surfaceRef: runtimeSurfaceRef,
     viewport
   });
+  const simulationState = useEntitySimulation();
   const { markFailed, markReady, rendererState } = useRendererHealth();
   const { preferences, setDebugPanelVisible, setPrefersFullscreen } = useShellPreferences({
     defaultDebugPanelVisible: appConfig.debugOverlayEnabled && appConfig.diagnosticsEnabled
@@ -149,6 +151,14 @@ export function AppShell() {
             </dd>
           </div>
           <div>
+            <dt>Entity</dt>
+            <dd>
+              {Math.round(simulationState.entity.worldPosition.x)},{" "}
+              {Math.round(simulationState.entity.worldPosition.y)} /{" "}
+              {simulationState.entity.state}
+            </dd>
+          </div>
+          <div>
             <dt>Chunk baseline</dt>
             <dd>
               {worldContract.chunkSizeInTiles}x{worldContract.chunkSizeInTiles} / {chunkWorldSize}wu
@@ -174,6 +184,7 @@ export function AppShell() {
 
         <ShellDiagnosticsPanel
           camera={cameraState}
+          entity={simulationState.entity}
           fullscreen={{
             isFullscreen,
             isSupported,

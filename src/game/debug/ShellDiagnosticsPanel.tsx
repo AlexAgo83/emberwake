@@ -8,10 +8,11 @@ import {
 import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage";
 import type { ReturnTypeUseLogicalViewportModel } from "./types";
 import type { CameraState } from "../camera/model/cameraMath";
-import { createGenericMoverEntity } from "../entities/model/entityContract";
+import type { SimulatedEntity } from "../entities/model/entitySimulation";
 
 type ShellDiagnosticsPanelProps = {
   camera: CameraState;
+  entity: SimulatedEntity;
   fullscreen: {
     isFullscreen: boolean;
     isSupported: boolean;
@@ -26,10 +27,9 @@ type ShellDiagnosticsPanelProps = {
   viewport: ReturnTypeUseLogicalViewportModel;
 };
 
-const previewEntity = createGenericMoverEntity();
-
 export function ShellDiagnosticsPanel({
   camera,
+  entity,
   fullscreen,
   preferences,
   renderer,
@@ -100,19 +100,35 @@ export function ShellDiagnosticsPanel({
         </div>
         <div>
           <dt>Entity archetype</dt>
-          <dd>{previewEntity.archetype}</dd>
+          <dd>{entity.archetype}</dd>
         </div>
         <div>
           <dt>Entity state</dt>
-          <dd>{previewEntity.state}</dd>
+          <dd>{entity.state}</dd>
         </div>
         <div>
           <dt>Entity radius</dt>
-          <dd>{previewEntity.footprint.radius}</dd>
+          <dd>{entity.footprint.radius}</dd>
         </div>
         <div>
           <dt>Entity layer</dt>
-          <dd>{previewEntity.renderLayer}</dd>
+          <dd>{entity.renderLayer}</dd>
+        </div>
+        <div>
+          <dt>Entity world</dt>
+          <dd>
+            {Math.round(entity.worldPosition.x)}, {Math.round(entity.worldPosition.y)}
+          </dd>
+        </div>
+        <div>
+          <dt>Entity velocity</dt>
+          <dd>
+            {Math.round(entity.velocity.x)}, {Math.round(entity.velocity.y)}
+          </dd>
+        </div>
+        <div>
+          <dt>Entity facing</dt>
+          <dd>{entity.orientation.toFixed(3)}rad</dd>
         </div>
         <div>
           <dt>Chunk baseline</dt>

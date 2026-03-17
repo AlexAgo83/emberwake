@@ -1,9 +1,9 @@
 ## item_010_implement_fixed_step_entity_movement_and_state_update_loop - Implement fixed-step entity movement and state update loop
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 91%
-> Progress: 10%
+> Progress: 100%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -41,12 +41,12 @@ flowchart LR
 - AC6: The resulting movement and state loop is reusable by later indexing, rendering, and behavior slices.
 
 # AC Traceability
-- AC1 -> Scope: Entity updates follow a fixed-step-compatible mindset. Proof: TODO.
-- AC2 -> Scope: Movement is continuous and velocity-based. Proof: TODO.
-- AC3 -> Scope: Movement remains deterministic or debug-driven without advanced AI. Proof: TODO.
-- AC4 -> Scope: State can evolve over time under the update loop. Proof: TODO.
-- AC5 -> Scope: Collision, combat, and advanced animation remain out of scope. Proof: TODO.
-- AC6 -> Scope: Update loop remains reusable for later indexing, rendering, and behavior slices. Proof: TODO.
+- AC1 -> Scope: Entity updates follow a fixed-step-compatible mindset. Proof: `src/game/entities/hooks/useEntitySimulation.ts`, `src/game/entities/model/entitySimulation.ts`.
+- AC2 -> Scope: Movement is continuous and velocity-based. Proof: `src/game/entities/model/entitySimulation.ts`, `src/game/entities/model/entitySimulation.test.ts`.
+- AC3 -> Scope: Movement remains deterministic or debug-driven without advanced AI. Proof: `src/game/entities/model/entitySimulation.ts`, `src/game/entities/model/entitySimulation.test.ts`.
+- AC4 -> Scope: State can evolve over time under the update loop. Proof: `src/game/entities/model/entitySimulation.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC5 -> Scope: Collision, combat, and advanced animation remain out of scope. Proof: `src/game/entities/model/entitySimulation.ts`.
+- AC6 -> Scope: Update loop remains reusable for later indexing, rendering, and behavior slices. Proof: `src/game/entities/hooks/useEntitySimulation.ts`, `src/app/AppShell.tsx`.
 
 # Decision framing
 - Product framing: Not needed
