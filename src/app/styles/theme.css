@@ -23,3 +23,9 @@ body {
   color: var(--emberwake-copy);
   font-family: var(--emberwake-body-font);
 }
+
+html[data-app-viewport-lock="true"],
+body[data-app-viewport-lock="true"] {
+  overflow: hidden;
+  overscroll-behavior: none;
+}

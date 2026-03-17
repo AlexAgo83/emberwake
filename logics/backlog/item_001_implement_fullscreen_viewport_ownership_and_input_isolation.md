@@ -1,9 +1,9 @@
 ## item_001_implement_fullscreen_viewport_ownership_and_input_isolation - Implement fullscreen viewport ownership and input isolation
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 10%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -41,12 +41,12 @@ flowchart LR
 - AC6: This slice does not yet define world-space invariants or debugging workflows, but it leaves the shell ready for them.
 
 # AC Traceability
-- AC1 -> Scope: Full-viewport shell neutralizes document scrolling and overflow. Proof: TODO.
-- AC2 -> Scope: Fullscreen API flow and fallback layout are implemented. Proof: TODO.
-- AC3 -> Scope: Page-level interference with the render surface is suppressed where possible. Proof: TODO.
-- AC4 -> Scope: Mobile safe-area behavior is covered. Proof: TODO.
-- AC5 -> Scope: Pointer and touch ownership are explicit on the render surface. Proof: TODO.
-- AC6 -> Scope: Slice leaves room for later world-space and debug work without taking them on now. Proof: TODO.
+- AC1 -> Scope: Full-viewport shell neutralizes document scrolling and overflow. Proof: `src/app/styles/app.css`, `src/app/hooks/useDocumentViewportLock.ts`.
+- AC2 -> Scope: Fullscreen API flow and fallback layout are implemented. Proof: `src/app/components/FullscreenToggleButton.tsx`, `src/app/hooks/useFullscreenController.ts`.
+- AC3 -> Scope: Page-level interference with the render surface is suppressed where possible. Proof: `src/app/hooks/useRuntimeInteractionGuards.ts`, `src/app/styles/theme.css`.
+- AC4 -> Scope: Mobile safe-area behavior is covered. Proof: `src/app/styles/app.css`.
+- AC5 -> Scope: Pointer and touch ownership are explicit on the render surface. Proof: `src/game/render/RuntimeSurface.tsx`, `src/app/styles/app.css`.
+- AC6 -> Scope: Slice leaves room for later world-space and debug work without taking them on now. Proof: `src/app/AppShell.tsx`, `src/game/render/RuntimeSurface.tsx`.
 
 # Decision framing
 - Product framing: Required

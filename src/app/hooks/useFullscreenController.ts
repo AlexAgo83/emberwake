@@ -1,0 +1,54 @@
+import { useEffect, useState } from "react";
+import type { RefObject } from "react";
+
+type FullscreenController = {
+  enterFullscreen: () => Promise<void>;
+  isFullscreen: boolean;
+  isSupported: boolean;
+};
+
+const hasFullscreenApi = (element: HTMLElement | null) =>
+  typeof document !== "undefined" &&
+  typeof document.fullscreenEnabled === "boolean" &&
+  document.fullscreenEnabled &&
+  element !== null &&
+  typeof element.requestFullscreen === "function";
+
+export function useFullscreenController(shellRef: RefObject<HTMLElement | null>): FullscreenController {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isSupported, setIsSupported] = useState(false);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(document.fullscreenElement === shellRef.current);
+    };
+
+    setIsSupported(hasFullscreenApi(shellRef.current));
+    handleFullscreenChange();
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, [shellRef]);
+
+  const enterFullscreen = async () => {
+    const shellElement = shellRef.current;
+    if (!shellElement || !hasFullscreenApi(shellElement)) {
+      return;
+    }
+
+    if (document.fullscreenElement === shellElement) {
+      return;
+    }
+
+    await shellElement.requestFullscreen();
+    setIsFullscreen(document.fullscreenElement === shellElement);
+  };
+
+  return {
+    enterFullscreen,
+    isFullscreen,
+    isSupported
+  };
+}

@@ -1,14 +1,35 @@
+import { useRef } from "react";
+
+import { FullscreenToggleButton } from "./components/FullscreenToggleButton";
+import { useDocumentViewportLock } from "./hooks/useDocumentViewportLock";
+import { useFullscreenController } from "./hooks/useFullscreenController";
+import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards";
 import { RuntimeSurface } from "../game/render/RuntimeSurface";
 import { appConfig } from "../shared/config/appConfig";
 
 export function AppShell() {
+  const shellRef = useRef<HTMLElement>(null);
+  const runtimeSurfaceRef = useRef<HTMLDivElement>(null);
+  useDocumentViewportLock();
+  useRuntimeInteractionGuards(runtimeSurfaceRef);
+  const { enterFullscreen, isFullscreen, isSupported } = useFullscreenController(shellRef);
+
   return (
-    <main className="app-shell" data-app-ready="true">
+    <main className="app-shell" data-app-ready="true" ref={shellRef}>
       <section className="app-shell__runtime" aria-label="Interactive runtime shell">
-        <RuntimeSurface />
+        <RuntimeSurface surfaceRef={runtimeSurfaceRef} />
       </section>
 
       <section className="app-shell__overlay" aria-label="Shell status overlay">
+        <header className="shell-topbar">
+          <span className="shell-topbar__mode">Fullscreen-first shell</span>
+          <FullscreenToggleButton
+            isFullscreen={isFullscreen}
+            isSupported={isSupported}
+            onEnterFullscreen={enterFullscreen}
+          />
+        </header>
+
         <div className="shell-identity">
           <p className="shell-identity__eyebrow">Static runtime foundation</p>
           <h1>{appConfig.name}</h1>
@@ -30,6 +51,10 @@ export function AppShell() {
           <div>
             <dt>Target</dt>
             <dd>{appConfig.logicalWidth}px logical width baseline</dd>
+          </div>
+          <div>
+            <dt>Input ownership</dt>
+            <dd>Scroll, selection, and drag guarded by shell</dd>
           </div>
         </dl>
       </section>
