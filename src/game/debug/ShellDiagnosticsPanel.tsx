@@ -9,9 +9,11 @@ import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage"
 import type { ReturnTypeUseLogicalViewportModel } from "./types";
 import type { CameraState } from "../camera/model/cameraMath";
 import type { SimulatedEntity } from "../entities/model/entitySimulation";
+import type { SingleEntityControlState } from "../input/model/singleEntityControlContract";
 
 type ShellDiagnosticsPanelProps = {
   camera: CameraState;
+  control: SingleEntityControlState;
   entity: SimulatedEntity;
   fullscreen: {
     isFullscreen: boolean;
@@ -29,6 +31,7 @@ type ShellDiagnosticsPanelProps = {
 
 export function ShellDiagnosticsPanel({
   camera,
+  control,
   entity,
   fullscreen,
   preferences,
@@ -97,6 +100,22 @@ export function ShellDiagnosticsPanel({
         <div>
           <dt>Camera rotation</dt>
           <dd>{camera.rotation.toFixed(3)}rad</dd>
+        </div>
+        <div>
+          <dt>Control owner</dt>
+          <dd>{control.inputOwner}</dd>
+        </div>
+        <div>
+          <dt>Control entity</dt>
+          <dd>{control.controlledEntityId}</dd>
+        </div>
+        <div>
+          <dt>Intent source</dt>
+          <dd>{control.movementIntent.source}</dd>
+        </div>
+        <div>
+          <dt>Intent magnitude</dt>
+          <dd>{control.movementIntent.magnitude.toFixed(2)}</dd>
         </div>
         <div>
           <dt>Entity archetype</dt>

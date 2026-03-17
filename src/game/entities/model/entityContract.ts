@@ -2,6 +2,7 @@ import type { WorldPoint } from "../../world/types";
 
 export const entityContract = {
   defaultArchetype: "generic-mover",
+  primaryEntityId: "entity:player:primary",
   defaultRenderLayer: 100,
   defaultState: "idle",
   defaultVisualKind: "ember-core"
@@ -32,7 +33,7 @@ export const createGenericMoverEntity = (
   footprint: {
     radius: 40
   },
-  id: "entity:player:primary",
+  id: entityContract.primaryEntityId,
   orientation: 0,
   renderLayer: entityContract.defaultRenderLayer,
   state: entityContract.defaultState,

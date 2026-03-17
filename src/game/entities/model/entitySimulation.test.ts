@@ -4,6 +4,8 @@ import {
   entitySimulationContract,
   getScriptedEntityPhase
 } from "./entitySimulation";
+import { entityContract } from "./entityContract";
+import { singleEntityControlContract } from "../../input/model/singleEntityControlContract";
 
 describe("entitySimulation", () => {
   it("starts from a deterministic idle state", () => {
@@ -49,5 +51,35 @@ describe("entitySimulation", () => {
     }
 
     expect(simulationState.entity.orientation).toBeCloseTo(Math.PI / 2);
+  });
+
+  it("lets the controlled entity override scripted motion with direct movement intent", () => {
+    const simulationState = advanceSimulationState(createInitialSimulationState(), {
+      controlState: {
+        controlledEntityId: entityContract.primaryEntityId,
+        debugCameraModifierActive: false,
+        inputOwner: singleEntityControlContract.ownership.controlledEntity,
+        movementIntent: {
+          isActive: true,
+          magnitude: 1,
+          source: "keyboard",
+          vector: {
+            x: 0,
+            y: -1
+          }
+        }
+      }
+    });
+
+    expect(simulationState.entity.state).toBe("moving");
+    expect(simulationState.entity.velocity).toEqual({
+      x: 0,
+      y: -singleEntityControlContract.desktopMoveSpeedWorldUnitsPerSecond
+    });
+    expect(simulationState.entity.worldPosition.y).toBeCloseTo(
+      -singleEntityControlContract.desktopMoveSpeedWorldUnitsPerSecond *
+        (entitySimulationContract.fixedStepMs / 1000)
+    );
+    expect(simulationState.entity.orientation).toBeCloseTo(-Math.PI / 2);
   });
 });

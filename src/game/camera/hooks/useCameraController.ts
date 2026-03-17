@@ -15,23 +15,18 @@ type ViewportForCamera = {
 };
 
 type UseCameraControllerOptions = {
+  debugCameraEnabled: boolean;
   surfaceRef: RefObject<HTMLElement | null>;
   viewport: ViewportForCamera;
 };
 
-type GestureState =
-  | {
-      previousX: number;
-      previousY: number;
-      type: "pan";
-    }
-  | {
-      previousAngle: number;
-      previousCenterX: number;
-      previousCenterY: number;
-      previousDistance: number;
-      type: "gesture";
-    };
+type GestureState = {
+  previousAngle: number;
+  previousCenterX: number;
+  previousCenterY: number;
+  previousDistance: number;
+  type: "gesture";
+};
 
 const getTouchCenter = (touches: TouchList) => ({
   x: (touches[0].clientX + touches[1].clientX) / 2,
@@ -45,6 +40,7 @@ const getTouchAngle = (touches: TouchList) =>
   Math.atan2(touches[1].clientY - touches[0].clientY, touches[1].clientX - touches[0].clientX);
 
 export function useCameraController({
+  debugCameraEnabled,
   surfaceRef,
   viewport
 }: UseCameraControllerOptions) {
@@ -64,7 +60,7 @@ export function useCameraController({
     const currentScale = () => viewport.fitScale * cameraState.zoom;
 
     const handlePointerDown = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse" || event.button !== 0) {
+      if (event.pointerType !== "mouse" || event.button !== 0 || !event.shiftKey) {
         return;
       }
 
@@ -92,11 +88,27 @@ export function useCameraController({
     };
 
     const handleWheel = (event: WheelEvent) => {
+      if (!event.shiftKey) {
+        return;
+      }
+
       event.preventDefault();
       setCameraState((currentState) => zoomCamera(currentState, event.deltaY));
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      const isCameraDebugKey =
+        event.key === "q" ||
+        event.key === "Q" ||
+        event.key === "e" ||
+        event.key === "E" ||
+        event.key === "r" ||
+        event.key === "R";
+
+      if (isCameraDebugKey && !debugCameraEnabled) {
+        return;
+      }
+
       if (event.key === "q" || event.key === "Q") {
         setCameraState((currentState) =>
           rotateCamera(currentState, -cameraContract.rotationStepRadians)
@@ -115,14 +127,6 @@ export function useCameraController({
     };
 
     const handleTouchStart = (event: TouchEvent) => {
-      if (event.touches.length === 1) {
-        touchGesture = {
-          previousX: event.touches[0].clientX,
-          previousY: event.touches[0].clientY,
-          type: "pan"
-        };
-      }
-
       if (event.touches.length === 2) {
         const center = getTouchCenter(event.touches);
         touchGesture = {
@@ -138,19 +142,6 @@ export function useCameraController({
     const handleTouchMove = (event: TouchEvent) => {
       if (!touchGesture) {
         return;
-      }
-
-      if (touchGesture.type === "pan" && event.touches.length === 1) {
-        const deltaX = event.touches[0].clientX - touchGesture.previousX;
-        const deltaY = event.touches[0].clientY - touchGesture.previousY;
-
-        touchGesture = {
-          previousX: event.touches[0].clientX,
-          previousY: event.touches[0].clientY,
-          type: "pan"
-        };
-
-        setCameraState((currentState) => panCamera(currentState, deltaX, deltaY, currentScale()));
       }
 
       if (touchGesture.type === "gesture" && event.touches.length === 2) {
@@ -189,14 +180,6 @@ export function useCameraController({
       if (event.touches.length === 0) {
         touchGesture = null;
       }
-
-      if (event.touches.length === 1) {
-        touchGesture = {
-          previousX: event.touches[0].clientX,
-          previousY: event.touches[0].clientY,
-          type: "pan"
-        };
-      }
     };
 
     surfaceElement.addEventListener("pointerdown", handlePointerDown);
@@ -220,7 +203,7 @@ export function useCameraController({
       surfaceElement.removeEventListener("touchend", handleTouchEnd);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [cameraState.zoom, surfaceRef, viewport.fitScale]);
+  }, [cameraState.zoom, debugCameraEnabled, surfaceRef, viewport.fitScale]);
 
   return {
     cameraState,

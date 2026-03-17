@@ -11,6 +11,9 @@ import { useCameraController } from "../game/camera/hooks/useCameraController";
 import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
 import { useDebugPanelHotkey } from "../game/debug/hooks/useDebugPanelHotkey";
 import { useEntitySimulation } from "../game/entities/hooks/useEntitySimulation";
+import { entityContract } from "../game/entities/model/entityContract";
+import { useSingleEntityControl } from "../game/input/hooks/useSingleEntityControl";
+import { singleEntityControlContract } from "../game/input/model/singleEntityControlContract";
 import { RuntimeSurface } from "../game/render/RuntimeSurface";
 import {
   chunkWorldSize,
@@ -25,14 +28,18 @@ export function AppShell() {
   const runtimeSurfaceRef = useRef<HTMLDivElement>(null);
   useDocumentViewportLock();
   useRuntimeInteractionGuards(runtimeSurfaceRef);
+  const controlState = useSingleEntityControl({
+    controlledEntityId: entityContract.primaryEntityId
+  });
   const { enterFullscreen, isFullscreen, isSupported, lastError } =
     useFullscreenController(shellRef);
   const viewport = useLogicalViewportModel(shellRef);
   const { cameraState, resetCamera } = useCameraController({
+    debugCameraEnabled: controlState.debugCameraModifierActive,
     surfaceRef: runtimeSurfaceRef,
     viewport
   });
-  const simulationState = useEntitySimulation();
+  const simulationState = useEntitySimulation({ controlState });
   const { markFailed, markReady, rendererState } = useRendererHealth();
   const { preferences, setDebugPanelVisible, setPrefersFullscreen } = useShellPreferences({
     defaultDebugPanelVisible: appConfig.debugOverlayEnabled && appConfig.diagnosticsEnabled
@@ -151,6 +158,20 @@ export function AppShell() {
             </dd>
           </div>
           <div>
+            <dt>Control owner</dt>
+            <dd>{controlState.inputOwner}</dd>
+          </div>
+          <div>
+            <dt>Desktop fallback</dt>
+            <dd>WASD / arrows steer the entity</dd>
+          </div>
+          <div>
+            <dt>Debug camera</dt>
+            <dd>
+              Hold {singleEntityControlContract.debugCameraModifierKey} + drag / wheel / Q E R
+            </dd>
+          </div>
+          <div>
             <dt>Entity</dt>
             <dd>
               {Math.round(simulationState.entity.worldPosition.x)},{" "}
@@ -184,6 +205,7 @@ export function AppShell() {
 
         <ShellDiagnosticsPanel
           camera={cameraState}
+          control={controlState}
           entity={simulationState.entity}
           fullscreen={{
             isFullscreen,

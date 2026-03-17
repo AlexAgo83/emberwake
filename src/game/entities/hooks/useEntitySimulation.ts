@@ -6,16 +6,26 @@ import {
   entitySimulationContract
 } from "../model/entitySimulation";
 import type { EntitySimulationState } from "../model/entitySimulation";
+import type { SingleEntityControlState } from "../../input/model/singleEntityControlContract";
 
-export function useEntitySimulation() {
+type UseEntitySimulationOptions = {
+  controlState?: SingleEntityControlState;
+};
+
+export function useEntitySimulation({ controlState }: UseEntitySimulationOptions = {}) {
   const [simulationState, setSimulationState] = useState<EntitySimulationState>(
     createInitialSimulationState
   );
   const simulationStateRef = useRef(simulationState);
+  const controlStateRef = useRef(controlState);
 
   useEffect(() => {
     simulationStateRef.current = simulationState;
   }, [simulationState]);
+
+  useEffect(() => {
+    controlStateRef.current = controlState;
+  }, [controlState]);
 
   useEffect(() => {
     let frameId = 0;
@@ -34,7 +44,9 @@ export function useEntitySimulation() {
         let nextSimulationState = simulationStateRef.current;
 
         while (accumulator >= entitySimulationContract.fixedStepMs) {
-          nextSimulationState = advanceSimulationState(nextSimulationState);
+          nextSimulationState = advanceSimulationState(nextSimulationState, {
+            controlState: controlStateRef.current
+          });
           accumulator -= entitySimulationContract.fixedStepMs;
         }
 

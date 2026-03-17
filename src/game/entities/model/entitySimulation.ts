@@ -1,4 +1,6 @@
 import type { WorldPoint } from "../../world/types";
+import type { SingleEntityControlState } from "../../input/model/singleEntityControlContract";
+import { singleEntityControlContract } from "../../input/model/singleEntityControlContract";
 import { createGenericMoverEntity } from "./entityContract";
 import type { EntityState, WorldEntity } from "./entityContract";
 
@@ -13,6 +15,10 @@ export type SimulatedEntity = WorldEntity & {
 export type EntitySimulationState = {
   entity: SimulatedEntity;
   tick: number;
+};
+
+type SimulationCommand = {
+  controlState?: SingleEntityControlState;
 };
 
 type ScriptedPhase = {
@@ -86,9 +92,28 @@ export const getScriptedEntityPhase = (tick: number): ScriptedPhase => {
 };
 
 export const advanceSimulationState = (
-  simulationState: EntitySimulationState
+  simulationState: EntitySimulationState,
+  command: SimulationCommand = {}
 ): EntitySimulationState => {
-  const phase = getScriptedEntityPhase(simulationState.tick);
+  const controlledEntity =
+    command.controlState?.controlledEntityId === simulationState.entity.id
+      ? command.controlState
+      : null;
+  const phase: ScriptedPhase = controlledEntity
+    ? {
+        state: controlledEntity.movementIntent.isActive ? "moving" : "idle",
+        velocity: {
+          x:
+            controlledEntity.movementIntent.vector.x *
+            controlledEntity.movementIntent.magnitude *
+            singleEntityControlContract.desktopMoveSpeedWorldUnitsPerSecond,
+          y:
+            controlledEntity.movementIntent.vector.y *
+            controlledEntity.movementIntent.magnitude *
+            singleEntityControlContract.desktopMoveSpeedWorldUnitsPerSecond
+        }
+      }
+    : getScriptedEntityPhase(simulationState.tick);
   const nextTick = simulationState.tick + 1;
   const stepSeconds = entitySimulationContract.fixedStepMs / 1000;
   const orientation =
