@@ -24,7 +24,7 @@
   z-index: 2;
   display: grid;
   gap: 1.5rem;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
   align-content: end;
   min-height: 100dvh;
   padding:
@@ -217,7 +217,6 @@
     rgba(15, 10, 25, 0.86);
 }
 
-.shell-identity,
 .shell-status {
   width: min(32rem, 100%);
   padding: 1.25rem 1.4rem;
@@ -228,46 +227,11 @@
   backdrop-filter: blur(18px);
 }
 
-.shell-identity h1 {
-  margin: 0;
-  font-family: var(--emberwake-title-font);
-  font-size: clamp(2.25rem, 5vw, 4rem);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.shell-identity__eyebrow {
-  margin: 0 0 0.85rem;
-  color: var(--emberwake-accent-cold);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-.shell-identity__body {
-  margin: 0.95rem 0 0;
-  max-width: 36ch;
-  color: var(--emberwake-copy-dim);
-  font-size: 1rem;
-  line-height: 1.55;
-}
-
-.shell-identity--compact {
-  width: min(24rem, 100%);
-  padding: 1rem 1.2rem;
-}
-
-.shell-identity--compact h1 {
-  font-size: clamp(1.6rem, 4vw, 2.5rem);
-}
-
 .shell-player-surfaces {
   display: grid;
   gap: 1rem;
   align-items: end;
+  align-self: end;
   grid-template-columns: minmax(0, 20rem) minmax(0, 22rem);
 }
 
@@ -422,7 +386,7 @@
 @media (min-width: 901px) {
   .app-shell__overlay {
     grid-template-columns: minmax(0, 1fr) minmax(22rem, 34rem);
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto 1fr;
     align-content: stretch;
     align-items: start;
     padding:
@@ -437,11 +401,6 @@
     grid-row: 1;
   }
 
-  .shell-identity {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
   .shell-status {
     width: min(28rem, 100%);
     margin-left: auto;
@@ -449,14 +408,14 @@
 
   .shell-player-surfaces {
     grid-column: 1;
-    grid-row: 3;
+    grid-row: 2;
     align-self: end;
     grid-template-columns: minmax(0, 20rem) minmax(0, 24rem);
   }
 
   .shell-diagnostics {
     grid-column: 2;
-    grid-row: 2 / 4;
+    grid-row: 2;
     align-self: start;
     width: 100%;
     margin-left: 0;
@@ -468,7 +427,6 @@
     align-content: end;
   }
 
-  .shell-identity,
   .shell-status {
     border-radius: 1.1rem;
   }

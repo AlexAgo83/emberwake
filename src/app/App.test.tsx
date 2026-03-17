@@ -18,15 +18,11 @@ vi.mock("../game/render/RuntimeSurface", () => ({
 }));
 
 describe("App", () => {
-  it("renders the Emberwake shell identity", () => {
+  it("renders the runtime shell controls", () => {
     render(<App />);
 
-    expect(
-      screen.getByRole("heading", {
-        name: "Emberwake"
-      })
-    ).toBeInTheDocument();
     expect(screen.getByTestId("runtime-surface")).toBeInTheDocument();
+    expect(screen.getByText("Emberwake runtime")).toBeInTheDocument();
     expect(
       screen.getByRole("button", {
         name: "Enter fullscreen"

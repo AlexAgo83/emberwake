@@ -25,7 +25,6 @@ import { worldPointToChunkCoordinate } from "../game/world/model/worldContract";
 import { useWorldInteractionDiagnostics } from "../game/world/hooks/useWorldInteractionDiagnostics";
 import { useVisibleChunkSet } from "../game/world/hooks/useVisibleChunkSet";
 import { appConfig } from "../shared/config/appConfig";
-import { runtimeContract } from "../shared/constants/runtimeContract";
 
 export function AppShell() {
   const shellRef = useRef<HTMLElement>(null);
@@ -165,15 +164,6 @@ export function AppShell() {
             />
           </div>
         </header>
-
-        <div className="shell-identity shell-identity--compact">
-          <p className="shell-identity__eyebrow">High-density top-down survival action</p>
-          <h1>{appConfig.name}</h1>
-          <p className="shell-identity__body">
-            {runtimeContract.worldAssumption} world, direct movement loop, debug tooling kept out
-            of the player HUD.
-          </p>
-        </div>
 
         <div className="shell-player-surfaces">
           <PlayerHudCard
