@@ -3,6 +3,12 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  server: {
+    port: 5073
+  },
+  preview: {
+    port: 4073
+  },
   plugins: [
     react(),
     VitePWA({
