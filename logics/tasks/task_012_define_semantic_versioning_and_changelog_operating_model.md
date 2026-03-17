@@ -1,9 +1,9 @@
 ## task_012_define_semantic_versioning_and_changelog_operating_model - Define semantic versioning and changelog operating model
-> From version: 0.1.2
+> From version: 0.1.3
 > Status: Ready
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 5%
+> Understanding: 96%
+> Confidence: 93%
+> Progress: 10%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -43,7 +43,7 @@ flowchart LR
 - AC5 -> Scope: The request treats a missing or stale changelog as a release blocker rather than an optional documentation gap.. Proof: TODO.
 - AC6 -> Scope: The request defines a per-version changelog naming convention compatible with the user's existing repositories, such as `changelogs/CHANGELOGS_X_Y_Z.md`.. Proof: TODO.
 - AC7 -> Scope: The request treats Git tags and GitHub releases as consumers of curated version notes rather than relying only on auto-generated notes.. Proof: TODO.
-- AC8 -> Scope: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.. Proof: TODO.
+- AC8 -> Scope: The request remains compatible with the static Render-hosting model, the dedicated `release` branch workflow, and the future GitHub Actions CI pipeline.. Proof: TODO.
 - AC9 -> Scope: If preview-style environments are introduced later, the request treats them first as technical validation surfaces rather than as separate product release channels.. Proof: TODO.
 - AC10 -> Scope: The request addresses rollback or recovery thinking appropriate to a static-site deployment.. Proof: TODO.
 - AC11 -> Scope: The request does not assume a backend service topology or an enterprise-grade release-management stack.. Proof: TODO.
@@ -59,7 +59,7 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): `adr_012_require_curated_versioned_changelogs_for_releases`
+- Architecture decision(s): `adr_012_require_curated_versioned_changelogs_for_releases`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Backlog item: `item_059_define_semantic_versioning_and_changelog_operating_model`
 - Request(s): `req_015_define_release_workflow_and_deployment_operations`
 

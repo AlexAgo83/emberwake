@@ -1,8 +1,8 @@
 ## req_003_create_render_static_free_plan_blueprint - Create Render static free plan blueprint
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 94%
-> Confidence: 91%
+> Understanding: 96%
+> Confidence: 93%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -11,7 +11,7 @@
 - Create a Render Blueprint for deploying the project as a static site on the Render free plan.
 - Keep the deployment model aligned with the existing frontend-only architecture: no backend runtime, no database, no worker, and no paid infrastructure assumptions.
 - Produce a Git-backed `render.yaml` configuration suitable for a static site deployment rather than an image-backed or server-backed setup.
-- Treat the first delivery path as `main`-driven only, without introducing preview or staging environments in this initial Blueprint scope.
+- Treat the first delivery path as `release`-driven, without introducing preview or staging environments in this initial Blueprint scope.
 - Ensure the deployment blueprint remains compatible with the React, TypeScript, PixiJS, and PWA shell already defined in `req_000_bootstrap_fullscreen_2d_react_pwa_shell`.
 - Define the frontend environment-variable strategy for Vite so local development, production builds, and Render build-time configuration stay aligned.
 - Treat `.env.production` as a non-versioned local mirror of Render-provided build variables rather than a committed source of truth.
@@ -23,7 +23,7 @@ The project direction is explicitly frontend-only at this stage. The rendering s
 
 Render is the target hosting platform for this request, but the scope should stay limited to the static-site Blueprint path. The request is not asking for backend deployment, managed data services, private networking, or multi-service orchestration. It is specifically about creating the Render static-site Blueprint needed to host the app on the free plan.
 
-The recommended default is to keep the first hosting path intentionally simple: a single production-like static site driven from the main branch. Preview environments or staging branches may be useful later, but they should not complicate the first Render Blueprint on the free plan.
+The recommended default is to keep the first hosting path intentionally simple: a single production-like static site driven from the `release` branch. Preview environments or staging branches may be useful later, but they should not complicate the first Render Blueprint on the free plan.
 
 The Blueprint should be expressed as code through `render.yaml` so deployment settings are versioned with the repository and can be reproduced later. The expected result is a minimal but correct static-site service definition that captures the build command, publish directory, and any static-delivery settings needed by the app shell.
 
@@ -56,7 +56,7 @@ flowchart TD
 - AC6: The request defines a Vite-compatible frontend env strategy in which public client variables use the `VITE_` prefix and are treated as build-time public values.
 - AC7: The request treats `.env.example` as the versioned documentation source for expected frontend variables.
 - AC8: The request treats `.env.local` and `.env.production` as non-versioned files, with `.env.production` explicitly positioned as a local mirror of Render build-time values rather than the source of truth.
-- AC9: The request treats the initial deployment path as a `main`-driven free-plan static-site deployment without requiring preview or staging environments.
+- AC9: The request treats the initial deployment path as a `release`-driven free-plan static-site deployment without requiring preview or staging environments.
 - AC10: The resulting deployment blueprint is suitable for later implementation without forcing the app into a backend or multi-service topology.
 
 # Definition of Ready (DoR)
@@ -67,7 +67,7 @@ flowchart TD
 
 # Companion docs
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 
 # Backlog
 - `item_014_define_render_static_site_blueprint_and_build_contract`

@@ -1,8 +1,8 @@
 ## req_011_define_ui_hud_and_overlay_system - Define UI HUD and overlay system
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
+> Understanding: 95%
+> Confidence: 92%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -52,7 +52,7 @@ flowchart TD
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
-- Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
+- Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`, `prod_005_visual_identity_dark_fantasy_with_synthetic_energy_accents`
 - Architecture decision(s): (none yet)
 # Backlog
 - `item_043_define_system_overlay_ownership_and_fullscreen_install_prompt_behavior`

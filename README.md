@@ -20,7 +20,7 @@ The name combines:
 Taken together, `Emberwake` suggests a moving presence that leaves pressure, heat, and momentum in its path. That fits the current product direction: top-down real-time survival action built around movement, readability, and escalating density.
 
 Reference brief:
-- [prod_004_emberwake_name_and_brand_direction.md](/Users/alexandreagostini/Documents/pyra-motion/logics/product/prod_004_emberwake_name_and_brand_direction.md)
+- [prod_004_emberwake_name_and_brand_direction.md](/Users/alexandreagostini/Documents/emberwake/logics/product/prod_004_emberwake_name_and_brand_direction.md)
 
 ```mermaid
 flowchart LR
@@ -70,10 +70,10 @@ At the moment, this repository mainly contains the project operating model:
 - product briefs
 
 The implementation backbone already starts in:
-- [logics/tasks/task_000_bootstrap_react_pixi_pwa_project_foundation.md](/Users/alexandreagostini/Documents/pyra-motion/logics/tasks/task_000_bootstrap_react_pixi_pwa_project_foundation.md)
-- [logics/tasks/task_001_implement_fullscreen_viewport_ownership_and_input_isolation.md](/Users/alexandreagostini/Documents/pyra-motion/logics/tasks/task_001_implement_fullscreen_viewport_ownership_and_input_isolation.md)
-- [logics/tasks/task_002_add_stable_logical_viewport_and_world_space_shell_contract.md](/Users/alexandreagostini/Documents/pyra-motion/logics/tasks/task_002_add_stable_logical_viewport_and_world_space_shell_contract.md)
-- [logics/tasks/task_003_add_render_diagnostics_fallback_handling_and_shell_preferences.md](/Users/alexandreagostini/Documents/pyra-motion/logics/tasks/task_003_add_render_diagnostics_fallback_handling_and_shell_preferences.md)
+- [logics/tasks/task_000_bootstrap_react_pixi_pwa_project_foundation.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_000_bootstrap_react_pixi_pwa_project_foundation.md)
+- [logics/tasks/task_001_implement_fullscreen_viewport_ownership_and_input_isolation.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_001_implement_fullscreen_viewport_ownership_and_input_isolation.md)
+- [logics/tasks/task_002_add_stable_logical_viewport_and_world_space_shell_contract.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_002_add_stable_logical_viewport_and_world_space_shell_contract.md)
+- [logics/tasks/task_003_add_render_diagnostics_fallback_handling_and_shell_preferences.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_003_add_render_diagnostics_fallback_handling_and_shell_preferences.md)
 
 ## Workflow
 
@@ -88,9 +88,9 @@ This repo uses a staged `logics/` workflow:
 - `logics/external`: generated artifacts that do not fit elsewhere
 
 Useful entry points:
-- [logics/instructions.md](/Users/alexandreagostini/Documents/pyra-motion/logics/instructions.md)
-- [logics/request/req_000_bootstrap_fullscreen_2d_react_pwa_shell.md](/Users/alexandreagostini/Documents/pyra-motion/logics/request/req_000_bootstrap_fullscreen_2d_react_pwa_shell.md)
-- [logics/product/prod_000_initial_single_entity_navigation_loop.md](/Users/alexandreagostini/Documents/pyra-motion/logics/product/prod_000_initial_single_entity_navigation_loop.md)
+- [logics/instructions.md](/Users/alexandreagostini/Documents/emberwake/logics/instructions.md)
+- [logics/request/req_000_bootstrap_fullscreen_2d_react_pwa_shell.md](/Users/alexandreagostini/Documents/emberwake/logics/request/req_000_bootstrap_fullscreen_2d_react_pwa_shell.md)
+- [logics/product/prod_000_initial_single_entity_navigation_loop.md](/Users/alexandreagostini/Documents/emberwake/logics/product/prod_000_initial_single_entity_navigation_loop.md)
 
 ```mermaid
 flowchart LR
@@ -115,11 +115,11 @@ flowchart LR
 - React side effects should be isolated into dedicated hooks or modules
 
 Relevant ADRs:
-- [adr_000_adopt_feature_oriented_organic_frontend_structure.md](/Users/alexandreagostini/Documents/pyra-motion/logics/architecture/adr_000_adopt_feature_oriented_organic_frontend_structure.md)
-- [adr_001_enforce_bounded_file_size_and_isolate_react_side_effects.md](/Users/alexandreagostini/Documents/pyra-motion/logics/architecture/adr_001_enforce_bounded_file_size_and_isolate_react_side_effects.md)
-- [adr_002_separate_react_shell_from_pixi_runtime_ownership.md](/Users/alexandreagostini/Documents/pyra-motion/logics/architecture/adr_002_separate_react_shell_from_pixi_runtime_ownership.md)
-- [adr_003_define_coordinate_spaces_and_camera_contract.md](/Users/alexandreagostini/Documents/pyra-motion/logics/architecture/adr_003_define_coordinate_spaces_and_camera_contract.md)
-- [adr_004_run_simulation_on_a_fixed_timestep.md](/Users/alexandreagostini/Documents/pyra-motion/logics/architecture/adr_004_run_simulation_on_a_fixed_timestep.md)
+- [adr_000_adopt_feature_oriented_organic_frontend_structure.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_000_adopt_feature_oriented_organic_frontend_structure.md)
+- [adr_001_enforce_bounded_file_size_and_isolate_react_side_effects.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_001_enforce_bounded_file_size_and_isolate_react_side_effects.md)
+- [adr_002_separate_react_shell_from_pixi_runtime_ownership.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_002_separate_react_shell_from_pixi_runtime_ownership.md)
+- [adr_003_define_coordinate_spaces_and_camera_contract.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_003_define_coordinate_spaces_and_camera_contract.md)
+- [adr_004_run_simulation_on_a_fixed_timestep.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_004_run_simulation_on_a_fixed_timestep.md)
 
 ```mermaid
 flowchart TD
@@ -138,18 +138,20 @@ Releases are expected to stay explicit and documented.
 Current rule:
 - `package.json` will be the source of truth for app versioning
 - each release must have a curated changelog file
+- deployable releases must be promoted onto a dedicated `release` branch
 - release tags use the form `vX.Y.Z`
 - a release is blocked if its changelog is missing or stale
 
 Reference ADR:
-- [adr_012_require_curated_versioned_changelogs_for_releases.md](/Users/alexandreagostini/Documents/pyra-motion/logics/architecture/adr_012_require_curated_versioned_changelogs_for_releases.md)
+- [adr_012_require_curated_versioned_changelogs_for_releases.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_012_require_curated_versioned_changelogs_for_releases.md)
 
 Expected changelog location:
 - `changelogs/CHANGELOGS_X_Y_Z.md`
 
 ```mermaid
 flowchart LR
-    Tasks[Completed tasks] --> Version[Version bump in package.json]
+    Tasks[Completed tasks] --> ReleaseBranch[Promote to release branch]
+    ReleaseBranch --> Version[Version bump in package.json]
     Version --> Changelog[Curated changelog file]
     Changelog --> Commit[Release commit]
     Commit --> Tag[Git tag vX.Y.Z]
@@ -165,7 +167,7 @@ For the future Vite frontend:
 - frontend `VITE_*` variables are public build-time configuration, not secrets
 
 Reference ADR:
-- [adr_010_treat_render_build_variables_as_public_frontend_configuration.md](/Users/alexandreagostini/Documents/pyra-motion/logics/architecture/adr_010_treat_render_build_variables_as_public_frontend_configuration.md)
+- [adr_010_treat_render_build_variables_as_public_frontend_configuration.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_010_treat_render_build_variables_as_public_frontend_configuration.md)
 
 ## Validation
 

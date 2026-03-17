@@ -1,9 +1,9 @@
 ## item_017_define_baseline_github_actions_workflow_triggers_and_dependency_caching - Define baseline GitHub Actions workflow triggers and dependency caching
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 94%
-> Confidence: 91%
-> Progress: 0%
+> Understanding: 95%
+> Confidence: 92%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -13,7 +13,7 @@
 - This slice defines workflow triggers and dependency caching so GitHub Actions runs are predictable and practical.
 
 # Scope
-- In: `push` and `pull_request` triggers, package-manager caching, and baseline workflow shape.
+- In: `push` and `pull_request` triggers, package-manager caching, baseline workflow shape, and compatibility with a dedicated `release` branch.
 - Out: Quality-gate content, deployment jobs, or release automation.
 
 ```mermaid
@@ -30,10 +30,11 @@ flowchart LR
 - AC3: The pipeline includes the baseline repository checks needed for this stack, such as install, lint, typecheck, and build verification, with tests included when relevant to the project state.
 - AC4: The request treats lint, typecheck, tests, build verification, and Logics lint as the intended baseline mandatory checks for the initial CI workflow.
 - AC5: The request treats `push` and `pull_request` as the default triggering events for the initial CI workflow.
-- AC6: The CI design accounts for dependency caching suitable for the project's package-management setup.
-- AC7: The CI design remains compatible with the delivery direction defined in `req_003_create_render_static_free_plan_blueprint`.
-- AC8: The CI design accounts for Logics validation as part of repository quality rather than treating `logics/` as out-of-band documentation.
-- AC9: The resulting pipeline foundation is suitable for later extension into deployment or release workflows without requiring a full CI redesign.
+- AC6: The CI trigger design remains compatible with a dedicated `release` branch used for deployable states.
+- AC7: The CI design accounts for dependency caching suitable for the project's package-management setup.
+- AC8: The CI design remains compatible with the delivery direction defined in `req_003_create_render_static_free_plan_blueprint`.
+- AC9: The CI design accounts for Logics validation as part of repository quality rather than treating `logics/` as out-of-band documentation.
+- AC10: The resulting pipeline foundation is suitable for later extension into deployment or release workflows without requiring a full CI redesign.
 
 # AC Traceability
 - AC1 -> Scope: The request defines a GitHub Actions CI pipeline for the repository rather than a local-only validation approach.. Proof: TODO.
@@ -41,10 +42,11 @@ flowchart LR
 - AC3 -> Scope: The pipeline includes the baseline repository checks needed for this stack, such as install, lint, typecheck, and build verification, with tests included when relevant to the project state.. Proof: TODO.
 - AC4 -> Scope: The request treats lint, typecheck, tests, build verification, and Logics lint as the intended baseline mandatory checks for the initial CI workflow.. Proof: TODO.
 - AC5 -> Scope: The request treats `push` and `pull_request` as the default triggering events for the initial CI workflow.. Proof: TODO.
-- AC6 -> Scope: The CI design accounts for dependency caching suitable for the project's package-management setup.. Proof: TODO.
-- AC7 -> Scope: The CI design remains compatible with the delivery direction defined in `req_003_create_render_static_free_plan_blueprint`.. Proof: TODO.
-- AC8 -> Scope: The CI design accounts for Logics validation as part of repository quality rather than treating `logics/` as out-of-band documentation.. Proof: TODO.
-- AC9 -> Scope: The resulting pipeline foundation is suitable for later extension into deployment or release workflows without requiring a full CI redesign.. Proof: TODO.
+- AC6 -> Scope: The CI trigger design remains compatible with a dedicated `release` branch used for deployable states.. Proof: TODO.
+- AC7 -> Scope: The CI design accounts for dependency caching suitable for the project's package-management setup.. Proof: TODO.
+- AC8 -> Scope: The CI design remains compatible with the delivery direction defined in `req_003_create_render_static_free_plan_blueprint`.. Proof: TODO.
+- AC9 -> Scope: The CI design accounts for Logics validation as part of repository quality rather than treating `logics/` as out-of-band documentation.. Proof: TODO.
+- AC10 -> Scope: The resulting pipeline foundation is suitable for later extension into deployment or release workflows without requiring a full CI redesign.. Proof: TODO.
 
 # Decision framing
 - Product framing: Not needed

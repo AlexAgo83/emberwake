@@ -1,16 +1,16 @@
 ## item_061_define_preview_environment_role_in_the_delivery_workflow - Define preview environment role in the delivery workflow
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Understanding: 95%
+> Confidence: 92%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - If previews exist later, they need one clear role in the delivery model.
-- This slice defines previews as technical validation surfaces first so they do not silently become a second release track.
+- This slice defines previews as technical validation surfaces first so they do not silently become a second release track beside the dedicated `release` branch.
 
 # Scope
 - In: Preview environment purpose, validation role, and boundaries versus production releases.
@@ -29,7 +29,7 @@ flowchart LR
 - AC2: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.
 - AC3: The request treats lightweight semantic versioning and a simple changelog discipline as the intended default release-identification model.
 - AC4: The request addresses at least release readiness, version identification, and operational validation expectations, including a minimal post-deployment smoke check.
-- AC5: If preview-style environments are introduced later, the request treats them first as technical validation surfaces rather than as separate product release channels.
+- AC5: If preview-style environments are introduced later, the request treats them as technical validation surfaces distinct from the dedicated `release` branch rather than as separate product release channels.
 - AC6: The request addresses rollback or recovery thinking appropriate to a static-site deployment.
 - AC7: The request does not assume a backend service topology or an enterprise-grade release-management stack.
 - AC8: The request complements rather than duplicates the Render Blueprint request.
@@ -39,7 +39,7 @@ flowchart LR
 - AC2 -> Scope: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.. Proof: TODO.
 - AC3 -> Scope: The request treats lightweight semantic versioning and a simple changelog discipline as the intended default release-identification model.. Proof: TODO.
 - AC4 -> Scope: The request addresses at least release readiness, version identification, and operational validation expectations, including a minimal post-deployment smoke check.. Proof: TODO.
-- AC5 -> Scope: If preview-style environments are introduced later, the request treats them first as technical validation surfaces rather than as separate product release channels.. Proof: TODO.
+- AC5 -> Scope: If preview-style environments are introduced later, the request treats them as technical validation surfaces distinct from the dedicated `release` branch rather than as separate product release channels.. Proof: TODO.
 - AC6 -> Scope: The request addresses rollback or recovery thinking appropriate to a static-site deployment.. Proof: TODO.
 - AC7 -> Scope: The request does not assume a backend service topology or an enterprise-grade release-management stack.. Proof: TODO.
 - AC8 -> Scope: The request complements rather than duplicates the Render Blueprint request.. Proof: TODO.
@@ -54,7 +54,7 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Request: `req_015_define_release_workflow_and_deployment_operations`
 - Primary task(s): (none yet)
 

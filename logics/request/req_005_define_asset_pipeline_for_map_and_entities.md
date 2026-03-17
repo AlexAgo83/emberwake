@@ -1,8 +1,8 @@
 ## req_005_define_asset_pipeline_for_map_and_entities - Define asset pipeline for map and entities
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 94%
-> Confidence: 91%
+> Understanding: 96%
+> Confidence: 93%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -62,7 +62,7 @@ flowchart TD
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
-- Product brief(s): (none yet)
+- Product brief(s): `prod_005_visual_identity_dark_fantasy_with_synthetic_energy_accents`
 - Architecture decision(s): (none yet)
 
 # Backlog

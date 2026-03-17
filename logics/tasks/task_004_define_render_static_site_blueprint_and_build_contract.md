@@ -1,9 +1,9 @@
 ## task_004_define_render_static_site_blueprint_and_build_contract - Define Render static site blueprint and build contract
-> From version: 0.1.3
+> From version: 0.1.4
 > Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 5%
+> Understanding: 97%
+> Confidence: 94%
+> Progress: 10%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -44,7 +44,7 @@ flowchart LR
 - AC6 -> Scope: The request defines a Vite-compatible frontend env strategy in which public client variables use the `VITE_` prefix and are treated as build-time public values.. Proof: TODO.
 - AC7 -> Scope: The request treats `.env.example` as the versioned documentation source for expected frontend variables.. Proof: TODO.
 - AC8 -> Scope: The request treats `.env.local` and `.env.production` as non-versioned files, with `.env.production` explicitly positioned as a local mirror of Render build-time values rather than the source of truth.. Proof: TODO.
-- AC9 -> Scope: The request treats the initial deployment path as a `main`-driven free-plan static-site deployment without requiring preview or staging environments.. Proof: TODO.
+- AC9 -> Scope: The request treats the initial deployment path as a `release`-driven free-plan static-site deployment without requiring preview or staging environments.. Proof: TODO.
 - AC10 -> Scope: The resulting deployment blueprint is suitable for later implementation without forcing the app into a backend or multi-service topology.. Proof: TODO.
 
 # Decision framing
@@ -57,7 +57,7 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): `adr_010_treat_render_build_variables_as_public_frontend_configuration`
+- Architecture decision(s): `adr_010_treat_render_build_variables_as_public_frontend_configuration`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Backlog item: `item_014_define_render_static_site_blueprint_and_build_contract`
 - Request(s): `req_000_bootstrap_fullscreen_2d_react_pwa_shell`, `req_003_create_render_static_free_plan_blueprint`
 

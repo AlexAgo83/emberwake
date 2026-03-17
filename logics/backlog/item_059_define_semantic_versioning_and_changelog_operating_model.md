@@ -1,9 +1,9 @@
 ## item_059_define_semantic_versioning_and_changelog_operating_model - Define semantic versioning and changelog operating model
-> From version: 0.1.2
+> From version: 0.1.3
 > Status: Ready
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 10%
+> Understanding: 96%
+> Confidence: 93%
+> Progress: 15%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -13,7 +13,7 @@
 - This slice defines how versions and changelog entries are maintained so delivered states remain understandable and no release ships without curated notes.
 
 # Scope
-- In: Versioning rules, mandatory curated changelog expectations, release-labeling practice, and version-to-changelog matching rules.
+- In: Versioning rules, mandatory curated changelog expectations, release-labeling practice, version-to-changelog matching rules, and alignment with the `release` branch workflow.
 - Out: Smoke checks, rollback mechanics, or Render deployment config.
 
 ```mermaid
@@ -32,7 +32,7 @@ flowchart LR
 - AC5: The request treats a missing or stale changelog as a release blocker rather than an optional documentation gap.
 - AC6: The request defines a per-version changelog naming convention compatible with the user's existing repositories, such as `changelogs/CHANGELOGS_X_Y_Z.md`.
 - AC7: The request treats Git tags and GitHub releases as consumers of curated version notes rather than relying only on auto-generated notes.
-- AC8: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.
+- AC8: The request remains compatible with the static Render-hosting model, the dedicated `release` branch workflow, and the future GitHub Actions CI pipeline.
 - AC9: If preview-style environments are introduced later, the request treats them first as technical validation surfaces rather than as separate product release channels.
 - AC10: The request addresses rollback or recovery thinking appropriate to a static-site deployment.
 - AC11: The request does not assume a backend service topology or an enterprise-grade release-management stack.
@@ -62,7 +62,7 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): `adr_012_require_curated_versioned_changelogs_for_releases`
+- Architecture decision(s): `adr_012_require_curated_versioned_changelogs_for_releases`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Request: `req_015_define_release_workflow_and_deployment_operations`
 - Primary task(s): `task_012_define_semantic_versioning_and_changelog_operating_model`
 

@@ -1,9 +1,9 @@
 ## task_005_define_mandatory_frontend_and_logics_quality_gates_in_ci - Define mandatory frontend and Logics quality gates in CI
-> From version: 0.1.3
+> From version: 0.1.4
 > Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 5%
+> Understanding: 97%
+> Confidence: 94%
+> Progress: 10%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -41,10 +41,11 @@ flowchart LR
 - AC3 -> Scope: The pipeline includes the baseline repository checks needed for this stack, such as install, lint, typecheck, tests, and build verification, with tests remaining part of the baseline even if initially lightweight.. Proof: TODO.
 - AC4 -> Scope: The request treats lint, typecheck, tests, build verification, and Logics lint as the initial blocking mandatory checks for the CI workflow.. Proof: TODO.
 - AC5 -> Scope: The request treats `push` and `pull_request` as the default triggering events for the initial CI workflow.. Proof: TODO.
-- AC6 -> Scope: The CI design accounts for dependency caching suitable for the project's package-management setup.. Proof: TODO.
-- AC7 -> Scope: The CI design remains compatible with the delivery direction defined in `req_003_create_render_static_free_plan_blueprint`.. Proof: TODO.
-- AC8 -> Scope: The CI design accounts for Logics validation as part of repository quality rather than treating `logics/` as out-of-band documentation.. Proof: TODO.
-- AC9 -> Scope: The resulting pipeline foundation is suitable for later extension into deployment or release workflows without requiring a full CI redesign.. Proof: TODO.
+- AC6 -> Scope: The CI trigger design remains compatible with a dedicated `release` branch used for deployable states.. Proof: TODO.
+- AC7 -> Scope: The CI design accounts for dependency caching suitable for the project's package-management setup.. Proof: TODO.
+- AC8 -> Scope: The CI design remains compatible with the delivery direction defined in `req_003_create_render_static_free_plan_blueprint`.. Proof: TODO.
+- AC9 -> Scope: The CI design accounts for Logics validation as part of repository quality rather than treating `logics/` as out-of-band documentation.. Proof: TODO.
+- AC10 -> Scope: The resulting pipeline foundation is suitable for later extension into deployment or release workflows without requiring a full CI redesign.. Proof: TODO.
 
 # Decision framing
 - Product framing: Not needed
