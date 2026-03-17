@@ -1,9 +1,9 @@
 ## task_003_add_render_diagnostics_fallback_handling_and_shell_preferences - Add render diagnostics fallback handling and shell preferences
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 5%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,19 +30,19 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm scope, dependencies, and linked acceptance criteria.
-- [ ] 2. Implement the scoped changes from the backlog item.
-- [ ] 3. Validate the result and update the linked Logics docs.
-- [ ] 4. Create a dedicated git commit for this task scope after validation passes.
-- [ ] FINAL: Update related Logics docs
+- [x] 1. Confirm scope, dependencies, and linked acceptance criteria.
+- [x] 2. Implement the scoped changes from the backlog item.
+- [x] 3. Validate the result and update the linked Logics docs.
+- [x] 4. Create a dedicated git commit for this task scope after validation passes.
+- [x] FINAL: Update related Logics docs
 
 # AC Traceability
-- AC1 -> Scope: A single standard shell-level debug entry point exists for rendering diagnostics and is mounted by default in development without becoming visually noisy.. Proof: TODO.
-- AC2 -> Scope: Shell-level diagnostics are available in development and preview environments, can be toggled through a shortcut or equivalent control, and are hidden or disabled by default in production builds.. Proof: TODO.
-- AC3 -> Scope: If Pixi, WebGL, or true fullscreen cannot initialize correctly, the shell fails in a controlled and diagnosable way rather than silently.. Proof: TODO.
-- AC4 -> Scope: Local shell preferences such as fullscreen preference and debug visibility can be persisted without expanding into gameplay-state persistence.. Proof: TODO.
-- AC5 -> Scope: This slice keeps later map and entity diagnostics compatible with one shared debug workflow instead of fragmenting tooling.. Proof: TODO.
-- AC6 -> Scope: Fallback and preference behavior remain limited to shell concerns and do not pull in gameplay features.. Proof: TODO.
+- AC1 -> Scope: A single standard shell-level debug entry point exists for rendering diagnostics and is mounted by default in development without becoming visually noisy.. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/game/debug/hooks/useDebugPanelHotkey.ts`.
+- AC2 -> Scope: Shell-level diagnostics are available in development and preview environments, can be toggled through a shortcut or equivalent control, and are hidden or disabled by default in production builds.. Proof: `src/shared/config/appConfig.ts`, `src/app/AppShell.tsx`.
+- AC3 -> Scope: If Pixi, WebGL, or true fullscreen cannot initialize correctly, the shell fails in a controlled and diagnosable way rather than silently.. Proof: `src/app/hooks/useRendererHealth.ts`, `src/app/hooks/useFullscreenController.ts`, `src/game/render/RuntimeSurfaceBoundary.tsx`.
+- AC4 -> Scope: Local shell preferences such as fullscreen preference and debug visibility can be persisted without expanding into gameplay-state persistence.. Proof: `src/app/hooks/useShellPreferences.ts`, `src/shared/lib/shellPreferencesStorage.ts`.
+- AC5 -> Scope: This slice keeps later map and entity diagnostics compatible with one shared debug workflow instead of fragmenting tooling.. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/shared/constants/runtimeContract.ts`.
+- AC6 -> Scope: Fallback and preference behavior remain limited to shell concerns and do not pull in gameplay features.. Proof: `src/app/AppShell.tsx`.
 
 # Decision framing
 - Product framing: Consider
@@ -66,10 +66,18 @@ flowchart LR
 - `npm run build`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated.
-- [ ] A dedicated git commit has been created for the completed task scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated.
+- [x] A dedicated git commit has been created for the completed task scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Added one shared shell-level diagnostics entry point with a button toggle, backtick hotkey, and a single diagnostics panel designed to survive later map and entity growth.
+- Added shell-only local preferences for debug visibility and fullscreen preference, persisted in local storage without crossing into gameplay save territory.
+- Added visible renderer/fullscreen fallback states so Pixi readiness delays, render errors, and rejected fullscreen requests stay diagnosable instead of failing silently.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `npm run build`

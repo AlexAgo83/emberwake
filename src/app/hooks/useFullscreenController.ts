@@ -4,6 +4,7 @@ import type { RefObject } from "react";
 type FullscreenController = {
   enterFullscreen: () => Promise<void>;
   isFullscreen: boolean;
+  lastError: string | null;
   isSupported: boolean;
 };
 
@@ -17,6 +18,7 @@ const hasFullscreenApi = (element: HTMLElement | null) =>
 export function useFullscreenController(shellRef: RefObject<HTMLElement | null>): FullscreenController {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
+  const [lastError, setLastError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -42,13 +44,19 @@ export function useFullscreenController(shellRef: RefObject<HTMLElement | null>)
       return;
     }
 
-    await shellElement.requestFullscreen();
-    setIsFullscreen(document.fullscreenElement === shellElement);
+    try {
+      await shellElement.requestFullscreen();
+      setLastError(null);
+      setIsFullscreen(document.fullscreenElement === shellElement);
+    } catch {
+      setLastError("Fullscreen request was rejected by the browser.");
+    }
   };
 
   return {
     enterFullscreen,
     isFullscreen,
+    lastError,
     isSupported
   };
 }

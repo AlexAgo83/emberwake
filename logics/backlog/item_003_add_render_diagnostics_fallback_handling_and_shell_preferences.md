@@ -1,9 +1,9 @@
 ## item_003_add_render_diagnostics_fallback_handling_and_shell_preferences - Add render diagnostics fallback handling and shell preferences
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 10%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -41,12 +41,12 @@ flowchart LR
 - AC6: Fallback and preference behavior remain limited to shell concerns and do not pull in gameplay features.
 
 # AC Traceability
-- AC1 -> Scope: One standard shell-level debug entry point exists. Proof: TODO.
-- AC2 -> Scope: Diagnostics are available in dev and preview but not exposed by default in production. Proof: TODO.
-- AC3 -> Scope: Render and fullscreen failures remain visible and diagnosable. Proof: TODO.
-- AC4 -> Scope: Shell-only preferences persist locally without gameplay persistence. Proof: TODO.
-- AC5 -> Scope: Debug workflow remains shared for later map and entity slices. Proof: TODO.
-- AC6 -> Scope: Slice is limited to shell-level diagnostics, fallbacks, and preferences. Proof: TODO.
+- AC1 -> Scope: One standard shell-level debug entry point exists. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/game/debug/hooks/useDebugPanelHotkey.ts`.
+- AC2 -> Scope: Diagnostics are available in dev and preview but not exposed by default in production. Proof: `src/shared/config/appConfig.ts`, `src/app/AppShell.tsx`.
+- AC3 -> Scope: Render and fullscreen failures remain visible and diagnosable. Proof: `src/app/hooks/useRendererHealth.ts`, `src/app/hooks/useFullscreenController.ts`, `src/game/render/RuntimeSurfaceBoundary.tsx`.
+- AC4 -> Scope: Shell-only preferences persist locally without gameplay persistence. Proof: `src/app/hooks/useShellPreferences.ts`, `src/shared/lib/shellPreferencesStorage.ts`.
+- AC5 -> Scope: Debug workflow remains shared for later map and entity slices. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/shared/constants/runtimeContract.ts`.
+- AC6 -> Scope: Slice is limited to shell-level diagnostics, fallbacks, and preferences. Proof: `src/app/AppShell.tsx`.
 
 # Decision framing
 - Product framing: Required

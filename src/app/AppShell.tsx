@@ -4,7 +4,11 @@ import { FullscreenToggleButton } from "./components/FullscreenToggleButton";
 import { useDocumentViewportLock } from "./hooks/useDocumentViewportLock";
 import { useFullscreenController } from "./hooks/useFullscreenController";
 import { useLogicalViewportModel } from "./hooks/useLogicalViewportModel";
+import { useRendererHealth } from "./hooks/useRendererHealth";
+import { useShellPreferences } from "./hooks/useShellPreferences";
 import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards";
+import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
+import { useDebugPanelHotkey } from "../game/debug/hooks/useDebugPanelHotkey";
 import { RuntimeSurface } from "../game/render/RuntimeSurface";
 import { appConfig } from "../shared/config/appConfig";
 import { runtimeContract } from "../shared/constants/runtimeContract";
@@ -14,8 +18,24 @@ export function AppShell() {
   const runtimeSurfaceRef = useRef<HTMLDivElement>(null);
   useDocumentViewportLock();
   useRuntimeInteractionGuards(runtimeSurfaceRef);
-  const { enterFullscreen, isFullscreen, isSupported } = useFullscreenController(shellRef);
+  const { enterFullscreen, isFullscreen, isSupported, lastError } =
+    useFullscreenController(shellRef);
   const viewport = useLogicalViewportModel(shellRef);
+  const { markFailed, markReady, rendererState } = useRendererHealth();
+  const { preferences, setDebugPanelVisible, setPrefersFullscreen } = useShellPreferences({
+    defaultDebugPanelVisible: appConfig.debugOverlayEnabled && appConfig.diagnosticsEnabled
+  });
+  useDebugPanelHotkey({
+    enabled: appConfig.diagnosticsEnabled,
+    onToggle: () => {
+      setDebugPanelVisible(!preferences.debugPanelVisible);
+    }
+  });
+  const diagnosticsVisible = appConfig.diagnosticsEnabled && preferences.debugPanelVisible;
+  const handleEnterFullscreen = async () => {
+    setPrefersFullscreen(true);
+    await enterFullscreen();
+  };
 
   return (
     <main
@@ -25,16 +45,31 @@ export function AppShell() {
       ref={shellRef}
     >
       <section className="app-shell__runtime" aria-label="Interactive runtime shell">
-        <RuntimeSurface surfaceRef={runtimeSurfaceRef} />
+        <RuntimeSurface
+          onRendererError={markFailed}
+          onRendererReady={markReady}
+          surfaceRef={runtimeSurfaceRef}
+        />
       </section>
 
       <section className="app-shell__overlay" aria-label="Shell status overlay">
         <header className="shell-topbar">
           <span className="shell-topbar__mode">Fullscreen-first shell</span>
+          {appConfig.diagnosticsEnabled ? (
+            <button
+              className="shell-control shell-control--button"
+              onClick={() => {
+                setDebugPanelVisible(!preferences.debugPanelVisible);
+              }}
+              type="button"
+            >
+              {preferences.debugPanelVisible ? "Hide diagnostics" : "Show diagnostics"}
+            </button>
+          ) : null}
           <FullscreenToggleButton
             isFullscreen={isFullscreen}
             isSupported={isSupported}
-            onEnterFullscreen={enterFullscreen}
+            onEnterFullscreen={handleEnterFullscreen}
           />
         </header>
 
@@ -91,7 +126,23 @@ export function AppShell() {
             <dt>Input ownership</dt>
             <dd>Scroll, selection, and drag guarded by shell</dd>
           </div>
+          <div>
+            <dt>Renderer health</dt>
+            <dd>{rendererState.status}</dd>
+          </div>
         </dl>
+
+        <ShellDiagnosticsPanel
+          fullscreen={{
+            isFullscreen,
+            isSupported,
+            lastError
+          }}
+          preferences={preferences}
+          renderer={rendererState}
+          viewport={viewport}
+          visible={diagnosticsVisible}
+        />
       </section>
     </main>
   );
