@@ -14,10 +14,12 @@
     "typecheck": "tsc -b",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:browser:smoke": "npm run build && node scripts/testing/runBrowserSmoke.mjs",
     "logics:lint": "python3 logics/skills/logics-doc-linter/scripts/logics_lint.py",
     "release:changelog:resolve": "node scripts/release/resolveReleaseChangelog.mjs",
     "release:changelog:validate": "node scripts/release/validateReleaseChangelog.mjs",
-    "ci": "npm run lint && npm run typecheck && npm run test && npm run build && npm run logics:lint"
+    "ci": "npm run lint && npm run typecheck && npm run test && npm run build && npm run logics:lint",
+    "ci:full": "npm run ci && npm run test:browser:smoke"
   },
   "dependencies": {
     "@pixi/react": "^8.0.3",
@@ -38,6 +40,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "jsdom": "^26.0.0",
+    "playwright": "^1.58.2",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.2.0",

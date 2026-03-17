@@ -259,6 +259,31 @@ Reference contracts:
 - [officialDebugScenario.ts](/Users/alexandreagostini/Documents/emberwake/src/game/debug/data/officialDebugScenario.ts)
 - [assetCatalog.ts](/Users/alexandreagostini/Documents/emberwake/src/assets/assetCatalog.ts)
 
+## Testing Strategy
+
+Testing now follows explicit tiers instead of a single generic test bucket.
+
+Current tiers:
+- `npm run test`: fast unit and integration checks for math, deterministic world logic, simulation, and typed fixtures
+- `npm run test:browser:smoke`: slower browser validation for the first runtime loop on a desktop reference viewport
+- `npm run ci`: blocking fast quality gates used on `main`, `release`, and pull requests
+- `npm run ci:full`: local full-tier check that adds browser smoke on top of the fast gates
+
+Current browser-smoke scope:
+- boot the built app through `vite preview`
+- verify the shell and player-facing HUD surfaces exist
+- steer the primary entity with keyboard fallback input
+- confirm visible world-position change and onboarding resolution
+
+Current deterministic fixture anchors:
+- `src/test/fixtures/runtimeFixtures.ts`
+- `src/game/debug/data/officialDebugScenario.ts`
+
+CI posture:
+- fast gates stay blocking on `main`, `release`, and pull requests
+- browser smoke runs on the `release` branch and on manual workflow dispatch
+- release-oriented smoke uses Playwright Chromium rather than widening the matrix too early
+
 ## Validation
 
 The main documentation validation command is:

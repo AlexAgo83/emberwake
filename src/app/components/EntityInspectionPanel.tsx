@@ -19,6 +19,7 @@ export function EntityInspectionPanel({
     <aside
       className={`inspection-panel${isMobile ? " inspection-panel--mobile" : ""}`}
       aria-label="Selected entity inspection"
+      data-testid="entity-inspection"
     >
       <p className="inspection-panel__eyebrow">Inspection</p>
       <h2>{entityLabel}</h2>
@@ -29,7 +30,7 @@ export function EntityInspectionPanel({
         </div>
         <div>
           <dt>State</dt>
-          <dd>{entityState}</dd>
+          <dd data-testid="entity-state">{entityState}</dd>
         </div>
         <div>
           <dt>Chunk</dt>
@@ -37,7 +38,7 @@ export function EntityInspectionPanel({
         </div>
         <div>
           <dt>World</dt>
-          <dd>{entityPosition}</dd>
+          <dd data-testid="entity-world">{entityPosition}</dd>
         </div>
       </dl>
     </aside>

@@ -1,9 +1,9 @@
 ## task_022_orchestrate_testing_browser_smoke_and_ci_execution_tiers - Orchestrate testing, browser smoke, and CI execution tiers
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 91%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -27,17 +27,17 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Expand test priorities around transforms, world logic, and simulation invariants.
-- [ ] 2. Add deterministic fixtures and browser smoke coverage for the first real player loop.
-- [ ] 3. Define CI execution tiers and gating rules across fast and slower checks.
-- [ ] 4. Validate the test strategy and update linked Logics docs.
+- [x] 1. Expand test priorities around transforms, world logic, and simulation invariants.
+- [x] 2. Add deterministic fixtures and browser smoke coverage for the first real player loop.
+- [x] 3. Define CI execution tiers and gating rules across fast and slower checks.
+- [x] 4. Validate the test strategy and update linked Logics docs.
 - [ ] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_050` -> Unit and integration testing priorities are explicit around runtime math and simulation. Proof: TODO.
-- `item_051` -> Browser smoke strategy exists for the runtime and first player loop. Proof: TODO.
-- `item_052` -> Deterministic fixtures and scenarios support automation. Proof: TODO.
-- `item_053` -> CI test execution tiers and gates are explicit. Proof: TODO.
+- `item_050` -> Unit and integration testing priorities are explicit around runtime math and simulation. Proof: `README.md`, `src/game/camera/model/cameraMath.test.ts`, `src/game/world/model/worldViewMath.test.ts`, `src/game/entities/model/entitySimulation.test.ts`.
+- `item_051` -> Browser smoke strategy exists for the runtime and first player loop. Proof: `scripts/testing/runBrowserSmoke.mjs`, `package.json`.
+- `item_052` -> Deterministic fixtures and scenarios support automation. Proof: `src/test/fixtures/runtimeFixtures.ts`, `src/test/fixtures/runtimeFixtures.test.ts`, `src/game/debug/data/officialDebugScenario.ts`.
+- `item_053` -> CI test execution tiers and gates are explicit. Proof: `package.json`, `.github/workflows/ci.yml`.
 
 # Decision framing
 - Product framing: Consider
@@ -58,11 +58,13 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] The project has meaningful layered tests from unit math up to browser smoke.
-- [ ] Linked backlog/task docs are updated with proofs and status.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] The project has meaningful layered tests from unit math up to browser smoke.
+- [x] Linked backlog/task docs are updated with proofs and status.
 - [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-
+- Added deterministic runtime fixtures and kept them anchored to the official debug scenario.
+- Added a real browser-smoke script that validates runtime boot, keyboard steering, visible entity movement, and onboarding resolution.
+- Split CI posture into a fast blocking tier and a slower browser-smoke tier for `release` and manual dispatch.
