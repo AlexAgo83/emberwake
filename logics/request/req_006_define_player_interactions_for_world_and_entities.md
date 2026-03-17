@@ -1,8 +1,8 @@
 ## req_006_define_player_interactions_for_world_and_entities - Define player interactions for world and entities
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
+> Understanding: 95%
+> Confidence: 92%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -68,7 +68,7 @@ flowchart TD
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
-- Product brief(s): `prod_000_initial_single_entity_navigation_loop`
+- Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_001_enforce_bounded_file_size_and_isolate_react_side_effects`
 # Backlog
 - `item_024_define_single_entity_control_contract_and_input_ownership_boundaries`

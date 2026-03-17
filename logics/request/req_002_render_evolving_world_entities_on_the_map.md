@@ -1,8 +1,8 @@
 ## req_002_render_evolving_world_entities_on_the_map - Render evolving world entities on the map
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 97%
-> Confidence: 94%
+> Understanding: 98%
+> Confidence: 95%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -133,7 +133,7 @@ flowchart TD
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
-- Product brief(s): `prod_000_initial_single_entity_navigation_loop`
+- Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_001_enforce_bounded_file_size_and_isolate_react_side_effects`
 
 # Backlog

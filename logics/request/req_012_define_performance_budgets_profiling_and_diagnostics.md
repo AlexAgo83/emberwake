@@ -1,8 +1,8 @@
 ## req_012_define_performance_budgets_profiling_and_diagnostics - Define performance budgets profiling and diagnostics
-> From version: 0.1.1
+> From version: 0.1.2
 > Status: Ready
-> Understanding: 93%
-> Confidence: 90%
+> Understanding: 95%
+> Confidence: 92%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -55,7 +55,7 @@ flowchart TD
 - [x] Dependencies and known risks are listed.
 
 # Companion docs
-- Product brief(s): (none yet)
+- Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): (none yet)
 
 # Backlog
