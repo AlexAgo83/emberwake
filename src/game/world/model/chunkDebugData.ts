@@ -37,8 +37,11 @@ const terrainPalette = {
   }
 } as const;
 
-export const createChunkDebugData = (chunkCoordinate: ChunkCoordinate): ChunkDebugData => {
-  const generatedChunk = createGeneratedChunk(chunkCoordinate);
+export const createChunkDebugData = (
+  chunkCoordinate: ChunkCoordinate,
+  seed?: string
+): ChunkDebugData => {
+  const generatedChunk = createGeneratedChunk(chunkCoordinate, seed);
   const tiles: DebugTile[] = [];
   const primaryTerrainPalette = terrainPalette[generatedChunk.primaryTerrain];
 

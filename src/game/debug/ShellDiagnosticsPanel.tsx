@@ -38,6 +38,7 @@ type ShellDiagnosticsPanelProps = {
     tick: number;
   };
   simulationControls: {
+    cycleWorldSeed: () => void;
     resume: () => void;
     setSpeedMultiplier: (speedMultiplier: SimulationSpeedOption) => void;
     stepOnce: () => void;
@@ -55,6 +56,7 @@ type ShellDiagnosticsPanelProps = {
     trackedEntities: number;
     visibleEntities: number;
     visibleChunks: ChunkCoordinate[];
+    worldSeed: string;
   };
   visible: boolean;
   viewport: ReturnTypeUseLogicalViewportModel;
@@ -115,6 +117,13 @@ export function ShellDiagnosticsPanel({
             {speedMultiplier}x
           </button>
         ))}
+        <button
+          className="shell-control shell-control--button"
+          onClick={simulationControls.cycleWorldSeed}
+          type="button"
+        >
+          Cycle seed
+        </button>
       </div>
 
       <dl className="shell-diagnostics__grid">
@@ -266,12 +275,16 @@ export function ShellDiagnosticsPanel({
           </dd>
         </div>
         <div>
+          <dt>World seed</dt>
+          <dd>{worldRender.worldSeed}</dd>
+        </div>
+        <div>
           <dt>Chunk id</dt>
-          <dd>{chunkCoordinateToId({ x: 0, y: 0 })}</dd>
+          <dd>{chunkCoordinateToId({ x: 0, y: 0 }, worldRender.worldSeed)}</dd>
         </div>
         <div>
           <dt>Chunk signature</dt>
-          <dd>{sampleChunkDebugSignature({ x: 0, y: 0 })}</dd>
+          <dd>{sampleChunkDebugSignature({ x: 0, y: 0 }, worldRender.worldSeed)}</dd>
         </div>
         <div>
           <dt>Visible chunks</dt>

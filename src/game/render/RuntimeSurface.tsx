@@ -22,6 +22,7 @@ type RuntimeSurfaceProps = {
       width: number;
     };
   };
+  worldSeed: string;
 };
 
 export function RuntimeSurface({
@@ -31,7 +32,8 @@ export function RuntimeSurface({
   surfaceRef,
   visibleEntities,
   visibleChunks,
-  viewport
+  viewport,
+  worldSeed
 }: RuntimeSurfaceProps) {
   return (
     <div className="runtime-surface" data-runtime-surface="pixi" ref={surfaceRef}>
@@ -47,7 +49,12 @@ export function RuntimeSurface({
           onInit={onRendererReady}
           resizeTo={surfaceRef ?? window}
         >
-          <WorldScene camera={camera} viewport={viewport} visibleChunks={visibleChunks} />
+          <WorldScene
+            camera={camera}
+            viewport={viewport}
+            visibleChunks={visibleChunks}
+            worldSeed={worldSeed}
+          />
           <EntityScene camera={camera} entities={visibleEntities} viewport={viewport} />
         </Application>
       </RuntimeSurfaceBoundary>

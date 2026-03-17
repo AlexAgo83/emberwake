@@ -24,12 +24,13 @@ type WorldSceneProps = {
   camera: CameraState;
   visibleChunks: ChunkCoordinate[];
   viewport: ViewportForWorldScene;
+  worldSeed: string;
 };
 
 const tileSize = worldContract.tileSizeInWorldUnits;
 
-const drawChunkBase = (chunkCoordinate: ChunkCoordinate) => (graphics: Graphics) => {
-  const debugData = createChunkDebugData(chunkCoordinate);
+const drawChunkBase = (chunkCoordinate: ChunkCoordinate, worldSeed: string) => (graphics: Graphics) => {
+  const debugData = createChunkDebugData(chunkCoordinate, worldSeed);
   const origin = chunkCoordinateToWorldOrigin(chunkCoordinate);
 
   graphics.clear();
@@ -44,8 +45,8 @@ const drawChunkBase = (chunkCoordinate: ChunkCoordinate) => (graphics: Graphics)
   }
 };
 
-const drawChunkOverlay = (chunkCoordinate: ChunkCoordinate) => (graphics: Graphics) => {
-  const debugData = createChunkDebugData(chunkCoordinate);
+const drawChunkOverlay = (chunkCoordinate: ChunkCoordinate, worldSeed: string) => (graphics: Graphics) => {
+  const debugData = createChunkDebugData(chunkCoordinate, worldSeed);
   const origin = chunkCoordinateToWorldOrigin(chunkCoordinate);
 
   graphics.clear();
@@ -67,7 +68,7 @@ const drawChunkOverlay = (chunkCoordinate: ChunkCoordinate) => (graphics: Graphi
   graphics.stroke();
 };
 
-export function WorldScene({ camera, visibleChunks, viewport }: WorldSceneProps) {
+export function WorldScene({ camera, visibleChunks, viewport, worldSeed }: WorldSceneProps) {
   const scale = viewport.fitScale * camera.zoom;
 
   return (
@@ -88,12 +89,12 @@ export function WorldScene({ camera, visibleChunks, viewport }: WorldSceneProps)
 
       {visibleChunks.map((chunkCoordinate) => {
         const origin = chunkCoordinateToWorldOrigin(chunkCoordinate);
-        const debugData = createChunkDebugData(chunkCoordinate);
+        const debugData = createChunkDebugData(chunkCoordinate, worldSeed);
 
         return (
-          <pixiContainer key={chunkCoordinateToId(chunkCoordinate)}>
-            <pixiGraphics draw={drawChunkBase(chunkCoordinate)} />
-            <pixiGraphics draw={drawChunkOverlay(chunkCoordinate)} />
+          <pixiContainer key={chunkCoordinateToId(chunkCoordinate, worldSeed)}>
+            <pixiGraphics draw={drawChunkBase(chunkCoordinate, worldSeed)} />
+            <pixiGraphics draw={drawChunkOverlay(chunkCoordinate, worldSeed)} />
             <pixiText
               anchor={0.5}
               eventMode="none"

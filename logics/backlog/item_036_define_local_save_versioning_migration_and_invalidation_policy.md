@@ -1,9 +1,9 @@
 ## item_036_define_local_save_versioning_migration_and_invalidation_policy - Define local save versioning migration and invalidation policy
 > From version: 0.1.1
-> Status: Ready
+> Status: Done
 > Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Confidence: 92%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -34,13 +34,13 @@ flowchart LR
 - AC7: The request stays compatible with the PWA and static-hosting direction.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a dedicated local persistence scope suitable for a static frontend application.. Proof: TODO.
-- AC2 -> Scope: The request identifies the first categories of data that may need persistence and distinguishes them from transient runtime state.. Proof: TODO.
-- AC3 -> Scope: The request treats preferences, world seed, and camera state as the intended first persistence scope before richer world or entity state.. Proof: TODO.
-- AC4 -> Scope: The request remains compatible with deterministic world or seed-driven behavior already anticipated elsewhere.. Proof: TODO.
-- AC5 -> Scope: The request addresses versioning or evolution concerns for saved local data at an appropriate level, with explicit save-version handling expected from the start.. Proof: TODO.
-- AC6 -> Scope: The request remains frontend-only and does not assume accounts, backend storage, or cloud sync.. Proof: TODO.
-- AC7 -> Scope: The request stays compatible with the PWA and static-hosting direction.. Proof: TODO.
+- AC1 -> Scope: Versioning is part of the local persistence scope. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `src/shared/lib/shellPreferencesStorage.ts`.
+- AC2 -> Scope: Persisted categories are explicit. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `README.md`.
+- AC3 -> Scope: Versioned storage covers preferences, seed, and camera state. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `src/shared/lib/shellPreferencesStorage.ts`.
+- AC4 -> Scope: The policy remains compatible with deterministic world reconstruction. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `src/game/world/model/worldGeneration.ts`.
+- AC5 -> Scope: Version mismatch invalidates stale saves. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `src/shared/lib/runtimeSessionStorage.test.ts`.
+- AC6 -> Scope: The policy remains frontend-only. Proof: `src/shared/lib/runtimeSessionStorage.ts`.
+- AC7 -> Scope: The policy stays compatible with static/PWA delivery. Proof: `README.md`.
 
 # Decision framing
 - Product framing: Consider
@@ -54,7 +54,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_009_limit_persistence_to_local_versioned_frontend_storage`
 - Request: `req_009_define_local_persistence_and_save_strategy`
-- Primary task(s): (none yet)
+- Primary task(s): `task_020_orchestrate_persistence_and_reconstruction_boundaries`
 
 # Priority
 - Impact: High
@@ -64,3 +64,4 @@ flowchart LR
 - Derived from request `req_009_define_local_persistence_and_save_strategy`.
 - Source file: `logics/request/req_009_define_local_persistence_and_save_strategy.md`.
 - Request context seeded into this backlog item from `logics/request/req_009_define_local_persistence_and_save_strategy.md`.
+- Completed in `task_020_orchestrate_persistence_and_reconstruction_boundaries`.

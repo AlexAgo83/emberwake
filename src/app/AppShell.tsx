@@ -8,6 +8,7 @@ import { useFullscreenController } from "./hooks/useFullscreenController";
 import { useInstallPrompt } from "./hooks/useInstallPrompt";
 import { useLogicalViewportModel } from "./hooks/useLogicalViewportModel";
 import { useRendererHealth } from "./hooks/useRendererHealth";
+import { useRuntimeSession } from "./hooks/useRuntimeSession";
 import { useShellPreferences } from "./hooks/useShellPreferences";
 import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards";
 import { useCameraController } from "../game/camera/hooks/useCameraController";
@@ -42,8 +43,11 @@ export function AppShell() {
   const { enterFullscreen, isFullscreen, isSupported, lastError } =
     useFullscreenController(shellRef);
   const viewport = useLogicalViewportModel(shellRef);
+  const { cycleWorldSeed, runtimeSession, setCameraState } = useRuntimeSession();
   const { cameraState, resetCamera } = useCameraController({
     debugCameraEnabled: controlState.debugCameraModifierActive,
+    initialCameraState: runtimeSession.cameraState,
+    onCameraStateChange: setCameraState,
     surfaceRef: runtimeSurfaceRef,
     viewport
   });
@@ -115,6 +119,7 @@ export function AppShell() {
           visibleEntities={entityWorld.visibleEntities}
           visibleChunks={chunkVisibility.visibleChunks}
           viewport={viewport}
+          worldSeed={runtimeSession.worldSeed}
         />
       </section>
 
@@ -205,7 +210,8 @@ export function AppShell() {
             trackedEntities: entityWorld.trackedEntities.length,
             visibleEntities: entityWorld.visibleEntities.length,
             preloadMargin: chunkVisibility.preloadMargin,
-            visibleChunks: chunkVisibility.visibleChunks
+            visibleChunks: chunkVisibility.visibleChunks,
+            worldSeed: runtimeSession.worldSeed
           }}
           preferences={preferences}
           renderer={rendererState}
@@ -213,7 +219,10 @@ export function AppShell() {
             ...simulationState.runtime,
             tick: simulationState.tick
           }}
-          simulationControls={simulationState.controls}
+          simulationControls={{
+            ...simulationState.controls,
+            cycleWorldSeed
+          }}
           viewport={viewport}
           visible={diagnosticsVisible}
         />

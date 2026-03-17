@@ -216,6 +216,27 @@ Current rules:
 Reference contract:
 - [assetPipeline.ts](/Users/alexandreagostini/Documents/emberwake/src/shared/config/assetPipeline.ts)
 
+## Local Persistence
+
+Local persistence is intentionally narrow for now.
+
+Persisted first:
+- shell preferences
+- world seed
+- camera state
+
+Not persisted first:
+- generated chunk content
+- entity populations
+- large world snapshots
+
+Current rules:
+- local storage only, no account or backend sync
+- versioned payloads with drop-on-version-mismatch invalidation
+- world content is reconstructed from the persisted seed instead of stored as opaque chunk data
+- browser storage is treated as best-effort, not durable infrastructure
+- this posture stays compatible with the static PWA delivery model
+
 ## Validation
 
 The main documentation validation command is:

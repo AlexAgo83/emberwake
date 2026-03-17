@@ -16,6 +16,8 @@ type ViewportForCamera = {
 
 type UseCameraControllerOptions = {
   debugCameraEnabled: boolean;
+  initialCameraState?: CameraState;
+  onCameraStateChange?: (cameraState: CameraState) => void;
   surfaceRef: RefObject<HTMLElement | null>;
   viewport: ViewportForCamera;
 };
@@ -41,10 +43,18 @@ const getTouchAngle = (touches: TouchList) =>
 
 export function useCameraController({
   debugCameraEnabled,
+  initialCameraState,
+  onCameraStateChange,
   surfaceRef,
   viewport
 }: UseCameraControllerOptions) {
-  const [cameraState, setCameraState] = useState<CameraState>(createDefaultCameraState);
+  const [cameraState, setCameraState] = useState<CameraState>(() =>
+    initialCameraState ?? createDefaultCameraState()
+  );
+
+  useEffect(() => {
+    onCameraStateChange?.(cameraState);
+  }, [cameraState, onCameraStateChange]);
 
   useEffect(() => {
     const surfaceElement = surfaceRef.current;

@@ -1,9 +1,9 @@
 ## task_020_orchestrate_persistence_and_reconstruction_boundaries - Orchestrate persistence and reconstruction boundaries
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 94%
-> Confidence: 90%
-> Progress: 0%
+> Confidence: 92%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Persistence
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -27,17 +27,17 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Define the first persisted state set and local storage ownership.
-- [ ] 2. Add versioning, invalidation, and migration posture for stored state.
-- [ ] 3. Separate reconstructible deterministic world state from state that must actually be persisted.
-- [ ] 4. Validate the persistence model and update linked Logics docs.
-- [ ] FINAL: Create a dedicated git commit for this orchestration scope.
+- [x] 1. Define the first persisted state set and local storage ownership.
+- [x] 2. Add versioning, invalidation, and migration posture for stored state.
+- [x] 3. Separate reconstructible deterministic world state from state that must actually be persisted.
+- [x] 4. Validate the persistence model and update linked Logics docs.
+- [x] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_035` -> First local persistence scope is explicit. Proof: TODO.
-- `item_036` -> Save versioning and invalidation posture are explicit. Proof: TODO.
-- `item_037` -> Reconstruction boundaries between deterministic world and persisted state are explicit. Proof: TODO.
-- `item_038` -> Browser and PWA storage constraints are accounted for. Proof: TODO.
+- `item_035` -> First local persistence scope is explicit. Proof: `src/shared/lib/shellPreferencesStorage.ts`, `src/shared/lib/runtimeSessionStorage.ts`, `src/app/hooks/useRuntimeSession.ts`.
+- `item_036` -> Save versioning and invalidation posture are explicit. Proof: `src/shared/lib/shellPreferencesStorage.ts`, `src/shared/lib/runtimeSessionStorage.ts`, `src/shared/lib/runtimeSessionStorage.test.ts`.
+- `item_037` -> Reconstruction boundaries between deterministic world and persisted state are explicit. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `src/game/world/model/worldGeneration.ts`, `README.md`.
+- `item_038` -> Browser and PWA storage constraints are accounted for. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `README.md`.
 
 # Decision framing
 - Product framing: Consider
@@ -60,11 +60,19 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Local persistence remains minimal, versioned, and compatible with deterministic reconstruction.
-- [ ] Linked backlog/task docs are updated with proofs and status.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Local persistence remains minimal, versioned, and compatible with deterministic reconstruction.
+- [x] Linked backlog/task docs are updated with proofs and status.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-
+- Added a versioned local persistence layer for world seed and camera state, alongside versioned shell-preference persistence.
+- Kept the save scope intentionally narrow and reconstructible: the world is regenerated from the persisted seed instead of storing chunk payloads.
+- Added deterministic storage tests that cover round-trip persistence and invalidation on schema mismatch.
+- Documented the browser and PWA storage posture in the README so local persistence remains clearly constrained.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`

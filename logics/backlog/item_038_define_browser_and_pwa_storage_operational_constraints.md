@@ -1,9 +1,9 @@
 ## item_038_define_browser_and_pwa_storage_operational_constraints - Define browser and PWA storage operational constraints
 > From version: 0.1.1
-> Status: Ready
+> Status: Done
 > Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Confidence: 92%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -34,13 +34,13 @@ flowchart LR
 - AC7: The request stays compatible with the PWA and static-hosting direction.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a dedicated local persistence scope suitable for a static frontend application.. Proof: TODO.
-- AC2 -> Scope: The request identifies the first categories of data that may need persistence and distinguishes them from transient runtime state.. Proof: TODO.
-- AC3 -> Scope: The request treats preferences, world seed, and camera state as the intended first persistence scope before richer world or entity state.. Proof: TODO.
-- AC4 -> Scope: The request remains compatible with deterministic world or seed-driven behavior already anticipated elsewhere.. Proof: TODO.
-- AC5 -> Scope: The request addresses versioning or evolution concerns for saved local data at an appropriate level, with explicit save-version handling expected from the start.. Proof: TODO.
-- AC6 -> Scope: The request remains frontend-only and does not assume accounts, backend storage, or cloud sync.. Proof: TODO.
-- AC7 -> Scope: The request stays compatible with the PWA and static-hosting direction.. Proof: TODO.
+- AC1 -> Scope: Storage constraints are explicit in the local persistence contract. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `README.md`.
+- AC2 -> Scope: The stored categories remain narrow and distinguishable from transient state. Proof: `README.md`.
+- AC3 -> Scope: Browser storage is limited to preferences, seed, and camera state. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `src/shared/lib/shellPreferencesStorage.ts`.
+- AC4 -> Scope: The storage model stays compatible with deterministic seed-driven world reconstruction. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `src/game/world/model/worldGeneration.ts`.
+- AC5 -> Scope: Versioning and invalidation are explicit. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `src/shared/lib/runtimeSessionStorage.test.ts`.
+- AC6 -> Scope: No backend or cloud sync assumptions are made. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `README.md`.
+- AC7 -> Scope: The constraints remain compatible with the static PWA posture. Proof: `README.md`.
 
 # Decision framing
 - Product framing: Consider
@@ -54,7 +54,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_009_limit_persistence_to_local_versioned_frontend_storage`
 - Request: `req_009_define_local_persistence_and_save_strategy`
-- Primary task(s): (none yet)
+- Primary task(s): `task_020_orchestrate_persistence_and_reconstruction_boundaries`
 
 # Priority
 - Impact: Medium
@@ -64,3 +64,4 @@ flowchart LR
 - Derived from request `req_009_define_local_persistence_and_save_strategy`.
 - Source file: `logics/request/req_009_define_local_persistence_and_save_strategy.md`.
 - Request context seeded into this backlog item from `logics/request/req_009_define_local_persistence_and_save_strategy.md`.
+- Completed in `task_020_orchestrate_persistence_and_reconstruction_boundaries`.
