@@ -1,6 +1,7 @@
 import type { WorldPoint } from "../../world/types";
 import type { SingleEntityControlState } from "../../input/model/singleEntityControlContract";
 import { singleEntityControlContract } from "../../input/model/singleEntityControlContract";
+import { officialDebugScenario } from "../../debug/data/officialDebugScenario";
 import { createGenericMoverEntity } from "./entityContract";
 import type { EntityState, WorldEntity } from "./entityContract";
 
@@ -71,7 +72,15 @@ const totalCycleTicks = scriptedPhases.reduce(
 
 export const createInitialSimulationState = (): EntitySimulationState => ({
   entity: {
-    ...createGenericMoverEntity(),
+    ...createGenericMoverEntity({
+      archetype: officialDebugScenario.playerEntity.archetype,
+      id: officialDebugScenario.playerEntity.id,
+      visual: {
+        kind: officialDebugScenario.playerEntity.visualKind,
+        tint: officialDebugScenario.playerEntity.tint
+      },
+      worldPosition: officialDebugScenario.playerEntity.worldPosition
+    }),
     velocity: {
       x: 0,
       y: 0

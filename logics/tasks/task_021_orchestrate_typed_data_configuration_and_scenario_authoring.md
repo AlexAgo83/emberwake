@@ -1,9 +1,9 @@
 ## task_021_orchestrate_typed_data_configuration_and_scenario_authoring - Orchestrate typed data, configuration, and scenario authoring
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 90%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -27,17 +27,17 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Define domain-owned typed configuration structure for world, entity, and asset-adjacent data.
-- [ ] 2. Add official debug scenario data and clear validation/runtime boundaries.
-- [ ] 3. Make cross-domain references explicit across world, entities, and assets.
-- [ ] 4. Validate the authoring model and update linked Logics docs.
+- [x] 1. Define domain-owned typed configuration structure for world, entity, and asset-adjacent data.
+- [x] 2. Add official debug scenario data and clear validation/runtime boundaries.
+- [x] 3. Make cross-domain references explicit across world, entities, and assets.
+- [x] 4. Validate the authoring model and update linked Logics docs.
 - [ ] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_039` -> Domain-owned typed configuration structure is explicit. Proof: TODO.
-- `item_040` -> Official debug scenario data model exists. Proof: TODO.
-- `item_041` -> Validation, typing, and runtime boundaries are explicit. Proof: TODO.
-- `item_042` -> Data references across world, entities, and assets are explicit. Proof: TODO.
+- `item_039` -> Domain-owned typed configuration structure is explicit. Proof: `src/shared/config/dataAuthoringContract.ts`, `src/game/world/data/worldData.ts`, `src/game/entities/data/entityData.ts`.
+- `item_040` -> Official debug scenario data model exists. Proof: `src/game/debug/data/officialDebugScenario.ts`, `src/game/debug/data/officialDebugScenario.test.ts`.
+- `item_041` -> Validation, typing, and runtime boundaries are explicit. Proof: `src/shared/config/dataAuthoringContract.ts`, `src/game/debug/data/officialDebugScenario.ts`.
+- `item_042` -> Data references across world, entities, and assets are explicit. Proof: `src/assets/assetCatalog.ts`, `src/game/entities/data/entityData.ts`, `src/game/world/data/worldData.ts`, `src/game/debug/data/officialDebugScenario.ts`.
 
 # Decision framing
 - Product framing: Consider
@@ -60,11 +60,13 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Typed configuration and debug-scenario authoring are coherent across domains.
-- [ ] Linked backlog/task docs are updated with proofs and status.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Typed configuration and debug-scenario authoring are coherent across domains.
+- [x] Linked backlog/task docs are updated with proofs and status.
 - [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-
+- Added typed authoring modules for world terrain, entity visuals/archetypes, asset ids, and authoring boundaries.
+- Introduced one canonical debug scenario shared by runtime defaults, debug entities, and automated tests.
+- Replaced scattered literals in simulation/runtime defaults with references that resolve through typed data catalogs.

@@ -1,17 +1,19 @@
 import type { WorldPoint } from "../../world/types";
+import type { EntityArchetypeId, EntityVisualKind } from "../data/entityData";
+import { entityArchetypeDefinitions } from "../data/entityData";
 
 export const entityContract = {
   defaultArchetype: "generic-mover",
   primaryEntityId: "entity:player:primary",
-  defaultRenderLayer: 100,
-  defaultState: "idle",
-  defaultVisualKind: "ember-core"
+  defaultRenderLayer: entityArchetypeDefinitions["generic-mover"].defaultRenderLayer,
+  defaultState: entityArchetypeDefinitions["generic-mover"].defaultState,
+  defaultVisualKind: entityArchetypeDefinitions["generic-mover"].defaultVisualKind
 } as const;
 
 export type EntityState = "idle" | "inactive" | "moving" | "selected";
 
 export type WorldEntity = {
-  archetype: typeof entityContract.defaultArchetype;
+  archetype: EntityArchetypeId;
   footprint: {
     radius: number;
   };
@@ -20,7 +22,7 @@ export type WorldEntity = {
   renderLayer: number;
   state: EntityState;
   visual: {
-    kind: typeof entityContract.defaultVisualKind;
+    kind: EntityVisualKind;
     tint: string;
   };
   worldPosition: WorldPoint;
@@ -31,7 +33,7 @@ export const createGenericMoverEntity = (
 ): WorldEntity => ({
   archetype: entityContract.defaultArchetype,
   footprint: {
-    radius: 40
+    radius: entityArchetypeDefinitions["generic-mover"].footprintRadius
   },
   id: entityContract.primaryEntityId,
   orientation: 0,

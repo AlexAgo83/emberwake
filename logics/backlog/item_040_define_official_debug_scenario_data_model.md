@@ -1,9 +1,9 @@
 ## item_040_define_official_debug_scenario_data_model - Define official debug scenario data model
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 91%
-> Progress: 5%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,14 +35,14 @@ flowchart LR
 - AC8: The request does not require a full editor or external content-management platform.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a dedicated data and configuration scope rather than leaving content modeling implicit in code.. Proof: TODO.
-- AC2 -> Scope: The request distinguishes between static game data, runtime configuration, debug scenario data, and executable logic.. Proof: TODO.
-- AC3 -> Scope: The request treats typed TypeScript-backed configuration as the intended initial baseline, while leaving room for additional data-file formats later.. Proof: TODO.
-- AC4 -> Scope: The request reserves an explicit place for reproducible debug-scenario data.. Proof: TODO.
-- AC5 -> Scope: The request remains compatible with the static frontend architecture and deterministic world assumptions.. Proof: TODO.
-- AC6 -> Scope: The request addresses typed or validated data expectations at an appropriate level.. Proof: TODO.
-- AC7 -> Scope: The request stays compatible with future asset, map, and entity systems.. Proof: TODO.
-- AC8 -> Scope: The request does not require a full editor or external content-management platform.. Proof: TODO.
+- AC1 -> Scope: Debug-scenario authoring now lives in a dedicated data module. Proof: `src/game/debug/data/officialDebugScenario.ts`.
+- AC2 -> Scope: Scenario data is distinct from runtime config and executable logic. Proof: `src/shared/config/dataAuthoringContract.ts`, `src/game/debug/data/officialDebugScenario.ts`.
+- AC3 -> Scope: The official scenario is authored in typed TypeScript. Proof: `src/game/debug/data/officialDebugScenario.ts`.
+- AC4 -> Scope: One canonical official scenario is defined and shared. Proof: `src/game/debug/data/officialDebugScenario.ts`, `src/game/debug/data/officialDebugScenario.test.ts`.
+- AC5 -> Scope: The scenario stays compatible with deterministic world assumptions. Proof: `src/game/debug/data/officialDebugScenario.ts`, `src/shared/lib/runtimeSessionStorage.ts`.
+- AC6 -> Scope: Validation expectations are explicit. Proof: `src/game/debug/data/officialDebugScenario.ts`, `src/game/debug/data/officialDebugScenario.test.ts`.
+- AC7 -> Scope: The scenario references entity and terrain systems through typed ids. Proof: `src/game/entities/data/entityData.ts`, `src/game/world/data/worldData.ts`, `src/assets/assetCatalog.ts`.
+- AC8 -> Scope: The model does not require scenario tooling outside the repo. Proof: `src/game/debug/data/officialDebugScenario.ts`.
 
 # Decision framing
 - Product framing: Consider
@@ -56,7 +56,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_011_use_typed_typescript_as_the_initial_data_and_config_authoring_model`
 - Request: `req_010_define_game_data_and_configuration_model`
-- Primary task(s): (none yet)
+- Primary task(s): `task_021_orchestrate_typed_data_configuration_and_scenario_authoring`
 
 # Priority
 - Impact: High
@@ -66,3 +66,4 @@ flowchart LR
 - Derived from request `req_010_define_game_data_and_configuration_model`.
 - Source file: `logics/request/req_010_define_game_data_and_configuration_model.md`.
 - Request context seeded into this backlog item from `logics/request/req_010_define_game_data_and_configuration_model.md`.
+- Completed in `task_021_orchestrate_typed_data_configuration_and_scenario_authoring`.

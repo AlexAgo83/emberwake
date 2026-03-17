@@ -1,6 +1,6 @@
 import { createDefaultCameraState } from "../../game/camera/model/cameraMath";
 import type { CameraState } from "../../game/camera/model/cameraMath";
-import { worldContract } from "../../game/world/model/worldContract";
+import { officialDebugScenario } from "../../game/debug/data/officialDebugScenario";
 
 export type RuntimeSessionState = {
   cameraState: CameraState;
@@ -19,7 +19,7 @@ export const runtimeSessionContract = {
   invalidationPolicy: "drop-on-version-mismatch",
   reconstructionBoundary: "world-regenerated-from-seed",
   seedOptions: [
-    worldContract.defaultSeed,
+    officialDebugScenario.worldSeed,
     "emberwake-ash-seed",
     "emberwake-glow-seed"
   ] as const,
@@ -29,8 +29,8 @@ export const runtimeSessionContract = {
 } as const;
 
 export const createDefaultRuntimeSessionState = (): RuntimeSessionState => ({
-  cameraState: createDefaultCameraState(),
-  worldSeed: worldContract.defaultSeed
+  cameraState: officialDebugScenario.cameraState ?? createDefaultCameraState(),
+  worldSeed: officialDebugScenario.worldSeed
 });
 
 export const readRuntimeSessionState = (

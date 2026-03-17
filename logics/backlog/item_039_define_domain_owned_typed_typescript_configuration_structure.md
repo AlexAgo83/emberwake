@@ -1,9 +1,9 @@
 ## item_039_define_domain_owned_typed_typescript_configuration_structure - Define domain owned typed TypeScript configuration structure
 > From version: 0.1.1
-> Status: Ready
+> Status: Done
 > Understanding: 93%
 > Confidence: 90%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,14 +35,14 @@ flowchart LR
 - AC8: The request does not require a full editor or external content-management platform.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a dedicated data and configuration scope rather than leaving content modeling implicit in code.. Proof: TODO.
-- AC2 -> Scope: The request distinguishes between static game data, runtime configuration, debug scenario data, and executable logic.. Proof: TODO.
-- AC3 -> Scope: The request treats typed TypeScript-backed configuration as the intended initial baseline, while leaving room for additional data-file formats later.. Proof: TODO.
-- AC4 -> Scope: The request reserves an explicit place for reproducible debug-scenario data.. Proof: TODO.
-- AC5 -> Scope: The request remains compatible with the static frontend architecture and deterministic world assumptions.. Proof: TODO.
-- AC6 -> Scope: The request addresses typed or validated data expectations at an appropriate level.. Proof: TODO.
-- AC7 -> Scope: The request stays compatible with future asset, map, and entity systems.. Proof: TODO.
-- AC8 -> Scope: The request does not require a full editor or external content-management platform.. Proof: TODO.
+- AC1 -> Scope: A dedicated data structure exists for world, entity, asset, and debug-scenario authoring. Proof: `src/game/world/data/worldData.ts`, `src/game/entities/data/entityData.ts`, `src/assets/assetCatalog.ts`.
+- AC2 -> Scope: Static game data, runtime config, debug scenarios, and executable logic are separated explicitly. Proof: `src/shared/config/dataAuthoringContract.ts`, `src/game/debug/data/officialDebugScenario.ts`.
+- AC3 -> Scope: Typed TypeScript modules are the baseline authoring model. Proof: `src/shared/config/dataAuthoringContract.ts`, `src/game/world/data/worldData.ts`, `src/game/entities/data/entityData.ts`.
+- AC4 -> Scope: The repo reserves an explicit place for reproducible debug-scenario data. Proof: `src/game/debug/data/officialDebugScenario.ts`.
+- AC5 -> Scope: The structure stays aligned with static frontend and deterministic-world constraints. Proof: `src/game/debug/data/officialDebugScenario.ts`, `src/shared/lib/runtimeSessionStorage.ts`.
+- AC6 -> Scope: Typing and validation expectations are explicit without adding heavy schema tooling. Proof: `src/shared/config/dataAuthoringContract.ts`, `src/game/debug/data/officialDebugScenario.test.ts`.
+- AC7 -> Scope: World, entity, and asset systems compose through typed contracts. Proof: `src/game/world/data/worldData.ts`, `src/game/entities/data/entityData.ts`, `src/assets/assetCatalog.ts`.
+- AC8 -> Scope: The model does not require external editors or CMS tooling. Proof: `src/shared/config/dataAuthoringContract.ts`.
 
 # Decision framing
 - Product framing: Consider
@@ -56,7 +56,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_011_use_typed_typescript_as_the_initial_data_and_config_authoring_model`
 - Request: `req_010_define_game_data_and_configuration_model`
-- Primary task(s): (none yet)
+- Primary task(s): `task_021_orchestrate_typed_data_configuration_and_scenario_authoring`
 
 # Priority
 - Impact: High
@@ -66,3 +66,4 @@ flowchart LR
 - Derived from request `req_010_define_game_data_and_configuration_model`.
 - Source file: `logics/request/req_010_define_game_data_and_configuration_model.md`.
 - Request context seeded into this backlog item from `logics/request/req_010_define_game_data_and_configuration_model.md`.
+- Completed in `task_021_orchestrate_typed_data_configuration_and_scenario_authoring`.

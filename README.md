@@ -237,6 +237,28 @@ Current rules:
 - browser storage is treated as best-effort, not durable infrastructure
 - this posture stays compatible with the static PWA delivery model
 
+## Typed Data And Scenarios
+
+Authoring data now follows a typed TypeScript baseline instead of scattered literals.
+
+Current ownership:
+- world-authored terrain data lives in `src/game/world/data`
+- entity-authored archetypes and visuals live in `src/game/entities/data`
+- canonical debug scenarios live in `src/game/debug/data`
+- asset ids remain owned by `src/assets/assetCatalog.ts`
+- runtime config stays in `src/shared/config`
+
+Current rules:
+- static game data, runtime configuration, debug scenarios, and executable logic stay in separate modules
+- cross-domain references happen through explicit ids rather than ad-hoc literals
+- the official debug scenario is shared by runtime defaults, entity debug content, and automated tests
+- validation starts with TypeScript and module-level assertions, while leaving room for stricter schemas later
+
+Reference contracts:
+- [dataAuthoringContract.ts](/Users/alexandreagostini/Documents/emberwake/src/shared/config/dataAuthoringContract.ts)
+- [officialDebugScenario.ts](/Users/alexandreagostini/Documents/emberwake/src/game/debug/data/officialDebugScenario.ts)
+- [assetCatalog.ts](/Users/alexandreagostini/Documents/emberwake/src/assets/assetCatalog.ts)
+
 ## Validation
 
 The main documentation validation command is:
