@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { chunkCoordinateToId } from "../../world/model/worldContract";
 import { createDeterministicDebugEntities } from "../model/entityDebugScenario";
+import { detectEntityOverlaps } from "../model/entityOccupancy";
 import {
   filterVisibleEntities,
   indexEntitiesByChunk,
@@ -19,6 +20,7 @@ type UseEntityWorldOptions = {
 
 type EntityWorldState = {
   entitiesByChunk: Map<string, SimulatedEntity[]>;
+  overlappingPairs: ReturnType<typeof detectEntityOverlaps>;
   selectedEntity: SimulatedEntity;
   trackedEntities: SimulatedEntity[];
   visibleEntities: SimulatedEntity[];
@@ -43,6 +45,7 @@ export function useEntityWorld({
     [trackedEntities, visibleChunkIds]
   );
   const entitiesByChunk = useMemo(() => indexEntitiesByChunk(trackedEntities), [trackedEntities]);
+  const overlappingPairs = useMemo(() => detectEntityOverlaps(trackedEntities), [trackedEntities]);
   const [selectedEntityId, setSelectedEntityId] = useState<string | null>(primaryEntity.id);
 
   useEffect(() => {
@@ -62,6 +65,7 @@ export function useEntityWorld({
 
   return {
     entitiesByChunk,
+    overlappingPairs,
     selectedEntity: {
       ...selectedEntity,
       state: selectedEntity.id === selectedEntityId ? "selected" : selectedEntity.state

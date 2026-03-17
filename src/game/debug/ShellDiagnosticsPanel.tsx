@@ -52,6 +52,7 @@ type ShellDiagnosticsPanelProps = {
   };
   worldRender: {
     cachedChunkIds: string[];
+    overlappingPairs: number;
     preloadMargin: number;
     trackedEntities: number;
     visibleEntities: number;
@@ -293,6 +294,10 @@ export function ShellDiagnosticsPanel({
         <div>
           <dt>Tracked entities</dt>
           <dd>{worldRender.trackedEntities}</dd>
+        </div>
+        <div>
+          <dt>Entity overlaps</dt>
+          <dd>{worldRender.overlappingPairs}</dd>
         </div>
         <div>
           <dt>Visible entities</dt>

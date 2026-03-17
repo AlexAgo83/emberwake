@@ -237,6 +237,20 @@ Current rules:
 - browser storage is treated as best-effort, not durable infrastructure
 - this posture stays compatible with the static PWA delivery model
 
+## World Occupancy
+
+World occupancy is now explicit enough for the early movement loop.
+
+Current rules:
+- entity occupancy is modeled as a circular radius in continuous world space
+- chunks remain indexing and streaming helpers, not hard movement cells
+- early overlaps are tolerated and diagnosed rather than blocked
+- terrain blocking and world bounds are intentionally off for the first loop
+- player-facing continuity expects seamless chunk crossing and stable camera follow
+
+Reference contract:
+- [entityOccupancy.ts](/Users/alexandreagostini/Documents/emberwake/src/game/entities/model/entityOccupancy.ts)
+
 ## Typed Data And Scenarios
 
 Authoring data now follows a typed TypeScript baseline instead of scattered literals.
@@ -283,6 +297,28 @@ CI posture:
 - fast gates stay blocking on `main`, `release`, and pull requests
 - browser smoke runs on the `release` branch and on manual workflow dispatch
 - release-oriented smoke uses Playwright Chromium rather than widening the matrix too early
+
+## Release Operations
+
+Release operations now have an explicit minimal posture.
+
+Deployable artifact:
+- `dist/`
+
+Release-ready baseline:
+- `npm run ci`
+- `npm run release:changelog:validate`
+- `npm run test:browser:smoke`
+- promotion onto the dedicated `release` branch
+
+Operational helpers:
+- `npm run release:ready`
+- `npm run release:postdeploy:smoke`
+
+Current release operations rules:
+- previews are treated as technical validation surfaces, not a second release channel
+- post-deploy smoke reuses the same browser loop against a deployed URL through `RELEASE_SMOKE_URL`
+- rollback posture is static-hosting friendly: redeploy the last known-good release commit/tag on `release`
 
 ## Validation
 

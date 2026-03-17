@@ -16,8 +16,10 @@
     "test:watch": "vitest",
     "test:browser:smoke": "npm run build && node scripts/testing/runBrowserSmoke.mjs",
     "logics:lint": "python3 logics/skills/logics-doc-linter/scripts/logics_lint.py",
+    "release:ready": "node scripts/release/verifyReleaseReadiness.mjs --allow-non-release",
     "release:changelog:resolve": "node scripts/release/resolveReleaseChangelog.mjs",
     "release:changelog:validate": "node scripts/release/validateReleaseChangelog.mjs",
+    "release:postdeploy:smoke": "node scripts/release/runPostDeploySmoke.mjs",
     "ci": "npm run lint && npm run typecheck && npm run test && npm run build && npm run logics:lint",
     "ci:full": "npm run ci && npm run test:browser:smoke"
   },

@@ -1,9 +1,9 @@
 ## item_054_define_entity_occupancy_model_and_footprint_rules_in_world_space - Define entity occupancy model and footprint rules in world space
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 91%
-> Progress: 5%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,14 +35,14 @@ flowchart LR
 - AC8: The request remains compatible with future interaction and simulation requests.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a dedicated spatial-rules scope connecting entities and world space.. Proof: TODO.
-- AC2 -> Scope: The request addresses occupancy expectations for entities in relation to tiles or world coordinates.. Proof: TODO.
-- AC3 -> Scope: The request treats world space as continuous by default, with grid or tile structure used as a helper rather than the only movement model.. Proof: TODO.
-- AC4 -> Scope: The request addresses baseline navigation or traversal rules at a product or architecture level.. Proof: TODO.
-- AC5 -> Scope: The request remains compatible with the chunked world model and entity footprint expectations already defined elsewhere.. Proof: TODO.
-- AC6 -> Scope: The request allows early overlap situations to be tolerated and diagnosed before a fuller resolution model exists.. Proof: TODO.
-- AC7 -> Scope: The request does not overreach into advanced AI, combat, or full physics systems.. Proof: TODO.
-- AC8 -> Scope: The request remains compatible with future interaction and simulation requests.. Proof: TODO.
+- AC1 -> Scope: A dedicated occupancy contract now connects entities and world space. Proof: `src/game/entities/model/entityOccupancy.ts`.
+- AC2 -> Scope: Occupancy is expressed through world-space footprints. Proof: `src/game/entities/model/entityContract.ts`, `src/game/entities/model/entityOccupancy.ts`.
+- AC3 -> Scope: World space remains continuous, with chunks as helpers only. Proof: `src/game/entities/model/entityOccupancy.ts`.
+- AC4 -> Scope: Baseline traversal posture is explicit. Proof: `src/game/entities/model/entityOccupancy.ts`, `README.md`.
+- AC5 -> Scope: The contract stays compatible with chunked world and entity footprints. Proof: `src/game/entities/model/entityOccupancy.ts`, `src/game/world/model/worldContract.ts`.
+- AC6 -> Scope: Overlaps are tolerated and diagnosed. Proof: `src/game/entities/model/entityOccupancy.ts`, `src/game/entities/model/entityOccupancy.test.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC7 -> Scope: The model avoids advanced physics or combat. Proof: `src/game/entities/model/entityOccupancy.ts`.
+- AC8 -> Scope: The contract remains forward-compatible with future navigation and simulation work. Proof: `src/game/entities/model/entityOccupancy.ts`.
 
 # Decision framing
 - Product framing: Consider
@@ -56,7 +56,7 @@ flowchart LR
 - Product brief(s): `prod_002_readable_world_traversal_and_presence`
 - Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`
 - Request: `req_014_define_world_occupancy_navigation_and_interaction_rules`
-- Primary task(s): (none yet)
+- Primary task(s): `task_023_orchestrate_world_occupancy_continuity_and_release_operations`
 
 # Priority
 - Impact: High
@@ -66,3 +66,4 @@ flowchart LR
 - Derived from request `req_014_define_world_occupancy_navigation_and_interaction_rules`.
 - Source file: `logics/request/req_014_define_world_occupancy_navigation_and_interaction_rules.md`.
 - Request context seeded into this backlog item from `logics/request/req_014_define_world_occupancy_navigation_and_interaction_rules.md`.
+- Completed in `task_023_orchestrate_world_occupancy_continuity_and_release_operations`.

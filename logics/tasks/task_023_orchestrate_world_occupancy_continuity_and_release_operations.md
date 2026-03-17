@@ -1,9 +1,9 @@
 ## task_023_orchestrate_world_occupancy_continuity_and_release_operations - Orchestrate world occupancy, continuity, and release operations
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 90%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Operations
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,20 +30,20 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Define occupancy, overlap, and early traversal constraints in world space.
-- [ ] 2. Capture player-facing continuity expectations and future-facing navigation or terrain interaction boundaries.
-- [ ] 3. Define release readiness gates, post-deploy smoke posture, and preview-environment role under the release-branch workflow.
-- [ ] 4. Validate runtime and delivery expectations, then update linked Logics docs.
+- [x] 1. Define occupancy, overlap, and early traversal constraints in world space.
+- [x] 2. Capture player-facing continuity expectations and future-facing navigation or terrain interaction boundaries.
+- [x] 3. Define release readiness gates, post-deploy smoke posture, and preview-environment role under the release-branch workflow.
+- [x] 4. Validate runtime and delivery expectations, then update linked Logics docs.
 - [ ] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_054` -> Entity occupancy and footprint rules are explicit in world space. Proof: TODO.
-- `item_055` -> Traversal overlaps and early movement constraints are explicit. Proof: TODO.
-- `item_056` -> Future navigation and terrain interaction contract is explicit. Proof: TODO.
-- `item_057` -> Player-facing continuity and world presence expectations are explicit. Proof: TODO.
-- `item_058` -> Release readiness gates and deployable artifact identification are explicit. Proof: TODO.
-- `item_060` -> Post-deployment smoke checks and rollback posture are explicit. Proof: TODO.
-- `item_061` -> Preview environment role is explicit within the delivery workflow. Proof: TODO.
+- `item_054` -> Entity occupancy and footprint rules are explicit in world space. Proof: `src/game/entities/model/entityOccupancy.ts`, `src/game/entities/model/entityOccupancy.test.ts`.
+- `item_055` -> Traversal overlaps and early movement constraints are explicit. Proof: `src/game/entities/model/entityOccupancy.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- `item_056` -> Future navigation and terrain interaction contract is explicit. Proof: `src/game/entities/model/entityOccupancy.ts`.
+- `item_057` -> Player-facing continuity and world presence expectations are explicit. Proof: `README.md`, `src/game/entities/model/entityOccupancy.ts`.
+- `item_058` -> Release readiness gates and deployable artifact identification are explicit. Proof: `scripts/release/verifyReleaseReadiness.mjs`, `README.md`.
+- `item_060` -> Post-deployment smoke checks and rollback posture are explicit. Proof: `scripts/release/runPostDeploySmoke.mjs`, `README.md`.
+- `item_061` -> Preview environment role is explicit within the delivery workflow. Proof: `README.md`, `.github/workflows/ci.yml`.
 
 # Decision framing
 - Product framing: Required
@@ -65,10 +65,13 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] World-occupancy and release-operation rules are explicit enough to support later growth without ambiguity.
-- [ ] Linked backlog/task docs are updated with proofs and status.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] World-occupancy and release-operation rules are explicit enough to support later growth without ambiguity.
+- [x] Linked backlog/task docs are updated with proofs and status.
 - [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Added an explicit occupancy contract for circle-radius footprints, tolerated overlaps, continuous world-space movement, and future navigation boundaries.
+- Surfaced overlap diagnostics in the runtime so early collision-free traversal remains observable instead of implicit.
+- Added release-operation helpers for readiness and post-deployment smoke, and documented the preview/rollback posture around the `release` branch.

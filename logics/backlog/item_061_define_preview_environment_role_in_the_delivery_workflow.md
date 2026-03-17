@@ -1,9 +1,9 @@
 ## item_061_define_preview_environment_role_in_the_delivery_workflow - Define preview environment role in the delivery workflow
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 92%
-> Progress: 5%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,14 +35,14 @@ flowchart LR
 - AC8: The request complements rather than duplicates the Render Blueprint request.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a release-workflow scope distinct from raw deployment configuration.. Proof: TODO.
-- AC2 -> Scope: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.. Proof: TODO.
-- AC3 -> Scope: The request treats lightweight semantic versioning and a simple changelog discipline as the intended default release-identification model.. Proof: TODO.
-- AC4 -> Scope: The request addresses at least release readiness, version identification, and operational validation expectations, including a minimal post-deployment smoke check.. Proof: TODO.
-- AC5 -> Scope: If preview-style environments are introduced later, the request treats them as technical validation surfaces distinct from the dedicated `release` branch rather than as separate product release channels.. Proof: TODO.
-- AC6 -> Scope: The request addresses rollback or recovery thinking appropriate to a static-site deployment.. Proof: TODO.
-- AC7 -> Scope: The request does not assume a backend service topology or an enterprise-grade release-management stack.. Proof: TODO.
-- AC8 -> Scope: The request complements rather than duplicates the Render Blueprint request.. Proof: TODO.
+- AC1 -> Scope: Preview role is explicit within the release workflow. Proof: `README.md`.
+- AC2 -> Scope: The role stays compatible with Render and CI. Proof: `.github/workflows/ci.yml`, `render.yaml`, `README.md`.
+- AC3 -> Scope: Previews stay downstream of the same semantic-version and changelog discipline. Proof: `README.md`.
+- AC4 -> Scope: Preview role stays connected to release readiness and smoke posture. Proof: `README.md`, `scripts/release/runPostDeploySmoke.mjs`.
+- AC5 -> Scope: Previews are defined as technical validation surfaces rather than a second release channel. Proof: `README.md`.
+- AC6 -> Scope: The role remains compatible with rollback thinking. Proof: `README.md`.
+- AC7 -> Scope: The workflow avoids backend-heavy preview assumptions. Proof: `README.md`.
+- AC8 -> Scope: The preview role complements rather than duplicates Render blueprint concerns. Proof: `render.yaml`, `README.md`.
 
 # Decision framing
 - Product framing: Not needed
@@ -56,7 +56,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Request: `req_015_define_release_workflow_and_deployment_operations`
-- Primary task(s): (none yet)
+- Primary task(s): `task_023_orchestrate_world_occupancy_continuity_and_release_operations`
 
 # Priority
 - Impact: Medium
@@ -66,3 +66,4 @@ flowchart LR
 - Derived from request `req_015_define_release_workflow_and_deployment_operations`.
 - Source file: `logics/request/req_015_define_release_workflow_and_deployment_operations.md`.
 - Request context seeded into this backlog item from `logics/request/req_015_define_release_workflow_and_deployment_operations.md`.
+- Completed in `task_023_orchestrate_world_occupancy_continuity_and_release_operations`.

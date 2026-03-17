@@ -1,9 +1,9 @@
 ## item_060_define_post_deployment_smoke_checks_and_rollback_posture - Define post deployment smoke checks and rollback posture
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 91%
-> Progress: 5%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,14 +35,14 @@ flowchart LR
 - AC8: The request complements rather than duplicates the Render Blueprint request.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a release-workflow scope distinct from raw deployment configuration.. Proof: TODO.
-- AC2 -> Scope: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.. Proof: TODO.
-- AC3 -> Scope: The request treats lightweight semantic versioning and a simple changelog discipline as the intended default release-identification model.. Proof: TODO.
-- AC4 -> Scope: The request addresses at least release readiness, version identification, and operational validation expectations, including a minimal post-deployment smoke check.. Proof: TODO.
-- AC5 -> Scope: If preview-style environments are introduced later, the request treats them first as technical validation surfaces rather than as separate product release channels.. Proof: TODO.
-- AC6 -> Scope: The request addresses rollback or recovery thinking appropriate to a static-site deployment.. Proof: TODO.
-- AC7 -> Scope: The request does not assume a backend service topology or an enterprise-grade release-management stack.. Proof: TODO.
-- AC8 -> Scope: The request complements rather than duplicates the Render Blueprint request.. Proof: TODO.
+- AC1 -> Scope: Post-deploy smoke is explicit rather than implied. Proof: `README.md`, `scripts/release/runPostDeploySmoke.mjs`.
+- AC2 -> Scope: The posture stays compatible with static hosting and CI. Proof: `.github/workflows/ci.yml`, `scripts/release/runPostDeploySmoke.mjs`.
+- AC3 -> Scope: The smoke posture complements semantic versioning and changelog discipline. Proof: `README.md`, `scripts/release/validateReleaseChangelog.mjs`.
+- AC4 -> Scope: A minimal post-deploy smoke check is defined. Proof: `README.md`, `scripts/release/runPostDeploySmoke.mjs`, `scripts/testing/runBrowserSmoke.mjs`.
+- AC5 -> Scope: Preview surfaces remain technical validation layers. Proof: `README.md`.
+- AC6 -> Scope: Rollback posture is explicit and static-site friendly. Proof: `README.md`.
+- AC7 -> Scope: The approach avoids backend-heavy release stacks. Proof: `scripts/release/runPostDeploySmoke.mjs`.
+- AC8 -> Scope: The slice complements the Render blueprint. Proof: `render.yaml`, `README.md`.
 
 # Decision framing
 - Product framing: Not needed
@@ -54,9 +54,9 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_012_require_curated_versioned_changelogs_for_releases`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Request: `req_015_define_release_workflow_and_deployment_operations`
-- Primary task(s): (none yet)
+- Primary task(s): `task_023_orchestrate_world_occupancy_continuity_and_release_operations`
 
 # Priority
 - Impact: High
@@ -66,3 +66,4 @@ flowchart LR
 - Derived from request `req_015_define_release_workflow_and_deployment_operations`.
 - Source file: `logics/request/req_015_define_release_workflow_and_deployment_operations.md`.
 - Request context seeded into this backlog item from `logics/request/req_015_define_release_workflow_and_deployment_operations.md`.
+- Completed in `task_023_orchestrate_world_occupancy_continuity_and_release_operations`.

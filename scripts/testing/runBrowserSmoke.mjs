@@ -9,6 +9,7 @@ import { chromium } from "playwright";
 
 const previewHost = "127.0.0.1";
 const outputDirectory = new URL("../../output/playwright/", import.meta.url);
+const externalSmokeUrl = process.env.BROWSER_SMOKE_URL;
 
 const waitForPreview = async () => {
   const startedAt = Date.now();
@@ -70,27 +71,32 @@ const parseWorldPosition = (value) => {
   return { x, y };
 };
 
-const previewPort = await resolveFreePort();
-const previewUrl = `http://${previewHost}:${previewPort}`;
+const previewPort = externalSmokeUrl ? null : await resolveFreePort();
+const previewUrl = externalSmokeUrl ?? `http://${previewHost}:${previewPort}`;
 
-const previewServer = spawn(
-  "npm",
-  ["run", "preview", "--", "--host", previewHost, "--port", String(previewPort), "--strictPort"],
-  {
-    cwd: new URL("../../", import.meta.url),
-    env: {
-      ...process.env,
-      CI: "1",
-      VITE_APP_ENV: process.env.VITE_APP_ENV ?? "preview"
-    },
-    stdio: "inherit"
-  }
-);
+const previewServer =
+  externalSmokeUrl === undefined
+    ? spawn(
+        "npm",
+        ["run", "preview", "--", "--host", previewHost, "--port", String(previewPort), "--strictPort"],
+        {
+          cwd: new URL("../../", import.meta.url),
+          env: {
+            ...process.env,
+            CI: "1",
+            VITE_APP_ENV: process.env.VITE_APP_ENV ?? "preview"
+          },
+          stdio: "inherit"
+        }
+      )
+    : null;
 
 let browser;
 
 try {
-  await waitForPreview();
+  if (externalSmokeUrl === undefined) {
+    await waitForPreview();
+  }
   await mkdir(outputDirectory, {
     recursive: true
   });
@@ -148,7 +154,7 @@ try {
 } finally {
   await browser?.close();
 
-  if (!previewServer.killed) {
+  if (previewServer && !previewServer.killed) {
     previewServer.kill("SIGTERM");
   }
 }

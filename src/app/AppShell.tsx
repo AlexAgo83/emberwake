@@ -207,6 +207,7 @@ export function AppShell() {
           worldDiagnostics={worldDiagnostics}
           worldRender={{
             cachedChunkIds: chunkVisibility.cachedChunkIds,
+            overlappingPairs: entityWorld.overlappingPairs.length,
             trackedEntities: entityWorld.trackedEntities.length,
             visibleEntities: entityWorld.visibleEntities.length,
             preloadMargin: chunkVisibility.preloadMargin,
