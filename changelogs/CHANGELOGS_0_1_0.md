@@ -12,4 +12,5 @@
 
 - Release delivery is expected to flow through the dedicated `release` branch.
 - Curated changelog files are mandatory for deployable versions.
+- The Render Blueprint now omits an explicit `plan` field and relies on Render-managed plan selection.
 - The current build still reports a large Pixi bundle warning, but validation passes.

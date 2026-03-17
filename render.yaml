@@ -2,7 +2,6 @@ services:
   - type: web
     name: emberwake
     runtime: static
-    plan: free
     branch: release
     autoDeploy: true
     buildCommand: npm ci && npm run build
