@@ -1,4 +1,4 @@
-# Pyra Motion
+# Emberwake
 
 Static frontend game project built around a fullscreen 2D top-down world, designed for `React + TypeScript + PixiJS`, with `PWA` delivery and no backend runtime.
 
@@ -8,6 +8,27 @@ This repository is currently documentation-first:
 - the runtime codebase is not bootstrapped yet
 
 This README is meant to evolve with the project.
+
+## Identity
+
+`Emberwake` is the working name and product identity for the game.
+
+The name combines:
+- `ember`: heat, braise, lingering energy
+- `wake`: a trail, a moving trace, a disturbance left behind
+
+Taken together, `Emberwake` suggests a moving presence that leaves pressure, heat, and momentum in its path. That fits the current product direction: top-down real-time survival action built around movement, readability, and escalating density.
+
+Reference brief:
+- [prod_004_emberwake_name_and_brand_direction.md](/Users/alexandreagostini/Documents/pyra-motion/logics/product/prod_004_emberwake_name_and_brand_direction.md)
+
+```mermaid
+flowchart LR
+    Ember[Heat and ember energy] --> Emberwake[Emberwake]
+    Wake[Trail and movement trace] --> Emberwake
+    Emberwake --> Tone[Readable, kinetic, pressurized]
+    Tone --> Direction[Top-down survival action]
+```
 
 ## Current Direction
 
