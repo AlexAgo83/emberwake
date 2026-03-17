@@ -8,6 +8,7 @@ import {
 import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage";
 import type { ReturnTypeUseLogicalViewportModel } from "./types";
 import type { CameraState } from "../camera/model/cameraMath";
+import { createGenericMoverEntity } from "../entities/model/entityContract";
 
 type ShellDiagnosticsPanelProps = {
   camera: CameraState;
@@ -24,6 +25,8 @@ type ShellDiagnosticsPanelProps = {
   visible: boolean;
   viewport: ReturnTypeUseLogicalViewportModel;
 };
+
+const previewEntity = createGenericMoverEntity();
 
 export function ShellDiagnosticsPanel({
   camera,
@@ -94,6 +97,22 @@ export function ShellDiagnosticsPanel({
         <div>
           <dt>Camera rotation</dt>
           <dd>{camera.rotation.toFixed(3)}rad</dd>
+        </div>
+        <div>
+          <dt>Entity archetype</dt>
+          <dd>{previewEntity.archetype}</dd>
+        </div>
+        <div>
+          <dt>Entity state</dt>
+          <dd>{previewEntity.state}</dd>
+        </div>
+        <div>
+          <dt>Entity radius</dt>
+          <dd>{previewEntity.footprint.radius}</dd>
+        </div>
+        <div>
+          <dt>Entity layer</dt>
+          <dd>{previewEntity.renderLayer}</dd>
         </div>
         <div>
           <dt>Chunk baseline</dt>

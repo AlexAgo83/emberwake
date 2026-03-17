@@ -1,9 +1,9 @@
 ## item_009_define_entity_contract_and_generic_archetype_baseline - Define entity contract and generic archetype baseline
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 91%
-> Progress: 10%
+> Progress: 100%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -43,12 +43,12 @@ flowchart LR
 - AC6: This baseline contract is suitable for later movement, chunk indexing, inspection, and player-control slices without being replaced by a special player entity model.
 
 # AC Traceability
-- AC1 -> Scope: Minimum shared entity contract is explicit. Proof: TODO.
-- AC2 -> Scope: One generic movable archetype is the default baseline. Proof: TODO.
-- AC3 -> Scope: Footprint or radius model exists. Proof: TODO.
-- AC4 -> Scope: Orientation is part of the baseline contract. Proof: TODO.
-- AC5 -> Scope: Render ordering is explicit. Proof: TODO.
-- AC6 -> Scope: Contract remains reusable for later movement, indexing, and inspection work. Proof: TODO.
+- AC1 -> Scope: Minimum shared entity contract is explicit. Proof: `src/game/entities/model/entityContract.ts`.
+- AC2 -> Scope: One generic movable archetype is the default baseline. Proof: `src/game/entities/model/entityContract.ts`.
+- AC3 -> Scope: Footprint or radius model exists. Proof: `src/game/entities/model/entityContract.ts`.
+- AC4 -> Scope: Orientation is part of the baseline contract. Proof: `src/game/entities/model/entityContract.ts`.
+- AC5 -> Scope: Render ordering is explicit. Proof: `src/game/entities/model/entityContract.ts`.
+- AC6 -> Scope: Contract remains reusable for later movement, indexing, and inspection work. Proof: `src/game/entities/model/entityContract.ts`, `src/game/entities/model/entityContract.test.ts`.
 
 # Decision framing
 - Product framing: Not needed
