@@ -127,6 +127,24 @@
   color: var(--emberwake-accent-cold);
 }
 
+.shell-diagnostics__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.shell-diagnostics__controls .shell-control[data-active="true"] {
+  border-color: rgba(76, 226, 255, 0.42);
+  color: var(--emberwake-accent-cold);
+}
+
+.shell-diagnostics__controls .shell-control:disabled {
+  cursor: default;
+  opacity: 0.45;
+  transform: none;
+}
+
 .shell-diagnostics__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

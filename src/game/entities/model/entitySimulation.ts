@@ -5,7 +5,9 @@ import { createGenericMoverEntity } from "./entityContract";
 import type { EntityState, WorldEntity } from "./entityContract";
 
 export const entitySimulationContract = {
-  fixedStepMs: 1000 / 60
+  fixedStepMs: 1000 / 60,
+  maxCatchUpStepsPerFrame: 6,
+  speedOptions: [0.5, 1, 2] as const
 } as const;
 
 export type SimulatedEntity = WorldEntity & {
@@ -16,6 +18,8 @@ export type EntitySimulationState = {
   entity: SimulatedEntity;
   tick: number;
 };
+
+export type SimulationSpeedOption = (typeof entitySimulationContract.speedOptions)[number];
 
 type SimulationCommand = {
   controlState?: SingleEntityControlState;

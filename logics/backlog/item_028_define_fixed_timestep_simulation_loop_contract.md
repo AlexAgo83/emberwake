@@ -1,9 +1,9 @@
 ## item_028_define_fixed_timestep_simulation_loop_contract - Define fixed timestep simulation loop contract
 > From version: 0.1.1
-> Status: Ready
+> Status: Done
 > Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Confidence: 92%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -34,13 +34,13 @@ flowchart LR
 - AC7: The request does not prematurely assume multiplayer or backend-driven synchronization.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a dedicated simulation-loop scope rather than leaving update timing implicit inside rendering concerns.. Proof: TODO.
-- AC2 -> Scope: The request defines the relationship between simulation updates and rendering frames.. Proof: TODO.
-- AC3 -> Scope: The request treats a strict fixed-timestep simulation loop as the intended baseline for logic updates.. Proof: TODO.
-- AC4 -> Scope: The request defines a deterministic or reproducible update expectation suitable for debugging and automated testing.. Proof: TODO.
-- AC5 -> Scope: The request covers pause, simulation stepping, and speed-adjustment expectations where they affect the update model.. Proof: TODO.
-- AC6 -> Scope: The request remains compatible with the world and entity requests already written.. Proof: TODO.
-- AC7 -> Scope: The request does not prematurely assume multiplayer or backend-driven synchronization.. Proof: TODO.
+- AC1 -> Scope: The simulation loop has a dedicated runtime contract. Proof: `src/game/entities/model/entitySimulation.ts`, `src/game/entities/hooks/useEntitySimulation.ts`.
+- AC2 -> Scope: The relationship between frame sampling and simulation updates is explicit. Proof: `src/game/entities/hooks/useEntitySimulation.ts`.
+- AC3 -> Scope: A strict fixed timestep remains the baseline. Proof: `src/game/entities/model/entitySimulation.ts`.
+- AC4 -> Scope: Deterministic stepping remains suitable for debugging and tests. Proof: `src/game/entities/model/entitySimulation.ts`, `src/game/entities/model/entitySimulation.test.ts`.
+- AC5 -> Scope: Pause, step, and speed adjustments are supported within the update model. Proof: `src/game/entities/hooks/useEntitySimulation.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC6 -> Scope: The loop remains compatible with world and entity layers already implemented. Proof: `src/app/AppShell.tsx`, `src/game/entities/hooks/useEntityWorld.ts`.
+- AC7 -> Scope: The slice stays frontend-local and deterministic. Proof: `src/game/entities/hooks/useEntitySimulation.ts`.
 
 # Decision framing
 - Product framing: Not needed
@@ -54,7 +54,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_004_run_simulation_on_a_fixed_timestep`
 - Request: `req_007_define_simulation_loop_and_deterministic_update_model`
-- Primary task(s): (none yet)
+- Primary task(s): `task_018_orchestrate_simulation_cadence_debug_controls_and_performance_metrics`
 
 # Priority
 - Impact: High
@@ -64,3 +64,4 @@ flowchart LR
 - Derived from request `req_007_define_simulation_loop_and_deterministic_update_model`.
 - Source file: `logics/request/req_007_define_simulation_loop_and_deterministic_update_model.md`.
 - Request context seeded into this backlog item from `logics/request/req_007_define_simulation_loop_and_deterministic_update_model.md`.
+- Completed in `task_018_orchestrate_simulation_cadence_debug_controls_and_performance_metrics`.

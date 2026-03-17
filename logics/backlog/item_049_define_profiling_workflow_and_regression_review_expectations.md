@@ -1,9 +1,9 @@
 ## item_049_define_profiling_workflow_and_regression_review_expectations - Define profiling workflow and regression review expectations
 > From version: 0.1.1
-> Status: Ready
+> Status: Done
 > Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Confidence: 92%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -36,15 +36,15 @@ flowchart LR
 - AC9: The request does not assume backend telemetry or paid observability tooling.
 
 # AC Traceability
-- AC1 -> Scope: The request defines dedicated performance and diagnostics expectations for the frontend application.. Proof: TODO.
-- AC2 -> Scope: The request identifies the first metrics or budgets relevant to shell rendering, world rendering, entity rendering, or loading behavior.. Proof: TODO.
-- AC3 -> Scope: The request defines an explicit minimum-performance target for a mobile-sized reference experience rather than relying only on qualitative language.. Proof: TODO.
-- AC4 -> Scope: The request requires in-app visibility for core diagnostics such as FPS, frame time, and world-load indicators during development.. Proof: TODO.
-- AC5 -> Scope: The request treats controlled-entity position, speed or movement vector, current chunk, and camera state as part of the preferred first in-app diagnostic set.. Proof: TODO.
-- AC6 -> Scope: The request remains compatible with the debug overlay and diagnostics direction already anticipated.. Proof: TODO.
-- AC7 -> Scope: The request addresses profiling expectations appropriate for a frontend-only static application.. Proof: TODO.
-- AC8 -> Scope: The request remains compatible with mobile and large-screen usage expectations.. Proof: TODO.
-- AC9 -> Scope: The request does not assume backend telemetry or paid observability tooling.. Proof: TODO.
+- AC1 -> Scope: Profiling expectations are tied to the runtime diagnostics contract. Proof: `README.md`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC2 -> Scope: The workflow names the first metrics to compare. Proof: `README.md`.
+- AC3 -> Scope: The workflow uses the explicit mobile reference target. Proof: `README.md`, `src/shared/constants/performanceBudget.ts`.
+- AC4 -> Scope: In-app diagnostics are the starting point of the profiling routine. Proof: `README.md`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC5 -> Scope: Controlled-entity, camera, and chunk signals are part of the baseline review. Proof: `README.md`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- AC6 -> Scope: The workflow stays aligned with the debug overlay posture. Proof: `README.md`, `src/app/AppShell.tsx`.
+- AC7 -> Scope: Profiling expectations are suitable for a frontend-only static app. Proof: `README.md`.
+- AC8 -> Scope: The workflow explicitly uses the mobile reference viewport while staying comparable on larger screens. Proof: `README.md`, `src/shared/constants/performanceBudget.ts`.
+- AC9 -> Scope: The workflow does not assume backend observability tooling. Proof: `README.md`.
 
 # Decision framing
 - Product framing: Not needed
@@ -58,7 +58,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_006_standardize_debug_first_runtime_instrumentation`
 - Request: `req_012_define_performance_budgets_profiling_and_diagnostics`
-- Primary task(s): (none yet)
+- Primary task(s): `task_018_orchestrate_simulation_cadence_debug_controls_and_performance_metrics`
 
 # Priority
 - Impact: Medium
@@ -68,3 +68,4 @@ flowchart LR
 - Derived from request `req_012_define_performance_budgets_profiling_and_diagnostics`.
 - Source file: `logics/request/req_012_define_performance_budgets_profiling_and_diagnostics.md`.
 - Request context seeded into this backlog item from `logics/request/req_012_define_performance_budgets_profiling_and_diagnostics.md`.
+- Completed in `task_018_orchestrate_simulation_cadence_debug_controls_and_performance_metrics`.

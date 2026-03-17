@@ -209,6 +209,11 @@ export function AppShell() {
           }}
           preferences={preferences}
           renderer={rendererState}
+          simulation={{
+            ...simulationState.runtime,
+            tick: simulationState.tick
+          }}
+          simulationControls={simulationState.controls}
           viewport={viewport}
           visible={diagnosticsVisible}
         />

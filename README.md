@@ -189,6 +189,19 @@ The main workflow helper is:
 python3 logics/skills/logics-flow-manager/scripts/logics_flow.py --help
 ```
 
+## Runtime Profiling
+
+Early runtime profiling should stay lightweight, deterministic, and reproducible.
+
+- start with the in-app diagnostics overlay before opening external profiling tools
+- use the reference mobile viewport `390 x 844` and the deterministic default seed when comparing changes
+- reset the camera before taking before/after readings so chunk and entity counts stay comparable
+- capture at minimum `FPS`, `frame time`, `simulation speed`, `tick`, `visible chunks`, and selected-entity motion signals
+- when a performance-sensitive change is introduced, compare the same runtime posture before and after the change
+- if the in-app overlay suggests a regression, escalate to a browser trace or devtools recording instead of guessing
+
+This keeps performance review grounded in the same runtime contract used by the shell and diagnostics tasks.
+
 ## Current Execution Order
 
 The current development backbone is intentionally sequential:

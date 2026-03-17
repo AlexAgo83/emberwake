@@ -1,9 +1,9 @@
 ## task_018_orchestrate_simulation_cadence_debug_controls_and_performance_metrics - Orchestrate simulation cadence, debug controls, and performance metrics
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 95%
-> Confidence: 91%
-> Progress: 0%
+> Confidence: 93%
+> Progress: 100%
 > Complexity: High
 > Theme: Runtime
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -29,19 +29,19 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Formalize cadence separation and fixed-step runtime behavior at the app level.
-- [ ] 2. Add pause, single-step, and simulation-speed controls for debug operation.
-- [ ] 3. Standardize runtime diagnostics metrics, performance targets, and profiling review posture.
-- [ ] 4. Validate the runtime and update linked Logics docs.
-- [ ] FINAL: Create a dedicated git commit for this orchestration scope.
+- [x] 1. Formalize cadence separation and fixed-step runtime behavior at the app level.
+- [x] 2. Add pause, single-step, and simulation-speed controls for debug operation.
+- [x] 3. Standardize runtime diagnostics metrics, performance targets, and profiling review posture.
+- [x] 4. Validate the runtime and update linked Logics docs.
+- [x] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_028` -> Fixed-step simulation loop contract is explicit across runtime subsystems. Proof: TODO.
-- `item_029` -> Render cadence and simulation cadence are intentionally separated. Proof: TODO.
-- `item_030` -> Pause, step, and speed controls exist for debug use. Proof: TODO.
-- `item_047` -> Performance budgets and reference targets are explicit. Proof: TODO.
-- `item_048` -> Standard in-app metrics are visible and consistent. Proof: TODO.
-- `item_049` -> Profiling and regression review workflow is documented and usable. Proof: TODO.
+- `item_028` -> Fixed-step simulation loop contract is explicit across runtime subsystems. Proof: `src/game/entities/model/entitySimulation.ts`, `src/game/entities/hooks/useEntitySimulation.ts`.
+- `item_029` -> Render cadence and simulation cadence are intentionally separated. Proof: `src/game/entities/hooks/useEntitySimulation.ts`, `src/game/render/RuntimeSurface.tsx`, `src/app/AppShell.tsx`.
+- `item_030` -> Pause, step, and speed controls exist for debug use. Proof: `src/game/entities/hooks/useEntitySimulation.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- `item_047` -> Performance budgets and reference targets are explicit. Proof: `src/shared/constants/performanceBudget.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+- `item_048` -> Standard in-app metrics are visible and consistent. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`.
+- `item_049` -> Profiling and regression review workflow is documented and usable. Proof: `README.md`, `logics/tasks/task_018_orchestrate_simulation_cadence_debug_controls_and_performance_metrics.md`.
 
 # Decision framing
 - Product framing: Consider
@@ -62,11 +62,21 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Simulation cadence and diagnostics are explicit enough to support future performance-sensitive work.
-- [ ] Linked backlog/task docs are updated with proofs and status.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Simulation cadence and diagnostics are explicit enough to support future performance-sensitive work.
+- [x] Linked backlog/task docs are updated with proofs and status.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-
+- Made the fixed-step simulation contract explicit in the runtime hook, including capped catch-up behavior and a controlled separation between frame sampling and simulation updates.
+- Added debug-only simulation controls for pause, single-step, and speed multipliers without leaking those controls into the player-facing HUD.
+- Expanded the diagnostics panel with runtime cadence metrics such as frame time, FPS, tick, steps per frame, accumulator, entity speed, and explicit mobile reference targets.
+- Documented the early profiling workflow in the repository README so performance changes can be reviewed against the same deterministic runtime posture.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `npm run build`
+  - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
+  - runtime browser verification of pause, step, resume, speed changes, and diagnostics visibility

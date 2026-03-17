@@ -9,6 +9,7 @@ import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage"
 import type { ReturnTypeUseLogicalViewportModel } from "./types";
 import type { CameraState } from "../camera/model/cameraMath";
 import type { SimulatedEntity } from "../entities/model/entitySimulation";
+import type { SimulationSpeedOption } from "../entities/model/entitySimulation";
 import type { SingleEntityControlState } from "../input/model/singleEntityControlContract";
 import type { ChunkCoordinate, WorldPoint } from "../world/types";
 
@@ -25,6 +26,22 @@ type ShellDiagnosticsPanelProps = {
   renderer: {
     message: string;
     status: "degraded" | "failed" | "initializing" | "ready";
+  };
+  simulation: {
+    accumulatorMs: number;
+    fixedStepMs: number;
+    fps: number;
+    frameTimeMs: number;
+    isPaused: boolean;
+    simulationStepsLastFrame: number;
+    speedMultiplier: SimulationSpeedOption;
+    tick: number;
+  };
+  simulationControls: {
+    resume: () => void;
+    setSpeedMultiplier: (speedMultiplier: SimulationSpeedOption) => void;
+    stepOnce: () => void;
+    togglePaused: () => void;
   };
   worldDiagnostics: {
     hoveredChunkCoordinate: ChunkCoordinate | null;
@@ -50,6 +67,8 @@ export function ShellDiagnosticsPanel({
   fullscreen,
   preferences,
   renderer,
+  simulation,
+  simulationControls,
   worldDiagnostics,
   worldRender,
   visible,
@@ -65,6 +84,38 @@ export function ShellDiagnosticsPanel({
         <p>Shell diagnostics</p>
         <span>{renderer.status}</span>
       </header>
+
+      <div className="shell-diagnostics__controls" role="group" aria-label="Simulation controls">
+        <button
+          className="shell-control shell-control--button"
+          onClick={simulationControls.togglePaused}
+          type="button"
+        >
+          {simulation.isPaused ? "Resume sim" : "Pause sim"}
+        </button>
+        <button
+          className="shell-control shell-control--button"
+          disabled={!simulation.isPaused}
+          onClick={simulationControls.stepOnce}
+          type="button"
+        >
+          Step sim
+        </button>
+        {([0.5, 1, 2] as const).map((speedMultiplier) => (
+          <button
+            className="shell-control shell-control--button"
+            data-active={simulation.speedMultiplier === speedMultiplier}
+            key={speedMultiplier}
+            onClick={() => {
+              simulationControls.setSpeedMultiplier(speedMultiplier);
+              simulationControls.resume();
+            }}
+            type="button"
+          >
+            {speedMultiplier}x
+          </button>
+        ))}
+      </div>
 
       <dl className="shell-diagnostics__grid">
         <div>
@@ -118,6 +169,38 @@ export function ShellDiagnosticsPanel({
           <dd>{camera.rotation.toFixed(3)}rad</dd>
         </div>
         <div>
+          <dt>Frame time</dt>
+          <dd>{simulation.frameTimeMs.toFixed(2)}ms</dd>
+        </div>
+        <div>
+          <dt>FPS</dt>
+          <dd>{simulation.fps.toFixed(1)}</dd>
+        </div>
+        <div>
+          <dt>Sim tick</dt>
+          <dd>{simulation.tick}</dd>
+        </div>
+        <div>
+          <dt>Sim cadence</dt>
+          <dd>{(1000 / simulation.fixedStepMs).toFixed(0)}hz / {simulation.fixedStepMs.toFixed(2)}ms</dd>
+        </div>
+        <div>
+          <dt>Sim paused</dt>
+          <dd>{simulation.isPaused ? "yes" : "no"}</dd>
+        </div>
+        <div>
+          <dt>Sim speed</dt>
+          <dd>{simulation.speedMultiplier.toFixed(1)}x</dd>
+        </div>
+        <div>
+          <dt>Steps / frame</dt>
+          <dd>{simulation.simulationStepsLastFrame}</dd>
+        </div>
+        <div>
+          <dt>Accumulator</dt>
+          <dd>{simulation.accumulatorMs.toFixed(2)}ms</dd>
+        </div>
+        <div>
           <dt>Control owner</dt>
           <dd>{control.inputOwner}</dd>
         </div>
@@ -167,6 +250,10 @@ export function ShellDiagnosticsPanel({
           <dd>
             {Math.round(entity.velocity.x)}, {Math.round(entity.velocity.y)}
           </dd>
+        </div>
+        <div>
+          <dt>Entity speed</dt>
+          <dd>{Math.hypot(entity.velocity.x, entity.velocity.y).toFixed(1)}wu/s</dd>
         </div>
         <div>
           <dt>Entity facing</dt>
@@ -265,7 +352,14 @@ export function ShellDiagnosticsPanel({
         </div>
         <div>
           <dt>Perf floor</dt>
-          <dd>{viewport.performanceBudget.frameRateFloor}+ FPS</dd>
+          <dd>{viewport.performanceBudget.frameRateFloor}+ FPS / {viewport.performanceBudget.acceptableFrameTimeMs.toFixed(2)}ms</dd>
+        </div>
+        <div>
+          <dt>Perf reference</dt>
+          <dd>
+            {viewport.performanceBudget.referenceDeviceClass} / {viewport.performanceBudget.referenceViewport.width} x{" "}
+            {viewport.performanceBudget.referenceViewport.height}
+          </dd>
         </div>
       </dl>
 
