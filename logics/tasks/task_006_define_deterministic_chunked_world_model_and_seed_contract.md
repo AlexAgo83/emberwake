@@ -1,9 +1,9 @@
 ## task_006_define_deterministic_chunked_world_model_and_seed_contract - Define deterministic chunked world model and seed contract
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 5%
+> Progress: 100%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,19 +30,19 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm scope, dependencies, and linked acceptance criteria.
-- [ ] 2. Implement the scoped changes from the backlog item.
-- [ ] 3. Validate the result and update the linked Logics docs.
-- [ ] 4. Create a dedicated git commit for this task scope after validation passes.
-- [ ] FINAL: Update related Logics docs
+- [x] 1. Confirm scope, dependencies, and linked acceptance criteria.
+- [x] 2. Implement the scoped changes from the backlog item.
+- [x] 3. Validate the result and update the linked Logics docs.
+- [x] 4. Create a dedicated git commit for this task scope after validation passes.
+- [x] FINAL: Update related Logics docs
 
 # AC Traceability
-- AC1 -> Scope: The world model uses fixed square chunks with a default target of `16x16` tiles or logical cells per chunk.. Proof: TODO.
-- AC2 -> Scope: World, chunk, and screen coordinates are explicitly distinguished and transform cleanly between one another.. Proof: TODO.
-- AC3 -> Scope: Stable logical world units and tile sizing are defined independently from raw screen pixels.. Proof: TODO.
-- AC4 -> Scope: Chunk identity is deterministic from chunk coordinates and compatible with a global world-seed model, starting from a fixed default seed that can be overridden later.. Proof: TODO.
-- AC5 -> Scope: The world model supports positive and negative coordinates and remains compatible with a future infinite-map approach.. Proof: TODO.
-- AC6 -> Scope: This slice provides the deterministic world contract required by later rendering, culling, and entity indexing work.. Proof: TODO.
+- AC1 -> Scope: The world model uses fixed square chunks with a default target of `16x16` tiles or logical cells per chunk.. Proof: `src/game/world/model/worldContract.ts`.
+- AC2 -> Scope: World, chunk, and screen coordinates are explicitly distinguished and transform cleanly between one another.. Proof: `src/game/world/types.ts`, `src/game/world/model/worldContract.ts`.
+- AC3 -> Scope: Stable logical world units and tile sizing are defined independently from raw screen pixels.. Proof: `src/game/world/model/worldContract.ts`.
+- AC4 -> Scope: Chunk identity is deterministic from chunk coordinates and compatible with a global world-seed model, starting from a fixed default seed that can be overridden later.. Proof: `src/game/world/model/worldContract.ts`, `src/game/world/model/worldContract.test.ts`.
+- AC5 -> Scope: The world model supports positive and negative coordinates and remains compatible with a future infinite-map approach.. Proof: `src/game/world/model/worldContract.ts`, `src/game/world/model/worldContract.test.ts`.
+- AC6 -> Scope: This slice provides the deterministic world contract required by later rendering, culling, and entity indexing work.. Proof: `src/game/world/model/worldContract.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
 
 # Decision framing
 - Product framing: Required
@@ -65,10 +65,18 @@ flowchart LR
 - `npm run test`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated.
-- [ ] A dedicated git commit has been created for the completed task scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated.
+- [x] A dedicated git commit has been created for the completed task scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Added a deterministic world contract with fixed `16x16` chunks, stable tile sizing in world units, and an overrideable global seed.
+- Added explicit world/chunk/screen coordinate types and shared projection helpers so later camera and picking work build on named conversions instead of ad hoc math.
+- Added deterministic chunk identity and signature helpers plus unit tests covering negative coordinates and projection round-trips.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`

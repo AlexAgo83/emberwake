@@ -10,6 +10,11 @@ import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards
 import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
 import { useDebugPanelHotkey } from "../game/debug/hooks/useDebugPanelHotkey";
 import { RuntimeSurface } from "../game/render/RuntimeSurface";
+import {
+  chunkWorldSize,
+  sampleChunkDebugSignature,
+  worldContract
+} from "../game/world/model/worldContract";
 import { appConfig } from "../shared/config/appConfig";
 import { runtimeContract } from "../shared/constants/runtimeContract";
 
@@ -117,6 +122,20 @@ export function AppShell() {
           <div>
             <dt>World posture</dt>
             <dd>{runtimeContract.worldAssumption}</dd>
+          </div>
+          <div>
+            <dt>World seed</dt>
+            <dd>{worldContract.defaultSeed}</dd>
+          </div>
+          <div>
+            <dt>Chunk baseline</dt>
+            <dd>
+              {worldContract.chunkSizeInTiles}x{worldContract.chunkSizeInTiles} / {chunkWorldSize}wu
+            </dd>
+          </div>
+          <div>
+            <dt>Chunk signature</dt>
+            <dd>{sampleChunkDebugSignature({ x: 0, y: 0 })}</dd>
           </div>
           <div>
             <dt>Shell perf floor</dt>

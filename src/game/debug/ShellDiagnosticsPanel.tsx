@@ -1,3 +1,9 @@
+import {
+  chunkCoordinateToId,
+  chunkWorldSize,
+  sampleChunkDebugSignature,
+  worldContract
+} from "../world/model/worldContract";
 import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage";
 import type { ReturnTypeUseLogicalViewportModel } from "./types";
 
@@ -63,6 +69,20 @@ export function ShellDiagnosticsPanel({
           <dd>
             {viewport.worldOrigin.x}, {viewport.worldOrigin.y}
           </dd>
+        </div>
+        <div>
+          <dt>Chunk baseline</dt>
+          <dd>
+            {worldContract.chunkSizeInTiles}x{worldContract.chunkSizeInTiles} / {chunkWorldSize}wu
+          </dd>
+        </div>
+        <div>
+          <dt>Chunk id</dt>
+          <dd>{chunkCoordinateToId({ x: 0, y: 0 })}</dd>
+        </div>
+        <div>
+          <dt>Chunk signature</dt>
+          <dd>{sampleChunkDebugSignature({ x: 0, y: 0 })}</dd>
         </div>
         <div>
           <dt>Fit scale</dt>

@@ -1,9 +1,9 @@
 ## item_005_define_deterministic_chunked_world_model_and_seed_contract - Define deterministic chunked world model and seed contract
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 10%
+> Progress: 100%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -41,12 +41,12 @@ flowchart LR
 - AC6: This slice provides the deterministic world contract required by later rendering, culling, and entity indexing work.
 
 # AC Traceability
-- AC1 -> Scope: Chunk model uses fixed square chunks with default `16x16` sizing. Proof: TODO.
-- AC2 -> Scope: World, chunk, and screen transforms are explicit. Proof: TODO.
-- AC3 -> Scope: Logical world units and tile sizing are defined independently from pixels. Proof: TODO.
-- AC4 -> Scope: Chunk identity and world-seed contract are deterministic. Proof: TODO.
-- AC5 -> Scope: Positive and negative coordinates are supported for future infinite world use. Proof: TODO.
-- AC6 -> Scope: Slice supplies deterministic world contract for later rendering and entity work. Proof: TODO.
+- AC1 -> Scope: Chunk model uses fixed square chunks with default `16x16` sizing. Proof: `src/game/world/model/worldContract.ts`.
+- AC2 -> Scope: World, chunk, and screen transforms are explicit. Proof: `src/game/world/types.ts`, `src/game/world/model/worldContract.ts`.
+- AC3 -> Scope: Logical world units and tile sizing are defined independently from pixels. Proof: `src/game/world/model/worldContract.ts`.
+- AC4 -> Scope: Chunk identity and world-seed contract are deterministic. Proof: `src/game/world/model/worldContract.ts`, `src/game/world/model/worldContract.test.ts`.
+- AC5 -> Scope: Positive and negative coordinates are supported for future infinite world use. Proof: `src/game/world/model/worldContract.ts`, `src/game/world/model/worldContract.test.ts`.
+- AC6 -> Scope: Slice supplies deterministic world contract for later rendering and entity work. Proof: `src/game/world/model/worldContract.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
 
 # Decision framing
 - Product framing: Required
