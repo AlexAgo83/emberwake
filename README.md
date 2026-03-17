@@ -175,6 +175,25 @@ For the future Vite frontend:
 Reference ADR:
 - [adr_010_treat_render_build_variables_as_public_frontend_configuration.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_010_treat_render_build_variables_as_public_frontend_configuration.md)
 
+## Static Delivery
+
+Static delivery currently assumes:
+- Render static hosting on the free plan
+- deployment from the dedicated `release` branch
+- no backend runtime, worker, preview environment, or paid feature assumptions
+- `dist/` as the single deployable frontend artifact
+- Render-managed build variables as the production source of truth
+
+Operational notes:
+- keep `.env.example` as versioned documentation for expected public `VITE_*` values
+- keep `.env.local` and `.env.production` local-only
+- use `.env.production` only as a local mirror of Render values when reproducing a release build
+- do not put secrets into `VITE_*` variables because they are embedded into the client build
+- keep PR validation in CI and keep deployable states flowing through `release`
+
+The Render Blueprint lives in:
+- [render.yaml](/Users/alexandreagostini/Documents/emberwake/render.yaml)
+
 ## Validation
 
 The main documentation validation command is:

@@ -9,6 +9,11 @@ on:
     branches:
       - main
       - release
+  workflow_dispatch:
+
+concurrency:
+  cancel-in-progress: true
+  group: ci-${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: read
@@ -24,6 +29,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
+          cache-dependency-path: package-lock.json
           node-version: 20
           cache: npm
 
@@ -47,5 +53,35 @@ jobs:
       - name: Build application
         run: npm run build
 
+      - name: Upload static build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-site-dist
+          path: dist
+          if-no-files-found: error
+
       - name: Lint Logics docs
         run: python3 logics/skills/logics-doc-linter/scripts/logics_lint.py
+
+  release-branch-readiness:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/release'
+    needs:
+      - quality-gates
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache-dependency-path: package-lock.json
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate release changelog contract
+        run: npm run release:changelog:validate

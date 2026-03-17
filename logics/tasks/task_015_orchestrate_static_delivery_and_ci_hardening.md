@@ -1,9 +1,9 @@
 ## task_015_orchestrate_static_delivery_and_ci_hardening - Orchestrate static delivery and CI hardening
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 95%
-> Confidence: 92%
-> Progress: 0%
+> Confidence: 93%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -28,17 +28,17 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Harden frontend env mirroring and document build-time public configuration boundaries.
-- [ ] 2. Capture Render free-plan operational constraints and validate the repository against them.
-- [ ] 3. Refine GitHub Actions triggers, dependency caching, and CI extension posture for later release automation.
-- [ ] 4. Validate the delivery workflow and update linked Logics docs.
-- [ ] FINAL: Create a dedicated git commit for this orchestration scope.
+- [x] 1. Harden frontend env mirroring and document build-time public configuration boundaries.
+- [x] 2. Capture Render free-plan operational constraints and validate the repository against them.
+- [x] 3. Refine GitHub Actions triggers, dependency caching, and CI extension posture for later release automation.
+- [x] 4. Validate the delivery workflow and update linked Logics docs.
+- [x] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_015` -> Frontend env mirroring and public build variable behavior are explicit and reproducible. Proof: TODO.
-- `item_016` -> Render free-plan operational constraints are documented and reflected in delivery choices. Proof: TODO.
-- `item_017` -> CI triggers and dependency caching are explicit and stable. Proof: TODO.
-- `item_019` -> CI remains extendable toward later deployment and release automation without redesign. Proof: TODO.
+- `item_015` -> Frontend env mirroring and public build variable behavior are explicit and reproducible. Proof: `.env.example`, `.gitignore`, `README.md`, `render.yaml`.
+- `item_016` -> Render free-plan operational constraints are documented and reflected in delivery choices. Proof: `render.yaml`, `README.md`.
+- `item_017` -> CI triggers and dependency caching are explicit and stable. Proof: `.github/workflows/ci.yml`.
+- `item_019` -> CI remains extendable toward later deployment and release automation without redesign. Proof: `.github/workflows/ci.yml`.
 
 # Decision framing
 - Product framing: Not needed
@@ -60,11 +60,17 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Delivery and CI behavior are reproducible locally and documented for release-branch flow.
-- [ ] Linked backlog/task docs are updated with proofs and status.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Delivery and CI behavior are reproducible locally and documented for release-branch flow.
+- [x] Linked backlog/task docs are updated with proofs and status.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-
+- Hardened the frontend env contract by documenting public `VITE_*` usage directly in `.env.example` and aligning repository guidance with Render-managed build variables.
+- Documented the Render static free-plan operating envelope in the README and kept the deployable artifact centered on `dist/` from the `release` branch.
+- Upgraded GitHub Actions with explicit concurrency, dependency cache-path wiring, build artifact upload, manual invocation, and a `release`-branch readiness job that validates the changelog contract without deploying.
+- Validation passed with:
+  - `npm run ci`
+  - `npm run release:changelog:validate`
+  - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
