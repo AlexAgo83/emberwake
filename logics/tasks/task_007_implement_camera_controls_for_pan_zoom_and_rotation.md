@@ -1,9 +1,9 @@
 ## task_007_implement_camera_controls_for_pan_zoom_and_rotation - Implement camera controls for pan zoom and rotation
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 5%
+> Progress: 100%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,19 +30,19 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm scope, dependencies, and linked acceptance criteria.
-- [ ] 2. Implement the scoped changes from the backlog item.
-- [ ] 3. Validate the result and update the linked Logics docs.
-- [ ] 4. Create a dedicated git commit for this task scope after validation passes.
-- [ ] FINAL: Update related Logics docs
+- [x] 1. Confirm scope, dependencies, and linked acceptance criteria.
+- [x] 2. Implement the scoped changes from the backlog item.
+- [x] 3. Validate the result and update the linked Logics docs.
+- [x] 4. Create a dedicated git commit for this task scope after validation passes.
+- [x] FINAL: Update related Logics docs
 
 # AC Traceability
-- AC1 -> Scope: The default desktop controls are explicit, with pointer drag for pan, mouse wheel for zoom, and keyboard rotation controls such as `Q` and `E`.. Proof: TODO.
-- AC2 -> Scope: The default mobile controls are explicit, with one-finger pan, pinch-to-zoom, and two-finger rotation as the baseline gesture model.. Proof: TODO.
-- AC3 -> Scope: Zoom and rotation behave around a defined pivot rule, preferably the viewport center by default.. Proof: TODO.
-- AC4 -> Scope: Zoom is constrained by explicit minimum and maximum bounds.. Proof: TODO.
-- AC5 -> Scope: Rotation is free-form by default and camera reset actions can restore position, zoom, and rotation to a known state.. Proof: TODO.
-- AC6 -> Scope: The camera contract remains compatible with later chunked-world rendering without requiring a camera rewrite, while still allowing pan, zoom, and rotation to stay debug-oriented in the first player loop.. Proof: TODO.
+- AC1 -> Scope: The default desktop controls are explicit, with pointer drag for pan, mouse wheel for zoom, and keyboard rotation controls such as `Q` and `E`.. Proof: `src/game/camera/hooks/useCameraController.ts`.
+- AC2 -> Scope: The default mobile controls are explicit, with one-finger pan, pinch-to-zoom, and two-finger rotation as the baseline gesture model.. Proof: `src/game/camera/hooks/useCameraController.ts`.
+- AC3 -> Scope: Zoom and rotation behave around a defined pivot rule, preferably the viewport center by default.. Proof: `src/game/camera/model/cameraMath.ts`.
+- AC4 -> Scope: Zoom is constrained by explicit minimum and maximum bounds.. Proof: `src/game/camera/constants/cameraContract.ts`, `src/game/camera/model/cameraMath.ts`.
+- AC5 -> Scope: Rotation is free-form by default and camera reset actions can restore position, zoom, and rotation to a known state.. Proof: `src/game/camera/constants/cameraContract.ts`, `src/app/AppShell.tsx`.
+- AC6 -> Scope: The camera contract remains compatible with later chunked-world rendering without requiring a camera rewrite, while still allowing pan, zoom, and rotation to stay debug-oriented in the first player loop.. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/game/camera/model/cameraMath.ts`.
 
 # Decision framing
 - Product framing: Required
@@ -66,10 +66,18 @@ flowchart LR
 - `npm run build`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated.
-- [ ] A dedicated git commit has been created for the completed task scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated.
+- [x] A dedicated git commit has been created for the completed task scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Added a debug-oriented camera controller with desktop pan/zoom/rotation, one-finger mobile pan, pinch-to-zoom, two-finger rotation, and camera reset.
+- Added explicit camera math and bounds so pan works in world space and zoom stays clamped to a stable range.
+- Surfaced live camera telemetry in the shell diagnostics so camera behavior can be inspected before map rendering lands.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `npm run build`

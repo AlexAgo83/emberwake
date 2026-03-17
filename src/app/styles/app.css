@@ -42,6 +42,11 @@
   gap: 1rem;
 }
 
+.shell-topbar__controls {
+  display: inline-flex;
+  gap: 0.75rem;
+}
+
 .shell-topbar__mode,
 .shell-control {
   pointer-events: auto;
@@ -293,6 +298,10 @@
   .shell-topbar {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .shell-topbar__controls {
+    display: grid;
   }
 
   .shell-diagnostics {

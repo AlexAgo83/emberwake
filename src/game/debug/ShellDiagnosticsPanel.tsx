@@ -2,12 +2,15 @@ import {
   chunkCoordinateToId,
   chunkWorldSize,
   sampleChunkDebugSignature,
+  worldPointToChunkCoordinate,
   worldContract
 } from "../world/model/worldContract";
 import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage";
 import type { ReturnTypeUseLogicalViewportModel } from "./types";
+import type { CameraState } from "../camera/model/cameraMath";
 
 type ShellDiagnosticsPanelProps = {
+  camera: CameraState;
   fullscreen: {
     isFullscreen: boolean;
     isSupported: boolean;
@@ -23,6 +26,7 @@ type ShellDiagnosticsPanelProps = {
 };
 
 export function ShellDiagnosticsPanel({
+  camera,
   fullscreen,
   preferences,
   renderer,
@@ -69,6 +73,27 @@ export function ShellDiagnosticsPanel({
           <dd>
             {viewport.worldOrigin.x}, {viewport.worldOrigin.y}
           </dd>
+        </div>
+        <div>
+          <dt>Camera world</dt>
+          <dd>
+            {Math.round(camera.worldPosition.x)}, {Math.round(camera.worldPosition.y)}
+          </dd>
+        </div>
+        <div>
+          <dt>Camera chunk</dt>
+          <dd>
+            {worldPointToChunkCoordinate(camera.worldPosition).x},{" "}
+            {worldPointToChunkCoordinate(camera.worldPosition).y}
+          </dd>
+        </div>
+        <div>
+          <dt>Camera zoom</dt>
+          <dd>{camera.zoom.toFixed(3)}x</dd>
+        </div>
+        <div>
+          <dt>Camera rotation</dt>
+          <dd>{camera.rotation.toFixed(3)}rad</dd>
         </div>
         <div>
           <dt>Chunk baseline</dt>

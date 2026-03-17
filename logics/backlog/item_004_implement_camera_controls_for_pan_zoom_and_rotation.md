@@ -1,9 +1,9 @@
 ## item_004_implement_camera_controls_for_pan_zoom_and_rotation - Implement camera controls for pan zoom and rotation
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 10%
+> Progress: 100%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -42,12 +42,12 @@ flowchart LR
 - AC6: The camera contract remains compatible with later chunked-world rendering without requiring a camera rewrite, while still allowing pan, zoom, and rotation to stay debug-oriented in the first player loop.
 
 # AC Traceability
-- AC1 -> Scope: Desktop camera controls are explicit. Proof: TODO.
-- AC2 -> Scope: Mobile camera gestures are explicit. Proof: TODO.
-- AC3 -> Scope: Camera pivot rule is defined. Proof: TODO.
-- AC4 -> Scope: Zoom bounds are defined. Proof: TODO.
-- AC5 -> Scope: Free-form rotation and reset behavior are defined. Proof: TODO.
-- AC6 -> Scope: Camera contract remains reusable for later chunked-world slices. Proof: TODO.
+- AC1 -> Scope: Desktop camera controls are explicit. Proof: `src/game/camera/hooks/useCameraController.ts`.
+- AC2 -> Scope: Mobile camera gestures are explicit. Proof: `src/game/camera/hooks/useCameraController.ts`.
+- AC3 -> Scope: Camera pivot rule is defined. Proof: `src/game/camera/model/cameraMath.ts`.
+- AC4 -> Scope: Zoom bounds are defined. Proof: `src/game/camera/constants/cameraContract.ts`, `src/game/camera/model/cameraMath.ts`.
+- AC5 -> Scope: Free-form rotation and reset behavior are defined. Proof: `src/game/camera/constants/cameraContract.ts`, `src/app/AppShell.tsx`.
+- AC6 -> Scope: Camera contract remains reusable for later chunked-world slices. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/game/camera/model/cameraMath.ts`.
 
 # Decision framing
 - Product framing: Required

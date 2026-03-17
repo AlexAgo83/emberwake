@@ -7,6 +7,7 @@ import { useLogicalViewportModel } from "./hooks/useLogicalViewportModel";
 import { useRendererHealth } from "./hooks/useRendererHealth";
 import { useShellPreferences } from "./hooks/useShellPreferences";
 import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards";
+import { useCameraController } from "../game/camera/hooks/useCameraController";
 import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
 import { useDebugPanelHotkey } from "../game/debug/hooks/useDebugPanelHotkey";
 import { RuntimeSurface } from "../game/render/RuntimeSurface";
@@ -26,6 +27,10 @@ export function AppShell() {
   const { enterFullscreen, isFullscreen, isSupported, lastError } =
     useFullscreenController(shellRef);
   const viewport = useLogicalViewportModel(shellRef);
+  const { cameraState, resetCamera } = useCameraController({
+    surfaceRef: runtimeSurfaceRef,
+    viewport
+  });
   const { markFailed, markReady, rendererState } = useRendererHealth();
   const { preferences, setDebugPanelVisible, setPrefersFullscreen } = useShellPreferences({
     defaultDebugPanelVisible: appConfig.debugOverlayEnabled && appConfig.diagnosticsEnabled
@@ -61,15 +66,24 @@ export function AppShell() {
         <header className="shell-topbar">
           <span className="shell-topbar__mode">Fullscreen-first shell</span>
           {appConfig.diagnosticsEnabled ? (
-            <button
-              className="shell-control shell-control--button"
-              onClick={() => {
-                setDebugPanelVisible(!preferences.debugPanelVisible);
-              }}
-              type="button"
-            >
-              {preferences.debugPanelVisible ? "Hide diagnostics" : "Show diagnostics"}
-            </button>
+            <div className="shell-topbar__controls">
+              <button
+                className="shell-control shell-control--button"
+                onClick={() => {
+                  setDebugPanelVisible(!preferences.debugPanelVisible);
+                }}
+                type="button"
+              >
+                {preferences.debugPanelVisible ? "Hide diagnostics" : "Show diagnostics"}
+              </button>
+              <button
+                className="shell-control shell-control--button"
+                onClick={resetCamera}
+                type="button"
+              >
+                Reset camera
+              </button>
+            </div>
           ) : null}
           <FullscreenToggleButton
             isFullscreen={isFullscreen}
@@ -128,6 +142,13 @@ export function AppShell() {
             <dd>{worldContract.defaultSeed}</dd>
           </div>
           <div>
+            <dt>Camera</dt>
+            <dd>
+              {Math.round(cameraState.worldPosition.x)}, {Math.round(cameraState.worldPosition.y)} /{" "}
+              {cameraState.zoom.toFixed(2)}x / {cameraState.rotation.toFixed(2)}rad
+            </dd>
+          </div>
+          <div>
             <dt>Chunk baseline</dt>
             <dd>
               {worldContract.chunkSizeInTiles}x{worldContract.chunkSizeInTiles} / {chunkWorldSize}wu
@@ -152,6 +173,7 @@ export function AppShell() {
         </dl>
 
         <ShellDiagnosticsPanel
+          camera={cameraState}
           fullscreen={{
             isFullscreen,
             isSupported,
