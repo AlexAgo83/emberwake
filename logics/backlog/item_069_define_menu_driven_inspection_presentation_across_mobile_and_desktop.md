@@ -1,9 +1,9 @@
 ## item_069_define_menu_driven_inspection_presentation_across_mobile_and_desktop - Define menu driven inspection presentation across mobile and desktop
 > From version: 0.1.3
-> Status: Ready
-> Understanding: 92%
-> Confidence: 90%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -60,3 +60,4 @@ flowchart LR
 - Derived from request `req_017_redesign_runtime_overlay_into_a_single_floating_menu`.
 - Source file: `logics/request/req_017_redesign_runtime_overlay_into_a_single_floating_menu.md`.
 - Request context seeded into this backlog item from `logics/request/req_017_redesign_runtime_overlay_into_a_single_floating_menu.md`.
+- Completed through `task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu`.
