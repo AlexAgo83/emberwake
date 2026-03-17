@@ -1,9 +1,9 @@
 ## item_059_define_semantic_versioning_and_changelog_operating_model - Define semantic versioning and changelog operating model
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
-> Progress: 15%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -39,18 +39,18 @@ flowchart LR
 - AC12: The request complements rather than duplicates the Render Blueprint request.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a release-workflow scope distinct from raw deployment configuration.. Proof: TODO.
-- AC2 -> Scope: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.. Proof: TODO.
-- AC3 -> Scope: The request treats lightweight semantic versioning and a curated changelog discipline as the intended default release-identification model.. Proof: TODO.
-- AC4 -> Scope: The request defines `package.json` as the source of truth for the application version and requires a matching changelog file for each released version.. Proof: TODO.
-- AC5 -> Scope: The request treats a missing or stale changelog as a release blocker rather than an optional documentation gap.. Proof: TODO.
-- AC6 -> Scope: The request defines a per-version changelog naming convention compatible with the user's existing repositories, such as `changelogs/CHANGELOGS_X_Y_Z.md`.. Proof: TODO.
-- AC7 -> Scope: The request treats Git tags and GitHub releases as consumers of curated version notes rather than relying only on auto-generated notes.. Proof: TODO.
-- AC8 -> Scope: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.. Proof: TODO.
-- AC9 -> Scope: If preview-style environments are introduced later, the request treats them first as technical validation surfaces rather than as separate product release channels.. Proof: TODO.
-- AC10 -> Scope: The request addresses rollback or recovery thinking appropriate to a static-site deployment.. Proof: TODO.
-- AC11 -> Scope: The request does not assume a backend service topology or an enterprise-grade release-management stack.. Proof: TODO.
-- AC12 -> Scope: The request complements rather than duplicates the Render Blueprint request.. Proof: TODO.
+- AC1 -> Scope: The request defines a release-workflow scope distinct from raw deployment configuration.. Proof: `changelogs/README.md`, `README.md`.
+- AC2 -> Scope: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.. Proof: `package.json`, `README.md`.
+- AC3 -> Scope: The request treats lightweight semantic versioning and a curated changelog discipline as the intended default release-identification model.. Proof: `changelogs/README.md`, `scripts/release/validateReleaseChangelog.mjs`.
+- AC4 -> Scope: The request defines `package.json` as the source of truth for the application version and requires a matching changelog file for each released version.. Proof: `package.json`, `scripts/release/resolveReleaseChangelog.mjs`, `scripts/release/validateReleaseChangelog.mjs`.
+- AC5 -> Scope: The request treats a missing or stale changelog as a release blocker rather than an optional documentation gap.. Proof: `scripts/release/validateReleaseChangelog.mjs`.
+- AC6 -> Scope: The request defines a per-version changelog naming convention compatible with the user's existing repositories, such as `changelogs/CHANGELOGS_X_Y_Z.md`.. Proof: `changelogs/README.md`, `changelogs/CHANGELOGS_0_1_0.md`.
+- AC7 -> Scope: The request treats Git tags and GitHub releases as consumers of curated version notes rather than relying only on auto-generated notes.. Proof: `changelogs/README.md`, `README.md`.
+- AC8 -> Scope: The request remains compatible with the static Render-hosting model and the future GitHub Actions CI pipeline.. Proof: `README.md`, `changelogs/README.md`.
+- AC9 -> Scope: If preview-style environments are introduced later, the request treats them first as technical validation surfaces rather than as separate product release channels.. Proof: `README.md`.
+- AC10 -> Scope: The request addresses rollback or recovery thinking appropriate to a static-site deployment.. Proof: `README.md`, `changelogs/README.md`.
+- AC11 -> Scope: The request does not assume a backend service topology or an enterprise-grade release-management stack.. Proof: `changelogs/README.md`, `scripts/release/validateReleaseChangelog.mjs`.
+- AC12 -> Scope: The request complements rather than duplicates the Render Blueprint request.. Proof: `README.md`, `render.yaml`.
 
 # Decision framing
 - Product framing: Not needed

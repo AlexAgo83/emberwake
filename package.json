@@ -15,6 +15,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "logics:lint": "python3 logics/skills/logics-doc-linter/scripts/logics_lint.py",
+    "release:changelog:resolve": "node scripts/release/resolveReleaseChangelog.mjs",
+    "release:changelog:validate": "node scripts/release/validateReleaseChangelog.mjs",
     "ci": "npm run lint && npm run typecheck && npm run test && npm run build && npm run logics:lint"
   },
   "dependencies": {

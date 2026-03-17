@@ -145,9 +145,14 @@ Current rule:
 
 Reference ADR:
 - [adr_012_require_curated_versioned_changelogs_for_releases.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_012_require_curated_versioned_changelogs_for_releases.md)
+- [adr_013_use_a_dedicated_release_branch_for_deployable_static_releases.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_013_use_a_dedicated_release_branch_for_deployable_static_releases.md)
 
 Expected changelog location:
 - `changelogs/CHANGELOGS_X_Y_Z.md`
+
+Current helpers:
+- `npm run release:changelog:resolve`
+- `npm run release:changelog:validate`
 
 ```mermaid
 flowchart LR
@@ -199,6 +204,7 @@ The current development backbone is intentionally sequential:
 9. fixed-step entity movement
 10. player control boundaries
 11. mobile virtual stick
+12. semantic versioning and changelog discipline
 
 Each completed task should end with its own dedicated git commit.
 
@@ -216,6 +222,8 @@ flowchart TD
     T7 --> T10[task_010 control boundaries]
     T9 --> T10
     T10 --> T11[task_011 mobile virtual stick]
+    T4 --> T12[task_012 semantic versioning and changelog]
+    T5 --> T12
 ```
 
 ## Updating This README
