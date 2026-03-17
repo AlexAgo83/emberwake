@@ -1,0 +1,35 @@
+import { createGeneratedChunk, terrainKinds } from "./worldGeneration";
+import { worldContract } from "./worldContract";
+
+describe("worldGeneration", () => {
+  it("keeps chunk generation deterministic for the same seed and coordinates", () => {
+    const chunkCoordinate = { x: -2, y: 3 };
+
+    expect(createGeneratedChunk(chunkCoordinate, "alpha-seed")).toEqual(
+      createGeneratedChunk(chunkCoordinate, "alpha-seed")
+    );
+  });
+
+  it("changes generated terrain when chunk coordinates change", () => {
+    const firstChunk = createGeneratedChunk({ x: 0, y: 0 }, "alpha-seed");
+    const secondChunk = createGeneratedChunk({ x: 1, y: 0 }, "alpha-seed");
+
+    expect(firstChunk.chunkId).not.toBe(secondChunk.chunkId);
+    expect(firstChunk.terrainLayer).not.toEqual(secondChunk.terrainLayer);
+  });
+
+  it("builds a full terrain layer without render-only fields", () => {
+    const generatedChunk = createGeneratedChunk({ x: 0, y: 0 });
+
+    expect(generatedChunk.terrainLayer).toHaveLength(worldContract.chunkSizeInTiles ** 2);
+    expect(terrainKinds).toContain(generatedChunk.primaryTerrain);
+    expect(generatedChunk.terrainLayer[0]).toEqual({
+      terrainKind: expect.any(String),
+      tileX: expect.any(Number),
+      tileY: expect.any(Number),
+      variant: expect.any(Number)
+    });
+    expect(generatedChunk.terrainLayer[0]).not.toHaveProperty("color");
+    expect(generatedChunk.terrainLayer[0]).not.toHaveProperty("entityId");
+  });
+});

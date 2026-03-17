@@ -1,4 +1,4 @@
-import { sampleChunkDebugSignature, worldContract } from "./worldContract";
+import { createGeneratedChunk } from "./worldGeneration";
 import type { ChunkCoordinate } from "../types";
 
 type DebugTile = {
@@ -14,30 +14,48 @@ export type ChunkDebugData = {
   tiles: DebugTile[];
 };
 
-const colorPalette = [0x21192d, 0x16242f, 0x2b1f1f, 0x1c2820, 0x22222f, 0x301d27];
-const overlayPalette = [0xffa457, 0x4ce2ff, 0xff5f7a, 0x9fff7a, 0xd88cff, 0xffd36e];
+const terrainPalette = {
+  ashfield: {
+    baseColor: 0x1b1f25,
+    overlayColor: 0xffc36e,
+    variants: [0x222932, 0x1a2128, 0x262e38]
+  },
+  emberplain: {
+    baseColor: 0x301d27,
+    overlayColor: 0xff8b63,
+    variants: [0x41242f, 0x3a212b, 0x4b2b36]
+  },
+  glowfen: {
+    baseColor: 0x16242f,
+    overlayColor: 0x4ce2ff,
+    variants: [0x1f3342, 0x18303d, 0x214255]
+  },
+  obsidian: {
+    baseColor: 0x21192d,
+    overlayColor: 0xd88cff,
+    variants: [0x2a2038, 0x241d32, 0x312746]
+  }
+} as const;
 
 export const createChunkDebugData = (chunkCoordinate: ChunkCoordinate): ChunkDebugData => {
-  const signature = sampleChunkDebugSignature(chunkCoordinate);
-  const tileCount = worldContract.chunkSizeInTiles;
+  const generatedChunk = createGeneratedChunk(chunkCoordinate);
   const tiles: DebugTile[] = [];
+  const primaryTerrainPalette = terrainPalette[generatedChunk.primaryTerrain];
 
-  for (let tileX = 0; tileX < tileCount; tileX += 1) {
-    for (let tileY = 0; tileY < tileCount; tileY += 1) {
-      const tileSignature = (signature + tileX * 73 + tileY * 97) >>> 0;
+  for (const terrainTile of generatedChunk.terrainLayer) {
+    const terrainColors = terrainPalette[terrainTile.terrainKind];
 
-      tiles.push({
-        color: colorPalette[tileSignature % colorPalette.length],
-        x: tileX,
-        y: tileY
-      });
-    }
+    tiles.push({
+      color: terrainColors.variants[terrainTile.variant],
+      x: terrainTile.tileX,
+      y: terrainTile.tileY
+    });
   }
 
   return {
-    baseColor: colorPalette[signature % colorPalette.length],
-    label: `${chunkCoordinate.x},${chunkCoordinate.y}`,
-    overlayColor: overlayPalette[signature % overlayPalette.length],
+    baseColor: primaryTerrainPalette.baseColor,
+    label: `${chunkCoordinate.x},${chunkCoordinate.y} ${generatedChunk.primaryTerrain}`,
+    overlayColor: primaryTerrainPalette.overlayColor,
     tiles
   };
 };

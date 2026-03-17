@@ -1,9 +1,9 @@
 ## item_034_define_generation_boundaries_versus_rendering_assets_and_entities - Define generation boundaries versus rendering assets and entities
 > From version: 0.1.1
-> Status: Ready
+> Status: Done
 > Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Confidence: 92%
+> Progress: 100%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -34,13 +34,13 @@ flowchart LR
 - AC7: The request does not conflate generation rules with final visual assets or entity logic.
 
 # AC Traceability
-- AC1 -> Scope: The request defines a dedicated world-generation scope rather than leaving chunk content as an informal rendering concern.. Proof: TODO.
-- AC2 -> Scope: The request defines deterministic expectations for chunk content generation.. Proof: TODO.
-- AC3 -> Scope: The request treats identical seed and coordinate inputs as producing identical world results.. Proof: TODO.
-- AC4 -> Scope: The request addresses the role of chunk coordinates and a future global seed in generation.. Proof: TODO.
-- AC5 -> Scope: The request remains compatible with the chunked streaming model and top-down rendering model already defined.. Proof: TODO.
-- AC6 -> Scope: The request treats a simple terrain-layer baseline as sufficient for the first generation model while anticipating later richness such as extra layers or biome-like variation.. Proof: TODO.
-- AC7 -> Scope: The request does not conflate generation rules with final visual assets or entity logic.. Proof: TODO.
+- AC1 -> Scope: Generation no longer lives as an informal render concern. Proof: `src/game/world/model/worldGeneration.ts`.
+- AC2 -> Scope: Deterministic generation is explicit. Proof: `src/game/world/model/worldGeneration.ts`.
+- AC3 -> Scope: Same inputs still produce same outputs. Proof: `src/game/world/model/worldGeneration.test.ts`.
+- AC4 -> Scope: Seed and coordinates remain generation inputs only. Proof: `src/game/world/model/worldGeneration.ts`.
+- AC5 -> Scope: Generation output remains compatible with the current render model. Proof: `src/game/world/model/chunkDebugData.ts`, `src/game/world/render/WorldScene.tsx`.
+- AC6 -> Scope: The first terrain-layer baseline remains simple. Proof: `src/game/world/model/worldGeneration.ts`.
+- AC7 -> Scope: Generation excludes render colors, assets, and entity logic. Proof: `src/game/world/model/worldGeneration.ts`, `src/game/world/model/worldGeneration.test.ts`.
 
 # Decision framing
 - Product framing: Not needed
@@ -54,7 +54,7 @@ flowchart LR
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_005_make_world_identity_deterministic_from_seed_and_coordinates`
 - Request: `req_008_define_infinite_chunked_world_generation_model`
-- Primary task(s): (none yet)
+- Primary task(s): `task_019_orchestrate_deterministic_world_generation_foundation`
 
 # Priority
 - Impact: Medium
@@ -64,3 +64,4 @@ flowchart LR
 - Derived from request `req_008_define_infinite_chunked_world_generation_model`.
 - Source file: `logics/request/req_008_define_infinite_chunked_world_generation_model.md`.
 - Request context seeded into this backlog item from `logics/request/req_008_define_infinite_chunked_world_generation_model.md`.
+- Completed in `task_019_orchestrate_deterministic_world_generation_foundation`.

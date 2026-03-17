@@ -27,6 +27,8 @@ const hashString = (value: string) => {
   return hash >>> 0;
 };
 
+export const sampleDeterministicSignature = (value: string) => hashString(value);
+
 export const worldToChunkIndex = (worldCoordinate: number) =>
   Math.floor(worldCoordinate / chunkWorldSize);
 
@@ -48,7 +50,7 @@ export const chunkCoordinateToId = (
 export const sampleChunkDebugSignature = (
   chunkCoordinate: ChunkCoordinate,
   seed = worldContract.defaultSeed
-) => hashString(chunkCoordinateToId(chunkCoordinate, seed));
+) => sampleDeterministicSignature(chunkCoordinateToId(chunkCoordinate, seed));
 
 export const worldPointToScreenPoint = (
   worldPoint: WorldPoint,
