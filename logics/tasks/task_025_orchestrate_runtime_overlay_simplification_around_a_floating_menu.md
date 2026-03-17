@@ -1,9 +1,9 @@
 ## task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu - Orchestrate runtime overlay simplification around a floating menu
 > From version: 0.1.3
-> Status: In Progress
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 90%
+> Progress: 100%
 > Complexity: High
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -61,13 +61,14 @@ flowchart LR
 - [x] Validation commands executed and results captured.
 - [x] The runtime exposes one persistent menu trigger and reveals optional tools only on demand.
 - [x] Linked request/backlog/task docs updated.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
 - Replaced the panel-heavy top bar and persistent player HUD with a single top-right `ShellMenu` trigger that owns fullscreen, reset-camera, diagnostics, inspecteur, and optional install actions.
 - Added menu-driven visibility control for the inspecteur and diagnostics, including persisted inspecteur visibility, explicit close actions on both panels, and a default-hidden diagnostics posture even in debug-capable environments.
 - Shifted the shell overlay CSS to a floating-menu model with a desktop inspection card, a mobile bottom-sheet inspection posture, and diagnostics anchored independently from the menu trigger.
+- Tightened the mobile presentation further by compacting both the inspecteur and diagnostics panels so they preserve more render surface while staying usable.
 - Updated app-level coverage so the shell test now verifies the menu-first default state and on-demand reveal of inspecteur and diagnostics.
 - Validation:
   `npm run lint`
@@ -77,5 +78,5 @@ flowchart LR
   `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 - Residual note:
   `npm run build` still emits the existing `vendor-pixi` chunk-size warning, but the build completes successfully.
-- Pending closure step:
-  Create the dedicated implementation commit before promoting this task to `Done`.
+- Completion:
+  Dedicated implementation commit created as `efbd96d Implement floating shell menu overlay`.
