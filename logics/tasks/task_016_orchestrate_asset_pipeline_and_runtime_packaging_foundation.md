@@ -1,9 +1,9 @@
 ## task_016_orchestrate_asset_pipeline_and_runtime_packaging_foundation - Orchestrate asset pipeline and runtime packaging foundation
 > From version: 0.1.3
-> Status: Ready
+> Status: Done
 > Understanding: 94%
-> Confidence: 90%
-> Progress: 0%
+> Confidence: 92%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Assets
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -27,17 +27,17 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Define directory ownership and naming for map, entity, and overlay assets.
-- [ ] 2. Fix logical sizing, pivots, orientation, and placeholder-to-atlas migration rules.
-- [ ] 3. Define runtime asset loading, caching, and PWA delivery expectations.
-- [ ] 4. Validate the docs and repository conventions.
-- [ ] FINAL: Create a dedicated git commit for this orchestration scope.
+- [x] 1. Define directory ownership and naming for map, entity, and overlay assets.
+- [x] 2. Fix logical sizing, pivots, orientation, and placeholder-to-atlas migration rules.
+- [x] 3. Define runtime asset loading, caching, and PWA delivery expectations.
+- [x] 4. Validate the docs and repository conventions.
+- [x] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
-- `item_020` -> Asset ownership and directory model are explicit. Proof: TODO.
-- `item_021` -> Logical sizing, pivot, and orientation rules are explicit. Proof: TODO.
-- `item_022` -> Placeholder-to-atlas packaging strategy is defined. Proof: TODO.
-- `item_023` -> Runtime loading and caching expectations are aligned with PWA/static delivery. Proof: TODO.
+- `item_020` -> Asset ownership and directory model are explicit. Proof: `src/assets/README.md`, `src/shared/config/assetPipeline.ts`.
+- `item_021` -> Logical sizing, pivot, and orientation rules are explicit. Proof: `src/shared/config/assetPipeline.ts`.
+- `item_022` -> Placeholder-to-atlas packaging strategy is defined. Proof: `src/shared/config/assetPipeline.ts`, `README.md`.
+- `item_023` -> Runtime loading and caching expectations are aligned with PWA/static delivery. Proof: `src/shared/config/assetPipeline.ts`, `README.md`, `render.yaml`.
 
 # Decision framing
 - Product framing: Required
@@ -57,11 +57,18 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Asset conventions are documented well enough to guide implementation without ad-hoc naming drift.
-- [ ] Linked backlog/task docs are updated with proofs and status.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Asset conventions are documented well enough to guide implementation without ad-hoc naming drift.
+- [x] Linked backlog/task docs are updated with proofs and status.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-
+- Added an explicit `src/assets/` ownership layout for map, entity, and overlay assets, with separate `source`, `placeholders`, and `runtime` stages per domain.
+- Added a typed asset pipeline contract that fixes naming posture, logical sizing, pivots, placeholder-to-atlas migration, and runtime caching/loading expectations.
+- Extended the repository README with the asset pipeline posture so future runtime work can reference a single public convention instead of inventing domain-local rules.
+- Validation passed with:
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`

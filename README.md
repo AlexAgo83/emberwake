@@ -194,6 +194,28 @@ Operational notes:
 The Render Blueprint lives in:
 - [render.yaml](/Users/alexandreagostini/Documents/emberwake/render.yaml)
 
+## Asset Pipeline
+
+The repository now reserves explicit asset ownership for:
+- `src/assets/map`
+- `src/assets/entities`
+- `src/assets/overlays`
+
+Each domain separates:
+- `source/`
+- `placeholders/`
+- `runtime/`
+
+Current rules:
+- placeholders are acceptable for early runtime slices
+- direct runtime files are allowed before atlas generation is justified
+- atlases or spritesheets remain the preferred target once asset count grows
+- logical sizing and pivot rules stay independent from source-pixel dimensions
+- static delivery should cache hashed runtime assets aggressively while keeping shell files fresh
+
+Reference contract:
+- [assetPipeline.ts](/Users/alexandreagostini/Documents/emberwake/src/shared/config/assetPipeline.ts)
+
 ## Validation
 
 The main documentation validation command is:
