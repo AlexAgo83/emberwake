@@ -16,3 +16,4 @@ Current helpers:
 Example:
 - version `0.1.0` -> `changelogs/CHANGELOGS_0_1_0.md`
 - version `0.1.1` -> `changelogs/CHANGELOGS_0_1_1.md`
+- version `0.1.2` -> `changelogs/CHANGELOGS_0_1_2.md`

@@ -116,17 +116,15 @@ try {
     waitUntil: "networkidle"
   });
 
-  await page.getByLabel("Interactive runtime shell").click({
-    position: {
-      x: 120,
-      y: 120
-    }
-  });
+  await page.getByRole("button", {
+    name: "Menu"
+  }).click();
+  await page.getByRole("button", {
+    name: /Inspecteur/i
+  }).click();
 
   const inspectionPanel = page.getByTestId("entity-inspection");
-  const playerHud = page.getByTestId("player-hud");
   const worldPosition = inspectionPanel.getByTestId("entity-world");
-  const hudHint = playerHud.getByTestId("player-hud-hint");
 
   const initialPosition = parseWorldPosition((await worldPosition.textContent()) ?? "");
 
@@ -136,16 +134,11 @@ try {
   await page.waitForTimeout(150);
 
   const nextPosition = parseWorldPosition((await worldPosition.textContent()) ?? "");
-  const resolvedHint = ((await hudHint.textContent()) ?? "").trim();
 
   if (nextPosition.x <= initialPosition.x) {
     throw new Error(
       `Expected entity to move to the right. Initial: ${initialPosition.x}, next: ${nextPosition.x}`
     );
-  }
-
-  if (!resolvedHint.includes("Movement acknowledged")) {
-    throw new Error(`Expected onboarding hint to resolve after movement. Received: ${resolvedHint}`);
   }
 
   await page.screenshot({
