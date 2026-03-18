@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
 
 import { cameraContract } from "../constants/cameraContract";
@@ -57,30 +57,38 @@ export function useCameraController({
   const [cameraState, setCameraState] = useState<CameraState>(() =>
     initialCameraState ?? createDefaultCameraState()
   );
+  const previousCameraModeRef = useRef<CameraMode>(cameraMode);
+  const resolvedCameraState = useMemo(
+    () =>
+      cameraMode === "follow-entity"
+        ? {
+            ...cameraState,
+            worldPosition: {
+              x: followedWorldPosition.x,
+              y: followedWorldPosition.y
+            }
+          }
+        : cameraState,
+    [cameraMode, cameraState, followedWorldPosition.x, followedWorldPosition.y]
+  );
 
   useEffect(() => {
     onCameraStateChange?.(cameraState);
   }, [cameraState, onCameraStateChange]);
 
   useEffect(() => {
-    if (cameraMode !== "follow-entity") {
-      return;
+    if (previousCameraModeRef.current === "follow-entity" && cameraMode === "free") {
+      setCameraState((currentState) => ({
+        ...currentState,
+        worldPosition: {
+          x: followedWorldPosition.x,
+          y: followedWorldPosition.y
+        }
+      }));
     }
 
-    setCameraState((currentState) => {
-      if (
-        currentState.worldPosition.x === followedWorldPosition.x &&
-        currentState.worldPosition.y === followedWorldPosition.y
-      ) {
-        return currentState;
-      }
-
-      return {
-        ...currentState,
-        worldPosition: { ...followedWorldPosition }
-      };
-    });
-  }, [cameraMode, followedWorldPosition]);
+    previousCameraModeRef.current = cameraMode;
+  }, [cameraMode, followedWorldPosition.x, followedWorldPosition.y]);
 
   useEffect(() => {
     const surfaceElement = surfaceRef.current;
@@ -269,7 +277,7 @@ export function useCameraController({
   }, [cameraMode, cameraState.zoom, debugCameraEnabled, surfaceRef, viewport.fitScale]);
 
   return {
-    cameraState,
+    cameraState: resolvedCameraState,
     resetCamera: () => {
       setCameraState(createDefaultCameraState());
     }

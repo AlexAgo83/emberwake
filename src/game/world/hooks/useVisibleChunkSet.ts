@@ -49,7 +49,16 @@ export function useVisibleChunkSet(
         nextCache.unshift(chunkId);
       }
 
-      return nextCache.slice(0, chunkVisibilityContract.cacheLimit);
+      const trimmedCache = nextCache.slice(0, chunkVisibilityContract.cacheLimit);
+
+      if (
+        trimmedCache.length === currentCache.length &&
+        trimmedCache.every((chunkId, index) => chunkId === currentCache[index])
+      ) {
+        return currentCache;
+      }
+
+      return trimmedCache;
     });
   }, [visibleChunks]);
 
