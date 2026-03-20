@@ -2,8 +2,13 @@ import { extend } from "@pixi/react";
 import { Container, Graphics, Text } from "pixi.js";
 
 import type { CameraState } from "@engine/camera/cameraMath";
+import {
+  chunkCoordinateToId,
+  chunkCoordinateToWorldOrigin,
+  chunkWorldSize,
+  worldContract
+} from "@engine/world/worldContract";
 import { WorldViewportContainer } from "@engine-pixi/components/WorldViewportContainer";
-import { chunkCoordinateToId, chunkCoordinateToWorldOrigin, chunkWorldSize, worldContract } from "../model/worldContract";
 import { createChunkDebugData } from "../model/chunkDebugData";
 import type { ChunkCoordinate } from "../types";
 

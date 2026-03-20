@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { chunkCoordinateToId } from "../model/worldContract";
-import { getVisibleChunkCoordinates } from "../model/worldViewMath";
+import { chunkCoordinateToId } from "@engine/world/worldContract";
+import { getVisibleChunkCoordinates } from "@engine/world/worldViewMath";
 import type { CameraState } from "../../camera/model/cameraMath";
 import type { ChunkCoordinate } from "../types";
 

@@ -10,6 +10,7 @@ import { useRendererHealth } from "./hooks/useRendererHealth";
 import { useRuntimeSession } from "./hooks/useRuntimeSession";
 import { useShellPreferences } from "./hooks/useShellPreferences";
 import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards";
+import { worldPointToChunkCoordinate } from "@engine/world/worldContract";
 import { useCameraController } from "../game/camera/hooks/useCameraController";
 import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
 import { useDebugPanelHotkey } from "../game/debug/hooks/useDebugPanelHotkey";
@@ -20,7 +21,6 @@ import { MobileVirtualStickOverlay } from "../game/input/components/MobileVirtua
 import { useMobileVirtualStick } from "../game/input/hooks/useMobileVirtualStick";
 import { useSingleEntityControl } from "../game/input/hooks/useSingleEntityControl";
 import { RuntimeSurface } from "../game/render/RuntimeSurface";
-import { worldPointToChunkCoordinate } from "../game/world/model/worldContract";
 import { useWorldInteractionDiagnostics } from "../game/world/hooks/useWorldInteractionDiagnostics";
 import { useVisibleChunkSet } from "../game/world/hooks/useVisibleChunkSet";
 import { appConfig } from "../shared/config/appConfig";

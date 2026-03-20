@@ -15,6 +15,27 @@ export type {
   ScreenPoint,
   WorldPoint
 } from "./geometry/primitives";
+export {
+  chunkCoordinateToId,
+  chunkCoordinateToWorldOrigin,
+  chunkWorldSize,
+  sampleChunkDebugSignature,
+  sampleDeterministicSignature,
+  screenPointToWorldPoint,
+  worldContract,
+  worldPointToChunkCoordinate,
+  worldPointToScreenPoint,
+  worldToChunkIndex
+} from "./world/worldContract";
+export {
+  createWorldPickingSample,
+  getChunkScreenBounds,
+  getVisibleChunkCoordinates,
+  getVisibleWorldCorners,
+  getWorldScale,
+  screenPointToWorldPointWithCamera,
+  worldPointToScreenPointWithCamera
+} from "./world/worldViewMath";
 export type {
   EngineInputFrame,
   EngineInputSource,
@@ -24,3 +45,5 @@ export type {
   EngineTiming,
   GameModule
 } from "./contracts/gameModule";
+export type { ViewportProjectionContract } from "./world/worldContract";
+export type { WorldPickingSample } from "./world/worldViewMath";

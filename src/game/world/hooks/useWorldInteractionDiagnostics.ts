@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { RefObject } from "react";
 
-import { createWorldPickingSample } from "../model/worldViewMath";
+import { createWorldPickingSample } from "@engine/world/worldViewMath";
 import type { CameraState } from "../../camera/model/cameraMath";
 import type { ChunkCoordinate, WorldPoint } from "../types";
 
