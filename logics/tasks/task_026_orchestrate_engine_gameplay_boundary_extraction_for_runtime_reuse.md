@@ -3,7 +3,7 @@
 > Status: In Progress
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 84%
+> Progress: 90%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -93,10 +93,11 @@ flowchart LR
   - world chunk identity and screen/world conversion helpers now live in engine-owned world contracts
   - camera-aware world-view math and picking helpers now live in engine-owned world-view modules
 - Rewired runtime-facing consumers such as chunk visibility, world picking diagnostics, chunk labels, and selected-entity chunk reporting to use engine-owned world primitives directly, while preserving compatibility shims under `src/game/world/model`.
+- Phase 7 extracted low-level virtual-stick geometry into `packages/engine-core`, so the engine now owns the raw stick resolution math while Emberwake keeps only the conversion from resolved geometry into gameplay `MovementIntent`.
 - Validation passed with:
   - `npm run ci`
   - `npm run test:browser:smoke`
 - Remaining work:
-  - move additional stable input and interaction primitives behind engine-owned modules
+  - move additional stable interaction primitives behind engine-owned modules
   - move additional Emberwake-specific content definitions and world-flavor logic behind the game layer
   - extend dependency enforcement beyond the first engine-package lint guardrails where it materially reduces boundary drift

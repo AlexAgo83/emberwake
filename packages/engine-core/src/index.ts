@@ -45,5 +45,13 @@ export type {
   EngineTiming,
   GameModule
 } from "./contracts/gameModule";
+export {
+  resolveVirtualStickGeometry
+} from "./input/virtualStickMath";
 export type { ViewportProjectionContract } from "./world/worldContract";
 export type { WorldPickingSample } from "./world/worldViewMath";
+export type {
+  ResolvedVirtualStickVector,
+  VirtualStickGeometryState,
+  VirtualStickPoint
+} from "./input/virtualStickMath";
