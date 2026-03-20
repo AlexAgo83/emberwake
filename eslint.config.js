@@ -37,5 +37,22 @@ export default tseslint.config(
         }
       ]
     }
+  },
+  {
+    files: ["packages/engine-core/src/**/*.{ts,tsx}", "packages/engine-pixi/src/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@game", "@game/*", "@src/game/*"],
+              message:
+                "Engine-owned modules must not depend on Emberwake game modules. Move the dependency behind an engine-to-game contract instead."
+            }
+          ]
+        }
+      ]
+    }
   }
 );

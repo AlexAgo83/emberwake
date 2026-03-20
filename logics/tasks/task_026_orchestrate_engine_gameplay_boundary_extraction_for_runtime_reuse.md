@@ -3,7 +3,7 @@
 > Status: In Progress
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 60%
+> Progress: 68%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -84,10 +84,11 @@ flowchart LR
 - Rewired the current runtime to consume engine-owned camera primitives in the camera hook, runtime surface, world types, and debug scenario bootstrap without changing visible behavior.
 - Phase 3 moved Emberwake-owned scenario content into the game layer by relocating the official debug scenario and deterministic support-entity scenario builder into `games/emberwake/src/content/scenarios`, while preserving legacy import compatibility through re-export shims.
 - Rewired Emberwake session bootstrapping, entity simulation, and runtime fixtures so current gameplay-facing scenario ownership now resolves from the game layer instead of the legacy `src/game/debug/data` location.
+- Phase 4 started mechanical boundary enforcement by adding lint rules that forbid engine-owned packages from importing Emberwake game modules through `@game/*` or `@src/game/*` paths.
 - Validation passed with:
   - `npm run ci`
   - `npm run test:browser:smoke`
 - Remaining work:
   - move additional stable transform and render primitives behind engine-owned modules
   - move additional Emberwake-specific content definitions and world-flavor logic behind the game layer
-  - tighten dependency enforcement so `engine -> game` violations become mechanically visible
+  - extend dependency enforcement beyond the first engine-package lint guardrails where it materially reduces boundary drift
