@@ -1,17 +1,6 @@
-export type ChunkCoordinate = {
-  x: number;
-  y: number;
-};
+import type { WorldPoint } from "@engine/geometry/primitives";
 
-export type ScreenPoint = {
-  x: number;
-  y: number;
-};
-
-export type WorldPoint = {
-  x: number;
-  y: number;
-};
+export type { ChunkCoordinate, ScreenPoint, WorldPoint } from "@engine/geometry/primitives";
 
 export type ViewportProjectionContract = {
   fitScale: number;

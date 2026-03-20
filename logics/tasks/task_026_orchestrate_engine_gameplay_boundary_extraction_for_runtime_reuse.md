@@ -3,7 +3,7 @@
 > Status: In Progress
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 30%
+> Progress: 45%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -77,10 +77,15 @@ flowchart LR
 - Added path aliases in TypeScript, Vite, and Vitest so the new ownership zones can be referenced explicitly without broad relative-import churn.
 - Introduced the first engine-owned runtime contract types in `packages/engine-core` and a first Emberwake-owned `GameModule` adapter in `games/emberwake` covering `initialize`, `mapInput`, `update`, and `present`.
 - Rewired the runtime entry and selected runtime seams so the web app now boots from `apps/emberwake-web`, the simulation hook updates through the Emberwake game module, and runtime session defaults are sourced from the Emberwake game layer.
+- Phase 2 extracted the first stable runtime primitives into engine-owned packages:
+  - camera geometry and camera math now live in `packages/engine-core`
+  - the Pixi error boundary now lives in `packages/engine-pixi`
+  - legacy game-layer paths now act as compatibility re-export shims where needed
+- Rewired the current runtime to consume engine-owned camera primitives in the camera hook, runtime surface, world types, and debug scenario bootstrap without changing visible behavior.
 - Validation passed with:
   - `npm run ci`
   - `npm run test:browser:smoke`
 - Remaining work:
-  - move stable camera, transform, and render primitives behind engine-owned modules
+  - move additional stable transform and render primitives behind engine-owned modules
   - move additional Emberwake-specific scenario and content logic behind the game layer
   - tighten dependency enforcement so `engine -> game` violations become mechanically visible

@@ -1,11 +1,11 @@
 import { Application } from "@pixi/react";
 import type { RefObject } from "react";
 
-import { RuntimeSurfaceBoundary } from "./RuntimeSurfaceBoundary";
+import type { CameraState } from "@engine/camera/cameraMath";
+import { RuntimeSurfaceBoundary } from "@engine-pixi/components/RuntimeSurfaceBoundary";
 import { EntityScene } from "../entities/render/EntityScene";
 import type { PresentedEntity } from "../entities/model/entityContract";
 import { WorldScene } from "../world/render/WorldScene";
-import type { CameraState } from "../camera/model/cameraMath";
 import type { ChunkCoordinate } from "../world/types";
 import type { SimulatedEntity } from "../entities/model/entitySimulation";
 

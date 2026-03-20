@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
 
-import { cameraContract } from "../constants/cameraContract";
-import type { CameraMode } from "../model/cameraMode";
+import { cameraContract } from "@engine/camera/cameraContract";
 import {
   createDefaultCameraState,
   panCamera,
   rotateCamera,
   zoomCamera
-} from "../model/cameraMath";
-import type { CameraState } from "../model/cameraMath";
-import type { WorldPoint } from "../../world/types";
+} from "@engine/camera/cameraMath";
+import type { CameraState } from "@engine/camera/cameraMath";
+import type { WorldPoint } from "@engine/geometry/primitives";
+import type { CameraMode } from "../model/cameraMode";
 
 type ViewportForCamera = {
   fitScale: number;
