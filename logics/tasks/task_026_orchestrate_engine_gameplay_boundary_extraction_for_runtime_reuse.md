@@ -3,7 +3,7 @@
 > Status: In Progress
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 94%
+> Progress: 97%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -96,10 +96,12 @@ flowchart LR
 - Phase 7 extracted low-level virtual-stick geometry into `packages/engine-core`, so the engine now owns the raw stick resolution math while Emberwake keeps only the conversion from resolved geometry into gameplay `MovementIntent`.
 - Phase 8 moved Emberwake-owned terrain and entity content definitions into `games/emberwake/src/content`, so debug terrain palettes, terrain ids, entity visuals, and archetype defaults now belong to the game layer instead of the legacy runtime path.
 - Rewired scenario validation, chunk debug presentation, chunk generation typing, entity contracts, and debug scenario tests to resolve those content definitions from the Emberwake game layer while preserving compatibility shims in `src/game/world/data/worldData.ts` and `src/game/entities/data/entityData.ts`.
+- Phase 9 moved Emberwake-specific chunk generation and chunk debug presentation data into `games/emberwake/src/content/world`, so world flavor thresholds, generated terrain composition, and debug tile colorization now belong to the game layer rather than the legacy `src/game/world/model` path.
+- Rewired the world scene and compatibility model modules so the current runtime renders the same generated chunks while resolving generation and chunk debug data from the Emberwake game layer.
 - Validation passed with:
   - `npm run ci`
   - `npm run test:browser:smoke`
 - Remaining work:
   - move additional stable interaction primitives behind engine-owned modules
-  - move additional Emberwake-specific world-flavor generation and presentation helpers behind the game layer
+  - move additional Emberwake-specific entity and presentation ownership behind the game layer where it reduces legacy `src/game/*` coupling
   - extend dependency enforcement beyond the first engine-package lint guardrails where it materially reduces boundary drift

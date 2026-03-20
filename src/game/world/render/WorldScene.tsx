@@ -9,7 +9,7 @@ import {
   worldContract
 } from "@engine/world/worldContract";
 import { WorldViewportContainer } from "@engine-pixi/components/WorldViewportContainer";
-import { createChunkDebugData } from "../model/chunkDebugData";
+import { createChunkDebugData } from "@game/content/world/chunkDebugData";
 import type { ChunkCoordinate } from "../types";
 
 extend({

@@ -19,6 +19,17 @@ export {
   officialDebugScenario,
   validateOfficialDebugScenario
 } from "./content/scenarios/officialDebugScenario";
+export {
+  chunkGenerationContract,
+  createGeneratedChunk,
+  sampleChunkWorldArea
+} from "./content/world/worldGeneration";
+export type {
+  GeneratedChunk,
+  GeneratedTerrainTile
+} from "./content/world/worldGeneration";
+export { createChunkDebugData } from "./content/world/chunkDebugData";
+export type { ChunkDebugData } from "./content/world/chunkDebugData";
 export { terrainDefinitions, terrainKinds } from "./content/world/worldData";
 export type { TerrainKind } from "./content/world/worldData";
 export {
