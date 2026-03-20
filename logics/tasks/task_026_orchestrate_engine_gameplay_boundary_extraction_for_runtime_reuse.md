@@ -3,7 +3,7 @@
 > Status: In Progress
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 97%
+> Progress: 99%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -98,10 +98,12 @@ flowchart LR
 - Rewired scenario validation, chunk debug presentation, chunk generation typing, entity contracts, and debug scenario tests to resolve those content definitions from the Emberwake game layer while preserving compatibility shims in `src/game/world/data/worldData.ts` and `src/game/entities/data/entityData.ts`.
 - Phase 9 moved Emberwake-specific chunk generation and chunk debug presentation data into `games/emberwake/src/content/world`, so world flavor thresholds, generated terrain composition, and debug tile colorization now belong to the game layer rather than the legacy `src/game/world/model` path.
 - Rewired the world scene and compatibility model modules so the current runtime renders the same generated chunks while resolving generation and chunk debug data from the Emberwake game layer.
+- Phase 10 moved the Emberwake entity contract into `games/emberwake/src/content/entities`, so the primary entity id, default archetype ownership, and generic mover factory now belong to the game layer instead of the legacy entity model path.
+- Rewired Emberwake runtime composition and scenario builders to consume the game-owned entity contract directly while preserving a compatibility shim under `src/game/entities/model/entityContract.ts`.
 - Validation passed with:
   - `npm run ci`
   - `npm run test:browser:smoke`
 - Remaining work:
   - move additional stable interaction primitives behind engine-owned modules
-  - move additional Emberwake-specific entity and presentation ownership behind the game layer where it reduces legacy `src/game/*` coupling
+  - decide whether any remaining `src/game/*` presentation shells should move fully under `games/emberwake` or remain as transitional feature adapters
   - extend dependency enforcement beyond the first engine-package lint guardrails where it materially reduces boundary drift

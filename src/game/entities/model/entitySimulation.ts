@@ -1,8 +1,8 @@
 import type { WorldPoint } from "../../world/types";
+import { createGenericMoverEntity } from "@game/content/entities/entityContract";
 import { officialDebugScenario } from "@game/content/scenarios/officialDebugScenario";
 import type { SingleEntityControlState } from "../../input/model/singleEntityControlContract";
 import { singleEntityControlContract } from "../../input/model/singleEntityControlContract";
-import { createGenericMoverEntity } from "./entityContract";
 import type { EntityState, WorldEntity } from "./entityContract";
 
 export const entitySimulationContract = {

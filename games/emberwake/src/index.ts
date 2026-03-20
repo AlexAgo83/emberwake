@@ -7,6 +7,15 @@ export {
 } from "./runtime/emberwakeGameModule";
 export { createDeterministicDebugEntities } from "./content/scenarios/entityDebugScenario";
 export {
+  createGenericMoverEntity,
+  entityContract
+} from "./content/entities/entityContract";
+export type {
+  EntityState,
+  PresentedEntity,
+  WorldEntity
+} from "./content/entities/entityContract";
+export {
   entityArchetypeDefinitions,
   entityVisualDefinitions
 } from "./content/entities/entityData";

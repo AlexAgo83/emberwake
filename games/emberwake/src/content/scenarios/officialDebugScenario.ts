@@ -5,10 +5,10 @@ import {
   entityArchetypeDefinitions,
   entityVisualDefinitions
 } from "@game/content/entities/entityData";
+import { entityContract } from "@game/content/entities/entityContract";
 import type { EntityArchetypeId, EntityVisualKind } from "@game/content/entities/entityData";
 import { terrainDefinitions } from "@game/content/world/worldData";
 import { assetCatalog } from "@src/assets/assetCatalog";
-import { entityContract } from "@src/game/entities/model/entityContract";
 import { dataAuthoringContract } from "@src/shared/config/dataAuthoringContract";
 import { chunkWorldSize, worldContract } from "@src/game/world/model/worldContract";
 

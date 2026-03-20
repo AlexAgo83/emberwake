@@ -5,7 +5,7 @@ import type {
   EngineTiming,
   GameModule
 } from "@engine/contracts/gameModule";
-import { entityContract } from "@src/game/entities/model/entityContract";
+import { entityContract } from "@game/content/entities/entityContract";
 import {
   advanceSimulationState,
   createInitialSimulationState,
