@@ -5,7 +5,7 @@ import {
   officialDebugScenario,
   validateOfficialDebugScenario
 } from "./officialDebugScenario";
-import { entityVisualDefinitions } from "../../entities/data/entityData";
+import { entityVisualDefinitions } from "@game/content/entities/entityData";
 
 describe("officialDebugScenario", () => {
   it("stays deterministic and canonical for the first runtime loop", () => {

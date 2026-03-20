@@ -1,5 +1,5 @@
 import { createGeneratedChunk } from "./worldGeneration";
-import { terrainDefinitions } from "../data/worldData";
+import { terrainDefinitions } from "@game/content/world/worldData";
 import type { ChunkCoordinate } from "../types";
 
 type DebugTile = {

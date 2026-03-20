@@ -5,10 +5,10 @@ import {
   sampleDeterministicSignature,
   worldContract
 } from "./worldContract";
-import type { TerrainKind } from "../data/worldData";
+import type { TerrainKind } from "@game/content/world/worldData";
 import type { ChunkCoordinate } from "../types";
 
-export { terrainKinds } from "../data/worldData";
+export { terrainKinds } from "@game/content/world/worldData";
 
 export type GeneratedTerrainTile = {
   terrainKind: TerrainKind;

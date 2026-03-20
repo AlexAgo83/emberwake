@@ -1,6 +1,6 @@
 import type { WorldPoint } from "../../world/types";
-import type { EntityArchetypeId, EntityVisualKind } from "../data/entityData";
-import { entityArchetypeDefinitions } from "../data/entityData";
+import type { EntityArchetypeId, EntityVisualKind } from "@game/content/entities/entityData";
+import { entityArchetypeDefinitions } from "@game/content/entities/entityData";
 
 export const entityContract = {
   defaultArchetype: "generic-mover",
