@@ -1,7 +1,7 @@
 import type { WorldPoint } from "../../world/types";
+import { officialDebugScenario } from "@game/content/scenarios/officialDebugScenario";
 import type { SingleEntityControlState } from "../../input/model/singleEntityControlContract";
 import { singleEntityControlContract } from "../../input/model/singleEntityControlContract";
-import { officialDebugScenario } from "../../debug/data/officialDebugScenario";
 import { createGenericMoverEntity } from "./entityContract";
 import type { EntityState, WorldEntity } from "./entityContract";
 

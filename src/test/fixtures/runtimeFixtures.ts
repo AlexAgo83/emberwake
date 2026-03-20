@@ -1,4 +1,4 @@
-import { officialDebugScenario } from "../../game/debug/data/officialDebugScenario";
+import { officialDebugScenario } from "@game/content/scenarios/officialDebugScenario";
 import { createDefaultRuntimeSessionState } from "../../shared/lib/runtimeSessionStorage";
 
 export const runtimeFixtureCatalog = {

@@ -1,5 +1,5 @@
-import { createDefaultCameraState } from "@src/game/camera/model/cameraMath";
-import { officialDebugScenario } from "@src/game/debug/data/officialDebugScenario";
+import { createDefaultCameraState } from "@engine/camera/cameraMath";
+import { officialDebugScenario } from "@game/content/scenarios/officialDebugScenario";
 import type { RuntimeSessionState } from "@shared/lib/runtimeSessionStorage";
 
 export const emberwakeRuntimeSessionSeedOptions = [
