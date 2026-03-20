@@ -1,6 +1,6 @@
 ## adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies - Adopt a modular app engine game topology with one way dependencies
 > Date: 2026-03-20
-> Status: Proposed
+> Status: Accepted
 > Drivers: Make runtime reuse possible without freezing Emberwake delivery; prevent gameplay rules from leaking into reusable runtime code; create a migration-safe ownership model for shell, engine, and game modules.
 > Related request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
 > Related backlog: `item_070_define_target_repository_topology_for_engine_runtime_and_game_modules`, `item_071_define_engine_to_game_contracts_for_update_render_and_input_integration`, `item_074_define_incremental_migration_and_validation_strategy_for_engine_gameplay_extraction`
@@ -70,7 +70,7 @@ The project does not need a universal engine. It needs a reusable runtime postur
 - Define the minimum engine-to-game contracts for initialization, update flow, input handoff, and render presentation.
 - Extract only the first stable runtime primitives into engine-owned boundaries.
 - Move Emberwake-specific gameplay, content, and scenario ownership into the game layer in parallel with runtime extraction.
-- Keep `npm run ci`, `npm run test:browser:smoke`, and `npm run release:ready` green throughout the staged migration.
+- Keep `npm run ci` and `npm run test:browser:smoke` green throughout the staged migration, and rerun `npm run release:ready` from the `release` branch before deployment promotion.
 - Revisit package publishing, external versioning, or multi-repository extraction only after the in-repository boundary is working in practice.
 
 # References
@@ -83,7 +83,5 @@ The project does not need a universal engine. It needs a reusable runtime postur
 - `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
 
 # Follow-up work
-- Decide whether the repository will materialize the modular boundary with workspace packages, path aliases, or both in the first migration step.
-- Add an explicit contract or spec for engine-to-game initialization, update, input, and render integration.
-- Create a migration inventory that classifies current modules as `engine candidate`, `game owned`, or `not stable enough to move yet`.
-- Add review guidance or tooling that flags forbidden `engine -> game` imports once the first boundaries are in place.
+- Continue reducing transitional `src/game/*` adapters only where it improves clarity without blurring shell ownership.
+- Extend boundary enforcement and review guidance if later refactors start to reintroduce `engine -> game` coupling pressure.

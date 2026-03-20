@@ -1,8 +1,8 @@
 ## req_018_define_engine_and_gameplay_boundary_for_runtime_reuse - Define engine and gameplay boundary for runtime reuse
 > From version: 0.1.3
-> Status: Ready
-> Understanding: 95%
-> Confidence: 91%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -102,7 +102,9 @@ flowchart TD
 
 # Companion docs
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_003_define_coordinate_spaces_and_camera_contract`
+- Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies`, `adr_015_define_engine_to_game_runtime_contract_boundaries`
+- Spec(s): `spec_000_define_initial_engine_to_game_typescript_contract_shapes`
+- Task(s): `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
 
 # Backlog
 - `item_070_define_target_repository_topology_for_engine_runtime_and_game_modules`
@@ -110,3 +112,7 @@ flowchart TD
 - `item_072_extract_reusable_runtime_primitives_from_current_game_modules`
 - `item_073_separate_emberwake_specific_gameplay_content_and_scenarios_from_runtime_code`
 - `item_074_define_incremental_migration_and_validation_strategy_for_engine_gameplay_extraction`
+
+# Delivery note
+- Implemented through `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`.
+- The repository now materializes the target ownership split with `apps/emberwake-web`, `packages/engine-core`, `packages/engine-pixi`, and `games/emberwake`.

@@ -1,9 +1,9 @@
 ## item_074_define_incremental_migration_and_validation_strategy_for_engine_gameplay_extraction - Define incremental migration and validation strategy for engine gameplay extraction
 > From version: 0.1.3
-> Status: Ready
-> Understanding: 97%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Operations
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,7 +50,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_012_require_curated_versioned_changelogs_for_releases`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
-- Primary task(s): (none yet)
+- Primary task(s): `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
 
 # Priority
 - Impact: High
@@ -60,3 +60,4 @@ flowchart LR
 - Derived from request `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`.
 - Source file: `logics/request/req_018_define_engine_and_gameplay_boundary_for_runtime_reuse.md`.
 - Recommended default from the request: keep the current runtime playable and keep `npm run ci`, `npm run test:browser:smoke`, and `npm run release:ready` green throughout staged extraction work.
+- Implemented with staged commits under `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`; `npm run ci` and `npm run test:browser:smoke` stay green on `main`, while `npm run release:ready` is validated as a branch guard that must be rerun from `release` before deployable promotion.

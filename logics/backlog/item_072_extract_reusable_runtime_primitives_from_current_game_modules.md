@@ -1,9 +1,9 @@
 ## item_072_extract_reusable_runtime_primitives_from_current_game_modules - Extract reusable runtime primitives from current game modules
 > From version: 0.1.3
-> Status: Ready
-> Understanding: 94%
-> Confidence: 89%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: High
 > Theme: Runtime
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,7 +50,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_003_define_coordinate_spaces_and_camera_contract`
 - Request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
-- Primary task(s): (none yet)
+- Primary task(s): `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
 
 # Priority
 - Impact: High
@@ -60,4 +60,4 @@ flowchart LR
 - Derived from request `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`.
 - Source file: `logics/request/req_018_define_engine_and_gameplay_boundary_for_runtime_reuse.md`.
 - Likely first engine candidates from current code include camera primitives, world-view transforms, virtual-stick math, runtime surface wiring, and related technical diagnostics.
-
+- Implemented with reusable primitives promoted into `packages/engine-core` and `packages/engine-pixi`, including camera, world contracts, world-view math, virtual-stick geometry, runtime canvas composition, and viewport containers.

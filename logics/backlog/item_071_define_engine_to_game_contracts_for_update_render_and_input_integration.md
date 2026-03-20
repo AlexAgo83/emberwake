@@ -1,9 +1,9 @@
 ## item_071_define_engine_to_game_contracts_for_update_render_and_input_integration - Define engine to game contracts for update render and input integration
 > From version: 0.1.3
-> Status: Ready
-> Understanding: 95%
-> Confidence: 91%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,7 +50,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_004_run_simulation_on_a_fixed_timestep`, `adr_007_isolate_runtime_input_from_browser_page_controls`
 - Request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
-- Primary task(s): (none yet)
+- Primary task(s): `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
 
 # Priority
 - Impact: High
@@ -60,4 +60,4 @@ flowchart LR
 - Derived from request `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`.
 - Source file: `logics/request/req_018_define_engine_and_gameplay_boundary_for_runtime_reuse.md`.
 - Recommended default from the request: keep the first engine-to-game contract narrow around `initialize`, `update`, `present render data`, and `map input`.
-
+- Implemented with the first contract materialized in `packages/engine-core/src/contracts/gameModule.ts`, `games/emberwake/src/runtime/emberwakeGameModule.ts`, and `spec_000_define_initial_engine_to_game_typescript_contract_shapes`.

@@ -1,6 +1,6 @@
 ## spec_000_define_initial_engine_to_game_typescript_contract_shapes - Define initial engine to game TypeScript contract shapes
 > Date: 2026-03-20
-> Status: Proposed
+> Status: Accepted
 > Related request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
 > Related backlog: `item_071_define_engine_to_game_contracts_for_update_render_and_input_integration`
 > Related task: `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
@@ -17,6 +17,10 @@ The first contract is organized around four responsibilities:
 - `present`
 
 The engine owns orchestration and transport of these calls. The game owns the meaning of state, actions, and presentation content.
+
+Implementation status:
+- The first contract is now materialized in `packages/engine-core/src/contracts/gameModule.ts`.
+- Emberwake consumes that contract through `games/emberwake/src/runtime/emberwakeGameModule.ts`.
 
 # Goals
 - Give the refactor a first concrete contract shape that can be implemented incrementally.

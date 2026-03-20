@@ -1,9 +1,9 @@
 ## item_070_define_target_repository_topology_for_engine_runtime_and_game_modules - Define target repository topology for engine runtime and game modules
 > From version: 0.1.3
-> Status: Ready
-> Understanding: 96%
-> Confidence: 92%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,7 +50,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_002_separate_react_shell_from_pixi_runtime_ownership`
 - Request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
-- Primary task(s): (none yet)
+- Primary task(s): `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
 
 # Priority
 - Impact: High
@@ -60,4 +60,4 @@ flowchart LR
 - Derived from request `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`.
 - Source file: `logics/request/req_018_define_engine_and_gameplay_boundary_for_runtime_reuse.md`.
 - Recommended default topology from the request: `apps/emberwake-web`, `packages/engine-core`, `packages/engine-pixi`, and `games/emberwake`.
-
+- Implemented with repository-level ownership materialized under `apps/emberwake-web`, `packages/engine-core`, `packages/engine-pixi`, and `games/emberwake`, with task traceability captured in `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`.

@@ -1,9 +1,9 @@
 ## item_073_separate_emberwake_specific_gameplay_content_and_scenarios_from_runtime_code - Separate Emberwake specific gameplay content and scenarios from runtime code
 > From version: 0.1.3
-> Status: Ready
-> Understanding: 95%
-> Confidence: 90%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,7 +50,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_002_readable_world_traversal_and_presence`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`
 - Request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
-- Primary task(s): (none yet)
+- Primary task(s): `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
 
 # Priority
 - Impact: High
@@ -60,4 +60,4 @@ flowchart LR
 - Derived from request `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`.
 - Source file: `logics/request/req_018_define_engine_and_gameplay_boundary_for_runtime_reuse.md`.
 - Likely Emberwake-owned modules include gameplay simulation rules, debug scenario content, world generation flavor, player-facing HUD meaning, and future survival or progression systems.
-
+- Implemented with Emberwake-owned content and rules moved into `games/emberwake/src/content`, `games/emberwake/src/input`, and `games/emberwake/src/runtime`, while legacy `src/game/*` modules remain as migration shims or shell-facing adapters where needed.

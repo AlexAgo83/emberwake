@@ -1,6 +1,6 @@
 ## adr_015_define_engine_to_game_runtime_contract_boundaries - Define engine to game runtime contract boundaries
 > Date: 2026-03-20
-> Status: Proposed
+> Status: Accepted
 > Drivers: Prevent gameplay leakage into reusable runtime code; make engine extraction incremental and safe; keep Emberwake delivery moving while engine and game responsibilities separate.
 > Related request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
 > Related backlog: `item_071_define_engine_to_game_contracts_for_update_render_and_input_integration`, `item_072_extract_reusable_runtime_primitives_from_current_game_modules`, `item_073_separate_emberwake_specific_gameplay_content_and_scenarios_from_runtime_code`
@@ -85,7 +85,7 @@ The goal is not a plugin-heavy framework. The goal is a practical runtime contra
 - Extract engine-owned primitives first where they already have stable contracts.
 - Move Emberwake-specific gameplay and scenario logic behind game-owned boundaries in parallel.
 - Introduce implementation-level interfaces only after the ownership boundary is agreed and documented.
-- Keep `npm run ci`, `npm run test:browser:smoke`, and `npm run release:ready` green while adapters and boundaries are introduced incrementally.
+- Keep `npm run ci` and `npm run test:browser:smoke` green while adapters and boundaries are introduced incrementally, and rerun `npm run release:ready` from the `release` branch before deployment promotion.
 
 # References
 - `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
@@ -95,6 +95,5 @@ The goal is not a plugin-heavy framework. The goal is a practical runtime contra
 - `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
 
 # Follow-up work
-- Create a lightweight implementation spec that defines the first concrete TypeScript shapes for normalized input, gameplay actions or intents, gameplay state initialization, update commands, and presentation output.
-- Review current modules and classify them against the four contract responsibilities.
-- Add boundary guidance in code review so new modules do not reintroduce engine knowledge of Emberwake gameplay rules.
+- Refine presentation or input contract shapes only if a second game or denser Emberwake gameplay makes the first contract too broad.
+- Keep boundary guidance active in code review so new modules do not reintroduce engine knowledge of Emberwake gameplay rules.
