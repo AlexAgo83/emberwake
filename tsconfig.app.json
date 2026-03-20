@@ -11,11 +11,21 @@
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "baseUrl": ".",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["vite/client", "vitest/globals"]
+    "types": ["vite/client", "vitest/globals"],
+    "paths": {
+      "@app/*": ["src/app/*"],
+      "@assets/*": ["src/assets/*"],
+      "@engine/*": ["packages/engine-core/src/*"],
+      "@engine-pixi/*": ["packages/engine-pixi/src/*"],
+      "@game/*": ["games/emberwake/src/*"],
+      "@shared/*": ["src/shared/*"],
+      "@src/*": ["src/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", "apps", "games", "packages"]
 }

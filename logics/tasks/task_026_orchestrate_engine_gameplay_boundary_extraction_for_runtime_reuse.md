@@ -1,9 +1,9 @@
 ## task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse - Orchestrate engine gameplay boundary extraction for runtime reuse
 > From version: 0.1.3
-> Status: Ready
+> Status: In Progress
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 0%
+> Progress: 30%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -28,8 +28,8 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Define and document the target repository topology for `app shell`, `engine runtime`, and `Emberwake gameplay` ownership.
-- [ ] 2. Define the minimum engine-to-game contracts for initialization, update flow, input handoff, and render presentation.
+- [x] 1. Define and document the target repository topology for `app shell`, `engine runtime`, and `Emberwake gameplay` ownership.
+- [x] 2. Define the minimum engine-to-game contracts for initialization, update flow, input handoff, and render presentation.
 - [ ] 3. Extract the first stable runtime primitives behind engine-owned boundaries without introducing `engine -> game` dependencies.
 - [ ] 4. Move Emberwake-specific gameplay rules, scenario data, and content-facing modules behind game-owned boundaries.
 - [ ] 5. Execute the migration incrementally while keeping the current runtime buildable, testable, and release-safe.
@@ -53,7 +53,7 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_002_readable_world_traversal_and_presence`, `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_004_run_simulation_on_a_fixed_timestep`, `adr_007_isolate_runtime_input_from_browser_page_controls`, `adr_012_require_curated_versioned_changelogs_for_releases`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
+- Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_004_run_simulation_on_a_fixed_timestep`, `adr_007_isolate_runtime_input_from_browser_page_controls`, `adr_012_require_curated_versioned_changelogs_for_releases`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`, `adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies`, `adr_015_define_engine_to_game_runtime_contract_boundaries`
 - Backlog item(s): `item_070_define_target_repository_topology_for_engine_runtime_and_game_modules`, `item_071_define_engine_to_game_contracts_for_update_render_and_input_integration`, `item_072_extract_reusable_runtime_primitives_from_current_game_modules`, `item_073_separate_emberwake_specific_gameplay_content_and_scenarios_from_runtime_code`, `item_074_define_incremental_migration_and_validation_strategy_for_engine_gameplay_extraction`
 - Request(s): `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
 
@@ -73,4 +73,14 @@ flowchart LR
 - [ ] Status is `Done` and progress is `100%`.
 
 # Report
-- Pending.
+- Phase 1 materialized the target topology by adding first-class `apps/emberwake-web`, `packages/engine-core`, `packages/engine-pixi`, and `games/emberwake` entrypoints while keeping the current runtime behavior unchanged.
+- Added path aliases in TypeScript, Vite, and Vitest so the new ownership zones can be referenced explicitly without broad relative-import churn.
+- Introduced the first engine-owned runtime contract types in `packages/engine-core` and a first Emberwake-owned `GameModule` adapter in `games/emberwake` covering `initialize`, `mapInput`, `update`, and `present`.
+- Rewired the runtime entry and selected runtime seams so the web app now boots from `apps/emberwake-web`, the simulation hook updates through the Emberwake game module, and runtime session defaults are sourced from the Emberwake game layer.
+- Validation passed with:
+  - `npm run ci`
+  - `npm run test:browser:smoke`
+- Remaining work:
+  - move stable camera, transform, and render primitives behind engine-owned modules
+  - move additional Emberwake-specific scenario and content logic behind the game layer
+  - tighten dependency enforcement so `engine -> game` violations become mechanically visible

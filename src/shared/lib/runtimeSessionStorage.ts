@@ -1,7 +1,9 @@
-import { createDefaultCameraState } from "../../game/camera/model/cameraMath";
 import type { CameraMode } from "../../game/camera/model/cameraMode";
 import type { CameraState } from "../../game/camera/model/cameraMath";
-import { officialDebugScenario } from "../../game/debug/data/officialDebugScenario";
+import {
+  createDefaultEmberwakeRuntimeSessionState,
+  emberwakeRuntimeSessionSeedOptions
+} from "@game/runtime/emberwakeSession";
 
 export type RuntimeSessionState = {
   cameraState: CameraState;
@@ -20,21 +22,15 @@ const STORAGE_VERSION = 1;
 export const runtimeSessionContract = {
   invalidationPolicy: "drop-on-version-mismatch",
   reconstructionBoundary: "world-regenerated-from-seed",
-  seedOptions: [
-    officialDebugScenario.worldSeed,
-    "emberwake-ash-seed",
-    "emberwake-glow-seed"
-  ] as const,
+  seedOptions: emberwakeRuntimeSessionSeedOptions,
   storageBackend: "localStorage",
   storageKey: STORAGE_KEY,
   storageVersion: STORAGE_VERSION
 } as const;
 
-export const createDefaultRuntimeSessionState = (): RuntimeSessionState => ({
-  cameraState: officialDebugScenario.cameraState ?? createDefaultCameraState(),
-  cameraMode: "free",
-  worldSeed: officialDebugScenario.worldSeed
-});
+export const createDefaultRuntimeSessionState = (): RuntimeSessionState =>
+  createDefaultEmberwakeRuntimeSessionState();
+
 
 export const readRuntimeSessionState = (
   fallbackState: RuntimeSessionState

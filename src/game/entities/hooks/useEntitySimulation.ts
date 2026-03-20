@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
 import {
-  advanceSimulationState,
-  createInitialSimulationState,
+  advanceEmberwakeSimulationState,
+  createInitialEmberwakeSimulationState,
   entitySimulationContract
-} from "../model/entitySimulation";
+} from "@game/runtime/emberwakeGameModule";
 import type { EntitySimulationState } from "../model/entitySimulation";
 import type { SimulationSpeedOption } from "../model/entitySimulation";
 import type { SingleEntityControlState } from "../../input/model/singleEntityControlContract";
@@ -38,7 +38,7 @@ type UseEntitySimulationResult = EntitySimulationState & {
 
 export function useEntitySimulation({ controlState }: UseEntitySimulationOptions = {}) {
   const [simulationState, setSimulationState] = useState<EntitySimulationState>(
-    createInitialSimulationState
+    createInitialEmberwakeSimulationState
   );
   const [isPaused, setIsPaused] = useState(false);
   const [runtimeMetrics, setRuntimeMetrics] = useState<SimulationRuntimeMetrics>({
@@ -99,9 +99,10 @@ export function useEntitySimulation({ controlState }: UseEntitySimulationOptions
 
       if (isPausedRef.current && queuedStepCountRef.current > 0) {
         while (queuedStepCountRef.current > 0) {
-          nextSimulationState = advanceSimulationState(nextSimulationState, {
-            controlState: controlStateRef.current
-          });
+          nextSimulationState = advanceEmberwakeSimulationState(
+            nextSimulationState,
+            controlStateRef.current
+          );
           queuedStepCountRef.current -= 1;
           simulationStepsLastFrame += 1;
         }
@@ -110,9 +111,10 @@ export function useEntitySimulation({ controlState }: UseEntitySimulationOptions
           accumulator >= entitySimulationContract.fixedStepMs &&
           simulationStepsLastFrame < entitySimulationContract.maxCatchUpStepsPerFrame
         ) {
-          nextSimulationState = advanceSimulationState(nextSimulationState, {
-            controlState: controlStateRef.current
-          });
+          nextSimulationState = advanceEmberwakeSimulationState(
+            nextSimulationState,
+            controlStateRef.current
+          );
           accumulator -= entitySimulationContract.fixedStepMs;
           simulationStepsLastFrame += 1;
         }
