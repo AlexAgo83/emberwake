@@ -1,7 +1,8 @@
 import { extend } from "@pixi/react";
 import { Graphics, Text } from "pixi.js";
 
-import type { CameraState } from "../../camera/model/cameraMath";
+import type { CameraState } from "@engine/camera/cameraMath";
+import { WorldViewportContainer } from "@engine-pixi/components/WorldViewportContainer";
 import type { PresentedEntity } from "../model/entityContract";
 import type { SimulatedEntity } from "../model/entitySimulation";
 
@@ -54,14 +55,7 @@ export function EntityScene({ camera, entities, viewport }: EntitySceneProps) {
   const scale = viewport.fitScale * camera.zoom;
 
   return (
-    <pixiContainer
-      pivot={camera.worldPosition}
-      rotation={-camera.rotation}
-      scale={scale}
-      sortableChildren
-      x={viewport.screenSize.width / 2}
-      y={viewport.screenSize.height / 2}
-    >
+    <WorldViewportContainer camera={camera} viewport={viewport}>
       {entities.map((entity) => (
         <pixiContainer key={entity.id}>
           <pixiGraphics draw={drawEntity(entity)} />
@@ -90,6 +84,6 @@ export function EntityScene({ camera, entities, viewport }: EntitySceneProps) {
           />
         </pixiContainer>
       ))}
-    </pixiContainer>
+    </WorldViewportContainer>
   );
 }

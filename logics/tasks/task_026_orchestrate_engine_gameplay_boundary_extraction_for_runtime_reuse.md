@@ -3,7 +3,7 @@
 > Status: In Progress
 > Understanding: 96%
 > Confidence: 92%
-> Progress: 68%
+> Progress: 76%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -85,10 +85,14 @@ flowchart LR
 - Phase 3 moved Emberwake-owned scenario content into the game layer by relocating the official debug scenario and deterministic support-entity scenario builder into `games/emberwake/src/content/scenarios`, while preserving legacy import compatibility through re-export shims.
 - Rewired Emberwake session bootstrapping, entity simulation, and runtime fixtures so current gameplay-facing scenario ownership now resolves from the game layer instead of the legacy `src/game/debug/data` location.
 - Phase 4 started mechanical boundary enforcement by adding lint rules that forbid engine-owned packages from importing Emberwake game modules through `@game/*` or `@src/game/*` paths.
+- Phase 5 extracted the first reusable Pixi runtime composition primitives into `packages/engine-pixi`:
+  - `RuntimeCanvas` now owns the generic Pixi `Application` shell and runtime boundary composition
+  - `WorldViewportContainer` now owns the reusable camera or viewport transform container for world-space Pixi scenes
+- Rewired Emberwake `RuntimeSurface`, `WorldScene`, and `EntityScene` so game-owned rendering now composes engine-owned Pixi primitives instead of duplicating the same runtime shell and viewport math locally.
 - Validation passed with:
   - `npm run ci`
   - `npm run test:browser:smoke`
 - Remaining work:
-  - move additional stable transform and render primitives behind engine-owned modules
+  - move additional stable transform and interaction primitives behind engine-owned modules
   - move additional Emberwake-specific content definitions and world-flavor logic behind the game layer
   - extend dependency enforcement beyond the first engine-package lint guardrails where it materially reduces boundary drift

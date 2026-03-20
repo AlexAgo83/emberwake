@@ -1,9 +1,10 @@
 import { extend } from "@pixi/react";
 import { Container, Graphics, Text } from "pixi.js";
 
+import type { CameraState } from "@engine/camera/cameraMath";
+import { WorldViewportContainer } from "@engine-pixi/components/WorldViewportContainer";
 import { chunkCoordinateToId, chunkCoordinateToWorldOrigin, chunkWorldSize, worldContract } from "../model/worldContract";
 import { createChunkDebugData } from "../model/chunkDebugData";
-import type { CameraState } from "../../camera/model/cameraMath";
 import type { ChunkCoordinate } from "../types";
 
 extend({
@@ -72,14 +73,7 @@ export function WorldScene({ camera, visibleChunks, viewport, worldSeed }: World
   const scale = viewport.fitScale * camera.zoom;
 
   return (
-    <pixiContainer
-      pivot={camera.worldPosition}
-      rotation={-camera.rotation}
-      scale={scale}
-      sortableChildren
-      x={viewport.screenSize.width / 2}
-      y={viewport.screenSize.height / 2}
-    >
+    <WorldViewportContainer camera={camera} viewport={viewport}>
       <pixiGraphics draw={(graphics) => {
         graphics.clear();
         graphics.setFillStyle({ alpha: 1, color: 0x09070f });
@@ -121,6 +115,6 @@ export function WorldScene({ camera, visibleChunks, viewport, worldSeed }: World
           </pixiContainer>
         );
       })}
-    </pixiContainer>
+    </WorldViewportContainer>
   );
 }

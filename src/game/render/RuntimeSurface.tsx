@@ -1,8 +1,7 @@
-import { Application } from "@pixi/react";
 import type { RefObject } from "react";
 
 import type { CameraState } from "@engine/camera/cameraMath";
-import { RuntimeSurfaceBoundary } from "@engine-pixi/components/RuntimeSurfaceBoundary";
+import { RuntimeCanvas } from "@engine-pixi/components/RuntimeCanvas";
 import { EntityScene } from "../entities/render/EntityScene";
 import type { PresentedEntity } from "../entities/model/entityContract";
 import { WorldScene } from "../world/render/WorldScene";
@@ -37,29 +36,18 @@ export function RuntimeSurface({
   worldSeed
 }: RuntimeSurfaceProps) {
   return (
-    <div className="runtime-surface" data-runtime-surface="pixi" ref={surfaceRef}>
-      <RuntimeSurfaceBoundary
-        onError={(error) => {
-          onRendererError?.(error.message);
-        }}
-      >
-        <Application
-          antialias
-          autoDensity
-          backgroundColor={0x09070f}
-          onInit={onRendererReady}
-          resizeTo={surfaceRef ?? window}
-        >
-          <WorldScene
-            camera={camera}
-            viewport={viewport}
-            visibleChunks={visibleChunks}
-            worldSeed={worldSeed}
-          />
-          <EntityScene camera={camera} entities={visibleEntities} viewport={viewport} />
-        </Application>
-      </RuntimeSurfaceBoundary>
-      <div className="runtime-surface__glow" aria-hidden="true" />
-    </div>
+    <RuntimeCanvas
+      onRendererError={onRendererError}
+      onRendererReady={onRendererReady}
+      surfaceRef={surfaceRef}
+    >
+      <WorldScene
+        camera={camera}
+        viewport={viewport}
+        visibleChunks={visibleChunks}
+        worldSeed={worldSeed}
+      />
+      <EntityScene camera={camera} entities={visibleEntities} viewport={viewport} />
+    </RuntimeCanvas>
   );
 }
