@@ -2,9 +2,31 @@ export {
   advanceEmberwakeSimulationState,
   createInitialEmberwakeGameState,
   createInitialEmberwakeSimulationState,
-  emberwakeGameModule,
-  entitySimulationContract
+  emberwakeGameModule
 } from "./runtime/emberwakeGameModule";
+export {
+  advanceSimulationState,
+  createInitialSimulationState,
+  entitySimulationContract,
+  getScriptedEntityPhase
+} from "./runtime/entitySimulation";
+export {
+  createIdleMovementIntent,
+  createKeyboardMovementIntent,
+  createMovementIntent,
+  singleEntityControlContract
+} from "./input/singleEntityControlContract";
+export type {
+  EntitySimulationState,
+  SimulatedEntity,
+  SimulationSpeedOption
+} from "./runtime/entitySimulation";
+export type {
+  InputOwner,
+  MovementIntent,
+  MovementIntentSource,
+  SingleEntityControlState
+} from "./input/singleEntityControlContract";
 export { createDeterministicDebugEntities } from "./content/scenarios/entityDebugScenario";
 export {
   createGenericMoverEntity,

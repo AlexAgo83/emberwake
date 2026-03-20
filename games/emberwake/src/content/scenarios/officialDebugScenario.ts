@@ -1,6 +1,7 @@
 import { createDefaultCameraState } from "@engine/camera/cameraMath";
 import type { CameraState } from "@engine/camera/cameraMath";
 import type { WorldPoint } from "@engine/geometry/primitives";
+import { chunkWorldSize, worldContract } from "@engine/world/worldContract";
 import {
   entityArchetypeDefinitions,
   entityVisualDefinitions
@@ -10,7 +11,6 @@ import type { EntityArchetypeId, EntityVisualKind } from "@game/content/entities
 import { terrainDefinitions } from "@game/content/world/worldData";
 import { assetCatalog } from "@src/assets/assetCatalog";
 import { dataAuthoringContract } from "@src/shared/config/dataAuthoringContract";
-import { chunkWorldSize, worldContract } from "@src/game/world/model/worldContract";
 
 type ScenarioEntityBlueprint = {
   archetype: EntityArchetypeId;

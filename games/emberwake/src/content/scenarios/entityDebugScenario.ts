@@ -1,5 +1,5 @@
 import { createGenericMoverEntity } from "@game/content/entities/entityContract";
-import type { SimulatedEntity } from "@src/game/entities/model/entitySimulation";
+import type { SimulatedEntity } from "@game/runtime/entitySimulation";
 
 import { officialDebugScenario } from "./officialDebugScenario";
 

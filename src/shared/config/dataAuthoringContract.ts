@@ -1,10 +1,14 @@
 export const dataAuthoringContract = {
   authoringBaseline: "typed-typescript-modules",
   boundaries: {
-    debugScenarios: "src/game/debug/data",
+    debugScenarios: "games/emberwake/src/content/scenarios",
     executableLogic: "hooks-model-render-files",
     runtimeConfiguration: "src/shared/config",
-    staticGameData: ["src/game/world/data", "src/game/entities/data", "src/assets"]
+    staticGameData: [
+      "games/emberwake/src/content/world",
+      "games/emberwake/src/content/entities",
+      "src/assets"
+    ]
   },
   crossDomainReferences: {
     assets: "opaque-string-ids-owned-by-asset-catalog",

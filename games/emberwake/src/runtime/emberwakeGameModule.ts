@@ -6,13 +6,13 @@ import type {
   GameModule
 } from "@engine/contracts/gameModule";
 import { entityContract } from "@game/content/entities/entityContract";
+import type { SingleEntityControlState } from "@game/input/singleEntityControlContract";
 import {
   advanceSimulationState,
   createInitialSimulationState,
   entitySimulationContract
-} from "@src/game/entities/model/entitySimulation";
-import type { EntitySimulationState } from "@src/game/entities/model/entitySimulation";
-import type { SingleEntityControlState } from "@src/game/input/model/singleEntityControlContract";
+} from "@game/runtime/entitySimulation";
+import type { EntitySimulationState } from "@game/runtime/entitySimulation";
 
 type EmberwakeGameState = {
   simulation: EntitySimulationState;

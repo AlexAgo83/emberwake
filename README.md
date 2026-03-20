@@ -80,6 +80,19 @@ The implementation backbone already starts in:
 - [logics/tasks/task_002_add_stable_logical_viewport_and_world_space_shell_contract.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_002_add_stable_logical_viewport_and_world_space_shell_contract.md)
 - [logics/tasks/task_003_add_render_diagnostics_fallback_handling_and_shell_preferences.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_003_add_render_diagnostics_fallback_handling_and_shell_preferences.md)
 
+## Runtime Topology
+
+The repository now carries an explicit modular runtime split:
+- `apps/emberwake-web` owns the web entrypoint and shell boot wiring
+- `packages/engine-core` owns reusable runtime math, contracts, camera, world, and input primitives
+- `packages/engine-pixi` owns reusable Pixi composition primitives
+- `games/emberwake` owns Emberwake gameplay rules, content, scenarios, and runtime adapters
+- `src/` still contains shell, assets, and transitional feature adapters that are being kept stable during the migration
+
+Reference decisions:
+- [adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies.md)
+- [adr_015_define_engine_to_game_runtime_contract_boundaries.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_015_define_engine_to_game_runtime_contract_boundaries.md)
+
 ## Workflow
 
 This repo uses a staged `logics/` workflow:

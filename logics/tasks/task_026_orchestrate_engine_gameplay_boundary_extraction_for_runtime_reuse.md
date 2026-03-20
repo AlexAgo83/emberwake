@@ -1,9 +1,9 @@
 ## task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse - Orchestrate engine gameplay boundary extraction for runtime reuse
 > From version: 0.1.3
-> Status: In Progress
-> Understanding: 96%
-> Confidence: 92%
-> Progress: 99%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,11 +30,11 @@ flowchart LR
 # Plan
 - [x] 1. Define and document the target repository topology for `app shell`, `engine runtime`, and `Emberwake gameplay` ownership.
 - [x] 2. Define the minimum engine-to-game contracts for initialization, update flow, input handoff, and render presentation.
-- [ ] 3. Extract the first stable runtime primitives behind engine-owned boundaries without introducing `engine -> game` dependencies.
-- [ ] 4. Move Emberwake-specific gameplay rules, scenario data, and content-facing modules behind game-owned boundaries.
-- [ ] 5. Execute the migration incrementally while keeping the current runtime buildable, testable, and release-safe.
-- [ ] 6. Validate CI, smoke, and release-readiness expectations throughout the staged extraction and update linked Logics docs.
-- [ ] FINAL: Create a dedicated git commit for this orchestration scope.
+- [x] 3. Extract the first stable runtime primitives behind engine-owned boundaries without introducing `engine -> game` dependencies.
+- [x] 4. Move Emberwake-specific gameplay rules, scenario data, and content-facing modules behind game-owned boundaries.
+- [x] 5. Execute the migration incrementally while keeping the current runtime buildable, testable, and release-safe.
+- [x] 6. Validate CI, smoke, and release-readiness expectations throughout the staged extraction and update linked Logics docs.
+- [x] FINAL: Create a dedicated git commit for this orchestration scope.
 
 # AC Traceability
 - `item_070` -> The repository exposes a concrete target topology for shell, engine, and game ownership. Proof target: repository structure, `README.md`, architecture docs, import paths.
@@ -64,13 +64,13 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] The repository has a concrete and documented boundary between app shell, reusable runtime, and Emberwake gameplay.
-- [ ] Engine-to-game contracts are explicit enough to prevent gameplay rules or content from drifting back into engine-owned modules.
-- [ ] The current playable runtime remains buildable and validated throughout the migration.
-- [ ] Linked request, backlog, task, and architecture docs are updated with proofs and status.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] The repository has a concrete and documented boundary between app shell, reusable runtime, and Emberwake gameplay.
+- [x] Engine-to-game contracts are explicit enough to prevent gameplay rules or content from drifting back into engine-owned modules.
+- [x] The current playable runtime remains buildable and validated throughout the migration.
+- [x] Linked request, backlog, task, and architecture docs are updated with proofs and status.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
 - Phase 1 materialized the target topology by adding first-class `apps/emberwake-web`, `packages/engine-core`, `packages/engine-pixi`, and `games/emberwake` entrypoints while keeping the current runtime behavior unchanged.
@@ -100,10 +100,14 @@ flowchart LR
 - Rewired the world scene and compatibility model modules so the current runtime renders the same generated chunks while resolving generation and chunk debug data from the Emberwake game layer.
 - Phase 10 moved the Emberwake entity contract into `games/emberwake/src/content/entities`, so the primary entity id, default archetype ownership, and generic mover factory now belong to the game layer instead of the legacy entity model path.
 - Rewired Emberwake runtime composition and scenario builders to consume the game-owned entity contract directly while preserving a compatibility shim under `src/game/entities/model/entityContract.ts`.
+- Phase 11 moved Emberwake entity simulation into `games/emberwake/src/runtime`, so the deterministic loop and simulated-entity typing now belong to the game layer instead of the legacy entity model path.
+- Rewired the Emberwake runtime module and scenario helpers to consume game-owned simulation modules directly while preserving a compatibility shim under `src/game/entities/model/entitySimulation.ts`.
+- Phase 12 moved the single-entity control contract into `games/emberwake/src/input`, so player-control ownership, keyboard bindings, movement-intent typing, and virtual-stick thresholds now belong to the game layer instead of the legacy input model path.
+- Rewired Emberwake runtime simulation to consume the game-owned control contract directly while preserving a compatibility shim under `src/game/input/model/singleEntityControlContract.ts`.
 - Validation passed with:
   - `npm run ci`
   - `npm run test:browser:smoke`
-- Remaining work:
-  - move additional stable interaction primitives behind engine-owned modules
-  - decide whether any remaining `src/game/*` presentation shells should move fully under `games/emberwake` or remain as transitional feature adapters
-  - extend dependency enforcement beyond the first engine-package lint guardrails where it materially reduces boundary drift
+- Release-readiness guard validated with:
+  - `npm run release:ready` blocks on `main` by design and must be rerun from the `release` branch before deployment promotion
+- Closure note:
+  - remaining `src/game/*` rendering, hooks, and diagnostics modules are intentionally kept as transitional feature adapters because they bind current shell composition to the extracted engine and Emberwake game modules without reintroducing `engine -> game` coupling
