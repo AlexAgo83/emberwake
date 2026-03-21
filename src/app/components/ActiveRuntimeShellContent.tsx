@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
+import "./ActiveRuntimeShellContent.css";
 import { EntityInspectionPanel } from "./EntityInspectionPanel";
 import { PlayerHudCard } from "./PlayerHudCard";
 import { RuntimeSceneBoundary } from "./RuntimeSceneBoundary";

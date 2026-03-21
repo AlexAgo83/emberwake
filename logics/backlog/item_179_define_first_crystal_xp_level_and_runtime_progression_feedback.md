@@ -1,9 +1,9 @@
 ## item_179_define_first_crystal_xp_level_and_runtime_progression_feedback - Define first crystal, XP, level, and runtime progression feedback
 > From version: 0.3.0
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: High
 > Theme: Progression
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_050_define_a_main_menu_polish_and_first_crystal_xp_progression_wave`.
+- Implemented through `task_044_orchestrate_main_menu_polish_and_first_crystal_progression_wave`.

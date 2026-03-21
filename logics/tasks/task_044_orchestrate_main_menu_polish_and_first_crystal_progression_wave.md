@@ -1,9 +1,9 @@
 ## task_044_orchestrate_main_menu_polish_and_first_crystal_progression_wave - Orchestrate main-menu polish and first crystal progression wave
 > From version: 0.3.0
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -27,12 +27,12 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Define and implement the `Main menu` changelog entry, changelog-reading surface, and `Load game` action ordering.
-- [ ] 2. Define and implement the animated `Main menu` background and bottom-anchored version footer linking to GitHub.
-- [ ] 3. Define and implement first hostile crystal drops, XP gain, and level progression feedback in runtime.
-- [ ] 4. Define and implement player overhead identity, settings compaction, and mobile joystick fade-out polish.
-- [ ] 5. Validate shell UX, runtime progression readability, and docs traceability end to end.
-- [ ] FINAL: Create dedicated git commit(s) for this orchestration scope.
+- [x] 1. Define and implement the `Main menu` changelog entry, changelog-reading surface, and `Load game` action ordering.
+- [x] 2. Define and implement the animated `Main menu` background and bottom-anchored version footer linking to GitHub.
+- [x] 3. Define and implement first hostile crystal drops, XP gain, and level progression feedback in runtime.
+- [x] 4. Define and implement player overhead identity, settings compaction, and mobile joystick fade-out polish.
+- [x] 5. Validate shell UX, runtime progression readability, and docs traceability end to end.
+- [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
 
 # Links
 - Backlog item(s): `item_177_define_a_main_menu_changelog_surface_and_release_history_entry`, `item_178_define_a_more_atmospheric_main_menu_presentation_with_footer_version_linking`, `item_179_define_first_crystal_xp_level_and_runtime_progression_feedback`, `item_180_define_player_overhead_identity_and_compact_settings_mobile_control_polish`
@@ -44,17 +44,21 @@ flowchart TD
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] `Main menu` exposes changelog reading and prioritizes `Load game` ahead of `Start new game`.
-- [ ] `Main menu` gains a stronger atmospheric background and a bottom-anchored version footer linking to GitHub without layout shift.
-- [ ] Defeated hostiles drop crystals and the player can gain XP and levels from collecting them.
-- [ ] Runtime feedback shows level plus XP progress and the player overhead shows name plus level.
-- [ ] `Settings` fits more comfortably inside the page height and the mobile joystick background fades progressively.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] `Main menu` exposes changelog reading and prioritizes `Load game` ahead of `Start new game`.
+- [x] `Main menu` gains a stronger atmospheric background and a bottom-anchored version footer linking to GitHub without layout shift.
+- [x] Defeated hostiles drop crystals and the player can gain XP and levels from collecting them.
+- [x] Runtime feedback shows level plus XP progress and the player overhead shows name plus level.
+- [x] `Settings` fits more comfortably inside the page height and the mobile joystick background fades progressively.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Outcome
-- Pending implementation.
+- The `Main menu` now exposes a dedicated `Changelogs` scene, prioritizes `Load game`, and presents a stronger ambient identity with an in-surface version footer linking to GitHub.
+- The runtime now drops crystals from defeated hostiles, converts crystal pickups into XP and levels, and surfaces level progression in both the runtime HUD and player overhead identity.
+- The `Settings` surface is denser and viewport-safe, while the mobile joystick base now fades progressively after touch interaction.
 
 # Commits
-- Pending.
+- `67f3115` `Add main menu changelog and presentation polish`
+- `4f9676f` `Add crystal drops and first player progression`
+- `0cecf2f` `Compact settings and fade mobile joystick`

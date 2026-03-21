@@ -1,9 +1,9 @@
 ## item_180_define_player_overhead_identity_and_compact_settings_mobile_control_polish - Define player overhead identity and compact settings/mobile-control polish
 > From version: 0.3.0
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: High
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -36,3 +36,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_050_define_a_main_menu_polish_and_first_crystal_xp_progression_wave`.
+- Implemented through `task_044_orchestrate_main_menu_polish_and_first_crystal_progression_wave`.

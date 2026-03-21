@@ -1,8 +1,8 @@
 ## req_050_define_a_main_menu_polish_and_first_crystal_xp_progression_wave - Define a main-menu polish and first crystal-XP progression wave
 > From version: 0.3.0
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -140,3 +140,9 @@ flowchart TD
 - `define_a_more_atmospheric_main_menu_presentation_with_footer_version_linking`
 - `define_first_crystal_xp_and_level_progression_feedback_for_the_player`
 - `define_player_identity_overhead_and_settings_compaction_for_the_next_shell_polish_slice`
+
+# Outcome
+- Added a shell-owned `Changelogs` scene in `Main menu`, reordered `Load game` before `Start new game`, and introduced a bottom-anchored in-surface app-version footer linking to the GitHub project.
+- Added a more atmospheric ambient `Main menu` treatment without shifting layout or expanding the shell surface contract.
+- Added hostile crystal drops, first XP/level progression, runtime feedback for `Level` and `XP current / XP needed`, and a player-only overhead `name + level` label.
+- Compacted the `Settings` surface and added progressive fade-out behavior for the mobile joystick base.

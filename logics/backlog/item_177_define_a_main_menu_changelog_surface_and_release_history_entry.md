@@ -1,9 +1,9 @@
 ## item_177_define_a_main_menu_changelog_surface_and_release_history_entry - Define a main-menu changelog surface and release-history entry
 > From version: 0.3.0
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_050_define_a_main_menu_polish_and_first_crystal_xp_progression_wave`.
+- Implemented through `task_044_orchestrate_main_menu_polish_and_first_crystal_progression_wave`.
