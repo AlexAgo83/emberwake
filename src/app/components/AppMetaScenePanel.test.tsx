@@ -24,7 +24,6 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   pendingCharacterName: "Wanderer",
   playerName: "",
   runtimeOutcome: null,
-  savedSlotSummary: null,
   scene: "runtime" as const,
   ...overrides
 });
@@ -38,7 +37,6 @@ describe("AppMetaScenePanel", () => {
 
   it("renders the main menu hub before runtime start", () => {
     const props = createProps({
-      savedSlotSummary: null,
       scene: "main-menu"
     });
 
@@ -59,7 +57,6 @@ describe("AppMetaScenePanel", () => {
       canResumeSession: true,
       canSaveSession: true,
       isLoadAvailable: true,
-      savedSlotSummary: "Ash / 21 mars, 12:00",
       scene: "main-menu"
     });
 

@@ -1,9 +1,9 @@
 ## item_157_define_blob_like_clustering_rules_for_obstacles_and_surface_modifier_patches - Define blob-like clustering rules for obstacles and surface-modifier patches
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: World generation
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_043_define_a_softer_and_more_clustered_blocking_and_surface_generation_posture`.
+- Implemented in `a27102c`.
+- Obstacles and movement modifiers now sample smoother local cluster fields so patches read as compact blobs more often than isolated points.

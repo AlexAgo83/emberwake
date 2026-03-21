@@ -194,23 +194,6 @@ export function AppShell() {
 
     saveActiveSession(latestGameStateRef.current);
   }, [runtimeSession.hasActiveSession, saveActiveSession]);
-  const savedSlotSummary = useMemo(() => {
-    if (!savedSessionSlot) {
-      return null;
-    }
-
-    const savedAtDate = new Date(savedSessionSlot.metadata.savedAtIso);
-    const timestampLabel = Number.isNaN(savedAtDate.getTime())
-      ? "Saved slot"
-      : savedAtDate.toLocaleString("fr-FR", {
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-          month: "short"
-        });
-
-    return `${savedSessionSlot.metadata.playerName} / ${timestampLabel}`;
-  }, [savedSessionSlot]);
   const handleApplyDesktopControlBindings = useCallback(
     (nextBindings: DesktopControlBindings) => {
       applyDesktopControlBindings(nextBindings);
@@ -254,7 +237,6 @@ export function AppShell() {
       pendingCharacterName={pendingCharacterName}
       playerName={runtimeSession.playerName}
       runtimeOutcome={runtimeOutcome}
-      savedSlotSummary={savedSlotSummary}
       scene={activeScene}
     />
   );

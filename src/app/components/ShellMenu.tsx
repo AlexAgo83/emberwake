@@ -42,55 +42,55 @@ const sceneStatusMap: Record<
   }
 > = {
   boot: {
-    detail: "The runtime boundary is mounting and the shell is holding the deck until the live surface is ready.",
+    detail: "The runtime is booting.",
     stateLabel: "Booting",
     title: "Runtime boot sequence",
     tone: "cold"
   },
   defeat: {
-    detail: "Gameplay requested shell intervention. Use the deck to recover the session or inspect the current state.",
+    detail: "The shell is handling a defeat state.",
     stateLabel: "Recovery",
     title: "Runtime interrupted",
     tone: "alert"
   },
   failure: {
-    detail: "The shell detected a renderer failure and is holding the runtime outside the live loop.",
+    detail: "The renderer failed and the shell is holding the runtime.",
     stateLabel: "Failure",
     title: "Renderer recovery",
     tone: "alert"
   },
   "main-menu": {
-    detail: "The shell-owned main menu is acting as the product entry and session return hub.",
+    detail: "The main menu is the entry and return hub.",
     stateLabel: "Menu",
     title: "Main menu",
     tone: "neutral"
   },
   "new-game": {
-    detail: "The shell is preparing a new run before handing control to the live runtime.",
+    detail: "The shell is staging a new run.",
     stateLabel: "New run",
     title: "New game staging",
     tone: "warm"
   },
   pause: {
-    detail: "The shell owns the pause scene while the runtime remains preserved underneath the live session.",
+    detail: "The runtime is paused and preserved.",
     stateLabel: "Paused",
     title: "Session pause",
     tone: "warm"
   },
   runtime: {
-    detail: "The live session owns the play surface. Session controls, camera options, and tools are available from here.",
+    detail: "Session controls, view options, and tools live here.",
     stateLabel: "Live",
     title: "Runtime command deck",
     tone: "cold"
   },
   settings: {
-    detail: "Settings are shell-owned. The runtime session is preserved and can resume without rebuilding gameplay state.",
+    detail: "Settings are shell-owned and preserve the run.",
     stateLabel: "Settings",
     title: "Shell settings",
     tone: "neutral"
   },
   victory: {
-    detail: "A gameplay outcome reached the shell. The session can continue while keeping the current runtime state readable.",
+    detail: "The shell is presenting a gameplay outcome.",
     stateLabel: "Victory",
     title: "Outcome handoff",
     tone: "warm"
@@ -129,28 +129,28 @@ export const ShellMenu = memo(function ShellMenu({
   const primaryAction =
     activeScene === "runtime"
       ? {
-          detail: "Hand session control to the shell-owned pause scene.",
+          detail: "Pause the live run.",
           label: "Pause",
           tone: "warm" as const,
           trigger: onShowPauseScene
         }
       : activeScene === "defeat" || activeScene === "failure"
         ? {
-            detail: "Rebuild the runtime boundary and re-enter the live loop.",
+            detail: "Restart the runtime.",
             label: "Retry runtime",
             tone: "alert" as const,
             trigger: onRetryRuntime
           }
         : activeScene === "boot"
           ? {
-              detail: "The shell is still preparing the runtime surface.",
+              detail: "Wait for the runtime to mount.",
               disabled: true,
               label: "Runtime booting",
               tone: "neutral" as const,
               trigger: null
             }
           : {
-              detail: "Return from the current shell-owned scene to the live runtime loop.",
+              detail: "Return to the live run.",
               label: "Resume runtime",
               tone: "cold" as const,
               trigger: onResumeRuntime

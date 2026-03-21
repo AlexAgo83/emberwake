@@ -1,8 +1,8 @@
 ## req_043_define_a_softer_and_more_clustered_blocking_and_surface_generation_posture - Define a softer and more clustered blocking and surface-generation posture
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: World generation
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -91,6 +91,18 @@ flowchart TD
 - AC4: The request defines that clustered patches should read more like blobs/taches than isolated points or long thin lines.
 - AC5: The request keeps obstacle clustering and modifier clustering as distinct generation concerns.
 - AC6: The request preserves deterministic seed-driven generation and does not reopen full world-generation redesign.
+
+# Outcome
+- Done in `a27102c`.
+- Obstacle density and movement-surface density now target roughly half of the prior effective posture.
+- Obstacle and modifier generation now sample smoother local cluster fields so features form compact blobs more often than isolated speckles or thin streaks.
+- Deterministic seed-based generation remains intact while traversal space reads cleaner and less noisy.
+
+# Validation
+- `npx vitest run src/game/world/model/worldGeneration.test.ts`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Open questions
 - Should “half probability” be applied directly to raw tile rolls or to the effective post-cluster density?

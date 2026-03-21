@@ -1,8 +1,8 @@
 ## req_042_define_a_low_cost_first_pathfinding_slice_for_runtime_entities - Define a low-cost first pathfinding slice for runtime entities
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -92,6 +92,18 @@ flowchart TD
 - AC4: The request defines a deterministic and bounded search posture rather than an open-ended navigation system.
 - AC5: The request preserves compatibility with existing pseudo-physics and obstacle-layer contracts.
 - AC6: The request remains intentionally narrow and does not drift into navmesh, flocking, or large-scale encounter-AI design.
+
+# Outcome
+- Done in `a27102c`.
+- Hostiles now keep direct pursuit as the default branch and only request bounded local pathfinding when the direct path is blocked.
+- A low-cost tile-based A* fallback now computes short local routes, refreshes on cadence or target drift, and feeds waypoint-following back into hostile pursuit.
+- If no bounded route is found, hostiles still fall back to direct pursuit instead of stalling entirely.
+
+# Validation
+- `npx vitest run src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Open questions
 - Should the first route-finding operate on tiles, coarse cells, or another lightweight abstraction?

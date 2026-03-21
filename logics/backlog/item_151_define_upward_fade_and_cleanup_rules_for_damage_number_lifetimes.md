@@ -1,9 +1,9 @@
 ## item_151_define_upward_fade_and_cleanup_rules_for_damage_number_lifetimes - Define upward fade and cleanup rules for damage-number lifetimes
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_041_define_damage_reaction_fx_and_floating_damage_numbers_for_runtime_combat`.
+- Implemented in `a27102c`.
+- Damage numbers now drift upward, fade out, and clean themselves up after a bounded lifetime.

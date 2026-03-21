@@ -1,8 +1,8 @@
 ## req_040_define_directionally_biased_hostile_spawns_ahead_of_player_movement - Define directionally biased hostile spawns ahead of player movement
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -88,6 +88,18 @@ flowchart TD
 - AC4: The request preserves existing safety constraints such as safe distance, blocked-space rejection, and local hostile cap.
 - AC5: The request keeps the slice deterministic and lightweight without reopening a full encounter-director system.
 - AC6: The request defines a neutral fallback when the player is not moving or when forward-biased candidates fail.
+
+# Outcome
+- Done in `a27102c`.
+- Hostile spawns now prefer the player’s movement intent first, then recent heading memory and live velocity as fallback.
+- Preferred spawn sectors now bias front first, then sides, with rear sectors used only as late deterministic fallback.
+- Neutral radial spawning still applies when player motion is not meaningful or no preferred heading is available.
+
+# Validation
+- `npx vitest run src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Open questions
 - Should “forward” be derived from movement intent, actual velocity, or facing/orientation?

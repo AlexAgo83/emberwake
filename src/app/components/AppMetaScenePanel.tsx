@@ -3,7 +3,6 @@ import { lazy, memo, Suspense } from "react";
 import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
 import { characterNameMaxLength } from "../model/characterName";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
-import { entitySimulationContract } from "@game";
 
 export type GameOverRecap = {
   defeatDetail: string;
@@ -21,6 +20,8 @@ const LazyDesktopControlSettingsSection = lazy(async () => {
     default: module.DesktopControlSettingsSection
   };
 });
+
+const runtimeFixedStepMs = 1000 / 60;
 
 type AppMetaScenePanelProps = {
   canResumeSession: boolean;
@@ -42,7 +43,6 @@ type AppMetaScenePanelProps = {
   pendingCharacterName: string;
   playerName: string;
   runtimeOutcome?: RuntimeShellOutcome | null;
-  savedSlotSummary: string | null;
   scene: AppSceneId;
 };
 
@@ -66,7 +66,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   pendingCharacterName,
   playerName,
   runtimeOutcome,
-  savedSlotSummary,
   scene
 }: AppMetaScenePanelProps) {
   if (
@@ -83,7 +82,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   const formatRunDuration = (ticks: number) => {
     const totalSeconds = Math.max(
       0,
-      Math.round((ticks * entitySimulationContract.fixedStepMs) / 1000)
+      Math.round((ticks * runtimeFixedStepMs) / 1000)
     );
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
@@ -105,20 +104,20 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   const detail =
     scene === "main-menu"
       ? canResumeSession
-        ? "Resume the live session, start a new run, or open shell-owned settings."
-        : "Start a new run, check settings, or return later when a save slot exists."
+        ? "Resume the run, start a new one, or open settings."
+        : "Start a new run or open settings."
       : scene === "new-game"
-        ? "Name your character before the shell hands control to the live runtime."
+        ? "Name your character before the run starts."
       : scene === "pause"
-      ? "The live session is preserved while the shell holds the pause scene."
+      ? "The run is paused and preserved."
       : scene === "settings"
         ? ""
         : scene === "defeat" && gameOverRecap
           ? gameOverRecap.defeatDetail
         : runtimeOutcome?.detail ??
           (scene === "defeat"
-            ? "The active run ended and the shell is presenting the run recap."
-            : "The shell is presenting the latest runtime outcome.");
+            ? "The run ended. Review the recap."
+            : "Review the latest runtime outcome.");
   const resumeLabel =
     scene === "defeat"
       ? "Return to main menu"
@@ -189,7 +188,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               />
             </label>
             <p className="app-meta-scene__field-help">
-              3-20 characters. Letters, numbers, spaces, apostrophes, and hyphens only.
+              3-20 chars. Letters, numbers, spaces, apostrophes, and hyphens only.
             </p>
             {characterNameError ? (
               <p className="app-meta-scene__field-error" role="alert">

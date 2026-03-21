@@ -1,9 +1,9 @@
 ## item_145_define_world_space_layout_rules_for_stacked_combat_bars_above_entities - Define world-space layout rules for stacked combat bars above entities
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants`.
+- Implemented in `a27102c`.
+- Health bars now render above charge bars in a compact stacked world-space layout above combatants.

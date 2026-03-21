@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { createInitialEmberwakeGameState } from "@game";
 import type { EmberwakeGameState } from "@game";
 import {
   createDefaultRuntimeSessionState,
@@ -66,7 +65,7 @@ export function useRuntimeSession() {
 
   const createNewSession = useCallback((playerName: string) => {
     const normalizedPlayerName = normalizeCharacterName(playerName);
-    setSessionInitState(createInitialEmberwakeGameState(runtimeSession.worldSeed));
+    setSessionInitState(undefined);
 
     setRuntimeSession((currentSession) => {
       const defaultSession = createDefaultRuntimeSessionState();
@@ -79,7 +78,7 @@ export function useRuntimeSession() {
         worldSeed: currentSession.worldSeed
       };
     });
-  }, [runtimeSession.worldSeed]);
+  }, []);
 
   const loadSavedSession = useCallback(() => {
     if (!savedSessionSlot) {

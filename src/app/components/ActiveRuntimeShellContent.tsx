@@ -30,6 +30,7 @@ import type { RuntimeSessionState } from "../../shared/lib/runtimeSessionStorage
 import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage";
 import type { ReturnTypeUseLogicalViewportModel } from "../../game/debug/types";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
+import { createInitialEmberwakeGameState } from "@game";
 import type { EmberwakeGameState } from "@game";
 
 type ActiveRuntimeShellContentProps = {
@@ -141,9 +142,13 @@ export function ActiveRuntimeShellContent({
           },
     [runtimeControlState, shellRequestedScene]
   );
+  const effectiveSessionInitState = useMemo(
+    () => sessionInitState ?? createInitialEmberwakeGameState(runtimeSession.worldSeed),
+    [runtimeSession.worldSeed, sessionInitState]
+  );
   const simulationState = useEntitySimulation({
     controlState,
-    initialGameState: sessionInitState,
+    initialGameState: effectiveSessionInitState,
     sessionRevision: runtimeSession.sessionRevision
   });
   const runtimeOutcome = useMemo(() => {

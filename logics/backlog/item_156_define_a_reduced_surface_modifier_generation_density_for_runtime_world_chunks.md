@@ -1,9 +1,9 @@
 ## item_156_define_a_reduced_surface_modifier_generation_density_for_runtime_world_chunks - Define a reduced surface-modifier generation density for runtime world chunks
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: World generation
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_043_define_a_softer_and_more_clustered_blocking_and_surface_generation_posture`.
+- Implemented in `a27102c`.
+- Slow and slippery surface modifiers now generate at a lower effective density.

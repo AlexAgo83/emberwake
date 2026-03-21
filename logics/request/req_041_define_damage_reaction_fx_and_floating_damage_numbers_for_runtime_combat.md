@@ -1,8 +1,8 @@
 ## req_041_define_damage_reaction_fx_and_floating_damage_numbers_for_runtime_combat - Define damage-reaction FX and floating damage numbers for runtime combat
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -89,6 +89,18 @@ flowchart TD
 - AC4: The request keeps the slice applicable to runtime combatants without reopening a full combat-VFX system.
 - AC5: The request keeps the presentation readable and lightweight rather than noisy or debug-like.
 - AC6: The request remains intentionally narrow and does not drift into healing numbers, crit systems, or audio work.
+
+# Outcome
+- Done in `a27102c`.
+- Damaged combatants now receive a brief hit pulse driven by the live damage tick.
+- Integer floating damage numbers now spawn above damaged combatants, drift upward, fade out, and clean themselves up automatically.
+- The first slice stays lightweight and shared across player and hostile combatants without widening into a heavier VFX stack.
+
+# Validation
+- `npx vitest run src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Open questions
 - Should the player and hostiles use the same hit-reaction treatment?

@@ -1,9 +1,9 @@
 ## item_146_define_forward_biased_spawn_sampling_for_moving_player_states - Define forward-biased spawn sampling for moving player states
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_040_define_directionally_biased_hostile_spawns_ahead_of_player_movement`.
+- Implemented in `a27102c`.
+- Hostile spawn sampling now prefers forward-biased sectors when the player is moving meaningfully.

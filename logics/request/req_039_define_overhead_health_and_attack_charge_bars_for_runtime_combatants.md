@@ -1,8 +1,8 @@
 ## req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants - Define overhead health and attack-charge bars for runtime combatants
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -90,6 +90,19 @@ flowchart TD
 - AC4: The request defines the slice for player and hostile combatants without widening to non-combat entities.
 - AC5: The request keeps the presentation lightweight and readable rather than drifting into debug-only combat overlays.
 - AC6: The request remains intentionally narrow and does not reopen floating text, status icons, or full combat-VFX work.
+
+# Outcome
+- Done in `a27102c`.
+- Player and hostile combatants now render overhead health bars in world space.
+- Attack-charge bars now sit directly below health bars and fill toward readiness for both the player automatic attack and hostile contact attacks.
+- The stacked layout now stays compact and consistent above combatant footprints without extending to pickups or support entities.
+
+# Validation
+- `npx vitest run src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts`
+- `npx vitest run src/game/world/model/worldGeneration.test.ts games/emberwake/src/systems/gameplaySystems.test.ts`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Open questions
 - Should the bars be permanently visible or only under certain combat conditions?

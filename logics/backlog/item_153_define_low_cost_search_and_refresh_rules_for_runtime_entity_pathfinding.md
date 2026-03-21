@@ -1,9 +1,9 @@
 ## item_153_define_low_cost_search_and_refresh_rules_for_runtime_entity_pathfinding - Define low-cost search and refresh rules for runtime entity pathfinding
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_042_define_a_low_cost_first_pathfinding_slice_for_runtime_entities`.
+- Implemented in `a27102c`.
+- Hostile pathfinding now uses a bounded tile search, a small node budget, and periodic refresh instead of per-frame replanning.

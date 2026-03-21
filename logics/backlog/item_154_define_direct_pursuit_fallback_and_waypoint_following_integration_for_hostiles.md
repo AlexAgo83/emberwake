@@ -1,9 +1,9 @@
 ## item_154_define_direct_pursuit_fallback_and_waypoint_following_integration_for_hostiles - Define direct-pursuit fallback and waypoint-following integration for hostiles
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_042_define_a_low_cost_first_pathfinding_slice_for_runtime_entities`.
+- Implemented in `a27102c`.
+- Hostiles now keep direct pursuit as the default branch and follow local waypoints only when the bounded pathfinding slice is needed.

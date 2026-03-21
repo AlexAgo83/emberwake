@@ -1,9 +1,9 @@
 ## item_147_define_fallback_spawn_sector_rules_when_preferred_forward_positions_fail - Define fallback spawn sector rules when preferred forward positions fail
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_040_define_directionally_biased_hostile_spawns_ahead_of_player_movement`.
+- Implemented in `a27102c`.
+- Spawn retries now fall back deterministically through side sectors before rear-biased sectors.

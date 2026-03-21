@@ -1,9 +1,9 @@
 ## item_152_define_a_bounded_obstacle_aware_route_finding_posture_for_hostile_pursuit - Define a bounded obstacle-aware route-finding posture for hostile pursuit
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_042_define_a_low_cost_first_pathfinding_slice_for_runtime_entities`.
+- Implemented in `a27102c`.
+- Hostiles now request a bounded obstacle-aware route only when direct pursuit is blocked.

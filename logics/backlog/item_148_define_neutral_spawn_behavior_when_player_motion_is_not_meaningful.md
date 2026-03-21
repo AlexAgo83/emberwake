@@ -1,9 +1,9 @@
 ## item_148_define_neutral_spawn_behavior_when_player_motion_is_not_meaningful - Define neutral spawn behavior when player motion is not meaningful
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_040_define_directionally_biased_hostile_spawns_ahead_of_player_movement`.
+- Implemented in `a27102c`.
+- Hostile spawning now falls back to a neutral posture when player movement is not meaningful enough to bias direction.
