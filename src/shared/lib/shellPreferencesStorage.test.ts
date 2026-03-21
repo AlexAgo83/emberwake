@@ -17,7 +17,8 @@ describe("shellPreferencesStorage", () => {
       inspectionPanelVisible: false,
       lastMetaScene: "settings" as const,
       movementOnboardingDismissed: true,
-      prefersFullscreen: true
+      prefersFullscreen: true,
+      runtimeFeedbackVisible: false
     };
 
     writeShellPreferences(preferences);
@@ -28,7 +29,8 @@ describe("shellPreferencesStorage", () => {
         inspectionPanelVisible: false,
         lastMetaScene: "none",
         movementOnboardingDismissed: false,
-        prefersFullscreen: false
+        prefersFullscreen: false,
+        runtimeFeedbackVisible: true
       })
     ).toEqual(preferences);
   });
@@ -39,7 +41,8 @@ describe("shellPreferencesStorage", () => {
       inspectionPanelVisible: false,
       lastMetaScene: "none" as const,
       movementOnboardingDismissed: false,
-      prefersFullscreen: false
+      prefersFullscreen: false,
+      runtimeFeedbackVisible: true
     };
 
     window.localStorage.setItem(

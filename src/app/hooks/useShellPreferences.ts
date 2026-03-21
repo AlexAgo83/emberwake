@@ -19,7 +19,8 @@ export function useShellPreferences({
       inspectionPanelVisible: false,
       lastMetaScene: "none",
       movementOnboardingDismissed: false,
-      prefersFullscreen: false
+      prefersFullscreen: false,
+      runtimeFeedbackVisible: true
     })
   );
 
@@ -57,6 +58,12 @@ export function useShellPreferences({
       movementOnboardingDismissed
     }));
   }, []);
+  const setRuntimeFeedbackVisible = useCallback((runtimeFeedbackVisible: boolean) => {
+    setPreferences((currentPreferences) => ({
+      ...currentPreferences,
+      runtimeFeedbackVisible
+    }));
+  }, []);
 
   return {
     preferences,
@@ -64,6 +71,7 @@ export function useShellPreferences({
     setInspectionPanelVisible,
     setLastMetaScene,
     setPrefersFullscreen,
-    setMovementOnboardingDismissed
+    setMovementOnboardingDismissed,
+    setRuntimeFeedbackVisible
   };
 }

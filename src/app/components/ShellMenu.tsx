@@ -24,8 +24,10 @@ type ShellMenuProps = {
   onSetCameraMode: (cameraMode: CameraMode) => void;
   onShowMainMenuScene: () => void;
   onShowPauseScene: () => void;
+  onToggleRuntimeFeedback: () => void;
   onToggleDiagnostics: () => void;
   onToggleInspecteur: () => void;
+  runtimeFeedbackVisible: boolean;
 };
 
 type ShellMenuScreen = "root" | "tools" | "view";
@@ -115,8 +117,10 @@ export const ShellMenu = memo(function ShellMenu({
   onSetCameraMode,
   onShowMainMenuScene,
   onShowPauseScene,
+  onToggleRuntimeFeedback,
   onToggleDiagnostics,
-  onToggleInspecteur
+  onToggleInspecteur,
+  runtimeFeedbackVisible
 }: ShellMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
@@ -370,6 +374,19 @@ export const ShellMenu = memo(function ShellMenu({
                     </>
                   ) : (
                     <>
+                      <button
+                        className="shell-menu__item shell-menu__item--action shell-menu__item--utility"
+                        onClick={() => {
+                          runAction(onToggleRuntimeFeedback);
+                        }}
+                        type="button"
+                      >
+                        <span className="shell-menu__item-label">Runtime feedback</span>
+                        <span className="shell-menu__item-value">
+                          {runtimeFeedbackVisible ? "Visible" : "Hidden"}
+                        </span>
+                      </button>
+
                       <button
                         className="shell-menu__item shell-menu__item--action shell-menu__item--utility"
                         onClick={() => {

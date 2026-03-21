@@ -47,6 +47,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByLabelText("Main menu")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Start new game/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Load game/i })).toBeDisabled();
+    expect(screen.queryByText("No save available")).not.toBeInTheDocument();
     expect(screen.queryByText("Ownership")).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /Settings/i }));

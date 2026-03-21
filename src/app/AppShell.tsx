@@ -99,7 +99,8 @@ export function AppShell() {
     setInspectionPanelVisible,
     setLastMetaScene,
     setMovementOnboardingDismissed,
-    setPrefersFullscreen
+    setPrefersFullscreen,
+    setRuntimeFeedbackVisible
   } = useShellPreferences({
     defaultDebugPanelVisible: false
   });
@@ -318,6 +319,7 @@ export function AppShell() {
             onSetInspectionPanelVisible={setInspectionPanelVisible}
             onSetLastMetaScene={setLastMetaScene}
             onSetMovementOnboardingDismissed={setMovementOnboardingDismissed}
+            onSetRuntimeFeedbackVisible={setRuntimeFeedbackVisible}
             onShowMainMenuScene={showMainMenuScene}
             onShowPauseScene={showPauseScene}
             onShowSettingsScene={handleOpenSettings}

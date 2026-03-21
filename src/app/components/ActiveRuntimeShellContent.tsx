@@ -59,6 +59,7 @@ type ActiveRuntimeShellContentProps = {
   onSetInspectionPanelVisible: (visible: boolean) => void;
   onSetLastMetaScene: (scene: ShellPreferences["lastMetaScene"]) => void;
   onSetMovementOnboardingDismissed: (dismissed: boolean) => void;
+  onSetRuntimeFeedbackVisible: (visible: boolean) => void;
   onShowMainMenuScene: () => void;
   onShowPauseScene: () => void;
   onShowSettingsScene: () => void;
@@ -97,6 +98,7 @@ export function ActiveRuntimeShellContent({
   onSetInspectionPanelVisible,
   onSetLastMetaScene,
   onSetMovementOnboardingDismissed,
+  onSetRuntimeFeedbackVisible,
   onShowMainMenuScene,
   onShowPauseScene,
   onShowSettingsScene,
@@ -304,7 +306,10 @@ export function ActiveRuntimeShellContent({
 
   const selectedEntityChunk = worldPointToChunkCoordinate(entityWorld.selectedEntity.worldPosition);
   const playerHudVisible =
-    activeScene === "runtime" && !diagnosticsVisible && !inspecteurVisible;
+    activeScene === "runtime" &&
+    preferences.runtimeFeedbackVisible &&
+    !diagnosticsVisible &&
+    !inspecteurVisible;
 
   return (
     <>
@@ -350,8 +355,12 @@ export function ActiveRuntimeShellContent({
             onSetCameraMode={onSetCameraMode}
             onShowMainMenuScene={onShowMainMenuScene}
             onShowPauseScene={onShowPauseScene}
+            onToggleRuntimeFeedback={() => {
+              onSetRuntimeFeedbackVisible(!preferences.runtimeFeedbackVisible);
+            }}
             onToggleDiagnostics={handleToggleDiagnostics}
             onToggleInspecteur={handleToggleInspecteur}
+            runtimeFeedbackVisible={preferences.runtimeFeedbackVisible}
           />
         ) : null}
 

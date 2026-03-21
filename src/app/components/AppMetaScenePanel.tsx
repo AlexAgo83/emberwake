@@ -144,10 +144,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               <dt>Session</dt>
               <dd>{canResumeSession ? `Active run / ${playerName}` : "No active run"}</dd>
             </div>
-            <div>
-              <dt>Load game</dt>
-              <dd>{savedSlotSummary ?? "No save available"}</dd>
-            </div>
           </dl>
           <div className="app-meta-scene__actions">
             {canResumeSession ? (

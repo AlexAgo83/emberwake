@@ -10,6 +10,7 @@ export type ShellPreferences = {
   lastMetaScene: "none" | "pause" | "settings";
   movementOnboardingDismissed: boolean;
   prefersFullscreen: boolean;
+  runtimeFeedbackVisible: boolean;
 };
 
 export const shellPreferencesContract = {

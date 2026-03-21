@@ -23,8 +23,10 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof ShellMenu>> 
   onSetCameraMode: vi.fn(),
   onShowMainMenuScene: vi.fn(),
   onShowPauseScene: vi.fn(),
+  onToggleRuntimeFeedback: vi.fn(),
   onToggleDiagnostics: vi.fn(),
   onToggleInspecteur: vi.fn(),
+  runtimeFeedbackVisible: true,
   ...overrides
 });
 
@@ -131,10 +133,25 @@ describe("ShellMenu", () => {
 
     expect(within(panel).getByText("Tools")).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Back to Session/i })).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: /Runtime feedback/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Inspecteur/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Diagnostics/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Install app/i })).toBeInTheDocument();
     expect(within(panel).queryByRole("button", { name: /Main menu/i })).not.toBeInTheDocument();
+  });
+
+  it("toggles runtime feedback from the tools submenu before inspecteur", () => {
+    const props = createProps({
+      runtimeFeedbackVisible: false
+    });
+
+    render(<ShellMenu {...props} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Tools/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Runtime feedback/i }));
+
+    expect(props.onToggleRuntimeFeedback).toHaveBeenCalledTimes(1);
+    expect(props.onOpenChange).toHaveBeenCalledWith(false);
   });
 
   it("returns to Session and resets submenu navigation when the menu closes", () => {
