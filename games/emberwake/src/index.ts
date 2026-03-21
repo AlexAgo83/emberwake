@@ -37,6 +37,10 @@ export type {
 } from "./input/singleEntityControlContract";
 export { createDeterministicDebugEntities } from "./content/scenarios/entityDebugScenario";
 export {
+  emberwakeContentAuthoringContract,
+  validateEmberwakeContentAuthoring
+} from "./content/contentAuthoring";
+export {
   createGenericMoverEntity,
   entityContract
 } from "./content/entities/entityContract";
@@ -75,3 +79,9 @@ export {
   createDefaultEmberwakeRuntimeSessionState,
   emberwakeRuntimeSessionSeedOptions
 } from "./runtime/emberwakeSession";
+export {
+  emberwakeRenderBoundaryContract,
+  emberwakeRuntimeRenderLayerOrder,
+  emberwakeRuntimeRenderLayers
+} from "./presentation/emberwakeRenderLayers";
+export type { EmberwakeRuntimeRenderLayerId } from "./presentation/emberwakeRenderLayers";

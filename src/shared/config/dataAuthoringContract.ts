@@ -16,8 +16,8 @@ export const dataAuthoringContract = {
     world: "terrain-kind-ids-owned-by-world-data"
   },
   validation: {
-    authoringModel: "type-level-and-module-local-assertions",
-    futureExtension: "schema-validation-can-be-added-without-changing-data-ownership",
+    authoringModel: "type-level-and-cross-catalog-module-assertions",
+    futureExtension: "schema-validation-can-wrap-content-catalog-validation-without-moving-ownership",
     runtimeConfig: "import-meta-env-and-explicit-config-modules-only"
   }
 } as const;
