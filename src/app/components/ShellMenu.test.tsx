@@ -65,4 +65,28 @@ describe("ShellMenu", () => {
     expect(within(panel).getByRole("button", { name: "Free" })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: "Follow entity" })).toBeInTheDocument();
   });
+
+  it("renders a stateful command deck trigger and contextual header for the live runtime", () => {
+    const props = createProps({
+      isOpen: false
+    });
+
+    render(<ShellMenu {...props} />);
+
+    expect(screen.getByRole("button", { name: /Command deck/i })).toHaveTextContent("Live");
+  });
+
+  it("renders paused shell context inside the opened command deck", () => {
+    const props = createProps({
+      activeScene: "pause"
+    });
+
+    render(<ShellMenu {...props} />);
+
+    const panel = screen.getByLabelText("Shell menu");
+
+    expect(within(panel).getByText("Session pause")).toBeInTheDocument();
+    expect(within(panel).getByText("Paused")).toBeInTheDocument();
+    expect(within(panel).getByText(/shell owns the pause scene/i)).toBeInTheDocument();
+  });
 });
