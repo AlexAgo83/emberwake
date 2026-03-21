@@ -167,30 +167,30 @@ try {
   }
 
   if (
-    typeof frameLoopMetrics.framesSinceReady !== "number" ||
-    frameLoopMetrics.framesSinceReady < runtimePerformanceBudget.framePacing.minTrackedVisualFrames
+    typeof frameLoopMetrics.recentFramesTracked !== "number" ||
+    frameLoopMetrics.recentFramesTracked < runtimePerformanceBudget.framePacing.minTrackedVisualFrames
   ) {
     throw new Error(
-      `Frame pacing sample window too small. Actual: ${frameLoopMetrics?.framesSinceReady ?? "missing"}, minimum: ${runtimePerformanceBudget.framePacing.minTrackedVisualFrames}`
+      `Frame pacing sample window too small. Actual: ${frameLoopMetrics?.recentFramesTracked ?? "missing"}, minimum: ${runtimePerformanceBudget.framePacing.minTrackedVisualFrames}`
     );
   }
 
   if (
-    typeof frameLoopMetrics.maxSimulationStepsLastFrameSinceReady !== "number" ||
-    frameLoopMetrics.maxSimulationStepsLastFrameSinceReady >
+    typeof frameLoopMetrics.recentMaxSimulationStepsLastFrame !== "number" ||
+    frameLoopMetrics.recentMaxSimulationStepsLastFrame >
       runtimePerformanceBudget.framePacing.maxSimulationStepsPerVisualFrame
   ) {
     throw new Error(
-      `Simulation step burst exceeded frame pacing budget. Actual: ${frameLoopMetrics?.maxSimulationStepsLastFrameSinceReady ?? "missing"}, budget: ${runtimePerformanceBudget.framePacing.maxSimulationStepsPerVisualFrame}`
+      `Simulation step burst exceeded frame pacing budget. Actual: ${frameLoopMetrics?.recentMaxSimulationStepsLastFrame ?? "missing"}, budget: ${runtimePerformanceBudget.framePacing.maxSimulationStepsPerVisualFrame}`
     );
   }
 
   if (
-    typeof frameLoopMetrics.catchUpFramesRatio !== "number" ||
-    frameLoopMetrics.catchUpFramesRatio > runtimePerformanceBudget.framePacing.maxCatchUpFramesRatio
+    typeof frameLoopMetrics.recentCatchUpFramesRatio !== "number" ||
+    frameLoopMetrics.recentCatchUpFramesRatio > runtimePerformanceBudget.framePacing.maxCatchUpFramesRatio
   ) {
     throw new Error(
-      `Catch-up frame ratio exceeded budget. Actual: ${frameLoopMetrics?.catchUpFramesRatio ?? "missing"}, budget: ${runtimePerformanceBudget.framePacing.maxCatchUpFramesRatio}`
+      `Catch-up frame ratio exceeded budget. Actual: ${frameLoopMetrics?.recentCatchUpFramesRatio ?? "missing"}, budget: ${runtimePerformanceBudget.framePacing.maxCatchUpFramesRatio}`
     );
   }
 

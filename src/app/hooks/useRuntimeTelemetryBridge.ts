@@ -18,6 +18,9 @@ declare global {
         framesWithCatchUpSinceReady: number;
         maxFrameTimeMsSinceReady: number;
         maxSimulationStepsLastFrameSinceReady: number;
+        recentCatchUpFramesRatio: number;
+        recentFramesTracked: number;
+        recentMaxSimulationStepsLastFrame: number;
         schedulerMode: "internal-raf" | "pixi-ticker-master";
         simulationStepsLastFrame: number;
         simulationStepsTotalSinceReady: number;
@@ -53,6 +56,8 @@ type RuntimeTelemetryBridgeOptions = {
   };
 };
 
+const recentFrameSampleWindow = 120;
+
 export function useRuntimeTelemetryBridge({
   activeScene,
   diagnosticsVisible,
@@ -67,12 +72,19 @@ export function useRuntimeTelemetryBridge({
   } | null>(null);
   const maxFrameTimeSinceReadyRef = useRef(0);
   const maxSimulationStepsLastFrameSinceReadyRef = useRef(0);
+  const recentFrameSamplesRef = useRef<
+    Array<{
+      hadCatchUp: boolean;
+      simulationStepsLastFrame: number;
+    }>
+  >([]);
 
   useEffect(() => {
     if (rendererState.status !== "ready") {
       readyBaselineRef.current = null;
       maxFrameTimeSinceReadyRef.current = 0;
       maxSimulationStepsLastFrameSinceReadyRef.current = 0;
+      recentFrameSamplesRef.current = [];
     } else {
       if (readyBaselineRef.current === null) {
         readyBaselineRef.current = {
@@ -90,6 +102,13 @@ export function useRuntimeTelemetryBridge({
         maxSimulationStepsLastFrameSinceReadyRef.current,
         runtime.simulationStepsLastFrame
       );
+      recentFrameSamplesRef.current = [
+        ...recentFrameSamplesRef.current.slice(-(recentFrameSampleWindow - 1)),
+        {
+          hadCatchUp: runtime.simulationStepsLastFrame > 1,
+          simulationStepsLastFrame: runtime.simulationStepsLastFrame
+        }
+      ];
     }
 
     const baseline = readyBaselineRef.current;
@@ -101,6 +120,16 @@ export function useRuntimeTelemetryBridge({
       baseline === null ? 0 : Math.max(0, runtime.simulationStepsTotal - baseline.simulationStepsTotal);
     const catchUpFramesRatio =
       framesSinceReady === 0 ? 0 : framesWithCatchUpSinceReady / framesSinceReady;
+    const recentFrameSamples = recentFrameSamplesRef.current;
+    const recentFramesTracked = recentFrameSamples.length;
+    const recentFramesWithCatchUp = recentFrameSamples.filter((sample) => sample.hadCatchUp).length;
+    const recentCatchUpFramesRatio =
+      recentFramesTracked === 0 ? 0 : recentFramesWithCatchUp / recentFramesTracked;
+    const recentMaxSimulationStepsLastFrame = recentFrameSamples.reduce(
+      (maxSimulationSteps, sample) =>
+        Math.max(maxSimulationSteps, sample.simulationStepsLastFrame),
+      0
+    );
 
     globalThis.window.__EMBERWAKE_RUNTIME_METRICS__ = {
       activeScene,
@@ -115,6 +144,9 @@ export function useRuntimeTelemetryBridge({
         framesWithCatchUpSinceReady,
         maxFrameTimeMsSinceReady: Number(maxFrameTimeSinceReadyRef.current.toFixed(2)),
         maxSimulationStepsLastFrameSinceReady: maxSimulationStepsLastFrameSinceReadyRef.current,
+        recentCatchUpFramesRatio: Number(recentCatchUpFramesRatio.toFixed(4)),
+        recentFramesTracked,
+        recentMaxSimulationStepsLastFrame,
         schedulerMode: runtime.schedulerMode,
         simulationStepsLastFrame: runtime.simulationStepsLastFrame,
         simulationStepsTotalSinceReady,
