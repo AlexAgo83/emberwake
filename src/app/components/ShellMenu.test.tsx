@@ -106,6 +106,24 @@ describe("ShellMenu", () => {
     );
   });
 
+  it("keeps view controls nested inside the session section without changing camera access", () => {
+    const props = createProps();
+
+    render(<ShellMenu {...props} />);
+
+    const sessionSection = screen.getByText("Session").closest(".shell-menu__section");
+    expect(sessionSection).not.toBeNull();
+
+    const viewSection = within(sessionSection as HTMLElement)
+      .getByText("View")
+      .closest(".shell-menu__subsection");
+
+    expect(viewSection).toHaveClass("shell-menu__subsection--view");
+    expect(within(viewSection as HTMLElement).getByRole("button", { name: /Reset camera/i })).toBeInTheDocument();
+    expect(within(viewSection as HTMLElement).getByRole("button", { name: "Free" })).toBeInTheDocument();
+    expect(within(viewSection as HTMLElement).getByRole("button", { name: "Follow entity" })).toBeInTheDocument();
+  });
+
   it("renders a stateful command deck trigger and contextual header for the live runtime", () => {
     const props = createProps({
       isOpen: false

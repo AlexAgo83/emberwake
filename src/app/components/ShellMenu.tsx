@@ -275,7 +275,7 @@ export const ShellMenu = memo(function ShellMenu({
               </button>
               <section
                 aria-labelledby={`${menuId}-view`}
-                className="shell-menu__subsection"
+                className="shell-menu__subsection shell-menu__subsection--view"
                 data-subsection-tone="secondary"
               >
                 <p className="shell-menu__subsection-title" id={`${menuId}-view`}>
@@ -293,7 +293,7 @@ export const ShellMenu = memo(function ShellMenu({
                     <span className="shell-menu__item-value">Recenter view</span>
                   </button>
                   <div
-                    className="shell-menu__group shell-menu__group--secondary"
+                    className="shell-menu__group shell-menu__group--secondary shell-menu__group--view"
                     role="group"
                     aria-label="Camera mode"
                   >
