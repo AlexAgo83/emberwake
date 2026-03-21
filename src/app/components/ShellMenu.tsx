@@ -32,6 +32,13 @@ type ShellMenuProps = {
 
 type ShellMenuScreen = "root" | "tools" | "view";
 
+const isEditableTarget = (target: EventTarget | null) =>
+  target instanceof HTMLElement &&
+  (target.isContentEditable ||
+    target.tagName === "INPUT" ||
+    target.tagName === "SELECT" ||
+    target.tagName === "TEXTAREA");
+
 const sceneStatusMap: Record<
   AppSceneId,
   {
@@ -173,6 +180,22 @@ export const ShellMenu = memo(function ShellMenu({
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.key !== "Escape" ||
+        event.defaultPrevented ||
+        document.body.dataset.desktopControlCaptureActive === "true" ||
+        isEditableTarget(event.target)
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (menuScreen !== "root") {
+        setMenuScreen("root");
+        return;
+      }
+
       if (event.key === "Escape") {
         onOpenChange(false);
       }
@@ -185,7 +208,7 @@ export const ShellMenu = memo(function ShellMenu({
       window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen, onOpenChange]);
+  }, [isOpen, menuScreen, onOpenChange]);
 
   const runAction = (action: () => void) => {
     action();

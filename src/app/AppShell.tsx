@@ -224,6 +224,7 @@ export function AppShell() {
       desktopControlBindings={desktopControlBindings}
       fullscreenPreferred={preferences.prefersFullscreen}
       gameOverRecap={gameOverRecap}
+      isShellMenuOpen={isMenuOpen}
       isLoadAvailable={isLoadAvailable}
       onApplyDesktopControlBindings={handleApplyDesktopControlBindings}
       onBeginNewGame={handleBeginNewGame}

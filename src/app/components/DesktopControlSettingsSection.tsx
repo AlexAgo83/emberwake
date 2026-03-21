@@ -114,6 +114,14 @@ export function DesktopControlSettingsSection({
     };
   }, [captureState]);
 
+  useEffect(() => {
+    document.body.dataset.desktopControlCaptureActive = captureState ? "true" : "false";
+
+    return () => {
+      document.body.dataset.desktopControlCaptureActive = "false";
+    };
+  }, [captureState]);
+
   const statusCopy = useMemo(() => {
     if (conflictSet.size > 0) {
       return "Resolve duplicate keys before applying changes.";

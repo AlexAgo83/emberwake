@@ -1,4 +1,5 @@
 import { lazy, memo, Suspense } from "react";
+import { useEffect } from "react";
 
 import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
 import { characterNameMaxLength } from "../model/characterName";
@@ -30,6 +31,7 @@ type AppMetaScenePanelProps = {
   desktopControlBindings: DesktopControlBindings;
   fullscreenPreferred: boolean;
   gameOverRecap?: GameOverRecap | null;
+  isShellMenuOpen: boolean;
   isLoadAvailable: boolean;
   onApplyDesktopControlBindings: (bindings: DesktopControlBindings) => void;
   onBeginNewGame: () => void;
@@ -53,6 +55,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   desktopControlBindings,
   fullscreenPreferred,
   gameOverRecap,
+  isShellMenuOpen,
   isLoadAvailable,
   onApplyDesktopControlBindings,
   onBeginNewGame,
@@ -125,6 +128,49 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
     scene === "defeat" || scene === "victory"
       ? `Shell scene / gameplay outcome ${runtimeOutcome?.kind ?? scene}`
       : "Shell scene / runtime state preserved";
+  const handleEscapeAction =
+    scene === "main-menu"
+      ? canResumeSession
+        ? onResumeRuntime
+        : null
+      : scene === "new-game" || scene === "settings" || scene === "defeat"
+        ? onReturnToMainMenu
+        : null;
+
+  useEffect(() => {
+    if (!handleEscapeAction) {
+      return;
+    }
+
+    const handleWindowKeyDown = (event: KeyboardEvent) => {
+      const target = event.target;
+      const isEditableElement =
+        target instanceof HTMLElement &&
+        (target.isContentEditable ||
+          target.tagName === "INPUT" ||
+          target.tagName === "SELECT" ||
+          target.tagName === "TEXTAREA");
+
+      if (
+        event.key !== "Escape" ||
+        event.defaultPrevented ||
+        isShellMenuOpen ||
+        isEditableElement ||
+        document.body.dataset.desktopControlCaptureActive === "true"
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      handleEscapeAction();
+    };
+
+    window.addEventListener("keydown", handleWindowKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleWindowKeyDown);
+    };
+  }, [handleEscapeAction, isShellMenuOpen]);
 
   return (
     <aside className="app-meta-scene" aria-label={title}>

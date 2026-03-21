@@ -11,6 +11,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   desktopControlBindings: createDefaultDesktopControlBindings(),
   fullscreenPreferred: false,
   gameOverRecap: null,
+  isShellMenuOpen: false,
   isLoadAvailable: false,
   onApplyDesktopControlBindings: vi.fn(),
   onBeginNewGame: vi.fn(),
@@ -69,6 +70,19 @@ describe("AppMetaScenePanel", () => {
     expect(props.onLoadGame).toHaveBeenCalledTimes(1);
   });
 
+  it("maps Escape to Resume runtime from the main menu when that action is available", () => {
+    const props = createProps({
+      canResumeSession: true,
+      scene: "main-menu"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(props.onResumeRuntime).toHaveBeenCalledTimes(1);
+  });
+
   it("renders the new-game naming step and gates Begin on invalid input", () => {
     const props = createProps({
       characterNameError: "Enter a character name.",
@@ -85,6 +99,32 @@ describe("AppMetaScenePanel", () => {
     });
 
     expect(props.onCharacterNameChange).toHaveBeenCalledWith("Ash");
+  });
+
+  it("routes Escape through Back actions for settings when the shell menu is closed", () => {
+    const props = createProps({
+      scene: "settings"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(props.onReturnToMainMenu).toHaveBeenCalledTimes(1);
+  });
+
+  it("lets local input focus absorb Escape instead of navigating away", () => {
+    const props = createProps({
+      scene: "new-game"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    const input = screen.getByLabelText(/Character name/i);
+    input.focus();
+    fireEvent.keyDown(input, { key: "Escape" });
+
+    expect(props.onReturnToMainMenu).not.toHaveBeenCalled();
   });
 
   it("stays hidden for the removed pause overlay surface", () => {

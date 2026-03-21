@@ -172,6 +172,28 @@ describe("ShellMenu", () => {
     expect(screen.queryByRole("button", { name: /Back to Session/i })).not.toBeInTheDocument();
   });
 
+  it("uses Escape to step back from submenus before closing the deck", () => {
+    const props = createProps();
+
+    render(<ShellMenu {...props} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /View/i }));
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(screen.getByRole("button", { name: /Main menu/i })).toBeInTheDocument();
+    expect(props.onOpenChange).not.toHaveBeenCalled();
+  });
+
+  it("uses Escape to close the deck from the root screen", () => {
+    const props = createProps();
+
+    render(<ShellMenu {...props} />);
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(props.onOpenChange).toHaveBeenCalledWith(false);
+  });
+
   it("routes main-menu navigation through the session root actions", () => {
     const props = createProps();
 
