@@ -1,8 +1,8 @@
 ## req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors - Refine spawn, bootstrap, pause surface, and escape-navigation behaviors
 > From version: 0.2.3
-> Status: Done
+> Status: Draft
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -13,6 +13,7 @@
 - Stop showing a dedicated `Runtime paused` panel when the shell enters pause.
 - Make `Escape` trigger the same behavior as visible `Back` actions in shell-owned menus and submenus.
 - Make `Escape` from `Main menu` resume the active runtime when `Resume runtime` is available.
+- Make `Escape` during live runtime open `Main menu`, which therefore pauses/preserves the current run through shell ownership.
 - Push hostile spawn distance farther out so the player has a better chance to see incoming threats before contact.
 
 # Context
@@ -38,6 +39,7 @@ Recommended target posture:
 5. Treat `Escape` as a first-class shell navigation affordance:
    - in nested shell menus, it should invoke the active `Back` action
    - in `Main menu`, it should invoke `Resume runtime` when that action exists
+   - during live runtime, it should open `Main menu`, which implicitly pauses the run by returning to a shell-owned scene
 
 Recommended first-slice posture:
 - hostile spawning:
@@ -51,6 +53,7 @@ Recommended first-slice posture:
 - `Escape` navigation:
   - route `Escape` through visible `Back` affordances in shell-owned surfaces
   - route `Escape` on `Main menu` to `Resume runtime` when available
+  - route `Escape` during live runtime to `Main menu`
 
 Recommended defaults:
 - treat “forward-biased” as a strong front-first preference, with side sectors as fallback and rear sectors as last resort
@@ -65,6 +68,8 @@ Recommended defaults:
 - if a text field or rebinding capture is actively focused, `Escape` should resolve that local interaction first before triggering shell back-navigation
 - if the command deck itself is open, `Escape` should close or step back inside the deck before triggering broader scene-level resume behavior
 - in `Main menu`, `Escape` should only resume when `Resume runtime` is actually available; otherwise it should do nothing
+- in live runtime, `Escape` should open `Main menu` rather than only opening or closing the command deck
+- opening `Main menu` from live runtime through `Escape` should preserve the current session and therefore pause the run through normal shell ownership
 
 Scope includes:
 - correcting forward-biased hostile spawn behavior
@@ -73,6 +78,7 @@ Scope includes:
 - suppressing the dedicated pause panel
 - `Escape` handling for shell back-navigation
 - `Escape` handling for main-menu runtime resume
+- `Escape` handling for runtime-to-main-menu pause handoff
 
 Scope excludes:
 - combat redesign
@@ -90,8 +96,10 @@ flowchart TD
     C --> D[Player can see threats coming]
     E[Shell menu has Back] --> F[Escape triggers Back]
     G[Main menu has Resume runtime] --> H[Escape resumes runtime]
-    I[Pause requested] --> J[No dedicated Runtime paused panel]
-    K[New game starts] --> L[Only intended runtime actors are presented]
+    I[Live runtime + Escape] --> J[Open Main menu]
+    J --> K[Run becomes shell-preserved and paused]
+    L[Pause requested] --> M[No dedicated Runtime paused panel]
+    N[New game starts] --> O[Only intended runtime actors are presented]
 ```
 
 # Acceptance criteria
@@ -101,7 +109,8 @@ flowchart TD
 - AC4: The request defines that the dedicated `Runtime paused` panel should no longer render during pause.
 - AC5: The request defines that `Escape` should invoke visible `Back` actions in menus where such actions exist.
 - AC6: The request defines that `Escape` should invoke `Resume runtime` from `Main menu` when that action is available.
-- AC7: The request stays intentionally narrow and does not reopen menu redesign, combat redesign, or debug-tool ownership.
+- AC7: The request defines that `Escape` during live runtime should open `Main menu` and preserve/pause the current run.
+- AC8: The request stays intentionally narrow and does not reopen menu redesign, combat redesign, or debug-tool ownership.
 
 # Open questions
 - Should rear-biased hostile spawns remain technically possible?
@@ -116,6 +125,8 @@ flowchart TD
   Recommended default: no; if they are removed from normal presentation, they should also disappear from normal selection and targeting.
 - Should `Escape` on a focused input immediately navigate away?
   Recommended default: no; clear the local focus/capture first, then allow a subsequent `Escape` to trigger the visible `Back` or `Resume` action.
+- Should runtime `Escape` still step through the command deck first if the deck is already open?
+  Recommended default: yes; the open deck keeps first claim on `Escape`, and only a subsequent `Escape` from live runtime with no open deck should open `Main menu`.
 
 # Definition of Ready (DoR)
 - [x] Problem statement is explicit and user impact is clear.
@@ -133,19 +144,11 @@ flowchart TD
 - `remove_fake_bootstrap_entities_from_player_facing_runtime_start`
 - `remove_runtime_paused_panel_and_align_escape_navigation_with_visible_back_or_resume_actions`
 
-# Outcome
-- Hostile spawning now uses attempt-ordered front and front-side sectors before any rear fallback, and the hostile safe spawn distance was raised so incoming threats appear farther out.
-- Player-facing runtime presentation now filters bootstrap/support entities out of normal rendering, selection, and targeting while leaving runtime support data available to the simulation layer.
-- The dedicated `Runtime paused` card no longer renders; pause remains shell-owned through the command deck and scene state alone.
-- `Escape` now mirrors visible shell actions:
-  - command-deck submenus step back before the deck closes
-  - command-deck root closes on `Escape`
-  - `Main menu` maps `Escape` to `Resume runtime` when available
-  - `Settings`, `New game`, and `Game over` map `Escape` to their visible back action
-  - active text input and desktop-control rebinding capture consume `Escape` before shell navigation
-
-# Validation
-- `npx vitest run src/app/components/ShellMenu.test.tsx src/app/components/AppMetaScenePanel.test.tsx src/app/components/DesktopControlSettingsSection.test.tsx src/game/entities/hooks/useEntityWorld.test.tsx games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts`
-- `npm run ci`
-- `npm run test:browser:smoke`
-- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
+# Implementation note
+- The previously delivered slice already covers:
+  - forward-biased and farther hostile spawns
+  - removal of fake/bootstrap entities from player-facing runtime presentation
+  - removal of the dedicated `Runtime paused` card
+  - `Escape` mirroring visible `Back` actions and `Resume runtime` on `Main menu`
+- This request is now reopened to additionally cover:
+  - `Escape` from live runtime opening `Main menu` and thereby pausing/preserving the run
