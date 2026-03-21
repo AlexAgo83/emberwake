@@ -210,8 +210,8 @@ describe("entitySimulation", () => {
   it("computes a bounded fallback route when direct hostile pursuit is blocked", () => {
     let blockingTile: { x: number; y: number } | null = null;
 
-    for (let tileX = -64; tileX <= 64 && !blockingTile; tileX += 1) {
-      for (let tileY = -64; tileY <= 64; tileY += 1) {
+    for (let tileX = -160; tileX <= 160 && !blockingTile; tileX += 1) {
+      for (let tileY = -160; tileY <= 160; tileY += 1) {
         if (sampleWorldTileLayers(tileX, tileY).obstacleKind === "solid") {
           blockingTile = { x: tileX, y: tileY };
           break;
