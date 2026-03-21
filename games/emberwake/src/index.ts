@@ -35,7 +35,7 @@ export type {
   MovementIntentSource,
   SingleEntityControlState
 } from "./input/singleEntityControlContract";
-export { createDeterministicDebugEntities } from "./content/scenarios/entityDebugScenario";
+export { createDeterministicDebugEntities } from "./runtime/debugEntities";
 export {
   emberwakeContentAuthoringContract,
   validateEmberwakeContentAuthoring

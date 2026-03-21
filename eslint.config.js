@@ -71,5 +71,72 @@ export default tseslint.config(
         }
       ]
     }
+  },
+  {
+    files: ["games/emberwake/src/content/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "@app",
+                "@app/*",
+                "@engine-pixi",
+                "@engine-pixi/*",
+                "@game/runtime",
+                "@game/runtime/*",
+                "@src/game",
+                "@src/game/*"
+              ],
+              message:
+                "Game content modules must stay authoring-focused. Keep them free from app-shell, Pixi-adapter, runtime-orchestration, and legacy src/game dependencies."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    files: ["games/emberwake/src/presentation/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "@app",
+                "@app/*",
+                "@engine-pixi",
+                "@engine-pixi/*",
+                "@src/game",
+                "@src/game/*"
+              ],
+              message:
+                "Game presentation contracts must stay descriptive. Let src/game/render own Pixi adapters and app-shell integration."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    files: ["src/app/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@engine-pixi", "@engine-pixi/*"],
+              message:
+                "App-shell modules must not depend on Pixi adapters directly. Route runtime rendering through src/game/render boundaries instead."
+            }
+          ]
+        }
+      ]
+    }
   }
 );

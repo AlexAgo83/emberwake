@@ -1,7 +1,6 @@
 import { createGenericMoverEntity } from "@game/content/entities/entityContract";
+import { officialDebugScenario } from "@game/content/scenarios/officialDebugScenario";
 import type { SimulatedEntity } from "@game/runtime/entitySimulation";
-
-import { officialDebugScenario } from "./officialDebugScenario";
 
 const createScenarioEntity = (
   entityBlueprint: (typeof officialDebugScenario.supportEntities)[number],
