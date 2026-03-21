@@ -1,8 +1,8 @@
 ## req_031_define_character_name_validation_and_constraints_for_new_game_entry - Define character-name validation and constraints for new-game entry
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Low
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -108,3 +108,8 @@ flowchart TD
 - `define_character_name_validation_rules_for_new_game_entry`
 - `define_character_name_field_feedback_and_begin_gating_behavior`
 - `define_character_name_persistence_contract_for_session_creation`
+
+# Implementation notes
+- Delivered through `src/app/model/characterName.ts` with one shared contract for normalization, validation, and downstream session creation.
+- The first-slice contract now trims input, collapses repeated whitespace, enforces a `3-20` character window, allows letters/digits/spaces/apostrophes/hyphens, and rejects numeric-only names.
+- The `New game` form applies the same contract for inline feedback, `Begin` gating, and persisted runtime-session name storage.

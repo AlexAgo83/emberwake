@@ -14,12 +14,15 @@ describe("runtimeSessionStorage", () => {
 
   it("round-trips runtime session state through local storage", () => {
     const runtimeSession = {
+      hasActiveSession: true,
+      playerName: "Wanderer",
       cameraMode: "free" as const,
       cameraState: {
         rotation: 0.5,
         worldPosition: { x: 128, y: -256 },
         zoom: 1.25
       },
+      sessionRevision: 3,
       worldSeed: "emberwake-glow-seed"
     };
 
@@ -35,11 +38,14 @@ describe("runtimeSessionStorage", () => {
       runtimeSessionContract.storageKey,
       JSON.stringify({
         runtimeSession: {
+          hasActiveSession: true,
+          playerName: "Legacy",
           cameraState: {
             rotation: 1,
             worldPosition: { x: 10, y: 20 },
             zoom: 2
           },
+          sessionRevision: 1,
           worldSeed: "legacy-seed"
         },
         version: runtimeSessionContract.storageVersion + 1

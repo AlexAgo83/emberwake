@@ -1,6 +1,15 @@
 export type RendererLifecycleStatus = "degraded" | "failed" | "initializing" | "ready";
 
-export type AppSceneId = "boot" | "defeat" | "failure" | "pause" | "runtime" | "settings" | "victory";
+export type AppSceneId =
+  | "boot"
+  | "defeat"
+  | "failure"
+  | "main-menu"
+  | "new-game"
+  | "pause"
+  | "runtime"
+  | "settings"
+  | "victory";
 
 export type AppShellSurfaceId = "menu" | "none";
 
@@ -12,8 +21,8 @@ export type RuntimeShellOutcome = {
 };
 
 export const appSceneContract = {
-  initialScene: "runtime",
-  metaScenes: ["pause", "settings", "defeat", "victory"],
+  initialScene: "main-menu",
+  metaScenes: ["main-menu", "new-game", "pause", "settings", "defeat", "victory"],
   outcomeScenes: ["defeat", "pause", "victory"],
   shellOwnedSurfaces: ["menu"],
   terminalScenes: ["failure", "defeat", "victory"]

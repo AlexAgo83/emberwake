@@ -1,8 +1,8 @@
 ## req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow - Define a shell-owned main menu and new-game entry flow
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -139,3 +139,9 @@ flowchart TD
 - `define_a_shell_owned_main_menu_as_the_primary_product_entry_and_return_hub`
 - `define_a_new_game_flow_that_captures_character_name_before_runtime_start`
 - `define_resume_load_and_session_replacement_rules_for_main_menu_navigation`
+
+# Implementation notes
+- Delivered through `AppShell`, `AppMetaScenePanel`, `useAppScene`, and runtime-session storage changes so the product now boots into `Main menu` instead of entering the live runtime immediately.
+- Added a shell-owned `New game` subflow that captures character name before runtime start and routes back safely to `Main menu`.
+- Preserved runtime sessions in memory and storage so `Resume` can return to the active session while `New game` uses explicit confirmation before replacing it.
+- Kept `Load game` visible but unavailable for the first slice while the save-system redesign remains out of scope.

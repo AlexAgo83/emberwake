@@ -38,6 +38,14 @@ export function useAppScene({ rendererStatus, runtimeOutcome }: UseAppSceneOptio
     setRequestedScene("pause");
     setShellSurface("none");
   }, []);
+  const showMainMenuScene = useCallback(() => {
+    setRequestedScene("main-menu");
+    setShellSurface("none");
+  }, []);
+  const showNewGameScene = useCallback(() => {
+    setRequestedScene("new-game");
+    setShellSurface("none");
+  }, []);
   const showSettingsScene = useCallback(() => {
     setRequestedScene("settings");
     setShellSurface("none");
@@ -53,6 +61,8 @@ export function useAppScene({ rendererStatus, runtimeOutcome }: UseAppSceneOptio
     resumeRuntime,
     runtimeOutcome,
     shellSurface,
+    showMainMenuScene,
+    showNewGameScene,
     showPauseScene,
     showSettingsScene
   };

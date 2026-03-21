@@ -6,7 +6,7 @@ import { shellPerformanceBudget } from "../../shared/constants/performanceBudget
 import { runtimeContract } from "../../shared/constants/runtimeContract";
 import type { LayoutMode } from "../../shared/types/layout";
 
-type LogicalViewportModel = {
+export type LogicalViewportModel = {
   fitScale: number;
   layoutMode: LayoutMode;
   logicalSize: {

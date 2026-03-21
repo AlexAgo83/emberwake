@@ -1,9 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
+import { ActiveRuntimeShellContent } from "./components/ActiveRuntimeShellContent";
 import { AppMetaScenePanel } from "./components/AppMetaScenePanel";
-import { EntityInspectionPanel } from "./components/EntityInspectionPanel";
-import { RuntimeSceneBoundary } from "./components/RuntimeSceneBoundary";
-import { ShellMenu } from "./components/ShellMenu";
 import { useAppScene } from "./hooks/useAppScene";
 import { useDocumentViewportLock } from "./hooks/useDocumentViewportLock";
 import { useFullscreenController } from "./hooks/useFullscreenController";
@@ -11,58 +9,39 @@ import { useInstallPrompt } from "./hooks/useInstallPrompt";
 import { useLogicalViewportModel } from "./hooks/useLogicalViewportModel";
 import { useRendererHealth } from "./hooks/useRendererHealth";
 import { useRuntimeSession } from "./hooks/useRuntimeSession";
-import { useSampledValue } from "./hooks/useSampledValue";
 import { useShellPreferences } from "./hooks/useShellPreferences";
-import { useRuntimeTelemetryBridge } from "./hooks/useRuntimeTelemetryBridge";
-import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards";
 import { deriveAppSceneId } from "./model/appScene";
-import { runtimePublicationContract } from "./model/runtimePublicationContract";
-import { worldPointToChunkCoordinate } from "@engine";
-import type { GameplayShellOutcome } from "@game";
-import { useCameraController } from "../game/camera/hooks/useCameraController";
-import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
-import { useDebugPanelHotkey } from "../game/debug/hooks/useDebugPanelHotkey";
-import { useEntitySimulation } from "../game/entities/hooks/useEntitySimulation";
-import { useEntityWorld } from "../game/entities/hooks/useEntityWorld";
-import { entityContract } from "../game/entities/model/entityContract";
-import { MobileVirtualStickOverlay } from "../game/input/components/MobileVirtualStickOverlay";
-import { useMobileVirtualStick } from "../game/input/hooks/useMobileVirtualStick";
-import { useSingleEntityControl } from "../game/input/hooks/useSingleEntityControl";
-import { useWorldInteractionDiagnostics } from "../game/world/hooks/useWorldInteractionDiagnostics";
-import { useVisibleChunkSet } from "../game/world/hooks/useVisibleChunkSet";
+import type { RuntimeShellOutcome } from "./model/appScene";
+import { defaultCharacterName, validateCharacterName } from "./model/characterName";
 import { appConfig } from "../shared/config/appConfig";
-import { createIdleMovementIntent } from "../game/input/model/singleEntityControlContract";
 
 export function AppShell() {
   const shellRef = useRef<HTMLElement>(null);
-  const runtimeSurfaceRef = useRef<HTMLDivElement | null>(null);
-  const [runtimeSurfaceElement, setRuntimeSurfaceElement] = useState<HTMLDivElement | null>(null);
+  const [pendingCharacterName, setPendingCharacterName] = useState(defaultCharacterName);
+  const [runtimeOutcome, setRuntimeOutcome] = useState<RuntimeShellOutcome | null>(null);
   useDocumentViewportLock();
-  const handleRuntimeSurfaceElementChange = useCallback((element: HTMLDivElement | null) => {
-    if (runtimeSurfaceRef.current === element) {
-      return;
-    }
-
-    runtimeSurfaceRef.current = element;
-    setRuntimeSurfaceElement(element);
-  }, []);
-  useRuntimeInteractionGuards(runtimeSurfaceElement);
-  const mobileVirtualStick = useMobileVirtualStick({
-    surfaceElement: runtimeSurfaceElement
-  });
   const { canInstall, promptInstall } = useInstallPrompt();
-  const runtimeControlState = useSingleEntityControl({
-    controlledEntityId: entityContract.primaryEntityId,
-    touchMovementIntent: mobileVirtualStick.movementIntent
-  });
   const { enterFullscreen, isFullscreen, isSupported, lastError } =
     useFullscreenController(shellRef);
   const viewport = useLogicalViewportModel(shellRef);
-  const { cycleWorldSeed, runtimeSession, setCameraMode, setCameraState } = useRuntimeSession();
-  const { markFailed, markReady, rendererState, reset: resetRenderer } = useRendererHealth();
+  const {
+    createNewSession,
+    cycleWorldSeed,
+    runtimeSession,
+    setCameraMode,
+    setCameraState
+  } = useRuntimeSession();
+  const {
+    markFailed,
+    markReady,
+    rendererState,
+    reset: resetRenderer
+  } = useRendererHealth({
+    enabled: runtimeSession.hasActiveSession
+  });
   const appScene = useAppScene({
     rendererStatus: rendererState.status,
-    runtimeOutcome: null
+    runtimeOutcome
   });
   const {
     closeShellSurface,
@@ -70,7 +49,8 @@ export function AppShell() {
     openMenu,
     requestedScene,
     resumeRuntime,
-    shellSurface,
+    showMainMenuScene,
+    showNewGameScene,
     showPauseScene,
     showSettingsScene
   } = appScene;
@@ -83,28 +63,6 @@ export function AppShell() {
       }),
     [rendererState.status, requestedScene]
   );
-  const controlState = useMemo(
-    () =>
-      shellRequestedScene === "runtime"
-        ? runtimeControlState
-        : {
-            ...runtimeControlState,
-            debugCameraModifierActive: false,
-            inputOwner: "none" as const,
-            movementIntent: createIdleMovementIntent("none")
-          },
-    [runtimeControlState, shellRequestedScene]
-  );
-  const simulationState = useEntitySimulation({ controlState });
-  const runtimeOutcome = useMemo(() => {
-    const rawRuntimeOutcome = simulationState.presentation.overlays?.runtimeOutcome;
-
-    if (!rawRuntimeOutcome || rawRuntimeOutcome.kind === "none") {
-      return null;
-    }
-
-    return rawRuntimeOutcome as GameplayShellOutcome;
-  }, [simulationState.presentation.overlays]);
   const activeScene = useMemo(
     () =>
       deriveAppSceneId({
@@ -114,28 +72,6 @@ export function AppShell() {
       }),
     [rendererState.status, requestedScene, runtimeOutcome]
   );
-  const followedWorldPosition =
-    simulationState.presentation.cameraTarget?.worldPosition ?? simulationState.entity.worldPosition;
-  const { cameraState, resetCamera } = useCameraController({
-    cameraMode: runtimeSession.cameraMode,
-    debugCameraEnabled: controlState.debugCameraModifierActive,
-    followedWorldPosition,
-    initialCameraState: runtimeSession.cameraState,
-    onCameraStateChange: setCameraState,
-    surfaceElement: runtimeSurfaceElement,
-    viewport
-  });
-  const chunkVisibility = useVisibleChunkSet(cameraState, viewport);
-  const worldDiagnostics = useWorldInteractionDiagnostics({
-    camera: cameraState,
-    surfaceElement: runtimeSurfaceElement,
-    viewport
-  });
-  const entityWorld = useEntityWorld({
-    primaryEntity: simulationState.entity,
-    selectedWorldPoint: worldDiagnostics.selectedWorldPoint,
-    visibleChunks: chunkVisibility.visibleChunks
-  });
   const {
     preferences,
     setDebugPanelVisible,
@@ -145,23 +81,8 @@ export function AppShell() {
   } = useShellPreferences({
     defaultDebugPanelVisible: false
   });
-  const isMobileLayout = viewport.layoutMode === "mobile";
   const diagnosticsVisible = appConfig.diagnosticsEnabled && preferences.debugPanelVisible;
   const inspecteurVisible = preferences.inspectionPanelVisible;
-  const handleToggleDiagnostics = useCallback(() => {
-    setDebugPanelVisible(!preferences.debugPanelVisible);
-  }, [preferences.debugPanelVisible, setDebugPanelVisible]);
-  const handleToggleInspecteur = useCallback(() => {
-    setInspectionPanelVisible(!preferences.inspectionPanelVisible);
-  }, [preferences.inspectionPanelVisible, setInspectionPanelVisible]);
-  const handleMenuOpenChange = useCallback((isOpen: boolean) => {
-    if (isOpen) {
-      openMenu();
-      return;
-    }
-
-    closeShellSurface();
-  }, [closeShellSurface, openMenu]);
   const handleEnterFullscreen = useCallback(async () => {
     setPrefersFullscreen(true);
     await enterFullscreen();
@@ -176,107 +97,43 @@ export function AppShell() {
     resumeRuntime();
     resetRenderer();
   }, [resetRenderer, resumeRuntime]);
-  const handleCloseInspectionPanel = useCallback(() => {
-    setInspectionPanelVisible(false);
-  }, [setInspectionPanelVisible]);
-  const handleCloseDiagnostics = useCallback(() => {
-    setDebugPanelVisible(false);
-  }, [setDebugPanelVisible]);
-  const diagnosticsPanelProps = useMemo(
-    () => ({
-      camera: cameraState,
-      control: runtimeControlState,
-      entity: entityWorld.selectedEntity ?? simulationState.entity,
-      fullscreen: {
-        isFullscreen,
-        isSupported,
-        lastError
-      },
-      onClose: handleCloseDiagnostics,
-      preferences,
-      publication: runtimePublicationContract.hotPathSurfaceModes,
-      renderer: rendererState,
-      simulation: {
-        ...simulationState.runtime,
-        tick: simulationState.tick
-      },
-      simulationControls: {
-        ...simulationState.controls,
-        cycleWorldSeed
-      },
-      viewport,
-      worldDiagnostics,
-      worldRender: {
-        cachedChunkIds: chunkVisibility.cachedChunkIds,
-        overlappingPairs: entityWorld.overlappingPairs.length,
-        preloadMargin: chunkVisibility.preloadMargin,
-        trackedEntities: entityWorld.trackedEntities.length,
-        visibleEntities: entityWorld.visibleEntities.length,
-        visibleChunks: chunkVisibility.visibleChunks,
-        worldSeed: runtimeSession.worldSeed
-      }
-    }),
-    [
-      cameraState,
-      chunkVisibility.cachedChunkIds,
-      chunkVisibility.preloadMargin,
-      chunkVisibility.visibleChunks,
-      cycleWorldSeed,
-      entityWorld.overlappingPairs.length,
-      entityWorld.selectedEntity,
-      entityWorld.trackedEntities.length,
-      entityWorld.visibleEntities.length,
-      handleCloseDiagnostics,
-      isFullscreen,
-      isSupported,
-      lastError,
-      preferences,
-      rendererState,
-      runtimeControlState,
-      runtimeSession.worldSeed,
-      simulationState.controls,
-      simulationState.entity,
-      simulationState.runtime,
-      simulationState.tick,
-      viewport,
-      worldDiagnostics
-    ]
+  const characterNameValidation = useMemo(
+    () => validateCharacterName(pendingCharacterName),
+    [pendingCharacterName]
   );
-  const sampledDiagnosticsPanelProps = useSampledValue(diagnosticsPanelProps, {
-    enabled: diagnosticsVisible,
-    intervalMs: runtimePublicationContract.diagnosticsSamplingIntervalMs
-  });
-
-  useRuntimeTelemetryBridge({
-    activeScene,
-    diagnosticsVisible,
-    publication: runtimePublicationContract.hotPathSurfaceModes,
-    rendererState,
-    runtime: simulationState.runtime
-  });
-
-  useDebugPanelHotkey({
-    enabled: appConfig.diagnosticsEnabled,
-    onToggle: handleToggleDiagnostics
-  });
-  const selectedEntityChunk = worldPointToChunkCoordinate(entityWorld.selectedEntity.worldPosition);
-
-  useEffect(() => {
-    if (activeScene === "pause" || activeScene === "settings") {
-      simulationState.controls.pause();
-      setLastMetaScene(activeScene);
+  const handleBeginNewGame = useCallback(() => {
+    if (!characterNameValidation.isValid) {
       return;
     }
 
-    if (activeScene === "runtime") {
-      simulationState.controls.resume();
-      setLastMetaScene("none");
+    if (
+      runtimeSession.hasActiveSession &&
+      !window.confirm("Starting a new game will replace the current unsaved session. Continue?")
+    ) {
       return;
     }
 
-    simulationState.controls.pause();
-    setLastMetaScene("none");
-  }, [activeScene, setLastMetaScene, simulationState.controls]);
+    createNewSession(characterNameValidation.normalizedValue);
+    resetRenderer();
+    resumeRuntime();
+  }, [
+    characterNameValidation,
+    createNewSession,
+    resetRenderer,
+    resumeRuntime,
+    runtimeSession.hasActiveSession
+  ]);
+  const handleOpenNewGame = useCallback(() => {
+    showNewGameScene();
+  }, [showNewGameScene]);
+  const handleCharacterNameChange = useCallback((value: string) => {
+    setPendingCharacterName(value);
+  }, []);
+  const handleReturnToMainMenu = useCallback(() => {
+    showMainMenuScene();
+  }, [showMainMenuScene]);
+  const isLoadAvailable = false;
+  const hasRuntimeLayer = runtimeSession.hasActiveSession;
 
   return (
     <main
@@ -286,82 +143,89 @@ export function AppShell() {
       data-renderer-status={rendererState.status}
       data-runtime-ready-ms={rendererState.metrics.rendererReadyMs ?? "pending"}
       data-scene={activeScene}
-      data-shell-surface={shellSurface}
       ref={shellRef}
     >
-      <section className="app-shell__runtime" aria-label="Interactive runtime shell">
-        <RuntimeSceneBoundary
-          camera={cameraState}
-          onOpenSettings={showSettingsScene}
+      {hasRuntimeLayer ? (
+        <ActiveRuntimeShellContent
+          activeScene={activeScene}
+          canInstall={canInstall}
+          cycleWorldSeed={cycleWorldSeed}
+          diagnosticsVisible={diagnosticsVisible}
+          inspecteurVisible={inspecteurVisible}
+          isFullscreen={isFullscreen}
+          isFullscreenSupported={isSupported}
+          isMenuOpen={isMenuOpen}
+          lastFullscreenError={lastError}
+          metaOverlay={
+            <AppMetaScenePanel
+              canResumeSession={runtimeSession.hasActiveSession}
+              characterNameError={characterNameValidation.error}
+              fullscreenPreferred={preferences.prefersFullscreen}
+              isLoadAvailable={isLoadAvailable}
+              onBeginNewGame={handleBeginNewGame}
+              onCharacterNameChange={handleCharacterNameChange}
+              onOpenNewGame={handleOpenNewGame}
+              onOpenSettings={showSettingsScene}
+              onReturnToMainMenu={handleReturnToMainMenu}
+              onResumeRuntime={resumeRuntime}
+              pendingCharacterName={pendingCharacterName}
+              playerName={runtimeSession.playerName}
+              runtimeOutcome={runtimeOutcome}
+              scene={activeScene}
+            />
+          }
+          onEnterFullscreen={handleRequestFullscreen}
+          onInstall={handleInstall}
+          onMenuOpenChange={(nextIsOpen) => {
+            if (nextIsOpen) {
+              openMenu();
+              return;
+            }
+
+            closeShellSurface();
+          }}
           onRendererError={markFailed}
           onRendererReady={markReady}
           onRetryRuntime={handleRetryRuntime}
-          onSurfaceElementChange={handleRuntimeSurfaceElementChange}
-          renderSurfaceMode={diagnosticsVisible ? "diagnostics" : "player"}
-          onVisualFrame={simulationState.controls.advanceVisualFrame}
-          rendererMessage={rendererState.message}
-          scene={activeScene}
-          visibleEntities={entityWorld.visibleEntities}
-          visibleChunks={chunkVisibility.visibleChunks}
-          viewport={viewport}
-          worldSeed={runtimeSession.worldSeed}
-        />
-      </section>
-
-      <section className="app-shell__overlay" aria-label="Shell status overlay">
-        <ShellMenu
-          activeScene={activeScene}
-          cameraMode={runtimeSession.cameraMode}
-          canInstall={canInstall}
-          diagnosticsEnabled={appConfig.diagnosticsEnabled}
-          diagnosticsVisible={diagnosticsVisible}
-          inspecteurVisible={inspecteurVisible}
-          isOpen={isMenuOpen}
-          isFullscreen={isFullscreen}
-          isFullscreenSupported={isSupported}
-          layoutMode={viewport.layoutMode}
-          onEnterFullscreen={handleRequestFullscreen}
-          onInstall={handleInstall}
-          onOpenChange={handleMenuOpenChange}
-          onResetCamera={resetCamera}
-          onRetryRuntime={handleRetryRuntime}
           onResumeRuntime={resumeRuntime}
+          onRuntimeOutcomeChange={setRuntimeOutcome}
           onSetCameraMode={setCameraMode}
+          onSetCameraState={setCameraState}
+          onSetDebugPanelVisible={setDebugPanelVisible}
+          onSetInspectionPanelVisible={setInspectionPanelVisible}
+          onSetLastMetaScene={setLastMetaScene}
+          onShowMainMenuScene={showMainMenuScene}
           onShowPauseScene={showPauseScene}
           onShowSettingsScene={showSettingsScene}
-          onToggleDiagnostics={handleToggleDiagnostics}
-          onToggleInspecteur={handleToggleInspecteur}
+          preferences={preferences}
+          rendererState={rendererState}
+          runtimeSession={runtimeSession}
+          shellRequestedScene={shellRequestedScene}
+          viewport={viewport}
         />
-
-        {inspecteurVisible ? (
-          <EntityInspectionPanel
-            entityChunk={`${selectedEntityChunk.x}, ${selectedEntityChunk.y}`}
-            entityId={entityWorld.selectedEntity.id}
-            entityLabel={entityWorld.selectedEntity.id.split(":").at(-1) ?? entityWorld.selectedEntity.id}
-            entityPosition={`${Math.round(entityWorld.selectedEntity.worldPosition.x)}, ${Math.round(entityWorld.selectedEntity.worldPosition.y)}`}
-            entitySelectionState={entityWorld.selectedEntity.isSelected ? "selected" : "not selected"}
-            entityState={entityWorld.selectedEntity.state}
-            isMobile={isMobileLayout}
-            onClose={handleCloseInspectionPanel}
-          />
-        ) : null}
-
-        <AppMetaScenePanel
-          fullscreenPreferred={preferences.prefersFullscreen}
-          onResumeRuntime={resumeRuntime}
-          runtimeOutcome={runtimeOutcome}
-          scene={activeScene}
-        />
-
-        {diagnosticsVisible ? (
-          <ShellDiagnosticsPanel
-            {...sampledDiagnosticsPanelProps}
-            visible={diagnosticsVisible}
-          />
-        ) : null}
-      </section>
-
-      <MobileVirtualStickOverlay stickState={mobileVirtualStick} />
+      ) : (
+        <>
+          <section className="app-shell__runtime" aria-label="Interactive runtime shell" />
+          <section className="app-shell__overlay" aria-label="Shell status overlay">
+            <AppMetaScenePanel
+              canResumeSession={runtimeSession.hasActiveSession}
+              characterNameError={characterNameValidation.error}
+              fullscreenPreferred={preferences.prefersFullscreen}
+              isLoadAvailable={isLoadAvailable}
+              onBeginNewGame={handleBeginNewGame}
+              onCharacterNameChange={handleCharacterNameChange}
+              onOpenNewGame={handleOpenNewGame}
+              onOpenSettings={showSettingsScene}
+              onReturnToMainMenu={handleReturnToMainMenu}
+              onResumeRuntime={resumeRuntime}
+              pendingCharacterName={pendingCharacterName}
+              playerName={runtimeSession.playerName}
+              runtimeOutcome={runtimeOutcome}
+              scene={activeScene}
+            />
+          </section>
+        </>
+      )}
     </main>
   );
 }

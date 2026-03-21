@@ -9,7 +9,10 @@ export const emberwakeRuntimeSessionSeedOptions = [
 ] as const;
 
 export const createDefaultEmberwakeRuntimeSessionState = (): RuntimeSessionState => ({
+  hasActiveSession: false,
+  playerName: "",
   cameraState: emberwakeRuntimeBootstrap.cameraState ?? createDefaultCameraState(),
   cameraMode: "follow-entity",
+  sessionRevision: 0,
   worldSeed: emberwakeRuntimeBootstrap.worldSeed
 });

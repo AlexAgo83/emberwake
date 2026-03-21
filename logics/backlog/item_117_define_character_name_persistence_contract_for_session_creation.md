@@ -1,9 +1,9 @@
 ## item_117_define_character_name_persistence_contract_for_session_creation - Define character-name persistence contract for session creation
 > From version: 0.2.2
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Low
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_031_define_character_name_validation_and_constraints_for_new_game_entry`.
 - Source file: `logics/request/req_031_define_character_name_validation_and_constraints_for_new_game_entry.md`.
+- Delivered in `src/app/hooks/useRuntimeSession.ts` and `src/shared/lib/runtimeSessionStorage.ts`, which normalize the validated name before attaching it to the created session contract.

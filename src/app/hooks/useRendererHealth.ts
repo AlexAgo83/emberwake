@@ -25,15 +25,51 @@ const createRendererMetrics = (attempt: number): RendererMetrics => ({
   rendererReadyMs: null
 });
 
-export function useRendererHealth() {
+type UseRendererHealthOptions = {
+  enabled?: boolean;
+};
+
+const createIdleRendererState = (attempt: number): RendererState => ({
+  metrics: createRendererMetrics(attempt),
+  message: "Runtime idle until a session starts.",
+  status: "ready"
+});
+
+export function useRendererHealth({ enabled = true }: UseRendererHealthOptions = {}) {
   const [rendererState, setRendererState] = useState<RendererState>({
-    metrics: createRendererMetrics(0),
-    message: "Waiting for Pixi runtime readiness signal.",
-    status: "initializing"
+    ...(enabled
+      ? {
+          metrics: createRendererMetrics(0),
+          message: "Waiting for Pixi runtime readiness signal.",
+          status: "initializing" as const
+        }
+      : createIdleRendererState(0))
   });
 
   useEffect(() => {
-    if (rendererState.status !== "initializing") {
+    setRendererState((currentState) => {
+      if (!enabled) {
+        if (currentState.message === "Runtime idle until a session starts." && currentState.status === "ready") {
+          return currentState;
+        }
+
+        return createIdleRendererState(currentState.metrics.attempt);
+      }
+
+      if (currentState.message !== "Runtime idle until a session starts.") {
+        return currentState;
+      }
+
+      return {
+        metrics: createRendererMetrics(currentState.metrics.attempt + 1),
+        message: "Waiting for Pixi runtime readiness signal.",
+        status: "initializing"
+      };
+    });
+  }, [enabled]);
+
+  useEffect(() => {
+    if (!enabled || rendererState.status !== "initializing") {
       return;
     }
 
@@ -54,7 +90,7 @@ export function useRendererHealth() {
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [rendererState.status]);
+  }, [enabled, rendererState.status]);
 
   const markReady = useCallback(() => {
     const rendererReadyAtMs = getNowMs();

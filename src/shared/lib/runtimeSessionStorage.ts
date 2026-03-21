@@ -11,8 +11,11 @@ import {
 } from "./persistence/storageDomain";
 
 export type RuntimeSessionState = {
+  hasActiveSession: boolean;
+  playerName: string;
   cameraState: CameraState;
   cameraMode: CameraMode;
+  sessionRevision: number;
   worldSeed: string;
 };
 

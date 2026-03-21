@@ -9,6 +9,7 @@ import {
 import type { RuntimeSessionState } from "../../shared/lib/runtimeSessionStorage";
 import type { CameraMode } from "../../game/camera/model/cameraMode";
 import type { CameraState } from "../../game/camera/model/cameraMath";
+import { normalizeCharacterName } from "../model/characterName";
 
 export function useRuntimeSession() {
   const [runtimeSession, setRuntimeSession] = useState<RuntimeSessionState>(() =>
@@ -48,7 +49,24 @@ export function useRuntimeSession() {
     }));
   }, []);
 
+  const createNewSession = useCallback((playerName: string) => {
+    const normalizedPlayerName = normalizeCharacterName(playerName);
+
+    setRuntimeSession((currentSession) => {
+      const defaultSession = createDefaultRuntimeSessionState();
+
+      return {
+        ...defaultSession,
+        hasActiveSession: true,
+        playerName: normalizedPlayerName,
+        sessionRevision: currentSession.sessionRevision + 1,
+        worldSeed: currentSession.worldSeed
+      };
+    });
+  }, []);
+
   return {
+    createNewSession,
     cycleWorldSeed,
     runtimeSession,
     setCameraMode,

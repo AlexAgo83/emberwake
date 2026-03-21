@@ -22,6 +22,7 @@ type ShellMenuProps = {
   onRetryRuntime: () => void;
   onResumeRuntime: () => void;
   onSetCameraMode: (cameraMode: CameraMode) => void;
+  onShowMainMenuScene: () => void;
   onShowPauseScene: () => void;
   onShowSettingsScene: () => void;
   onToggleDiagnostics: () => void;
@@ -56,6 +57,18 @@ const sceneStatusMap: Record<
     stateLabel: "Failure",
     title: "Renderer recovery",
     tone: "alert"
+  },
+  "main-menu": {
+    detail: "The shell-owned main menu is acting as the product entry and session return hub.",
+    stateLabel: "Menu",
+    title: "Main menu",
+    tone: "neutral"
+  },
+  "new-game": {
+    detail: "The shell is preparing a new run before handing control to the live runtime.",
+    stateLabel: "New run",
+    title: "New game staging",
+    tone: "warm"
   },
   pause: {
     detail: "The shell owns the pause scene while the runtime remains preserved underneath the live session.",
@@ -101,6 +114,7 @@ export const ShellMenu = memo(function ShellMenu({
   onRetryRuntime,
   onResumeRuntime,
   onSetCameraMode,
+  onShowMainMenuScene,
   onShowPauseScene,
   onShowSettingsScene,
   onToggleDiagnostics,
@@ -249,6 +263,16 @@ export const ShellMenu = memo(function ShellMenu({
             <div className="shell-menu__section-body">
               {menuScreen === "root" ? (
                 <>
+                  <button
+                    className="shell-menu__item shell-menu__item--action shell-menu__item--secondary"
+                    onClick={() => {
+                      runAction(onShowMainMenuScene);
+                    }}
+                    type="button"
+                  >
+                    <span className="shell-menu__item-label">Main menu</span>
+                    <span className="shell-menu__item-value">Session hub</span>
+                  </button>
                   <button
                     className="shell-menu__item shell-menu__item--action shell-menu__item--secondary"
                     onClick={() => {

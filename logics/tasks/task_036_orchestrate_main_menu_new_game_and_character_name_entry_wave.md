@@ -1,9 +1,9 @@
 ## task_036_orchestrate_main_menu_new_game_and_character_name_entry_wave - Orchestrate main menu, new-game, and character-name entry wave
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: High
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,15 +30,15 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Define the shell-owned `Main menu` as the default product entry and durable return hub, aligned with the current shell family and command-deck routing model.
-- [ ] 2. Define and implement the first-slice `New game` flow so runtime start happens through a lightweight shell-owned entry step rather than an immediate bootstrap.
-- [ ] 3. Define and implement `Resume`, `Load game`, and session-replacement rules so the menu behaves safely and predictably with or without an active session.
-- [ ] 4. Define and implement the character-name validation contract, including allowed values, whitespace handling, and rejection of obviously broken names.
-- [ ] 5. Define and implement field feedback, default-name posture, and `Begin` gating so the naming step feels guided and deterministic.
-- [ ] 6. Define and implement how the validated character name is normalized, persisted, and attached to the created session contract.
-- [ ] 7. Update linked requests, backlog items, tasks, and any supporting UX notes needed to keep main-menu, new-game, and naming behavior traceable.
-- [ ] 8. Validate the resulting entry-flow wave against current repository delivery constraints on desktop and mobile.
-- [ ] FINAL: Create dedicated git commit(s) for this orchestration scope.
+- [x] 1. Define the shell-owned `Main menu` as the default product entry and durable return hub, aligned with the current shell family and command-deck routing model.
+- [x] 2. Define and implement the first-slice `New game` flow so runtime start happens through a lightweight shell-owned entry step rather than an immediate bootstrap.
+- [x] 3. Define and implement `Resume`, `Load game`, and session-replacement rules so the menu behaves safely and predictably with or without an active session.
+- [x] 4. Define and implement the character-name validation contract, including allowed values, whitespace handling, and rejection of obviously broken names.
+- [x] 5. Define and implement field feedback, default-name posture, and `Begin` gating so the naming step feels guided and deterministic.
+- [x] 6. Define and implement how the validated character name is normalized, persisted, and attached to the created session contract.
+- [x] 7. Update linked requests, backlog items, tasks, and any supporting UX notes needed to keep main-menu, new-game, and naming behavior traceable.
+- [x] 8. Validate the resulting entry-flow wave against current repository delivery constraints on desktop and mobile.
+- [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
 
 # AC Traceability
 - `item_115` -> Character-name validation rules are explicit. Proof target: validation contract or implementation report.
@@ -68,10 +68,10 @@ flowchart TD
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] The product boots into a shell-owned `Main menu` rather than dropping directly into runtime.
-- [ ] `New game`, `Resume`, `Load game`, and `Settings` behave coherently with preserved session ownership and replacement safeguards.
-- [ ] Character-name validation, UI feedback, `Begin` gating, and session persistence all share one explicit contract.
-- [ ] Linked request, backlog, task, and related docs are updated with proofs and status.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] The product boots into a shell-owned `Main menu` rather than dropping directly into runtime.
+- [x] `New game`, `Resume`, `Load game`, and `Settings` behave coherently with preserved session ownership and replacement safeguards.
+- [x] Character-name validation, UI feedback, `Begin` gating, and session persistence all share one explicit contract.
+- [x] Linked request, backlog, task, and related docs are updated with proofs and status.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.

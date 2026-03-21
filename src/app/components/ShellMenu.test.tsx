@@ -21,6 +21,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof ShellMenu>> 
   onRetryRuntime: vi.fn(),
   onResumeRuntime: vi.fn(),
   onSetCameraMode: vi.fn(),
+  onShowMainMenuScene: vi.fn(),
   onShowPauseScene: vi.fn(),
   onShowSettingsScene: vi.fn(),
   onToggleDiagnostics: vi.fn(),
@@ -77,6 +78,7 @@ describe("ShellMenu", () => {
     const panel = screen.getByLabelText("Shell menu");
 
     expect(within(panel).getByText("Session")).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: /Main menu/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Settings/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /View/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Tools/i })).toBeInTheDocument();
@@ -92,6 +94,9 @@ describe("ShellMenu", () => {
 
     render(<ShellMenu {...props} />);
 
+    expect(screen.getByRole("button", { name: /Main menu/i })).toHaveClass(
+      "shell-menu__item--secondary"
+    );
     expect(screen.getByRole("button", { name: /Settings/i })).toHaveClass("shell-menu__item--secondary");
     expect(screen.getByRole("button", { name: /View/i })).toHaveClass("shell-menu__item--secondary");
     expect(screen.getByRole("button", { name: /Tools/i })).toHaveClass(
@@ -151,6 +156,17 @@ describe("ShellMenu", () => {
 
     expect(screen.getByRole("button", { name: /Settings/i })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Back to Session/i })).not.toBeInTheDocument();
+  });
+
+  it("routes main-menu navigation through the session root actions", () => {
+    const props = createProps();
+
+    render(<ShellMenu {...props} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Main menu/i }));
+
+    expect(props.onShowMainMenuScene).toHaveBeenCalledTimes(1);
+    expect(props.onOpenChange).toHaveBeenCalledWith(false);
   });
 
   it("renders a stateful command deck trigger and contextual header for the live runtime", () => {

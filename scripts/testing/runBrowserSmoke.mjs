@@ -117,6 +117,19 @@ try {
     waitUntil: "networkidle"
   });
 
+  await page.getByLabel("Main menu").waitFor({
+    timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
+  });
+  await page.getByRole("button", {
+    name: /Start new game/i
+  }).click();
+  await page.getByLabel(/Character name/i).waitFor({
+    timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
+  });
+  await page.getByRole("button", {
+    name: /^Begin$/i
+  }).click();
+
   await page.locator('.app-shell[data-renderer-status="ready"]').waitFor({
     timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
   });

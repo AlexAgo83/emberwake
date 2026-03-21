@@ -1,9 +1,9 @@
 ## item_119_define_a_new_game_flow_that_captures_character_name_before_runtime_start - Define a new-game flow that captures character name before runtime start
 > From version: 0.2.2
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow`.
 - Source file: `logics/request/req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow.md`.
+- Delivered through the shell-owned `new-game` scene and `Begin` path in `src/app/components/AppMetaScenePanel.tsx` plus session creation in `src/app/hooks/useRuntimeSession.ts`.

@@ -1,9 +1,9 @@
 ## item_120_define_resume_load_and_session_replacement_rules_for_main_menu_navigation - Define resume, load, and session-replacement rules for main-menu navigation
 > From version: 0.2.2
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow`.
 - Source file: `logics/request/req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow.md`.
+- Delivered with visible-but-disabled `Load game`, conditional `Resume`, and explicit replacement confirmation inside `src/app/AppShell.tsx` and `src/app/components/AppMetaScenePanel.tsx`.

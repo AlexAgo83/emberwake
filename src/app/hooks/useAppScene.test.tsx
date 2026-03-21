@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 
 import { useAppScene } from "./useAppScene";
 
@@ -27,7 +27,7 @@ describe("useAppScene", () => {
       }
     );
 
-    expect(result.current.activeScene).toBe("runtime");
+    expect(result.current.activeScene).toBe("main-menu");
 
     rerender({
       rendererStatus: "ready" as const,
@@ -52,5 +52,24 @@ describe("useAppScene", () => {
     });
 
     expect(result.current.activeScene).toBe("failure");
+  });
+
+  it("can route shell-owned main menu and new-game scenes directly", () => {
+    const { result } = renderHook(() =>
+      useAppScene({
+        rendererStatus: "ready",
+        runtimeOutcome: null
+      })
+    );
+
+    act(() => {
+      result.current.showNewGameScene();
+    });
+    expect(result.current.requestedScene).toBe("new-game");
+
+    act(() => {
+      result.current.showMainMenuScene();
+    });
+    expect(result.current.requestedScene).toBe("main-menu");
   });
 });
