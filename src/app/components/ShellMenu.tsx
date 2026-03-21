@@ -3,6 +3,7 @@ import { useEffect, useId, useRef } from "react";
 import type { CameraMode } from "../../game/camera/model/cameraMode";
 
 type ShellMenuProps = {
+  activeScene: "boot" | "failure" | "pause" | "runtime" | "settings";
   cameraMode: CameraMode;
   canInstall: boolean;
   diagnosticsEnabled: boolean;
@@ -15,12 +16,16 @@ type ShellMenuProps = {
   onInstall: () => void;
   onOpenChange: (isOpen: boolean) => void;
   onResetCamera: () => void;
+  onResumeRuntime: () => void;
   onSetCameraMode: (cameraMode: CameraMode) => void;
+  onShowPauseScene: () => void;
+  onShowSettingsScene: () => void;
   onToggleDiagnostics: () => void;
   onToggleInspecteur: () => void;
 };
 
 export function ShellMenu({
+  activeScene,
   cameraMode,
   canInstall,
   diagnosticsEnabled,
@@ -33,7 +38,10 @@ export function ShellMenu({
   onInstall,
   onOpenChange,
   onResetCamera,
+  onResumeRuntime,
   onSetCameraMode,
+  onShowPauseScene,
+  onShowSettingsScene,
   onToggleDiagnostics,
   onToggleInspecteur
 }: ShellMenuProps) {
@@ -127,6 +135,32 @@ export function ShellMenu({
               </span>
             </button>
           ) : null}
+
+          <button
+            className="shell-menu__item shell-menu__item--action"
+            onClick={() => {
+              runAction(activeScene === "runtime" ? onShowPauseScene : onResumeRuntime);
+            }}
+            type="button"
+          >
+            <span className="shell-menu__item-label">
+              {activeScene === "runtime" ? "Pause runtime" : "Resume runtime"}
+            </span>
+            <span className="shell-menu__item-value">
+              {activeScene === "runtime" ? "Open pause scene" : "Return to loop"}
+            </span>
+          </button>
+
+          <button
+            className="shell-menu__item shell-menu__item--action"
+            onClick={() => {
+              runAction(onShowSettingsScene);
+            }}
+            type="button"
+          >
+            <span className="shell-menu__item-label">Settings</span>
+            <span className="shell-menu__item-value">Shell-owned</span>
+          </button>
 
           <button
             className="shell-menu__item shell-menu__item--action"

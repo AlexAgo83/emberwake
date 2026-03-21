@@ -17,8 +17,10 @@ const LazyRuntimeSurface = lazy(async () => {
 
 type RuntimeSceneBoundaryProps = {
   camera: CameraState;
+  onOpenSettings?: () => void;
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
+  onRetryRuntime?: () => void;
   rendererMessage: string;
   scene: AppSceneId;
   surfaceRef?: RefObject<HTMLDivElement | null>;
@@ -35,9 +37,14 @@ type RuntimeSceneBoundaryProps = {
 };
 
 function RuntimeStatusCard({
+  actions,
   detail,
   title
 }: {
+  actions?: Array<{
+    label: string;
+    onPress: () => void;
+  }>;
   detail: string;
   title: string;
 }) {
@@ -46,14 +53,30 @@ function RuntimeStatusCard({
       <p className="runtime-scene-status__eyebrow">Runtime</p>
       <h2 className="runtime-scene-status__title">{title}</h2>
       <p className="runtime-scene-status__detail">{detail}</p>
+      {actions?.length ? (
+        <div className="runtime-scene-status__actions">
+          {actions.map((action) => (
+            <button
+              className="shell-control shell-control--button"
+              key={action.label}
+              onClick={action.onPress}
+              type="button"
+            >
+              {action.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
 
 export function RuntimeSceneBoundary({
   camera,
+  onOpenSettings,
   onRendererError,
   onRendererReady,
+  onRetryRuntime,
   rendererMessage,
   scene,
   surfaceRef,
@@ -65,6 +88,24 @@ export function RuntimeSceneBoundary({
   if (scene === "failure") {
     return (
       <RuntimeStatusCard
+        actions={[
+          ...(onRetryRuntime
+            ? [
+                {
+                  label: "Retry runtime",
+                  onPress: onRetryRuntime
+                }
+              ]
+            : []),
+          ...(onOpenSettings
+            ? [
+                {
+                  label: "Open settings",
+                  onPress: onOpenSettings
+                }
+              ]
+            : [])
+        ]}
         detail={rendererMessage}
         title="Runtime unavailable"
       />

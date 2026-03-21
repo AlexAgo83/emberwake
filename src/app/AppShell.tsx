@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
+import { AppMetaScenePanel } from "./components/AppMetaScenePanel";
 import { EntityInspectionPanel } from "./components/EntityInspectionPanel";
 import { RuntimeSceneBoundary } from "./components/RuntimeSceneBoundary";
 import { ShellMenu } from "./components/ShellMenu";
@@ -25,6 +26,7 @@ import { useSingleEntityControl } from "../game/input/hooks/useSingleEntityContr
 import { useWorldInteractionDiagnostics } from "../game/world/hooks/useWorldInteractionDiagnostics";
 import { useVisibleChunkSet } from "../game/world/hooks/useVisibleChunkSet";
 import { appConfig } from "../shared/config/appConfig";
+import { createIdleMovementIntent } from "../game/input/model/singleEntityControlContract";
 
 export function AppShell() {
   const shellRef = useRef<HTMLElement>(null);
@@ -35,7 +37,7 @@ export function AppShell() {
     surfaceRef: runtimeSurfaceRef
   });
   const { canInstall, promptInstall } = useInstallPrompt();
-  const controlState = useSingleEntityControl({
+  const runtimeControlState = useSingleEntityControl({
     controlledEntityId: entityContract.primaryEntityId,
     touchMovementIntent: mobileVirtualStick.movementIntent
   });
@@ -43,6 +45,22 @@ export function AppShell() {
     useFullscreenController(shellRef);
   const viewport = useLogicalViewportModel(shellRef);
   const { cycleWorldSeed, runtimeSession, setCameraMode, setCameraState } = useRuntimeSession();
+  const { markFailed, markReady, rendererState, reset: resetRenderer } = useRendererHealth();
+  const appScene = useAppScene({
+    rendererStatus: rendererState.status
+  });
+  const controlState = useMemo(
+    () =>
+      appScene.activeScene === "runtime"
+        ? runtimeControlState
+        : {
+            ...runtimeControlState,
+            debugCameraModifierActive: false,
+            inputOwner: "none" as const,
+            movementIntent: createIdleMovementIntent("none")
+          },
+    [appScene.activeScene, runtimeControlState]
+  );
   const simulationState = useEntitySimulation({ controlState });
   const followedWorldPosition =
     simulationState.presentation.cameraTarget?.worldPosition ?? simulationState.entity.worldPosition;
@@ -66,14 +84,11 @@ export function AppShell() {
     selectedWorldPoint: worldDiagnostics.selectedWorldPoint,
     visibleChunks: chunkVisibility.visibleChunks
   });
-  const { markFailed, markReady, rendererState } = useRendererHealth();
-  const appScene = useAppScene({
-    rendererStatus: rendererState.status
-  });
   const {
     preferences,
     setDebugPanelVisible,
     setInspectionPanelVisible,
+    setLastMetaScene,
     setPrefersFullscreen
   } = useShellPreferences({
     defaultDebugPanelVisible: false
@@ -94,6 +109,19 @@ export function AppShell() {
   };
   const selectedEntityChunk = worldPointToChunkCoordinate(entityWorld.selectedEntity.worldPosition);
 
+  useEffect(() => {
+    if (appScene.activeScene === "pause" || appScene.activeScene === "settings") {
+      simulationState.controls.pause();
+      setLastMetaScene(appScene.activeScene);
+      return;
+    }
+
+    if (appScene.activeScene === "runtime") {
+      simulationState.controls.resume();
+      setLastMetaScene("none");
+    }
+  }, [appScene.activeScene, setLastMetaScene, simulationState.controls]);
+
   return (
     <main
       className="app-shell"
@@ -108,8 +136,13 @@ export function AppShell() {
       <section className="app-shell__runtime" aria-label="Interactive runtime shell">
         <RuntimeSceneBoundary
           camera={cameraState}
+          onOpenSettings={appScene.showSettingsScene}
           onRendererError={markFailed}
           onRendererReady={markReady}
+          onRetryRuntime={() => {
+            appScene.resumeRuntime();
+            resetRenderer();
+          }}
           rendererMessage={rendererState.message}
           scene={appScene.activeScene}
           surfaceRef={runtimeSurfaceRef}
@@ -122,6 +155,7 @@ export function AppShell() {
 
       <section className="app-shell__overlay" aria-label="Shell status overlay">
         <ShellMenu
+          activeScene={appScene.activeScene}
           cameraMode={runtimeSession.cameraMode}
           canInstall={canInstall}
           diagnosticsEnabled={appConfig.diagnosticsEnabled}
@@ -145,7 +179,10 @@ export function AppShell() {
             appScene.closeShellSurface();
           }}
           onResetCamera={resetCamera}
+          onResumeRuntime={appScene.resumeRuntime}
           onSetCameraMode={setCameraMode}
+          onShowPauseScene={appScene.showPauseScene}
+          onShowSettingsScene={appScene.showSettingsScene}
           onToggleDiagnostics={() => {
             setDebugPanelVisible(!preferences.debugPanelVisible);
           }}
@@ -169,9 +206,15 @@ export function AppShell() {
           />
         ) : null}
 
+        <AppMetaScenePanel
+          fullscreenPreferred={preferences.prefersFullscreen}
+          onResumeRuntime={appScene.resumeRuntime}
+          scene={appScene.activeScene}
+        />
+
         <ShellDiagnosticsPanel
           camera={cameraState}
-          control={controlState}
+          control={runtimeControlState}
           entity={entityWorld.selectedEntity ?? simulationState.entity}
           fullscreen={{
             isFullscreen,

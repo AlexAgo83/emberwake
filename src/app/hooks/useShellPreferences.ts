@@ -17,6 +17,7 @@ export function useShellPreferences({
     readShellPreferences({
       debugPanelVisible: defaultDebugPanelVisible,
       inspectionPanelVisible: false,
+      lastMetaScene: "none",
       movementOnboardingDismissed: false,
       prefersFullscreen: false
     })
@@ -38,6 +39,12 @@ export function useShellPreferences({
       setPreferences((currentPreferences) => ({
         ...currentPreferences,
         inspectionPanelVisible
+      }));
+    },
+    setLastMetaScene: (lastMetaScene: ShellPreferences["lastMetaScene"]) => {
+      setPreferences((currentPreferences) => ({
+        ...currentPreferences,
+        lastMetaScene
       }));
     },
     setPrefersFullscreen: (prefersFullscreen: boolean) => {

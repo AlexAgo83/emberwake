@@ -1,7 +1,65 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
+import { useEffect, useRef } from "react";
 import { vi } from "vitest";
 
 import { App } from "./App";
+
+const mockSimulationState = {
+  controls: {
+    cycleWorldSeed: vi.fn(),
+    pause: vi.fn(),
+    resume: vi.fn(),
+    setSpeedMultiplier: vi.fn(),
+    stepOnce: vi.fn(),
+    togglePaused: vi.fn()
+  },
+  entity: {
+    archetype: "generic-mover",
+    footprint: {
+      radius: 40
+    },
+    id: "entity:player:primary",
+    isSelected: true,
+    orientation: 0,
+    renderLayer: 100,
+    state: "idle",
+    velocity: {
+      x: 0,
+      y: 0
+    },
+    visual: {
+      kind: "ember-core",
+      tint: "#ff7b3f"
+    },
+    worldPosition: {
+      x: 0,
+      y: 0
+    }
+  },
+  presentation: {
+    cameraTarget: {
+      worldPosition: {
+        x: 0,
+        y: 0
+      }
+    },
+    entities: [],
+    world: {
+      visibleChunks: []
+    }
+  },
+  runtime: {
+    accumulatorMs: 0,
+    fixedStepMs: 1000 / 60,
+    fps: 60,
+    frameTimeMs: 16.67,
+    isPaused: false,
+    maxCatchUpStepsPerFrame: 6,
+    simulationStepsLastFrame: 1,
+    speedMultiplier: 1
+  },
+  tick: 0
+};
 
 Object.defineProperty(document, "fullscreenEnabled", {
   configurable: true,
@@ -13,8 +71,25 @@ Object.defineProperty(HTMLElement.prototype, "requestFullscreen", {
   value: vi.fn().mockResolvedValue(undefined)
 });
 
-vi.mock("../game/render/RuntimeSurface", () => ({
-  RuntimeSurface: () => <div data-testid="runtime-surface" />
+vi.mock("./components/RuntimeSceneBoundary", () => ({
+  RuntimeSceneBoundary: ({ onRendererReady }: { onRendererReady?: () => void }) => {
+    const readySignalSentRef = useRef(false);
+
+    useEffect(() => {
+      if (readySignalSentRef.current) {
+        return;
+      }
+
+      readySignalSentRef.current = true;
+      onRendererReady?.();
+    }, [onRendererReady]);
+
+    return <div data-testid="runtime-surface" />;
+  }
+}));
+
+vi.mock("../game/entities/hooks/useEntitySimulation", () => ({
+  useEntitySimulation: () => mockSimulationState
 }));
 
 describe("App", () => {
@@ -52,5 +127,22 @@ describe("App", () => {
     );
 
     expect(screen.getByLabelText("Shell diagnostics")).toBeInTheDocument();
+  });
+
+  it("supports pause and runtime re-entry through the shell meta flow", async () => {
+    render(<App />);
+
+    await screen.findByTestId("runtime-surface");
+
+    fireEvent.click(screen.getByRole("button", { name: "Menu" }));
+    fireEvent.click(
+      within(screen.getByLabelText("Shell menu")).getByRole("button", { name: /Pause runtime/i })
+    );
+
+    expect(screen.getByLabelText("Runtime paused")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /Resume runtime/i }));
+
+    expect(screen.queryByLabelText("Runtime paused")).not.toBeInTheDocument();
   });
 });

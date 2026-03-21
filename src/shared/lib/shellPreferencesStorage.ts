@@ -7,6 +7,7 @@ import {
 export type ShellPreferences = {
   debugPanelVisible: boolean;
   inspectionPanelVisible: boolean;
+  lastMetaScene: "none" | "pause" | "settings";
   movementOnboardingDismissed: boolean;
   prefersFullscreen: boolean;
 };

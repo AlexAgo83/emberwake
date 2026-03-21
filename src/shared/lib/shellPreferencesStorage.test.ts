@@ -15,6 +15,7 @@ describe("shellPreferencesStorage", () => {
     const preferences = {
       debugPanelVisible: true,
       inspectionPanelVisible: false,
+      lastMetaScene: "settings" as const,
       movementOnboardingDismissed: true,
       prefersFullscreen: true
     };
@@ -25,6 +26,7 @@ describe("shellPreferencesStorage", () => {
       readShellPreferences({
         debugPanelVisible: false,
         inspectionPanelVisible: false,
+        lastMetaScene: "none",
         movementOnboardingDismissed: false,
         prefersFullscreen: false
       })
@@ -35,6 +37,7 @@ describe("shellPreferencesStorage", () => {
     const fallbackPreferences = {
       debugPanelVisible: false,
       inspectionPanelVisible: false,
+      lastMetaScene: "none" as const,
       movementOnboardingDismissed: false,
       prefersFullscreen: false
     };

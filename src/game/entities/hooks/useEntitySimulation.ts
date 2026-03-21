@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   entitySimulationContract
@@ -30,6 +30,7 @@ type SimulationRuntimeMetrics = {
 };
 
 type EntitySimulationControls = {
+  pause: () => void;
   resume: () => void;
   setSpeedMultiplier: (speedMultiplier: SimulationSpeedOption) => void;
   stepOnce: () => void;
@@ -69,20 +70,26 @@ export function useEntitySimulation({ controlState }: UseEntitySimulationOptions
     runner.setInputFrame(createEngineInputFrameFromControlState(controlState));
   }, [controlState, runner]);
 
-  const controls: EntitySimulationControls = {
-    resume: () => {
-      runner.resume();
-    },
-    setSpeedMultiplier: (speedMultiplier) => {
-      runner.setSpeedMultiplier(speedMultiplier);
-    },
-    stepOnce: () => {
-      runner.stepOnce();
-    },
-    togglePaused: () => {
-      runner.togglePaused();
-    }
-  };
+  const controls = useMemo<EntitySimulationControls>(
+    () => ({
+      pause: () => {
+        runner.pause();
+      },
+      resume: () => {
+        runner.resume();
+      },
+      setSpeedMultiplier: (speedMultiplier) => {
+        runner.setSpeedMultiplier(speedMultiplier);
+      },
+      stepOnce: () => {
+        runner.stepOnce();
+      },
+      togglePaused: () => {
+        runner.togglePaused();
+      }
+    }),
+    [runner]
+  );
 
   return {
     ...snapshot.state.simulation,

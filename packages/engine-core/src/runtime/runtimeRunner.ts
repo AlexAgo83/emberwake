@@ -167,6 +167,12 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
     this.emit();
   }
 
+  pause() {
+    this.isPaused = true;
+    this.syncRuntimeState();
+    this.emit();
+  }
+
   togglePaused() {
     this.isPaused = !this.isPaused;
     this.syncRuntimeState();
