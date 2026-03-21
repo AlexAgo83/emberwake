@@ -25,6 +25,7 @@ describe("AppMetaScenePanel", () => {
       <AppMetaScenePanel
         fullscreenPreferred={true}
         onResumeRuntime={onResumeRuntime}
+        runtimeOutcome={null}
         scene="pause"
       />
     );
@@ -42,11 +43,32 @@ describe("AppMetaScenePanel", () => {
       <AppMetaScenePanel
         fullscreenPreferred={false}
         onResumeRuntime={vi.fn()}
+        runtimeOutcome={null}
         scene="settings"
       />
     );
 
     expect(screen.getByLabelText("Settings")).toBeInTheDocument();
     expect(screen.getByText(/Returning to runtime resumes the live loop/i)).toBeInTheDocument();
+  });
+
+  it("renders gameplay outcomes through shell-owned meta scenes", () => {
+    render(
+      <AppMetaScenePanel
+        fullscreenPreferred={false}
+        onResumeRuntime={vi.fn()}
+        runtimeOutcome={{
+          detail: "Traversal goal reached without shell-owned defeat handling leaking into gameplay internals.",
+          emittedAtTick: 42,
+          kind: "victory",
+          shellScene: "victory"
+        }}
+        scene="victory"
+      />
+    );
+
+    expect(screen.getByLabelText("Victory")).toBeInTheDocument();
+    expect(screen.getByText(/Traversal goal reached/i)).toBeInTheDocument();
+    expect(screen.getByText(/gameplay outcome victory/i)).toBeInTheDocument();
   });
 });

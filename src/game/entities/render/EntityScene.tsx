@@ -1,8 +1,8 @@
 import { extend } from "@pixi/react";
 import { Graphics, Text } from "pixi.js";
 
-import type { CameraState } from "@engine/camera/cameraMath";
-import { WorldViewportContainer } from "@engine-pixi/components/WorldViewportContainer";
+import { WorldViewportContainer, type CameraState } from "@engine-pixi";
+import type { EmberwakeRenderSurfaceMode } from "@game";
 import type { PresentedEntity } from "../model/entityContract";
 import type { SimulatedEntity } from "../model/entitySimulation";
 
@@ -14,6 +14,7 @@ extend({
 type EntitySceneProps = {
   camera: CameraState;
   entities: Array<PresentedEntity<SimulatedEntity>>;
+  renderSurfaceMode: EmberwakeRenderSurfaceMode;
   viewport: {
     fitScale: number;
     screenSize: {
@@ -51,37 +52,45 @@ const drawEntity = (entity: PresentedEntity<SimulatedEntity>) => (graphics: Grap
   graphics.stroke();
 };
 
-export function EntityScene({ camera, entities, viewport }: EntitySceneProps) {
+export function EntityScene({
+  camera,
+  entities,
+  renderSurfaceMode,
+  viewport
+}: EntitySceneProps) {
   const scale = viewport.fitScale * camera.zoom;
+  const debugLabelsVisible = renderSurfaceMode === "diagnostics";
 
   return (
     <WorldViewportContainer camera={camera} viewport={viewport}>
       {entities.map((entity) => (
         <pixiContainer key={entity.id}>
           <pixiGraphics draw={drawEntity(entity)} />
-          <pixiText
-            anchor={0.5}
-            eventMode="none"
-            resolution={2}
-            scale={1 / scale}
-            style={{
-              align: "center",
-              dropShadow: {
-                alpha: 0.55,
-                blur: 2,
-                color: "#09070f",
-                distance: 1
-              },
-              fill: entity.isSelected ? "#f6eee8" : entity.visual.tint,
-              fontFamily: "monospace",
-              fontSize: 15,
-              fontWeight: "700",
-              letterSpacing: 1
-            }}
-            text={`${entity.id.split(":").at(-1)} · ${entity.state}${entity.isSelected ? " · selected" : ""}`}
-            x={entity.worldPosition.x}
-            y={entity.worldPosition.y - entity.footprint.radius - 20}
-          />
+          {debugLabelsVisible ? (
+            <pixiText
+              anchor={0.5}
+              eventMode="none"
+              resolution={2}
+              scale={1 / scale}
+              style={{
+                align: "center",
+                dropShadow: {
+                  alpha: 0.55,
+                  blur: 2,
+                  color: "#09070f",
+                  distance: 1
+                },
+                fill: entity.isSelected ? "#f6eee8" : entity.visual.tint,
+                fontFamily: "monospace",
+                fontSize: 15,
+                fontWeight: "700",
+                letterSpacing: 1
+              }}
+              text={`${entity.id.split(":").at(-1)} · ${entity.state}${entity.isSelected ? " · selected" : ""}`}
+              x={entity.worldPosition.x}
+              y={entity.worldPosition.y - entity.footprint.radius - 20}
+            />
+          ) : null}
         </pixiContainer>
       ))}
     </WorldViewportContainer>

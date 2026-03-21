@@ -64,7 +64,14 @@ export type EnginePresentationModel = {
   };
   diagnostics?: Record<string, unknown>;
   entities: EngineRenderEntity[];
-  overlays?: Record<string, unknown>;
+  overlays?: Record<string, unknown> & {
+    runtimeOutcome?: {
+      detail: string;
+      emittedAtTick: number | null;
+      kind: "defeat" | "none" | "recovery" | "restart-needed" | "victory";
+      shellScene: "defeat" | "none" | "pause" | "victory";
+    };
+  };
   world: {
     visibleChunks: EngineRenderChunk[];
   };

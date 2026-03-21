@@ -3,6 +3,7 @@ export const enginePixiPackageContract = {
   packageRole: "render-surface-and-renderer-boundaries"
 } as const;
 
+export type { CameraState } from "@engine";
 export { RuntimeFrameLoopBridge } from "./components/RuntimeFrameLoopBridge";
 export { RuntimeCanvas } from "./components/RuntimeCanvas";
 export { RuntimeSurfaceBoundary } from "./components/RuntimeSurfaceBoundary";

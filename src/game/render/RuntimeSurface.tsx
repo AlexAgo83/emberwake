@@ -1,12 +1,12 @@
 import { Fragment } from "react";
 import type { ReactNode } from "react";
 
-import type { CameraState } from "@engine/camera/cameraMath";
-import { RuntimeCanvas } from "@engine-pixi/components/RuntimeCanvas";
+import { RuntimeCanvas, type CameraState } from "@engine-pixi";
 import {
   emberwakeRuntimeRenderLayerOrder,
   type EmberwakeRuntimeRenderLayerId
 } from "@game/presentation/emberwakeRenderLayers";
+import type { EmberwakeRenderSurfaceMode } from "@game";
 import { EntityScene } from "../entities/render/EntityScene";
 import type { PresentedEntity } from "../entities/model/entityContract";
 import { WorldScene } from "../world/render/WorldScene";
@@ -18,6 +18,7 @@ type RuntimeSurfaceProps = {
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
   onSurfaceElementChange?: (element: HTMLDivElement | null) => void;
+  renderSurfaceMode: EmberwakeRenderSurfaceMode;
   onVisualFrame?: (timestampMs: number) => void;
   visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
   visibleChunks: ChunkCoordinate[];
@@ -36,6 +37,7 @@ export function RuntimeSurface({
   onRendererError,
   onRendererReady,
   onSurfaceElementChange,
+  renderSurfaceMode,
   onVisualFrame,
   visibleEntities,
   visibleChunks,
@@ -43,11 +45,19 @@ export function RuntimeSurface({
   worldSeed
 }: RuntimeSurfaceProps) {
   const renderLayers: Record<EmberwakeRuntimeRenderLayerId, ReactNode> = {
-    entities: <EntityScene camera={camera} entities={visibleEntities} viewport={viewport} />,
+    entities: (
+      <EntityScene
+        camera={camera}
+        entities={visibleEntities}
+        renderSurfaceMode={renderSurfaceMode}
+        viewport={viewport}
+      />
+    ),
     feedback: null,
     world: (
       <WorldScene
         camera={camera}
+        renderSurfaceMode={renderSurfaceMode}
         viewport={viewport}
         visibleChunks={visibleChunks}
         worldSeed={worldSeed}

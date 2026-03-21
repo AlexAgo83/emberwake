@@ -64,15 +64,27 @@ describe("gameplaySystems", () => {
     expect(nextState.progression.runtimeTicksSurvived).toBe(1);
     expect(nextState.progression.traversalDistanceWorldUnits).toBe(10);
     expect(nextState.autonomy.lastAutonomyTick).toBe(1);
+    expect(nextState.lifecycle.lastCompletedPhase).toBe("outcomes");
+    expect(nextState.lifecycle.recentSignals).toContain("progression.traversal-recorded");
+    expect(nextState.outcome.kind).toBe("none");
     expect(createGameplaySystemDiagnostics(nextState)).toMatchObject({
       activeStatusEffects: 0,
       combatState: "dormant",
+      gameplayOutcome: "none",
       progressionTicksSurvived: 1
     });
   });
 
   it("documents gameplay-system ownership without leaking render-adapter concerns", () => {
     expect(gameplaySystemsContract.seams.presentation).toContain("render-adapters");
+    expect(gameplaySystemsContract.phaseOrder).toEqual([
+      "autonomy",
+      "combat",
+      "status-effects",
+      "progression",
+      "outcomes"
+    ]);
+    expect(gameplaySystemsContract.signalPosture).toContain("narrow-phase-signals");
     expect(createDefaultCameraState().zoom).toBe(1);
   });
 });

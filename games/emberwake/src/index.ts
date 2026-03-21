@@ -86,10 +86,16 @@ export {
   gameplaySystemsContract
 } from "./systems/gameplaySystems";
 export {
+  createIdleGameplayOutcome,
+  gameplayOutcomeContract
+} from "./systems/gameplayOutcome";
+export {
   emberwakeRenderBoundaryContract,
   emberwakeRuntimeRenderLayerOrder,
   emberwakeRuntimeRenderLayers
 } from "./presentation/emberwakeRenderLayers";
+export { emberwakeRenderPerformanceContract } from "./presentation/emberwakeRenderPerformance";
+export type { EmberwakeRenderSurfaceMode } from "./presentation/emberwakeRenderPerformance";
 export type { EmberwakeRuntimeRenderLayerId } from "./presentation/emberwakeRenderLayers";
 export type {
   AutonomySystemState,
@@ -98,3 +104,4 @@ export type {
   ProgressionSystemState,
   StatusEffectSystemState
 } from "./systems/gameplaySystems";
+export type { GameplayOutcomeKind, GameplayShellOutcome, GameplayShellSceneHint } from "./systems/gameplayOutcome";

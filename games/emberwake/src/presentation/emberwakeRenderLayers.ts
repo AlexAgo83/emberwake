@@ -8,7 +8,8 @@ export const emberwakeRenderBoundaryContract = {
     "scene-layer-order",
     "world-visual-composition",
     "entity-visual-composition",
-    "future-runtime-feedback-layers"
+    "future-runtime-feedback-layers",
+    "player-vs-diagnostics-visual-budgeting"
   ],
   shellOwns: [
     "diagnostics-panels",
@@ -20,11 +21,11 @@ export const emberwakeRenderBoundaryContract = {
 export const emberwakeRuntimeRenderLayers = {
   world: {
     owner: "game",
-    role: "terrain-grid-and-world-labels"
+    role: "terrain-base-plus-optional-debug-grid-and-labels"
   },
   entities: {
     owner: "game",
-    role: "entity-bodies-and-runtime-readable-labels"
+    role: "entity-bodies-with-optional-debug-labels"
   },
   feedback: {
     owner: "game",

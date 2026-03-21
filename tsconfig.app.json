@@ -20,8 +20,11 @@
     "paths": {
       "@app/*": ["src/app/*"],
       "@assets/*": ["src/assets/*"],
+      "@engine": ["packages/engine-core/src/index.ts"],
       "@engine/*": ["packages/engine-core/src/*"],
+      "@engine-pixi": ["packages/engine-pixi/src/index.ts"],
       "@engine-pixi/*": ["packages/engine-pixi/src/*"],
+      "@game": ["games/emberwake/src/index.ts"],
       "@game/*": ["games/emberwake/src/*"],
       "@shared/*": ["src/shared/*"],
       "@src/*": ["src/*"]

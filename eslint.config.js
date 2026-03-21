@@ -133,6 +133,28 @@ export default tseslint.config(
               group: ["@engine-pixi", "@engine-pixi/*"],
               message:
                 "App-shell modules must not depend on Pixi adapters directly. Route runtime rendering through src/game/render boundaries instead."
+            },
+            {
+              group: ["@engine/*", "@game/*"],
+              message:
+                "App-shell modules should consume engine and game contracts through the public @engine and @game entrypoints when they cross package boundaries."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    files: ["src/game/render/**/*.{ts,tsx}", "src/game/world/render/**/*.{ts,tsx}", "src/game/entities/render/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@engine-pixi/*"],
+              message:
+                "Render-shell modules should consume Pixi adapter contracts through the public @engine-pixi entrypoint."
             }
           ]
         }

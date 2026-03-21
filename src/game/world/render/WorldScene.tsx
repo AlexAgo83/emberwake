@@ -1,15 +1,16 @@
 import { extend } from "@pixi/react";
+import { useMemo } from "react";
 import { Container, Graphics, Text } from "pixi.js";
 
-import type { CameraState } from "@engine/camera/cameraMath";
 import {
   chunkCoordinateToId,
   chunkCoordinateToWorldOrigin,
   chunkWorldSize,
   worldContract
-} from "@engine/world/worldContract";
-import { WorldViewportContainer } from "@engine-pixi/components/WorldViewportContainer";
+} from "@engine";
+import { WorldViewportContainer, type CameraState } from "@engine-pixi";
 import { createChunkDebugData } from "@game/content/world/chunkDebugData";
+import type { EmberwakeRenderSurfaceMode } from "@game";
 import type { ChunkCoordinate } from "../types";
 
 extend({
@@ -28,6 +29,7 @@ type ViewportForWorldScene = {
 
 type WorldSceneProps = {
   camera: CameraState;
+  renderSurfaceMode: EmberwakeRenderSurfaceMode;
   visibleChunks: ChunkCoordinate[];
   viewport: ViewportForWorldScene;
   worldSeed: string;
@@ -74,8 +76,24 @@ const drawChunkOverlay = (chunkCoordinate: ChunkCoordinate, worldSeed: string) =
   graphics.stroke();
 };
 
-export function WorldScene({ camera, visibleChunks, viewport, worldSeed }: WorldSceneProps) {
+export function WorldScene({
+  camera,
+  renderSurfaceMode,
+  visibleChunks,
+  viewport,
+  worldSeed
+}: WorldSceneProps) {
   const scale = viewport.fitScale * camera.zoom;
+  const chunkDebugData = useMemo(
+    () =>
+      visibleChunks.map((chunkCoordinate) => ({
+        chunkCoordinate,
+        debugData: createChunkDebugData(chunkCoordinate, worldSeed),
+        origin: chunkCoordinateToWorldOrigin(chunkCoordinate)
+      })),
+    [visibleChunks, worldSeed]
+  );
+  const debugVisualsEnabled = renderSurfaceMode === "diagnostics";
 
   return (
     <WorldViewportContainer camera={camera} viewport={viewport}>
@@ -86,37 +104,38 @@ export function WorldScene({ camera, visibleChunks, viewport, worldSeed }: World
         graphics.fill();
       }} />
 
-      {visibleChunks.map((chunkCoordinate) => {
-        const origin = chunkCoordinateToWorldOrigin(chunkCoordinate);
-        const debugData = createChunkDebugData(chunkCoordinate, worldSeed);
-
+      {chunkDebugData.map(({ chunkCoordinate, debugData, origin }) => {
         return (
           <pixiContainer key={chunkCoordinateToId(chunkCoordinate, worldSeed)}>
             <pixiGraphics draw={drawChunkBase(chunkCoordinate, worldSeed)} />
-            <pixiGraphics draw={drawChunkOverlay(chunkCoordinate, worldSeed)} />
-            <pixiText
-              anchor={0.5}
-              eventMode="none"
-              resolution={2}
-              scale={1 / scale}
-              style={{
-                align: "center",
-                dropShadow: {
-                  alpha: 0.6,
-                  blur: 2,
-                  color: "#09070f",
-                  distance: 1
-                },
-                fill: "#f6eee8",
-                fontFamily: "monospace",
-                fontSize: 18,
-                fontWeight: "700",
-                letterSpacing: 1.5
-              }}
-              text={debugData.label}
-              x={origin.x + chunkWorldSize / 2}
-              y={origin.y + 34}
-            />
+            {debugVisualsEnabled ? (
+              <>
+                <pixiGraphics draw={drawChunkOverlay(chunkCoordinate, worldSeed)} />
+                <pixiText
+                  anchor={0.5}
+                  eventMode="none"
+                  resolution={2}
+                  scale={1 / scale}
+                  style={{
+                    align: "center",
+                    dropShadow: {
+                      alpha: 0.6,
+                      blur: 2,
+                      color: "#09070f",
+                      distance: 1
+                    },
+                    fill: "#f6eee8",
+                    fontFamily: "monospace",
+                    fontSize: 18,
+                    fontWeight: "700",
+                    letterSpacing: 1.5
+                  }}
+                  text={debugData.label}
+                  x={origin.x + chunkWorldSize / 2}
+                  y={origin.y + 34}
+                />
+              </>
+            ) : null}
           </pixiContainer>
         );
       })}

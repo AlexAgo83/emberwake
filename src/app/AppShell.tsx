@@ -15,8 +15,10 @@ import { useSampledValue } from "./hooks/useSampledValue";
 import { useShellPreferences } from "./hooks/useShellPreferences";
 import { useRuntimeTelemetryBridge } from "./hooks/useRuntimeTelemetryBridge";
 import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards";
+import { deriveAppSceneId } from "./model/appScene";
 import { runtimePublicationContract } from "./model/runtimePublicationContract";
-import { worldPointToChunkCoordinate } from "@engine/world/worldContract";
+import { worldPointToChunkCoordinate } from "@engine";
+import type { GameplayShellOutcome } from "@game";
 import { useCameraController } from "../game/camera/hooks/useCameraController";
 import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
 import { useDebugPanelHotkey } from "../game/debug/hooks/useDebugPanelHotkey";
@@ -55,21 +57,31 @@ export function AppShell() {
   const { cycleWorldSeed, runtimeSession, setCameraMode, setCameraState } = useRuntimeSession();
   const { markFailed, markReady, rendererState, reset: resetRenderer } = useRendererHealth();
   const appScene = useAppScene({
-    rendererStatus: rendererState.status
+    rendererStatus: rendererState.status,
+    runtimeOutcome: null
   });
-  const {
-    activeScene,
+  let {
     closeShellSurface,
     isMenuOpen,
     openMenu,
+    requestedScene,
     resumeRuntime,
     shellSurface,
     showPauseScene,
     showSettingsScene
   } = appScene;
+  const shellRequestedScene = useMemo(
+    () =>
+      deriveAppSceneId({
+        rendererStatus: rendererState.status,
+        requestedScene,
+        runtimeOutcome: null
+      }),
+    [rendererState.status, requestedScene]
+  );
   const controlState = useMemo(
     () =>
-      activeScene === "runtime"
+      shellRequestedScene === "runtime"
         ? runtimeControlState
         : {
             ...runtimeControlState,
@@ -77,9 +89,27 @@ export function AppShell() {
             inputOwner: "none" as const,
             movementIntent: createIdleMovementIntent("none")
           },
-    [activeScene, runtimeControlState]
+    [runtimeControlState, shellRequestedScene]
   );
   const simulationState = useEntitySimulation({ controlState });
+  const runtimeOutcome = useMemo(() => {
+    const rawRuntimeOutcome = simulationState.presentation.overlays?.runtimeOutcome;
+
+    if (!rawRuntimeOutcome || rawRuntimeOutcome.kind === "none") {
+      return null;
+    }
+
+    return rawRuntimeOutcome as GameplayShellOutcome;
+  }, [simulationState.presentation.overlays]);
+  const activeScene = useMemo(
+    () =>
+      deriveAppSceneId({
+        rendererStatus: rendererState.status,
+        requestedScene,
+        runtimeOutcome
+      }),
+    [rendererState.status, requestedScene, runtimeOutcome]
+  );
   const followedWorldPosition =
     simulationState.presentation.cameraTarget?.worldPosition ?? simulationState.entity.worldPosition;
   const { cameraState, resetCamera } = useCameraController({
@@ -237,7 +267,11 @@ export function AppShell() {
     if (activeScene === "runtime") {
       simulationState.controls.resume();
       setLastMetaScene("none");
+      return;
     }
+
+    simulationState.controls.pause();
+    setLastMetaScene("none");
   }, [activeScene, setLastMetaScene, simulationState.controls]);
 
   return (
@@ -259,6 +293,7 @@ export function AppShell() {
           onRendererReady={markReady}
           onRetryRuntime={handleRetryRuntime}
           onSurfaceElementChange={handleRuntimeSurfaceElementChange}
+          renderSurfaceMode={diagnosticsVisible ? "diagnostics" : "player"}
           onVisualFrame={simulationState.controls.advanceVisualFrame}
           rendererMessage={rendererState.message}
           scene={activeScene}
@@ -308,6 +343,7 @@ export function AppShell() {
         <AppMetaScenePanel
           fullscreenPreferred={preferences.prefersFullscreen}
           onResumeRuntime={resumeRuntime}
+          runtimeOutcome={runtimeOutcome}
           scene={activeScene}
         />
 

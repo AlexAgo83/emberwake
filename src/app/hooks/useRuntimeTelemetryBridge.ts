@@ -1,11 +1,12 @@
 import { useEffect, useRef } from "react";
 
+import type { AppSceneId } from "../model/appScene";
 import type { RendererState } from "./useRendererHealth";
 
 declare global {
   interface Window {
     __EMBERWAKE_RUNTIME_METRICS__?: {
-      activeScene: "boot" | "failure" | "pause" | "runtime" | "settings";
+      activeScene: AppSceneId;
       attempt: number;
       bootStartedAtMs: number;
       diagnosticsVisible: boolean;
@@ -33,7 +34,7 @@ declare global {
 }
 
 type RuntimeTelemetryBridgeOptions = {
-  activeScene: "boot" | "failure" | "pause" | "runtime" | "settings";
+  activeScene: AppSceneId;
   diagnosticsVisible: boolean;
   publication: {
     diagnostics: string;

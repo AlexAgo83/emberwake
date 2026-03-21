@@ -1,27 +1,47 @@
 import { memo } from "react";
 
-import type { AppSceneId } from "../model/appScene";
+import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
 
 type AppMetaScenePanelProps = {
   fullscreenPreferred: boolean;
   onResumeRuntime: () => void;
+  runtimeOutcome?: RuntimeShellOutcome | null;
   scene: AppSceneId;
 };
 
 export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   fullscreenPreferred,
   onResumeRuntime,
+  runtimeOutcome,
   scene
 }: AppMetaScenePanelProps) {
-  if (scene !== "pause" && scene !== "settings") {
+  if (scene !== "pause" && scene !== "settings" && scene !== "defeat" && scene !== "victory") {
     return null;
   }
 
-  const title = scene === "pause" ? "Runtime paused" : "Settings";
+  const title =
+    scene === "pause"
+      ? "Runtime paused"
+      : scene === "settings"
+        ? "Settings"
+        : scene === "defeat"
+          ? "Runtime interrupted"
+          : "Victory";
   const detail =
     scene === "pause"
       ? "The shell owns the pause scene and holds the runtime while the player is outside the live loop."
-      : "Settings stay shell-owned. Returning to runtime resumes the live loop without rebuilding gameplay state.";
+      : scene === "settings"
+        ? "Settings stay shell-owned. Returning to runtime resumes the live loop without rebuilding gameplay state."
+        : runtimeOutcome?.detail ??
+          (scene === "defeat"
+            ? "The shell has taken ownership after a gameplay outcome requested recovery or restart."
+            : "The shell presents the gameplay outcome without reading arbitrary runtime internals.");
+  const resumeLabel =
+    scene === "defeat" ? "Restart runtime" : scene === "victory" ? "Continue runtime" : "Resume runtime";
+  const ownershipLabel =
+    scene === "defeat" || scene === "victory"
+      ? `Shell scene / gameplay outcome ${runtimeOutcome?.kind ?? scene}`
+      : "Shell scene / runtime state preserved";
 
   return (
     <aside className="app-meta-scene" aria-label={title}>
@@ -39,7 +59,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         </div>
         <div>
           <dt>Ownership</dt>
-          <dd>Shell scene / runtime state preserved</dd>
+          <dd>{ownershipLabel}</dd>
         </div>
       </dl>
       <button
@@ -47,7 +67,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         onClick={onResumeRuntime}
         type="button"
       >
-        Resume runtime
+        {resumeLabel}
       </button>
     </aside>
   );

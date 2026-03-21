@@ -7,20 +7,22 @@ import {
 import type {
   AppSceneId,
   AppShellSurfaceId,
-  RendererLifecycleStatus
+  RendererLifecycleStatus,
+  RuntimeShellOutcome
 } from "../model/appScene";
 
 type UseAppSceneOptions = {
   rendererStatus: RendererLifecycleStatus;
+  runtimeOutcome?: RuntimeShellOutcome | null;
 };
 
-export function useAppScene({ rendererStatus }: UseAppSceneOptions) {
+export function useAppScene({ rendererStatus, runtimeOutcome }: UseAppSceneOptions) {
   const [requestedScene, setRequestedScene] = useState<AppSceneId>(appSceneContract.initialScene);
   const [shellSurface, setShellSurface] = useState<AppShellSurfaceId>("none");
 
   const activeScene = useMemo(
-    () => deriveAppSceneId({ rendererStatus, requestedScene }),
-    [rendererStatus, requestedScene]
+    () => deriveAppSceneId({ rendererStatus, runtimeOutcome, requestedScene }),
+    [rendererStatus, requestedScene, runtimeOutcome]
   );
   const closeShellSurface = useCallback(() => {
     setShellSurface("none");
@@ -49,6 +51,7 @@ export function useAppScene({ rendererStatus }: UseAppSceneOptions) {
     openMenu,
     requestedScene,
     resumeRuntime,
+    runtimeOutcome,
     shellSurface,
     showPauseScene,
     showSettingsScene

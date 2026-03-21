@@ -18,6 +18,7 @@ import {
   createGameplaySystemDiagnostics,
   createInitialGameplaySystemsState
 } from "@game/systems/gameplaySystems";
+import { createIdleGameplayOutcome } from "@game/systems/gameplayOutcome";
 import type { EmberwakeGameplaySystemsState } from "@game/systems/gameplaySystems";
 
 type EmberwakeGameState = {
@@ -106,6 +107,9 @@ export const emberwakeGameModule: GameModule<EmberwakeGameState, EmberwakeGameAc
         worldPosition: state.simulation.entity.worldPosition
       }
     ],
+    overlays: {
+      runtimeOutcome: state.systems.outcome ?? createIdleGameplayOutcome()
+    },
     world: {
       visibleChunks: []
     }

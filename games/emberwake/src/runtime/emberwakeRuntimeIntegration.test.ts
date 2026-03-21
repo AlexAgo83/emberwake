@@ -65,7 +65,12 @@ describe("Emberwake runtime integration", () => {
     });
     expect(presentation.diagnostics).toMatchObject({
       combatState: "dormant",
+      gameplayOutcome: "none",
       progressionTicksSurvived: 1
+    });
+    expect(presentation.overlays?.runtimeOutcome).toMatchObject({
+      kind: "none",
+      shellScene: "none"
     });
   });
 

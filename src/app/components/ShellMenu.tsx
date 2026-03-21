@@ -1,9 +1,10 @@
 import { memo, useEffect, useId, useRef } from "react";
 
 import type { CameraMode } from "../../game/camera/model/cameraMode";
+import type { AppSceneId } from "../model/appScene";
 
 type ShellMenuProps = {
-  activeScene: "boot" | "failure" | "pause" | "runtime" | "settings";
+  activeScene: AppSceneId;
   cameraMode: CameraMode;
   canInstall: boolean;
   diagnosticsEnabled: boolean;

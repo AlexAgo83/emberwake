@@ -1,6 +1,6 @@
 import { Suspense, lazy } from "react";
 
-import type { CameraState } from "@engine/camera/cameraMath";
+import type { CameraState } from "@engine";
 import type { PresentedEntity } from "../../game/entities/model/entityContract";
 import type { SimulatedEntity } from "../../game/entities/model/entitySimulation";
 import type { ChunkCoordinate } from "../../game/world/types";
@@ -20,6 +20,7 @@ type RuntimeSceneBoundaryProps = {
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
   onRetryRuntime?: () => void;
+  renderSurfaceMode: "diagnostics" | "player";
   onSurfaceElementChange?: (element: HTMLDivElement | null) => void;
   onVisualFrame?: (timestampMs: number) => void;
   rendererMessage: string;
@@ -77,6 +78,7 @@ export function RuntimeSceneBoundary({
   onRendererError,
   onRendererReady,
   onRetryRuntime,
+  renderSurfaceMode,
   onSurfaceElementChange,
   onVisualFrame,
   rendererMessage,
@@ -127,6 +129,7 @@ export function RuntimeSceneBoundary({
           camera={camera}
           onRendererError={onRendererError}
           onRendererReady={onRendererReady}
+          renderSurfaceMode={renderSurfaceMode}
           onSurfaceElementChange={onSurfaceElementChange}
           onVisualFrame={onVisualFrame}
           visibleEntities={visibleEntities}
