@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { AppMetaScenePanel } from "./components/AppMetaScenePanel";
 import type { GameOverRecap } from "./components/AppMetaScenePanel";
@@ -200,6 +200,40 @@ export function AppShell() {
     },
     [applyDesktopControlBindings]
   );
+  useEffect(() => {
+    if (activeScene !== "runtime") {
+      return;
+    }
+
+    const handleWindowKeyDown = (event: KeyboardEvent) => {
+      const target = event.target;
+      const isEditableElement =
+        target instanceof HTMLElement &&
+        (target.isContentEditable ||
+          target.tagName === "INPUT" ||
+          target.tagName === "SELECT" ||
+          target.tagName === "TEXTAREA");
+
+      if (
+        event.key !== "Escape" ||
+        event.defaultPrevented ||
+        isMenuOpen ||
+        isEditableElement ||
+        document.body.dataset.desktopControlCaptureActive === "true"
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      showMainMenuScene();
+    };
+
+    window.addEventListener("keydown", handleWindowKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleWindowKeyDown);
+    };
+  }, [activeScene, isMenuOpen, showMainMenuScene]);
   const isLoadAvailable = savedSessionSlot !== null;
   const hasRuntimeLayer = runtimeSession.hasActiveSession;
   const updateGameOverRecap = useCallback((gameState: EmberwakeGameState | null) => {

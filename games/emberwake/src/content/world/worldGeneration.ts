@@ -98,7 +98,30 @@ const sampleTerrainAtWorldTile = (
   };
   const macroValue = sampleChunkMacroValue(chunkCoordinate, seed);
   const tileSignature = sampleDeterministicSignature(`${seed}:${worldTileX}:${worldTileY}`);
-  const terrainBias = (macroValue + (tileSignature % 61)) % 256;
+  const clusterPrimary = sampleClusterFieldValue({
+    prefix: "terrain-cluster-primary",
+    scaleInTiles: 5,
+    seed,
+    worldTileX,
+    worldTileY
+  });
+  const clusterSecondary = sampleClusterFieldValue({
+    prefix: "terrain-cluster-secondary",
+    scaleInTiles: 9,
+    seed,
+    worldTileX,
+    worldTileY
+  });
+  const localBlendValue =
+    sampleDeterministicSignature(
+      `${seed}:terrain-local:${Math.floor(worldTileX / 2)}:${Math.floor(worldTileY / 2)}`
+    ) % 256;
+  const terrainBias = Math.round(
+    macroValue * 0.26 +
+      clusterPrimary * 0.42 +
+      clusterSecondary * 0.24 +
+      localBlendValue * 0.08
+  ) % 256;
 
   return {
     terrainKind: pickTerrainKind(terrainBias),

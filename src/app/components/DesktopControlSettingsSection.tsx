@@ -44,6 +44,9 @@ const desktopControlDirectionOrder = [
   ...desktopCameraControlDirections
 ] as const satisfies readonly DesktopControlBindingDirection[];
 
+const movementDirections = desktopControlDirections as readonly DesktopControlBindingDirection[];
+const cameraDirections = desktopCameraControlDirections as readonly DesktopControlBindingDirection[];
+
 export function DesktopControlSettingsSection({
   bindings,
   onApply
@@ -140,11 +143,52 @@ export function DesktopControlSettingsSection({
       : "Saved desktop bindings are active.";
   }, [captureMessage, captureState, conflictSet.size, hasUnsavedChanges]);
 
+  const renderBindingRow = (direction: DesktopControlBindingDirection) => (
+    <div className="settings-controls__row" key={direction}>
+      <span className="settings-controls__label">
+        {isDesktopCameraControlDirection(direction)
+          ? cameraDirectionLabels[direction]
+          : directionLabels[direction]}
+      </span>
+      <div className="settings-controls__bindings">
+        {getDesktopControlSlotOrder(direction).map((slotIndex) => {
+          const slotId = `${direction}:${slotIndex}`;
+          const isCapturing =
+            captureState?.direction === direction && captureState.slotIndex === slotIndex;
+
+          return (
+            <button
+              className="settings-controls__binding shell-control shell-control--button"
+              data-conflict={conflictSet.has(slotId)}
+              data-capture={isCapturing}
+              key={slotId}
+              onClick={() => {
+                setCaptureState({ direction, slotIndex });
+                setCaptureMessage(null);
+              }}
+              type="button"
+            >
+              {isCapturing
+                ? "Press key"
+                : formatDesktopControlBindingKey(draftBindings[direction][slotIndex]!)}
+            </button>
+          );
+        })}
+        {isDesktopCameraControlDirection(direction) ? (
+          <span className="settings-controls__binding settings-controls__binding--static shell-control">
+            Shift held
+          </span>
+        ) : null}
+      </div>
+    </div>
+  );
+
   return (
     <section className="settings-controls" aria-label="Desktop controls">
       <div className="settings-controls__header">
         <div>
           <h3 className="settings-controls__title">Desktop controls</h3>
+          <p className="settings-controls__hint">Click a binding to capture a replacement key.</p>
         </div>
         <p className="settings-controls__status" data-conflict={conflictSet.size > 0}>
           {statusCopy}
@@ -152,73 +196,57 @@ export function DesktopControlSettingsSection({
       </div>
 
       <div className="settings-controls__grid">
-        {desktopControlDirectionOrder.map((direction) => (
-          <div className="settings-controls__row" key={direction}>
-            <span className="settings-controls__label">
-              {isDesktopCameraControlDirection(direction)
-                ? cameraDirectionLabels[direction]
-                : directionLabels[direction]}
-            </span>
-            <div className="settings-controls__bindings">
-              {getDesktopControlSlotOrder(direction).map((slotIndex) => {
-                const slotId = `${direction}:${slotIndex}`;
-                const isCapturing =
-                  captureState?.direction === direction && captureState.slotIndex === slotIndex;
-
-                return (
-                  <button
-                    className="settings-controls__binding shell-control shell-control--button"
-                    data-conflict={conflictSet.has(slotId)}
-                    data-capture={isCapturing}
-                    key={slotId}
-                    onClick={() => {
-                      setCaptureState({ direction, slotIndex });
-                      setCaptureMessage(null);
-                    }}
-                    type="button"
-                  >
-                    {isCapturing
-                      ? "Press key"
-                      : formatDesktopControlBindingKey(draftBindings[direction][slotIndex]!)}
-                  </button>
-                );
-              })}
-              {isDesktopCameraControlDirection(direction) ? (
-                <span className="settings-controls__binding settings-controls__binding--static shell-control">
-                  Shift held
-                </span>
-              ) : null}
-            </div>
+        <section className="settings-controls__group" aria-labelledby="settings-controls-movement">
+          <div className="settings-controls__group-header">
+            <h4 className="settings-controls__group-title" id="settings-controls-movement">
+              Movement
+            </h4>
           </div>
-        ))}
+          <div className="settings-controls__group-rows">
+            {movementDirections.map(renderBindingRow)}
+          </div>
+        </section>
+
+        <section className="settings-controls__group" aria-labelledby="settings-controls-camera">
+          <div className="settings-controls__group-header">
+            <h4 className="settings-controls__group-title" id="settings-controls-camera">
+              Camera
+            </h4>
+          </div>
+          <div className="settings-controls__group-rows">
+            {cameraDirections.map(renderBindingRow)}
+          </div>
+        </section>
       </div>
 
       <div className="settings-controls__actions">
+        <div className="settings-controls__actions-secondary">
+          <button
+            className="shell-control shell-control--button"
+            disabled={!hasUnsavedChanges}
+            onClick={() => {
+              setDraftBindings(bindings);
+              setCaptureState(null);
+              setCaptureMessage("Unsaved changes reverted.");
+            }}
+            type="button"
+          >
+            Revert
+          </button>
+          <button
+            className="shell-control shell-control--button"
+            onClick={() => {
+              setDraftBindings(createDefaultDesktopControlBindings());
+              setCaptureState(null);
+              setCaptureMessage("Draft controls reset to product defaults.");
+            }}
+            type="button"
+          >
+            Reset defaults
+          </button>
+        </div>
         <button
-          className="shell-control shell-control--button"
-          disabled={!hasUnsavedChanges}
-          onClick={() => {
-            setDraftBindings(bindings);
-            setCaptureState(null);
-            setCaptureMessage("Unsaved changes reverted.");
-          }}
-          type="button"
-        >
-          Revert
-        </button>
-        <button
-          className="shell-control shell-control--button"
-          onClick={() => {
-            setDraftBindings(createDefaultDesktopControlBindings());
-            setCaptureState(null);
-            setCaptureMessage("Draft controls reset to product defaults.");
-          }}
-          type="button"
-        >
-          Reset defaults
-        </button>
-        <button
-          className="shell-control shell-control--button"
+          className="shell-control shell-control--button settings-controls__apply"
           disabled={!canApply}
           onClick={() => {
             onApply(draftBindings);

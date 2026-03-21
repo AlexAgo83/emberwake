@@ -15,6 +15,8 @@ describe("DesktopControlSettingsSection", () => {
 
     expect(screen.getByRole("heading", { name: /Desktop controls/i })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: /Movement bindings/i })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Movement/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Camera/i })).toBeInTheDocument();
     expect(screen.getByText("Rotate left")).toBeInTheDocument();
     expect(screen.getByText("Rotate right")).toBeInTheDocument();
     expect(screen.getAllByText("Shift held")).toHaveLength(2);
