@@ -9,6 +9,10 @@ export {
   createEngineInputFrameFromControlState
 } from "./runtime/emberwakeRuntimeRunner";
 export {
+  createDeterministicRuntimeSupportEntities,
+  emberwakeRuntimeBootstrap
+} from "./runtime/emberwakeRuntimeBootstrap";
+export {
   advanceSimulationState,
   createInitialSimulationState,
   entitySimulationContract,

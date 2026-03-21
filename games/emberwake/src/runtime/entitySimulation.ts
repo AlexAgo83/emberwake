@@ -2,8 +2,8 @@ import type { WorldPoint } from "@engine/geometry/primitives";
 import { createGenericMoverEntity } from "@game/content/entities/entityContract";
 import type { SingleEntityControlState } from "@game/input/singleEntityControlContract";
 import { singleEntityControlContract } from "@game/input/singleEntityControlContract";
-import { officialDebugScenario } from "@game/content/scenarios/officialDebugScenario";
 import type { EntityState, WorldEntity } from "@game/content/entities/entityContract";
+import { emberwakeRuntimeBootstrap } from "@game/runtime/emberwakeRuntimeBootstrap";
 
 export const entitySimulationContract = {
   fixedStepMs: 1000 / 60,
@@ -73,13 +73,13 @@ const totalCycleTicks = scriptedPhases.reduce(
 export const createInitialSimulationState = (): EntitySimulationState => ({
   entity: {
     ...createGenericMoverEntity({
-      archetype: officialDebugScenario.playerEntity.archetype,
-      id: officialDebugScenario.playerEntity.id,
+      archetype: emberwakeRuntimeBootstrap.playerEntity.archetype,
+      id: emberwakeRuntimeBootstrap.playerEntity.id,
       visual: {
-        kind: officialDebugScenario.playerEntity.visualKind,
-        tint: officialDebugScenario.playerEntity.tint
+        kind: emberwakeRuntimeBootstrap.playerEntity.visualKind,
+        tint: emberwakeRuntimeBootstrap.playerEntity.tint
       },
-      worldPosition: officialDebugScenario.playerEntity.worldPosition
+      worldPosition: emberwakeRuntimeBootstrap.playerEntity.worldPosition
     }),
     velocity: {
       x: 0,

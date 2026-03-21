@@ -1,15 +1,15 @@
 import { createDefaultCameraState } from "@engine/camera/cameraMath";
-import { officialDebugScenario } from "@game/content/scenarios/officialDebugScenario";
 import type { RuntimeSessionState } from "@shared/lib/runtimeSessionStorage";
+import { emberwakeRuntimeBootstrap } from "@game/runtime/emberwakeRuntimeBootstrap";
 
 export const emberwakeRuntimeSessionSeedOptions = [
-  officialDebugScenario.worldSeed,
+  emberwakeRuntimeBootstrap.worldSeed,
   "emberwake-ash-seed",
   "emberwake-glow-seed"
 ] as const;
 
 export const createDefaultEmberwakeRuntimeSessionState = (): RuntimeSessionState => ({
-  cameraState: officialDebugScenario.cameraState ?? createDefaultCameraState(),
+  cameraState: emberwakeRuntimeBootstrap.cameraState ?? createDefaultCameraState(),
   cameraMode: "free",
-  worldSeed: officialDebugScenario.worldSeed
+  worldSeed: emberwakeRuntimeBootstrap.worldSeed
 });

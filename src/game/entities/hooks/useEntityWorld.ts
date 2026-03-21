@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
+import { createDeterministicRuntimeSupportEntities } from "@game/runtime/emberwakeRuntimeBootstrap";
 import { chunkCoordinateToId } from "../../world/model/worldContract";
-import { createDeterministicDebugEntities } from "../model/entityDebugScenario";
 import type { PresentedEntity } from "../model/entityContract";
 import { detectEntityOverlaps } from "../model/entityOccupancy";
 import {
@@ -41,7 +41,7 @@ export function useEntityWorld({
   visibleChunks
 }: UseEntityWorldOptions): EntityWorldState {
   const trackedEntities = useMemo(() => {
-    const scenarioEntities = createDeterministicDebugEntities();
+    const scenarioEntities = createDeterministicRuntimeSupportEntities();
 
     return [primaryEntity, ...scenarioEntities];
   }, [primaryEntity]);

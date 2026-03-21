@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from "@testing-library/react";
 
+import { createDeterministicRuntimeSupportEntities } from "@game/runtime/emberwakeRuntimeBootstrap";
 import { worldPointToChunkCoordinate } from "../../world/model/worldContract";
-import { createDeterministicDebugEntities } from "../model/entityDebugScenario";
 import { createInitialSimulationState } from "../model/entitySimulation";
 import { useEntityWorld } from "./useEntityWorld";
 
@@ -27,7 +27,7 @@ describe("useEntityWorld", () => {
 
   it("keeps selection presentation separate from support-entity simulation state", async () => {
     const primaryEntity = createInitialSimulationState().entity;
-    const supportEntity = createDeterministicDebugEntities()[2];
+    const supportEntity = createDeterministicRuntimeSupportEntities()[2];
     const visibleChunks = [
       worldPointToChunkCoordinate(primaryEntity.worldPosition),
       worldPointToChunkCoordinate(supportEntity.worldPosition)
