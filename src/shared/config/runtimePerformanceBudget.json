@@ -10,7 +10,7 @@
   },
   "framePacing": {
     "maxCatchUpFramesRatio": 0.12,
-    "maxSimulationStepsPerVisualFrame": 3,
+    "maxSimulationStepsPerVisualFrame": 4,
     "minTrackedVisualFrames": 20
   },
   "shellStartup": {
