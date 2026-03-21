@@ -42,11 +42,17 @@ type ShellDiagnosticsPanelProps = {
   };
   simulation: {
     accumulatorMs: number;
+    droppedFrameTimeMsTotal: number;
+    droppedSimulationDebtMsTotal: number;
     fixedStepMs: number;
+    framesWithDroppedFrameTime: number;
+    framesWithDroppedSimulationDebt: number;
     framesWithCatchUp: number;
     fps: number;
     frameTimeMs: number;
     isPaused: boolean;
+    maxDroppedFrameTimeMs: number;
+    maxDroppedSimulationDebtMs: number;
     maxFrameTimeMs: number;
     schedulerMode: "internal-raf" | "pixi-ticker-master";
     simulationStepsLastFrame: number;
@@ -256,6 +262,30 @@ function ShellDiagnosticsPanelComponent({
         <div>
           <dt>Catch-up frames</dt>
           <dd>{simulation.framesWithCatchUp}</dd>
+        </div>
+        <div>
+          <dt>Frame clamp frames</dt>
+          <dd>{simulation.framesWithDroppedFrameTime}</dd>
+        </div>
+        <div>
+          <dt>Dropped frame total</dt>
+          <dd>{simulation.droppedFrameTimeMsTotal.toFixed(2)}ms</dd>
+        </div>
+        <div>
+          <dt>Max dropped frame</dt>
+          <dd>{simulation.maxDroppedFrameTimeMs.toFixed(2)}ms</dd>
+        </div>
+        <div>
+          <dt>Debt clamp frames</dt>
+          <dd>{simulation.framesWithDroppedSimulationDebt}</dd>
+        </div>
+        <div>
+          <dt>Dropped debt total</dt>
+          <dd>{simulation.droppedSimulationDebtMsTotal.toFixed(2)}ms</dd>
+        </div>
+        <div>
+          <dt>Max dropped debt</dt>
+          <dd>{simulation.maxDroppedSimulationDebtMs.toFixed(2)}ms</dd>
         </div>
         <div>
           <dt>Max frame time</dt>

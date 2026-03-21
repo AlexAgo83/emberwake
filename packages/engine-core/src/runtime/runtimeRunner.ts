@@ -7,11 +7,17 @@ import type {
 
 export type RuntimeRunnerMetrics = {
   accumulatorMs: number;
+  droppedFrameTimeMsTotal: number;
+  droppedSimulationDebtMsTotal: number;
   fixedStepMs: number;
+  framesWithDroppedFrameTime: number;
+  framesWithDroppedSimulationDebt: number;
   framesWithCatchUp: number;
   frameTimeMs: number;
   fps: number;
   isPaused: boolean;
+  maxDroppedFrameTimeMs: number;
+  maxDroppedSimulationDebtMs: number;
   maxFrameTimeMs: number;
   maxCatchUpStepsPerFrame: number;
   schedulerMode: "internal-raf" | "pixi-ticker-master";
@@ -79,11 +85,17 @@ export const createIdleEngineInputFrame = (): EngineInputFrame => ({
 export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameContext = void> {
   private accumulatorMs = 0;
   private currentInput = createIdleEngineInputFrame();
+  private droppedFrameTimeMsTotal = 0;
+  private droppedSimulationDebtMsTotal = 0;
   private frameHandle: ReturnType<typeof requestFrame> | null = null;
+  private framesWithDroppedFrameTime = 0;
+  private framesWithDroppedSimulationDebt = 0;
   private framesWithCatchUp = 0;
   private fps = 0;
   private isPaused = false;
   private listeners = new Set<(snapshot: RuntimeRunnerSnapshot<TGameState>) => void>();
+  private maxDroppedFrameTimeMs = 0;
+  private maxDroppedSimulationDebtMs = 0;
   private maxFrameTimeMs: number;
   private previousTimestamp: number | null = null;
   private queuedStepCount = 0;
@@ -119,11 +131,17 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
     });
     this.runtime = {
       accumulatorMs: 0,
+      droppedFrameTimeMsTotal: 0,
+      droppedSimulationDebtMsTotal: 0,
       fixedStepMs,
+      framesWithDroppedFrameTime: 0,
+      framesWithDroppedSimulationDebt: 0,
       framesWithCatchUp: 0,
       fps: 0,
       frameTimeMs: fixedStepMs,
       isPaused: false,
+      maxDroppedFrameTimeMs: 0,
+      maxDroppedSimulationDebtMs: 0,
       maxFrameTimeMs: fixedStepMs,
       maxCatchUpStepsPerFrame,
       schedulerMode: this.schedulerMode,
@@ -222,13 +240,29 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
     this.previousTimestamp = timestamp;
     this.visualFrameCount += 1;
     const clampedFrameTimeMs = Math.min(rawFrameTimeMs, this.fixedStepMs * 4);
+    const droppedFrameTimeMs = Math.max(0, rawFrameTimeMs - clampedFrameTimeMs);
     const speedAdjustedFrameTimeMs = this.isPaused ? 0 : clampedFrameTimeMs * this.speedMultiplier;
+    const maxAccumulatorMs = this.fixedStepMs * this.maxCatchUpStepsPerFrame;
+    const unclampedAccumulatorMs = this.accumulatorMs + speedAdjustedFrameTimeMs;
+    const droppedSimulationDebtMs = Math.max(0, unclampedAccumulatorMs - maxAccumulatorMs);
 
     // Clamp accumulation so a slow frame cannot create unbounded catch-up debt.
-    this.accumulatorMs = Math.min(
-      this.accumulatorMs + speedAdjustedFrameTimeMs,
-      this.fixedStepMs * this.maxCatchUpStepsPerFrame
-    );
+    this.accumulatorMs = Math.min(unclampedAccumulatorMs, maxAccumulatorMs);
+
+    if (droppedFrameTimeMs > 0) {
+      this.framesWithDroppedFrameTime += 1;
+      this.droppedFrameTimeMsTotal += droppedFrameTimeMs;
+      this.maxDroppedFrameTimeMs = Math.max(this.maxDroppedFrameTimeMs, droppedFrameTimeMs);
+    }
+
+    if (droppedSimulationDebtMs > 0) {
+      this.framesWithDroppedSimulationDebt += 1;
+      this.droppedSimulationDebtMsTotal += droppedSimulationDebtMs;
+      this.maxDroppedSimulationDebtMs = Math.max(
+        this.maxDroppedSimulationDebtMs,
+        droppedSimulationDebtMs
+      );
+    }
 
     this.simulationStepsLastFrame = 0;
 
@@ -267,11 +301,17 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
 
     this.runtime = {
       accumulatorMs: this.accumulatorMs,
+      droppedFrameTimeMsTotal: this.droppedFrameTimeMsTotal,
+      droppedSimulationDebtMsTotal: this.droppedSimulationDebtMsTotal,
       fixedStepMs: this.fixedStepMs,
+      framesWithDroppedFrameTime: this.framesWithDroppedFrameTime,
+      framesWithDroppedSimulationDebt: this.framesWithDroppedSimulationDebt,
       framesWithCatchUp: this.framesWithCatchUp,
       fps: this.fps,
       frameTimeMs: rawFrameTimeMs || this.runtime.frameTimeMs,
       isPaused: this.isPaused,
+      maxDroppedFrameTimeMs: this.maxDroppedFrameTimeMs,
+      maxDroppedSimulationDebtMs: this.maxDroppedSimulationDebtMs,
       maxFrameTimeMs: this.maxFrameTimeMs,
       maxCatchUpStepsPerFrame: this.maxCatchUpStepsPerFrame,
       schedulerMode: this.schedulerMode,
@@ -321,8 +361,14 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
     this.runtime = {
       ...this.runtime,
       accumulatorMs: this.accumulatorMs,
+      droppedFrameTimeMsTotal: this.droppedFrameTimeMsTotal,
+      droppedSimulationDebtMsTotal: this.droppedSimulationDebtMsTotal,
+      framesWithDroppedFrameTime: this.framesWithDroppedFrameTime,
+      framesWithDroppedSimulationDebt: this.framesWithDroppedSimulationDebt,
       framesWithCatchUp: this.framesWithCatchUp,
       isPaused: this.isPaused,
+      maxDroppedFrameTimeMs: this.maxDroppedFrameTimeMs,
+      maxDroppedSimulationDebtMs: this.maxDroppedSimulationDebtMs,
       maxFrameTimeMs: this.maxFrameTimeMs,
       schedulerMode: this.schedulerMode,
       simulationStepsLastFrame: this.simulationStepsLastFrame,

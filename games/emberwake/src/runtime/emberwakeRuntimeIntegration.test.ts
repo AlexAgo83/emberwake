@@ -96,6 +96,43 @@ describe("Emberwake runtime integration", () => {
     );
   });
 
+  it("records dropped frame time when frame time exceeds the fixed-step clamp", () => {
+    const runner = createEmberwakeRuntimeRunner();
+
+    runner.setInputFrame(createEngineInputFrameFromControlState(activeRightControlState));
+    runner.advanceFrame(0, "pixi-ticker-master");
+    runner.advanceFrame(entitySimulationContract.fixedStepMs * 20, "pixi-ticker-master");
+
+    const snapshot = runner.getSnapshot();
+
+    expect(snapshot.runtime.framesWithDroppedFrameTime).toBe(1);
+    expect(snapshot.runtime.droppedFrameTimeMsTotal).toBeGreaterThan(0);
+    expect(snapshot.runtime.maxDroppedFrameTimeMs).toBeGreaterThan(0);
+    expect(snapshot.runtime.framesWithDroppedSimulationDebt).toBe(0);
+    expect(snapshot.runtime.simulationStepsLastFrame).toBeGreaterThanOrEqual(3);
+  });
+
+  it("records dropped simulation debt when catch-up saturates under an elevated speed multiplier", () => {
+    const runner = createEmberwakeRuntimeRunner();
+
+    runner.setSpeedMultiplier(2);
+    runner.setInputFrame(createEngineInputFrameFromControlState(activeRightControlState));
+    runner.advanceFrame(0, "pixi-ticker-master");
+    runner.advanceFrame(entitySimulationContract.fixedStepMs * 4, "pixi-ticker-master");
+
+    const snapshot = runner.getSnapshot();
+
+    expect(snapshot.runtime.framesWithDroppedSimulationDebt).toBe(1);
+    expect(snapshot.runtime.droppedSimulationDebtMsTotal).toBeGreaterThan(0);
+    expect(snapshot.runtime.maxDroppedSimulationDebtMs).toBeGreaterThan(0);
+    expect(snapshot.runtime.simulationStepsLastFrame).toBeGreaterThanOrEqual(
+      entitySimulationContract.maxCatchUpStepsPerFrame - 1
+    );
+    expect(snapshot.runtime.simulationStepsLastFrame).toBeLessThanOrEqual(
+      entitySimulationContract.maxCatchUpStepsPerFrame
+    );
+  });
+
   it("restores the runtime from a provided initial game state", () => {
     const restoredState = createInitialEmberwakeGameState();
     restoredState.simulation.tick = 12;

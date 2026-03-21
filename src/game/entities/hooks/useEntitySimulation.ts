@@ -22,11 +22,17 @@ type UseEntitySimulationOptions = {
 
 type SimulationRuntimeMetrics = {
   accumulatorMs: number;
+  droppedFrameTimeMsTotal: number;
+  droppedSimulationDebtMsTotal: number;
   fixedStepMs: number;
+  framesWithDroppedFrameTime: number;
+  framesWithDroppedSimulationDebt: number;
   framesWithCatchUp: number;
   frameTimeMs: number;
   fps: number;
   isPaused: boolean;
+  maxDroppedFrameTimeMs: number;
+  maxDroppedSimulationDebtMs: number;
   maxFrameTimeMs: number;
   maxCatchUpStepsPerFrame: number;
   schedulerMode: "internal-raf" | "pixi-ticker-master";
