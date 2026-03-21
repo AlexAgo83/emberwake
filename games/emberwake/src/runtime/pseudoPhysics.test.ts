@@ -40,4 +40,43 @@ describe("pseudoPhysics", () => {
 
     expect(result.worldPosition.x).toBeLessThan(0);
   });
+
+  it("reduces traversal speed on slow surfaces", () => {
+    const normalResult = resolvePseudoPhysicalMovement({
+      currentPosition: { x: 0, y: 0 },
+      currentVelocity: { x: 0, y: 0 },
+      desiredVelocity: { x: 120, y: 0 },
+      footprintRadius: 12,
+      isBlockedAtPosition: () => false,
+      stepSeconds: 1 / 60,
+      surfaceModifierKind: "normal"
+    });
+    const slowResult = resolvePseudoPhysicalMovement({
+      currentPosition: { x: 0, y: 0 },
+      currentVelocity: { x: 0, y: 0 },
+      desiredVelocity: { x: 120, y: 0 },
+      footprintRadius: 12,
+      isBlockedAtPosition: () => false,
+      stepSeconds: 1 / 60,
+      surfaceModifierKind: "slow"
+    });
+
+    expect(slowResult.worldPosition.x).toBeLessThan(normalResult.worldPosition.x);
+    expect(slowResult.velocity.x).toBeLessThan(normalResult.velocity.x);
+  });
+
+  it("retains momentum longer on slippery surfaces", () => {
+    const slipperyResult = resolvePseudoPhysicalMovement({
+      currentPosition: { x: 0, y: 0 },
+      currentVelocity: { x: 80, y: 0 },
+      desiredVelocity: { x: 0, y: 0 },
+      footprintRadius: 12,
+      isBlockedAtPosition: () => false,
+      stepSeconds: 1 / 60,
+      surfaceModifierKind: "slippery"
+    });
+
+    expect(slipperyResult.velocity.x).toBeGreaterThan(0);
+    expect(slipperyResult.worldPosition.x).toBeGreaterThan(0);
+  });
 });
