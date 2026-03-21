@@ -1,9 +1,9 @@
 ## item_175_clean_up_request_and_task_status_drift_in_recent_waves - Clean up request and task status drift in recent waves
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_049_define_a_documentation_release_and_logics_hygiene_wave_for_repository_coherence`.
+- Delivered in `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave`.

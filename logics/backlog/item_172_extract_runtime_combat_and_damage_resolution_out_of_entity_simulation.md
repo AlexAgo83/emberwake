@@ -1,9 +1,9 @@
 ## item_172_extract_runtime_combat_and_damage_resolution_out_of_entity_simulation - Extract runtime combat and damage resolution out of entity-simulation
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_048_define_a_structural_runtime_refactor_wave_to_split_the_entity_simulation_monolith`.
+- Delivered in `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave`.

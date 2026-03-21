@@ -1,7 +1,6 @@
 import type { WorldPoint } from "@engine/geometry/primitives";
 import { sampleDeterministicSignature } from "@engine/world/worldContract";
 
-import { hostileCombatContract } from "./hostileCombatContract";
 import { pickupContract } from "./pickupContract";
 import type {
   FloatingDamageNumber,

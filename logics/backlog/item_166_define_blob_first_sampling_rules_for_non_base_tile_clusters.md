@@ -1,9 +1,9 @@
 ## item_166_define_blob_first_sampling_rules_for_non_base_tile_clusters - Define blob-first sampling rules for non-base tile clusters
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_046_define_a_non_linear_tile_generation_posture_that_avoids_stripes_and_columns`.
+- Delivered in `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave`.

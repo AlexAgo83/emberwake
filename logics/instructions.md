@@ -18,6 +18,16 @@ The `logics` folder defines a lightweight product flow:
 * `logics/specs`: Lightweight functional specs derived from backlog/tasks.
 * `logics/external`: Generated artifacts (images, exports) that don't fit other logics folders.
 
+## Logics Hygiene
+
+When editing the `logics/` corpus:
+
+* Keep `request -> backlog -> task` traceability explicit and current.
+* Update `Status`, `Progress`, and linked references in the same change that delivers the work.
+* If a previously completed doc is reopened, immediately move it out of `Done` so status stays truthful.
+* Prefer lightweight hygiene updates in place over large archival or folder reshuffles unless explicitly requested.
+* Keep release-facing docs such as `README.md` aligned with the real repository state when a wave materially changes project posture.
+
 ## Indicators
 
 Use the following indicators in request/backlog/task items:

@@ -1,8 +1,8 @@
 ## req_046_define_a_non_linear_tile_generation_posture_that_avoids_stripes_and_columns - Define a non-linear tile-generation posture that avoids stripes and columns
-> From version: 0.2.3
-> Status: Draft
-> Understanding: 100%
-> Confidence: 98%
+> From version: 0.2.4
+> Status: Done
+> Understanding: 99%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -92,3 +92,7 @@ flowchart TD
 - `define_an_anti_stripe_generation_posture_for_special_tiles`
 - `define_blob_first_sampling_rules_for_non_base_tile_clusters`
 - `define_runtime_safe_deterministic_sampling_that_reduces_visible_column_artifacts`
+
+# Outcome
+- Special-tile generation now favors thicker clustered patches over thin stripe-like runs.
+- Deterministic runtime sampling is preserved while visible column artifacts are materially reduced in player-facing chunk output.

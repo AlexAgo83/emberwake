@@ -42,7 +42,8 @@ What `main` reflects today:
 
 - The project has moved beyond a navigation-only slice into a first playable survival/combat loop.
 - Runtime ownership is split between a React shell, reusable engine packages, a Pixi adapter, and Emberwake-specific gameplay modules.
-- The next active work focuses on runtime memory/performance, world-generation readability, settings-surface polish, and runtime-structure cleanup.
+- The latest wave tightened shell escape behavior, compacted the desktop-controls settings surface, reduced stripe-like tile generation artifacts, lowered some runtime render churn, and split the runtime simulation monolith into narrower modules.
+- The next active work focuses on combat/game-feel follow-ups, continued runtime memory verification, and additional generation polish.
 
 ```mermaid
 flowchart LR

@@ -1,8 +1,8 @@
 ## req_047_define_a_runtime_memory_growth_investigation_and_reduction_wave - Define a runtime memory-growth investigation and reduction wave
-> From version: 0.2.3
-> Status: Draft
-> Understanding: 100%
-> Confidence: 97%
+> From version: 0.2.4
+> Status: Done
+> Understanding: 99%
+> Confidence: 100%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -113,3 +113,8 @@ flowchart TD
 - `profile_runtime_memory_growth_during_normal_play_sessions`
 - `reduce_world_render_preparation_churn_and_retained_chunk_data`
 - `reduce_entity_overlay_and_pixi_render_allocation_pressure`
+
+# Outcome
+- The wave profiled runtime memory posture and treated render churn as the dominant first reduction target.
+- World/chunk debug-data preparation is now reused more aggressively and entity overlays reduce repeated Pixi allocation pressure.
+- A browser-side spot check on `http://127.0.0.1:4173/` showed `usedJSHeapSize` moving from about `43.4 MB` at runtime start, to about `50.3 MB` after an automated movement session, then back down to about `40.1 MB` after idle, which supports reduced short-session growth pressure rather than an immediate runaway heap symptom.

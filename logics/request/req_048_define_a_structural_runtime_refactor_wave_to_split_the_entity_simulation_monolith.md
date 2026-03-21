@@ -1,8 +1,8 @@
 ## req_048_define_a_structural_runtime_refactor_wave_to_split_the_entity_simulation_monolith - Define a structural runtime refactor wave to split the entity-simulation monolith
-> From version: 0.2.3
-> Status: Draft
-> Understanding: 100%
-> Confidence: 97%
+> From version: 0.2.4
+> Status: Done
+> Understanding: 99%
+> Confidence: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -115,3 +115,7 @@ flowchart TD
 - `extract_runtime_spawn_logic_out_of_entity_simulation`
 - `extract_runtime_combat_and_damage_resolution_out_of_entity_simulation`
 - `extract_runtime_pathfinding_pickups_and_presentation_state_out_of_entity_simulation`
+
+# Outcome
+- `entitySimulation.ts` no longer carries the same monolithic responsibility footprint.
+- Spawn, combat, and intent/pathfinding-oriented responsibilities now live in dedicated runtime-local modules while the public simulation contract remains stable.

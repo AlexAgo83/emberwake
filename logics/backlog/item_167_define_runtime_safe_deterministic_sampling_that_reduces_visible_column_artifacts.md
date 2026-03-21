@@ -1,9 +1,9 @@
 ## item_167_define_runtime_safe_deterministic_sampling_that_reduces_visible_column_artifacts - Define runtime-safe deterministic sampling that reduces visible column artifacts
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_046_define_a_non_linear_tile_generation_posture_that_avoids_stripes_and_columns`.
+- Delivered in `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave`.

@@ -1,9 +1,9 @@
 ## item_163_define_a_denser_binding_row_posture_for_desktop_controls_settings - Define a denser binding-row posture for desktop-controls settings
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_045_define_a_clearer_and_more_compact_desktop_controls_settings_surface`.
+- Delivered in `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave`.

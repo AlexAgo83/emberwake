@@ -1,8 +1,8 @@
 ## req_045_define_a_clearer_and_more_compact_desktop_controls_settings_surface - Define a clearer and more compact desktop-controls settings surface
-> From version: 0.2.3
-> Status: Draft
-> Understanding: 100%
-> Confidence: 98%
+> From version: 0.2.4
+> Status: Done
+> Understanding: 99%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -109,3 +109,7 @@ flowchart TD
 - `define_clearer_movement_and_camera_grouping_inside_desktop_controls_settings`
 - `define_a_denser_binding_row_posture_for_desktop_controls_settings`
 - `define_a_clearer_action_hierarchy_between_apply_reset_revert_and_back_navigation`
+
+# Outcome
+- `Settings > Desktop controls` now separates bindings into clearer `Movement` and `Camera` groups.
+- Binding rows are denser, easier to scan, and the bottom actions now read more cleanly as primary CTA vs secondary edits vs navigation.

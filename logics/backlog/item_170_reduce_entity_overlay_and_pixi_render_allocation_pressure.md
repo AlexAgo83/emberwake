@@ -1,9 +1,9 @@
 ## item_170_reduce_entity_overlay_and_pixi_render_allocation_pressure - Reduce entity-overlay and Pixi-render allocation pressure
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_047_define_a_runtime_memory_growth_investigation_and_reduction_wave`.
+- Delivered in `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave`.

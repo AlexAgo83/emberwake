@@ -1,9 +1,9 @@
 ## item_162_define_clearer_movement_and_camera_grouping_inside_desktop_controls_settings - Define clearer movement and camera grouping inside desktop-controls settings
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_045_define_a_clearer_and_more_compact_desktop_controls_settings_surface`.
+- Delivered in `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave`.

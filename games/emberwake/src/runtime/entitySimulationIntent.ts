@@ -52,8 +52,6 @@ const createVelocityTowardTarget = (
   };
 };
 
-const movementVectorMagnitude = (vector: WorldPoint) => Math.hypot(vector.x, vector.y);
-
 const createTileCenterWorldPoint = (tilePoint: TilePoint): WorldPoint => {
   const tileOrigin = tileCoordinateToWorldOrigin(tilePoint);
 

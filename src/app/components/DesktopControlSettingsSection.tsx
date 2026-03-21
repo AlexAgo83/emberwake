@@ -39,11 +39,6 @@ const cameraDirectionLabels: Record<DesktopCameraControlDirection, string> = {
   rotateRight: "Rotate right"
 };
 
-const desktopControlDirectionOrder = [
-  ...desktopControlDirections,
-  ...desktopCameraControlDirections
-] as const satisfies readonly DesktopControlBindingDirection[];
-
 const movementDirections = desktopControlDirections as readonly DesktopControlBindingDirection[];
 const cameraDirections = desktopCameraControlDirections as readonly DesktopControlBindingDirection[];
 

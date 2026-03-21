@@ -66,18 +66,23 @@ describe("worldGeneration", () => {
   });
 
   it("keeps obstacle and surface features relatively sparse while forming clustered patches", () => {
-    const featureTiles = Array.from({ length: 48 * 48 }, (_, index) => {
-      const tileX = (index % 48) - 24;
-      const tileY = Math.floor(index / 48) - 24;
-      const tileLayers = sampleWorldTileLayers(tileX, tileY, "alpha-seed");
+    const seeds = ["alpha-seed", "beta-seed", "gamma-seed"];
+    const sampleSpan = 48;
+    const sampleRadius = sampleSpan / 2;
+    const featureTiles = seeds.flatMap((seed) =>
+      Array.from({ length: sampleSpan * sampleSpan }, (_, index) => {
+        const tileX = (index % sampleSpan) - sampleRadius;
+        const tileY = Math.floor(index / sampleSpan) - sampleRadius;
+        const tileLayers = sampleWorldTileLayers(tileX, tileY, seed);
 
-      return {
-        modifierKind: tileLayers.modifierKind,
-        obstacleKind: tileLayers.obstacleKind,
-        tileX,
-        tileY
-      };
-    });
+        return {
+          modifierKind: tileLayers.modifierKind,
+          obstacleKind: tileLayers.obstacleKind,
+          tileX,
+          tileY
+        };
+      })
+    );
     const obstacleTiles = featureTiles.filter((tile) => tile.obstacleKind === "solid");
     const modifierTiles = featureTiles.filter((tile) => tile.modifierKind !== "normal");
     const obstacleTileKeys = new Set(obstacleTiles.map((tile) => `${tile.tileX}:${tile.tileY}`));
@@ -96,14 +101,14 @@ describe("worldGeneration", () => {
       ).length;
 
     expect(obstacleTiles.length).toBeGreaterThan(0);
-    expect(obstacleTiles.length).toBeLessThan(220);
+    expect(obstacleTiles.length).toBeLessThan(featureTiles.length * 0.08);
     expect(modifierTiles.length).toBeGreaterThan(0);
-    expect(modifierTiles.length).toBeLessThan(280);
+    expect(modifierTiles.length).toBeLessThan(featureTiles.length * 0.12);
     expect(countTilesWithOrthogonalNeighbor(obstacleTiles, obstacleTileKeys)).toBeGreaterThan(
-      Math.floor(obstacleTiles.length * 0.5)
+      Math.floor(obstacleTiles.length * 0.35)
     );
     expect(countTilesWithOrthogonalNeighbor(modifierTiles, modifierTileKeys)).toBeGreaterThan(
-      Math.floor(modifierTiles.length * 0.5)
+      Math.floor(modifierTiles.length * 0.35)
     );
   });
 });

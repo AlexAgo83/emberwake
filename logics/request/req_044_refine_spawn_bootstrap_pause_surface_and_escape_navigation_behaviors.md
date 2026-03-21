@@ -1,8 +1,8 @@
 ## req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors - Refine spawn, bootstrap, pause surface, and escape-navigation behaviors
-> From version: 0.2.3
-> Status: Draft
-> Understanding: 100%
-> Confidence: 99%
+> From version: 0.2.4
+> Status: Done
+> Understanding: 99%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -152,3 +152,7 @@ flowchart TD
   - `Escape` mirroring visible `Back` actions and `Resume runtime` on `Main menu`
 - This request is now reopened to additionally cover:
   - `Escape` from live runtime opening `Main menu` and thereby pausing/preserving the run
+
+# Outcome
+- `Escape` from live runtime now opens `Main menu` while preserving the active session through shell ownership.
+- The runtime still gives priority to local capture and command-deck handling before broader scene navigation.

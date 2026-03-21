@@ -1,9 +1,9 @@
 ## item_164_define_a_clearer_action_hierarchy_between_apply_reset_revert_and_back_navigation - Define a clearer action hierarchy between apply, reset, revert, and back navigation
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,4 @@ flowchart LR
 
 # Notes
 - Derived from request `req_045_define_a_clearer_and_more_compact_desktop_controls_settings_surface`.
+- Delivered in `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave`.
