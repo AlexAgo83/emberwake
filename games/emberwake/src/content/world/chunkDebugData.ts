@@ -1,4 +1,5 @@
 import type { ChunkCoordinate } from "@engine/geometry/primitives";
+import { chunkCoordinateToId } from "@engine/world/worldContract";
 import { createGeneratedChunk } from "@game/content/world/worldGeneration";
 import {
   movementSurfaceModifierDefinitions,
@@ -19,21 +20,34 @@ export type ChunkDebugData = {
   tiles: DebugTile[];
 };
 
+const chunkDebugDataCacheLimit = 192;
+const chunkDebugDataCache = new Map<string, ChunkDebugData>();
+
 export const createChunkDebugData = (
   chunkCoordinate: ChunkCoordinate,
   seed?: string
 ): ChunkDebugData => {
+  const cacheKey = chunkCoordinateToId(chunkCoordinate, seed);
+  const cachedDebugData = chunkDebugDataCache.get(cacheKey);
+
+  if (cachedDebugData) {
+    return cachedDebugData;
+  }
+
   const generatedChunk = createGeneratedChunk(chunkCoordinate, seed);
   const tiles: DebugTile[] = [];
   const primaryTerrainPalette = terrainDefinitions[generatedChunk.primaryTerrain].debugPalette;
+  const obstacleIndex = new Map(
+    generatedChunk.obstacleLayer.map((tile) => [`${tile.tileX}:${tile.tileY}`, tile])
+  );
+  const surfaceModifierIndex = new Map(
+    generatedChunk.surfaceModifierLayer.map((tile) => [`${tile.tileX}:${tile.tileY}`, tile])
+  );
 
   for (const terrainTile of generatedChunk.terrainLayer) {
-    const obstacleTile = generatedChunk.obstacleLayer.find(
-      (tile) => tile.tileX === terrainTile.tileX && tile.tileY === terrainTile.tileY
-    );
-    const surfaceModifierTile = generatedChunk.surfaceModifierLayer.find(
-      (tile) => tile.tileX === terrainTile.tileX && tile.tileY === terrainTile.tileY
-    );
+    const tileKey = `${terrainTile.tileX}:${terrainTile.tileY}`;
+    const obstacleTile = obstacleIndex.get(tileKey);
+    const surfaceModifierTile = surfaceModifierIndex.get(tileKey);
     const terrainColors = terrainDefinitions[terrainTile.terrainKind].debugPalette;
     const obstacleColor =
       obstacleTile && obstacleDefinitions[obstacleTile.obstacleKind].debugColor !== null
@@ -52,10 +66,26 @@ export const createChunkDebugData = (
     });
   }
 
-  return {
+  const debugData = {
     baseColor: primaryTerrainPalette.baseColor,
     label: `${chunkCoordinate.x},${chunkCoordinate.y} ${terrainDefinitions[generatedChunk.primaryTerrain].label}`,
     overlayColor: primaryTerrainPalette.overlayColor,
     tiles
   };
+
+  chunkDebugDataCache.set(cacheKey, debugData);
+
+  if (chunkDebugDataCache.size > chunkDebugDataCacheLimit) {
+    const oldestCacheKey = chunkDebugDataCache.keys().next().value;
+
+    if (oldestCacheKey !== undefined) {
+      chunkDebugDataCache.delete(oldestCacheKey);
+    }
+  }
+
+  return debugData;
+};
+
+export const resetChunkDebugDataCacheForTests = () => {
+  chunkDebugDataCache.clear();
 };

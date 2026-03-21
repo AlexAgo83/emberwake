@@ -32,6 +32,21 @@ type EntitySceneProps = {
 
 const hexColorToNumber = (color: string) => Number.parseInt(color.replace("#", ""), 16);
 
+const floatingDamageTextStyle = {
+  align: "center" as const,
+  dropShadow: {
+    alpha: 0.52,
+    blur: 2,
+    color: "#09070f",
+    distance: 1
+  },
+  fill: "#fff1dc",
+  fontFamily: "monospace",
+  fontSize: 18,
+  fontWeight: "700" as const,
+  letterSpacing: 1
+};
+
 const isCombatant = (entity: PresentedEntity<SimulatedEntity>) =>
   entity.role === "player" || entity.role === "hostile";
 
@@ -70,48 +85,6 @@ const getAttackChargeProgress = (
 
   return 0;
 };
-
-const drawCombatBars =
-  (entity: PresentedEntity<SimulatedEntity>, currentTick: number) => (graphics: Graphics) => {
-    graphics.clear();
-
-    if (!isCombatant(entity) || entity.combat.maxHealth <= 0) {
-      return;
-    }
-
-    const barWidth = Math.max(36, entity.footprint.radius * 2.35);
-    const barHeight = 5;
-    const barRadius = 2;
-    const healthRatio = Math.max(0, entity.combat.currentHealth / entity.combat.maxHealth);
-    const attackChargeProgress = getAttackChargeProgress(entity, currentTick);
-    const baseX = entity.worldPosition.x - barWidth / 2;
-    const healthBarY = entity.worldPosition.y - entity.footprint.radius - 18;
-    const chargeBarY = healthBarY + 7;
-    const healthColor = entity.role === "player" ? 0x7dff9b : 0xff7a88;
-    const chargeColor = entity.role === "player" ? 0x5ce5ff : 0xffd76c;
-
-    graphics.setFillStyle({ alpha: 0.82, color: 0x05070c });
-    graphics.roundRect(baseX, healthBarY, barWidth, barHeight, barRadius);
-    graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
-    graphics.fill();
-
-    graphics.setFillStyle({ alpha: 0.94, color: healthColor });
-    graphics.roundRect(baseX, healthBarY, barWidth * healthRatio, barHeight, barRadius);
-    graphics.fill();
-
-    graphics.setFillStyle({ alpha: 0.9, color: chargeColor });
-    graphics.roundRect(baseX, chargeBarY, barWidth * attackChargeProgress, barHeight, barRadius);
-    graphics.fill();
-
-    graphics.setStrokeStyle({
-      alpha: 0.55,
-      color: 0xf6eee8,
-      width: 1
-    });
-    graphics.roundRect(baseX, healthBarY, barWidth, barHeight, barRadius);
-    graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
-    graphics.stroke();
-  };
 
 const drawEntity =
   (entity: PresentedEntity<SimulatedEntity>, currentTick: number) => (graphics: Graphics) => {
@@ -223,6 +196,43 @@ const drawEntity =
     entity.worldPosition.y + Math.sin(entity.orientation) * orientationLength
   );
   graphics.stroke();
+
+  if (!isCombatant(entity) || entity.combat.maxHealth <= 0) {
+    return;
+  }
+
+  const barWidth = Math.max(36, entity.footprint.radius * 2.35);
+  const barHeight = 5;
+  const barRadius = 2;
+  const healthRatio = Math.max(0, entity.combat.currentHealth / entity.combat.maxHealth);
+  const attackChargeProgress = getAttackChargeProgress(entity, currentTick);
+  const baseX = entity.worldPosition.x - barWidth / 2;
+  const healthBarY = entity.worldPosition.y - entity.footprint.radius - 18;
+  const chargeBarY = healthBarY + 7;
+  const healthColor = entity.role === "player" ? 0x7dff9b : 0xff7a88;
+  const chargeColor = entity.role === "player" ? 0x5ce5ff : 0xffd76c;
+
+  graphics.setFillStyle({ alpha: 0.82, color: 0x05070c });
+  graphics.roundRect(baseX, healthBarY, barWidth, barHeight, barRadius);
+  graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
+  graphics.fill();
+
+  graphics.setFillStyle({ alpha: 0.94, color: healthColor });
+  graphics.roundRect(baseX, healthBarY, barWidth * healthRatio, barHeight, barRadius);
+  graphics.fill();
+
+  graphics.setFillStyle({ alpha: 0.9, color: chargeColor });
+  graphics.roundRect(baseX, chargeBarY, barWidth * attackChargeProgress, barHeight, barRadius);
+  graphics.fill();
+
+  graphics.setStrokeStyle({
+    alpha: 0.55,
+    color: 0xf6eee8,
+    width: 1
+  });
+  graphics.roundRect(baseX, healthBarY, barWidth, barHeight, barRadius);
+  graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
+  graphics.stroke();
 };
 
 export function EntityScene({
@@ -241,7 +251,6 @@ export function EntityScene({
       {entities.map((entity) => (
         <pixiContainer key={entity.id}>
           <pixiGraphics draw={drawEntity(entity, currentTick)} />
-          <pixiGraphics draw={drawCombatBars(entity, currentTick)} />
           {debugLabelsVisible ? (
             <pixiText
               anchor={0.5}
@@ -285,20 +294,7 @@ export function EntityScene({
             key={floatingDamageNumber.id}
             resolution={2}
             scale={1 / scale}
-            style={{
-              align: "center",
-              dropShadow: {
-                alpha: 0.52,
-                blur: 2,
-                color: "#09070f",
-                distance: 1
-              },
-              fill: "#fff1dc",
-              fontFamily: "monospace",
-              fontSize: 18,
-              fontWeight: "700",
-              letterSpacing: 1
-            }}
+            style={floatingDamageTextStyle}
             text={`${floatingDamageNumber.amount}`}
             x={floatingDamageNumber.worldPosition.x + floatingDamageNumber.driftX * lifetimeProgress}
             y={floatingDamageNumber.worldPosition.y - lifetimeProgress * 26}

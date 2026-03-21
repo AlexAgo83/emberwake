@@ -37,10 +37,10 @@ type WorldSceneProps = {
 
 const tileSize = worldContract.tileSizeInWorldUnits;
 
-const drawChunkBase = (chunkCoordinate: ChunkCoordinate, worldSeed: string) => (graphics: Graphics) => {
-  const debugData = createChunkDebugData(chunkCoordinate, worldSeed);
-  const origin = chunkCoordinateToWorldOrigin(chunkCoordinate);
-
+const drawChunkBase = (
+  origin: { x: number; y: number },
+  debugData: ReturnType<typeof createChunkDebugData>
+) => (graphics: Graphics) => {
   graphics.clear();
   graphics.setFillStyle({ alpha: 0.96, color: debugData.baseColor });
   graphics.rect(origin.x, origin.y, chunkWorldSize, chunkWorldSize);
@@ -53,10 +53,10 @@ const drawChunkBase = (chunkCoordinate: ChunkCoordinate, worldSeed: string) => (
   }
 };
 
-const drawChunkOverlay = (chunkCoordinate: ChunkCoordinate, worldSeed: string) => (graphics: Graphics) => {
-  const debugData = createChunkDebugData(chunkCoordinate, worldSeed);
-  const origin = chunkCoordinateToWorldOrigin(chunkCoordinate);
-
+const drawChunkOverlay = (
+  origin: { x: number; y: number },
+  debugData: ReturnType<typeof createChunkDebugData>
+) => (graphics: Graphics) => {
   graphics.clear();
   graphics.setStrokeStyle({ alpha: 0.35, color: 0xf6eee8, width: 3 });
   graphics.rect(origin.x, origin.y, chunkWorldSize, chunkWorldSize);
@@ -107,10 +107,10 @@ export function WorldScene({
       {chunkDebugData.map(({ chunkCoordinate, debugData, origin }) => {
         return (
           <pixiContainer key={chunkCoordinateToId(chunkCoordinate, worldSeed)}>
-            <pixiGraphics draw={drawChunkBase(chunkCoordinate, worldSeed)} />
+            <pixiGraphics draw={drawChunkBase(origin, debugData)} />
             {debugVisualsEnabled ? (
               <>
-                <pixiGraphics draw={drawChunkOverlay(chunkCoordinate, worldSeed)} />
+                <pixiGraphics draw={drawChunkOverlay(origin, debugData)} />
                 <pixiText
                   anchor={0.5}
                   eventMode="none"
