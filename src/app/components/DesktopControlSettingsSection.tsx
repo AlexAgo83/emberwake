@@ -126,7 +126,7 @@ export function DesktopControlSettingsSection({
     }
 
     if (captureState) {
-      return "Press a key to replace the selected binding. Escape cancels.";
+      return "Press a key. Escape cancels.";
     }
 
     if (captureMessage) {
@@ -134,8 +134,8 @@ export function DesktopControlSettingsSection({
     }
 
     return hasUnsavedChanges
-      ? "Unsaved control edits are ready to apply."
-      : "Saved desktop bindings are active.";
+      ? "Unsaved changes ready."
+      : "Saved bindings active.";
   }, [captureMessage, captureState, conflictSet.size, hasUnsavedChanges]);
 
   const renderBindingRow = (direction: DesktopControlBindingDirection) => (
@@ -183,7 +183,7 @@ export function DesktopControlSettingsSection({
       <div className="settings-controls__header">
         <div>
           <h3 className="settings-controls__title">Desktop controls</h3>
-          <p className="settings-controls__hint">Click a binding to capture a replacement key.</p>
+          <p className="settings-controls__hint">Click a binding to replace it.</p>
         </div>
         <p className="settings-controls__status" data-conflict={conflictSet.size > 0}>
           {statusCopy}

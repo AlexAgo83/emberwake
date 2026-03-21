@@ -7,8 +7,10 @@ import type { VirtualStickPoint } from "../model/virtualStickMath";
 
 export type MobileVirtualStickState = {
   anchor: VirtualStickPoint;
+  baseOpacity: number;
   isVisible: boolean;
   knob: VirtualStickPoint;
+  knobVisible: boolean;
   movementIntent: MovementIntent;
 };
 
@@ -21,13 +23,20 @@ const hiddenStickState: MobileVirtualStickState = {
     x: 0,
     y: 0
   },
+  baseOpacity: 0,
   isVisible: false,
   knob: {
     x: 0,
     y: 0
   },
+  knobVisible: false,
   movementIntent: createIdleMovementIntent("touch")
 };
+
+const activeBaseOpacity = 0.5;
+const fadedBaseOpacity = 0.06;
+const fadeDurationMs = 2400;
+const fadeStepMs = 60;
 
 export function useMobileVirtualStick({
   surfaceElement
@@ -41,11 +50,51 @@ export function useMobileVirtualStick({
 
     let activePointerId: number | null = null;
     let anchor: VirtualStickPoint | null = null;
+    let fadeTimeoutId: number | null = null;
+
+    const clearFadeTimeout = () => {
+      if (fadeTimeoutId === null) {
+        return;
+      }
+
+      window.clearTimeout(fadeTimeoutId);
+      fadeTimeoutId = null;
+    };
 
     const resetStick = () => {
+      clearFadeTimeout();
       activePointerId = null;
       anchor = null;
       setStickState(hiddenStickState);
+    };
+
+    const beginFadeOut = (fadeAnchor: VirtualStickPoint) => {
+      clearFadeTimeout();
+      const fadeStartedAt = Date.now();
+
+      const fadeStep = () => {
+        const elapsedMs = Date.now() - fadeStartedAt;
+        const progress = Math.min(1, elapsedMs / fadeDurationMs);
+
+        if (progress >= 1) {
+          setStickState(hiddenStickState);
+          fadeTimeoutId = null;
+          return;
+        }
+
+        setStickState({
+          anchor: fadeAnchor,
+          baseOpacity:
+            activeBaseOpacity - (activeBaseOpacity - fadedBaseOpacity) * progress,
+          isVisible: true,
+          knob: fadeAnchor,
+          knobVisible: false,
+          movementIntent: createIdleMovementIntent("touch")
+        });
+        fadeTimeoutId = window.setTimeout(fadeStep, fadeStepMs);
+      };
+
+      fadeStep();
     };
 
     const handlePointerDown = (event: PointerEvent) => {
@@ -53,6 +102,7 @@ export function useMobileVirtualStick({
         return;
       }
 
+      clearFadeTimeout();
       activePointerId = event.pointerId;
       anchor = {
         x: event.clientX,
@@ -61,8 +111,10 @@ export function useMobileVirtualStick({
       surfaceElement.setPointerCapture?.(event.pointerId);
       setStickState({
         anchor,
+        baseOpacity: activeBaseOpacity,
         isVisible: true,
         knob: anchor,
+        knobVisible: true,
         movementIntent: createIdleMovementIntent("touch")
       });
     };
@@ -79,8 +131,10 @@ export function useMobileVirtualStick({
 
       setStickState({
         anchor,
+        baseOpacity: activeBaseOpacity,
         isVisible: true,
         knob: resolvedState.knobPosition,
+        knobVisible: true,
         movementIntent: resolvedState.movementIntent
       });
     };
@@ -91,7 +145,16 @@ export function useMobileVirtualStick({
       }
 
       surfaceElement.releasePointerCapture?.(event.pointerId);
-      resetStick();
+      activePointerId = null;
+      const fadeAnchor = anchor;
+      anchor = null;
+
+      if (!fadeAnchor) {
+        resetStick();
+        return;
+      }
+
+      beginFadeOut(fadeAnchor);
     };
 
     surfaceElement.addEventListener("pointerdown", handlePointerDown);
@@ -104,6 +167,7 @@ export function useMobileVirtualStick({
       surfaceElement.removeEventListener("pointermove", handlePointerMove);
       surfaceElement.removeEventListener("pointerup", handlePointerRelease);
       surfaceElement.removeEventListener("pointercancel", handlePointerRelease);
+      clearFadeTimeout();
     };
   }, [surfaceElement]);
 

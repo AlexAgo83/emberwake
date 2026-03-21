@@ -145,6 +145,12 @@
   display: grid;
 }
 
+.app-meta-scene[data-scene="settings"] {
+  width: min(39rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  max-height: min(43rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 2rem));
+  overflow: auto;
+}
+
 .app-meta-scene[data-scene="main-menu"] {
   overflow: hidden;
 }
@@ -941,6 +947,7 @@
     radial-gradient(circle, rgba(255, 128, 72, 0.18), rgba(15, 10, 25, 0.08) 65%),
     rgba(8, 12, 18, 0.14);
   backdrop-filter: blur(8px);
+  transition: opacity 180ms linear;
 }
 
 .mobile-virtual-stick__knob {
