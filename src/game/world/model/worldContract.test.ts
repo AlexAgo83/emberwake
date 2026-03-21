@@ -4,8 +4,10 @@ import {
   chunkWorldSize,
   sampleChunkDebugSignature,
   screenPointToWorldPoint,
+  tileCoordinateToWorldOrigin,
   worldContract,
   worldPointToChunkCoordinate,
+  worldPointToTileCoordinate,
   worldPointToScreenPoint
 } from "./worldContract";
 
@@ -20,6 +22,11 @@ describe("worldContract", () => {
     expect(worldPointToChunkCoordinate({ x: 0, y: 0 })).toEqual({ x: 0, y: 0 });
     expect(worldPointToChunkCoordinate({ x: 1500, y: -1 })).toEqual({ x: 1, y: -1 });
     expect(worldPointToChunkCoordinate({ x: -1025, y: -2048 })).toEqual({ x: -2, y: -2 });
+    expect(worldPointToTileCoordinate({ x: 65, y: -1 })).toEqual({ x: 1, y: -1 });
+    expect(tileCoordinateToWorldOrigin({ x: -2, y: 3 })).toEqual({
+      x: -128,
+      y: 192
+    });
   });
 
   it("builds deterministic chunk identities and signatures from seed and coordinates", () => {

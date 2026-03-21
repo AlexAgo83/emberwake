@@ -42,6 +42,7 @@ const createScenarioEntity = (
     },
     worldPosition: entityBlueprint.worldPosition
   }),
+  movementSurfaceModifier: "normal",
   velocity: {
     x: 0,
     y: 0

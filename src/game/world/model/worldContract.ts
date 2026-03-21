@@ -5,9 +5,12 @@ export {
   sampleChunkDebugSignature,
   sampleDeterministicSignature,
   screenPointToWorldPoint,
+  tileCoordinateToWorldOrigin,
   worldContract,
   worldPointToChunkCoordinate,
+  worldPointToTileCoordinate,
   worldPointToScreenPoint,
-  worldToChunkIndex
+  worldToChunkIndex,
+  worldToTileIndex
 } from "@engine/world/worldContract";
 export type { ViewportProjectionContract } from "@engine/world/worldContract";

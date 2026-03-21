@@ -66,7 +66,7 @@ export function useRuntimeSession() {
 
   const createNewSession = useCallback((playerName: string) => {
     const normalizedPlayerName = normalizeCharacterName(playerName);
-    setSessionInitState(createInitialEmberwakeGameState());
+    setSessionInitState(createInitialEmberwakeGameState(runtimeSession.worldSeed));
 
     setRuntimeSession((currentSession) => {
       const defaultSession = createDefaultRuntimeSessionState();
@@ -79,7 +79,7 @@ export function useRuntimeSession() {
         worldSeed: currentSession.worldSeed
       };
     });
-  }, []);
+  }, [runtimeSession.worldSeed]);
 
   const loadSavedSession = useCallback(() => {
     if (!savedSessionSlot) {

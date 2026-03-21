@@ -40,9 +40,22 @@ export const sampleDeterministicSignature = (value: string) => hashString(value)
 export const worldToChunkIndex = (worldCoordinate: number) =>
   Math.floor(worldCoordinate / chunkWorldSize);
 
+export const worldToTileIndex = (worldCoordinate: number) =>
+  Math.floor(worldCoordinate / worldContract.tileSizeInWorldUnits);
+
 export const worldPointToChunkCoordinate = (worldPoint: WorldPoint): ChunkCoordinate => ({
   x: worldToChunkIndex(worldPoint.x),
   y: worldToChunkIndex(worldPoint.y)
+});
+
+export const worldPointToTileCoordinate = (worldPoint: WorldPoint): ChunkCoordinate => ({
+  x: worldToTileIndex(worldPoint.x),
+  y: worldToTileIndex(worldPoint.y)
+});
+
+export const tileCoordinateToWorldOrigin = (tileCoordinate: ChunkCoordinate): WorldPoint => ({
+  x: tileCoordinate.x * worldContract.tileSizeInWorldUnits,
+  y: tileCoordinate.y * worldContract.tileSizeInWorldUnits
 });
 
 export const chunkCoordinateToWorldOrigin = (chunkCoordinate: ChunkCoordinate): WorldPoint => ({

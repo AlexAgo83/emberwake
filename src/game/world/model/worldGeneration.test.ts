@@ -1,4 +1,8 @@
-import { createGeneratedChunk, terrainKinds } from "./worldGeneration";
+import {
+  createGeneratedChunk,
+  sampleWorldTileLayers,
+  terrainKinds
+} from "./worldGeneration";
 import { worldContract } from "./worldContract";
 
 describe("worldGeneration", () => {
@@ -18,10 +22,12 @@ describe("worldGeneration", () => {
     expect(firstChunk.terrainLayer).not.toEqual(secondChunk.terrainLayer);
   });
 
-  it("builds a full terrain layer without render-only fields", () => {
+  it("builds full terrain, obstacle, and surface layers without render-only fields", () => {
     const generatedChunk = createGeneratedChunk({ x: 0, y: 0 });
 
     expect(generatedChunk.terrainLayer).toHaveLength(worldContract.chunkSizeInTiles ** 2);
+    expect(generatedChunk.obstacleLayer).toHaveLength(worldContract.chunkSizeInTiles ** 2);
+    expect(generatedChunk.surfaceModifierLayer).toHaveLength(worldContract.chunkSizeInTiles ** 2);
     expect(terrainKinds).toContain(generatedChunk.primaryTerrain);
     expect(generatedChunk.terrainLayer[0]).toEqual({
       terrainKind: expect.any(String),
@@ -31,5 +37,12 @@ describe("worldGeneration", () => {
     });
     expect(generatedChunk.terrainLayer[0]).not.toHaveProperty("color");
     expect(generatedChunk.terrainLayer[0]).not.toHaveProperty("entityId");
+  });
+
+  it("keeps the origin tile traversable and normal for bootstrap safety", () => {
+    expect(sampleWorldTileLayers(0, 0)).toMatchObject({
+      modifierKind: "normal",
+      obstacleKind: "none"
+    });
   });
 });

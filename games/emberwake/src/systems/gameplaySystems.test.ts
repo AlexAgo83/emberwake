@@ -18,6 +18,7 @@ describe("gameplaySystems", () => {
           archetype: "generic-mover",
           footprint: { radius: 40 },
           id: "entity:player:primary",
+          movementSurfaceModifier: "normal",
           orientation: 0,
           renderLayer: 100,
           state: "moving",
@@ -31,13 +32,15 @@ describe("gameplaySystems", () => {
             y: 0
           }
         },
-        tick: 1
+        tick: 1,
+        worldSeed: "emberwake-default-seed"
       },
       simulationBeforeUpdate: {
         entity: {
           archetype: "generic-mover",
           footprint: { radius: 40 },
           id: "entity:player:primary",
+          movementSurfaceModifier: "normal",
           orientation: 0,
           renderLayer: 100,
           state: "idle",
@@ -51,7 +54,8 @@ describe("gameplaySystems", () => {
             y: 0
           }
         },
-        tick: 0
+        tick: 0,
+        worldSeed: "emberwake-default-seed"
       },
       timing: {
         deltaMs: 1000 / 60,

@@ -13,6 +13,7 @@ import {
   entitySimulationContract
 } from "@game/runtime/entitySimulation";
 import type { EntitySimulationState } from "@game/runtime/entitySimulation";
+import { emberwakeRuntimeBootstrap } from "@game/runtime/emberwakeRuntimeBootstrap";
 import {
   advanceGameplaySystemsState,
   createGameplaySystemDiagnostics,
@@ -24,6 +25,7 @@ import type { EmberwakeGameplaySystemsState } from "@game/systems/gameplaySystem
 type EmberwakeGameState = {
   simulation: EntitySimulationState;
   systems: EmberwakeGameplaySystemsState;
+  worldSeed: string;
 };
 
 type EmberwakeGameAction = {
@@ -88,7 +90,8 @@ export const emberwakeGameModule: GameModule<
   initialize: ({ init }) =>
     init ?? {
       simulation: createInitialSimulationState(),
-      systems: createInitialGameplaySystemsState()
+      systems: createInitialGameplaySystemsState(),
+      worldSeed: emberwakeRuntimeBootstrap.worldSeed
     },
   mapInput: ({ input }) => ({
     controlState: createControlStateFromInput(input)
@@ -100,6 +103,7 @@ export const emberwakeGameModule: GameModule<
     },
     diagnostics: {
       entityState: state.simulation.entity.state,
+      movementSurfaceModifier: state.simulation.entity.movementSurfaceModifier,
       tick: state.simulation.tick,
       ...createGameplaySystemDiagnostics(state.systems)
     },
@@ -121,7 +125,8 @@ export const emberwakeGameModule: GameModule<
   }),
   update: ({ action, state, timing }) => {
     const nextSimulation = advanceSimulationState(state.simulation, {
-      controlState: action.controlState
+      controlState: action.controlState,
+      worldSeed: state.worldSeed
     });
 
     return {
@@ -131,15 +136,23 @@ export const emberwakeGameModule: GameModule<
         simulationAfterUpdate: nextSimulation,
         simulationBeforeUpdate: state.simulation,
         timing
-      })
+      }),
+      worldSeed: state.worldSeed
     };
   }
 };
 
-export const createInitialEmberwakeGameState = () =>
+export const createInitialEmberwakeGameState = (worldSeed = emberwakeRuntimeBootstrap.worldSeed) =>
   emberwakeGameModule.initialize({
     context: undefined,
-    init: undefined
+    init: {
+      simulation: {
+        ...createInitialSimulationState(),
+        worldSeed
+      },
+      systems: createInitialGameplaySystemsState(),
+      worldSeed
+    }
   });
 
 export const createInitialEmberwakeSimulationState = () =>
@@ -177,14 +190,16 @@ export const advanceEmberwakeSimulationState = (
           },
           state: {
             simulation: simulationState,
-            systems: createInitialGameplaySystemsState()
+            systems: createInitialGameplaySystemsState(),
+            worldSeed: simulationState.worldSeed
           }
         }).controlState
     },
     context: undefined,
     state: {
       simulation: simulationState,
-      systems: createInitialGameplaySystemsState()
+      systems: createInitialGameplaySystemsState(),
+      worldSeed: simulationState.worldSeed
     },
     timing: createTimingSnapshot(simulationState.tick)
   }).simulation;

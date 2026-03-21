@@ -13,6 +13,7 @@ describe("entitySimulation", () => {
 
     expect(simulationState.tick).toBe(0);
     expect(simulationState.entity.state).toBe("idle");
+    expect(simulationState.entity.movementSurfaceModifier).toBe("normal");
     expect(simulationState.entity.velocity).toEqual({ x: 0, y: 0 });
   });
 

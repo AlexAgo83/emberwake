@@ -53,3 +53,44 @@ export const terrainDefinitions = {
 export type TerrainKind = keyof typeof terrainDefinitions;
 
 export const terrainKinds = Object.keys(terrainDefinitions) as TerrainKind[];
+
+export const obstacleDefinitions = {
+  none: {
+    blocksMovement: false,
+    debugColor: null,
+    label: "Open"
+  },
+  solid: {
+    blocksMovement: true,
+    debugColor: 0x0c0f16,
+    label: "Solid"
+  }
+} as const;
+
+export type ObstacleKind = keyof typeof obstacleDefinitions;
+
+export const movementSurfaceModifierDefinitions = {
+  normal: {
+    accentColor: null,
+    controlResponsiveness: 1,
+    label: "Normal",
+    speedMultiplier: 1,
+    velocityRetainFactor: 0
+  },
+  slippery: {
+    accentColor: 0x8fd6ff,
+    controlResponsiveness: 0.22,
+    label: "Slippery",
+    speedMultiplier: 1,
+    velocityRetainFactor: 0.9
+  },
+  slow: {
+    accentColor: 0xffc36e,
+    controlResponsiveness: 1,
+    label: "Slow",
+    speedMultiplier: 0.58,
+    velocityRetainFactor: 0
+  }
+} as const;
+
+export type MovementSurfaceModifierKind = keyof typeof movementSurfaceModifierDefinitions;
