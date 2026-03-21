@@ -7,6 +7,12 @@ export const persistenceDomainCatalog = {
     storageKey: "emberwake.runtime-session",
     storageVersion: 1
   },
+  desktopControlBindings: {
+    domainId: "desktop-control-bindings",
+    storageBackend: "localStorage",
+    storageKey: "emberwake.desktop-control-bindings",
+    storageVersion: 1
+  },
   shellPreferences: {
     domainId: "shell-preferences",
     storageBackend: "localStorage",

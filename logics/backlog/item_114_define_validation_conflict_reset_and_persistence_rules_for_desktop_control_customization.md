@@ -1,9 +1,9 @@
 ## item_114_define_validation_conflict_reset_and_persistence_rules_for_desktop_control_customization - Define validation, conflict, reset, and persistence rules for desktop control customization
 > From version: 0.2.2
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_029_define_a_lightweight_settings_scene_with_desktop_control_customization`.
 - Source file: `logics/request/req_029_define_a_lightweight_settings_scene_with_desktop_control_customization.md`.
+- Delivered through `src/app/model/desktopControlBindings.ts`, `src/shared/lib/desktopControlBindingsStorage.ts`, and `src/app/hooks/useDesktopControlBindings.ts`.

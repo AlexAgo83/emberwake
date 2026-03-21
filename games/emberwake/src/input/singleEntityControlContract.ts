@@ -1,12 +1,30 @@
+export const desktopControlDirections = ["up", "left", "down", "right"] as const;
+
+export type DesktopControlDirection = (typeof desktopControlDirections)[number];
+
+export type DesktopControlBindings = Record<DesktopControlDirection, [string, string]>;
+
+const defaultDesktopControlBindings: DesktopControlBindings = {
+  down: ["s", "ArrowDown"],
+  left: ["a", "ArrowLeft"],
+  right: ["d", "ArrowRight"],
+  up: ["w", "ArrowUp"]
+};
+
+export const createDefaultDesktopControlBindings = (): DesktopControlBindings => ({
+  down: [...defaultDesktopControlBindings.down],
+  left: [...defaultDesktopControlBindings.left],
+  right: [...defaultDesktopControlBindings.right],
+  up: [...defaultDesktopControlBindings.up]
+});
+
+export const normalizeKeyboardBindingKey = (key: string) =>
+  key.length === 1 ? key.toLowerCase() : key;
+
 export const singleEntityControlContract = {
   debugCameraModifierKey: "Shift",
   desktopMoveSpeedWorldUnitsPerSecond: 240,
-  keyboardBindings: {
-    down: ["ArrowDown", "s", "S"],
-    left: ["ArrowLeft", "a", "A"],
-    right: ["ArrowRight", "d", "D"],
-    up: ["ArrowUp", "w", "W"]
-  },
+  keyboardBindings: defaultDesktopControlBindings,
   ownership: {
     cameraDebug: "debug-camera",
     controlledEntity: "player-entity",
@@ -99,17 +117,18 @@ const keyboardAxis = (
 };
 
 export const createKeyboardMovementIntent = (
-  pressedKeys: ReadonlySet<string>
+  pressedKeys: ReadonlySet<string>,
+  keyboardBindings: DesktopControlBindings = singleEntityControlContract.keyboardBindings
 ): MovementIntent => {
   const horizontal = keyboardAxis(
     pressedKeys,
-    singleEntityControlContract.keyboardBindings.left,
-    singleEntityControlContract.keyboardBindings.right
+    keyboardBindings.left,
+    keyboardBindings.right
   );
   const vertical = keyboardAxis(
     pressedKeys,
-    singleEntityControlContract.keyboardBindings.up,
-    singleEntityControlContract.keyboardBindings.down
+    keyboardBindings.up,
+    keyboardBindings.down
   );
 
   return createMovementIntent(horizontal, vertical, "keyboard");

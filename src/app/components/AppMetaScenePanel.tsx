@@ -1,13 +1,24 @@
-import { memo } from "react";
+import { lazy, memo, Suspense } from "react";
 
 import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
 import { characterNameMaxLength } from "../model/characterName";
+import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
+
+const LazyDesktopControlSettingsSection = lazy(async () => {
+  const module = await import("./DesktopControlSettingsSection");
+
+  return {
+    default: module.DesktopControlSettingsSection
+  };
+});
 
 type AppMetaScenePanelProps = {
   canResumeSession: boolean;
   characterNameError: string | null;
+  desktopControlBindings: DesktopControlBindings;
   fullscreenPreferred: boolean;
   isLoadAvailable: boolean;
+  onApplyDesktopControlBindings: (bindings: DesktopControlBindings) => void;
   onBeginNewGame: () => void;
   onCharacterNameChange: (value: string) => void;
   onOpenNewGame: () => void;
@@ -23,8 +34,10 @@ type AppMetaScenePanelProps = {
 export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   canResumeSession,
   characterNameError,
+  desktopControlBindings,
   fullscreenPreferred,
   isLoadAvailable,
+  onApplyDesktopControlBindings,
   onBeginNewGame,
   onCharacterNameChange,
   onOpenNewGame,
@@ -67,13 +80,13 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       : scene === "new-game"
         ? "Name your character before the shell hands control to the live runtime."
       : scene === "pause"
-      ? "The shell owns the pause scene and holds the runtime while the player is outside the live loop."
+      ? "The live session is preserved while the shell holds the pause scene."
       : scene === "settings"
-        ? "Settings stay shell-owned. Returning to runtime resumes the live loop without rebuilding gameplay state."
+        ? "Tune desktop controls, then return to the preserved runtime when you are ready."
         : runtimeOutcome?.detail ??
           (scene === "defeat"
-            ? "The shell has taken ownership after a gameplay outcome requested recovery or restart."
-            : "The shell presents the gameplay outcome without reading arbitrary runtime internals.");
+            ? "The shell took control after the live run requested recovery."
+            : "The shell is presenting the latest runtime outcome.");
   const resumeLabel =
     scene === "defeat"
       ? "Restart runtime"
@@ -170,46 +183,81 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         </>
       ) : (
         <>
-          <dl className="app-meta-scene__facts">
-            <div>
-              <dt>Runtime re-entry</dt>
-              <dd>Resume current session</dd>
-            </div>
-            <div>
-              <dt>Fullscreen preference</dt>
-              <dd>{fullscreenPreferred ? "remembered" : "off"}</dd>
-            </div>
-            <div>
-              <dt>Ownership</dt>
-              <dd>{ownershipLabel}</dd>
-            </div>
-          </dl>
-          <div className="app-meta-scene__actions">
-            <button
-              className="shell-control shell-control--button"
-              onClick={onResumeRuntime}
-              type="button"
-            >
-              {resumeLabel}
-            </button>
-            {scene !== "settings" ? (
-              <button
-                className="shell-control shell-control--button"
-                onClick={onOpenSettings}
-                type="button"
+          {scene === "settings" ? (
+            <>
+              <dl className="app-meta-scene__facts">
+                <div>
+                  <dt>Session</dt>
+                  <dd>{canResumeSession ? `Active run / ${playerName}` : "No active run"}</dd>
+                </div>
+                <div>
+                  <dt>Fullscreen</dt>
+                  <dd>{fullscreenPreferred ? "remembered" : "off"}</dd>
+                </div>
+              </dl>
+              <Suspense
+                fallback={
+                  <p className="settings-controls__status">Loading desktop control bindings…</p>
+                }
               >
-                Settings
-              </button>
-            ) : (
-              <button
-                className="shell-control shell-control--button"
-                onClick={onReturnToMainMenu}
-                type="button"
-              >
-                Back to menu
-              </button>
-            )}
-          </div>
+                <LazyDesktopControlSettingsSection
+                  bindings={desktopControlBindings}
+                  onApply={onApplyDesktopControlBindings}
+                />
+              </Suspense>
+              <div className="app-meta-scene__actions">
+                <button
+                  className="shell-control shell-control--button"
+                  onClick={onReturnToMainMenu}
+                  type="button"
+                >
+                  Back to menu
+                </button>
+                {canResumeSession ? (
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onResumeRuntime}
+                    type="button"
+                  >
+                    {resumeLabel}
+                  </button>
+                ) : null}
+              </div>
+            </>
+          ) : (
+            <>
+              <dl className="app-meta-scene__facts">
+                <div>
+                  <dt>Runtime re-entry</dt>
+                  <dd>Resume current session</dd>
+                </div>
+                <div>
+                  <dt>Fullscreen preference</dt>
+                  <dd>{fullscreenPreferred ? "remembered" : "off"}</dd>
+                </div>
+                <div>
+                  <dt>Ownership</dt>
+                  <dd>{ownershipLabel}</dd>
+                </div>
+              </dl>
+              <div className="app-meta-scene__actions">
+                <button
+                  className="shell-control shell-control--button"
+                  onClick={onResumeRuntime}
+                  type="button"
+                >
+                  {resumeLabel}
+                </button>
+                <button
+                  className="shell-control shell-control--button"
+                  onClick={onOpenSettings}
+                  type="button"
+                >
+                  Settings
+                </button>
+              </div>
+            </>
+          )}
         </>
       )}
     </aside>

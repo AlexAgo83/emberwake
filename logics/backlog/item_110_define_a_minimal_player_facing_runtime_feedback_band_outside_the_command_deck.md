@@ -1,9 +1,9 @@
 ## item_110_define_a_minimal_player_facing_runtime_feedback_band_outside_the_command_deck - Define a minimal player-facing runtime feedback band outside the command deck
 > From version: 0.2.2
-> Status: Draft
+> Status: Done
 > Understanding: 97%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface`.
 - Source file: `logics/request/req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface.md`.
+- Delivered in `src/app/components/PlayerHudCard.tsx`, `src/app/components/PlayerHudCard.css`, and `src/app/components/ActiveRuntimeShellContent.tsx`.

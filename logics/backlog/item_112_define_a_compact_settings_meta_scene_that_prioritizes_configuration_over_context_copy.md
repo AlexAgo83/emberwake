@@ -1,9 +1,9 @@
 ## item_112_define_a_compact_settings_meta_scene_that_prioritizes_configuration_over_context_copy - Define a compact settings meta scene that prioritizes configuration over context copy
 > From version: 0.2.2
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_029_define_a_lightweight_settings_scene_with_desktop_control_customization`.
 - Source file: `logics/request/req_029_define_a_lightweight_settings_scene_with_desktop_control_customization.md`.
+- Delivered in `src/app/components/AppMetaScenePanel.tsx`, where `Settings` now foregrounds configuration content and limits context copy to one short supporting line.

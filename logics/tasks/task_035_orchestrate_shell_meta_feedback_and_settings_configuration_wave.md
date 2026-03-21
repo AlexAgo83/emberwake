@@ -1,9 +1,9 @@
 ## task_035_orchestrate_shell_meta_feedback_and_settings_configuration_wave - Orchestrate shell meta feedback and settings configuration wave
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 96%
-> Confidence: 94%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: High
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,15 +30,15 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Define the shared shell-family posture for pause, settings, defeat, and victory so those shell-owned scenes read as one tactical-console product family.
-- [ ] 2. Define and implement a minimal player-facing runtime feedback surface that stays visible outside the command deck without becoming a second control deck.
-- [ ] 3. Define and enforce the boundary between player-facing HUD information and shell/debug utilities so diagnostics and operator controls remain explicitly gated.
-- [ ] 4. Redesign the `Settings` scene into a compact shell-owned configuration surface that sharply reduces explanatory copy and foregrounds meaningful settings content.
-- [ ] 5. Define and implement the desktop-control customization interaction model, including supported bindings, editing flow, save/apply behavior, and clarity around current assignments.
-- [ ] 6. Define and implement conflict handling, invalid-binding treatment, persistence rules, and a clear `Reset controls to defaults` path for desktop controls.
-- [ ] 7. Update linked requests, backlog items, tasks, and any supporting UX notes needed to keep the wave traceable across shell meta scenes, runtime feedback, and settings customization.
-- [ ] 8. Validate the resulting wave against current repository delivery constraints on desktop and mobile.
-- [ ] FINAL: Create dedicated git commit(s) for this orchestration scope.
+- [x] 1. Define the shared shell-family posture for pause, settings, defeat, and victory so those shell-owned scenes read as one tactical-console product family.
+- [x] 2. Define and implement a minimal player-facing runtime feedback surface that stays visible outside the command deck without becoming a second control deck.
+- [x] 3. Define and enforce the boundary between player-facing HUD information and shell/debug utilities so diagnostics and operator controls remain explicitly gated.
+- [x] 4. Redesign the `Settings` scene into a compact shell-owned configuration surface that sharply reduces explanatory copy and foregrounds meaningful settings content.
+- [x] 5. Define and implement the desktop-control customization interaction model, including supported bindings, editing flow, save/apply behavior, and clarity around current assignments.
+- [x] 6. Define and implement conflict handling, invalid-binding treatment, persistence rules, and a clear `Reset controls to defaults` path for desktop controls.
+- [x] 7. Update linked requests, backlog items, tasks, and any supporting UX notes needed to keep the wave traceable across shell meta scenes, runtime feedback, and settings customization.
+- [x] 8. Validate the resulting wave against current repository delivery constraints on desktop and mobile.
+- [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
 
 # AC Traceability
 - `item_109` -> Shell-owned meta scenes share one tactical-console family. Proof target: aligned scene structure or visual-system implementation notes.
@@ -68,11 +68,11 @@ flowchart TD
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Shell-owned meta scenes share one coherent tactical-console family.
-- [ ] The runtime exposes a minimal player-facing feedback surface outside the command deck without leaking debug clutter.
-- [ ] `Settings` is materially lighter and centered on actual configuration tasks.
-- [ ] Desktop-control remapping, conflict handling, persistence, and reset-to-defaults behavior are explicit and validated.
-- [ ] Linked request, backlog, task, and related docs are updated with proofs and status.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Shell-owned meta scenes share one coherent tactical-console family.
+- [x] The runtime exposes a minimal player-facing feedback surface outside the command deck without leaking debug clutter.
+- [x] `Settings` is materially lighter and centered on actual configuration tasks.
+- [x] Desktop-control remapping, conflict handling, persistence, and reset-to-defaults behavior are explicit and validated.
+- [x] Linked request, backlog, task, and related docs are updated with proofs and status.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.

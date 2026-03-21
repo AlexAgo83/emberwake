@@ -1,8 +1,8 @@
 ## req_029_define_a_lightweight_settings_scene_with_desktop_control_customization - Define a lightweight settings scene with desktop control customization
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -119,3 +119,8 @@ flowchart TD
 - `define_a_compact_settings_meta_scene_that_prioritizes_configuration_over_context_copy`
 - `define_desktop_control_remapping_scope_and_interaction_model_for_settings`
 - `define_validation_conflict_and_persistence_rules_for_desktop_control_customization`
+
+# Implementation notes
+- Delivered through a lighter `Settings` scene that now centers on desktop control configuration instead of shell-ownership prose.
+- Desktop remapping is scoped to player-facing movement bindings only for this slice, with explicit capture, duplicate-key conflict feedback, `Revert`, and `Reset defaults`.
+- Persisted desktop bindings now use a dedicated local-first storage domain and apply back into the runtime input hook without reopening debug/operator binding scope.

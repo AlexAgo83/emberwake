@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
 import { EntityInspectionPanel } from "./EntityInspectionPanel";
+import { PlayerHudCard } from "./PlayerHudCard";
 import { RuntimeSceneBoundary } from "./RuntimeSceneBoundary";
 import { ShellMenu } from "./ShellMenu";
 import { runtimePublicationContract } from "../model/runtimePublicationContract";
@@ -28,11 +29,14 @@ import { useRuntimeInteractionGuards } from "../hooks/useRuntimeInteractionGuard
 import type { RuntimeSessionState } from "../../shared/lib/runtimeSessionStorage";
 import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage";
 import type { ReturnTypeUseLogicalViewportModel } from "../../game/debug/types";
+import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
+import { describeDesktopMovementBindings } from "../model/desktopControlBindings";
 
 type ActiveRuntimeShellContentProps = {
   activeScene: AppSceneId;
   canInstall: boolean;
   cycleWorldSeed: () => void;
+  desktopControlBindings: DesktopControlBindings;
   diagnosticsVisible: boolean;
   inspecteurVisible: boolean;
   isFullscreen: boolean;
@@ -53,6 +57,7 @@ type ActiveRuntimeShellContentProps = {
   onSetDebugPanelVisible: (visible: boolean) => void;
   onSetInspectionPanelVisible: (visible: boolean) => void;
   onSetLastMetaScene: (scene: ShellPreferences["lastMetaScene"]) => void;
+  onSetMovementOnboardingDismissed: (dismissed: boolean) => void;
   onShowMainMenuScene: () => void;
   onShowPauseScene: () => void;
   onShowSettingsScene: () => void;
@@ -67,6 +72,7 @@ export function ActiveRuntimeShellContent({
   activeScene,
   canInstall,
   cycleWorldSeed,
+  desktopControlBindings,
   diagnosticsVisible,
   inspecteurVisible,
   isFullscreen,
@@ -87,6 +93,7 @@ export function ActiveRuntimeShellContent({
   onSetDebugPanelVisible,
   onSetInspectionPanelVisible,
   onSetLastMetaScene,
+  onSetMovementOnboardingDismissed,
   onShowMainMenuScene,
   onShowPauseScene,
   onShowSettingsScene,
@@ -113,6 +120,7 @@ export function ActiveRuntimeShellContent({
   useRuntimeInteractionGuards(runtimeSurfaceElement);
   const runtimeControlState = useSingleEntityControl({
     controlledEntityId: entityContract.primaryEntityId,
+    keyboardBindings: desktopControlBindings,
     touchMovementIntent: mobileVirtualStick.movementIntent
   });
   const controlState = useMemo(
@@ -254,6 +262,16 @@ export function ActiveRuntimeShellContent({
   });
 
   useEffect(() => {
+    if (!preferences.movementOnboardingDismissed && controlState.movementIntent.isActive) {
+      onSetMovementOnboardingDismissed(true);
+    }
+  }, [
+    controlState.movementIntent.isActive,
+    onSetMovementOnboardingDismissed,
+    preferences.movementOnboardingDismissed
+  ]);
+
+  useEffect(() => {
     if (activeScene === "pause" || activeScene === "settings") {
       simulationState.controls.pause();
       onSetLastMetaScene(activeScene);
@@ -271,6 +289,12 @@ export function ActiveRuntimeShellContent({
   }, [activeScene, onSetLastMetaScene, simulationState.controls]);
 
   const selectedEntityChunk = worldPointToChunkCoordinate(entityWorld.selectedEntity.worldPosition);
+  const movementSummary = useMemo(
+    () => describeDesktopMovementBindings(desktopControlBindings),
+    [desktopControlBindings]
+  );
+  const playerHudVisible =
+    activeScene === "runtime" && !diagnosticsVisible && !inspecteurVisible;
 
   return (
     <>
@@ -331,6 +355,15 @@ export function ActiveRuntimeShellContent({
             entityState={entityWorld.selectedEntity.state}
             isMobile={isMobileLayout}
             onClose={handleCloseInspectionPanel}
+          />
+        ) : null}
+
+        {playerHudVisible ? (
+          <PlayerHudCard
+            isMobile={isMobileLayout}
+            movementHintVisible={!preferences.movementOnboardingDismissed}
+            movementSummary={movementSummary}
+            playerName={runtimeSession.playerName || "Wanderer"}
           />
         ) : null}
 

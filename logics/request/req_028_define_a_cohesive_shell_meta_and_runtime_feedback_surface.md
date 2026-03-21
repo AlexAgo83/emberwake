@@ -1,8 +1,8 @@
 ## req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface - Define a cohesive shell meta and runtime feedback surface
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -106,3 +106,8 @@ flowchart TD
 - `define_a_shared_tactical_console_family_for_shell_owned_meta_scenes`
 - `define_a_minimal_player_facing_runtime_feedback_band_outside_the_command_deck`
 - `define_boundaries_between_player_hud_information_and_shell_debug_utilities`
+
+# Implementation notes
+- Delivered through a compacted `AppMetaScenePanel` and a runtime-only `PlayerHudCard`, so shell-owned scenes and the live runtime now read as one tactical-console family instead of separate overlay experiments.
+- The always-visible HUD remains intentionally sparse: session identity plus movement guidance only, with diagnostics and inspecteur still gated behind the command deck.
+- Runtime-only shell surfaces now lazy-load outside the initial `Main menu` boot path so coherence improved without regressing shell-startup budgets.

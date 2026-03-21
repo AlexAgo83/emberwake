@@ -2,12 +2,15 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { AppMetaScenePanel } from "./AppMetaScenePanel";
+import { createDefaultDesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
 
 const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScenePanel>> = {}) => ({
   canResumeSession: false,
   characterNameError: null,
+  desktopControlBindings: createDefaultDesktopControlBindings(),
   fullscreenPreferred: false,
   isLoadAvailable: false,
+  onApplyDesktopControlBindings: vi.fn(),
   onBeginNewGame: vi.fn(),
   onCharacterNameChange: vi.fn(),
   onOpenNewGame: vi.fn(),
@@ -79,16 +82,16 @@ describe("AppMetaScenePanel", () => {
   });
 
   it("renders settings details while keeping runtime re-entry available", () => {
-    render(
-      <AppMetaScenePanel
-        {...createProps({
-          scene: "settings"
-        })}
-      />
-    );
+    const props = createProps({
+      canResumeSession: true,
+      scene: "settings"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
 
     expect(screen.getByLabelText("Settings")).toBeInTheDocument();
-    expect(screen.getByText(/Returning to runtime resumes the live loop/i)).toBeInTheDocument();
+    expect(screen.getByText(/Tune desktop controls/i)).toBeInTheDocument();
+    expect(screen.getByText(/Loading desktop control bindings/i)).toBeInTheDocument();
   });
 
   it("renders gameplay outcomes through shell-owned meta scenes", () => {

@@ -1,9 +1,9 @@
 ## item_111_define_boundaries_between_player_hud_information_and_shell_debug_utilities - Define boundaries between player HUD information and shell debug utilities
 > From version: 0.2.2
-> Status: Draft
+> Status: Done
 > Understanding: 97%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface`.
 - Source file: `logics/request/req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface.md`.
+- Delivered by keeping diagnostics and inspecteur behind the command deck while the runtime HUD remains read-only and player-facing.

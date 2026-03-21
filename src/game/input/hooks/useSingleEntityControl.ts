@@ -3,20 +3,24 @@ import { useEffect, useMemo, useState } from "react";
 import { createIdleMovementIntent } from "../model/singleEntityControlContract";
 import {
   createKeyboardMovementIntent,
+  normalizeKeyboardBindingKey,
   singleEntityControlContract
 } from "../model/singleEntityControlContract";
 import type {
+  DesktopControlBindings,
   MovementIntent,
   SingleEntityControlState
 } from "../model/singleEntityControlContract";
 
 type UseSingleEntityControlOptions = {
   controlledEntityId: string;
+  keyboardBindings?: DesktopControlBindings;
   touchMovementIntent?: MovementIntent;
 };
 
 export function useSingleEntityControl({
   controlledEntityId,
+  keyboardBindings = singleEntityControlContract.keyboardBindings,
   touchMovementIntent = createIdleMovementIntent("touch")
 }: UseSingleEntityControlOptions): SingleEntityControlState {
   const [debugCameraModifierActive, setDebugCameraModifierActive] = useState(false);
@@ -24,31 +28,35 @@ export function useSingleEntityControl({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      const normalizedKey = normalizeKeyboardBindingKey(event.key);
+
       setPressedKeys((currentKeys) => {
-        if (currentKeys.has(event.key)) {
+        if (currentKeys.has(normalizedKey)) {
           return currentKeys;
         }
 
-        return new Set(currentKeys).add(event.key);
+        return new Set(currentKeys).add(normalizedKey);
       });
 
-      if (event.key === singleEntityControlContract.debugCameraModifierKey) {
+      if (normalizedKey === singleEntityControlContract.debugCameraModifierKey) {
         setDebugCameraModifierActive(true);
       }
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
+      const normalizedKey = normalizeKeyboardBindingKey(event.key);
+
       setPressedKeys((currentKeys) => {
-        if (!currentKeys.has(event.key)) {
+        if (!currentKeys.has(normalizedKey)) {
           return currentKeys;
         }
 
         const nextKeys = new Set(currentKeys);
-        nextKeys.delete(event.key);
+        nextKeys.delete(normalizedKey);
         return nextKeys;
       });
 
-      if (event.key === singleEntityControlContract.debugCameraModifierKey) {
+      if (normalizedKey === singleEntityControlContract.debugCameraModifierKey) {
         setDebugCameraModifierActive(false);
       }
     };
@@ -70,7 +78,7 @@ export function useSingleEntityControl({
   }, []);
 
   return useMemo(() => {
-    const keyboardMovementIntent = createKeyboardMovementIntent(pressedKeys);
+    const keyboardMovementIntent = createKeyboardMovementIntent(pressedKeys, keyboardBindings);
     const movementIntent = touchMovementIntent.isActive
       ? touchMovementIntent
       : keyboardMovementIntent;
@@ -86,5 +94,5 @@ export function useSingleEntityControl({
       inputOwner,
       movementIntent
     };
-  }, [controlledEntityId, debugCameraModifierActive, pressedKeys, touchMovementIntent]);
+  }, [controlledEntityId, debugCameraModifierActive, keyboardBindings, pressedKeys, touchMovementIntent]);
 }

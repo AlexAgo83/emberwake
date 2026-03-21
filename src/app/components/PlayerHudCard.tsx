@@ -1,30 +1,34 @@
+import "./PlayerHudCard.css";
+
 type PlayerHudCardProps = {
+  playerName: string;
   isMobile: boolean;
   movementHintVisible: boolean;
-  selectedEntityLabel: string;
+  movementSummary: string;
 };
 
 export function PlayerHudCard({
+  playerName,
   isMobile,
   movementHintVisible,
-  selectedEntityLabel
+  movementSummary
 }: PlayerHudCardProps) {
   return (
     <section className="player-hud" aria-label="Player HUD" data-testid="player-hud">
-      <p className="player-hud__eyebrow">Movement-first loop</p>
+      <p className="player-hud__eyebrow">Runtime feedback</p>
       <div className="player-hud__row">
-        <span>Focus</span>
-        <strong>{selectedEntityLabel}</strong>
+        <span>Session</span>
+        <strong>{playerName}</strong>
       </div>
       <div className="player-hud__row">
         <span>Controls</span>
-        <strong>{isMobile ? "Drag to steer" : "WASD / arrows"}</strong>
+        <strong>{isMobile ? "Drag to steer" : movementSummary}</strong>
       </div>
       {movementHintVisible ? (
         <p className="player-hud__hint" data-testid="player-hud-hint">
           {isMobile
-            ? "Glissez pour deplacer l'entitee."
-            : "Utilisez WASD ou les fleches pour deplacer l'entitee."}
+            ? "Glissez pour guider le deplacement."
+            : `Use ${movementSummary} to move.`}
         </p>
       ) : (
         <p className="player-hud__hint player-hud__hint--resolved" data-testid="player-hud-hint">

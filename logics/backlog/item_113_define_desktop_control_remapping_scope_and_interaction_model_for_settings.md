@@ -1,9 +1,9 @@
 ## item_113_define_desktop_control_remapping_scope_and_interaction_model_for_settings - Define desktop control remapping scope and interaction model for settings
 > From version: 0.2.2
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,4 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_029_define_a_lightweight_settings_scene_with_desktop_control_customization`.
 - Source file: `logics/request/req_029_define_a_lightweight_settings_scene_with_desktop_control_customization.md`.
-
+- Delivered in `src/app/components/DesktopControlSettingsSection.tsx` with a bounded movement-only remap flow and explicit capture interaction.
