@@ -79,10 +79,10 @@ export const movementSurfaceModifierDefinitions = {
   },
   slippery: {
     accentColor: 0x8fd6ff,
-    controlResponsiveness: 0.22,
+    controlResponsiveness: 0.14,
     label: "Slippery",
     speedMultiplier: 1,
-    velocityRetainFactor: 0.9
+    velocityRetainFactor: 0.96
   },
   slow: {
     accentColor: 0xffc36e,
