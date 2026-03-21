@@ -30,7 +30,6 @@ import type { RuntimeSessionState } from "../../shared/lib/runtimeSessionStorage
 import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage";
 import type { ReturnTypeUseLogicalViewportModel } from "../../game/debug/types";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
-import { describeDesktopMovementBindings } from "../model/desktopControlBindings";
 import type { EmberwakeGameState } from "@game";
 
 type ActiveRuntimeShellContentProps = {
@@ -302,10 +301,6 @@ export function ActiveRuntimeShellContent({
   }, [activeScene, onSetLastMetaScene, simulationState.controls]);
 
   const selectedEntityChunk = worldPointToChunkCoordinate(entityWorld.selectedEntity.worldPosition);
-  const movementSummary = useMemo(
-    () => describeDesktopMovementBindings(desktopControlBindings),
-    [desktopControlBindings]
-  );
   const playerHudVisible =
     activeScene === "runtime" && !diagnosticsVisible && !inspecteurVisible;
 

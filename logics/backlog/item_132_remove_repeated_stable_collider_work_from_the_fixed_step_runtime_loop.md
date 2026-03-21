@@ -1,9 +1,9 @@
 ## item_132_remove_repeated_stable_collider_work_from_the_fixed_step_runtime_loop - Remove repeated stable collider work from the fixed-step runtime loop
 > From version: 0.2.3
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,6 @@ flowchart LR
 # Notes
 - Derived from request `req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries`.
 - Source file: `logics/request/req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries.md`.
+- Delivered in commit `34beb5b`.
+- Stable support colliders are now built once at bootstrap and reused in the fixed-step loop.
+- The previous `create...` export remains available as a compatibility alias, but it now returns the stable bootstrap-backed collider set instead of reconstructing fresh entities.

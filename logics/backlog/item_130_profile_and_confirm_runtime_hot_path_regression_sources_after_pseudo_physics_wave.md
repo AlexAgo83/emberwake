@@ -1,9 +1,9 @@
 ## item_130_profile_and_confirm_runtime_hot_path_regression_sources_after_pseudo_physics_wave - Profile and confirm runtime hot-path regression sources after the pseudo-physics wave
 > From version: 0.2.3
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,8 @@ flowchart LR
 # Notes
 - Derived from request `req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries`.
 - Source file: `logics/request/req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries.md`.
+- Delivered in commit `30bfe61`.
+- Runtime telemetry now distinguishes:
+  - dropped frame time caused by the `fixedStep * 4` clamp
+  - dropped simulation debt caused by accumulator saturation under higher catch-up pressure
+- The diagnostics panel and browser telemetry now expose both signals so low-FPS movement slowdown can be confirmed from runtime data instead of guesswork.

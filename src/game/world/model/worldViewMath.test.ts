@@ -53,12 +53,16 @@ describe("worldViewMath", () => {
   });
 
   it("resolves a world picking sample from a screen point", () => {
+    const camera = {
+      ...createDefaultCameraState(),
+      zoom: 1
+    };
     const sample = createWorldPickingSample(
       {
         x: viewport.screenSize.width / 2 + chunkWorldSize,
         y: viewport.screenSize.height / 2
       },
-      createDefaultCameraState(),
+      camera,
       viewport
     );
 

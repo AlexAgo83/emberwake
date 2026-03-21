@@ -1,9 +1,9 @@
 ## item_131_cache_sampled_world_layers_for_deterministic_obstacle_and_surface_queries - Cache sampled world layers for deterministic obstacle and surface queries
 > From version: 0.2.3
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,6 @@ flowchart LR
 # Notes
 - Derived from request `req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries`.
 - Source file: `logics/request/req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries.md`.
+- Delivered in commit `3afe763`.
+- `sampleWorldTileLayers()` now uses a bounded cache keyed by seed and world tile coordinate, so obstacle and surface queries reuse one deterministic sample.
+- Test coverage now confirms both reuse for repeated queries and bounded cache growth.

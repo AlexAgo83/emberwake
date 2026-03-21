@@ -1,8 +1,8 @@
 ## req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries - Define a runtime hot-path optimization wave for pseudo-physics and world queries
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -96,6 +96,22 @@ flowchart TD
 - AC5: The request preserves deterministic simulation posture and does not reopen a full physics rewrite or architecture rollback.
 - AC6: The request defines validation expectations that cover both repository performance budgets and live runtime behavior after the optimization wave.
 - AC7: The request stays focused on measured or credible hot-path costs and does not turn into an unbounded general cleanup wave.
+
+# Outcome
+- Done in `30bfe61`, `3afe763`, and `34beb5b`.
+- The runtime now exposes both frame-clamp loss and dropped simulation-debt metrics, so lower-FPS movement slowdown is observable instead of inferred.
+- Deterministic world-layer queries now reuse a bounded shared cache keyed by seed and tile coordinate.
+- Stable runtime support colliders are now reused from bootstrap data instead of being rebuilt on every fixed-step update.
+- The wave preserved terrain / obstacle / surface separation and kept gameplay semantics intact.
+
+# Validation
+- `npx vitest run games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts`
+- `npx vitest run src/game/world/model/worldGeneration.test.ts`
+- `npx vitest run games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts games/emberwake/src/runtime/pseudoPhysics.test.ts`
+- `npm run typecheck`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Open questions
 - Should the first optimization step begin with measurement or with obviously safe hot-path cleanup?
