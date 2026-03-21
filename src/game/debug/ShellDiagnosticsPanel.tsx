@@ -452,6 +452,18 @@ function ShellDiagnosticsPanelComponent({
           <dd>{viewport.performanceBudget.runtimeActivation.maxRendererReadyMs}ms</dd>
         </div>
         <div>
+          <dt>Catch-up ratio budget</dt>
+          <dd>{(viewport.performanceBudget.framePacing.maxCatchUpFramesRatio * 100).toFixed(0)}%</dd>
+        </div>
+        <div>
+          <dt>Tracked frames min</dt>
+          <dd>{viewport.performanceBudget.framePacing.minTrackedVisualFrames}</dd>
+        </div>
+        <div>
+          <dt>Steps / visual frame budget</dt>
+          <dd>{viewport.performanceBudget.framePacing.maxSimulationStepsPerVisualFrame}</dd>
+        </div>
+        <div>
           <dt>Runtime scene mode</dt>
           <dd>{publication.runtimeScene}</dd>
         </div>

@@ -8,6 +8,11 @@
     "acceptableFrameTimeMs": 18.18,
     "frameRateFloor": 55
   },
+  "framePacing": {
+    "maxCatchUpFramesRatio": 0.12,
+    "maxSimulationStepsPerVisualFrame": 3,
+    "minTrackedVisualFrames": 20
+  },
   "shellStartup": {
     "maxInitialCssKb": 20,
     "maxInitialJsKb": 380,

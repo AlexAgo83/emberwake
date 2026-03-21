@@ -13,6 +13,7 @@ import { useRendererHealth } from "./hooks/useRendererHealth";
 import { useRuntimeSession } from "./hooks/useRuntimeSession";
 import { useSampledValue } from "./hooks/useSampledValue";
 import { useShellPreferences } from "./hooks/useShellPreferences";
+import { useRuntimeTelemetryBridge } from "./hooks/useRuntimeTelemetryBridge";
 import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards";
 import { runtimePublicationContract } from "./model/runtimePublicationContract";
 import { worldPointToChunkCoordinate } from "@engine/world/worldContract";
@@ -205,6 +206,14 @@ export function AppShell() {
   const sampledDiagnosticsPanelProps = useSampledValue(diagnosticsPanelProps, {
     enabled: diagnosticsVisible,
     intervalMs: runtimePublicationContract.diagnosticsSamplingIntervalMs
+  });
+
+  useRuntimeTelemetryBridge({
+    activeScene,
+    diagnosticsVisible,
+    publication: runtimePublicationContract.hotPathSurfaceModes,
+    rendererState,
+    runtime: simulationState.runtime
   });
 
   useDebugPanelHotkey({

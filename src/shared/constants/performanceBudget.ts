@@ -3,6 +3,7 @@ import runtimePerformanceBudgetJson from "../config/runtimePerformanceBudget.jso
 export const runtimePerformanceBudget = runtimePerformanceBudgetJson;
 
 export const shellPerformanceBudget = {
+  framePacing: runtimePerformanceBudget.framePacing,
   acceptableFrameTimeMs: runtimePerformanceBudget.simulation.acceptableFrameTimeMs,
   frameRateFloor: runtimePerformanceBudget.simulation.frameRateFloor,
   referenceDeviceClass: runtimePerformanceBudget.referenceDeviceClass,

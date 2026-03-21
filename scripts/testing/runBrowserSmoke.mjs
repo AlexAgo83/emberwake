@@ -121,14 +121,14 @@ try {
     timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
   });
 
-  const runtimeMetrics = await page.evaluate(() => globalThis.window.__EMBERWAKE_RUNTIME_METRICS__);
+  const readinessMetrics = await page.evaluate(() => globalThis.window.__EMBERWAKE_RUNTIME_METRICS__);
 
   if (
-    typeof runtimeMetrics?.rendererReadyMs !== "number" ||
-    runtimeMetrics.rendererReadyMs > runtimePerformanceBudget.runtimeActivation.maxRendererReadyMs
+    typeof readinessMetrics?.rendererReadyMs !== "number" ||
+    readinessMetrics.rendererReadyMs > runtimePerformanceBudget.runtimeActivation.maxRendererReadyMs
   ) {
     throw new Error(
-      `Renderer readiness exceeded budget. Actual: ${runtimeMetrics?.rendererReadyMs ?? "missing"}ms, budget: ${runtimePerformanceBudget.runtimeActivation.maxRendererReadyMs}ms`
+      `Renderer readiness exceeded budget. Actual: ${readinessMetrics?.rendererReadyMs ?? "missing"}ms, budget: ${runtimePerformanceBudget.runtimeActivation.maxRendererReadyMs}ms`
     );
   }
 
@@ -157,6 +157,43 @@ try {
     );
   }
 
+  const runtimeMetrics = await page.evaluate(() => globalThis.window.__EMBERWAKE_RUNTIME_METRICS__);
+  const frameLoopMetrics = runtimeMetrics?.frameLoop;
+
+  if (frameLoopMetrics?.schedulerMode !== "pixi-ticker-master") {
+    throw new Error(
+      `Expected unified live frame loop to be driven by Pixi ticker. Actual: ${frameLoopMetrics?.schedulerMode ?? "missing"}`
+    );
+  }
+
+  if (
+    typeof frameLoopMetrics.framesSinceReady !== "number" ||
+    frameLoopMetrics.framesSinceReady < runtimePerformanceBudget.framePacing.minTrackedVisualFrames
+  ) {
+    throw new Error(
+      `Frame pacing sample window too small. Actual: ${frameLoopMetrics?.framesSinceReady ?? "missing"}, minimum: ${runtimePerformanceBudget.framePacing.minTrackedVisualFrames}`
+    );
+  }
+
+  if (
+    typeof frameLoopMetrics.maxSimulationStepsLastFrameSinceReady !== "number" ||
+    frameLoopMetrics.maxSimulationStepsLastFrameSinceReady >
+      runtimePerformanceBudget.framePacing.maxSimulationStepsPerVisualFrame
+  ) {
+    throw new Error(
+      `Simulation step burst exceeded frame pacing budget. Actual: ${frameLoopMetrics?.maxSimulationStepsLastFrameSinceReady ?? "missing"}, budget: ${runtimePerformanceBudget.framePacing.maxSimulationStepsPerVisualFrame}`
+    );
+  }
+
+  if (
+    typeof frameLoopMetrics.catchUpFramesRatio !== "number" ||
+    frameLoopMetrics.catchUpFramesRatio > runtimePerformanceBudget.framePacing.maxCatchUpFramesRatio
+  ) {
+    throw new Error(
+      `Catch-up frame ratio exceeded budget. Actual: ${frameLoopMetrics?.catchUpFramesRatio ?? "missing"}, budget: ${runtimePerformanceBudget.framePacing.maxCatchUpFramesRatio}`
+    );
+  }
+
   await page.screenshot({
     path: new URL("browser-smoke.png", outputDirectory).pathname
   });
@@ -164,7 +201,7 @@ try {
     new URL("browser-smoke-metrics.json", outputDirectory),
     JSON.stringify(
       {
-        budgets: runtimePerformanceBudget.runtimeActivation,
+        budgets: runtimePerformanceBudget,
         runtimeMetrics
       },
       null,

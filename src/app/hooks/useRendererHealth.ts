@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
 
-declare global {
-  interface Window {
-    __EMBERWAKE_RUNTIME_METRICS__?: {
-      attempt: number;
-      bootStartedAtMs: number;
-      rendererReadyMs: number | null;
-      status: "degraded" | "failed" | "initializing" | "ready";
-    };
-  }
-}
-
-type RendererMetrics = {
+export type RendererMetrics = {
   attempt: number;
   bootStartedAtMs: number;
   rendererReadyMs: number | null;
 };
 
-type RendererState = {
+export type RendererState = {
   metrics: RendererMetrics;
   message: string;
   status: "degraded" | "failed" | "initializing" | "ready";
@@ -42,15 +31,6 @@ export function useRendererHealth() {
     message: "Waiting for Pixi runtime readiness signal.",
     status: "initializing"
   });
-
-  useEffect(() => {
-    globalThis.window.__EMBERWAKE_RUNTIME_METRICS__ = {
-      attempt: rendererState.metrics.attempt,
-      bootStartedAtMs: rendererState.metrics.bootStartedAtMs,
-      rendererReadyMs: rendererState.metrics.rendererReadyMs,
-      status: rendererState.status
-    };
-  }, [rendererState]);
 
   useEffect(() => {
     if (rendererState.status !== "initializing") {
@@ -106,5 +86,3 @@ export function useRendererHealth() {
     rendererState
   };
 }
-
-export {};
