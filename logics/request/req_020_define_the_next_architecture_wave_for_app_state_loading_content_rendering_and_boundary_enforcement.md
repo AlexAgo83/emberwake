@@ -1,8 +1,8 @@
 ## req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement - Define the next architecture wave for app state loading content rendering and boundary enforcement
 > From version: 0.1.2
-> Status: Ready
-> Understanding: 98%
-> Confidence: 95%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -92,9 +92,9 @@ flowchart TD
 
 # Companion docs
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_004_run_simulation_on_a_fixed_timestep`, `adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies`, `adr_015_define_engine_to_game_runtime_contract_boundaries`
+- Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_004_run_simulation_on_a_fixed_timestep`, `adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies`, `adr_015_define_engine_to_game_runtime_contract_boundaries`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`, `adr_018_validate_emberwake_content_as_a_typed_cross_catalog_graph`, `adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer`, `adr_020_enforce_architecture_boundaries_with_targeted_module_scoped_lint_rules`
 - Request(s): `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`
-- Task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`
+- Task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`, `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`
 
 # Backlog
 - `item_082_define_scene_and_app_state_architecture_for_boot_flow_runtime_pause_and_meta_surfaces`
@@ -102,3 +102,7 @@ flowchart TD
 - `item_084_define_content_authoring_and_validation_architecture_for_gameplay_world_and_entity_data`
 - `item_085_define_render_pipeline_and_scene_composition_boundary_between_engine_pixi_and_game_visual_layers`
 - `item_086_define_boundary_enforcement_strategy_for_public_modules_import_rules_and_architecture_regression_checks`
+
+# Delivery note
+- Implemented through `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`.
+- Accepted architecture decisions now cover shell scene ownership, lazy runtime loading, cross-catalog content validation, game-owned render-layer composition, and targeted lint-based boundary enforcement.
