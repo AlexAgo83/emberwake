@@ -1,9 +1,9 @@
 ## item_080_define_domain_oriented_versioned_persistence_for_runtime_growth - Define domain oriented versioned persistence for runtime growth
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,6 +50,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_010_treat_render_build_variables_as_public_frontend_configuration`
 - Request: `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`
+- Primary task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`
 
 # Priority
 - Impact: Medium
@@ -59,3 +60,4 @@ flowchart LR
 - Derived from request `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`.
 - Source file: `logics/request/req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries.md`.
 - Recommended default from the request: define a domain-oriented versioned storage model now, but implement only the minimal domains needed for the next gameplay wave.
+- Implemented through `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`.

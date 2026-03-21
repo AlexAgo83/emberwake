@@ -1,9 +1,9 @@
 ## item_076_extract_an_engine_owned_runtime_runner_for_fixed_step_input_update_and_present_flow - Extract an engine owned runtime runner for fixed step input update and present flow
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,6 +50,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_004_run_simulation_on_a_fixed_timestep`, `adr_015_define_engine_to_game_runtime_contract_boundaries`
 - Request: `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`
+- Primary task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`
 
 # Priority
 - Impact: High
@@ -59,3 +60,4 @@ flowchart LR
 - Derived from request `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`.
 - Source file: `logics/request/req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries.md`.
 - Recommended default from the request: move decisively to a narrow engine-owned runtime runner rather than preserving a long-lived hybrid.
+- Implemented through `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`.

@@ -1,10 +1,10 @@
 ## adr_015_define_engine_to_game_runtime_contract_boundaries - Define engine to game runtime contract boundaries
-> Date: 2026-03-20
+> Date: 2026-03-21
 > Status: Accepted
 > Drivers: Prevent gameplay leakage into reusable runtime code; make engine extraction incremental and safe; keep Emberwake delivery moving while engine and game responsibilities separate.
-> Related request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
-> Related backlog: `item_071_define_engine_to_game_contracts_for_update_render_and_input_integration`, `item_072_extract_reusable_runtime_primitives_from_current_game_modules`, `item_073_separate_emberwake_specific_gameplay_content_and_scenarios_from_runtime_code`
-> Related task: `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
+> Related request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`, `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`
+> Related backlog: `item_071_define_engine_to_game_contracts_for_update_render_and_input_integration`, `item_072_extract_reusable_runtime_primitives_from_current_game_modules`, `item_073_separate_emberwake_specific_gameplay_content_and_scenarios_from_runtime_code`, `item_075_route_live_runtime_through_engine_game_module_orchestration`, `item_076_extract_an_engine_owned_runtime_runner_for_fixed_step_input_update_and_present_flow`, `item_081_add_engine_to_game_integration_tests_for_runtime_contract_flow`
+> Related task: `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`, `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview
@@ -60,6 +60,7 @@ The goal is not a plugin-heavy framework. The goal is a practical runtime contra
   - `map input`: the game translates normalized engine input into gameplay-meaningful actions or intents
   - `update`: the game advances gameplay state from prior state, mapped input, and engine-provided timing
   - `present`: the game derives engine-consumable presentation data from gameplay state
+- The live runtime should execute those four responsibilities through an engine-owned runner or equivalent engine-owned orchestration layer rather than recreating cadence and update flow inside React-local hooks.
 - The engine may provide generic input frames, timing signals, camera services, and renderer hooks, but it must not interpret those as Emberwake-specific verbs.
 - The game may depend on engine primitives, but the engine must not import game state unions, entity contracts, content definitions, or scenario data.
 - Presentation data crossing from game to engine should be descriptive rather than rule-bearing. The engine can render `what is visible`, but not decide `what it means`.
@@ -89,10 +90,15 @@ The goal is not a plugin-heavy framework. The goal is a practical runtime contra
 
 # References
 - `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
+- `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`
 - `item_071_define_engine_to_game_contracts_for_update_render_and_input_integration`
 - `item_072_extract_reusable_runtime_primitives_from_current_game_modules`
 - `item_073_separate_emberwake_specific_gameplay_content_and_scenarios_from_runtime_code`
 - `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`
+- `item_075_route_live_runtime_through_engine_game_module_orchestration`
+- `item_076_extract_an_engine_owned_runtime_runner_for_fixed_step_input_update_and_present_flow`
+- `item_081_add_engine_to_game_integration_tests_for_runtime_contract_flow`
+- `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`
 
 # Follow-up work
 - Refine presentation or input contract shapes only if a second game or denser Emberwake gameplay makes the first contract too broad.

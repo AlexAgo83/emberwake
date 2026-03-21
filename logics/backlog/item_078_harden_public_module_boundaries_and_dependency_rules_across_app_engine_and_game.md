@@ -1,9 +1,9 @@
 ## item_078_harden_public_module_boundaries_and_dependency_rules_across_app_engine_and_game - Harden public module boundaries and dependency rules across app engine and game
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,6 +50,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies`, `adr_015_define_engine_to_game_runtime_contract_boundaries`
 - Request: `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`
+- Primary task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`
 
 # Priority
 - Impact: High
@@ -59,3 +60,4 @@ flowchart LR
 - Derived from request `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`.
 - Source file: `logics/request/req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries.md`.
 - This slice is about making boundaries technically meaningful, not just semantically named.
+- Implemented through `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`.

@@ -1,9 +1,9 @@
 ## item_077_remove_or_sunset_transitional_runtime_wrappers_under_src_game - Remove or sunset transitional runtime wrappers under src game
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,6 +50,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies`
 - Request: `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`
+- Primary task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`
 
 # Priority
 - Impact: Medium
@@ -59,3 +60,4 @@ flowchart LR
 - Derived from request `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`.
 - Source file: `logics/request/req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries.md`.
 - Recommended default from the request: remove pure re-export wrappers first and keep only adapters that still absorb active migration risk.
+- Implemented through `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`.

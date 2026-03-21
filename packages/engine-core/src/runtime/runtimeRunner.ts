@@ -78,7 +78,7 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
   private fps = 0;
   private isPaused = false;
   private listeners = new Set<(snapshot: RuntimeRunnerSnapshot<TGameState>) => void>();
-  private previousTimestamp = 0;
+  private previousTimestamp: number | null = null;
   private queuedStepCount = 0;
   private runtime: RuntimeRunnerMetrics;
   private running = false;
@@ -148,7 +148,7 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
     }
 
     this.running = true;
-    this.previousTimestamp = 0;
+    this.previousTimestamp = null;
     this.frameHandle = requestFrame(this.handleAnimationFrame);
   }
 
@@ -187,7 +187,7 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
   }
 
   advanceFrame(timestamp: number) {
-    if (this.previousTimestamp === 0) {
+    if (this.previousTimestamp === null) {
       this.previousTimestamp = timestamp;
     }
 

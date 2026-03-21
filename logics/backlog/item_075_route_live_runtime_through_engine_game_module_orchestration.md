@@ -1,9 +1,9 @@
 ## item_075_route_live_runtime_through_engine_game_module_orchestration - Route live runtime through engine game module orchestration
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,6 +50,7 @@ flowchart LR
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_015_define_engine_to_game_runtime_contract_boundaries`
 - Request: `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`
+- Primary task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`
 
 # Priority
 - Impact: High
@@ -59,3 +60,4 @@ flowchart LR
 - Derived from request `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`.
 - Source file: `logics/request/req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries.md`.
 - This item focuses on making the architecture real in the live app, not merely refining the contract shape on paper.
+- Implemented through `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`.
