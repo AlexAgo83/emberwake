@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { RefObject } from "react";
 
 import { cameraContract } from "@engine/camera/cameraContract";
@@ -276,10 +276,12 @@ export function useCameraController({
     };
   }, [cameraMode, cameraState.zoom, debugCameraEnabled, surfaceRef, viewport.fitScale]);
 
+  const resetCamera = useCallback(() => {
+    setCameraState(createDefaultCameraState());
+  }, []);
+
   return {
     cameraState: resolvedCameraState,
-    resetCamera: () => {
-      setCameraState(createDefaultCameraState());
-    }
+    resetCamera
   };
 }

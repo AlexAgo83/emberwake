@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 import { AppMetaScenePanel } from "./components/AppMetaScenePanel";
 import { EntityInspectionPanel } from "./components/EntityInspectionPanel";
@@ -11,8 +11,10 @@ import { useInstallPrompt } from "./hooks/useInstallPrompt";
 import { useLogicalViewportModel } from "./hooks/useLogicalViewportModel";
 import { useRendererHealth } from "./hooks/useRendererHealth";
 import { useRuntimeSession } from "./hooks/useRuntimeSession";
+import { useSampledValue } from "./hooks/useSampledValue";
 import { useShellPreferences } from "./hooks/useShellPreferences";
 import { useRuntimeInteractionGuards } from "./hooks/useRuntimeInteractionGuards";
+import { runtimePublicationContract } from "./model/runtimePublicationContract";
 import { worldPointToChunkCoordinate } from "@engine/world/worldContract";
 import { useCameraController } from "../game/camera/hooks/useCameraController";
 import { ShellDiagnosticsPanel } from "../game/debug/ShellDiagnosticsPanel";
@@ -49,9 +51,19 @@ export function AppShell() {
   const appScene = useAppScene({
     rendererStatus: rendererState.status
   });
+  const {
+    activeScene,
+    closeShellSurface,
+    isMenuOpen,
+    openMenu,
+    resumeRuntime,
+    shellSurface,
+    showPauseScene,
+    showSettingsScene
+  } = appScene;
   const controlState = useMemo(
     () =>
-      appScene.activeScene === "runtime"
+      activeScene === "runtime"
         ? runtimeControlState
         : {
             ...runtimeControlState,
@@ -59,7 +71,7 @@ export function AppShell() {
             inputOwner: "none" as const,
             movementIntent: createIdleMovementIntent("none")
           },
-    [appScene.activeScene, runtimeControlState]
+    [activeScene, runtimeControlState]
   );
   const simulationState = useEntitySimulation({ controlState });
   const followedWorldPosition =
@@ -94,33 +106,125 @@ export function AppShell() {
     defaultDebugPanelVisible: false
   });
   const isMobileLayout = viewport.layoutMode === "mobile";
-
-  useDebugPanelHotkey({
-    enabled: appConfig.diagnosticsEnabled,
-    onToggle: () => {
-      setDebugPanelVisible(!preferences.debugPanelVisible);
-    }
-  });
   const diagnosticsVisible = appConfig.diagnosticsEnabled && preferences.debugPanelVisible;
   const inspecteurVisible = preferences.inspectionPanelVisible;
-  const handleEnterFullscreen = async () => {
-    setPrefersFullscreen(true);
-    await enterFullscreen();
-  };
-  const selectedEntityChunk = worldPointToChunkCoordinate(entityWorld.selectedEntity.worldPosition);
-
-  useEffect(() => {
-    if (appScene.activeScene === "pause" || appScene.activeScene === "settings") {
-      simulationState.controls.pause();
-      setLastMetaScene(appScene.activeScene);
+  const handleToggleDiagnostics = useCallback(() => {
+    setDebugPanelVisible(!preferences.debugPanelVisible);
+  }, [preferences.debugPanelVisible, setDebugPanelVisible]);
+  const handleToggleInspecteur = useCallback(() => {
+    setInspectionPanelVisible(!preferences.inspectionPanelVisible);
+  }, [preferences.inspectionPanelVisible, setInspectionPanelVisible]);
+  const handleMenuOpenChange = useCallback((isOpen: boolean) => {
+    if (isOpen) {
+      openMenu();
       return;
     }
 
-    if (appScene.activeScene === "runtime") {
+    closeShellSurface();
+  }, [closeShellSurface, openMenu]);
+  const handleEnterFullscreen = useCallback(async () => {
+    setPrefersFullscreen(true);
+    await enterFullscreen();
+  }, [enterFullscreen, setPrefersFullscreen]);
+  const handleInstall = useCallback(() => {
+    void promptInstall();
+  }, [promptInstall]);
+  const handleRequestFullscreen = useCallback(() => {
+    void handleEnterFullscreen();
+  }, [handleEnterFullscreen]);
+  const handleRetryRuntime = useCallback(() => {
+    resumeRuntime();
+    resetRenderer();
+  }, [resetRenderer, resumeRuntime]);
+  const handleCloseInspectionPanel = useCallback(() => {
+    setInspectionPanelVisible(false);
+  }, [setInspectionPanelVisible]);
+  const handleCloseDiagnostics = useCallback(() => {
+    setDebugPanelVisible(false);
+  }, [setDebugPanelVisible]);
+  const diagnosticsPanelProps = useMemo(
+    () => ({
+      camera: cameraState,
+      control: runtimeControlState,
+      entity: entityWorld.selectedEntity ?? simulationState.entity,
+      fullscreen: {
+        isFullscreen,
+        isSupported,
+        lastError
+      },
+      onClose: handleCloseDiagnostics,
+      preferences,
+      publication: runtimePublicationContract.hotPathSurfaceModes,
+      renderer: rendererState,
+      simulation: {
+        ...simulationState.runtime,
+        tick: simulationState.tick
+      },
+      simulationControls: {
+        ...simulationState.controls,
+        cycleWorldSeed
+      },
+      viewport,
+      worldDiagnostics,
+      worldRender: {
+        cachedChunkIds: chunkVisibility.cachedChunkIds,
+        overlappingPairs: entityWorld.overlappingPairs.length,
+        preloadMargin: chunkVisibility.preloadMargin,
+        trackedEntities: entityWorld.trackedEntities.length,
+        visibleEntities: entityWorld.visibleEntities.length,
+        visibleChunks: chunkVisibility.visibleChunks,
+        worldSeed: runtimeSession.worldSeed
+      }
+    }),
+    [
+      cameraState,
+      chunkVisibility.cachedChunkIds,
+      chunkVisibility.preloadMargin,
+      chunkVisibility.visibleChunks,
+      cycleWorldSeed,
+      entityWorld.overlappingPairs.length,
+      entityWorld.selectedEntity,
+      entityWorld.trackedEntities.length,
+      entityWorld.visibleEntities.length,
+      handleCloseDiagnostics,
+      isFullscreen,
+      isSupported,
+      lastError,
+      preferences,
+      rendererState,
+      runtimeControlState,
+      runtimeSession.worldSeed,
+      simulationState.controls,
+      simulationState.entity,
+      simulationState.runtime,
+      simulationState.tick,
+      viewport,
+      worldDiagnostics
+    ]
+  );
+  const sampledDiagnosticsPanelProps = useSampledValue(diagnosticsPanelProps, {
+    enabled: diagnosticsVisible,
+    intervalMs: runtimePublicationContract.diagnosticsSamplingIntervalMs
+  });
+
+  useDebugPanelHotkey({
+    enabled: appConfig.diagnosticsEnabled,
+    onToggle: handleToggleDiagnostics
+  });
+  const selectedEntityChunk = worldPointToChunkCoordinate(entityWorld.selectedEntity.worldPosition);
+
+  useEffect(() => {
+    if (activeScene === "pause" || activeScene === "settings") {
+      simulationState.controls.pause();
+      setLastMetaScene(activeScene);
+      return;
+    }
+
+    if (activeScene === "runtime") {
       simulationState.controls.resume();
       setLastMetaScene("none");
     }
-  }, [appScene.activeScene, setLastMetaScene, simulationState.controls]);
+  }, [activeScene, setLastMetaScene, simulationState.controls]);
 
   return (
     <main
@@ -129,23 +233,20 @@ export function AppShell() {
       data-layout-mode={viewport.layoutMode}
       data-renderer-status={rendererState.status}
       data-runtime-ready-ms={rendererState.metrics.rendererReadyMs ?? "pending"}
-      data-scene={appScene.activeScene}
-      data-shell-surface={appScene.shellSurface}
+      data-scene={activeScene}
+      data-shell-surface={shellSurface}
       ref={shellRef}
     >
       <section className="app-shell__runtime" aria-label="Interactive runtime shell">
         <RuntimeSceneBoundary
           camera={cameraState}
-          onOpenSettings={appScene.showSettingsScene}
+          onOpenSettings={showSettingsScene}
           onRendererError={markFailed}
           onRendererReady={markReady}
-          onRetryRuntime={() => {
-            appScene.resumeRuntime();
-            resetRenderer();
-          }}
+          onRetryRuntime={handleRetryRuntime}
           onVisualFrame={simulationState.controls.advanceVisualFrame}
           rendererMessage={rendererState.message}
-          scene={appScene.activeScene}
+          scene={activeScene}
           surfaceRef={runtimeSurfaceRef}
           visibleEntities={entityWorld.visibleEntities}
           visibleChunks={chunkVisibility.visibleChunks}
@@ -156,40 +257,25 @@ export function AppShell() {
 
       <section className="app-shell__overlay" aria-label="Shell status overlay">
         <ShellMenu
-          activeScene={appScene.activeScene}
+          activeScene={activeScene}
           cameraMode={runtimeSession.cameraMode}
           canInstall={canInstall}
           diagnosticsEnabled={appConfig.diagnosticsEnabled}
           diagnosticsVisible={diagnosticsVisible}
           inspecteurVisible={inspecteurVisible}
-          isOpen={appScene.isMenuOpen}
+          isOpen={isMenuOpen}
           isFullscreen={isFullscreen}
           isFullscreenSupported={isSupported}
-          onEnterFullscreen={() => {
-            void handleEnterFullscreen();
-          }}
-          onInstall={() => {
-            void promptInstall();
-          }}
-          onOpenChange={(isOpen) => {
-            if (isOpen) {
-              appScene.openMenu();
-              return;
-            }
-
-            appScene.closeShellSurface();
-          }}
+          onEnterFullscreen={handleRequestFullscreen}
+          onInstall={handleInstall}
+          onOpenChange={handleMenuOpenChange}
           onResetCamera={resetCamera}
-          onResumeRuntime={appScene.resumeRuntime}
+          onResumeRuntime={resumeRuntime}
           onSetCameraMode={setCameraMode}
-          onShowPauseScene={appScene.showPauseScene}
-          onShowSettingsScene={appScene.showSettingsScene}
-          onToggleDiagnostics={() => {
-            setDebugPanelVisible(!preferences.debugPanelVisible);
-          }}
-          onToggleInspecteur={() => {
-            setInspectionPanelVisible(!preferences.inspectionPanelVisible);
-          }}
+          onShowPauseScene={showPauseScene}
+          onShowSettingsScene={showSettingsScene}
+          onToggleDiagnostics={handleToggleDiagnostics}
+          onToggleInspecteur={handleToggleInspecteur}
         />
 
         {inspecteurVisible ? (
@@ -201,53 +287,22 @@ export function AppShell() {
             entitySelectionState={entityWorld.selectedEntity.isSelected ? "selected" : "not selected"}
             entityState={entityWorld.selectedEntity.state}
             isMobile={isMobileLayout}
-            onClose={() => {
-              setInspectionPanelVisible(false);
-            }}
+            onClose={handleCloseInspectionPanel}
           />
         ) : null}
 
         <AppMetaScenePanel
           fullscreenPreferred={preferences.prefersFullscreen}
-          onResumeRuntime={appScene.resumeRuntime}
-          scene={appScene.activeScene}
+          onResumeRuntime={resumeRuntime}
+          scene={activeScene}
         />
 
-        <ShellDiagnosticsPanel
-          camera={cameraState}
-          control={runtimeControlState}
-          entity={entityWorld.selectedEntity ?? simulationState.entity}
-          fullscreen={{
-            isFullscreen,
-            isSupported,
-            lastError
-          }}
-          worldDiagnostics={worldDiagnostics}
-          worldRender={{
-            cachedChunkIds: chunkVisibility.cachedChunkIds,
-            overlappingPairs: entityWorld.overlappingPairs.length,
-            trackedEntities: entityWorld.trackedEntities.length,
-            visibleEntities: entityWorld.visibleEntities.length,
-            preloadMargin: chunkVisibility.preloadMargin,
-            visibleChunks: chunkVisibility.visibleChunks,
-            worldSeed: runtimeSession.worldSeed
-          }}
-          preferences={preferences}
-          renderer={rendererState}
-          simulation={{
-            ...simulationState.runtime,
-            tick: simulationState.tick
-          }}
-          simulationControls={{
-            ...simulationState.controls,
-            cycleWorldSeed
-          }}
-          onClose={() => {
-            setDebugPanelVisible(false);
-          }}
-          viewport={viewport}
-          visible={diagnosticsVisible}
-        />
+        {diagnosticsVisible ? (
+          <ShellDiagnosticsPanel
+            {...sampledDiagnosticsPanelProps}
+            visible={diagnosticsVisible}
+          />
+        ) : null}
       </section>
 
       <MobileVirtualStickOverlay stickState={mobileVirtualStick} />

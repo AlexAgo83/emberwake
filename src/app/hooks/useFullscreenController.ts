@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { RefObject } from "react";
 
 type FullscreenController = {
@@ -34,7 +34,7 @@ export function useFullscreenController(shellRef: RefObject<HTMLElement | null>)
     };
   }, [shellRef]);
 
-  const enterFullscreen = async () => {
+  const enterFullscreen = useCallback(async () => {
     const shellElement = shellRef.current;
     if (!shellElement || !hasFullscreenApi(shellElement)) {
       return;
@@ -51,7 +51,7 @@ export function useFullscreenController(shellRef: RefObject<HTMLElement | null>)
     } catch {
       setLastError("Fullscreen request was rejected by the browser.");
     }
-  };
+  }, [shellRef]);
 
   return {
     enterFullscreen,

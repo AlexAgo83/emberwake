@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import {
   chunkCoordinateToId,
   chunkWorldSize,
@@ -24,6 +26,11 @@ type ShellDiagnosticsPanelProps = {
     lastError: string | null;
   };
   preferences: ShellPreferences;
+  publication: {
+    diagnostics: string;
+    runtimeScene: string;
+    shellChrome: string;
+  };
   renderer: {
     metrics: {
       attempt: number;
@@ -36,12 +43,17 @@ type ShellDiagnosticsPanelProps = {
   simulation: {
     accumulatorMs: number;
     fixedStepMs: number;
+    framesWithCatchUp: number;
     fps: number;
     frameTimeMs: number;
     isPaused: boolean;
+    maxFrameTimeMs: number;
+    schedulerMode: "internal-raf" | "pixi-ticker-master";
     simulationStepsLastFrame: number;
+    simulationStepsTotal: number;
     speedMultiplier: SimulationSpeedOption;
     tick: number;
+    visualFrameCount: number;
   };
   simulationControls: {
     cycleWorldSeed: () => void;
@@ -70,12 +82,13 @@ type ShellDiagnosticsPanelProps = {
   viewport: ReturnTypeUseLogicalViewportModel;
 };
 
-export function ShellDiagnosticsPanel({
+function ShellDiagnosticsPanelComponent({
   camera,
   control,
   entity,
   fullscreen,
   preferences,
+  publication,
   renderer,
   simulation,
   simulationControls,
@@ -227,6 +240,26 @@ export function ShellDiagnosticsPanel({
         <div>
           <dt>Accumulator</dt>
           <dd>{simulation.accumulatorMs.toFixed(2)}ms</dd>
+        </div>
+        <div>
+          <dt>Frame loop</dt>
+          <dd>{simulation.schedulerMode}</dd>
+        </div>
+        <div>
+          <dt>Visual frames</dt>
+          <dd>{simulation.visualFrameCount}</dd>
+        </div>
+        <div>
+          <dt>Sim steps total</dt>
+          <dd>{simulation.simulationStepsTotal}</dd>
+        </div>
+        <div>
+          <dt>Catch-up frames</dt>
+          <dd>{simulation.framesWithCatchUp}</dd>
+        </div>
+        <div>
+          <dt>Max frame time</dt>
+          <dd>{simulation.maxFrameTimeMs.toFixed(2)}ms</dd>
         </div>
         <div>
           <dt>Control owner</dt>
@@ -419,6 +452,18 @@ export function ShellDiagnosticsPanel({
           <dd>{viewport.performanceBudget.runtimeActivation.maxRendererReadyMs}ms</dd>
         </div>
         <div>
+          <dt>Runtime scene mode</dt>
+          <dd>{publication.runtimeScene}</dd>
+        </div>
+        <div>
+          <dt>Shell chrome mode</dt>
+          <dd>{publication.shellChrome}</dd>
+        </div>
+        <div>
+          <dt>Diagnostics mode</dt>
+          <dd>{publication.diagnostics}</dd>
+        </div>
+        <div>
           <dt>Perf reference</dt>
           <dd>
             {viewport.performanceBudget.referenceDeviceClass} / {viewport.performanceBudget.referenceViewport.width} x{" "}
@@ -433,3 +478,5 @@ export function ShellDiagnosticsPanel({
     </aside>
   );
 }
+
+export const ShellDiagnosticsPanel = memo(ShellDiagnosticsPanelComponent);

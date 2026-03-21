@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   readShellPreferences,
@@ -27,37 +27,43 @@ export function useShellPreferences({
     writeShellPreferences(preferences);
   }, [preferences]);
 
+  const setDebugPanelVisible = useCallback((debugPanelVisible: boolean) => {
+    setPreferences((currentPreferences) => ({
+      ...currentPreferences,
+      debugPanelVisible
+    }));
+  }, []);
+  const setInspectionPanelVisible = useCallback((inspectionPanelVisible: boolean) => {
+    setPreferences((currentPreferences) => ({
+      ...currentPreferences,
+      inspectionPanelVisible
+    }));
+  }, []);
+  const setLastMetaScene = useCallback((lastMetaScene: ShellPreferences["lastMetaScene"]) => {
+    setPreferences((currentPreferences) => ({
+      ...currentPreferences,
+      lastMetaScene
+    }));
+  }, []);
+  const setPrefersFullscreen = useCallback((prefersFullscreen: boolean) => {
+    setPreferences((currentPreferences) => ({
+      ...currentPreferences,
+      prefersFullscreen
+    }));
+  }, []);
+  const setMovementOnboardingDismissed = useCallback((movementOnboardingDismissed: boolean) => {
+    setPreferences((currentPreferences) => ({
+      ...currentPreferences,
+      movementOnboardingDismissed
+    }));
+  }, []);
+
   return {
     preferences,
-    setDebugPanelVisible: (debugPanelVisible: boolean) => {
-      setPreferences((currentPreferences) => ({
-        ...currentPreferences,
-        debugPanelVisible
-      }));
-    },
-    setInspectionPanelVisible: (inspectionPanelVisible: boolean) => {
-      setPreferences((currentPreferences) => ({
-        ...currentPreferences,
-        inspectionPanelVisible
-      }));
-    },
-    setLastMetaScene: (lastMetaScene: ShellPreferences["lastMetaScene"]) => {
-      setPreferences((currentPreferences) => ({
-        ...currentPreferences,
-        lastMetaScene
-      }));
-    },
-    setPrefersFullscreen: (prefersFullscreen: boolean) => {
-      setPreferences((currentPreferences) => ({
-        ...currentPreferences,
-        prefersFullscreen
-      }));
-    },
-    setMovementOnboardingDismissed: (movementOnboardingDismissed: boolean) => {
-      setPreferences((currentPreferences) => ({
-        ...currentPreferences,
-        movementOnboardingDismissed
-      }));
-    }
+    setDebugPanelVisible,
+    setInspectionPanelVisible,
+    setLastMetaScene,
+    setPrefersFullscreen,
+    setMovementOnboardingDismissed
   };
 }

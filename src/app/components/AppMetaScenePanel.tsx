@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import type { AppSceneId } from "../model/appScene";
 
 type AppMetaScenePanelProps = {
@@ -6,7 +8,7 @@ type AppMetaScenePanelProps = {
   scene: AppSceneId;
 };
 
-export function AppMetaScenePanel({
+export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   fullscreenPreferred,
   onResumeRuntime,
   scene
@@ -49,4 +51,4 @@ export function AppMetaScenePanel({
       </button>
     </aside>
   );
-}
+});

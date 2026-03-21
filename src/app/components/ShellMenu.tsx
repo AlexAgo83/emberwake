@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from "react";
+import { memo, useEffect, useId, useRef } from "react";
 
 import type { CameraMode } from "../../game/camera/model/cameraMode";
 
@@ -24,7 +24,7 @@ type ShellMenuProps = {
   onToggleInspecteur: () => void;
 };
 
-export function ShellMenu({
+export const ShellMenu = memo(function ShellMenu({
   activeScene,
   cameraMode,
   canInstall,
@@ -234,4 +234,4 @@ export function ShellMenu({
       ) : null}
     </div>
   );
-}
+});

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import {
   appSceneContract,
@@ -22,30 +22,35 @@ export function useAppScene({ rendererStatus }: UseAppSceneOptions) {
     () => deriveAppSceneId({ rendererStatus, requestedScene }),
     [rendererStatus, requestedScene]
   );
+  const closeShellSurface = useCallback(() => {
+    setShellSurface("none");
+  }, []);
+  const openMenu = useCallback(() => {
+    setShellSurface("menu");
+  }, []);
+  const resumeRuntime = useCallback(() => {
+    setRequestedScene("runtime");
+    setShellSurface("none");
+  }, []);
+  const showPauseScene = useCallback(() => {
+    setRequestedScene("pause");
+    setShellSurface("none");
+  }, []);
+  const showSettingsScene = useCallback(() => {
+    setRequestedScene("settings");
+    setShellSurface("none");
+  }, []);
 
   return {
     activeScene,
     canRenderRuntime: activeScene !== "failure",
-    closeShellSurface: () => {
-      setShellSurface("none");
-    },
+    closeShellSurface,
     isMenuOpen: shellSurface === "menu",
-    openMenu: () => {
-      setShellSurface("menu");
-    },
+    openMenu,
     requestedScene,
-    resumeRuntime: () => {
-      setRequestedScene("runtime");
-      setShellSurface("none");
-    },
+    resumeRuntime,
     shellSurface,
-    showPauseScene: () => {
-      setRequestedScene("pause");
-      setShellSurface("none");
-    },
-    showSettingsScene: () => {
-      setRequestedScene("settings");
-      setShellSurface("none");
-    }
+    showPauseScene,
+    showSettingsScene
   };
 }
