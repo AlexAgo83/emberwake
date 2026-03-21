@@ -10,6 +10,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   characterNameError: null,
   desktopControlBindings: createDefaultDesktopControlBindings(),
   fullscreenPreferred: false,
+  gameOverRecap: null,
   isLoadAvailable: false,
   onApplyDesktopControlBindings: vi.fn(),
   onBeginNewGame: vi.fn(),
@@ -139,5 +140,36 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByLabelText("Victory")).toBeInTheDocument();
     expect(screen.getByText(/Traversal goal reached/i)).toBeInTheDocument();
     expect(screen.getByText(/gameplay outcome victory/i)).toBeInTheDocument();
+  });
+
+  it("renders a game-over recap and routes back to the main menu", () => {
+    const props = createProps({
+      gameOverRecap: {
+        defeatDetail: "The hostile swarm overran the active run.",
+        goldCollected: 7,
+        hostileDefeats: 3,
+        playerName: "Wanderer",
+        ticksSurvived: 9000,
+        traversalDistanceWorldUnits: 420
+      },
+      runtimeOutcome: {
+        detail: "The hostile swarm overran the active run.",
+        emittedAtTick: 9000,
+        kind: "defeat",
+        shellScene: "defeat"
+      },
+      scene: "defeat"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    expect(screen.getByLabelText("Game over")).toBeInTheDocument();
+    expect(screen.getByText("2:30")).toBeInTheDocument();
+    expect(screen.getByText("420 wu")).toBeInTheDocument();
+    expect(screen.getByText("7")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Resume runtime/i })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /Back to main menu/i }));
+    expect(props.onReturnToMainMenu).toHaveBeenCalledTimes(1);
   });
 });

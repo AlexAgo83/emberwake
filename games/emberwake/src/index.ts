@@ -18,6 +18,7 @@ export {
   entitySimulationContract,
   getScriptedEntityPhase
 } from "./runtime/entitySimulation";
+export { pickupContract } from "./runtime/pickupContract";
 export {
   createIdleMovementIntent,
   createKeyboardMovementIntent,

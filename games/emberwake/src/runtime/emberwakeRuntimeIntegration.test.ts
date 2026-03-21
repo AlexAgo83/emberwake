@@ -76,7 +76,9 @@ describe("Emberwake runtime integration", () => {
     });
     expect(presentation.diagnostics).toMatchObject({
       combatState: "dormant",
+      goldCollected: 0,
       hostileCount: 0,
+      hostileDefeats: 0,
       gameplayOutcome: "none",
       playerHealth: 100,
       progressionTicksSurvived: 1
@@ -185,7 +187,9 @@ describe("Emberwake runtime integration", () => {
     expect(snapshot.state.simulation.entity.combat.currentHealth).toBe(100);
     expect(snapshot.presentation.entities).toHaveLength(1);
     expect(snapshot.presentation.diagnostics).toMatchObject({
+      goldCollected: 0,
       hostileCount: 0,
+      hostileDefeats: 0,
       playerHealth: 100
     });
   });

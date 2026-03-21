@@ -22,7 +22,10 @@ export type StatusEffectSystemState = {
 };
 
 export type ProgressionSystemState = {
+  goldCollected: number;
   highestUnlockedTier: 0;
+  healingKitsCollected: number;
+  hostileDefeats: number;
   runtimeTicksSurvived: number;
   traversalDistanceWorldUnits: number;
 };
@@ -93,7 +96,10 @@ export const createInitialGameplaySystemsState = (): EmberwakeGameplaySystemsSta
   },
   outcome: createIdleGameplayOutcome(),
   progression: {
+    goldCollected: 0,
     highestUnlockedTier: 0,
+    healingKitsCollected: 0,
+    hostileDefeats: 0,
     runtimeTicksSurvived: 0,
     traversalDistanceWorldUnits: 0
   },
@@ -135,6 +141,9 @@ export const advanceGameplaySystemsState = ({
   const statusEffects = previousState.statusEffects;
   const progression = {
     ...previousState.progression,
+    goldCollected: simulationAfterUpdate.runStats.goldCollected,
+    healingKitsCollected: simulationAfterUpdate.runStats.healingKitsCollected,
+    hostileDefeats: simulationAfterUpdate.runStats.hostileDefeats,
     runtimeTicksSurvived: timing.tick + 1,
     traversalDistanceWorldUnits:
       previousState.progression.traversalDistanceWorldUnits + traversalDistanceWorldUnits
@@ -181,6 +190,8 @@ export const createGameplaySystemDiagnostics = (
   gameplayOutcome: systemsState.outcome.kind,
   gameplayPhaseOrder: gameplaySystemsContract.phaseOrder.join(" -> "),
   gameplaySignals: systemsState.lifecycle.recentSignals.join(", "),
+  goldCollected: systemsState.progression.goldCollected,
+  hostileDefeats: systemsState.progression.hostileDefeats,
   progressionTicksSurvived: systemsState.progression.runtimeTicksSurvived,
   traversalDistanceWorldUnits: Number(
     systemsState.progression.traversalDistanceWorldUnits.toFixed(2)

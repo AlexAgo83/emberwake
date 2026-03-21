@@ -49,14 +49,26 @@ describe("gameplaySystems", () => {
       simulationAfterUpdate: {
         entities: [afterEntity],
         entity: afterEntity,
+        nextPickupSequence: 0,
         nextHostileSequence: 0,
+        runStats: {
+          goldCollected: 0,
+          healingKitsCollected: 0,
+          hostileDefeats: 0
+        },
         tick: 1,
         worldSeed: "emberwake-default-seed"
       },
       simulationBeforeUpdate: {
         entities: [beforeEntity],
         entity: beforeEntity,
+        nextPickupSequence: 0,
         nextHostileSequence: 0,
+        runStats: {
+          goldCollected: 0,
+          healingKitsCollected: 0,
+          hostileDefeats: 0
+        },
         tick: 0,
         worldSeed: "emberwake-default-seed"
       },

@@ -3,6 +3,16 @@ import { lazy, memo, Suspense } from "react";
 import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
 import { characterNameMaxLength } from "../model/characterName";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
+import { entitySimulationContract } from "@game";
+
+export type GameOverRecap = {
+  defeatDetail: string;
+  goldCollected: number;
+  hostileDefeats: number;
+  playerName: string;
+  ticksSurvived: number;
+  traversalDistanceWorldUnits: number;
+};
 
 const LazyDesktopControlSettingsSection = lazy(async () => {
   const module = await import("./DesktopControlSettingsSection");
@@ -18,6 +28,7 @@ type AppMetaScenePanelProps = {
   characterNameError: string | null;
   desktopControlBindings: DesktopControlBindings;
   fullscreenPreferred: boolean;
+  gameOverRecap?: GameOverRecap | null;
   isLoadAvailable: boolean;
   onApplyDesktopControlBindings: (bindings: DesktopControlBindings) => void;
   onBeginNewGame: () => void;
@@ -41,6 +52,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   characterNameError,
   desktopControlBindings,
   fullscreenPreferred,
+  gameOverRecap,
   isLoadAvailable,
   onApplyDesktopControlBindings,
   onBeginNewGame,
@@ -68,6 +80,16 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
     return null;
   }
 
+  const formatRunDuration = (ticks: number) => {
+    const totalSeconds = Math.max(
+      0,
+      Math.round((ticks * entitySimulationContract.fixedStepMs) / 1000)
+    );
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${minutes}:${String(seconds).padStart(2, "0")}`;
+  };
   const title =
     scene === "main-menu"
       ? "Main menu"
@@ -78,7 +100,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       : scene === "settings"
         ? "Settings"
         : scene === "defeat"
-          ? "Runtime interrupted"
+          ? "Game over"
           : "Victory";
   const detail =
     scene === "main-menu"
@@ -91,13 +113,15 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       ? "The live session is preserved while the shell holds the pause scene."
       : scene === "settings"
         ? ""
+        : scene === "defeat" && gameOverRecap
+          ? gameOverRecap.defeatDetail
         : runtimeOutcome?.detail ??
           (scene === "defeat"
-            ? "The shell took control after the live run requested recovery."
+            ? "The active run ended and the shell is presenting the run recap."
             : "The shell is presenting the latest runtime outcome.");
   const resumeLabel =
     scene === "defeat"
-      ? "Restart runtime"
+      ? "Return to main menu"
       : scene === "victory"
         ? "Continue runtime"
         : scene === "main-menu"
@@ -212,6 +236,40 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                   type="button"
                 >
                   Back to menu
+                </button>
+              </div>
+            </>
+          ) : scene === "defeat" ? (
+            <>
+              <dl className="app-meta-scene__facts">
+                <div>
+                  <dt>Session</dt>
+                  <dd>{gameOverRecap?.playerName || playerName || "Wanderer"}</dd>
+                </div>
+                <div>
+                  <dt>Survived</dt>
+                  <dd>{formatRunDuration(gameOverRecap?.ticksSurvived ?? 0)}</dd>
+                </div>
+                <div>
+                  <dt>Traversal</dt>
+                  <dd>{Math.round(gameOverRecap?.traversalDistanceWorldUnits ?? 0)} wu</dd>
+                </div>
+                <div>
+                  <dt>Hostile defeats</dt>
+                  <dd>{gameOverRecap?.hostileDefeats ?? 0}</dd>
+                </div>
+                <div>
+                  <dt>Gold</dt>
+                  <dd>{gameOverRecap?.goldCollected ?? 0}</dd>
+                </div>
+              </dl>
+              <div className="app-meta-scene__actions">
+                <button
+                  className="shell-control shell-control--button"
+                  onClick={onReturnToMainMenu}
+                  type="button"
+                >
+                  Back to main menu
                 </button>
               </div>
             </>

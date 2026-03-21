@@ -1,6 +1,7 @@
 import { lazy, Suspense, useCallback, useMemo, useRef, useState } from "react";
 
 import { AppMetaScenePanel } from "./components/AppMetaScenePanel";
+import type { GameOverRecap } from "./components/AppMetaScenePanel";
 import { useAppScene } from "./hooks/useAppScene";
 import { useDesktopControlBindings } from "./hooks/useDesktopControlBindings";
 import { useDocumentViewportLock } from "./hooks/useDocumentViewportLock";
@@ -31,6 +32,7 @@ export function AppShell() {
   const shellRef = useRef<HTMLElement>(null);
   const latestGameStateRef = useRef<EmberwakeGameState | null>(null);
   const [pendingCharacterName, setPendingCharacterName] = useState(defaultCharacterName);
+  const [gameOverRecap, setGameOverRecap] = useState<GameOverRecap | null>(null);
   const [runtimeOutcome, setRuntimeOutcome] = useState<RuntimeShellOutcome | null>(null);
   useDocumentViewportLock();
   const { applyDesktopControlBindings, desktopControlBindings } = useDesktopControlBindings();
@@ -41,6 +43,7 @@ export function AppShell() {
   const {
     createNewSession,
     cycleWorldSeed,
+    endActiveSession,
     loadSavedSession,
     runtimeSession,
     saveActiveSession,
@@ -133,6 +136,8 @@ export function AppShell() {
     }
 
     createNewSession(characterNameValidation.normalizedValue);
+    setGameOverRecap(null);
+    setRuntimeOutcome(null);
     resetRenderer();
     resumeRuntime();
   }, [
@@ -149,8 +154,14 @@ export function AppShell() {
     setPendingCharacterName(value);
   }, []);
   const handleReturnToMainMenu = useCallback(() => {
+    if (activeScene === "defeat") {
+      endActiveSession();
+      setGameOverRecap(null);
+      setRuntimeOutcome(null);
+    }
+
     showMainMenuScene();
-  }, [showMainMenuScene]);
+  }, [activeScene, endActiveSession, showMainMenuScene]);
   const handleOpenSettings = useCallback(() => {
     showSettingsScene();
   }, [showSettingsScene]);
@@ -170,6 +181,8 @@ export function AppShell() {
       return;
     }
 
+    setGameOverRecap(null);
+    setRuntimeOutcome(null);
     resetRenderer();
     resumeRuntime();
   }, [loadSavedSession, resetRenderer, resumeRuntime, runtimeSession.hasActiveSession, savedSessionSlot]);
@@ -205,6 +218,20 @@ export function AppShell() {
   );
   const isLoadAvailable = savedSessionSlot !== null;
   const hasRuntimeLayer = runtimeSession.hasActiveSession;
+  const updateGameOverRecap = useCallback((gameState: EmberwakeGameState | null) => {
+    if (!gameState) {
+      return;
+    }
+
+    setGameOverRecap({
+      defeatDetail: gameState.systems.outcome.detail,
+      goldCollected: gameState.systems.progression.goldCollected,
+      hostileDefeats: gameState.systems.progression.hostileDefeats,
+      playerName: runtimeSession.playerName || "Wanderer",
+      ticksSurvived: gameState.systems.progression.runtimeTicksSurvived,
+      traversalDistanceWorldUnits: gameState.systems.progression.traversalDistanceWorldUnits
+    });
+  }, [runtimeSession.playerName]);
   const metaScenePanel = (
     <AppMetaScenePanel
       canResumeSession={runtimeSession.hasActiveSession}
@@ -212,6 +239,7 @@ export function AppShell() {
       characterNameError={characterNameValidation.error}
       desktopControlBindings={desktopControlBindings}
       fullscreenPreferred={preferences.prefersFullscreen}
+      gameOverRecap={gameOverRecap}
       isLoadAvailable={isLoadAvailable}
       onApplyDesktopControlBindings={handleApplyDesktopControlBindings}
       onBeginNewGame={handleBeginNewGame}
@@ -280,6 +308,9 @@ export function AppShell() {
             onRuntimeOutcomeChange={setRuntimeOutcome}
             onRuntimeStateChange={(gameState) => {
               latestGameStateRef.current = gameState;
+              if (gameState.systems.outcome.kind === "defeat") {
+                updateGameOverRecap(gameState);
+              }
             }}
             onSetCameraMode={setCameraMode}
             onSetCameraState={setCameraState}

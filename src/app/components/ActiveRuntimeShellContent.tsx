@@ -255,12 +255,12 @@ export function ActiveRuntimeShellContent({
   );
 
   useEffect(() => {
-    onRuntimeOutcomeChange(runtimeOutcome);
-  }, [onRuntimeOutcomeChange, runtimeOutcome]);
-
-  useEffect(() => {
     onRuntimeStateChange(simulationState.gameState);
   }, [onRuntimeStateChange, simulationState.gameState]);
+
+  useEffect(() => {
+    onRuntimeOutcomeChange(runtimeOutcome);
+  }, [onRuntimeOutcomeChange, runtimeOutcome]);
 
   useRuntimeTelemetryBridge({
     activeScene,
@@ -311,6 +311,7 @@ export function ActiveRuntimeShellContent({
       <section className="app-shell__runtime" aria-label="Interactive runtime shell">
         <RuntimeSceneBoundary
           camera={cameraState}
+          currentTick={simulationState.tick}
           onOpenSettings={onShowSettingsScene}
           onRendererError={onRendererError}
           onRendererReady={onRendererReady}
@@ -370,6 +371,7 @@ export function ActiveRuntimeShellContent({
         {playerHudVisible ? (
           <PlayerHudCard
             fps={simulationState.runtime.fps}
+            goldCollected={simulationState.gameState.systems.progression.goldCollected}
             isMobile={isMobileLayout}
             playerHealth={simulationState.entity.combat.currentHealth}
             playerName={runtimeSession.playerName || "Wanderer"}

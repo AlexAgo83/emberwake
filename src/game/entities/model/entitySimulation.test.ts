@@ -55,6 +55,11 @@ describe("entitySimulation", () => {
     expect(simulationState.entities).toHaveLength(1);
     expect(simulationState.entity.combat.currentHealth).toBe(hostileCombatContract.player.maxHealth);
     expect(simulationState.entity.movementSurfaceModifier).toBe("normal");
+    expect(simulationState.runStats).toEqual({
+      goldCollected: 0,
+      healingKitsCollected: 0,
+      hostileDefeats: 0
+    });
     expect(simulationState.entity.velocity).toEqual({ x: 0, y: 0 });
   });
 
@@ -188,6 +193,7 @@ describe("entitySimulation", () => {
 
     expect(simulationState.entities.some((entity) => entity.id === hostileEntity.id)).toBe(false);
     expect(simulationState.entity.automaticAttack?.lastAttackTick).toBe(1);
+    expect(simulationState.runStats.hostileDefeats).toBe(1);
   });
 
   it("applies hostile contact damage on overlap with a hostile-specific cooldown", () => {
@@ -233,5 +239,85 @@ describe("entitySimulation", () => {
       hostileCombatContract.player.maxHealth - hostileCombatContract.hostile.contactDamage
     );
     expect(secondState.entity.combat.currentHealth).toBe(firstState.entity.combat.currentHealth);
+  });
+
+  it("spawns nearby pickups and increments gold when the player collects one", () => {
+    let simulationState = createInitialSimulationState();
+
+    for (let step = 0; step < 24; step += 1) {
+      simulationState = advanceSimulationState(simulationState);
+    }
+
+    const pickupEntity = simulationState.entities.find((entity) => entity.role === "pickup");
+
+    expect(pickupEntity).toBeDefined();
+
+    const collectedState = advanceSimulationState({
+      ...simulationState,
+      entities: simulationState.entities.map((entity) =>
+        entity.id === pickupEntity!.id
+          ? {
+              ...entity,
+              pickupProfile: {
+                kind: "gold"
+              },
+              worldPosition: { ...simulationState.entity.worldPosition }
+            }
+          : entity
+      )
+    });
+
+    expect(collectedState.entities.some((entity) => entity.id === pickupEntity!.id)).toBe(false);
+    expect(collectedState.runStats.goldCollected).toBe(1);
+  });
+
+  it("applies healing-kit pickups with a max-health clamp", () => {
+    const initialState = createInitialSimulationState();
+    const healingPickup = {
+      ...createGenericMoverEntity({
+        id: "entity:pickup:healing-kit:0",
+        renderLayer: 90,
+        visual: {
+          kind: "pickup-healing-kit",
+          tint: "#7dff9b"
+        },
+        worldPosition: { ...initialState.entity.worldPosition }
+      }),
+      combat: {
+        currentHealth: 1,
+        maxHealth: 1
+      },
+      footprint: {
+        radius: 22
+      },
+      movementSurfaceModifier: "normal" as const,
+      pickupProfile: {
+        kind: "healing-kit" as const
+      },
+      role: "pickup" as const,
+      spawnedAtTick: 0,
+      state: "idle" as const,
+      velocity: {
+        x: 0,
+        y: 0
+      }
+    };
+    const healedState = advanceSimulationState({
+      ...initialState,
+      entities: [
+        {
+          ...initialState.entity,
+          combat: {
+            ...initialState.entity.combat,
+            currentHealth: 30
+          }
+        },
+        healingPickup
+      ],
+      nextPickupSequence: 1
+    });
+
+    expect(healedState.entity.combat.currentHealth).toBe(55);
+    expect(healedState.runStats.healingKitsCollected).toBe(1);
   });
 });

@@ -2,6 +2,7 @@ import "./PlayerHudCard.css";
 
 type PlayerHudCardProps = {
   fps: number;
+  goldCollected: number;
   isMobile: boolean;
   playerHealth: number;
   playerName: string;
@@ -10,6 +11,7 @@ type PlayerHudCardProps = {
 
 export function PlayerHudCard({
   fps,
+  goldCollected,
   isMobile,
   playerHealth,
   playerName,
@@ -25,6 +27,10 @@ export function PlayerHudCard({
       <div className="player-hud__row">
         <span>HP</span>
         <strong>{Math.max(0, Math.round(playerHealth))}</strong>
+      </div>
+      <div className="player-hud__row">
+        <span>Gold</span>
+        <strong>{Math.max(0, Math.round(goldCollected))}</strong>
       </div>
       <div className="player-hud__row">
         <span>FPS</span>

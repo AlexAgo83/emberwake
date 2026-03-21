@@ -16,6 +16,7 @@ const LazyRuntimeSurface = lazy(async () => {
 
 type RuntimeSceneBoundaryProps = {
   camera: CameraState;
+  currentTick: number;
   onOpenSettings?: () => void;
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
@@ -74,6 +75,7 @@ function RuntimeStatusCard({
 
 export function RuntimeSceneBoundary({
   camera,
+  currentTick,
   onOpenSettings,
   onRendererError,
   onRendererReady,
@@ -127,6 +129,7 @@ export function RuntimeSceneBoundary({
       >
         <LazyRuntimeSurface
           camera={camera}
+          currentTick={currentTick}
           onRendererError={onRendererError}
           onRendererReady={onRendererReady}
           renderSurfaceMode={renderSurfaceMode}

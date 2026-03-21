@@ -18,7 +18,8 @@ export const hostileCombatContract = {
       arcRadians: (120 * Math.PI) / 180,
       cooldownTicks: 18,
       damage: 20,
-      rangeWorldUnits: 172
+      rangeWorldUnits: 172,
+      visibleTicks: 8
     },
     maxHealth: 100
   }

@@ -20,6 +20,14 @@ export const entityVisualDefinitions = {
   "debug-watcher": {
     assetId: "entity.debug.watcher.placeholder",
     label: "Debug watcher"
+  },
+  "pickup-gold": {
+    assetId: "entity.debug.watcher.placeholder",
+    label: "Gold pickup"
+  },
+  "pickup-healing-kit": {
+    assetId: "entity.debug.anchor.placeholder",
+    label: "Healing kit pickup"
   }
 } as const satisfies Record<
   string,

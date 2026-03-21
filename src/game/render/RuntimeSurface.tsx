@@ -15,6 +15,7 @@ import type { SimulatedEntity } from "../entities/model/entitySimulation";
 
 type RuntimeSurfaceProps = {
   camera: CameraState;
+  currentTick: number;
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
   onSurfaceElementChange?: (element: HTMLDivElement | null) => void;
@@ -34,6 +35,7 @@ type RuntimeSurfaceProps = {
 
 export function RuntimeSurface({
   camera,
+  currentTick,
   onRendererError,
   onRendererReady,
   onSurfaceElementChange,
@@ -48,6 +50,7 @@ export function RuntimeSurface({
     entities: (
       <EntityScene
         camera={camera}
+        currentTick={currentTick}
         entities={visibleEntities}
         renderSurfaceMode={renderSurfaceMode}
         viewport={viewport}

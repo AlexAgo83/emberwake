@@ -15,6 +15,7 @@ import {
   emberwakeRuntimeBootstrap
 } from "@game/runtime/emberwakeRuntimeBootstrap";
 import { hostileCombatContract } from "@game/runtime/hostileCombatContract";
+import { pickupContract } from "@game/runtime/pickupContract";
 import { resolvePseudoPhysicalMovement } from "@game/runtime/pseudoPhysics";
 import type { MovementSurfaceModifierKind } from "@game/content/world/worldData";
 
@@ -24,7 +25,9 @@ export const entitySimulationContract = {
   speedOptions: [0.5, 1, 2] as const
 } as const;
 
-export type SimulatedEntityRole = "hostile" | "player" | "support";
+export type SimulatedPickupKind = "gold" | "healing-kit";
+
+export type SimulatedEntityRole = "hostile" | "pickup" | "player" | "support";
 
 export type EntityCombatState = {
   currentHealth: number;
@@ -37,6 +40,7 @@ export type AutomaticAttackProfile = {
   damage: number;
   lastAttackTick: number | null;
   rangeWorldUnits: number;
+  visibleTicks: number;
 };
 
 export type ContactDamageProfile = {
@@ -50,12 +54,23 @@ export type FocusState = {
   targetEntityId: string | null;
 };
 
+export type PickupProfile = {
+  kind: SimulatedPickupKind;
+};
+
+export type RunStats = {
+  goldCollected: number;
+  healingKitsCollected: number;
+  hostileDefeats: number;
+};
+
 export type SimulatedEntity = WorldEntity & {
   automaticAttack?: AutomaticAttackProfile;
   combat: EntityCombatState;
   contactDamageProfile?: ContactDamageProfile;
   focusState?: FocusState;
   movementSurfaceModifier: MovementSurfaceModifierKind;
+  pickupProfile?: PickupProfile;
   role: SimulatedEntityRole;
   spawnedAtTick: number;
   velocity: WorldPoint;
@@ -64,7 +79,9 @@ export type SimulatedEntity = WorldEntity & {
 export type EntitySimulationState = {
   entities: SimulatedEntity[];
   entity: SimulatedEntity;
+  nextPickupSequence: number;
   nextHostileSequence: number;
+  runStats: RunStats;
   tick: number;
   worldSeed: string;
 };
@@ -136,6 +153,12 @@ const createCombatState = (maxHealth: number): EntityCombatState => ({
   maxHealth
 });
 
+const createInitialRunStats = (): RunStats => ({
+  goldCollected: 0,
+  healingKitsCollected: 0,
+  hostileDefeats: 0
+});
+
 const createPlayerAutomaticAttackProfile = (): AutomaticAttackProfile => ({
   ...hostileCombatContract.player.automaticConeAttack,
   lastAttackTick: null
@@ -197,7 +220,40 @@ const createHostileEntity = (
   }
 });
 
+const createPickupEntity = (
+  pickupSequence: number,
+  pickupKind: SimulatedPickupKind,
+  worldPosition: WorldPoint,
+  spawnedAtTick: number
+): SimulatedEntity => ({
+  ...createGenericMoverEntity({
+    id: `entity:pickup:${pickupKind}:${pickupSequence}`,
+    renderLayer: 90,
+    visual: {
+      kind: pickupKind === "healing-kit" ? "pickup-healing-kit" : "pickup-gold",
+      tint: pickupKind === "healing-kit" ? "#7dff9b" : "#ffd76c"
+    },
+    worldPosition
+  }),
+  combat: createCombatState(1),
+  footprint: {
+    radius: pickupContract.pickup.pickupRadiusWorldUnits
+  },
+  movementSurfaceModifier: "normal",
+  pickupProfile: {
+    kind: pickupKind
+  },
+  role: "pickup",
+  spawnedAtTick,
+  velocity: {
+    x: 0,
+    y: 0
+  }
+});
+
 const isAlive = (entity: SimulatedEntity) => entity.combat.currentHealth > 0;
+
+const isDynamicCollider = (entity: SimulatedEntity) => entity.role !== "pickup" && isAlive(entity);
 
 const getPlayerEntity = (entities: readonly SimulatedEntity[]) =>
   entities.find((entity) => entity.role === "player") ?? entities[0];
@@ -233,7 +289,9 @@ export const createInitialSimulationState = (): EntitySimulationState => {
   return {
     entities: [playerEntity],
     entity: playerEntity,
+    nextPickupSequence: 0,
     nextHostileSequence: 0,
+    runStats: createInitialRunStats(),
     tick: 0,
     worldSeed: emberwakeRuntimeBootstrap.worldSeed
   };
@@ -258,6 +316,8 @@ const normalizeEntityRole = (
     ? "player"
     : entity.id.startsWith("entity:hostile:")
       ? "hostile"
+      : entity.id.startsWith("entity:pickup:")
+        ? "pickup"
       : "support");
 
 const normalizeSimulatedEntity = (
@@ -329,6 +389,27 @@ const normalizeSimulatedEntity = (
     };
   }
 
+  if (role === "pickup") {
+    const inferredPickupKind =
+      entity.pickupProfile?.kind ??
+      (entity.id.includes(":healing-kit:") ? "healing-kit" : "gold");
+
+    return {
+      ...baseEntity,
+      combat: normalizeCombatState(entity.combat, 1),
+      footprint: {
+        radius: entity.footprint?.radius ?? pickupContract.pickup.pickupRadiusWorldUnits
+      },
+      movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
+      pickupProfile: {
+        kind: inferredPickupKind
+      },
+      role,
+      spawnedAtTick: entity.spawnedAtTick ?? 0,
+      velocity: entity.velocity ?? { x: 0, y: 0 }
+    };
+  }
+
   return {
     ...baseEntity,
     combat: normalizeCombatState(entity.combat, 1),
@@ -365,11 +446,27 @@ export const normalizeEntitySimulationState = (
       ? highestSequence
       : Math.max(highestSequence, hostileSuffix + 1);
   }, simulationState.nextHostileSequence ?? 0);
+  const nextPickupSequence = normalizedEntities.reduce((highestSequence, entity) => {
+    if (entity.role !== "pickup") {
+      return highestSequence;
+    }
+
+    const pickupSuffix = Number.parseInt(entity.id.split(":").at(-1) ?? "", 10);
+
+    return Number.isNaN(pickupSuffix)
+      ? highestSequence
+      : Math.max(highestSequence, pickupSuffix + 1);
+  }, simulationState.nextPickupSequence ?? 0);
 
   return {
     entities: normalizedEntities,
     entity: playerEntity,
+    nextPickupSequence,
     nextHostileSequence,
+    runStats: {
+      ...createInitialRunStats(),
+      ...simulationState.runStats
+    },
     tick: simulationState.tick ?? 0,
     worldSeed: simulationState.worldSeed ?? emberwakeRuntimeBootstrap.worldSeed
   };
@@ -582,6 +679,14 @@ const applyDamage = (entity: SimulatedEntity, damage: number): SimulatedEntity =
   }
 });
 
+const applyHealing = (entity: SimulatedEntity, healing: number): SimulatedEntity => ({
+  ...entity,
+  combat: {
+    ...entity.combat,
+    currentHealth: Math.min(entity.combat.maxHealth, entity.combat.currentHealth + healing)
+  }
+});
+
 const resolveAutomaticPlayerAttack = (
   entities: readonly SimulatedEntity[],
   tick: number
@@ -754,7 +859,7 @@ const sampleHostileSpawnPosition = ({
   };
 };
 
-const canSpawnHostileAtPosition = ({
+const canSpawnEntityAtPosition = ({
   entities,
   footprintRadius,
   worldPosition,
@@ -835,7 +940,7 @@ const maintainLocalHostilePopulation = ({
     const hostileEntity = createHostileEntity(hostileSequence, candidatePosition, tick);
 
     if (
-      !canSpawnHostileAtPosition({
+      !canSpawnEntityAtPosition({
         entities: retainedEntities,
         footprintRadius: hostileEntity.footprint.radius,
         worldPosition: candidatePosition,
@@ -857,14 +962,205 @@ const maintainLocalHostilePopulation = ({
   };
 };
 
+const countNearbyPickups = (entities: readonly SimulatedEntity[], playerEntity: SimulatedEntity) =>
+  entities.filter(
+    (entity) =>
+      entity.role === "pickup" &&
+      distanceBetweenWorldPoints(entity.worldPosition, playerEntity.worldPosition) <=
+        pickupContract.pickup.despawnDistanceWorldUnits
+  ).length;
+
+const samplePickupSpawnPosition = ({
+  playerEntity,
+  sequence,
+  worldSeed
+}: {
+  playerEntity: SimulatedEntity;
+  sequence: number;
+  worldSeed: string;
+}) => {
+  const angleSignature = sampleDeterministicSignature(
+    `${worldSeed}:pickup-angle:${sequence}:${playerEntity.worldPosition.x}:${playerEntity.worldPosition.y}`
+  );
+  const distanceSignature = sampleDeterministicSignature(
+    `${worldSeed}:pickup-distance:${sequence}:${playerEntity.worldPosition.x}:${playerEntity.worldPosition.y}`
+  );
+  const angleRadians = ((angleSignature % 360) * Math.PI) / 180;
+  const distanceRatio = 0.85 + (distanceSignature % 45) / 100;
+  const radialDistance =
+    pickupContract.pickup.safeSpawnDistanceWorldUnits * distanceRatio;
+
+  return {
+    x: playerEntity.worldPosition.x + Math.cos(angleRadians) * radialDistance,
+    y: playerEntity.worldPosition.y + Math.sin(angleRadians) * radialDistance
+  };
+};
+
+const samplePickupKind = ({
+  playerEntity,
+  sequence,
+  worldSeed
+}: {
+  playerEntity: SimulatedEntity;
+  sequence: number;
+  worldSeed: string;
+}): SimulatedPickupKind => {
+  const pickupRoll = sampleDeterministicSignature(
+    `${worldSeed}:pickup-kind:${sequence}:${playerEntity.worldPosition.x}:${playerEntity.worldPosition.y}`
+  );
+
+  return pickupRoll % 100 < pickupContract.healingKit.spawnChancePercent
+    ? "healing-kit"
+    : "gold";
+};
+
+const maintainNearbyPickupPopulation = ({
+  entities,
+  nextPickupSequence,
+  tick,
+  worldSeed
+}: Pick<EntitySimulationState, "entities" | "nextPickupSequence" | "worldSeed"> & {
+  tick: number;
+}) => {
+  const playerEntity = getPlayerEntity(entities);
+
+  if (!playerEntity || !isAlive(playerEntity)) {
+    return {
+      entities: [...entities],
+      nextPickupSequence
+    };
+  }
+
+  const retainedEntities = entities.filter(
+    (entity) =>
+      entity.role !== "pickup" ||
+      distanceBetweenWorldPoints(entity.worldPosition, playerEntity.worldPosition) <=
+        pickupContract.pickup.despawnDistanceWorldUnits
+  );
+
+  const nearbyPickupCount = countNearbyPickups(retainedEntities, playerEntity);
+
+  if (
+    nearbyPickupCount >= pickupContract.pickup.localPopulationCap ||
+    tick % pickupContract.pickup.spawnCooldownTicks !== 0
+  ) {
+    return {
+      entities: retainedEntities,
+      nextPickupSequence
+    };
+  }
+
+  for (let attempt = 0; attempt < pickupContract.pickup.spawnAttemptCount; attempt += 1) {
+    const pickupSequence = nextPickupSequence + attempt;
+    const candidatePosition = samplePickupSpawnPosition({
+      playerEntity,
+      sequence: pickupSequence,
+      worldSeed
+    });
+
+    if (
+      distanceBetweenWorldPoints(candidatePosition, playerEntity.worldPosition) <
+      pickupContract.pickup.safeSpawnDistanceWorldUnits
+    ) {
+      continue;
+    }
+
+    const pickupEntity = createPickupEntity(
+      pickupSequence,
+      samplePickupKind({
+        playerEntity,
+        sequence: pickupSequence,
+        worldSeed
+      }),
+      candidatePosition,
+      tick
+    );
+
+    if (
+      !canSpawnEntityAtPosition({
+        entities: retainedEntities,
+        footprintRadius: pickupEntity.footprint.radius,
+        worldPosition: candidatePosition,
+        worldSeed
+      })
+    ) {
+      continue;
+    }
+
+    return {
+      entities: [...retainedEntities, pickupEntity],
+      nextPickupSequence: pickupSequence + 1
+    };
+  }
+
+  return {
+    entities: retainedEntities,
+    nextPickupSequence
+  };
+};
+
+const resolvePickupCollection = ({
+  entities,
+  runStats
+}: Pick<EntitySimulationState, "entities" | "runStats">) => {
+  const playerEntity = getPlayerEntity(entities);
+
+  if (!playerEntity || !isAlive(playerEntity)) {
+    return {
+      entities: [...entities],
+      runStats
+    };
+  }
+
+  let nextPlayerEntity = playerEntity;
+  const nextRunStats = { ...runStats };
+  const retainedEntities: SimulatedEntity[] = [];
+
+  for (const entity of entities) {
+    if (entity.role !== "pickup" || !entity.pickupProfile) {
+      retainedEntities.push(entity);
+      continue;
+    }
+
+    if (!isEntityPairOverlapping(entity, nextPlayerEntity)) {
+      retainedEntities.push(entity);
+      continue;
+    }
+
+    if (entity.pickupProfile.kind === "healing-kit") {
+      nextPlayerEntity = applyHealing(
+        nextPlayerEntity,
+        Math.ceil(nextPlayerEntity.combat.maxHealth * pickupContract.healingKit.healRatio)
+      );
+      nextRunStats.healingKitsCollected += 1;
+      continue;
+    }
+
+    nextRunStats.goldCollected += pickupContract.gold.value;
+  }
+
+  return {
+    entities: retainedEntities.map((entity) =>
+      entity.id === nextPlayerEntity.id ? nextPlayerEntity : entity
+    ),
+    runStats: nextRunStats
+  };
+};
+
 export const advanceSimulationState = (
   simulationState: EntitySimulationState,
   command: SimulationCommand = {}
 ): EntitySimulationState => {
   const worldSeed = command.worldSeed ?? simulationState.worldSeed;
   const nextTick = simulationState.tick + 1;
-  const spawnMaintainedState = maintainLocalHostilePopulation({
+  const pickupMaintainedState = maintainNearbyPickupPopulation({
     entities: simulationState.entities,
+    nextPickupSequence: simulationState.nextPickupSequence,
+    tick: nextTick,
+    worldSeed
+  });
+  const spawnMaintainedState = maintainLocalHostilePopulation({
+    entities: pickupMaintainedState.entities,
     nextHostileSequence: simulationState.nextHostileSequence,
     tick: nextTick,
     worldSeed
@@ -873,7 +1169,7 @@ export const advanceSimulationState = (
   const movedEntities = spawnMaintainedState.entities.map((entity) =>
     resolveEntityMovement({
       dynamicColliders: spawnMaintainedState.entities.filter(
-        (colliderEntity) => colliderEntity.id !== entity.id && isAlive(colliderEntity)
+        (colliderEntity) => colliderEntity.id !== entity.id && isDynamicCollider(colliderEntity)
       ),
       entity,
       intent: resolveEntityIntent({
@@ -891,7 +1187,14 @@ export const advanceSimulationState = (
     spawnMaintainedState.entities,
     nextTick
   );
-  const survivingEntities = combatResolvedEntities.filter(
+  const pickupResolvedState = resolvePickupCollection({
+    entities: combatResolvedEntities,
+    runStats: simulationState.runStats
+  });
+  const defeatedHostileCount = combatResolvedEntities.filter(
+    (entity) => entity.role === "hostile" && !isAlive(entity)
+  ).length;
+  const survivingEntities = pickupResolvedState.entities.filter(
     (entity) => entity.role === "player" || isAlive(entity)
   );
   const nextPlayerEntity = getPlayerEntity(survivingEntities);
@@ -899,7 +1202,12 @@ export const advanceSimulationState = (
   return {
     entities: survivingEntities,
     entity: nextPlayerEntity,
+    nextPickupSequence: pickupMaintainedState.nextPickupSequence,
     nextHostileSequence: spawnMaintainedState.nextHostileSequence,
+    runStats: {
+      ...pickupResolvedState.runStats,
+      hostileDefeats: pickupResolvedState.runStats.hostileDefeats + defeatedHostileCount
+    },
     tick: nextTick,
     worldSeed
   };

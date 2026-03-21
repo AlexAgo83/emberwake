@@ -124,9 +124,18 @@ export function useRuntimeSession() {
     [runtimeSession]
   );
 
+  const endActiveSession = useCallback(() => {
+    setSessionInitState(undefined);
+    setRuntimeSession((currentSession) => ({
+      ...currentSession,
+      hasActiveSession: false
+    }));
+  }, []);
+
   return {
     createNewSession,
     cycleWorldSeed,
+    endActiveSession,
     loadSavedSession,
     runtimeSession,
     saveActiveSession,
