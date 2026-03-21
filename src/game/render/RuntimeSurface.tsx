@@ -17,6 +17,7 @@ type RuntimeSurfaceProps = {
   camera: CameraState;
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
+  onVisualFrame?: (timestampMs: number) => void;
   surfaceRef?: RefObject<HTMLDivElement | null>;
   visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
   visibleChunks: ChunkCoordinate[];
@@ -34,6 +35,7 @@ export function RuntimeSurface({
   camera,
   onRendererError,
   onRendererReady,
+  onVisualFrame,
   surfaceRef,
   visibleEntities,
   visibleChunks,
@@ -57,6 +59,7 @@ export function RuntimeSurface({
     <RuntimeCanvas
       onRendererError={onRendererError}
       onRendererReady={onRendererReady}
+      onVisualFrame={onVisualFrame}
       surfaceRef={surfaceRef}
     >
       {emberwakeRuntimeRenderLayerOrder.map((layerId) => (

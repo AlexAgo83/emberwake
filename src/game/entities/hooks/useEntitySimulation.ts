@@ -21,15 +21,21 @@ type UseEntitySimulationOptions = {
 type SimulationRuntimeMetrics = {
   accumulatorMs: number;
   fixedStepMs: number;
+  framesWithCatchUp: number;
   frameTimeMs: number;
   fps: number;
   isPaused: boolean;
+  maxFrameTimeMs: number;
   maxCatchUpStepsPerFrame: number;
+  schedulerMode: "internal-raf" | "pixi-ticker-master";
   simulationStepsLastFrame: number;
+  simulationStepsTotal: number;
   speedMultiplier: SimulationSpeedOption;
+  visualFrameCount: number;
 };
 
 type EntitySimulationControls = {
+  advanceVisualFrame: (timestampMs: number) => void;
   pause: () => void;
   resume: () => void;
   setSpeedMultiplier: (speedMultiplier: SimulationSpeedOption) => void;
@@ -58,11 +64,8 @@ export function useEntitySimulation({ controlState }: UseEntitySimulationOptions
       setSnapshot(nextSnapshot);
     });
 
-    runner.start();
-
     return () => {
       unsubscribe();
-      runner.stop();
     };
   }, [runner]);
 
@@ -72,6 +75,9 @@ export function useEntitySimulation({ controlState }: UseEntitySimulationOptions
 
   const controls = useMemo<EntitySimulationControls>(
     () => ({
+      advanceVisualFrame: (timestampMs) => {
+        runner.advanceFrame(timestampMs, "pixi-ticker-master");
+      },
       pause: () => {
         runner.pause();
       },

@@ -143,6 +143,7 @@ export function AppShell() {
             appScene.resumeRuntime();
             resetRenderer();
           }}
+          onVisualFrame={simulationState.controls.advanceVisualFrame}
           rendererMessage={rendererState.message}
           scene={appScene.activeScene}
           surfaceRef={runtimeSurfaceRef}

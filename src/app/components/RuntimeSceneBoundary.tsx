@@ -21,6 +21,7 @@ type RuntimeSceneBoundaryProps = {
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
   onRetryRuntime?: () => void;
+  onVisualFrame?: (timestampMs: number) => void;
   rendererMessage: string;
   scene: AppSceneId;
   surfaceRef?: RefObject<HTMLDivElement | null>;
@@ -77,6 +78,7 @@ export function RuntimeSceneBoundary({
   onRendererError,
   onRendererReady,
   onRetryRuntime,
+  onVisualFrame,
   rendererMessage,
   scene,
   surfaceRef,
@@ -126,6 +128,7 @@ export function RuntimeSceneBoundary({
           camera={camera}
           onRendererError={onRendererError}
           onRendererReady={onRendererReady}
+          onVisualFrame={onVisualFrame}
           surfaceRef={surfaceRef}
           visibleEntities={visibleEntities}
           visibleChunks={visibleChunks}

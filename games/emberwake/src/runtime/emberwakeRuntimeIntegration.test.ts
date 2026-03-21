@@ -73,13 +73,16 @@ describe("Emberwake runtime integration", () => {
     const runner = createEmberwakeRuntimeRunner();
 
     runner.setInputFrame(createEngineInputFrameFromControlState(activeRightControlState));
-    runner.advanceFrame(0);
-    runner.advanceFrame(entitySimulationContract.fixedStepMs + 1);
+    runner.advanceFrame(0, "pixi-ticker-master");
+    runner.advanceFrame(entitySimulationContract.fixedStepMs + 1, "pixi-ticker-master");
 
     const snapshot = runner.getSnapshot();
 
     expect(snapshot.timing.tick).toBe(1);
+    expect(snapshot.runtime.schedulerMode).toBe("pixi-ticker-master");
     expect(snapshot.runtime.simulationStepsLastFrame).toBe(1);
+    expect(snapshot.runtime.simulationStepsTotal).toBe(1);
+    expect(snapshot.runtime.visualFrameCount).toBe(2);
     expect(snapshot.state.systems.progression.runtimeTicksSurvived).toBe(1);
     expect(snapshot.state.simulation.entity.worldPosition.x).toBeGreaterThan(0);
     expect(snapshot.presentation.entities[0].worldPosition).toEqual(

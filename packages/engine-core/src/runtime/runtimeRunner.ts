@@ -8,12 +8,17 @@ import type {
 export type RuntimeRunnerMetrics = {
   accumulatorMs: number;
   fixedStepMs: number;
+  framesWithCatchUp: number;
   frameTimeMs: number;
   fps: number;
   isPaused: boolean;
+  maxFrameTimeMs: number;
   maxCatchUpStepsPerFrame: number;
+  schedulerMode: "internal-raf" | "pixi-ticker-master";
   simulationStepsLastFrame: number;
+  simulationStepsTotal: number;
   speedMultiplier: number;
+  visualFrameCount: number;
 };
 
 export type RuntimeRunnerSnapshot<TGameState> = {
@@ -75,17 +80,22 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
   private accumulatorMs = 0;
   private currentInput = createIdleEngineInputFrame();
   private frameHandle: ReturnType<typeof requestFrame> | null = null;
+  private framesWithCatchUp = 0;
   private fps = 0;
   private isPaused = false;
   private listeners = new Set<(snapshot: RuntimeRunnerSnapshot<TGameState>) => void>();
+  private maxFrameTimeMs: number;
   private previousTimestamp: number | null = null;
   private queuedStepCount = 0;
   private runtime: RuntimeRunnerMetrics;
   private running = false;
+  private schedulerMode: RuntimeRunnerMetrics["schedulerMode"] = "internal-raf";
   private simulationStepsLastFrame = 0;
+  private simulationStepsTotal = 0;
   private speedMultiplier = 1;
   private state: TGameState;
   private tick = 0;
+  private visualFrameCount = 0;
   private readonly context: TGameContext;
   private readonly fixedStepMs: number;
   private readonly maxCatchUpStepsPerFrame: number;
@@ -102,6 +112,7 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
     this.fixedStepMs = fixedStepMs;
     this.maxCatchUpStepsPerFrame = maxCatchUpStepsPerFrame;
     this.module = module;
+    this.maxFrameTimeMs = fixedStepMs;
     this.state = module.initialize({
       context,
       init
@@ -109,12 +120,17 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
     this.runtime = {
       accumulatorMs: 0,
       fixedStepMs,
+      framesWithCatchUp: 0,
       fps: 0,
       frameTimeMs: fixedStepMs,
       isPaused: false,
+      maxFrameTimeMs: fixedStepMs,
       maxCatchUpStepsPerFrame,
+      schedulerMode: this.schedulerMode,
       simulationStepsLastFrame: 0,
-      speedMultiplier: 1
+      simulationStepsTotal: 0,
+      speedMultiplier: 1,
+      visualFrameCount: 0
     };
   }
 
@@ -192,13 +208,19 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
     this.emit();
   }
 
-  advanceFrame(timestamp: number) {
+  advanceFrame(
+    timestamp: number,
+    schedulerMode: RuntimeRunnerMetrics["schedulerMode"] = this.schedulerMode
+  ) {
+    this.schedulerMode = schedulerMode;
+
     if (this.previousTimestamp === null) {
       this.previousTimestamp = timestamp;
     }
 
     const rawFrameTimeMs = timestamp - this.previousTimestamp;
     this.previousTimestamp = timestamp;
+    this.visualFrameCount += 1;
     const clampedFrameTimeMs = Math.min(rawFrameTimeMs, this.fixedStepMs * 4);
     const speedAdjustedFrameTimeMs = this.isPaused ? 0 : clampedFrameTimeMs * this.speedMultiplier;
 
@@ -215,6 +237,7 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
         this.applyStep();
         this.queuedStepCount -= 1;
         this.simulationStepsLastFrame += 1;
+        this.simulationStepsTotal += 1;
       }
     } else {
       while (
@@ -224,7 +247,12 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
         this.applyStep();
         this.accumulatorMs -= this.fixedStepMs;
         this.simulationStepsLastFrame += 1;
+        this.simulationStepsTotal += 1;
       }
+    }
+
+    if (this.simulationStepsLastFrame > 1) {
+      this.framesWithCatchUp += 1;
     }
 
     const instantaneousFps = rawFrameTimeMs > 0 ? 1000 / rawFrameTimeMs : this.fps;
@@ -232,22 +260,32 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
     this.fps =
       this.fps === 0 ? instantaneousFps : this.fps * 0.85 + instantaneousFps * 0.15;
 
+    this.maxFrameTimeMs = Math.max(
+      this.maxFrameTimeMs,
+      rawFrameTimeMs || this.runtime.frameTimeMs
+    );
+
     this.runtime = {
       accumulatorMs: this.accumulatorMs,
       fixedStepMs: this.fixedStepMs,
+      framesWithCatchUp: this.framesWithCatchUp,
       fps: this.fps,
       frameTimeMs: rawFrameTimeMs || this.runtime.frameTimeMs,
       isPaused: this.isPaused,
+      maxFrameTimeMs: this.maxFrameTimeMs,
       maxCatchUpStepsPerFrame: this.maxCatchUpStepsPerFrame,
+      schedulerMode: this.schedulerMode,
       simulationStepsLastFrame: this.simulationStepsLastFrame,
-      speedMultiplier: this.speedMultiplier
+      simulationStepsTotal: this.simulationStepsTotal,
+      speedMultiplier: this.speedMultiplier,
+      visualFrameCount: this.visualFrameCount
     };
 
     this.emit();
   }
 
   private readonly handleAnimationFrame = (timestamp: number) => {
-    this.advanceFrame(timestamp);
+    this.advanceFrame(timestamp, "internal-raf");
 
     if (this.running) {
       this.frameHandle = requestFrame(this.handleAnimationFrame);
@@ -283,9 +321,14 @@ export class RuntimeRunner<TGameState, TGameAction, TGameInit = void, TGameConte
     this.runtime = {
       ...this.runtime,
       accumulatorMs: this.accumulatorMs,
+      framesWithCatchUp: this.framesWithCatchUp,
       isPaused: this.isPaused,
+      maxFrameTimeMs: this.maxFrameTimeMs,
+      schedulerMode: this.schedulerMode,
       simulationStepsLastFrame: this.simulationStepsLastFrame,
-      speedMultiplier: this.speedMultiplier
+      simulationStepsTotal: this.simulationStepsTotal,
+      speedMultiplier: this.speedMultiplier,
+      visualFrameCount: this.visualFrameCount
     };
   }
 

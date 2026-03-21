@@ -1,6 +1,7 @@
 import { Application } from "@pixi/react";
 import type { PropsWithChildren, RefObject } from "react";
 
+import { RuntimeFrameLoopBridge } from "./RuntimeFrameLoopBridge";
 import { RuntimeSurfaceBoundary } from "./RuntimeSurfaceBoundary";
 
 type RuntimeCanvasProps = PropsWithChildren<{
@@ -10,6 +11,7 @@ type RuntimeCanvasProps = PropsWithChildren<{
   glowClassName?: string;
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
+  onVisualFrame?: (timestampMs: number) => void;
   surfaceRef?: RefObject<HTMLDivElement | null>;
 }>;
 
@@ -21,6 +23,7 @@ export function RuntimeCanvas({
   glowClassName = "runtime-surface__glow",
   onRendererError,
   onRendererReady,
+  onVisualFrame,
   surfaceRef
 }: RuntimeCanvasProps) {
   return (
@@ -33,10 +36,13 @@ export function RuntimeCanvas({
         <Application
           antialias
           autoDensity
+          autoStart
           backgroundColor={backgroundColor}
           onInit={onRendererReady}
           resizeTo={surfaceRef ?? window}
+          sharedTicker={false}
         >
+          <RuntimeFrameLoopBridge onVisualFrame={onVisualFrame} />
           {children}
         </Application>
       </RuntimeSurfaceBoundary>
