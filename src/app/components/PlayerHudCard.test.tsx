@@ -6,29 +6,28 @@ describe("PlayerHudCard", () => {
   it("renders a compact runtime feedback card for desktop controls", () => {
     render(
       <PlayerHudCard
+        fps={58.7}
         isMobile={false}
-        movementHintVisible
-        movementSummary="WASD / arrows"
         playerName="Wanderer"
       />
     );
 
     expect(screen.getByTestId("player-hud")).toBeInTheDocument();
     expect(screen.getByText("Wanderer")).toBeInTheDocument();
-    expect(screen.getByText("WASD / arrows")).toBeInTheDocument();
-    expect(screen.getByText("Use WASD / arrows to move.")).toBeInTheDocument();
+    expect(screen.getByText("59")).toBeInTheDocument();
+    expect(screen.queryByText(/WASD \/ arrows/i)).not.toBeInTheDocument();
+    expect(screen.queryByTestId("player-hud-hint")).not.toBeInTheDocument();
   });
 
-  it("switches to the resolved onboarding state after movement is acknowledged", () => {
+  it("shows only the compact hint on mobile", () => {
     render(
       <PlayerHudCard
+        fps={61.2}
         isMobile
-        movementHintVisible={false}
-        movementSummary="WASD / arrows"
         playerName="Ash"
       />
     );
 
-    expect(screen.getByText("Movement acknowledged.")).toBeInTheDocument();
+    expect(screen.getByText("Glissez pour guider le deplacement.")).toBeInTheDocument();
   });
 });

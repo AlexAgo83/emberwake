@@ -1,17 +1,15 @@
 import "./PlayerHudCard.css";
 
 type PlayerHudCardProps = {
-  playerName: string;
+  fps: number;
   isMobile: boolean;
-  movementHintVisible: boolean;
-  movementSummary: string;
+  playerName: string;
 };
 
 export function PlayerHudCard({
-  playerName,
+  fps,
   isMobile,
-  movementHintVisible,
-  movementSummary
+  playerName
 }: PlayerHudCardProps) {
   return (
     <section className="player-hud" aria-label="Player HUD" data-testid="player-hud">
@@ -21,20 +19,14 @@ export function PlayerHudCard({
         <strong>{playerName}</strong>
       </div>
       <div className="player-hud__row">
-        <span>Controls</span>
-        <strong>{isMobile ? "Drag to steer" : movementSummary}</strong>
+        <span>FPS</span>
+        <strong>{Math.max(0, Math.round(fps))}</strong>
       </div>
-      {movementHintVisible ? (
+      {isMobile ? (
         <p className="player-hud__hint" data-testid="player-hud-hint">
-          {isMobile
-            ? "Glissez pour guider le deplacement."
-            : `Use ${movementSummary} to move.`}
+          Glissez pour guider le deplacement.
         </p>
-      ) : (
-        <p className="player-hud__hint player-hud__hint--resolved" data-testid="player-hud-hint">
-          Movement acknowledged.
-        </p>
-      )}
+      ) : null}
     </section>
   );
 }

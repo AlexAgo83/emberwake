@@ -373,9 +373,8 @@ export function ActiveRuntimeShellContent({
 
         {playerHudVisible ? (
           <PlayerHudCard
+            fps={simulationState.runtime.fps}
             isMobile={isMobileLayout}
-            movementHintVisible={!preferences.movementOnboardingDismissed}
-            movementSummary={movementSummary}
             playerName={runtimeSession.playerName || "Wanderer"}
           />
         ) : null}
