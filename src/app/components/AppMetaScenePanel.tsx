@@ -71,7 +71,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   if (
     scene !== "main-menu" &&
     scene !== "new-game" &&
-    scene !== "pause" &&
     scene !== "settings" &&
     scene !== "defeat" &&
     scene !== "victory"
@@ -94,9 +93,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       ? "Main menu"
       : scene === "new-game"
         ? "New game"
-        : scene === "pause"
-      ? "Runtime paused"
-      : scene === "settings"
+        : scene === "settings"
         ? "Settings"
         : scene === "defeat"
           ? "Game over"
@@ -108,8 +105,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         : "Start a new run or open settings."
       : scene === "new-game"
         ? "Name your character before the run starts."
-      : scene === "pause"
-      ? "The run is paused and preserved."
       : scene === "settings"
         ? ""
         : scene === "defeat" && gameOverRecap

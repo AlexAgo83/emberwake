@@ -1286,12 +1286,14 @@ const sampleSpawnAngleWithinSector = ({
 };
 
 const sampleHostileSpawnPosition = ({
+  attempt,
   command,
   playerEntity,
   sequence,
   tick,
   worldSeed
 }: {
+  attempt: number;
   command: SimulationCommand;
   playerEntity: SimulatedEntity;
   sequence: number;
@@ -1323,7 +1325,7 @@ const sampleHostileSpawnPosition = ({
           { centerOffsetRadians: Math.PI, widthRadians: (20 * Math.PI) / 180 }
         ];
   const sectorDefinition =
-    sectorDefinitions?.[sequence % sectorDefinitions.length] ?? null;
+    sectorDefinitions?.[attempt % sectorDefinitions.length] ?? null;
   const angleRadians =
     preferredHeadingRadians === null || !sectorDefinition
       ? ((angleSignature % 360) * Math.PI) / 180
@@ -1333,7 +1335,7 @@ const sampleHostileSpawnPosition = ({
           sectorWidthRadians: sectorDefinition.widthRadians,
           signature: angleSignature
         });
-  const distanceRatio = 0.75 + (distanceSignature % 55) / 100;
+  const distanceRatio = 1.05 + (distanceSignature % 46) / 100;
   const radialDistance =
     hostileCombatContract.hostile.safeSpawnDistanceWorldUnits * distanceRatio;
 
@@ -1411,6 +1413,7 @@ const maintainLocalHostilePopulation = ({
   ) {
     const hostileSequence = nextHostileSequence + attempt;
     const candidatePosition = sampleHostileSpawnPosition({
+      attempt,
       command,
       playerEntity,
       sequence: hostileSequence,

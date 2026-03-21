@@ -9,7 +9,7 @@ export const hostileCombatContract = {
     localPopulationCap: 5,
     maxHealth: 40,
     moveSpeedWorldUnitsPerSecond: 168,
-    safeSpawnDistanceWorldUnits: chunkWorldSize * 0.6,
+    safeSpawnDistanceWorldUnits: chunkWorldSize * 0.9,
     spawnAttemptCount: 8,
     spawnCooldownTicks: 36
   },

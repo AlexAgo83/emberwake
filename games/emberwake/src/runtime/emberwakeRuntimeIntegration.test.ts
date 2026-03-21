@@ -279,4 +279,5 @@ describe("Emberwake runtime integration", () => {
     expect(nextState.systems.outcome.kind).toBe("defeat");
     expect(nextState.systems.outcome.shellScene).toBe("defeat");
   });
+
 });

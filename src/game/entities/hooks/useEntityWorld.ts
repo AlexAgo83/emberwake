@@ -14,6 +14,7 @@ import type { ChunkCoordinate, WorldPoint } from "../../world/types";
 import type { SimulatedEntity } from "../model/entitySimulation";
 
 type UseEntityWorldOptions = {
+  includeSupportEntities?: boolean;
   primaryEntityId: string;
   simulatedEntities: SimulatedEntity[];
   selectedWorldPoint: WorldPoint | null;
@@ -37,16 +38,21 @@ const presentEntitySelection = (
 });
 
 export function useEntityWorld({
+  includeSupportEntities = false,
   primaryEntityId,
   simulatedEntities,
   selectedWorldPoint,
   visibleChunks
 }: UseEntityWorldOptions): EntityWorldState {
   const trackedEntities = useMemo(() => {
+    if (!includeSupportEntities) {
+      return simulatedEntities;
+    }
+
     const scenarioEntities = createDeterministicRuntimeSupportEntities();
 
     return [...simulatedEntities, ...scenarioEntities];
-  }, [simulatedEntities]);
+  }, [includeSupportEntities, simulatedEntities]);
   const visibleChunkIds = useMemo(
     () => new Set(visibleChunks.map((chunkCoordinate) => chunkCoordinateToId(chunkCoordinate))),
     [visibleChunks]

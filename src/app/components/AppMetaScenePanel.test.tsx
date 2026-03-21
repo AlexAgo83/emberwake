@@ -87,21 +87,12 @@ describe("AppMetaScenePanel", () => {
     expect(props.onCharacterNameChange).toHaveBeenCalledWith("Ash");
   });
 
-  it("renders pause metadata and resumes the runtime on demand", () => {
-    const props = createProps({
-      fullscreenPreferred: true,
-      onResumeRuntime: vi.fn(),
-      scene: "pause"
-    });
+  it("stays hidden for the removed pause overlay surface", () => {
+    const { container } = render(
+      <AppMetaScenePanel {...createProps({ scene: "pause" })} />
+    );
 
-    render(<AppMetaScenePanel {...props} />);
-
-    expect(screen.getByLabelText("Runtime paused")).toBeInTheDocument();
-    expect(screen.getByText("remembered")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: /Resume runtime/i }));
-
-    expect(props.onResumeRuntime).toHaveBeenCalledTimes(1);
+    expect(container).toBeEmptyDOMElement();
   });
 
   it("renders settings as a compact desktop-controls surface", () => {
