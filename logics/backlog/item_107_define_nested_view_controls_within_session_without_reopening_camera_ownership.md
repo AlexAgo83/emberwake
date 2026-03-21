@@ -1,9 +1,9 @@
 ## item_107_define_nested_view_controls_within_session_without_reopening_camera_ownership - Define nested View controls within Session without reopening camera ownership
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 96%
-> Confidence: 94%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,7 +48,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request: `req_027_restructure_the_shell_command_deck_around_a_primary_session_section`
-- Primary task(s): None yet
+- Primary task(s): `task_034_orchestrate_session_first_shell_command_deck_hierarchy`
 
 # Priority
 - Impact: Medium
@@ -57,3 +57,5 @@ flowchart LR
 # Notes
 - Derived from request `req_027_restructure_the_shell_command_deck_around_a_primary_session_section`.
 - Source file: `logics/request/req_027_restructure_the_shell_command_deck_around_a_primary_session_section.md`.
+- Implemented through `task_034_orchestrate_session_first_shell_command_deck_hierarchy`.
+- `View` is now nested inside `Session`, with `Reset camera` and `Camera mode` preserved as reachable camera controls without reopening camera ownership or behavior.

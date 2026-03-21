@@ -1,9 +1,9 @@
 ## item_106_define_session_as_the_single_primary_shell_menu_section - Define Session as the single primary shell-menu section
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,7 +48,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request: `req_027_restructure_the_shell_command_deck_around_a_primary_session_section`
-- Primary task(s): None yet
+- Primary task(s): `task_034_orchestrate_session_first_shell_command_deck_hierarchy`
 
 # Priority
 - Impact: High
@@ -57,3 +57,5 @@ flowchart LR
 # Notes
 - Derived from request `req_027_restructure_the_shell_command_deck_around_a_primary_session_section`.
 - Source file: `logics/request/req_027_restructure_the_shell_command_deck_around_a_primary_session_section.md`.
+- Implemented through `task_034_orchestrate_session_first_shell_command_deck_hierarchy`.
+- The shell deck now exposes `Session` as the only first-level section beneath the always-visible current action, which removes the previous peer-level `Session / View / Tools` split.

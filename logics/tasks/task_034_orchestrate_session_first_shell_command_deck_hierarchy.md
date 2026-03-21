@@ -1,9 +1,9 @@
 ## task_034_orchestrate_session_first_shell_command_deck_hierarchy - Orchestrate session-first shell command-deck hierarchy
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -27,12 +27,12 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Define and implement `Session` as the only first-level shell section beneath the always-visible current action.
-- [ ] 2. Define and implement `View` as a nested subordinate group inside `Session` while preserving reset-camera and camera-mode reachability.
-- [ ] 3. Define and implement `Tools` as a nested subordinate group inside `Session` while preserving inspecteur, diagnostics, and install access without reintroducing clutter.
-- [ ] 4. Update linked request, backlog, task, and any supporting UX notes needed to keep the session-first navigation wave traceable.
-- [ ] 5. Validate the resulting shell IA refinement against current repository delivery constraints and responsive shell behavior.
-- [ ] FINAL: Create dedicated git commit(s) for this orchestration scope.
+- [x] 1. Define and implement `Session` as the only first-level shell section beneath the always-visible current action.
+- [x] 2. Define and implement `View` as a nested subordinate group inside `Session` while preserving reset-camera and camera-mode reachability.
+- [x] 3. Define and implement `Tools` as a nested subordinate group inside `Session` while preserving inspecteur, diagnostics, and install access without reintroducing clutter.
+- [x] 4. Update linked request, backlog, task, and any supporting UX notes needed to keep the session-first navigation wave traceable.
+- [x] 5. Validate the resulting shell IA refinement against current repository delivery constraints and responsive shell behavior.
+- [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
 
 # AC Traceability
 - `item_106` -> Session-first top-level hierarchy is explicit. Proof target: menu IA update or implementation report.
@@ -59,13 +59,16 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] The shell exposes `Session` as the single first-level section below the current action.
-- [ ] `View` and `Tools` are re-presented as subordinate nested groups without losing access to the current action inventory.
-- [ ] The resulting shell IA refinement remains compatible with the existing shell-owned command deck and tactical-console direction.
-- [ ] Linked request, backlog, task, and related docs are updated with proofs and status.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] The shell exposes `Session` as the single first-level section below the current action.
+- [x] `View` and `Tools` are re-presented as subordinate nested groups without losing access to the current action inventory.
+- [x] The resulting shell IA refinement remains compatible with the existing shell-owned command deck and tactical-console direction.
+- [x] Linked request, backlog, task, and related docs are updated with proofs and status.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-- Pending.
+- Reworked `src/app/components/ShellMenu.tsx` so the menu now exposes one first-level `Session` section below the always-visible `Current action`, with `View` and `Tools` nested inside it instead of remaining peer top-level blocks.
+- Updated `src/app/styles/app.css` so nested subsections stay visually subordinate while preserving the current tactical-console direction and keeping the mobile sheet readable.
+- Extended `src/app/components/ShellMenu.test.tsx` to cover the session-first top-level structure plus nested `View` and `Tools` access, so the new grouping model cannot silently regress.
+- Visual browser checks were performed on desktop and mobile-sized viewports against the local app to confirm the nested `Session -> View / Tools` navigation remains readable and compact.

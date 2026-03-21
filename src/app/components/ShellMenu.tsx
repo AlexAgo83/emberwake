@@ -331,7 +331,7 @@ export const ShellMenu = memo(function ShellMenu({
 
               <section
                 aria-labelledby={`${menuId}-tools`}
-                className="shell-menu__subsection"
+                className="shell-menu__subsection shell-menu__subsection--tools"
                 data-subsection-tone="utility"
               >
                 <p className="shell-menu__subsection-title" id={`${menuId}-tools`}>

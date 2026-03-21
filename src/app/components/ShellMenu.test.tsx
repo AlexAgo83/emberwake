@@ -124,6 +124,26 @@ describe("ShellMenu", () => {
     expect(within(viewSection as HTMLElement).getByRole("button", { name: "Follow entity" })).toBeInTheDocument();
   });
 
+  it("keeps utility tools nested inside the session section without returning to peer top-level clutter", () => {
+    const props = createProps({
+      canInstall: true
+    });
+
+    render(<ShellMenu {...props} />);
+
+    const sessionSection = screen.getByText("Session").closest(".shell-menu__section");
+    expect(sessionSection).not.toBeNull();
+
+    const toolsSection = within(sessionSection as HTMLElement)
+      .getByText("Tools")
+      .closest(".shell-menu__subsection");
+
+    expect(toolsSection).toHaveClass("shell-menu__subsection--tools");
+    expect(within(toolsSection as HTMLElement).getByRole("button", { name: /Inspecteur/i })).toBeInTheDocument();
+    expect(within(toolsSection as HTMLElement).getByRole("button", { name: /Diagnostics/i })).toBeInTheDocument();
+    expect(within(toolsSection as HTMLElement).getByRole("button", { name: /Install app/i })).toBeInTheDocument();
+  });
+
   it("renders a stateful command deck trigger and contextual header for the live runtime", () => {
     const props = createProps({
       isOpen: false

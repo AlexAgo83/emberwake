@@ -430,14 +430,9 @@
   border-color: rgba(76, 226, 255, 0.12);
 }
 
-.shell-menu__subsection {
-  display: grid;
-  gap: 0.2rem;
-}
-
 .shell-menu__subsection-title {
   margin: 0;
-  padding: 0.2rem 0.68rem 0;
+  padding: 0.18rem 0.68rem 0;
   color: var(--emberwake-copy-dim);
   font-size: 0.58rem;
   font-weight: 800;
@@ -448,17 +443,7 @@
 .shell-menu__subsection-body {
   display: grid;
   gap: 0.2rem;
-}
-
-.shell-menu__subsection[data-subsection-tone="secondary"] .shell-menu__subsection-body {
-  padding: 0.28rem;
-  border: 1px solid rgba(255, 179, 92, 0.12);
-  border-radius: 0.66rem;
-  background: rgba(255, 179, 92, 0.03);
-}
-
-.shell-menu__subsection--view .shell-menu__subsection-title {
-  color: rgba(255, 200, 139, 0.82);
+  padding-left: 0.32rem;
 }
 
 .shell-menu__item {
@@ -577,12 +562,6 @@
   border: 1px solid rgba(246, 238, 232, 0.08);
   border-radius: 0.65rem;
   background: rgba(255, 255, 255, 0.015);
-}
-
-.shell-menu__group--view {
-  background:
-    linear-gradient(180deg, rgba(30, 22, 14, 0.2), rgba(16, 13, 20, 0.08)),
-    rgba(255, 255, 255, 0.015);
 }
 
 .shell-menu__choice-grid {
@@ -979,15 +958,6 @@
   .shell-menu__section-title {
     padding-inline: 0.82rem;
     font-size: 0.6rem;
-  }
-
-  .shell-menu__subsection-title {
-    padding-inline: 0.6rem;
-    font-size: 0.55rem;
-  }
-
-  .shell-menu__subsection[data-subsection-tone="secondary"] .shell-menu__subsection-body {
-    padding: 0.24rem;
   }
 
   .shell-menu__item {

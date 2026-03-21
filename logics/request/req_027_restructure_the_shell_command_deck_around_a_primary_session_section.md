@@ -1,8 +1,8 @@
 ## req_027_restructure_the_shell_command_deck_around_a_primary_session_section - Restructure the shell command deck around a primary Session section
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -150,7 +150,7 @@ flowchart TD
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request(s): `req_017_redesign_runtime_overlay_into_a_single_floating_menu`, `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b`, `req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus`
-- Task(s): `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`, `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`
+- Task(s): `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`, `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`, `task_034_orchestrate_session_first_shell_command_deck_hierarchy`
 
 # Backlog
 - `define_session_as_the_single_primary_shell_menu_section`
@@ -158,4 +158,5 @@ flowchart TD
 - `define_nested_tools_controls_within_session_without_reintroducing_menu_clutter`
 
 # Delivery note
-- Draft only. This request proposes a shell IA refinement where `Session` becomes the single first-level section below the current action and `View` / `Tools` become subordinate nested groups within it.
+- Implemented through `task_034_orchestrate_session_first_shell_command_deck_hierarchy`.
+- The accepted shell posture now keeps `Current action` visible while exposing `Session` as the single first-level section and re-presenting `View` and `Tools` as nested subordinate groups inside it.
