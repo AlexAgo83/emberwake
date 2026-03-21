@@ -1,4 +1,4 @@
-import { cameraContract } from "../constants/cameraContract";
+import { cameraContract } from "@engine/camera/cameraContract";
 import {
   clampZoom,
   createDefaultCameraState,

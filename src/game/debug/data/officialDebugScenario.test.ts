@@ -4,7 +4,7 @@ import {
   debugScenarioAuthoringContract,
   officialDebugScenario,
   validateOfficialDebugScenario
-} from "./officialDebugScenario";
+} from "@game/content/scenarios/officialDebugScenario";
 import { entityVisualDefinitions } from "@game/content/entities/entityData";
 
 describe("officialDebugScenario", () => {

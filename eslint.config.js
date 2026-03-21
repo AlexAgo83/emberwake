@@ -54,5 +54,22 @@ export default tseslint.config(
         }
       ]
     }
+  },
+  {
+    files: ["games/emberwake/src/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@app", "@app/*", "@src/game", "@src/game/*"],
+              message:
+                "Game-owned modules must not depend on app-shell modules or legacy src/game adapters. Depend on @engine or local game modules instead."
+            }
+          ]
+        }
+      ]
+    }
   }
 );
