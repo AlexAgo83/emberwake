@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { createInitialEmberwakeGameState } from "@game/runtime/emberwakeGameModule";
-import type { EmberwakeGameState } from "@game/runtime/emberwakeGameModule";
+import { createInitialEmberwakeGameState } from "@game";
+import type { EmberwakeGameState } from "@game";
 import {
   createDefaultRuntimeSessionState,
   readRuntimeSessionState,

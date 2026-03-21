@@ -1,9 +1,9 @@
 ## item_125_define_movement_resolution_against_non_traversable_world_space - Define movement resolution against non-traversable world space
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`.
 - Source file: `logics/request/req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay.md`.
+- Delivered through `games/emberwake/src/runtime/pseudoPhysics.ts`, `games/emberwake/src/runtime/pseudoPhysics.test.ts`, and `games/emberwake/src/runtime/entitySimulation.ts`, with deterministic axis-aware blocking against non-traversable world space.

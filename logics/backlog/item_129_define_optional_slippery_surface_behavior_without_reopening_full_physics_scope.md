@@ -1,9 +1,9 @@
 ## item_129_define_optional_slippery_surface_behavior_without_reopening_full_physics_scope - Define optional slippery-surface behavior without reopening full physics scope
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 96%
-> Confidence: 94%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay`.
 - Source file: `logics/request/req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay.md`.
+- Delivered through `games/emberwake/src/content/world/worldData.ts`, `games/emberwake/src/runtime/pseudoPhysics.ts`, and `games/emberwake/src/runtime/pseudoPhysics.test.ts`, with `slippery` shipped as a mild inertia-preserving modifier that stays inside the deterministic pseudo-physics posture.

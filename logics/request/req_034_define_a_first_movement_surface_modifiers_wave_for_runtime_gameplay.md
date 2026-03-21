@@ -1,8 +1,8 @@
 ## req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay - Define a first movement surface modifiers wave for runtime gameplay
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -109,3 +109,9 @@ flowchart TD
 - `define_a_first_movement_surface_modifier_contract_for_traversable_world_space`
 - `define_slow_surface_behavior_for_fixed_step_runtime_movement`
 - `define_optional_slippery_surface_behavior_without_reopening_full_physics_scope`
+
+# Implementation notes
+- Delivered through `worldData`, `worldGeneration`, `pseudoPhysics`, and runtime movement tests so traversable movement modifiers are now explicit and separate from both terrain identity and blocking obstacles.
+- Shipped the first bounded modifier contract with `normal`, `slow`, and `slippery`, all sampled deterministically from the generated world only on traversable space.
+- `Slow` reduces traversal speed without changing collision semantics, giving the first safe gameplay-facing movement modifier.
+- `Slippery` shipped with a bounded inertia profile that preserves deterministic fixed-step behavior and avoids reopening full physics scope.

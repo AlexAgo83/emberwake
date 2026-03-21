@@ -97,6 +97,7 @@ export {
 export { emberwakeRenderPerformanceContract } from "./presentation/emberwakeRenderPerformance";
 export type { EmberwakeRenderSurfaceMode } from "./presentation/emberwakeRenderPerformance";
 export type { EmberwakeRuntimeRenderLayerId } from "./presentation/emberwakeRenderLayers";
+export type { EmberwakeGameAction, EmberwakeGameState } from "./runtime/emberwakeGameModule";
 export type {
   AutonomySystemState,
   CombatSystemState,

@@ -3,8 +3,8 @@
 > Status: Accepted
 > Drivers: Preserve the current fixed-step simulation posture; add collision and movement feel without importing rigid-body complexity; keep runtime behavior easy to test, debug, and reason about.
 > Related request: `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`, `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay`
-> Related backlog: `TBD`
-> Related task: `TBD`
+> Related backlog: `item_125_define_movement_resolution_against_non_traversable_world_space`, `item_126_define_a_lightweight_entity_separation_posture_for_runtime_collisions`, `item_128_define_slow_surface_behavior_for_fixed_step_runtime_movement`, `item_129_define_optional_slippery_surface_behavior_without_reopening_full_physics_scope`
+> Related task: `task_037_orchestrate_single_slot_persistence_and_pseudo_physics_foundations`
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview

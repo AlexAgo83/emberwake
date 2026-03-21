@@ -3,8 +3,8 @@
 > Status: Accepted
 > Drivers: Prevent world rendering and gameplay traversal rules from collapsing into one contract; keep collision, terrain readability, and movement feel independently evolvable; support deterministic generation of both blocking and non-blocking world features.
 > Related request: `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`, `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay`
-> Related backlog: `TBD`
-> Related task: `TBD`
+> Related backlog: `item_124_define_a_first_obstacle_layer_representation_for_runtime_traversal`, `item_127_define_a_first_movement_surface_modifier_contract_for_traversable_world_space`
+> Related task: `task_037_orchestrate_single_slot_persistence_and_pseudo_physics_foundations`
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview

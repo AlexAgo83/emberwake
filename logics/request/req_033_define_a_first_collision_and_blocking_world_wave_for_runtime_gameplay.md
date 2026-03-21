@@ -1,8 +1,8 @@
 ## req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay - Define a first collision and blocking-world wave for runtime gameplay
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -106,3 +106,9 @@ flowchart TD
 - `define_a_first_obstacle_layer_representation_for_runtime_traversal`
 - `define_movement_resolution_against_non_traversable_world_space`
 - `define_a_lightweight_entity_separation_posture_for_runtime_collisions`
+
+# Implementation notes
+- Delivered through `worldData`, `worldGeneration`, `chunkDebugData`, `pseudoPhysics`, and `entitySimulation`, with terrain, obstacle, and movement-surface semantics now represented as separate layers.
+- Added a deterministic obstacle layer with a protected bootstrap zone so blocked world space is no longer inferred from terrain kind alone.
+- Runtime movement now resolves against non-traversable world space through bounded axis-aware blocking instead of free traversal.
+- Lightweight static-entity separation now prevents obvious overlap for the first relevant collidable entity set without introducing rigid-body response.

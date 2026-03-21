@@ -3,8 +3,8 @@
 > Status: Accepted
 > Drivers: Prevent obviously broken entity overlap; keep entity/entity interaction stable without introducing rigid-body response; preserve deterministic gameplay simulation.
 > Related request: `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`
-> Related backlog: `TBD`
-> Related task: `TBD`
+> Related backlog: `item_126_define_a_lightweight_entity_separation_posture_for_runtime_collisions`
+> Related task: `task_037_orchestrate_single_slot_persistence_and_pseudo_physics_foundations`
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview

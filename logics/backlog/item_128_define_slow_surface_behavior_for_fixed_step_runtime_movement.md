@@ -1,9 +1,9 @@
 ## item_128_define_slow_surface_behavior_for_fixed_step_runtime_movement - Define slow-surface behavior for fixed-step runtime movement
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay`.
 - Source file: `logics/request/req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay.md`.
+- Delivered through `games/emberwake/src/content/world/worldData.ts`, `games/emberwake/src/runtime/pseudoPhysics.ts`, and `games/emberwake/src/runtime/pseudoPhysics.test.ts`, with `slow` implemented as a bounded speed multiplier on traversable space.

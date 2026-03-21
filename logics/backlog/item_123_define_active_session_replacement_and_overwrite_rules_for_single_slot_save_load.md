@@ -1,9 +1,9 @@
 ## item_123_define_active_session_replacement_and_overwrite_rules_for_single_slot_save_load - Define active-session replacement and overwrite rules for single-slot save/load
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry`.
 - Source file: `logics/request/req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry.md`.
+- Delivered through `src/app/AppShell.tsx` and `src/app/hooks/useRuntimeSession.ts`, with direct single-slot overwrite on save, explicit replacement when loading into the active session, and preserved `New game` replacement safeguards carried forward from the main-menu wave.

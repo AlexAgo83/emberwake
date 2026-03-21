@@ -16,7 +16,7 @@ import { defaultCharacterName, validateCharacterName } from "./model/characterNa
 import type {
   DesktopControlBindings
 } from "../game/input/model/singleEntityControlContract";
-import type { EmberwakeGameState } from "@game/runtime/emberwakeGameModule";
+import type { EmberwakeGameState } from "@game";
 import { appConfig } from "../shared/config/appConfig";
 
 const LazyActiveRuntimeShellContent = lazy(async () => {

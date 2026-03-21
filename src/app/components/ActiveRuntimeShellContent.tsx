@@ -31,7 +31,7 @@ import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage"
 import type { ReturnTypeUseLogicalViewportModel } from "../../game/debug/types";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
 import { describeDesktopMovementBindings } from "../model/desktopControlBindings";
-import type { EmberwakeGameState } from "@game/runtime/emberwakeGameModule";
+import type { EmberwakeGameState } from "@game";
 
 type ActiveRuntimeShellContentProps = {
   activeScene: AppSceneId;

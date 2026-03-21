@@ -1,9 +1,9 @@
 ## item_122_define_save_resume_and_load_availability_across_shell_owned_surfaces - Define save, resume, and load availability across shell-owned surfaces
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,3 +56,4 @@ flowchart LR
 # Notes
 - Derived from request `req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry`.
 - Source file: `logics/request/req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry.md`.
+- Delivered through `src/app/components/AppMetaScenePanel.tsx`, `src/app/components/AppMetaScenePanel.test.tsx`, and `src/app/AppShell.tsx`, with `Save game`, `Resume runtime`, and `Load game` now reading consistently from the shell-owned main menu.

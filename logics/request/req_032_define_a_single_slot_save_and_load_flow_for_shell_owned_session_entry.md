@@ -1,8 +1,8 @@
 ## req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry - Define a single-slot save and load flow for shell-owned session entry
 > From version: 0.2.2
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -124,3 +124,9 @@ flowchart TD
 - `define_a_single_slot_saved_session_contract_for_local_first_persistence`
 - `define_save_resume_and_load_availability_across_shell_owned_surfaces`
 - `define_active_session_replacement_and_overwrite_rules_for_single_slot_save_load`
+
+# Implementation notes
+- Delivered through `savedRuntimeSessionStorage`, `storageDomainCatalog`, `useRuntimeSession`, `AppShell`, and `AppMetaScenePanel` so the product now has one persisted saved-session slot alongside the in-memory active session.
+- `Save game` writes the current runtime session plus minimal metadata (`playerName`, `savedAtIso`, `sessionRevision`, `worldSeed`) into the single slot without reopening multi-slot scope.
+- `Load game` restores the saved slot into the active session and increments `sessionRevision`, keeping `Resume` distinct as the in-memory-only re-entry path.
+- The main menu now exposes real save/load affordances and a saved-slot summary while keeping the whole flow local-first and browser-storage compatible.

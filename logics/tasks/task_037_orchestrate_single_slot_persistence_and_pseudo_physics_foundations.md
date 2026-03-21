@@ -1,9 +1,9 @@
 ## task_037_orchestrate_single_slot_persistence_and_pseudo_physics_foundations - Orchestrate single-slot persistence and pseudo-physics foundations
 > From version: 0.2.2
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -35,18 +35,18 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Define and implement the first single-slot saved-session contract, including minimal metadata and local-first storage compatibility.
-- [ ] 2. Define and implement where `Save`, `Resume`, and `Load game` are available across current shell-owned surfaces.
-- [ ] 3. Define and implement replacement, overwrite, and confirmation rules for `Save`, `Load game`, and `New game` in the single-slot model.
-- [ ] 4. Define and implement a first obstacle-layer representation that stays separate from visual terrain identity while remaining compatible with deterministic world generation.
-- [ ] 5. Define and implement first-slice movement resolution against non-traversable world space in a fixed-step deterministic posture.
-- [ ] 6. Define and implement a lightweight entity/entity separation posture for the first relevant collidable entity set.
-- [ ] 7. Define and implement the movement-surface modifier contract for traversable world space, distinct from both terrain and obstacle layers.
-- [ ] 8. Define and implement `slow` surface behavior as the first guaranteed movement modifier.
-- [ ] 9. Evaluate and implement `slippery` surface behavior only if it remains bounded, readable, and compatible with the deterministic pseudo-physics posture.
-- [ ] 10. Update linked requests, ADRs, backlog items, and any supporting runtime/gameplay docs so persistence and pseudo-physics foundations remain traceable.
-- [ ] 11. Validate the resulting wave with repository delivery constraints, runtime tests, and browser smoke coverage.
-- [ ] FINAL: Create dedicated git commit(s) for this orchestration scope.
+- [x] 1. Define and implement the first single-slot saved-session contract, including minimal metadata and local-first storage compatibility.
+- [x] 2. Define and implement where `Save`, `Resume`, and `Load game` are available across current shell-owned surfaces.
+- [x] 3. Define and implement replacement, overwrite, and confirmation rules for `Save`, `Load game`, and `New game` in the single-slot model.
+- [x] 4. Define and implement a first obstacle-layer representation that stays separate from visual terrain identity while remaining compatible with deterministic world generation.
+- [x] 5. Define and implement first-slice movement resolution against non-traversable world space in a fixed-step deterministic posture.
+- [x] 6. Define and implement a lightweight entity/entity separation posture for the first relevant collidable entity set.
+- [x] 7. Define and implement the movement-surface modifier contract for traversable world space, distinct from both terrain and obstacle layers.
+- [x] 8. Define and implement `slow` surface behavior as the first guaranteed movement modifier.
+- [x] 9. Evaluate and implement `slippery` surface behavior only if it remains bounded, readable, and compatible with the deterministic pseudo-physics posture.
+- [x] 10. Update linked requests, ADRs, backlog items, and any supporting runtime/gameplay docs so persistence and pseudo-physics foundations remain traceable.
+- [x] 11. Validate the resulting wave with repository delivery constraints, runtime tests, and browser smoke coverage.
+- [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
 
 # AC Traceability
 - `item_121` -> Single-slot saved-session contract is explicit. Proof target: storage contract or implementation report.
@@ -79,11 +79,11 @@ flowchart TD
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Single-slot `Save / Load` is real, understandable, and safe across shell-owned entry surfaces.
-- [ ] World blocking works through an explicit obstacle layer rather than through terrain kind alone.
-- [ ] Movement resolution and entity separation are deterministic and compatible with the fixed-step runtime posture.
-- [ ] Traversable movement modifiers are explicit, with `slow` shipped and `slippery` either shipped safely or explicitly deferred.
-- [ ] Linked request, backlog, task, and ADR docs are updated with proofs and status.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Single-slot `Save / Load` is real, understandable, and safe across shell-owned entry surfaces.
+- [x] World blocking works through an explicit obstacle layer rather than through terrain kind alone.
+- [x] Movement resolution and entity separation are deterministic and compatible with the fixed-step runtime posture.
+- [x] Traversable movement modifiers are explicit, with `slow` shipped and `slippery` either shipped safely or explicitly deferred.
+- [x] Linked request, backlog, task, and ADR docs are updated with proofs and status.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
