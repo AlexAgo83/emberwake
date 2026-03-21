@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import type { RefObject } from "react";
 
 import { createWorldPickingSample } from "@engine/world/worldViewMath";
 import type { CameraState } from "../../camera/model/cameraMath";
@@ -22,7 +21,7 @@ type WorldInteractionDiagnostics = {
 
 type UseWorldInteractionDiagnosticsOptions = {
   camera: CameraState;
-  surfaceRef: RefObject<HTMLElement | null>;
+  surfaceElement: HTMLElement | null;
   viewport: ViewportForWorldDiagnostics;
 };
 
@@ -35,13 +34,12 @@ const emptyState: WorldInteractionDiagnostics = {
 
 export function useWorldInteractionDiagnostics({
   camera,
-  surfaceRef,
+  surfaceElement,
   viewport
 }: UseWorldInteractionDiagnosticsOptions): WorldInteractionDiagnostics {
   const [diagnostics, setDiagnostics] = useState<WorldInteractionDiagnostics>(emptyState);
 
   useEffect(() => {
-    const surfaceElement = surfaceRef.current;
     if (!surfaceElement) {
       return;
     }
@@ -108,7 +106,7 @@ export function useWorldInteractionDiagnostics({
       surfaceElement.removeEventListener("pointerleave", handlePointerLeave);
       surfaceElement.removeEventListener("pointerdown", handlePointerDown);
     };
-  }, [camera, surfaceRef, viewport]);
+  }, [camera, surfaceElement, viewport]);
 
   return diagnostics;
 }

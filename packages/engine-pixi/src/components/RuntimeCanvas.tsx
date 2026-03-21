@@ -1,5 +1,6 @@
 import { Application } from "@pixi/react";
-import type { PropsWithChildren, RefObject } from "react";
+import { useCallback, useState } from "react";
+import type { PropsWithChildren } from "react";
 
 import { RuntimeFrameLoopBridge } from "./RuntimeFrameLoopBridge";
 import { RuntimeSurfaceBoundary } from "./RuntimeSurfaceBoundary";
@@ -11,8 +12,8 @@ type RuntimeCanvasProps = PropsWithChildren<{
   glowClassName?: string;
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
+  onSurfaceElementChange?: (element: HTMLDivElement | null) => void;
   onVisualFrame?: (timestampMs: number) => void;
-  surfaceRef?: RefObject<HTMLDivElement | null>;
 }>;
 
 export function RuntimeCanvas({
@@ -23,11 +24,20 @@ export function RuntimeCanvas({
   glowClassName = "runtime-surface__glow",
   onRendererError,
   onRendererReady,
-  onVisualFrame,
-  surfaceRef
+  onSurfaceElementChange,
+  onVisualFrame
 }: RuntimeCanvasProps) {
+  const [surfaceElement, setSurfaceElement] = useState<HTMLDivElement | null>(null);
+  const handleSurfaceRef = useCallback(
+    (element: HTMLDivElement | null) => {
+      setSurfaceElement(element);
+      onSurfaceElementChange?.(element);
+    },
+    [onSurfaceElementChange]
+  );
+
   return (
-    <div className={className} data-runtime-surface={dataRuntimeSurface} ref={surfaceRef}>
+    <div className={className} data-runtime-surface={dataRuntimeSurface} ref={handleSurfaceRef}>
       <RuntimeSurfaceBoundary
         onError={(error) => {
           onRendererError?.(error.message);
@@ -39,7 +49,7 @@ export function RuntimeCanvas({
           autoStart
           backgroundColor={backgroundColor}
           onInit={onRendererReady}
-          resizeTo={surfaceRef ?? window}
+          resizeTo={surfaceElement ?? window}
           sharedTicker={false}
         >
           <RuntimeFrameLoopBridge onVisualFrame={onVisualFrame} />

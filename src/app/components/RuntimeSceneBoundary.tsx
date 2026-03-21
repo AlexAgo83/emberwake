@@ -1,5 +1,4 @@
 import { Suspense, lazy } from "react";
-import type { RefObject } from "react";
 
 import type { CameraState } from "@engine/camera/cameraMath";
 import type { PresentedEntity } from "../../game/entities/model/entityContract";
@@ -21,10 +20,10 @@ type RuntimeSceneBoundaryProps = {
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
   onRetryRuntime?: () => void;
+  onSurfaceElementChange?: (element: HTMLDivElement | null) => void;
   onVisualFrame?: (timestampMs: number) => void;
   rendererMessage: string;
   scene: AppSceneId;
-  surfaceRef?: RefObject<HTMLDivElement | null>;
   visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
   visibleChunks: ChunkCoordinate[];
   viewport: {
@@ -78,10 +77,10 @@ export function RuntimeSceneBoundary({
   onRendererError,
   onRendererReady,
   onRetryRuntime,
+  onSurfaceElementChange,
   onVisualFrame,
   rendererMessage,
   scene,
-  surfaceRef,
   visibleEntities,
   visibleChunks,
   viewport,
@@ -128,8 +127,8 @@ export function RuntimeSceneBoundary({
           camera={camera}
           onRendererError={onRendererError}
           onRendererReady={onRendererReady}
+          onSurfaceElementChange={onSurfaceElementChange}
           onVisualFrame={onVisualFrame}
-          surfaceRef={surfaceRef}
           visibleEntities={visibleEntities}
           visibleChunks={visibleChunks}
           viewport={viewport}

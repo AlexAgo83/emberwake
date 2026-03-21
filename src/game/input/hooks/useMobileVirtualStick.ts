@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import type { RefObject } from "react";
 
 import { createIdleMovementIntent } from "../model/singleEntityControlContract";
 import { resolveVirtualStickState } from "../model/virtualStickMath";
@@ -14,7 +13,7 @@ export type MobileVirtualStickState = {
 };
 
 type UseMobileVirtualStickOptions = {
-  surfaceRef: RefObject<HTMLElement | null>;
+  surfaceElement: HTMLElement | null;
 };
 
 const hiddenStickState: MobileVirtualStickState = {
@@ -31,12 +30,11 @@ const hiddenStickState: MobileVirtualStickState = {
 };
 
 export function useMobileVirtualStick({
-  surfaceRef
+  surfaceElement
 }: UseMobileVirtualStickOptions): MobileVirtualStickState {
   const [stickState, setStickState] = useState<MobileVirtualStickState>(hiddenStickState);
 
   useEffect(() => {
-    const surfaceElement = surfaceRef.current;
     if (!surfaceElement) {
       return;
     }
@@ -107,7 +105,7 @@ export function useMobileVirtualStick({
       surfaceElement.removeEventListener("pointerup", handlePointerRelease);
       surfaceElement.removeEventListener("pointercancel", handlePointerRelease);
     };
-  }, [surfaceRef]);
+  }, [surfaceElement]);
 
   return stickState;
 }

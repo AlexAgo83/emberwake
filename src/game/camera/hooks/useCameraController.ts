@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { RefObject } from "react";
 
 import { cameraContract } from "@engine/camera/cameraContract";
 import {
@@ -22,7 +21,7 @@ type UseCameraControllerOptions = {
   followedWorldPosition: WorldPoint;
   initialCameraState?: CameraState;
   onCameraStateChange?: (cameraState: CameraState) => void;
-  surfaceRef: RefObject<HTMLElement | null>;
+  surfaceElement: HTMLElement | null;
   viewport: ViewportForCamera;
 };
 
@@ -51,7 +50,7 @@ export function useCameraController({
   followedWorldPosition,
   initialCameraState,
   onCameraStateChange,
-  surfaceRef,
+  surfaceElement,
   viewport
 }: UseCameraControllerOptions) {
   const [cameraState, setCameraState] = useState<CameraState>(() =>
@@ -91,7 +90,6 @@ export function useCameraController({
   }, [cameraMode, followedWorldPosition.x, followedWorldPosition.y]);
 
   useEffect(() => {
-    const surfaceElement = surfaceRef.current;
     if (!surfaceElement) {
       return;
     }
@@ -274,7 +272,7 @@ export function useCameraController({
       surfaceElement.removeEventListener("touchcancel", handleTouchEnd);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [cameraMode, cameraState.zoom, debugCameraEnabled, surfaceRef, viewport.fitScale]);
+  }, [cameraMode, cameraState.zoom, debugCameraEnabled, surfaceElement, viewport.fitScale]);
 
   const resetCamera = useCallback(() => {
     setCameraState(createDefaultCameraState());

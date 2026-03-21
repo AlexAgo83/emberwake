@@ -40,7 +40,7 @@ describe("useCameraController", () => {
           debugCameraEnabled: false,
           followedWorldPosition,
           initialCameraState: createDefaultCameraState(),
-          surfaceRef,
+          surfaceElement: surfaceRef.current,
           viewport: {
             fitScale: 1
           }
@@ -73,7 +73,7 @@ describe("useCameraController", () => {
         debugCameraEnabled: false,
         followedWorldPosition: { x: 0, y: 0 },
         initialCameraState,
-        surfaceRef,
+        surfaceElement: surfaceRef.current,
         viewport: {
           fitScale: 1
         }
@@ -107,12 +107,53 @@ describe("useCameraController", () => {
         debugCameraEnabled: true,
         followedWorldPosition: { x: 0, y: 0 },
         initialCameraState,
-        surfaceRef,
+        surfaceElement: surfaceRef.current,
         viewport: {
           fitScale: 1
         }
       })
     );
+
+    act(() => {
+      dispatchTouchEvent(surfaceElement, "touchstart", [
+        { clientX: 100, clientY: 100 },
+        { clientX: 180, clientY: 100 }
+      ]);
+      dispatchTouchEvent(surfaceElement, "touchmove", [
+        { clientX: 150, clientY: 120 },
+        { clientX: 250, clientY: 140 }
+      ]);
+      dispatchTouchEvent(surfaceElement, "touchend", []);
+    });
+
+    expect(result.current.cameraState).not.toEqual(initialCameraState);
+  });
+
+  it("attaches touch gesture handlers when the surface appears after the initial render", () => {
+    const surfaceElement = document.createElement("div");
+    const initialCameraState = createDefaultCameraState();
+    const { result, rerender } = renderHook(
+      ({ runtimeSurfaceElement }) =>
+        useCameraController({
+          cameraMode: "free",
+          debugCameraEnabled: true,
+          followedWorldPosition: { x: 0, y: 0 },
+          initialCameraState,
+          surfaceElement: runtimeSurfaceElement,
+          viewport: {
+            fitScale: 1
+          }
+        }),
+      {
+        initialProps: {
+          runtimeSurfaceElement: null as HTMLElement | null
+        }
+      }
+    );
+
+    rerender({
+      runtimeSurfaceElement: surfaceElement
+    });
 
     act(() => {
       dispatchTouchEvent(surfaceElement, "touchstart", [

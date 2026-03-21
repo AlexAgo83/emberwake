@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { AppMetaScenePanel } from "./components/AppMetaScenePanel";
 import { EntityInspectionPanel } from "./components/EntityInspectionPanel";
@@ -33,11 +33,16 @@ import { createIdleMovementIntent } from "../game/input/model/singleEntityContro
 
 export function AppShell() {
   const shellRef = useRef<HTMLElement>(null);
-  const runtimeSurfaceRef = useRef<HTMLDivElement>(null);
+  const runtimeSurfaceRef = useRef<HTMLDivElement | null>(null);
+  const [runtimeSurfaceElement, setRuntimeSurfaceElement] = useState<HTMLDivElement | null>(null);
   useDocumentViewportLock();
-  useRuntimeInteractionGuards(runtimeSurfaceRef);
+  const handleRuntimeSurfaceElementChange = useCallback((element: HTMLDivElement | null) => {
+    runtimeSurfaceRef.current = element;
+    setRuntimeSurfaceElement(element);
+  }, []);
+  useRuntimeInteractionGuards(runtimeSurfaceElement);
   const mobileVirtualStick = useMobileVirtualStick({
-    surfaceRef: runtimeSurfaceRef
+    surfaceElement: runtimeSurfaceElement
   });
   const { canInstall, promptInstall } = useInstallPrompt();
   const runtimeControlState = useSingleEntityControl({
@@ -83,13 +88,13 @@ export function AppShell() {
     followedWorldPosition,
     initialCameraState: runtimeSession.cameraState,
     onCameraStateChange: setCameraState,
-    surfaceRef: runtimeSurfaceRef,
+    surfaceElement: runtimeSurfaceElement,
     viewport
   });
   const chunkVisibility = useVisibleChunkSet(cameraState, viewport);
   const worldDiagnostics = useWorldInteractionDiagnostics({
     camera: cameraState,
-    surfaceRef: runtimeSurfaceRef,
+    surfaceElement: runtimeSurfaceElement,
     viewport
   });
   const entityWorld = useEntityWorld({
@@ -253,10 +258,10 @@ export function AppShell() {
           onRendererError={markFailed}
           onRendererReady={markReady}
           onRetryRuntime={handleRetryRuntime}
+          onSurfaceElementChange={handleRuntimeSurfaceElementChange}
           onVisualFrame={simulationState.controls.advanceVisualFrame}
           rendererMessage={rendererState.message}
           scene={activeScene}
-          surfaceRef={runtimeSurfaceRef}
           visibleEntities={entityWorld.visibleEntities}
           visibleChunks={chunkVisibility.visibleChunks}
           viewport={viewport}

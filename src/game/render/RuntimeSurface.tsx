@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import type { ReactNode, RefObject } from "react";
+import type { ReactNode } from "react";
 
 import type { CameraState } from "@engine/camera/cameraMath";
 import { RuntimeCanvas } from "@engine-pixi/components/RuntimeCanvas";
@@ -17,8 +17,8 @@ type RuntimeSurfaceProps = {
   camera: CameraState;
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
+  onSurfaceElementChange?: (element: HTMLDivElement | null) => void;
   onVisualFrame?: (timestampMs: number) => void;
-  surfaceRef?: RefObject<HTMLDivElement | null>;
   visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
   visibleChunks: ChunkCoordinate[];
   viewport: {
@@ -35,8 +35,8 @@ export function RuntimeSurface({
   camera,
   onRendererError,
   onRendererReady,
+  onSurfaceElementChange,
   onVisualFrame,
-  surfaceRef,
   visibleEntities,
   visibleChunks,
   viewport,
@@ -59,8 +59,8 @@ export function RuntimeSurface({
     <RuntimeCanvas
       onRendererError={onRendererError}
       onRendererReady={onRendererReady}
+      onSurfaceElementChange={onSurfaceElementChange}
       onVisualFrame={onVisualFrame}
-      surfaceRef={surfaceRef}
     >
       {emberwakeRuntimeRenderLayerOrder.map((layerId) => (
         <Fragment key={layerId}>{renderLayers[layerId]}</Fragment>

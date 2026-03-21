@@ -1,11 +1,9 @@
 import { useEffect } from "react";
-import type { RefObject } from "react";
 
 const guardedEvents = ["contextmenu", "dragstart", "selectstart"];
 
-export function useRuntimeInteractionGuards(surfaceRef: RefObject<HTMLElement | null>) {
+export function useRuntimeInteractionGuards(surfaceElement: HTMLElement | null) {
   useEffect(() => {
-    const surfaceElement = surfaceRef.current;
     if (!surfaceElement) {
       return;
     }
@@ -23,5 +21,5 @@ export function useRuntimeInteractionGuards(surfaceRef: RefObject<HTMLElement | 
         surfaceElement.removeEventListener(eventName, preventDefault);
       });
     };
-  }, [surfaceRef]);
+  }, [surfaceElement]);
 }
