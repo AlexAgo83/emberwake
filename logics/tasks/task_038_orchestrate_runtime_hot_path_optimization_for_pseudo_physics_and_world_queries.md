@@ -1,0 +1,69 @@
+## task_038_orchestrate_runtime_hot_path_optimization_for_pseudo_physics_and_world_queries - Orchestrate runtime hot-path optimization for pseudo-physics and world queries
+> From version: 0.2.3
+> Status: Draft
+> Understanding: 98%
+> Confidence: 96%
+> Progress: 0%
+> Complexity: High
+> Theme: Performance
+> Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
+
+# Context
+- Derived from backlog items `item_130_profile_and_confirm_runtime_hot_path_regression_sources_after_pseudo_physics_wave`, `item_131_cache_sampled_world_layers_for_deterministic_obstacle_and_surface_queries`, and `item_132_remove_repeated_stable_collider_work_from_the_fixed_step_runtime_loop`.
+- Related request(s): `req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries`.
+- The repository now has obstacle-based traversal, lightweight pseudo-physics, and movement-surface modifiers, but the live runtime appears to suffer from a player-facing symptom where lower FPS can reduce movement speed over real time.
+- This orchestration task groups the first bounded optimization wave so profiling, query reuse, and stable-collider cleanup advance together instead of creating partial fixes that leave the core symptom ambiguous.
+
+# Dependencies
+- Blocking: `task_037_orchestrate_single_slot_persistence_and_pseudo_physics_foundations`.
+- Unblocks: hot-path optimization of runtime traversal, confirmation of movement-throughput slowdown sources, and follow-up gameplay work that depends on trustworthy movement speed under load.
+
+```mermaid
+%% logics-signature: task|orchestrate-runtime-hot-path-optimizatio|item-130-profile-and-confirm-runtime-hot|1-profile-and-confirm-the-first|npm-run-ci
+flowchart TD
+    Profile[item_130 profile runtime hot path] --> Wave[Runtime hot-path optimization wave]
+    Cache[item_131 cache sampled world layers] --> Wave
+    Stable[item_132 remove repeated stable collider work] --> Wave
+```
+
+# Plan
+- [ ] 1. Profile and confirm the first credible runtime hot-path regression sources after the pseudo-physics wave, including the lower-FPS movement-slowdown symptom.
+- [ ] 2. Define and implement bounded reuse or caching for sampled world tile layers so obstacle and surface checks stop repeating equivalent deterministic work.
+- [ ] 3. Define and implement reuse of stable support-collider inputs so the fixed-step loop stops rebuilding immutable collision data.
+- [ ] 4. Re-evaluate movement throughput under lower-FPS conditions and confirm whether catch-up saturation remains part of the symptom after the hot-path wins land.
+- [ ] 5. Update linked request, backlog, task, and supporting notes so the optimization wave remains traceable.
+- [ ] 6. Validate the resulting optimization wave against repository delivery constraints and live runtime behavior.
+- [ ] FINAL: Create dedicated git commit(s) for this orchestration scope.
+
+# AC Traceability
+- `item_130` -> Runtime hot-path regression sources are confirmed. Proof target: profiling summary, runtime metrics report, or implementation note.
+- `item_131` -> World-layer query reuse is explicit. Proof target: cache contract, implementation report, or test summary.
+- `item_132` -> Stable collider reuse is explicit. Proof target: implementation note or collision-loop summary.
+
+# Decision framing
+- Product framing: Required
+- Product signals: stable movement speed under load and better runtime feel
+- Product follow-up: Treat this wave as a runtime-correction slice, not as optional polish.
+- Architecture framing: Required
+- Architecture signals: deterministic hot-path efficiency and bounded optimization
+- Architecture follow-up: Preserve layered world semantics while making the fixed-step loop cheaper and more trustworthy.
+
+# Links
+- Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
+- Architecture decision(s): `adr_032_separate_visual_terrain_blocking_obstacles_and_movement_surface_modifiers`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_034_model_traversable_surface_effects_as_bounded_movement_modifiers`, `adr_035_resolve_entity_collisions_as_lightweight_deterministic_separation`
+- Backlog item(s): `item_130_profile_and_confirm_runtime_hot_path_regression_sources_after_pseudo_physics_wave`, `item_131_cache_sampled_world_layers_for_deterministic_obstacle_and_surface_queries`, `item_132_remove_repeated_stable_collider_work_from_the_fixed_step_runtime_loop`
+- Request(s): `req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries`
+
+# Validation
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
+
+# Definition of Done (DoD)
+- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [ ] The first credible source(s) of runtime movement slowdown under lower FPS are confirmed rather than guessed.
+- [ ] World-layer queries reuse deterministic sampled data instead of repeating equivalent work in the hot path.
+- [ ] Stable support-collider data is no longer rebuilt unnecessarily inside the fixed-step runtime loop.
+- [ ] Linked request, backlog, and task docs are updated with proofs and status.
+- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [ ] Status is `Done` and progress is `100%`.
