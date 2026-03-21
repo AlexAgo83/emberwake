@@ -1,7 +1,9 @@
 import { useRef } from "react";
 
 import { EntityInspectionPanel } from "./components/EntityInspectionPanel";
+import { RuntimeSceneBoundary } from "./components/RuntimeSceneBoundary";
 import { ShellMenu } from "./components/ShellMenu";
+import { useAppScene } from "./hooks/useAppScene";
 import { useDocumentViewportLock } from "./hooks/useDocumentViewportLock";
 import { useFullscreenController } from "./hooks/useFullscreenController";
 import { useInstallPrompt } from "./hooks/useInstallPrompt";
@@ -20,7 +22,6 @@ import { entityContract } from "../game/entities/model/entityContract";
 import { MobileVirtualStickOverlay } from "../game/input/components/MobileVirtualStickOverlay";
 import { useMobileVirtualStick } from "../game/input/hooks/useMobileVirtualStick";
 import { useSingleEntityControl } from "../game/input/hooks/useSingleEntityControl";
-import { RuntimeSurface } from "../game/render/RuntimeSurface";
 import { useWorldInteractionDiagnostics } from "../game/world/hooks/useWorldInteractionDiagnostics";
 import { useVisibleChunkSet } from "../game/world/hooks/useVisibleChunkSet";
 import { appConfig } from "../shared/config/appConfig";
@@ -66,6 +67,9 @@ export function AppShell() {
     visibleChunks: chunkVisibility.visibleChunks
   });
   const { markFailed, markReady, rendererState } = useRendererHealth();
+  const appScene = useAppScene({
+    rendererStatus: rendererState.status
+  });
   const {
     preferences,
     setDebugPanelVisible,
@@ -95,13 +99,17 @@ export function AppShell() {
       className="app-shell"
       data-app-ready="true"
       data-layout-mode={viewport.layoutMode}
+      data-scene={appScene.activeScene}
+      data-shell-surface={appScene.shellSurface}
       ref={shellRef}
     >
       <section className="app-shell__runtime" aria-label="Interactive runtime shell">
-        <RuntimeSurface
+        <RuntimeSceneBoundary
           camera={cameraState}
           onRendererError={markFailed}
           onRendererReady={markReady}
+          rendererMessage={rendererState.message}
+          scene={appScene.activeScene}
           surfaceRef={runtimeSurfaceRef}
           visibleEntities={entityWorld.visibleEntities}
           visibleChunks={chunkVisibility.visibleChunks}
@@ -117,6 +125,7 @@ export function AppShell() {
           diagnosticsEnabled={appConfig.diagnosticsEnabled}
           diagnosticsVisible={diagnosticsVisible}
           inspecteurVisible={inspecteurVisible}
+          isOpen={appScene.isMenuOpen}
           isFullscreen={isFullscreen}
           isFullscreenSupported={isSupported}
           onEnterFullscreen={() => {
@@ -124,6 +133,14 @@ export function AppShell() {
           }}
           onInstall={() => {
             void promptInstall();
+          }}
+          onOpenChange={(isOpen) => {
+            if (isOpen) {
+              appScene.openMenu();
+              return;
+            }
+
+            appScene.closeShellSurface();
           }}
           onResetCamera={resetCamera}
           onSetCameraMode={setCameraMode}

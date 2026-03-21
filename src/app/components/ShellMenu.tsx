@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef } from "react";
 
 import type { CameraMode } from "../../game/camera/model/cameraMode";
 
@@ -8,10 +8,12 @@ type ShellMenuProps = {
   diagnosticsEnabled: boolean;
   diagnosticsVisible: boolean;
   inspecteurVisible: boolean;
+  isOpen: boolean;
   isFullscreen: boolean;
   isFullscreenSupported: boolean;
   onEnterFullscreen: () => void;
   onInstall: () => void;
+  onOpenChange: (isOpen: boolean) => void;
   onResetCamera: () => void;
   onSetCameraMode: (cameraMode: CameraMode) => void;
   onToggleDiagnostics: () => void;
@@ -24,16 +26,17 @@ export function ShellMenu({
   diagnosticsEnabled,
   diagnosticsVisible,
   inspecteurVisible,
+  isOpen,
   isFullscreen,
   isFullscreenSupported,
   onEnterFullscreen,
   onInstall,
+  onOpenChange,
   onResetCamera,
   onSetCameraMode,
   onToggleDiagnostics,
   onToggleInspecteur
 }: ShellMenuProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
 
@@ -44,12 +47,12 @@ export function ShellMenu({
 
     const handlePointerDown = (event: PointerEvent) => {
       if (!menuRef.current?.contains(event.target as Node)) {
-        setIsOpen(false);
+        onOpenChange(false);
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsOpen(false);
+        onOpenChange(false);
       }
     };
 
@@ -60,11 +63,11 @@ export function ShellMenu({
       window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, onOpenChange]);
 
   const runAction = (action: () => void) => {
     action();
-    setIsOpen(false);
+    onOpenChange(false);
   };
 
   return (
@@ -79,7 +82,7 @@ export function ShellMenu({
         aria-haspopup="dialog"
         className="shell-menu__trigger shell-control shell-control--button"
         onClick={() => {
-          setIsOpen((currentIsOpen) => !currentIsOpen);
+          onOpenChange(!isOpen);
         }}
         type="button"
       >

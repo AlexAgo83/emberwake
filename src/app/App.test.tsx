@@ -18,18 +18,20 @@ vi.mock("../game/render/RuntimeSurface", () => ({
 }));
 
 describe("App", () => {
-  it("renders a single floating menu trigger by default", () => {
+  it("renders a single floating menu trigger by default", async () => {
     render(<App />);
 
-    expect(screen.getByTestId("runtime-surface")).toBeInTheDocument();
+    expect(await screen.findByTestId("runtime-surface")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Menu" })).toBeInTheDocument();
     expect(screen.queryByText("Emberwake runtime")).not.toBeInTheDocument();
     expect(screen.queryByText("Movement-first loop")).not.toBeInTheDocument();
     expect(screen.queryByTestId("entity-inspection")).not.toBeInTheDocument();
   });
 
-  it("opens menu-driven inspecteur and diagnostics surfaces on demand", () => {
+  it("opens menu-driven inspecteur and diagnostics surfaces on demand", async () => {
     render(<App />);
+
+    await screen.findByTestId("runtime-surface");
 
     fireEvent.click(screen.getByRole("button", { name: "Menu" }));
     const shellMenu = screen.getByLabelText("Shell menu");

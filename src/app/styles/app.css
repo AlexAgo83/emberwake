@@ -19,6 +19,55 @@
   inset: 0;
 }
 
+.runtime-scene-boundary {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.runtime-scene-status {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-content: center;
+  gap: 0.65rem;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at top, rgba(76, 226, 255, 0.14), transparent 38%),
+    linear-gradient(180deg, rgba(10, 12, 19, 0.7), rgba(10, 12, 19, 0.86));
+  text-align: center;
+}
+
+.runtime-scene-status__eyebrow,
+.runtime-scene-status__title,
+.runtime-scene-status__detail {
+  margin: 0;
+}
+
+.runtime-scene-status__eyebrow {
+  color: var(--emberwake-copy-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.runtime-scene-status__title {
+  color: var(--emberwake-copy);
+  font-size: clamp(1.25rem, 3vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.runtime-scene-status__detail {
+  max-width: 28rem;
+  color: var(--emberwake-copy-dim);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 .app-shell__overlay {
   --shell-offset-top: calc(env(safe-area-inset-top, 0px) + 1rem);
   --shell-offset-right: calc(env(safe-area-inset-right, 0px) + 1rem);
