@@ -1,9 +1,9 @@
 ## task_034_orchestrate_session_first_shell_command_deck_hierarchy - Orchestrate session-first shell command-deck hierarchy
-> From version: 0.2.1
+> From version: 0.2.2
 > Status: Done
-> Understanding: 99%
-> Confidence: 96%
-> Progress: 100%
+> Understanding: 100%
+> Confidence: 97%
+> Progress: 100% (docs synced)
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -28,16 +28,16 @@ flowchart LR
 
 # Plan
 - [x] 1. Define and implement `Session` as the only first-level shell section beneath the always-visible current action.
-- [x] 2. Define and implement `View` as a nested subordinate group inside `Session` while preserving reset-camera and camera-mode reachability.
-- [x] 3. Define and implement `Tools` as a nested subordinate group inside `Session` while preserving inspecteur, diagnostics, and install access without reintroducing clutter.
+- [x] 2. Define and implement `View` as a nested subordinate screen inside `Session` while preserving reset-camera and camera-mode reachability.
+- [x] 3. Define and implement `Tools` as a nested subordinate screen inside `Session` while preserving inspecteur, diagnostics, and install access without reintroducing clutter.
 - [x] 4. Update linked request, backlog, task, and any supporting UX notes needed to keep the session-first navigation wave traceable.
 - [x] 5. Validate the resulting shell IA refinement against current repository delivery constraints and responsive shell behavior.
 - [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
 
 # AC Traceability
 - `item_106` -> Session-first top-level hierarchy is explicit. Proof target: menu IA update or implementation report.
-- `item_107` -> Nested View group is explicit. Proof target: nested structure or interaction notes for camera controls.
-- `item_108` -> Nested Tools group is explicit. Proof target: nested structure or interaction notes for utility controls.
+- `item_107` -> Nested View screen is explicit. Proof target: nested structure or interaction notes for camera controls.
+- `item_108` -> Nested Tools screen is explicit. Proof target: nested structure or interaction notes for utility controls.
 
 # Decision framing
 - Product framing: Required
@@ -61,14 +61,14 @@ flowchart LR
 # Definition of Done (DoD)
 - [x] Covered backlog items are implemented or explicitly split further with updated traceability.
 - [x] The shell exposes `Session` as the single first-level section below the current action.
-- [x] `View` and `Tools` are re-presented as subordinate nested groups without losing access to the current action inventory.
+- [x] `View` and `Tools` are re-presented as subordinate nested screens without losing access to the current action inventory.
 - [x] The resulting shell IA refinement remains compatible with the existing shell-owned command deck and tactical-console direction.
 - [x] Linked request, backlog, task, and related docs are updated with proofs and status.
 - [x] Dedicated git commit(s) have been created for the completed orchestration scope.
 - [x] Status is `Done` and progress is `100%`.
 
 # Report
-- Reworked `src/app/components/ShellMenu.tsx` so the menu now exposes one first-level `Session` section below the always-visible `Current action`, with `View` and `Tools` nested inside it instead of remaining peer top-level blocks.
-- Updated `src/app/styles/app.css` so nested subsections stay visually subordinate while preserving the current tactical-console direction and keeping the mobile sheet readable.
-- Extended `src/app/components/ShellMenu.test.tsx` to cover the session-first top-level structure plus nested `View` and `Tools` access, so the new grouping model cannot silently regress.
-- Visual browser checks were performed on desktop and mobile-sized viewports against the local app to confirm the nested `Session -> View / Tools` navigation remains readable and compact.
+- Reworked `src/app/components/ShellMenu.tsx` so the menu now exposes one first-level `Session` section below the always-visible `Current action`, with `View` and `Tools` opening as dedicated subordinate sub-screens instead of remaining peer top-level blocks.
+- Updated `src/app/styles/app.css` so the session root and submenu screens stay visually subordinate while preserving the current tactical-console direction and keeping the mobile sheet readable.
+- Extended `src/app/components/ShellMenu.test.tsx` to cover the session-first top-level structure plus focused `View` and `Tools` access, so the new submenu model cannot silently regress.
+- Visual browser checks were performed on desktop and mobile-sized viewports against the local app to confirm the focused `Session -> View / Tools` navigation remains readable and compact.

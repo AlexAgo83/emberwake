@@ -1,8 +1,8 @@
 ## req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b - Define a command-deck shell menu and button hierarchy for runtime Option B
-> From version: 0.2.1
+> From version: 0.2.2
 > Status: Done
-> Understanding: 99%
-> Confidence: 96%
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -36,7 +36,7 @@ This request should define `Option B` as the next shell UX refinement:
 
 Recommended target posture:
 1. A stateful trigger that reflects the current shell/runtime situation such as `Live`, `Paused`, `Settings`, or recovery/error state.
-2. A menu header or status band that establishes current runtime context rather than dropping directly into an undifferentiated list.
+2. A contextual entry treatment for the opened menu, whether as a header, status band, or equivalent first-entry surface, rather than dropping directly into an undifferentiated list.
 3. Explicit grouped sections such as:
 - `Session`
 - `View`
@@ -72,7 +72,7 @@ Scope excludes:
 flowchart TD
     A[Existing floating menu solved clutter] --> B[Current command hierarchy remains too flat]
     B --> C[Define Option B command-deck shell menu]
-    C --> D[Add stateful trigger and menu header]
+    C --> D[Add stateful trigger and contextual menu entry]
     C --> E[Group actions into session view and tools]
     C --> F[Differentiate primary secondary and utility buttons]
     C --> G[Define mobile sheet posture for the opened menu]
@@ -85,7 +85,7 @@ flowchart TD
 # Acceptance criteria
 - AC1: The request defines `Option B` as a refinement of the current floating shell menu rather than a return to persistent overlay clutter or a total shell redesign.
 - AC2: The request defines a stateful shell-menu trigger that communicates runtime or shell context more clearly than the current generic `Menu` button.
-- AC3: The request defines a command-deck posture for the opened menu, including an explicit contextual header or status area.
+- AC3: The request defines a command-deck posture for the opened menu, including an explicit contextual header, status area, or equivalent first-entry treatment.
 - AC4: The request defines a grouped information architecture for the menu, with at least distinct `Session`, `View`, and `Tools` families or equivalent explicit sections.
 - AC5: The request defines a stronger button hierarchy that distinguishes the primary current-state action from secondary actions and utility/debug toggles.
 - AC6: The request defines how existing actions such as pause/resume, settings, reset camera, camera mode, fullscreen, diagnostics, inspecteur, and install should be re-presented without losing access to them.
@@ -124,4 +124,5 @@ flowchart TD
 
 # Delivery note
 - Implemented through `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`.
-- The accepted shell posture now includes a stateful command-deck trigger, a contextual header inside the menu, grouped `Session / View / Tools` actions, a primary current-state CTA, and a mobile opened-menu sheet treatment while preserving the current shell-owned runtime model.
+- The accepted shell posture now includes a stateful command-deck trigger, grouped `Session / View / Tools` actions, a primary current-state CTA, and a mobile opened-menu sheet treatment while preserving the current shell-owned runtime model.
+- A later refinement removed the separate runtime-context intro card, so the delivered state context now lives in the trigger and the `Current action` entry surface rather than a standalone contextual header panel.

@@ -1,15 +1,15 @@
 ## req_027_restructure_the_shell_command_deck_around_a_primary_session_section - Restructure the shell command deck around a primary Session section
-> From version: 0.2.1
+> From version: 0.2.2
 > Status: Done
-> Understanding: 99%
-> Confidence: 96%
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
 - Refine the shell command-deck information architecture again because `Session`, `View`, and `Tools` currently read as three peer sections even though they do not carry equal product weight.
-- Promote `Session` as the single primary control block beneath the always-visible current action, then re-present `View` and `Tools` as subordinate subsections or nested control groups inside that session block.
+- Promote `Session` as the single primary control block beneath the always-visible current action, then re-present `View` and `Tools` as subordinate subsections or dedicated submenus inside that session block.
 - Make the opened shell menu feel more compact and intentional, especially on mobile, by reducing top-level section competition while preserving access to camera and utility controls.
 - Preserve the current shell-owned menu model, tactical-console visual direction, and current action model while tightening menu hierarchy.
 
@@ -40,7 +40,7 @@ Keeping all three as peer sections makes the command deck feel more segmented th
 The recommended refinement is therefore:
 1. Keep `Current action` outside the accordion or section structure and always visible.
 2. Make `Session` the only first-level section beneath it.
-3. Move `View` and `Tools` inside `Session` as subordinate groups, nested subsections, or nested accordions.
+3. Move `View` and `Tools` inside `Session` as subordinate groups, dedicated submenus, or equivalent nested navigation.
 4. Keep the current actions intact:
 - `Settings`
 - `Fullscreen`
@@ -61,8 +61,8 @@ This request is not asking for a new visual direction. It is an information-arch
 Recommended target posture:
 1. `Current action` remains visible and independent.
 2. `Session` becomes the only first-level command family.
-3. `View` becomes a nested, clearly subordinate control group inside `Session`.
-4. `Tools` becomes a nested, clearly subordinate utility group inside `Session`.
+3. `View` becomes a nested, clearly subordinate control group or focused submenu inside `Session`.
+4. `Tools` becomes a nested, clearly subordinate utility group or focused submenu inside `Session`.
 5. The resulting menu reads more like one coherent session-control surface and less like three parallel mini-panels.
 
 Scope includes:
@@ -124,9 +124,9 @@ flowchart TD
 
 # Acceptance criteria
 - AC1: The request defines `Session` as the primary first-level section beneath the always-visible current action.
-- AC2: The request defines `View` and `Tools` as subordinate groups inside `Session` rather than peer top-level sections.
+- AC2: The request defines `View` and `Tools` as subordinate groups or submenus inside `Session` rather than peer top-level sections.
 - AC3: The request preserves the current action inventory while redefining only the command-deck grouping model.
-- AC4: The request explains how nested `View` and `Tools` should remain readable and reachable without reintroducing clutter.
+- AC4: The request explains how nested `View` and `Tools` should remain readable and reachable, including a submenu treatment if needed, without reintroducing clutter.
 - AC5: The request preserves compatibility with the current shell-owned menu model, tactical-console visual direction, and mobile sheet posture.
 - AC6: The request remains focused on shell menu IA refinement and does not reopen broader visual rebranding, gameplay HUD redesign, or architecture change.
 
@@ -159,4 +159,5 @@ flowchart TD
 
 # Delivery note
 - Implemented through `task_034_orchestrate_session_first_shell_command_deck_hierarchy`.
-- The accepted shell posture now keeps `Current action` visible while exposing `Session` as the single first-level section and re-presenting `View` and `Tools` as nested subordinate groups inside it.
+- The accepted shell posture now keeps `Current action` visible while exposing `Session` as the single first-level section and re-presenting `View` and `Tools` as dedicated subordinate submenus inside it.
+- The final delivered menu no longer keeps all nested controls visible on the root screen; `View` and `Tools` open as focused sub-screens with a `Back to Session` return path.

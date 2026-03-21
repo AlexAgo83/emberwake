@@ -1,9 +1,9 @@
 ## item_108_define_nested_tools_controls_within_session_without_reintroducing_menu_clutter - Define nested Tools controls within Session without reintroducing menu clutter
-> From version: 0.2.1
+> From version: 0.2.2
 > Status: Done
-> Understanding: 98%
-> Confidence: 95%
-> Progress: 100%
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100% (docs synced)
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -13,19 +13,19 @@
 - Without a dedicated nesting slice, tool toggles risk either staying too prominent or becoming awkwardly hidden in a way that hurts debug reachability.
 
 # Scope
-- In: Defining how `Tools` becomes a nested subordinate group inside `Session`, including treatment of inspecteur, diagnostics, and install actions without bringing back top-level clutter.
+- In: Defining how `Tools` becomes a nested subordinate group or submenu inside `Session`, including treatment of inspecteur, diagnostics, and install actions without bringing back top-level clutter.
 - Out: Redesigning diagnostics content, changing install capability rules, or changing debug feature ownership.
 
 ```mermaid
 %% logics-signature: backlog|define-nested-tools-controls-within-sess|req-027-restructure-the-shell-command-de|tools-currently-sits-as-a-peer|ac1-the-slice-defines-how-tools
 flowchart LR
     Req[Req 027 session-first command deck] --> Gap[Tools remains too prominent at top level]
-    Gap --> Slice[Define nested Tools inside Session]
+    Gap --> Slice[Define nested Tools submenu inside Session]
     Slice --> Result[Utility controls stay reachable without dominating the deck]
 ```
 
 # Acceptance criteria
-- AC1: The slice defines how `Tools` becomes a nested subordinate group inside `Session` rather than a peer top-level section.
+- AC1: The slice defines how `Tools` becomes a nested subordinate group or submenu inside `Session` rather than a peer top-level section.
 - AC2: The slice preserves access to `Inspecteur`, `Diagnostics`, and `Install` under the new nested structure.
 - AC3: The slice defines how the nested `Tools` group remains lower-priority and less cluttering than the current peer-section model.
 - AC4: The slice remains compatible with the current shell-owned menu model and tactical-console direction.
@@ -58,4 +58,4 @@ flowchart LR
 - Derived from request `req_027_restructure_the_shell_command_deck_around_a_primary_session_section`.
 - Source file: `logics/request/req_027_restructure_the_shell_command_deck_around_a_primary_session_section.md`.
 - Implemented through `task_034_orchestrate_session_first_shell_command_deck_hierarchy`.
-- `Tools` is now nested inside `Session` with a more subordinate treatment, while `Inspecteur`, `Diagnostics`, and `Install` remain available without restoring top-level clutter.
+- `Tools` is now nested inside `Session` as a dedicated submenu with a more subordinate treatment, while `Inspecteur`, `Diagnostics`, and `Install` remain available without restoring top-level clutter.
