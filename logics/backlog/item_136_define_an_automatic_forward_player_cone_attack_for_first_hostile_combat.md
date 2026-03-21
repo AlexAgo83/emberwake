@@ -1,9 +1,9 @@
 ## item_136_define_an_automatic_forward_player_cone_attack_for_first_hostile_combat - Define an automatic forward player cone attack for first hostile combat
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,9 @@ flowchart LR
 
 # Notes
 - Derived from request `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`.
+- Implemented in `4c60012`.
+- The player now attacks automatically through a bounded forward cone:
+  - `120°` arc
+  - medium reach
+  - short cooldown
+  - multi-hit damage against every hostile inside the cone.

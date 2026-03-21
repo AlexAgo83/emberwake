@@ -1,9 +1,9 @@
 ## item_134_define_shared_entity_health_and_damage_resolution_for_first_combatants - Define shared entity health and damage resolution for first combatants
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,9 @@ flowchart LR
 
 # Notes
 - Derived from request `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`.
+- Implemented in `4c60012`.
+- The first combatants now share a common health/damage posture:
+  - player max health and hostile max health are explicit in `hostileCombatContract`
+  - hostile contact damage and player cone damage reduce the same health state
+  - hostile zero health removes the hostile from the simulation
+  - player zero health emits a shell-owned `defeat` outcome.

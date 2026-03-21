@@ -1,9 +1,9 @@
 ## item_133_define_hostile_spawning_near_the_player_chunk_with_a_local_population_cap - Define hostile spawning near the player chunk with a local population cap
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,9 @@ flowchart LR
 
 # Notes
 - Derived from request `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`.
+- Implemented in `4c60012`.
+- The runtime now maintains a bounded hostile population near the player with:
+  - a local cap of `5`
+  - a bounded spawn cooldown
+  - a safe spawn distance from the player
+  - hostile despawn beyond the local vicinity so pressure stays near the active run.

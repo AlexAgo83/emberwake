@@ -24,7 +24,6 @@ type ShellMenuProps = {
   onSetCameraMode: (cameraMode: CameraMode) => void;
   onShowMainMenuScene: () => void;
   onShowPauseScene: () => void;
-  onShowSettingsScene: () => void;
   onToggleDiagnostics: () => void;
   onToggleInspecteur: () => void;
 };
@@ -116,7 +115,6 @@ export const ShellMenu = memo(function ShellMenu({
   onSetCameraMode,
   onShowMainMenuScene,
   onShowPauseScene,
-  onShowSettingsScene,
   onToggleDiagnostics,
   onToggleInspecteur
 }: ShellMenuProps) {

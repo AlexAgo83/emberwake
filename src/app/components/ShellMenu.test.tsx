@@ -23,7 +23,6 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof ShellMenu>> 
   onSetCameraMode: vi.fn(),
   onShowMainMenuScene: vi.fn(),
   onShowPauseScene: vi.fn(),
-  onShowSettingsScene: vi.fn(),
   onToggleDiagnostics: vi.fn(),
   onToggleInspecteur: vi.fn(),
   ...overrides

@@ -1,8 +1,8 @@
 ## req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack - Define a first hostile combat loop with spawns, contact damage, and a player cone attack
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
+> Confidence: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -101,6 +101,23 @@ flowchart TD
 - AC5: The request defines the first hostile attack as contact/collision damage rather than a separate complex attack system.
 - AC6: The request defines a first pursuit behavior for hostiles when the player is in focus.
 - AC7: The request keeps the slice intentionally narrow and does not reopen pathfinding, ranged combat, or advanced encounter design.
+
+# Outcome
+- Done in `4c60012`.
+- The runtime now spawns a bounded local hostile population near the player instead of remaining traversal-only.
+- Player and hostiles now share real health state, damage application, and zero-health resolution.
+- Hostiles now acquire the player inside a bounded radius, pursue directly, and deal contact damage on a cooldown.
+- The player now uses an automatic `120°` forward cone attack with a bounded reach, cooldown, and multi-hit posture.
+- Player defeat now resolves into the shell-owned `defeat` scene through the gameplay outcome layer.
+
+# Validation
+- `npx vitest run src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts`
+- `npx vitest run src/game/entities/hooks/useEntityWorld.test.tsx src/game/entities/model/entitySpatialIndex.test.ts games/emberwake/src/systems/gameplaySystems.test.ts`
+- `npx vitest run src/app/components/PlayerHudCard.test.tsx`
+- `npm run typecheck`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Open questions
 - Should the first cone attack hit every hostile inside the cone or only one target?

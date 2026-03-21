@@ -349,7 +349,6 @@ export function ActiveRuntimeShellContent({
             onSetCameraMode={onSetCameraMode}
             onShowMainMenuScene={onShowMainMenuScene}
             onShowPauseScene={onShowPauseScene}
-            onShowSettingsScene={onShowSettingsScene}
             onToggleDiagnostics={handleToggleDiagnostics}
             onToggleInspecteur={handleToggleInspecteur}
           />

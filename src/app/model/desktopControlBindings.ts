@@ -7,8 +7,7 @@ import {
 import type {
   DesktopCameraControlDirection,
   DesktopControlBindingDirection,
-  DesktopControlBindings,
-  DesktopControlDirection
+  DesktopControlBindings
 } from "../../game/input/model/singleEntityControlContract";
 
 export const desktopControlSlotOrder = [0, 1] as const;

@@ -1,9 +1,9 @@
 ## item_135_define_hostile_focus_pursuit_and_contact_damage_for_the_first_combat_loop - Define hostile focus pursuit and contact damage for the first combat loop
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,8 @@ flowchart LR
 
 # Notes
 - Derived from request `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`.
+- Implemented in `4c60012`.
+- Hostiles now:
+  - acquire the player within a bounded focus radius
+  - move directly toward the focused player without pathfinding
+  - resolve contact damage through a hostile-owned cooldown so overlap pressure is dangerous but not frame-perfect lethal.
