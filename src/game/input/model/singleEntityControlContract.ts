@@ -1,4 +1,5 @@
 export {
+  desktopCameraControlDirections,
   createDefaultDesktopControlBindings,
   createIdleMovementIntent,
   createKeyboardMovementIntent,
@@ -8,6 +9,8 @@ export {
   singleEntityControlContract
 } from "@game/input/singleEntityControlContract";
 export type {
+  DesktopCameraControlDirection,
+  DesktopControlBindingDirection,
   DesktopControlBindings,
   DesktopControlDirection,
   InputOwner,

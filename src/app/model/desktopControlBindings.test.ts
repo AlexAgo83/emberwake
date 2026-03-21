@@ -36,6 +36,19 @@ describe("desktopControlBindings", () => {
     );
   });
 
+  it("detects duplicate bindings across movement and camera rotation slots", () => {
+    const conflictingBindings = assignDesktopControlBinding({
+      bindings: createDefaultDesktopControlBindings(),
+      direction: "rotateLeft",
+      key: "a",
+      slotIndex: 0
+    });
+
+    expect(createDesktopControlConflictSet(conflictingBindings)).toEqual(
+      new Set(["left:0", "rotateLeft:0"])
+    );
+  });
+
   it("formats and describes the current movement binding summary", () => {
     expect(formatDesktopControlBindingKey("ArrowLeft")).toBe("Arrow Left");
     expect(describeDesktopMovementBindings(createDefaultDesktopControlBindings())).toBe(

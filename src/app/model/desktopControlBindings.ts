@@ -1,15 +1,21 @@
 import {
   createDefaultDesktopControlBindings,
+  desktopCameraControlDirections,
+  desktopControlDirections,
   normalizeKeyboardBindingKey
 } from "../../game/input/model/singleEntityControlContract";
 import type {
+  DesktopCameraControlDirection,
+  DesktopControlBindingDirection,
   DesktopControlBindings,
   DesktopControlDirection
 } from "../../game/input/model/singleEntityControlContract";
 
 export const desktopControlSlotOrder = [0, 1] as const;
+export const desktopCameraControlSlotOrder = [0] as const;
 
 export type DesktopControlSlotIndex = (typeof desktopControlSlotOrder)[number];
+export type DesktopCameraControlSlotIndex = (typeof desktopCameraControlSlotOrder)[number];
 
 const unsupportedBindingKeys = new Set([
   "Alt",
@@ -56,7 +62,7 @@ export const validateDesktopControlBindingKey = (rawKey: string) => {
   }
 
   return {
-    error: "Only letters, digits, Space, and arrow keys are supported for movement.",
+    error: "Only letters, digits, Space, and arrow keys are supported for desktop controls.",
     normalizedKey: null
   };
 };
@@ -66,9 +72,26 @@ export const cloneDesktopControlBindings = (
 ): DesktopControlBindings => ({
   down: [...bindings.down],
   left: [...bindings.left],
+  rotateLeft: [...bindings.rotateLeft],
+  rotateRight: [...bindings.rotateRight],
   right: [...bindings.right],
   up: [...bindings.up]
 });
+
+const allDesktopControlDirections = [
+  ...desktopControlDirections,
+  ...desktopCameraControlDirections
+] as const satisfies readonly DesktopControlBindingDirection[];
+
+export const isDesktopCameraControlDirection = (
+  direction: DesktopControlBindingDirection
+): direction is DesktopCameraControlDirection =>
+  (desktopCameraControlDirections as readonly string[]).includes(direction);
+
+export const getDesktopControlSlotOrder = (direction: DesktopControlBindingDirection) =>
+  isDesktopCameraControlDirection(direction)
+    ? desktopCameraControlSlotOrder
+    : desktopControlSlotOrder;
 
 export const assignDesktopControlBinding = ({
   bindings,
@@ -77,12 +100,12 @@ export const assignDesktopControlBinding = ({
   slotIndex
 }: {
   bindings: DesktopControlBindings;
-  direction: DesktopControlDirection;
+  direction: DesktopControlBindingDirection;
   key: string;
-  slotIndex: DesktopControlSlotIndex;
+  slotIndex: DesktopControlSlotIndex | DesktopCameraControlSlotIndex;
 }): DesktopControlBindings => {
   const nextBindings = cloneDesktopControlBindings(bindings);
-  nextBindings[direction][slotIndex] = normalizeKeyboardBindingKey(key);
+  nextBindings[direction][slotIndex] = normalizeKeyboardBindingKey(key) as never;
   return nextBindings;
 };
 
@@ -95,14 +118,14 @@ export const getDesktopControlBindingConflicts = (bindings: DesktopControlBindin
   const seenLocations = new Map<
     string,
     Array<{
-      direction: DesktopControlDirection;
-      slotIndex: DesktopControlSlotIndex;
+      direction: DesktopControlBindingDirection;
+      slotIndex: DesktopControlSlotIndex | DesktopCameraControlSlotIndex;
     }>
   >();
 
-  (Object.keys(bindings) as DesktopControlDirection[]).forEach((direction) => {
-    desktopControlSlotOrder.forEach((slotIndex) => {
-      const key = bindings[direction][slotIndex];
+  allDesktopControlDirections.forEach((direction) => {
+    getDesktopControlSlotOrder(direction).forEach((slotIndex) => {
+      const key = bindings[direction][slotIndex]!;
       const locations = seenLocations.get(key) ?? [];
 
       locations.push({ direction, slotIndex });
@@ -128,7 +151,12 @@ export const createDesktopControlConflictSet = (bindings: DesktopControlBindings
 export const describeDesktopMovementBindings = (bindings: DesktopControlBindings) => {
   const defaultBindings = createDefaultDesktopControlBindings();
 
-  if (areDesktopControlBindingsEqual(bindings, defaultBindings)) {
+  if (
+    bindings.up.every((key, index) => key === defaultBindings.up[index]) &&
+    bindings.left.every((key, index) => key === defaultBindings.left[index]) &&
+    bindings.down.every((key, index) => key === defaultBindings.down[index]) &&
+    bindings.right.every((key, index) => key === defaultBindings.right[index])
+  ) {
     return "WASD / arrows";
   }
 
@@ -138,7 +166,7 @@ export const describeDesktopMovementBindings = (bindings: DesktopControlBindings
     bindings.down[0],
     bindings.right[0]
   ]
-    .map((key) => formatDesktopControlBindingKey(key))
+    .map((key) => formatDesktopControlBindingKey(key!))
     .join("");
   const hasArrowFallback = (
     [
@@ -147,7 +175,7 @@ export const describeDesktopMovementBindings = (bindings: DesktopControlBindings
       bindings.down[1],
       bindings.right[1]
     ] as const
-  ).every((key) => key.startsWith("Arrow"));
+  ).every((key) => key?.startsWith("Arrow"));
 
   return hasArrowFallback ? `${primaryLetterCluster} / arrows` : "Custom movement";
 };

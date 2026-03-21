@@ -79,7 +79,6 @@ describe("ShellMenu", () => {
 
     expect(within(panel).getByText("Session")).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Main menu/i })).toBeInTheDocument();
-    expect(within(panel).getByRole("button", { name: /Settings/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /View/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Tools/i })).toBeInTheDocument();
     expect(within(panel).queryByText(/^Diagnostics$/)).not.toBeInTheDocument();
@@ -97,7 +96,6 @@ describe("ShellMenu", () => {
     expect(screen.getByRole("button", { name: /Main menu/i })).toHaveClass(
       "shell-menu__item--secondary"
     );
-    expect(screen.getByRole("button", { name: /Settings/i })).toHaveClass("shell-menu__item--secondary");
     expect(screen.getByRole("button", { name: /View/i })).toHaveClass("shell-menu__item--secondary");
     expect(screen.getByRole("button", { name: /Tools/i })).toHaveClass(
       "shell-menu__item--utility"
@@ -118,7 +116,7 @@ describe("ShellMenu", () => {
     expect(within(panel).getByRole("button", { name: /Reset camera/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: "Free" })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: "Follow entity" })).toBeInTheDocument();
-    expect(within(panel).queryByRole("button", { name: /Settings/i })).not.toBeInTheDocument();
+    expect(within(panel).queryByRole("button", { name: /Main menu/i })).not.toBeInTheDocument();
   });
 
   it("opens a dedicated Tools submenu instead of keeping utility controls on the root screen", () => {
@@ -137,7 +135,7 @@ describe("ShellMenu", () => {
     expect(within(panel).getByRole("button", { name: /Inspecteur/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Diagnostics/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Install app/i })).toBeInTheDocument();
-    expect(within(panel).queryByRole("button", { name: /Settings/i })).not.toBeInTheDocument();
+    expect(within(panel).queryByRole("button", { name: /Main menu/i })).not.toBeInTheDocument();
   });
 
   it("returns to Session and resets submenu navigation when the menu closes", () => {
@@ -148,13 +146,13 @@ describe("ShellMenu", () => {
     expect(screen.getByRole("button", { name: /Back to Session/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /Back to Session/i }));
-    expect(screen.getByRole("button", { name: /Settings/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Main menu/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /Tools/i }));
     rerender(<ShellMenu {...props} isOpen={false} />);
     rerender(<ShellMenu {...props} isOpen />);
 
-    expect(screen.getByRole("button", { name: /Settings/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Main menu/i })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Back to Session/i })).not.toBeInTheDocument();
   });
 

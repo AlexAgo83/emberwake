@@ -275,16 +275,6 @@ export const ShellMenu = memo(function ShellMenu({
                   </button>
                   <button
                     className="shell-menu__item shell-menu__item--action shell-menu__item--secondary"
-                    onClick={() => {
-                      runAction(onShowSettingsScene);
-                    }}
-                    type="button"
-                  >
-                    <span className="shell-menu__item-label">Settings</span>
-                    <span className="shell-menu__item-value">Meta scene</span>
-                  </button>
-                  <button
-                    className="shell-menu__item shell-menu__item--action shell-menu__item--secondary"
                     disabled={!isFullscreenSupported || isFullscreen}
                     onClick={() => {
                       runAction(onEnterFullscreen);

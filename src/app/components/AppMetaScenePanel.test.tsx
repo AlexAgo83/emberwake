@@ -46,6 +46,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByLabelText("Main menu")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Start new game/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Load game/i })).toBeDisabled();
+    expect(screen.queryByText("Ownership")).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /Settings/i }));
     expect(props.onOpenSettings).toHaveBeenCalledTimes(1);
@@ -104,7 +105,7 @@ describe("AppMetaScenePanel", () => {
     expect(props.onResumeRuntime).toHaveBeenCalledTimes(1);
   });
 
-  it("renders settings details while keeping runtime re-entry available", () => {
+  it("renders settings as a compact desktop-controls surface", () => {
     const props = createProps({
       canResumeSession: true,
       scene: "settings"
@@ -113,7 +114,10 @@ describe("AppMetaScenePanel", () => {
     render(<AppMetaScenePanel {...props} />);
 
     expect(screen.getByLabelText("Settings")).toBeInTheDocument();
-    expect(screen.getByText(/Tune desktop controls/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Tune desktop controls/i)).not.toBeInTheDocument();
+    expect(screen.queryByText("Session")).not.toBeInTheDocument();
+    expect(screen.queryByText("Fullscreen")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Resume runtime/i })).not.toBeInTheDocument();
     expect(screen.getByText(/Loading desktop control bindings/i)).toBeInTheDocument();
   });
 

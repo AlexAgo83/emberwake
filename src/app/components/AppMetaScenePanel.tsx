@@ -90,7 +90,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       : scene === "pause"
       ? "The live session is preserved while the shell holds the pause scene."
       : scene === "settings"
-        ? "Tune desktop controls, then return to the preserved runtime when you are ready."
+        ? ""
         : runtimeOutcome?.detail ??
           (scene === "defeat"
             ? "The shell took control after the live run requested recovery."
@@ -104,11 +104,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           ? "Resume runtime"
           : "Resume runtime";
   const ownershipLabel =
-    scene === "main-menu" || scene === "new-game"
-      ? canResumeSession
-        ? "Shell scene / runtime state preserved"
-        : "Shell scene / no active runtime session"
-      : scene === "defeat" || scene === "victory"
+    scene === "defeat" || scene === "victory"
       ? `Shell scene / gameplay outcome ${runtimeOutcome?.kind ?? scene}`
       : "Shell scene / runtime state preserved";
 
@@ -116,7 +112,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
     <aside className="app-meta-scene" aria-label={title}>
       <p className="app-meta-scene__eyebrow">Meta flow</p>
       <h2 className="app-meta-scene__title">{title}</h2>
-      <p className="app-meta-scene__detail">{detail}</p>
+      {detail ? <p className="app-meta-scene__detail">{detail}</p> : null}
       {scene === "main-menu" ? (
         <>
           <dl className="app-meta-scene__facts">
@@ -124,13 +120,9 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               <dt>Session</dt>
               <dd>{canResumeSession ? `Active run / ${playerName}` : "No active run"}</dd>
             </div>
-                <div>
-                  <dt>Load game</dt>
-                  <dd>{savedSlotSummary ?? "No save available"}</dd>
-                </div>
-                <div>
-                  <dt>Ownership</dt>
-              <dd>{ownershipLabel}</dd>
+            <div>
+              <dt>Load game</dt>
+              <dd>{savedSlotSummary ?? "No save available"}</dd>
             </div>
           </dl>
           <div className="app-meta-scene__actions">
@@ -203,16 +195,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         <>
           {scene === "settings" ? (
             <>
-              <dl className="app-meta-scene__facts">
-                <div>
-                  <dt>Session</dt>
-                  <dd>{canResumeSession ? `Active run / ${playerName}` : "No active run"}</dd>
-                </div>
-                <div>
-                  <dt>Fullscreen</dt>
-                  <dd>{fullscreenPreferred ? "remembered" : "off"}</dd>
-                </div>
-              </dl>
               <Suspense
                 fallback={
                   <p className="settings-controls__status">Loading desktop control bindings…</p>
@@ -231,15 +213,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 >
                   Back to menu
                 </button>
-                {canResumeSession ? (
-                  <button
-                    className="shell-control shell-control--button"
-                    onClick={onResumeRuntime}
-                    type="button"
-                  >
-                    {resumeLabel}
-                  </button>
-                ) : null}
               </div>
             </>
           ) : (

@@ -157,6 +157,7 @@ export function ActiveRuntimeShellContent({
     simulationState.presentation.cameraTarget?.worldPosition ?? simulationState.entity.worldPosition;
   const { cameraState, resetCamera } = useCameraController({
     cameraMode: runtimeSession.cameraMode,
+    desktopControlBindings,
     debugCameraEnabled: controlState.debugCameraModifierActive,
     followedWorldPosition,
     initialCameraState: runtimeSession.cameraState,

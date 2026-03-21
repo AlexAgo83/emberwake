@@ -10,6 +10,8 @@ import {
 import type { CameraState } from "@engine/camera/cameraMath";
 import type { WorldPoint } from "@engine/geometry/primitives";
 import type { CameraMode } from "../model/cameraMode";
+import type { DesktopControlBindings } from "../../input/model/singleEntityControlContract";
+import { normalizeKeyboardBindingKey } from "../../input/model/singleEntityControlContract";
 
 type ViewportForCamera = {
   fitScale: number;
@@ -17,6 +19,7 @@ type ViewportForCamera = {
 
 type UseCameraControllerOptions = {
   cameraMode: CameraMode;
+  desktopControlBindings?: DesktopControlBindings;
   debugCameraEnabled: boolean;
   followedWorldPosition: WorldPoint;
   initialCameraState?: CameraState;
@@ -46,6 +49,7 @@ const getTouchAngle = (touches: TouchList) =>
 
 export function useCameraController({
   cameraMode,
+  desktopControlBindings,
   debugCameraEnabled,
   followedWorldPosition,
   initialCameraState,
@@ -144,31 +148,31 @@ export function useCameraController({
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      const normalizedKey = normalizeKeyboardBindingKey(event.key);
+      const rotateLeftKey = desktopControlBindings?.rotateLeft[0] ?? "q";
+      const rotateRightKey = desktopControlBindings?.rotateRight[0] ?? "e";
       const isCameraDebugKey =
-        event.key === "q" ||
-        event.key === "Q" ||
-        event.key === "e" ||
-        event.key === "E" ||
-        event.key === "r" ||
-        event.key === "R";
+        normalizedKey === rotateLeftKey ||
+        normalizedKey === rotateRightKey ||
+        normalizedKey === "r";
 
       if (isCameraDebugKey && !debugCameraEnabled) {
         return;
       }
 
-      if (event.key === "q" || event.key === "Q") {
+      if (normalizedKey === rotateLeftKey) {
         setCameraState((currentState) =>
           rotateCamera(currentState, -cameraContract.rotationStepRadians)
         );
       }
 
-      if (event.key === "e" || event.key === "E") {
+      if (normalizedKey === rotateRightKey) {
         setCameraState((currentState) =>
           rotateCamera(currentState, cameraContract.rotationStepRadians)
         );
       }
 
-      if (event.key === "r" || event.key === "R") {
+      if (normalizedKey === "r") {
         setCameraState(createDefaultCameraState());
       }
     };
@@ -272,7 +276,14 @@ export function useCameraController({
       surfaceElement.removeEventListener("touchcancel", handleTouchEnd);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [cameraMode, cameraState.zoom, debugCameraEnabled, surfaceElement, viewport.fitScale]);
+  }, [
+    cameraMode,
+    cameraState.zoom,
+    debugCameraEnabled,
+    desktopControlBindings,
+    surfaceElement,
+    viewport.fitScale
+  ]);
 
   const resetCamera = useCallback(() => {
     setCameraState(createDefaultCameraState());

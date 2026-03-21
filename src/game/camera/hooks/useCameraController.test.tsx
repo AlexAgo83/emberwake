@@ -2,6 +2,7 @@ import { renderHook, act } from "@testing-library/react";
 
 import { createDefaultCameraState } from "../model/cameraMath";
 import { useCameraController } from "./useCameraController";
+import { createDefaultDesktopControlBindings } from "../../input/model/singleEntityControlContract";
 
 type TouchPoint = {
   clientX: number;
@@ -168,5 +169,30 @@ describe("useCameraController", () => {
     });
 
     expect(result.current.cameraState).not.toEqual(initialCameraState);
+  });
+
+  it("rotates with editable desktop camera bindings when debug mode is active", () => {
+    const surfaceElement = document.createElement("div");
+    const customBindings = createDefaultDesktopControlBindings();
+    customBindings.rotateLeft[0] = "u";
+    const { result } = renderHook(() =>
+      useCameraController({
+        cameraMode: "free",
+        debugCameraEnabled: true,
+        desktopControlBindings: customBindings,
+        followedWorldPosition: { x: 0, y: 0 },
+        initialCameraState: createDefaultCameraState(),
+        surfaceElement,
+        viewport: {
+          fitScale: 1
+        }
+      })
+    );
+
+    act(() => {
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "u" }));
+    });
+
+    expect(result.current.cameraState.rotation).toBeLessThan(0);
   });
 });

@@ -5,16 +5,19 @@ import {
   areDesktopControlBindingsEqual,
   assignDesktopControlBinding,
   createDesktopControlConflictSet,
-  desktopControlSlotOrder,
   formatDesktopControlBindingKey,
+  getDesktopControlSlotOrder,
+  isDesktopCameraControlDirection,
   validateDesktopControlBindingKey
 } from "../model/desktopControlBindings";
-import type { DesktopControlSlotIndex } from "../model/desktopControlBindings";
 import {
   createDefaultDesktopControlBindings,
+  desktopCameraControlDirections,
   desktopControlDirections
 } from "../../game/input/model/singleEntityControlContract";
 import type {
+  DesktopCameraControlDirection,
+  DesktopControlBindingDirection,
   DesktopControlBindings,
   DesktopControlDirection
 } from "../../game/input/model/singleEntityControlContract";
@@ -31,14 +34,24 @@ const directionLabels: Record<DesktopControlDirection, string> = {
   up: "Move up"
 };
 
+const cameraDirectionLabels: Record<DesktopCameraControlDirection, string> = {
+  rotateLeft: "Rotate left",
+  rotateRight: "Rotate right"
+};
+
+const desktopControlDirectionOrder = [
+  ...desktopControlDirections,
+  ...desktopCameraControlDirections
+] as const satisfies readonly DesktopControlBindingDirection[];
+
 export function DesktopControlSettingsSection({
   bindings,
   onApply
 }: DesktopControlSettingsSectionProps) {
   const [draftBindings, setDraftBindings] = useState(bindings);
   const [captureState, setCaptureState] = useState<{
-    direction: DesktopControlDirection;
-    slotIndex: DesktopControlSlotIndex;
+    direction: DesktopControlBindingDirection;
+    slotIndex: 0 | 1;
   } | null>(null);
   const [captureMessage, setCaptureMessage] = useState<string | null>(null);
   const conflictSet = useMemo(
@@ -85,7 +98,11 @@ export function DesktopControlSettingsSection({
         })
       );
       setCaptureMessage(
-        `${directionLabels[captureState.direction]} now uses ${formatDesktopControlBindingKey(validation.normalizedKey)}.`
+        `${
+          isDesktopCameraControlDirection(captureState.direction)
+            ? cameraDirectionLabels[captureState.direction]
+            : directionLabels[captureState.direction]
+        } now uses ${formatDesktopControlBindingKey(validation.normalizedKey)}.`
       );
       setCaptureState(null);
     };
@@ -119,8 +136,7 @@ export function DesktopControlSettingsSection({
     <section className="settings-controls" aria-label="Desktop controls">
       <div className="settings-controls__header">
         <div>
-          <p className="settings-controls__eyebrow">Desktop controls</p>
-          <h3 className="settings-controls__title">Movement bindings</h3>
+          <h3 className="settings-controls__title">Desktop controls</h3>
         </div>
         <p className="settings-controls__status" data-conflict={conflictSet.size > 0}>
           {statusCopy}
@@ -128,11 +144,15 @@ export function DesktopControlSettingsSection({
       </div>
 
       <div className="settings-controls__grid">
-        {desktopControlDirections.map((direction) => (
+        {desktopControlDirectionOrder.map((direction) => (
           <div className="settings-controls__row" key={direction}>
-            <span className="settings-controls__label">{directionLabels[direction]}</span>
+            <span className="settings-controls__label">
+              {isDesktopCameraControlDirection(direction)
+                ? cameraDirectionLabels[direction]
+                : directionLabels[direction]}
+            </span>
             <div className="settings-controls__bindings">
-              {desktopControlSlotOrder.map((slotIndex) => {
+              {getDesktopControlSlotOrder(direction).map((slotIndex) => {
                 const slotId = `${direction}:${slotIndex}`;
                 const isCapturing =
                   captureState?.direction === direction && captureState.slotIndex === slotIndex;
@@ -151,10 +171,15 @@ export function DesktopControlSettingsSection({
                   >
                     {isCapturing
                       ? "Press key"
-                      : formatDesktopControlBindingKey(draftBindings[direction][slotIndex])}
+                      : formatDesktopControlBindingKey(draftBindings[direction][slotIndex]!)}
                   </button>
                 );
               })}
+              {isDesktopCameraControlDirection(direction) ? (
+                <span className="settings-controls__binding settings-controls__binding--static shell-control">
+                  Shift held
+                </span>
+              ) : null}
             </div>
           </div>
         ))}
