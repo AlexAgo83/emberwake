@@ -5,6 +5,10 @@ export {
   emberwakeGameModule
 } from "./runtime/emberwakeGameModule";
 export {
+  createEmberwakeRuntimeRunner,
+  createEngineInputFrameFromControlState
+} from "./runtime/emberwakeRuntimeRunner";
+export {
   advanceSimulationState,
   createInitialSimulationState,
   entitySimulationContract,

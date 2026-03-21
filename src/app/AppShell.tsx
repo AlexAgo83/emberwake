@@ -43,10 +43,12 @@ export function AppShell() {
   const viewport = useLogicalViewportModel(shellRef);
   const { cycleWorldSeed, runtimeSession, setCameraMode, setCameraState } = useRuntimeSession();
   const simulationState = useEntitySimulation({ controlState });
+  const followedWorldPosition =
+    simulationState.presentation.cameraTarget?.worldPosition ?? simulationState.entity.worldPosition;
   const { cameraState, resetCamera } = useCameraController({
     cameraMode: runtimeSession.cameraMode,
     debugCameraEnabled: controlState.debugCameraModifierActive,
-    followedWorldPosition: simulationState.entity.worldPosition,
+    followedWorldPosition,
     initialCameraState: runtimeSession.cameraState,
     onCameraStateChange: setCameraState,
     surfaceRef: runtimeSurfaceRef,

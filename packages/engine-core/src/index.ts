@@ -46,10 +46,19 @@ export type {
   GameModule
 } from "./contracts/gameModule";
 export {
+  createIdleEngineInputFrame,
+  createRuntimeRunner,
+  RuntimeRunner
+} from "./runtime/runtimeRunner";
+export {
   resolveVirtualStickGeometry
 } from "./input/virtualStickMath";
 export type { ViewportProjectionContract } from "./world/worldContract";
 export type { WorldPickingSample } from "./world/worldViewMath";
+export type {
+  RuntimeRunnerMetrics,
+  RuntimeRunnerSnapshot
+} from "./runtime/runtimeRunner";
 export type {
   ResolvedVirtualStickVector,
   VirtualStickGeometryState,
