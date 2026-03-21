@@ -1,3 +1,9 @@
+import { persistenceDomainCatalog } from "./persistence/storageDomainCatalog";
+import {
+  readVersionedStorageDomain,
+  writeVersionedStorageDomain
+} from "./persistence/storageDomain";
+
 export type ShellPreferences = {
   debugPanelVisible: boolean;
   inspectionPanelVisible: boolean;
@@ -5,52 +11,28 @@ export type ShellPreferences = {
   prefersFullscreen: boolean;
 };
 
-const STORAGE_KEY = "emberwake.shell-preferences";
-const STORAGE_VERSION = 1;
-
-type PersistedShellPreferences = {
-  preferences: ShellPreferences;
-  version: number;
-};
+export const shellPreferencesContract = {
+  invalidationPolicy: "drop-on-version-mismatch",
+  ...persistenceDomainCatalog.shellPreferences
+} as const;
 
 export const readShellPreferences = (
   fallbackPreferences: ShellPreferences
-): ShellPreferences => {
-  if (typeof window === "undefined") {
-    return fallbackPreferences;
-  }
-
-  const rawPreferences = window.localStorage.getItem(STORAGE_KEY);
-  if (!rawPreferences) {
-    return fallbackPreferences;
-  }
-
-  try {
-    const parsedPreferences = JSON.parse(rawPreferences) as Partial<PersistedShellPreferences>;
-
-    if (parsedPreferences.version !== STORAGE_VERSION || !parsedPreferences.preferences) {
-      return fallbackPreferences;
-    }
-
-    return {
-      ...fallbackPreferences,
-      ...parsedPreferences.preferences
-    };
-  } catch {
-    return fallbackPreferences;
-  }
-};
+): ShellPreferences =>
+  readVersionedStorageDomain({
+    contract: persistenceDomainCatalog.shellPreferences,
+    fallbackValue: fallbackPreferences,
+    merge: (currentFallbackPreferences, persistedPreferences) => ({
+      ...currentFallbackPreferences,
+      ...persistedPreferences
+    }),
+    payloadKey: "preferences"
+  });
 
 export const writeShellPreferences = (preferences: ShellPreferences) => {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  window.localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify({
-      preferences,
-      version: STORAGE_VERSION
-    } satisfies PersistedShellPreferences)
-  );
+  writeVersionedStorageDomain({
+    contract: persistenceDomainCatalog.shellPreferences,
+    payload: preferences,
+    payloadKey: "preferences"
+  });
 };

@@ -4,6 +4,11 @@ import {
   createDefaultEmberwakeRuntimeSessionState,
   emberwakeRuntimeSessionSeedOptions
 } from "@game/runtime/emberwakeSession";
+import { persistenceDomainCatalog } from "./persistence/storageDomainCatalog";
+import {
+  readVersionedStorageDomain,
+  writeVersionedStorageDomain
+} from "./persistence/storageDomain";
 
 export type RuntimeSessionState = {
   cameraState: CameraState;
@@ -11,69 +16,37 @@ export type RuntimeSessionState = {
   worldSeed: string;
 };
 
-type PersistedRuntimeSession = {
-  runtimeSession: RuntimeSessionState;
-  version: number;
-};
-
-const STORAGE_KEY = "emberwake.runtime-session";
-const STORAGE_VERSION = 1;
-
 export const runtimeSessionContract = {
   invalidationPolicy: "drop-on-version-mismatch",
   reconstructionBoundary: "world-regenerated-from-seed",
   seedOptions: emberwakeRuntimeSessionSeedOptions,
-  storageBackend: "localStorage",
-  storageKey: STORAGE_KEY,
-  storageVersion: STORAGE_VERSION
+  ...persistenceDomainCatalog.runtimeSession
 } as const;
 
 export const createDefaultRuntimeSessionState = (): RuntimeSessionState =>
   createDefaultEmberwakeRuntimeSessionState();
 
-
 export const readRuntimeSessionState = (
   fallbackState: RuntimeSessionState
-): RuntimeSessionState => {
-  if (typeof window === "undefined") {
-    return fallbackState;
-  }
-
-  const rawSession = window.localStorage.getItem(STORAGE_KEY);
-  if (!rawSession) {
-    return fallbackState;
-  }
-
-  try {
-    const parsedSession = JSON.parse(rawSession) as Partial<PersistedRuntimeSession>;
-
-    if (parsedSession.version !== STORAGE_VERSION || !parsedSession.runtimeSession) {
-      return fallbackState;
-    }
-
-    return {
-      ...fallbackState,
-      ...parsedSession.runtimeSession,
+): RuntimeSessionState =>
+  readVersionedStorageDomain({
+    contract: persistenceDomainCatalog.runtimeSession,
+    fallbackValue: fallbackState,
+    merge: (fallbackValue, persistedValue) => ({
+      ...fallbackValue,
+      ...persistedValue,
       cameraState: {
-        ...fallbackState.cameraState,
-        ...parsedSession.runtimeSession.cameraState
+        ...fallbackValue.cameraState,
+        ...persistedValue.cameraState
       }
-    };
-  } catch {
-    return fallbackState;
-  }
-};
+    }),
+    payloadKey: "runtimeSession"
+  });
 
 export const writeRuntimeSessionState = (runtimeSession: RuntimeSessionState) => {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  window.localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify({
-      runtimeSession,
-      version: STORAGE_VERSION
-    } satisfies PersistedRuntimeSession)
-  );
+  writeVersionedStorageDomain({
+    contract: persistenceDomainCatalog.runtimeSession,
+    payload: runtimeSession,
+    payloadKey: "runtimeSession"
+  });
 };
