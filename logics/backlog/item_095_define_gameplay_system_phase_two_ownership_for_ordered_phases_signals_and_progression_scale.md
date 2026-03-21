@@ -1,9 +1,9 @@
 ## item_095_define_gameplay_system_phase_two_ownership_for_ordered_phases_signals_and_progression_scale - Define gameplay-system phase-two ownership for ordered phases, signals, and progression scale
 > From version: 0.1.2
-> Status: Ready
-> Understanding: 94%
-> Confidence: 90%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,9 +48,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_015_define_engine_to_game_runtime_contract_boundaries`, `adr_023_model_gameplay_systems_as_game_owned_state_slices_around_the_game_module`
+- Architecture decision(s): `adr_015_define_engine_to_game_runtime_contract_boundaries`, `adr_023_model_gameplay_systems_as_game_owned_state_slices_around_the_game_module`, `adr_029_model_phase_two_gameplay_systems_with_ordered_phases_and_narrow_signals`
 - Request: `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
-- Primary task(s): `task_tbd_orchestrate_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
+- Primary task(s): `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`
 
 # Priority
 - Impact: High
@@ -59,3 +59,4 @@ flowchart LR
 # Notes
 - Derived from request `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`.
 - Source file: `logics/request/req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave.md`.
+- Implemented through `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`.

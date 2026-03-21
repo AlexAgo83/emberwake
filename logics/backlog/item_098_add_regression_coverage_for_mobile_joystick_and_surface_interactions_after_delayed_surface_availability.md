@@ -1,9 +1,9 @@
 ## item_098_add_regression_coverage_for_mobile_joystick_and_surface_interactions_after_delayed_surface_availability - Add regression coverage for mobile joystick and surface interactions after delayed surface availability
 > From version: 0.1.2
-> Status: Ready
-> Understanding: 96%
-> Confidence: 94%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,9 +48,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
-- Architecture decision(s): `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
+- Architecture decision(s): `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`, `adr_031_bind_runtime_surface_interactions_to_resolved_elements_after_lazy_mount`
 - Request: `req_024_restore_runtime_surface_input_binding_reliability_after_lazy_mount`
-- Primary task(s): `task_tbd_orchestrate_runtime_surface_input_binding_reliability_after_lazy_mount`
+- Primary task(s): `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`
 
 # Priority
 - Impact: High
@@ -59,3 +59,4 @@ flowchart LR
 # Notes
 - Derived from request `req_024_restore_runtime_surface_input_binding_reliability_after_lazy_mount`.
 - Source file: `logics/request/req_024_restore_runtime_surface_input_binding_reliability_after_lazy_mount.md`.
+- Implemented through `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`.

@@ -1,9 +1,9 @@
 ## item_093_define_gameplay_to_shell_outcome_contracts_for_defeat_victory_restart_and_runtime_recovery - Define gameplay-to-shell outcome contracts for defeat, victory, restart, and runtime recovery
 > From version: 0.1.2
-> Status: Ready
-> Understanding: 93%
-> Confidence: 90%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,9 +48,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`, `adr_023_model_gameplay_systems_as_game_owned_state_slices_around_the_game_module`
+- Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`, `adr_023_model_gameplay_systems_as_game_owned_state_slices_around_the_game_module`, `adr_027_expose_gameplay_outcomes_as_a_game_owned_shell_consumable_contract`
 - Request: `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
-- Primary task(s): `task_tbd_orchestrate_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
+- Primary task(s): `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`
 
 # Priority
 - Impact: High
@@ -59,3 +59,4 @@ flowchart LR
 # Notes
 - Derived from request `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`.
 - Source file: `logics/request/req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave.md`.
+- Implemented through `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`.

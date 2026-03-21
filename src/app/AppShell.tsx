@@ -60,7 +60,7 @@ export function AppShell() {
     rendererStatus: rendererState.status,
     runtimeOutcome: null
   });
-  let {
+  const {
     closeShellSurface,
     isMenuOpen,
     openMenu,

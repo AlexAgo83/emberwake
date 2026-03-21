@@ -1,8 +1,8 @@
 ## req_024_restore_runtime_surface_input_binding_reliability_after_lazy_mount - Restore runtime surface input binding reliability after lazy mount
 > From version: 0.1.2
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
+> Status: Done
+> Understanding: 99%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -67,9 +67,9 @@ flowchart TD
 
 # Companion docs
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
-- Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`, `adr_024_drive_live_runtime_from_the_pixi_visual_frame_while_engine_keeps_fixed_step_authority`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
+- Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`, `adr_024_drive_live_runtime_from_the_pixi_visual_frame_while_engine_keeps_fixed_step_authority`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`, `adr_031_bind_runtime_surface_interactions_to_resolved_elements_after_lazy_mount`
 - Request(s): `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
-- Task(s): `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
+- Task(s): `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`, `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`
 
 # Backlog
 - `restore_surface_bound_interaction_hooks_to_attach_after_lazy_runtime_mount`
@@ -77,5 +77,5 @@ flowchart TD
 - `validate_runtime_surface_input_reliability_without_reopening_input_ownership_design`
 
 # Delivery note
-- This request is intentionally corrective and narrow.
-- It exists to restore confidence in the current shell/runtime architecture by fixing the late-mounted surface binding gap instead of reopening the broader runtime design work that is already converged.
+- Implemented through `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`.
+- Accepted architecture decisions now cover resolved-surface binding after lazy mount, focused regression coverage for delayed surface availability, and bounded validation that keeps the current input-ownership model intact.

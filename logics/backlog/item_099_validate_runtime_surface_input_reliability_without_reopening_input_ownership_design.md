@@ -1,9 +1,9 @@
 ## item_099_validate_runtime_surface_input_reliability_without_reopening_input_ownership_design - Validate runtime surface input reliability without reopening input ownership design
 > From version: 0.1.2
-> Status: Ready
-> Understanding: 95%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: Low
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -46,9 +46,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
-- Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`
+- Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`, `adr_031_bind_runtime_surface_interactions_to_resolved_elements_after_lazy_mount`
 - Request: `req_024_restore_runtime_surface_input_binding_reliability_after_lazy_mount`
-- Primary task(s): `task_tbd_orchestrate_runtime_surface_input_binding_reliability_after_lazy_mount`
+- Primary task(s): `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`
 
 # Priority
 - Impact: Medium
@@ -57,3 +57,4 @@ flowchart LR
 # Notes
 - Derived from request `req_024_restore_runtime_surface_input_binding_reliability_after_lazy_mount`.
 - Source file: `logics/request/req_024_restore_runtime_surface_input_binding_reliability_after_lazy_mount.md`.
+- Implemented through `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`.

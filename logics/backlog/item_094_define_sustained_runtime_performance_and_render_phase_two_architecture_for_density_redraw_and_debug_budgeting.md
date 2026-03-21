@@ -1,9 +1,9 @@
 ## item_094_define_sustained_runtime_performance_and_render_phase_two_architecture_for_density_redraw_and_debug_budgeting - Define sustained runtime performance and render phase-two architecture for density, redraw, and debug budgeting
 > From version: 0.1.2
-> Status: Ready
-> Understanding: 94%
-> Confidence: 91%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,9 +48,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer`, `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`, `adr_024_drive_live_runtime_from_the_pixi_visual_frame_while_engine_keeps_fixed_step_authority`, `adr_026_validate_unified_runtime_scheduling_with_frame_pacing_telemetry_and_browser_smoke`
+- Architecture decision(s): `adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer`, `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`, `adr_024_drive_live_runtime_from_the_pixi_visual_frame_while_engine_keeps_fixed_step_authority`, `adr_026_validate_unified_runtime_scheduling_with_frame_pacing_telemetry_and_browser_smoke`, `adr_028_budget_player_runtime_and_debug_visuals_as_separate_render_modes`
 - Request: `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
-- Primary task(s): `task_tbd_orchestrate_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
+- Primary task(s): `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`
 
 # Priority
 - Impact: High
@@ -59,3 +59,4 @@ flowchart LR
 # Notes
 - Derived from request `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`.
 - Source file: `logics/request/req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave.md`.
+- Implemented through `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`.
