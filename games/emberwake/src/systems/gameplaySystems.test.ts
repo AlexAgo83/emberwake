@@ -49,6 +49,7 @@ describe("gameplaySystems", () => {
       simulationAfterUpdate: {
         entities: [afterEntity],
         entity: afterEntity,
+        floatingDamageNumbers: [],
         nextPickupSequence: 0,
         nextHostileSequence: 0,
         runStats: {
@@ -62,6 +63,7 @@ describe("gameplaySystems", () => {
       simulationBeforeUpdate: {
         entities: [beforeEntity],
         entity: beforeEntity,
+        floatingDamageNumbers: [],
         nextPickupSequence: 0,
         nextHostileSequence: 0,
         runStats: {

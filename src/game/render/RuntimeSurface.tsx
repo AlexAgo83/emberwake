@@ -9,9 +9,9 @@ import {
 import type { EmberwakeRenderSurfaceMode } from "@game";
 import { EntityScene } from "../entities/render/EntityScene";
 import type { PresentedEntity } from "../entities/model/entityContract";
+import type { FloatingDamageNumber, SimulatedEntity } from "../entities/model/entitySimulation";
 import { WorldScene } from "../world/render/WorldScene";
 import type { ChunkCoordinate } from "../world/types";
-import type { SimulatedEntity } from "../entities/model/entitySimulation";
 
 type RuntimeSurfaceProps = {
   camera: CameraState;
@@ -21,6 +21,7 @@ type RuntimeSurfaceProps = {
   onSurfaceElementChange?: (element: HTMLDivElement | null) => void;
   renderSurfaceMode: EmberwakeRenderSurfaceMode;
   onVisualFrame?: (timestampMs: number) => void;
+  floatingDamageNumbers: FloatingDamageNumber[];
   visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
   visibleChunks: ChunkCoordinate[];
   viewport: {
@@ -41,6 +42,7 @@ export function RuntimeSurface({
   onSurfaceElementChange,
   renderSurfaceMode,
   onVisualFrame,
+  floatingDamageNumbers,
   visibleEntities,
   visibleChunks,
   viewport,
@@ -52,6 +54,7 @@ export function RuntimeSurface({
         camera={camera}
         currentTick={currentTick}
         entities={visibleEntities}
+        floatingDamageNumbers={floatingDamageNumbers}
         renderSurfaceMode={renderSurfaceMode}
         viewport={viewport}
       />

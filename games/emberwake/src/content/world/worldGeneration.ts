@@ -107,10 +107,50 @@ const sampleTerrainAtWorldTile = (
 };
 
 const obstacleThresholdByTerrain: Record<TerrainKind, number> = {
-  ashfield: 20,
-  emberplain: 16,
-  glowfen: 28,
-  obsidian: 36
+  ashfield: 10,
+  emberplain: 8,
+  glowfen: 14,
+  obsidian: 18
+};
+
+const sampleClusterFieldValue = ({
+  prefix,
+  scaleInTiles,
+  worldTileX,
+  worldTileY,
+  seed
+}: {
+  prefix: string;
+  scaleInTiles: number;
+  seed: string;
+  worldTileX: number;
+  worldTileY: number;
+}) => {
+  const clusterCellX = Math.floor(worldTileX / scaleInTiles);
+  const clusterCellY = Math.floor(worldTileY / scaleInTiles);
+  const neighborOffsets = [
+    { offsetX: 0, offsetY: 0, weight: 4 },
+    { offsetX: 1, offsetY: 0, weight: 2 },
+    { offsetX: -1, offsetY: 0, weight: 2 },
+    { offsetX: 0, offsetY: 1, weight: 2 },
+    { offsetX: 0, offsetY: -1, weight: 2 },
+    { offsetX: 1, offsetY: 1, weight: 1 },
+    { offsetX: -1, offsetY: 1, weight: 1 },
+    { offsetX: 1, offsetY: -1, weight: 1 },
+    { offsetX: -1, offsetY: -1, weight: 1 }
+  ];
+  let weightedTotal = 0;
+  let totalWeight = 0;
+
+  for (const neighborOffset of neighborOffsets) {
+    weightedTotal +=
+      sampleDeterministicSignature(
+        `${seed}:${prefix}:${clusterCellX + neighborOffset.offsetX}:${clusterCellY + neighborOffset.offsetY}`
+      ) * neighborOffset.weight;
+    totalWeight += neighborOffset.weight;
+  }
+
+  return Math.round(weightedTotal / totalWeight) % 256;
 };
 
 const sampleObstacleAtWorldTile = (
@@ -127,10 +167,18 @@ const sampleObstacleAtWorldTile = (
   }
 
   const tileSignature = sampleDeterministicSignature(`${seed}:obstacle:${worldTileX}:${worldTileY}`);
-  const clusterSignature = sampleDeterministicSignature(
-    `${seed}:obstacle-cluster:${Math.floor(worldTileX / 2)}:${Math.floor(worldTileY / 2)}`
-  );
-  const obstacleValue = (clusterSignature + (tileSignature % 53)) % 256;
+  const clusterValue = sampleClusterFieldValue({
+    prefix: "obstacle-cluster",
+    scaleInTiles: 4,
+    seed,
+    worldTileX,
+    worldTileY
+  });
+  const localBlendValue =
+    sampleDeterministicSignature(
+      `${seed}:obstacle-local:${Math.floor(worldTileX / 2)}:${Math.floor(worldTileY / 2)}`
+    ) % 256;
+  const obstacleValue = Math.round(clusterValue * 0.62 + localBlendValue * 0.26 + (tileSignature % 64) * 0.12);
 
   return {
     obstacleKind:
@@ -151,24 +199,32 @@ const sampleSurfaceModifierAtWorldTile = (
   }
 
   const tileSignature = sampleDeterministicSignature(`${seed}:surface:${worldTileX}:${worldTileY}`);
-  const clusterSignature = sampleDeterministicSignature(
-    `${seed}:surface-cluster:${Math.floor(worldTileX / 3)}:${Math.floor(worldTileY / 3)}`
-  );
-  const modifierValue = (clusterSignature + (tileSignature % 71)) % 256;
+  const clusterValue = sampleClusterFieldValue({
+    prefix: "surface-cluster",
+    scaleInTiles: 5,
+    seed,
+    worldTileX,
+    worldTileY
+  });
+  const localBlendValue =
+    sampleDeterministicSignature(
+      `${seed}:surface-local:${Math.floor(worldTileX / 3)}:${Math.floor(worldTileY / 3)}`
+    ) % 256;
+  const modifierValue = Math.round(clusterValue * 0.66 + localBlendValue * 0.22 + (tileSignature % 72) * 0.12);
 
-  if (terrainKind === "glowfen" && modifierValue < 108) {
+  if (terrainKind === "glowfen" && modifierValue < 54) {
     return "slow";
   }
 
-  if (terrainKind === "obsidian" && modifierValue < 68) {
+  if (terrainKind === "obsidian" && modifierValue < 34) {
     return "slippery";
   }
 
-  if (terrainKind === "ashfield" && modifierValue < 20) {
+  if (terrainKind === "ashfield" && modifierValue < 10) {
     return "slow";
   }
 
-  if (terrainKind === "emberplain" && modifierValue < 14) {
+  if (terrainKind === "emberplain" && modifierValue < 7) {
     return "slippery";
   }
 

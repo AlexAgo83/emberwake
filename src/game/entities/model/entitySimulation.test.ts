@@ -8,6 +8,8 @@ import type { SimulatedEntity } from "./entitySimulation";
 import { createGenericMoverEntity, entityContract } from "./entityContract";
 import { singleEntityControlContract } from "../../input/model/singleEntityControlContract";
 import { hostileCombatContract } from "@game/runtime/hostileCombatContract";
+import { sampleWorldTileLayers } from "../../world/model/worldGeneration";
+import { worldContract } from "../../world/model/worldContract";
 
 describe("entitySimulation", () => {
   const createHostileFixture = (
@@ -60,6 +62,7 @@ describe("entitySimulation", () => {
       healingKitsCollected: 0,
       hostileDefeats: 0
     });
+    expect(simulationState.floatingDamageNumbers).toEqual([]);
     expect(simulationState.entity.velocity).toEqual({ x: 0, y: 0 });
   });
 
@@ -156,6 +159,34 @@ describe("entitySimulation", () => {
     ).toBe(true);
   });
 
+  it("biases the first hostile spawn ahead of the player's active movement intent", () => {
+    let simulationState = createInitialSimulationState();
+
+    for (let step = 0; step < hostileCombatContract.hostile.spawnCooldownTicks; step += 1) {
+      simulationState = advanceSimulationState(simulationState, {
+        controlState: {
+          controlledEntityId: entityContract.primaryEntityId,
+          debugCameraModifierActive: false,
+          inputOwner: "player-entity",
+          movementIntent: {
+            isActive: true,
+            magnitude: 1,
+            source: "keyboard",
+            vector: {
+              x: 1,
+              y: 0
+            }
+          }
+        }
+      });
+    }
+
+    const hostileEntity = simulationState.entities.find((entity) => entity.role === "hostile");
+
+    expect(hostileEntity).toBeDefined();
+    expect(hostileEntity!.worldPosition.x).toBeGreaterThan(simulationState.entity.worldPosition.x);
+  });
+
   it("moves hostiles toward the player when the player is in focus", () => {
     const initialState = createInitialSimulationState();
     const hostileEntity = createHostileFixture({
@@ -176,6 +207,48 @@ describe("entitySimulation", () => {
     expect(movedHostile.focusState?.targetEntityId).toBe(entityContract.primaryEntityId);
   });
 
+  it("computes a bounded fallback route when direct hostile pursuit is blocked", () => {
+    let blockingTile: { x: number; y: number } | null = null;
+
+    for (let tileX = -64; tileX <= 64 && !blockingTile; tileX += 1) {
+      for (let tileY = -64; tileY <= 64; tileY += 1) {
+        if (sampleWorldTileLayers(tileX, tileY).obstacleKind === "solid") {
+          blockingTile = { x: tileX, y: tileY };
+          break;
+        }
+      }
+    }
+
+    expect(blockingTile).not.toBeNull();
+
+    const initialState = createInitialSimulationState();
+    const hostileEntity = createHostileFixture({
+      worldPosition: {
+        x: (blockingTile!.x - 1.5) * worldContract.tileSizeInWorldUnits,
+        y: (blockingTile!.y + 0.5) * worldContract.tileSizeInWorldUnits
+      }
+    });
+    const playerEntity = {
+      ...initialState.entity,
+      state: "idle" as const,
+      worldPosition: {
+        x: (blockingTile!.x + 2.5) * worldContract.tileSizeInWorldUnits,
+        y: (blockingTile!.y + 0.5) * worldContract.tileSizeInWorldUnits
+      }
+    };
+
+    const simulationState = advanceSimulationState({
+      ...initialState,
+      entities: [playerEntity, hostileEntity],
+      entity: playerEntity,
+      nextHostileSequence: 1
+    });
+    const routedHostile = simulationState.entities.find((entity) => entity.id === hostileEntity.id)!;
+
+    expect(routedHostile.pathfindingState?.routeTiles.length ?? 0).toBeGreaterThan(0);
+    expect(routedHostile.focusState?.targetEntityId).toBe(entityContract.primaryEntityId);
+  });
+
   it("automatically damages hostiles inside the player's forward cone", () => {
     const initialState = createInitialSimulationState();
     const hostileEntity = createHostileFixture({
@@ -193,6 +266,11 @@ describe("entitySimulation", () => {
 
     expect(simulationState.entities.some((entity) => entity.id === hostileEntity.id)).toBe(false);
     expect(simulationState.entity.automaticAttack?.lastAttackTick).toBe(1);
+    expect(simulationState.floatingDamageNumbers).toHaveLength(1);
+    expect(simulationState.floatingDamageNumbers[0]).toMatchObject({
+      amount: hostileCombatContract.player.automaticConeAttack.damage,
+      sourceEntityId: hostileEntity.id
+    });
     expect(simulationState.runStats.hostileDefeats).toBe(1);
   });
 
@@ -238,6 +316,10 @@ describe("entitySimulation", () => {
     expect(firstState.entity.combat.currentHealth).toBe(
       hostileCombatContract.player.maxHealth - hostileCombatContract.hostile.contactDamage
     );
+    expect(firstState.entity.damageReactionState?.lastDamageAmount).toBe(
+      hostileCombatContract.hostile.contactDamage
+    );
+    expect(firstState.floatingDamageNumbers).toHaveLength(1);
     expect(secondState.entity.combat.currentHealth).toBe(firstState.entity.combat.currentHealth);
   });
 

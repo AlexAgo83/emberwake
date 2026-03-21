@@ -64,4 +64,46 @@ describe("worldGeneration", () => {
 
     expect(getSampledWorldTileLayerCacheSizeForTests()).toBeLessThanOrEqual(8192);
   });
+
+  it("keeps obstacle and surface features relatively sparse while forming clustered patches", () => {
+    const featureTiles = Array.from({ length: 48 * 48 }, (_, index) => {
+      const tileX = (index % 48) - 24;
+      const tileY = Math.floor(index / 48) - 24;
+      const tileLayers = sampleWorldTileLayers(tileX, tileY, "alpha-seed");
+
+      return {
+        modifierKind: tileLayers.modifierKind,
+        obstacleKind: tileLayers.obstacleKind,
+        tileX,
+        tileY
+      };
+    });
+    const obstacleTiles = featureTiles.filter((tile) => tile.obstacleKind === "solid");
+    const modifierTiles = featureTiles.filter((tile) => tile.modifierKind !== "normal");
+    const obstacleTileKeys = new Set(obstacleTiles.map((tile) => `${tile.tileX}:${tile.tileY}`));
+    const modifierTileKeys = new Set(modifierTiles.map((tile) => `${tile.tileX}:${tile.tileY}`));
+    const countTilesWithOrthogonalNeighbor = (
+      tiles: typeof featureTiles,
+      keySet: Set<string>
+    ) =>
+      tiles.filter((tile) =>
+        [
+          `${tile.tileX + 1}:${tile.tileY}`,
+          `${tile.tileX - 1}:${tile.tileY}`,
+          `${tile.tileX}:${tile.tileY + 1}`,
+          `${tile.tileX}:${tile.tileY - 1}`
+        ].some((neighborKey) => keySet.has(neighborKey))
+      ).length;
+
+    expect(obstacleTiles.length).toBeGreaterThan(0);
+    expect(obstacleTiles.length).toBeLessThan(220);
+    expect(modifierTiles.length).toBeGreaterThan(0);
+    expect(modifierTiles.length).toBeLessThan(280);
+    expect(countTilesWithOrthogonalNeighbor(obstacleTiles, obstacleTileKeys)).toBeGreaterThan(
+      Math.floor(obstacleTiles.length * 0.5)
+    );
+    expect(countTilesWithOrthogonalNeighbor(modifierTiles, modifierTileKeys)).toBeGreaterThan(
+      Math.floor(modifierTiles.length * 0.5)
+    );
+  });
 });

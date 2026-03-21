@@ -317,6 +317,7 @@ export function ActiveRuntimeShellContent({
         <RuntimeSceneBoundary
           camera={cameraState}
           currentTick={simulationState.tick}
+          floatingDamageNumbers={simulationState.floatingDamageNumbers}
           onOpenSettings={onShowSettingsScene}
           onRendererError={onRendererError}
           onRendererReady={onRendererReady}

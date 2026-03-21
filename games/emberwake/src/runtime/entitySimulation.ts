@@ -64,12 +64,45 @@ export type RunStats = {
   hostileDefeats: number;
 };
 
+export type DamageReactionState = {
+  lastDamageAmount: number | null;
+  lastDamageTick: number | null;
+};
+
+export type FloatingDamageNumber = {
+  amount: number;
+  driftX: number;
+  id: string;
+  sourceEntityId: string;
+  spawnedAtTick: number;
+  worldPosition: WorldPoint;
+};
+
+type TilePoint = {
+  x: number;
+  y: number;
+};
+
+export type MovementHeadingMemory = {
+  headingRadians: number;
+  lastMeaningfulTick: number;
+};
+
+export type HostilePathfindingState = {
+  lastComputedTick: number | null;
+  routeTiles: TilePoint[];
+  targetTile: TilePoint | null;
+};
+
 export type SimulatedEntity = WorldEntity & {
   automaticAttack?: AutomaticAttackProfile;
   combat: EntityCombatState;
   contactDamageProfile?: ContactDamageProfile;
+  damageReactionState?: DamageReactionState;
   focusState?: FocusState;
   movementSurfaceModifier: MovementSurfaceModifierKind;
+  movementHeadingMemory?: MovementHeadingMemory;
+  pathfindingState?: HostilePathfindingState;
   pickupProfile?: PickupProfile;
   role: SimulatedEntityRole;
   spawnedAtTick: number;
@@ -79,6 +112,7 @@ export type SimulatedEntity = WorldEntity & {
 export type EntitySimulationState = {
   entities: SimulatedEntity[];
   entity: SimulatedEntity;
+  floatingDamageNumbers: FloatingDamageNumber[];
   nextPickupSequence: number;
   nextHostileSequence: number;
   runStats: RunStats;
@@ -105,6 +139,7 @@ type ScriptedPhase = {
 
 type ResolvedEntityIntent = {
   focusTargetEntityId?: string | null;
+  pathfindingState?: HostilePathfindingState;
   state: EntityState;
   velocity: WorldPoint;
 };
@@ -148,9 +183,20 @@ const totalCycleTicks = scriptedPhases.reduce(
   0
 );
 
+export const entityCombatPresentationContract = {
+  floatingDamageNumberLifetimeTicks: 24,
+  hitReactionVisibleTicks: 10,
+  spawnHeadingMemoryTicks: 18
+} as const;
+
 const createCombatState = (maxHealth: number): EntityCombatState => ({
   currentHealth: maxHealth,
   maxHealth
+});
+
+const createDamageReactionState = (): DamageReactionState => ({
+  lastDamageAmount: null,
+  lastDamageTick: null
 });
 
 const createInitialRunStats = (): RunStats => ({
@@ -178,6 +224,7 @@ const createPlayerEntity = (): SimulatedEntity => ({
     ...createPlayerAutomaticAttackProfile()
   },
   combat: createCombatState(hostileCombatContract.player.maxHealth),
+  damageReactionState: createDamageReactionState(),
   movementSurfaceModifier: "normal",
   role: "player",
   spawnedAtTick: 0,
@@ -211,7 +258,13 @@ const createHostileEntity = (
     acquisitionRadiusWorldUnits: hostileCombatContract.hostile.acquisitionRadiusWorldUnits,
     targetEntityId: null
   },
+  damageReactionState: createDamageReactionState(),
   movementSurfaceModifier: "normal",
+  pathfindingState: {
+    lastComputedTick: null,
+    routeTiles: [],
+    targetTile: null
+  },
   role: "hostile",
   spawnedAtTick,
   velocity: {
@@ -236,6 +289,7 @@ const createPickupEntity = (
     worldPosition
   }),
   combat: createCombatState(1),
+  damageReactionState: createDamageReactionState(),
   footprint: {
     radius: pickupContract.pickup.pickupRadiusWorldUnits
   },
@@ -283,12 +337,171 @@ const createVelocityTowardTarget = (
   };
 };
 
+const movementVectorMagnitude = (vector: WorldPoint) => Math.hypot(vector.x, vector.y);
+
+const createTileCenterWorldPoint = (tilePoint: TilePoint): WorldPoint => {
+  const tileOrigin = tileCoordinateToWorldOrigin(tilePoint);
+
+  return {
+    x: tileOrigin.x + worldContract.tileSizeInWorldUnits / 2,
+    y: tileOrigin.y + worldContract.tileSizeInWorldUnits / 2
+  };
+};
+
+const tilePointKey = (tilePoint: TilePoint) => `${tilePoint.x}:${tilePoint.y}`;
+
+const isTileTraversable = (tilePoint: TilePoint, worldSeed: string) =>
+  !obstacleDefinitions[sampleWorldTileLayers(tilePoint.x, tilePoint.y, worldSeed).obstacleKind]
+    .blocksMovement;
+
+const isDirectPursuitBlocked = ({
+  footprintRadius,
+  source,
+  target,
+  worldSeed
+}: {
+  footprintRadius: number;
+  source: WorldPoint;
+  target: WorldPoint;
+  worldSeed: string;
+}) => {
+  const distance = distanceBetweenWorldPoints(source, target);
+
+  if (distance === 0) {
+    return false;
+  }
+
+  const sampleCount = Math.max(
+    1,
+    Math.ceil(distance / (worldContract.tileSizeInWorldUnits * 0.5))
+  );
+
+  for (let index = 1; index <= sampleCount; index += 1) {
+    const progress = index / sampleCount;
+    const sampledPoint = {
+      x: source.x + (target.x - source.x) * progress,
+      y: source.y + (target.y - source.y) * progress
+    };
+
+    if (isWorldPositionBlockedByObstacle(sampledPoint, footprintRadius, worldSeed)) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+const createEmptyHostilePathfindingState = (): HostilePathfindingState => ({
+  lastComputedTick: null,
+  routeTiles: [],
+  targetTile: null
+});
+
+const pathfindingContract = {
+  recomputeCadenceTicks: 18,
+  searchNodeBudget: 96,
+  searchRadiusTiles: 6,
+  waypointAdvanceDistanceWorldUnits: worldContract.tileSizeInWorldUnits * 0.35
+} as const;
+
+const findBoundedPathTiles = ({
+  startTile,
+  targetTile,
+  worldSeed
+}: {
+  startTile: TilePoint;
+  targetTile: TilePoint;
+  worldSeed: string;
+}) => {
+  const minTileX = startTile.x - pathfindingContract.searchRadiusTiles;
+  const maxTileX = startTile.x + pathfindingContract.searchRadiusTiles;
+  const minTileY = startTile.y - pathfindingContract.searchRadiusTiles;
+  const maxTileY = startTile.y + pathfindingContract.searchRadiusTiles;
+  const isInsideBounds = (tilePoint: TilePoint) =>
+    tilePoint.x >= minTileX &&
+    tilePoint.x <= maxTileX &&
+    tilePoint.y >= minTileY &&
+    tilePoint.y <= maxTileY;
+  const openSet: TilePoint[] = [startTile];
+  const cameFrom = new Map<string, TilePoint>();
+  const gScore = new Map<string, number>([[tilePointKey(startTile), 0]]);
+  const fScore = new Map<string, number>([
+    [
+      tilePointKey(startTile),
+      Math.abs(targetTile.x - startTile.x) + Math.abs(targetTile.y - startTile.y)
+    ]
+  ]);
+  let exploredNodes = 0;
+
+  while (
+    openSet.length > 0 &&
+    exploredNodes < pathfindingContract.searchNodeBudget
+  ) {
+    openSet.sort(
+      (left, right) =>
+        (fScore.get(tilePointKey(left)) ?? Number.POSITIVE_INFINITY) -
+        (fScore.get(tilePointKey(right)) ?? Number.POSITIVE_INFINITY)
+    );
+    const currentTile = openSet.shift()!;
+
+    if (currentTile.x === targetTile.x && currentTile.y === targetTile.y) {
+      const routeTiles: TilePoint[] = [];
+      let routeCursor: TilePoint | undefined = currentTile;
+
+      while (routeCursor && tilePointKey(routeCursor) !== tilePointKey(startTile)) {
+        routeTiles.unshift(routeCursor);
+        routeCursor = cameFrom.get(tilePointKey(routeCursor));
+      }
+
+      return routeTiles;
+    }
+
+    exploredNodes += 1;
+
+    const neighbors: TilePoint[] = [
+      { x: currentTile.x + 1, y: currentTile.y },
+      { x: currentTile.x - 1, y: currentTile.y },
+      { x: currentTile.x, y: currentTile.y + 1 },
+      { x: currentTile.x, y: currentTile.y - 1 }
+    ];
+
+    for (const neighborTile of neighbors) {
+      if (!isInsideBounds(neighborTile) || !isTileTraversable(neighborTile, worldSeed)) {
+        continue;
+      }
+
+      const neighborKey = tilePointKey(neighborTile);
+      const tentativeScore = (gScore.get(tilePointKey(currentTile)) ?? Number.POSITIVE_INFINITY) + 1;
+
+      if (tentativeScore >= (gScore.get(neighborKey) ?? Number.POSITIVE_INFINITY)) {
+        continue;
+      }
+
+      cameFrom.set(neighborKey, currentTile);
+      gScore.set(neighborKey, tentativeScore);
+      fScore.set(
+        neighborKey,
+        tentativeScore +
+          Math.abs(targetTile.x - neighborTile.x) +
+          Math.abs(targetTile.y - neighborTile.y)
+      );
+
+      if (!openSet.some((tilePoint) => tilePointKey(tilePoint) === neighborKey)) {
+        openSet.push(neighborTile);
+      }
+    }
+  }
+
+  return [];
+};
+
 export const createInitialSimulationState = (): EntitySimulationState => {
   const playerEntity = createPlayerEntity();
 
   return {
     entities: [playerEntity],
     entity: playerEntity,
+    floatingDamageNumbers: [],
     nextPickupSequence: 0,
     nextHostileSequence: 0,
     runStats: createInitialRunStats(),
@@ -306,6 +519,13 @@ const normalizeCombatState = (
     Math.min(combat?.currentHealth ?? maxHealth, combat?.maxHealth ?? maxHealth)
   ),
   maxHealth: combat?.maxHealth ?? maxHealth
+});
+
+const normalizeDamageReactionState = (
+  damageReactionState: Partial<DamageReactionState> | undefined
+): DamageReactionState => ({
+  lastDamageAmount: damageReactionState?.lastDamageAmount ?? null,
+  lastDamageTick: damageReactionState?.lastDamageTick ?? null
 });
 
 const normalizeEntityRole = (
@@ -357,7 +577,9 @@ const normalizeSimulatedEntity = (
         ...entity.automaticAttack
       },
       combat: normalizeCombatState(entity.combat, hostileCombatContract.player.maxHealth),
+      damageReactionState: normalizeDamageReactionState(entity.damageReactionState),
       movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
+      movementHeadingMemory: entity.movementHeadingMemory,
       role,
       spawnedAtTick: entity.spawnedAtTick ?? 0,
       velocity: entity.velocity ?? { x: 0, y: 0 }
@@ -382,7 +604,13 @@ const normalizeSimulatedEntity = (
           hostileCombatContract.hostile.acquisitionRadiusWorldUnits,
         targetEntityId: entity.focusState?.targetEntityId ?? null
       },
+      damageReactionState: normalizeDamageReactionState(entity.damageReactionState),
       movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
+      pathfindingState: {
+        lastComputedTick: entity.pathfindingState?.lastComputedTick ?? null,
+        routeTiles: entity.pathfindingState?.routeTiles ?? [],
+        targetTile: entity.pathfindingState?.targetTile ?? null
+      },
       role,
       spawnedAtTick: entity.spawnedAtTick ?? 0,
       velocity: entity.velocity ?? { x: 0, y: 0 }
@@ -397,6 +625,7 @@ const normalizeSimulatedEntity = (
     return {
       ...baseEntity,
       combat: normalizeCombatState(entity.combat, 1),
+      damageReactionState: normalizeDamageReactionState(entity.damageReactionState),
       footprint: {
         radius: entity.footprint?.radius ?? pickupContract.pickup.pickupRadiusWorldUnits
       },
@@ -413,6 +642,7 @@ const normalizeSimulatedEntity = (
   return {
     ...baseEntity,
     combat: normalizeCombatState(entity.combat, 1),
+    damageReactionState: normalizeDamageReactionState(entity.damageReactionState),
     movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
     role,
     spawnedAtTick: entity.spawnedAtTick ?? 0,
@@ -461,6 +691,7 @@ export const normalizeEntitySimulationState = (
   return {
     entities: normalizedEntities,
     entity: playerEntity,
+    floatingDamageNumbers: simulationState.floatingDamageNumbers ?? [],
     nextPickupSequence,
     nextHostileSequence,
     runStats: {
@@ -491,12 +722,14 @@ const resolveEntityIntent = ({
   command,
   entity,
   playerEntity,
-  tick
+  tick,
+  worldSeed
 }: {
   command: SimulationCommand;
   entity: SimulatedEntity;
   playerEntity: SimulatedEntity;
   tick: number;
+  worldSeed: string;
 }): ResolvedEntityIntent => {
   if (entity.role === "player") {
     const controlledEntity =
@@ -524,6 +757,7 @@ const resolveEntityIntent = ({
   if (entity.role !== "hostile" || !entity.focusState || !isAlive(playerEntity)) {
     return {
       focusTargetEntityId: null,
+      pathfindingState: entity.role === "hostile" ? createEmptyHostilePathfindingState() : undefined,
       state: "idle",
       velocity: { x: 0, y: 0 }
     };
@@ -537,17 +771,98 @@ const resolveEntityIntent = ({
   if (distanceToPlayer > entity.focusState.acquisitionRadiusWorldUnits) {
     return {
       focusTargetEntityId: null,
+      pathfindingState: createEmptyHostilePathfindingState(),
       state: "idle",
       velocity: { x: 0, y: 0 }
     };
   }
 
+  const currentTile = worldPointToTileCoordinate(entity.worldPosition);
+  const targetTile = worldPointToTileCoordinate(playerEntity.worldPosition);
+  const directPathBlocked = isDirectPursuitBlocked({
+    footprintRadius: entity.footprint.radius,
+    source: entity.worldPosition,
+    target: playerEntity.worldPosition,
+    worldSeed
+  });
+  const previousPathfindingState =
+    entity.pathfindingState ?? createEmptyHostilePathfindingState();
+
+  if (!directPathBlocked) {
+    return {
+      focusTargetEntityId: playerEntity.id,
+      pathfindingState: {
+        ...previousPathfindingState,
+        routeTiles: [],
+        targetTile
+      },
+      state: "moving",
+      velocity: createVelocityTowardTarget(
+        entity.worldPosition,
+        playerEntity.worldPosition,
+        hostileCombatContract.hostile.moveSpeedWorldUnitsPerSecond
+      )
+    };
+  }
+
+  const targetTileChanged =
+    previousPathfindingState.targetTile?.x !== targetTile.x ||
+    previousPathfindingState.targetTile?.y !== targetTile.y;
+  const shouldRefreshPath =
+    previousPathfindingState.lastComputedTick === null ||
+    previousPathfindingState.routeTiles.length === 0 ||
+    targetTileChanged ||
+    tick - previousPathfindingState.lastComputedTick >= pathfindingContract.recomputeCadenceTicks;
+  const refreshedRouteTiles = shouldRefreshPath
+    ? findBoundedPathTiles({
+        startTile: currentTile,
+        targetTile,
+        worldSeed
+      })
+    : previousPathfindingState.routeTiles;
+  const nextPathfindingState: HostilePathfindingState = {
+    lastComputedTick: shouldRefreshPath
+      ? tick
+      : previousPathfindingState.lastComputedTick,
+    routeTiles: refreshedRouteTiles.filter(
+      (routeTile) => routeTile.x !== currentTile.x || routeTile.y !== currentTile.y
+    ),
+    targetTile
+  };
+  const nextWaypointTile = nextPathfindingState.routeTiles[0];
+
+  if (!nextWaypointTile) {
+    return {
+      focusTargetEntityId: playerEntity.id,
+      pathfindingState: nextPathfindingState,
+      state: "moving",
+      velocity: createVelocityTowardTarget(
+        entity.worldPosition,
+        playerEntity.worldPosition,
+        hostileCombatContract.hostile.moveSpeedWorldUnitsPerSecond
+      )
+    };
+  }
+
+  const nextWaypointWorldPosition = createTileCenterWorldPoint(nextWaypointTile);
+  const reachedWaypoint =
+    distanceBetweenWorldPoints(entity.worldPosition, nextWaypointWorldPosition) <=
+    pathfindingContract.waypointAdvanceDistanceWorldUnits;
+  const routeTilesAfterAdvance = reachedWaypoint
+    ? nextPathfindingState.routeTiles.slice(1)
+    : nextPathfindingState.routeTiles;
+  const activeWaypointTile = routeTilesAfterAdvance[0] ?? nextWaypointTile;
+
   return {
     focusTargetEntityId: playerEntity.id,
+    pathfindingState: {
+      ...nextPathfindingState,
+      routeTiles: routeTilesAfterAdvance
+    },
     state: "moving",
     velocity: createVelocityTowardTarget(
       entity.worldPosition,
-      playerEntity.worldPosition,
+      createTileCenterWorldPoint(activeWaypointTile),
       hostileCombatContract.hostile.moveSpeedWorldUnitsPerSecond
     )
   };
@@ -613,11 +928,13 @@ const resolveEntityMovement = ({
   dynamicColliders,
   entity,
   intent,
+  tick,
   worldSeed
 }: {
   dynamicColliders: readonly SimulatedEntity[];
   entity: SimulatedEntity;
   intent: ResolvedEntityIntent;
+  tick: number;
   worldSeed: string;
 }) => {
   const stepSeconds = entitySimulationContract.fixedStepMs / 1000;
@@ -637,6 +954,7 @@ const resolveEntityMovement = ({
     resolvedMovement.velocity.x === 0 && resolvedMovement.velocity.y === 0
       ? entity.orientation
       : Math.atan2(resolvedMovement.velocity.y, resolvedMovement.velocity.x);
+  const movementSpeed = movementVectorMagnitude(resolvedMovement.velocity);
 
   return {
     ...entity,
@@ -646,7 +964,16 @@ const resolveEntityMovement = ({
           targetEntityId: intent.focusTargetEntityId ?? null
         }
       : undefined,
+    movementHeadingMemory:
+      entity.role === "player" && movementSpeed > 0
+        ? {
+            headingRadians: orientation,
+            lastMeaningfulTick: tick
+          }
+        : entity.movementHeadingMemory,
     movementSurfaceModifier: resolvedMovement.surfaceModifierKind,
+    pathfindingState:
+      entity.role === "hostile" ? intent.pathfindingState ?? entity.pathfindingState : undefined,
     orientation,
     state:
       resolvedMovement.velocity.x === 0 && resolvedMovement.velocity.y === 0
@@ -671,11 +998,19 @@ const normalizeAngleDelta = (angleRadians: number) => {
   return normalizedAngle;
 };
 
-const applyDamage = (entity: SimulatedEntity, damage: number): SimulatedEntity => ({
+const applyDamage = (
+  entity: SimulatedEntity,
+  damage: number,
+  tick: number
+): SimulatedEntity => ({
   ...entity,
   combat: {
     ...entity.combat,
     currentHealth: Math.max(0, entity.combat.currentHealth - damage)
+  },
+  damageReactionState: {
+    lastDamageAmount: damage,
+    lastDamageTick: tick
   }
 });
 
@@ -687,14 +1022,50 @@ const applyHealing = (entity: SimulatedEntity, healing: number): SimulatedEntity
   }
 });
 
+const createFloatingDamageNumber = (
+  entity: SimulatedEntity,
+  damage: number,
+  tick: number
+): FloatingDamageNumber => {
+  const driftSeed = sampleDeterministicSignature(`${entity.id}:damage:${tick}:${damage}`);
+
+  return {
+    amount: Math.max(0, Math.round(damage)),
+    driftX: ((driftSeed % 13) - 6) * 1.75,
+    id: `floating-damage:${entity.id}:${tick}:${damage}:${driftSeed % 17}`,
+    sourceEntityId: entity.id,
+    spawnedAtTick: tick,
+    worldPosition: {
+      x: entity.worldPosition.x,
+      y: entity.worldPosition.y - entity.footprint.radius - 18
+    }
+  };
+};
+
+const pruneFloatingDamageNumbers = (
+  floatingDamageNumbers: readonly FloatingDamageNumber[],
+  tick: number
+) =>
+  floatingDamageNumbers.filter(
+    (floatingDamageNumber) =>
+      tick - floatingDamageNumber.spawnedAtTick <
+      entityCombatPresentationContract.floatingDamageNumberLifetimeTicks
+  );
+
 const resolveAutomaticPlayerAttack = (
   entities: readonly SimulatedEntity[],
   tick: number
-): SimulatedEntity[] => {
+): {
+  entities: SimulatedEntity[];
+  floatingDamageNumbers: FloatingDamageNumber[];
+} => {
   const playerEntity = getPlayerEntity(entities);
 
   if (!playerEntity || !playerEntity.automaticAttack || !isAlive(playerEntity)) {
-    return [...entities];
+    return {
+      entities: [...entities],
+      floatingDamageNumbers: []
+    };
   }
 
   const { automaticAttack } = playerEntity;
@@ -703,7 +1074,10 @@ const resolveAutomaticPlayerAttack = (
     automaticAttack.lastAttackTick !== null &&
     tick - automaticAttack.lastAttackTick < automaticAttack.cooldownTicks
   ) {
-    return [...entities];
+    return {
+      entities: [...entities],
+      floatingDamageNumbers: []
+    };
   }
 
   const hitTargetIds = new Set(
@@ -735,10 +1109,14 @@ const resolveAutomaticPlayerAttack = (
   );
 
   if (hitTargetIds.size === 0) {
-    return [...entities];
+    return {
+      entities: [...entities],
+      floatingDamageNumbers: []
+    };
   }
 
-  return entities.map((entity) => {
+  const floatingDamageNumbers: FloatingDamageNumber[] = [];
+  const nextEntities = entities.map((entity) => {
     if (entity.id === playerEntity.id) {
       return {
         ...entity,
@@ -753,8 +1131,19 @@ const resolveAutomaticPlayerAttack = (
       return entity;
     }
 
-    return applyDamage(entity, automaticAttack.damage);
+    const damagedEntity = applyDamage(entity, automaticAttack.damage, tick);
+
+    floatingDamageNumbers.push(
+      createFloatingDamageNumber(damagedEntity, automaticAttack.damage, tick)
+    );
+
+    return damagedEntity;
   });
+
+  return {
+    entities: nextEntities,
+    floatingDamageNumbers
+  };
 };
 
 const isEntityPairOverlapping = (leftEntity: SimulatedEntity, rightEntity: SimulatedEntity) =>
@@ -765,16 +1154,23 @@ const resolveHostileContactDamage = (
   entities: readonly SimulatedEntity[],
   previousEntities: readonly SimulatedEntity[],
   tick: number
-): SimulatedEntity[] => {
+): {
+  entities: SimulatedEntity[];
+  floatingDamageNumbers: FloatingDamageNumber[];
+} => {
   const playerEntity = getPlayerEntity(entities);
   const previousPlayerEntity = getPlayerEntity(previousEntities);
 
   if (!playerEntity || !isAlive(playerEntity)) {
-    return [...entities];
+    return {
+      entities: [...entities],
+      floatingDamageNumbers: []
+    };
   }
 
   let nextPlayerEntity = playerEntity;
   const nextEntities = entities.map((entity) => ({ ...entity }));
+  const floatingDamageNumbers: FloatingDamageNumber[] = [];
 
   for (let index = 0; index < nextEntities.length; index += 1) {
     const hostileEntity = nextEntities[index];
@@ -809,7 +1205,10 @@ const resolveHostileContactDamage = (
       continue;
     }
 
-    nextPlayerEntity = applyDamage(nextPlayerEntity, contactDamageProfile.damage);
+    nextPlayerEntity = applyDamage(nextPlayerEntity, contactDamageProfile.damage, tick);
+    floatingDamageNumbers.push(
+      createFloatingDamageNumber(nextPlayerEntity, contactDamageProfile.damage, tick)
+    );
     nextEntities[index] = {
       ...hostileEntity,
       contactDamageProfile: {
@@ -819,9 +1218,12 @@ const resolveHostileContactDamage = (
     };
   }
 
-  return nextEntities.map((entity) =>
-    entity.id === nextPlayerEntity.id ? nextPlayerEntity : entity
-  );
+  return {
+    entities: nextEntities.map((entity) =>
+      entity.id === nextPlayerEntity.id ? nextPlayerEntity : entity
+    ),
+    floatingDamageNumbers
+  };
 };
 
 const countLocalHostiles = (entities: readonly SimulatedEntity[], playerEntity: SimulatedEntity) =>
@@ -831,15 +1233,69 @@ const countLocalHostiles = (entities: readonly SimulatedEntity[], playerEntity: 
       isAlive(entity) &&
       distanceBetweenWorldPoints(entity.worldPosition, playerEntity.worldPosition) <=
         hostileCombatContract.hostile.acquisitionRadiusWorldUnits
-  ).length;
+      ).length;
+
+const resolvePreferredSpawnHeadingRadians = ({
+  command,
+  playerEntity,
+  tick
+}: {
+  command: SimulationCommand;
+  playerEntity: SimulatedEntity;
+  tick: number;
+}) => {
+  const movementIntent = command.controlState?.movementIntent;
+
+  if (
+    movementIntent?.isActive &&
+    (movementIntent.vector.x !== 0 || movementIntent.vector.y !== 0)
+  ) {
+    return Math.atan2(movementIntent.vector.y, movementIntent.vector.x);
+  }
+
+  if (
+    playerEntity.movementHeadingMemory &&
+    tick - playerEntity.movementHeadingMemory.lastMeaningfulTick <=
+      entityCombatPresentationContract.spawnHeadingMemoryTicks
+  ) {
+    return playerEntity.movementHeadingMemory.headingRadians;
+  }
+
+  if (movementVectorMagnitude(playerEntity.velocity) > 0) {
+    return Math.atan2(playerEntity.velocity.y, playerEntity.velocity.x);
+  }
+
+  return null;
+};
+
+const sampleSpawnAngleWithinSector = ({
+  baseHeadingRadians,
+  sectorCenterOffsetRadians,
+  sectorWidthRadians,
+  signature
+}: {
+  baseHeadingRadians: number;
+  sectorCenterOffsetRadians: number;
+  sectorWidthRadians: number;
+  signature: number;
+}) => {
+  const halfWidth = sectorWidthRadians / 2;
+  const normalizedOffset = ((signature % 1000) / 999) * sectorWidthRadians - halfWidth;
+
+  return baseHeadingRadians + sectorCenterOffsetRadians + normalizedOffset;
+};
 
 const sampleHostileSpawnPosition = ({
+  command,
   playerEntity,
   sequence,
+  tick,
   worldSeed
 }: {
+  command: SimulationCommand;
   playerEntity: SimulatedEntity;
   sequence: number;
+  tick: number;
   worldSeed: string;
 }) => {
   const angleSignature = sampleDeterministicSignature(
@@ -848,7 +1304,35 @@ const sampleHostileSpawnPosition = ({
   const distanceSignature = sampleDeterministicSignature(
     `${worldSeed}:hostile-distance:${sequence}:${playerEntity.worldPosition.x}:${playerEntity.worldPosition.y}`
   );
-  const angleRadians = ((angleSignature % 360) * Math.PI) / 180;
+  const preferredHeadingRadians = resolvePreferredSpawnHeadingRadians({
+    command,
+    playerEntity,
+    tick
+  });
+  const sectorDefinitions =
+    preferredHeadingRadians === null
+      ? null
+      : [
+          { centerOffsetRadians: 0, widthRadians: (70 * Math.PI) / 180 },
+          { centerOffsetRadians: (55 * Math.PI) / 180, widthRadians: (42 * Math.PI) / 180 },
+          { centerOffsetRadians: (-55 * Math.PI) / 180, widthRadians: (42 * Math.PI) / 180 },
+          { centerOffsetRadians: (105 * Math.PI) / 180, widthRadians: (34 * Math.PI) / 180 },
+          { centerOffsetRadians: (-105 * Math.PI) / 180, widthRadians: (34 * Math.PI) / 180 },
+          { centerOffsetRadians: (145 * Math.PI) / 180, widthRadians: (26 * Math.PI) / 180 },
+          { centerOffsetRadians: (-145 * Math.PI) / 180, widthRadians: (26 * Math.PI) / 180 },
+          { centerOffsetRadians: Math.PI, widthRadians: (20 * Math.PI) / 180 }
+        ];
+  const sectorDefinition =
+    sectorDefinitions?.[sequence % sectorDefinitions.length] ?? null;
+  const angleRadians =
+    preferredHeadingRadians === null || !sectorDefinition
+      ? ((angleSignature % 360) * Math.PI) / 180
+      : sampleSpawnAngleWithinSector({
+          baseHeadingRadians: preferredHeadingRadians,
+          sectorCenterOffsetRadians: sectorDefinition.centerOffsetRadians,
+          sectorWidthRadians: sectorDefinition.widthRadians,
+          signature: angleSignature
+        });
   const distanceRatio = 0.75 + (distanceSignature % 55) / 100;
   const radialDistance =
     hostileCombatContract.hostile.safeSpawnDistanceWorldUnits * distanceRatio;
@@ -882,11 +1366,13 @@ const canSpawnEntityAtPosition = ({
 };
 
 const maintainLocalHostilePopulation = ({
+  command,
   entities,
   nextHostileSequence,
   tick,
   worldSeed
 }: Pick<EntitySimulationState, "entities" | "nextHostileSequence" | "worldSeed"> & {
+  command: SimulationCommand;
   tick: number;
 }) => {
   const playerEntity = getPlayerEntity(entities);
@@ -925,8 +1411,10 @@ const maintainLocalHostilePopulation = ({
   ) {
     const hostileSequence = nextHostileSequence + attempt;
     const candidatePosition = sampleHostileSpawnPosition({
+      command,
       playerEntity,
       sequence: hostileSequence,
+      tick,
       worldSeed
     });
 
@@ -1160,6 +1648,7 @@ export const advanceSimulationState = (
     worldSeed
   });
   const spawnMaintainedState = maintainLocalHostilePopulation({
+    command,
     entities: pickupMaintainedState.entities,
     nextHostileSequence: simulationState.nextHostileSequence,
     tick: nextTick,
@@ -1176,22 +1665,24 @@ export const advanceSimulationState = (
         command,
         entity,
         playerEntity,
-        tick: simulationState.tick
+        tick: simulationState.tick,
+        worldSeed
       }),
+      tick: nextTick,
       worldSeed
     })
   );
-  const attackResolvedEntities = resolveAutomaticPlayerAttack(movedEntities, nextTick);
-  const combatResolvedEntities = resolveHostileContactDamage(
-    attackResolvedEntities,
+  const attackResolvedState = resolveAutomaticPlayerAttack(movedEntities, nextTick);
+  const combatResolvedState = resolveHostileContactDamage(
+    attackResolvedState.entities,
     spawnMaintainedState.entities,
     nextTick
   );
   const pickupResolvedState = resolvePickupCollection({
-    entities: combatResolvedEntities,
+    entities: combatResolvedState.entities,
     runStats: simulationState.runStats
   });
-  const defeatedHostileCount = combatResolvedEntities.filter(
+  const defeatedHostileCount = combatResolvedState.entities.filter(
     (entity) => entity.role === "hostile" && !isAlive(entity)
   ).length;
   const survivingEntities = pickupResolvedState.entities.filter(
@@ -1202,6 +1693,14 @@ export const advanceSimulationState = (
   return {
     entities: survivingEntities,
     entity: nextPlayerEntity,
+    floatingDamageNumbers: pruneFloatingDamageNumbers(
+      [
+        ...simulationState.floatingDamageNumbers,
+        ...attackResolvedState.floatingDamageNumbers,
+        ...combatResolvedState.floatingDamageNumbers
+      ],
+      nextTick
+    ),
     nextPickupSequence: pickupMaintainedState.nextPickupSequence,
     nextHostileSequence: spawnMaintainedState.nextHostileSequence,
     runStats: {

@@ -2,7 +2,10 @@ import { Suspense, lazy } from "react";
 
 import type { CameraState } from "@engine";
 import type { PresentedEntity } from "../../game/entities/model/entityContract";
-import type { SimulatedEntity } from "../../game/entities/model/entitySimulation";
+import type {
+  FloatingDamageNumber,
+  SimulatedEntity
+} from "../../game/entities/model/entitySimulation";
 import type { ChunkCoordinate } from "../../game/world/types";
 import type { AppSceneId } from "../model/appScene";
 
@@ -26,6 +29,7 @@ type RuntimeSceneBoundaryProps = {
   onVisualFrame?: (timestampMs: number) => void;
   rendererMessage: string;
   scene: AppSceneId;
+  floatingDamageNumbers: FloatingDamageNumber[];
   visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
   visibleChunks: ChunkCoordinate[];
   viewport: {
@@ -85,6 +89,7 @@ export function RuntimeSceneBoundary({
   onVisualFrame,
   rendererMessage,
   scene,
+  floatingDamageNumbers,
   visibleEntities,
   visibleChunks,
   viewport,
@@ -135,6 +140,7 @@ export function RuntimeSceneBoundary({
           renderSurfaceMode={renderSurfaceMode}
           onSurfaceElementChange={onSurfaceElementChange}
           onVisualFrame={onVisualFrame}
+          floatingDamageNumbers={floatingDamageNumbers}
           visibleEntities={visibleEntities}
           visibleChunks={visibleChunks}
           viewport={viewport}
