@@ -1,0 +1,21 @@
+{
+  "referenceDeviceClass": "midrange-mobile-webview",
+  "referenceViewport": {
+    "width": 390,
+    "height": 844
+  },
+  "simulation": {
+    "acceptableFrameTimeMs": 18.18,
+    "frameRateFloor": 55
+  },
+  "shellStartup": {
+    "maxInitialCssKb": 20,
+    "maxInitialJsKb": 380,
+    "maxInitialRequestCount": 4
+  },
+  "runtimeActivation": {
+    "maxLazyRuntimeJsKb": 560,
+    "maxMenuInteractiveMs": 3000,
+    "maxRendererReadyMs": 2500
+  }
+}

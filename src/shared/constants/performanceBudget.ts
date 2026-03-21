@@ -1,9 +1,12 @@
+import runtimePerformanceBudgetJson from "../config/runtimePerformanceBudget.json";
+
+export const runtimePerformanceBudget = runtimePerformanceBudgetJson;
+
 export const shellPerformanceBudget = {
-  acceptableFrameTimeMs: 1000 / 55,
-  frameRateFloor: 55,
-  referenceDeviceClass: "mobile-shell",
-  referenceViewport: {
-    height: 844,
-    width: 390
-  }
+  acceptableFrameTimeMs: runtimePerformanceBudget.simulation.acceptableFrameTimeMs,
+  frameRateFloor: runtimePerformanceBudget.simulation.frameRateFloor,
+  referenceDeviceClass: runtimePerformanceBudget.referenceDeviceClass,
+  referenceViewport: runtimePerformanceBudget.referenceViewport,
+  runtimeActivation: runtimePerformanceBudget.runtimeActivation,
+  shellStartup: runtimePerformanceBudget.shellStartup
 } as const;

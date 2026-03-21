@@ -99,6 +99,8 @@ export function AppShell() {
       className="app-shell"
       data-app-ready="true"
       data-layout-mode={viewport.layoutMode}
+      data-renderer-status={rendererState.status}
+      data-runtime-ready-ms={rendererState.metrics.rendererReadyMs ?? "pending"}
       data-scene={appScene.activeScene}
       data-shell-surface={appScene.shellSurface}
       ref={shellRef}

@@ -25,6 +25,11 @@ type ShellDiagnosticsPanelProps = {
   };
   preferences: ShellPreferences;
   renderer: {
+    metrics: {
+      attempt: number;
+      bootStartedAtMs: number;
+      rendererReadyMs: number | null;
+    };
     message: string;
     status: "degraded" | "failed" | "initializing" | "ready";
   };
@@ -367,6 +372,18 @@ export function ShellDiagnosticsPanel({
           <dd>{renderer.message}</dd>
         </div>
         <div>
+          <dt>Renderer ready</dt>
+          <dd>
+            {renderer.metrics.rendererReadyMs === null
+              ? "pending"
+              : `${renderer.metrics.rendererReadyMs.toFixed(0)}ms`}
+          </dd>
+        </div>
+        <div>
+          <dt>Renderer attempts</dt>
+          <dd>{renderer.metrics.attempt + 1}</dd>
+        </div>
+        <div>
           <dt>Fullscreen</dt>
           <dd>
             {fullscreen.isSupported ? "supported" : "unsupported"} /{" "}
@@ -388,6 +405,18 @@ export function ShellDiagnosticsPanel({
         <div>
           <dt>Perf floor</dt>
           <dd>{viewport.performanceBudget.frameRateFloor}+ FPS / {viewport.performanceBudget.acceptableFrameTimeMs.toFixed(2)}ms</dd>
+        </div>
+        <div>
+          <dt>Startup JS budget</dt>
+          <dd>{viewport.performanceBudget.shellStartup.maxInitialJsKb}kb</dd>
+        </div>
+        <div>
+          <dt>Lazy runtime budget</dt>
+          <dd>{viewport.performanceBudget.runtimeActivation.maxLazyRuntimeJsKb}kb</dd>
+        </div>
+        <div>
+          <dt>Ready budget</dt>
+          <dd>{viewport.performanceBudget.runtimeActivation.maxRendererReadyMs}ms</dd>
         </div>
         <div>
           <dt>Perf reference</dt>

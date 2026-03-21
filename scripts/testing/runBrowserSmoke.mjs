@@ -1,4 +1,4 @@
-import { mkdir } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { createServer } from "node:net";
 import process from "node:process";
@@ -6,6 +6,7 @@ import { setTimeout as sleep } from "node:timers/promises";
 import { URL } from "node:url";
 
 import { chromium } from "playwright";
+import runtimePerformanceBudget from "../../src/shared/config/runtimePerformanceBudget.json" with { type: "json" };
 
 const previewHost = "127.0.0.1";
 const outputDirectory = new URL("../../output/playwright/", import.meta.url);
@@ -116,6 +117,21 @@ try {
     waitUntil: "networkidle"
   });
 
+  await page.locator('.app-shell[data-renderer-status="ready"]').waitFor({
+    timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
+  });
+
+  const runtimeMetrics = await page.evaluate(() => globalThis.window.__EMBERWAKE_RUNTIME_METRICS__);
+
+  if (
+    typeof runtimeMetrics?.rendererReadyMs !== "number" ||
+    runtimeMetrics.rendererReadyMs > runtimePerformanceBudget.runtimeActivation.maxRendererReadyMs
+  ) {
+    throw new Error(
+      `Renderer readiness exceeded budget. Actual: ${runtimeMetrics?.rendererReadyMs ?? "missing"}ms, budget: ${runtimePerformanceBudget.runtimeActivation.maxRendererReadyMs}ms`
+    );
+  }
+
   await page.getByRole("button", {
     name: "Menu"
   }).click();
@@ -144,6 +160,17 @@ try {
   await page.screenshot({
     path: new URL("browser-smoke.png", outputDirectory).pathname
   });
+  await writeFile(
+    new URL("browser-smoke-metrics.json", outputDirectory),
+    JSON.stringify(
+      {
+        budgets: runtimePerformanceBudget.runtimeActivation,
+        runtimeMetrics
+      },
+      null,
+      2
+    )
+  );
 } finally {
   await browser?.close();
 

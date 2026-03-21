@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "performance:validate": "node scripts/performance/validateRuntimeBudgets.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc -b",
@@ -21,7 +22,7 @@
     "release:changelog:resolve": "node scripts/release/resolveReleaseChangelog.mjs",
     "release:changelog:validate": "node scripts/release/validateReleaseChangelog.mjs",
     "release:postdeploy:smoke": "node scripts/release/runPostDeploySmoke.mjs",
-    "ci": "npm run lint && npm run typecheck && npm run test && npm run build && npm run logics:lint",
+    "ci": "npm run lint && npm run typecheck && npm run test && npm run build && npm run performance:validate && npm run logics:lint",
     "ci:full": "npm run ci && npm run test:browser:smoke"
   },
   "dependencies": {
