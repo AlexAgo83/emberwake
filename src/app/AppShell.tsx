@@ -323,6 +323,7 @@ export function AppShell() {
           onInstall={handleInstall}
           onOpenChange={handleMenuOpenChange}
           onResetCamera={resetCamera}
+          onRetryRuntime={handleRetryRuntime}
           onResumeRuntime={resumeRuntime}
           onSetCameraMode={setCameraMode}
           onShowPauseScene={showPauseScene}

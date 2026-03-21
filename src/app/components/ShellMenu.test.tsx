@@ -17,6 +17,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof ShellMenu>> 
   onInstall: vi.fn(),
   onOpenChange: vi.fn(),
   onResetCamera: vi.fn(),
+  onRetryRuntime: vi.fn(),
   onResumeRuntime: vi.fn(),
   onSetCameraMode: vi.fn(),
   onShowPauseScene: vi.fn(),
@@ -27,19 +28,19 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof ShellMenu>> 
 });
 
 describe("ShellMenu", () => {
-  it("routes runtime pause through the shell-owned pause scene", () => {
+  it("routes the primary runtime action through the shell-owned pause scene when live", () => {
     const props = createProps();
 
     render(<ShellMenu {...props} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Pause runtime/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Pause/i }));
 
     expect(props.onShowPauseScene).toHaveBeenCalledTimes(1);
     expect(props.onResumeRuntime).not.toHaveBeenCalled();
     expect(props.onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("routes runtime re-entry through the resume action outside the live scene", () => {
+  it("routes runtime re-entry through the primary action outside the live scene", () => {
     const props = createProps({
       activeScene: "pause"
     });
@@ -53,13 +54,30 @@ describe("ShellMenu", () => {
     expect(props.onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("exposes diagnostics, settings, and camera controls inside the shell panel", () => {
+  it("routes recovery states through the retry primary action", () => {
+    const props = createProps({
+      activeScene: "failure"
+    });
+
+    render(<ShellMenu {...props} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Retry runtime/i }));
+
+    expect(props.onRetryRuntime).toHaveBeenCalledTimes(1);
+    expect(props.onResumeRuntime).not.toHaveBeenCalled();
+    expect(props.onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("exposes session, view, and tool groupings inside the shell panel", () => {
     const props = createProps();
 
     render(<ShellMenu {...props} />);
 
     const panel = screen.getByLabelText("Shell menu");
 
+    expect(within(panel).getByText("Session")).toBeInTheDocument();
+    expect(within(panel).getByText("View")).toBeInTheDocument();
+    expect(within(panel).getByText("Tools")).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Diagnostics/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Settings/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: "Free" })).toBeInTheDocument();

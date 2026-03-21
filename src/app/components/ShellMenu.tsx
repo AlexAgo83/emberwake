@@ -17,6 +17,7 @@ type ShellMenuProps = {
   onInstall: () => void;
   onOpenChange: (isOpen: boolean) => void;
   onResetCamera: () => void;
+  onRetryRuntime: () => void;
   onResumeRuntime: () => void;
   onSetCameraMode: (cameraMode: CameraMode) => void;
   onShowPauseScene: () => void;
@@ -92,6 +93,7 @@ export const ShellMenu = memo(function ShellMenu({
   onInstall,
   onOpenChange,
   onResetCamera,
+  onRetryRuntime,
   onResumeRuntime,
   onSetCameraMode,
   onShowPauseScene,
@@ -102,6 +104,35 @@ export const ShellMenu = memo(function ShellMenu({
   const menuRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
   const sceneStatus = sceneStatusMap[activeScene];
+  const primaryAction =
+    activeScene === "runtime"
+      ? {
+          detail: "Hand session control to the shell-owned pause scene.",
+          label: "Pause",
+          tone: "warm" as const,
+          trigger: onShowPauseScene
+        }
+      : activeScene === "defeat" || activeScene === "failure"
+        ? {
+            detail: "Rebuild the runtime boundary and re-enter the live loop.",
+            label: "Retry runtime",
+            tone: "alert" as const,
+            trigger: onRetryRuntime
+          }
+        : activeScene === "boot"
+          ? {
+              detail: "The shell is still preparing the runtime surface.",
+              disabled: true,
+              label: "Runtime booting",
+              tone: "neutral" as const,
+              trigger: null
+            }
+          : {
+              detail: "Return from the current shell-owned scene to the live runtime loop.",
+              label: "Resume runtime",
+              tone: "cold" as const,
+              trigger: onResumeRuntime
+            };
 
   useEffect(() => {
     if (!isOpen) {
@@ -188,127 +219,143 @@ export const ShellMenu = memo(function ShellMenu({
           </header>
 
           <button
-            className="shell-menu__item shell-menu__item--action"
+            className="shell-menu__hero-action"
+            data-tone={primaryAction.tone}
+            disabled={primaryAction.disabled}
             onClick={() => {
-              runAction(onToggleInspecteur);
+              if (!primaryAction.trigger) {
+                return;
+              }
+
+              runAction(primaryAction.trigger);
             }}
             type="button"
           >
-            <span className="shell-menu__item-label">Inspecteur</span>
-            <span className="shell-menu__item-value">
-              {inspecteurVisible ? "Visible" : "Hidden"}
-            </span>
+            <span className="shell-menu__hero-label">{primaryAction.label}</span>
+            <span className="shell-menu__hero-detail">{primaryAction.detail}</span>
           </button>
 
-          {diagnosticsEnabled ? (
+          <section className="shell-menu__section" aria-labelledby={`${menuId}-session`}>
+            <p className="shell-menu__section-title" id={`${menuId}-session`}>
+              Session
+            </p>
             <button
               className="shell-menu__item shell-menu__item--action"
               onClick={() => {
-                runAction(onToggleDiagnostics);
+                runAction(onShowSettingsScene);
               }}
               type="button"
             >
-              <span className="shell-menu__item-label">Diagnostics</span>
+              <span className="shell-menu__item-label">Settings</span>
+              <span className="shell-menu__item-value">Meta scene</span>
+            </button>
+
+            <button
+              className="shell-menu__item shell-menu__item--action"
+              disabled={!isFullscreenSupported || isFullscreen}
+              onClick={() => {
+                runAction(onEnterFullscreen);
+              }}
+              type="button"
+            >
+              <span className="shell-menu__item-label">Fullscreen</span>
               <span className="shell-menu__item-value">
-                {diagnosticsVisible ? "Visible" : "Hidden"}
+                {!isFullscreenSupported ? "Unavailable" : isFullscreen ? "Active" : "Enter"}
               </span>
             </button>
-          ) : null}
+          </section>
 
-          <button
-            className="shell-menu__item shell-menu__item--action"
-            onClick={() => {
-              runAction(activeScene === "runtime" ? onShowPauseScene : onResumeRuntime);
-            }}
-            type="button"
-          >
-            <span className="shell-menu__item-label">
-              {activeScene === "runtime" ? "Pause runtime" : "Resume runtime"}
-            </span>
-            <span className="shell-menu__item-value">
-              {activeScene === "runtime" ? "Open pause scene" : "Return to loop"}
-            </span>
-          </button>
-
-          <button
-            className="shell-menu__item shell-menu__item--action"
-            onClick={() => {
-              runAction(onShowSettingsScene);
-            }}
-            type="button"
-          >
-            <span className="shell-menu__item-label">Settings</span>
-            <span className="shell-menu__item-value">Shell-owned</span>
-          </button>
-
-          <button
-            className="shell-menu__item shell-menu__item--action"
-            onClick={() => {
-              runAction(onResetCamera);
-            }}
-            type="button"
-          >
-            <span className="shell-menu__item-label">Reset camera</span>
-            <span className="shell-menu__item-value">Recenter view</span>
-          </button>
-
-          <div className="shell-menu__group" role="group" aria-label="Camera mode">
-            <div className="shell-menu__item shell-menu__item--static">
-              <span className="shell-menu__item-label">Camera mode</span>
-              <span className="shell-menu__item-value">
-                {cameraMode === "free" ? "Free" : "Follow entity"}
-              </span>
-            </div>
-            <div className="shell-menu__choice-grid">
-              <button
-                aria-pressed={cameraMode === "free"}
-                className="shell-menu__choice"
-                onClick={() => {
-                  onSetCameraMode("free");
-                }}
-                type="button"
-              >
-                Free
-              </button>
-              <button
-                aria-pressed={cameraMode === "follow-entity"}
-                className="shell-menu__choice"
-                onClick={() => {
-                  onSetCameraMode("follow-entity");
-                }}
-                type="button"
-              >
-                Follow entity
-              </button>
-            </div>
-          </div>
-
-          <button
-            className="shell-menu__item shell-menu__item--action"
-            disabled={!isFullscreenSupported || isFullscreen}
-            onClick={() => {
-              runAction(onEnterFullscreen);
-            }}
-            type="button"
-          >
-            <span className="shell-menu__item-label">Fullscreen</span>
-            <span className="shell-menu__item-value">
-              {!isFullscreenSupported ? "Unavailable" : isFullscreen ? "Active" : "Enter"}
-            </span>
-          </button>
-
-          {canInstall ? (
+          <section className="shell-menu__section" aria-labelledby={`${menuId}-view`}>
+            <p className="shell-menu__section-title" id={`${menuId}-view`}>
+              View
+            </p>
             <button
               className="shell-menu__item shell-menu__item--action"
               onClick={() => {
-                runAction(onInstall);
+                runAction(onResetCamera);
               }}
               type="button"
             >
-              <span className="shell-menu__item-label">Install app</span>
-              <span className="shell-menu__item-value">PWA</span>
+              <span className="shell-menu__item-label">Reset camera</span>
+              <span className="shell-menu__item-value">Recenter view</span>
             </button>
-          ) : null}
+            <div className="shell-menu__group" role="group" aria-label="Camera mode">
+              <div className="shell-menu__item shell-menu__item--static">
+                <span className="shell-menu__item-label">Camera mode</span>
+                <span className="shell-menu__item-value">
+                  {cameraMode === "free" ? "Free" : "Follow entity"}
+                </span>
+              </div>
+              <div className="shell-menu__choice-grid">
+                <button
+                  aria-pressed={cameraMode === "free"}
+                  className="shell-menu__choice"
+                  onClick={() => {
+                    onSetCameraMode("free");
+                  }}
+                  type="button"
+                >
+                  Free
+                </button>
+                <button
+                  aria-pressed={cameraMode === "follow-entity"}
+                  className="shell-menu__choice"
+                  onClick={() => {
+                    onSetCameraMode("follow-entity");
+                  }}
+                  type="button"
+                >
+                  Follow entity
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section className="shell-menu__section" aria-labelledby={`${menuId}-tools`}>
+            <p className="shell-menu__section-title" id={`${menuId}-tools`}>
+              Tools
+            </p>
+            <button
+              className="shell-menu__item shell-menu__item--action"
+              onClick={() => {
+                runAction(onToggleInspecteur);
+              }}
+              type="button"
+            >
+              <span className="shell-menu__item-label">Inspecteur</span>
+              <span className="shell-menu__item-value">
+                {inspecteurVisible ? "Visible" : "Hidden"}
+              </span>
+            </button>
+
+            {diagnosticsEnabled ? (
+              <button
+                className="shell-menu__item shell-menu__item--action"
+                onClick={() => {
+                  runAction(onToggleDiagnostics);
+                }}
+                type="button"
+              >
+                <span className="shell-menu__item-label">Diagnostics</span>
+                <span className="shell-menu__item-value">
+                  {diagnosticsVisible ? "Visible" : "Hidden"}
+                </span>
+              </button>
+            ) : null}
+
+            {canInstall ? (
+              <button
+                className="shell-menu__item shell-menu__item--action"
+                onClick={() => {
+                  runAction(onInstall);
+                }}
+                type="button"
+              >
+                <span className="shell-menu__item-label">Install app</span>
+                <span className="shell-menu__item-value">PWA</span>
+              </button>
+            ) : null}
+          </section>
         </section>
       ) : null}
     </div>
