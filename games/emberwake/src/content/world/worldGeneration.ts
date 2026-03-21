@@ -60,6 +60,9 @@ export type SampledWorldTileLayers = {
   worldTileY: number;
 };
 
+const sampledWorldTileLayerCacheLimit = 8192;
+const sampledWorldTileLayerCache = new Map<string, SampledWorldTileLayers>();
+
 const terrainThresholds: Array<{
   max: number;
   terrainKind: TerrainKind;
@@ -172,11 +175,24 @@ const sampleSurfaceModifierAtWorldTile = (
   return "normal";
 };
 
+const getSampledWorldTileLayerCacheKey = (
+  worldTileX: number,
+  worldTileY: number,
+  seed: string
+) => `${seed}:${worldTileX}:${worldTileY}`;
+
 export const sampleWorldTileLayers = (
   worldTileX: number,
   worldTileY: number,
   seed = worldContract.defaultSeed
 ): SampledWorldTileLayers => {
+  const cacheKey = getSampledWorldTileLayerCacheKey(worldTileX, worldTileY, seed);
+  const cachedLayers = sampledWorldTileLayerCache.get(cacheKey);
+
+  if (cachedLayers) {
+    return cachedLayers;
+  }
+
   const terrainSample = sampleTerrainAtWorldTile(worldTileX, worldTileY, seed);
   const obstacleSample = sampleObstacleAtWorldTile(
     worldTileX,
@@ -185,7 +201,7 @@ export const sampleWorldTileLayers = (
     seed
   );
 
-  return {
+  const sampledLayers = {
     modifierKind: sampleSurfaceModifierAtWorldTile(
       worldTileX,
       worldTileY,
@@ -199,6 +215,18 @@ export const sampleWorldTileLayers = (
     worldTileX,
     worldTileY
   };
+
+  sampledWorldTileLayerCache.set(cacheKey, sampledLayers);
+
+  if (sampledWorldTileLayerCache.size > sampledWorldTileLayerCacheLimit) {
+    const oldestCacheKey = sampledWorldTileLayerCache.keys().next().value;
+
+    if (oldestCacheKey !== undefined) {
+      sampledWorldTileLayerCache.delete(oldestCacheKey);
+    }
+  }
+
+  return sampledLayers;
 };
 
 export const sampleWorldPointLayers = (
@@ -261,6 +289,13 @@ export const createGeneratedChunk = (
     terrainLayer
   };
 };
+
+export const resetSampledWorldTileLayerCacheForTests = () => {
+  sampledWorldTileLayerCache.clear();
+};
+
+export const getSampledWorldTileLayerCacheSizeForTests = () =>
+  sampledWorldTileLayerCache.size;
 
 export const chunkGenerationContract = {
   boundaries: {

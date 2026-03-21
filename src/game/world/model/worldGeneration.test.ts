@@ -1,11 +1,17 @@
 import {
   createGeneratedChunk,
+  getSampledWorldTileLayerCacheSizeForTests,
+  resetSampledWorldTileLayerCacheForTests,
   sampleWorldTileLayers,
   terrainKinds
 } from "./worldGeneration";
 import { worldContract } from "./worldContract";
 
 describe("worldGeneration", () => {
+  beforeEach(() => {
+    resetSampledWorldTileLayerCacheForTests();
+  });
+
   it("keeps chunk generation deterministic for the same seed and coordinates", () => {
     const chunkCoordinate = { x: -2, y: 3 };
 
@@ -44,5 +50,18 @@ describe("worldGeneration", () => {
       modifierKind: "normal",
       obstacleKind: "none"
     });
+  });
+
+  it("reuses sampled tile layers and keeps the cache bounded", () => {
+    const firstSample = sampleWorldTileLayers(4, -3, "alpha-seed");
+    const repeatedSample = sampleWorldTileLayers(4, -3, "alpha-seed");
+
+    expect(repeatedSample).toBe(firstSample);
+
+    for (let index = 0; index < 9000; index += 1) {
+      sampleWorldTileLayers(index, index * -1, "alpha-seed");
+    }
+
+    expect(getSampledWorldTileLayerCacheSizeForTests()).toBeLessThanOrEqual(8192);
   });
 });

@@ -1,8 +1,10 @@
 export {
   chunkGenerationContract,
   createGeneratedChunk,
+  getSampledWorldTileLayerCacheSizeForTests,
   movementSurfaceModifierDefinitions,
   obstacleDefinitions,
+  resetSampledWorldTileLayerCacheForTests,
   sampleChunkWorldArea,
   sampleWorldPointLayers,
   sampleWorldTileLayers,
