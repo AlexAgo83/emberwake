@@ -1,5 +1,6 @@
 import type { EngineTiming } from "@engine/contracts/gameModule";
 import type { EntitySimulationState } from "@game/runtime/entitySimulation";
+import { resolveXpRequiredForLevel } from "@game/runtime/pickupContract";
 import {
   createIdleGameplayOutcome,
   gameplayOutcomeContract
@@ -22,10 +23,14 @@ export type StatusEffectSystemState = {
 };
 
 export type ProgressionSystemState = {
+  crystalsCollected: number;
+  currentLevel: number;
+  currentXp: number;
   goldCollected: number;
   highestUnlockedTier: 0;
   healingKitsCollected: number;
   hostileDefeats: number;
+  nextLevelXpRequired: number;
   runtimeTicksSurvived: number;
   traversalDistanceWorldUnits: number;
 };
@@ -96,10 +101,14 @@ export const createInitialGameplaySystemsState = (): EmberwakeGameplaySystemsSta
   },
   outcome: createIdleGameplayOutcome(),
   progression: {
+    crystalsCollected: 0,
+    currentLevel: 1,
+    currentXp: 0,
     goldCollected: 0,
     highestUnlockedTier: 0,
     healingKitsCollected: 0,
     hostileDefeats: 0,
+    nextLevelXpRequired: resolveXpRequiredForLevel(1),
     runtimeTicksSurvived: 0,
     traversalDistanceWorldUnits: 0
   },
@@ -141,9 +150,13 @@ export const advanceGameplaySystemsState = ({
   const statusEffects = previousState.statusEffects;
   const progression = {
     ...previousState.progression,
+    crystalsCollected: simulationAfterUpdate.runStats.crystalsCollected,
+    currentLevel: simulationAfterUpdate.runStats.currentLevel,
+    currentXp: simulationAfterUpdate.runStats.currentXp,
     goldCollected: simulationAfterUpdate.runStats.goldCollected,
     healingKitsCollected: simulationAfterUpdate.runStats.healingKitsCollected,
     hostileDefeats: simulationAfterUpdate.runStats.hostileDefeats,
+    nextLevelXpRequired: resolveXpRequiredForLevel(simulationAfterUpdate.runStats.currentLevel),
     runtimeTicksSurvived: timing.tick + 1,
     traversalDistanceWorldUnits:
       previousState.progression.traversalDistanceWorldUnits + traversalDistanceWorldUnits
@@ -190,8 +203,12 @@ export const createGameplaySystemDiagnostics = (
   gameplayOutcome: systemsState.outcome.kind,
   gameplayPhaseOrder: gameplaySystemsContract.phaseOrder.join(" -> "),
   gameplaySignals: systemsState.lifecycle.recentSignals.join(", "),
+  crystalsCollected: systemsState.progression.crystalsCollected,
+  currentLevel: systemsState.progression.currentLevel,
+  currentXp: systemsState.progression.currentXp,
   goldCollected: systemsState.progression.goldCollected,
   hostileDefeats: systemsState.progression.hostileDefeats,
+  nextLevelXpRequired: systemsState.progression.nextLevelXpRequired,
   progressionTicksSurvived: systemsState.progression.runtimeTicksSurvived,
   traversalDistanceWorldUnits: Number(
     systemsState.progression.traversalDistanceWorldUnits.toFixed(2)

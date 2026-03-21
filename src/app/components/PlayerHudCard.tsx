@@ -1,18 +1,24 @@
 import "./PlayerHudCard.css";
 
 type PlayerHudCardProps = {
+  currentLevel: number;
+  currentXp: number;
   fps: number;
   goldCollected: number;
   isMobile: boolean;
+  nextLevelXpRequired: number;
   playerHealth: number;
   playerName: string;
   zoomMultiplier: number;
 };
 
 export function PlayerHudCard({
+  currentLevel,
+  currentXp,
   fps,
   goldCollected,
   isMobile,
+  nextLevelXpRequired,
   playerHealth,
   playerName,
   zoomMultiplier
@@ -27,6 +33,16 @@ export function PlayerHudCard({
       <div className="player-hud__row">
         <span>HP</span>
         <strong>{Math.max(0, Math.round(playerHealth))}</strong>
+      </div>
+      <div className="player-hud__row">
+        <span>Level</span>
+        <strong>{Math.max(1, Math.round(currentLevel))}</strong>
+      </div>
+      <div className="player-hud__row">
+        <span>XP</span>
+        <strong>
+          {Math.max(0, Math.round(currentXp))} / {Math.max(1, Math.round(nextLevelXpRequired))}
+        </strong>
       </div>
       <div className="player-hud__row">
         <span>Gold</span>

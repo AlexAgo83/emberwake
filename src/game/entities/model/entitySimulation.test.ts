@@ -58,6 +58,9 @@ describe("entitySimulation", () => {
     expect(simulationState.entity.combat.currentHealth).toBe(hostileCombatContract.player.maxHealth);
     expect(simulationState.entity.movementSurfaceModifier).toBe("normal");
     expect(simulationState.runStats).toEqual({
+      crystalsCollected: 0,
+      currentLevel: 1,
+      currentXp: 0,
       goldCollected: 0,
       healingKitsCollected: 0,
       hostileDefeats: 0
@@ -271,6 +274,11 @@ describe("entitySimulation", () => {
       amount: hostileCombatContract.player.automaticConeAttack.damage,
       sourceEntityId: hostileEntity.id
     });
+    expect(
+      simulationState.entities.some(
+        (entity) => entity.role === "pickup" && entity.pickupProfile?.kind === "crystal"
+      )
+    ).toBe(true);
     expect(simulationState.runStats.hostileDefeats).toBe(1);
   });
 
@@ -401,5 +409,48 @@ describe("entitySimulation", () => {
 
     expect(healedState.entity.combat.currentHealth).toBe(55);
     expect(healedState.runStats.healingKitsCollected).toBe(1);
+  });
+
+  it("converts collected crystals into xp and level progression", () => {
+    const initialState = createInitialSimulationState();
+    const crystalPickup = {
+      ...createGenericMoverEntity({
+        id: "entity:pickup:crystal:0",
+        renderLayer: 90,
+        visual: {
+          kind: "pickup-crystal",
+          tint: "#73f2ff"
+        },
+        worldPosition: { ...initialState.entity.worldPosition }
+      }),
+      combat: {
+        currentHealth: 1,
+        maxHealth: 1
+      },
+      footprint: {
+        radius: 22
+      },
+      movementSurfaceModifier: "normal" as const,
+      pickupProfile: {
+        kind: "crystal" as const
+      },
+      role: "pickup" as const,
+      spawnedAtTick: 0,
+      state: "idle" as const,
+      velocity: {
+        x: 0,
+        y: 0
+      }
+    };
+
+    const leveledState = advanceSimulationState({
+      ...initialState,
+      entities: [initialState.entity, crystalPickup, { ...crystalPickup, id: "entity:pickup:crystal:1" }, { ...crystalPickup, id: "entity:pickup:crystal:2" }, { ...crystalPickup, id: "entity:pickup:crystal:3" }],
+      nextPickupSequence: 4
+    });
+
+    expect(leveledState.runStats.crystalsCollected).toBe(4);
+    expect(leveledState.runStats.currentLevel).toBe(2);
+    expect(leveledState.runStats.currentXp).toBe(0);
   });
 });

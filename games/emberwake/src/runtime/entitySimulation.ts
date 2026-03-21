@@ -36,7 +36,7 @@ export const entitySimulationContract = {
 } as const;
 export { entityCombatPresentationContract };
 
-export type SimulatedPickupKind = "gold" | "healing-kit";
+export type SimulatedPickupKind = "crystal" | "gold" | "healing-kit";
 
 export type SimulatedEntityRole = "hostile" | "pickup" | "player" | "support";
 
@@ -70,6 +70,9 @@ export type PickupProfile = {
 };
 
 export type RunStats = {
+  crystalsCollected: number;
+  currentLevel: number;
+  currentXp: number;
   goldCollected: number;
   healingKitsCollected: number;
   hostileDefeats: number;
@@ -198,6 +201,9 @@ const createDamageReactionState = (): DamageReactionState => ({
 });
 
 const createInitialRunStats = (): RunStats => ({
+  crystalsCollected: 0,
+  currentLevel: 1,
+  currentXp: 0,
   goldCollected: 0,
   healingKitsCollected: 0,
   hostileDefeats: 0
@@ -281,8 +287,18 @@ const createPickupEntity = (
     id: `entity:pickup:${pickupKind}:${pickupSequence}`,
     renderLayer: 90,
     visual: {
-      kind: pickupKind === "healing-kit" ? "pickup-healing-kit" : "pickup-gold",
-      tint: pickupKind === "healing-kit" ? "#7dff9b" : "#ffd76c"
+      kind:
+        pickupKind === "healing-kit"
+          ? "pickup-healing-kit"
+          : pickupKind === "crystal"
+            ? "pickup-crystal"
+            : "pickup-gold",
+      tint:
+        pickupKind === "healing-kit"
+          ? "#7dff9b"
+          : pickupKind === "crystal"
+            ? "#73f2ff"
+            : "#ffd76c"
     },
     worldPosition
   }),
@@ -440,7 +456,11 @@ const normalizeSimulatedEntity = (
   if (role === "pickup") {
     const inferredPickupKind =
       entity.pickupProfile?.kind ??
-      (entity.id.includes(":healing-kit:") ? "healing-kit" : "gold");
+      (entity.id.includes(":healing-kit:")
+        ? "healing-kit"
+        : entity.id.includes(":crystal:")
+          ? "crystal"
+          : "gold");
 
     return {
       ...baseEntity,
@@ -726,7 +746,30 @@ export const advanceSimulationState = (
     nextTick
   );
   const pickupResolvedState = resolvePickupCollection({
-    entities: combatResolvedState.entities,
+    entities: (() => {
+      const defeatedHostiles = combatResolvedState.entities.filter(
+        (entity) => entity.role === "hostile" && !isAlive(entity)
+      );
+
+      if (defeatedHostiles.length === 0) {
+        return combatResolvedState.entities;
+      }
+
+      const droppedCrystalEntities = defeatedHostiles.flatMap((hostileEntity, hostileIndex) =>
+        Array.from({ length: pickupContract.crystal.enemyDropCount }, (_, crystalIndex) =>
+          createPickupEntity(
+            pickupMaintainedState.nextPickupSequence +
+              hostileIndex * pickupContract.crystal.enemyDropCount +
+              crystalIndex,
+            "crystal",
+            hostileEntity.worldPosition,
+            nextTick
+          )
+        )
+      );
+
+      return [...combatResolvedState.entities, ...droppedCrystalEntities];
+    })(),
     runStats: simulationState.runStats
   });
   const defeatedHostileCount = combatResolvedState.entities.filter(
@@ -748,7 +791,9 @@ export const advanceSimulationState = (
       ],
       nextTick
     ),
-    nextPickupSequence: pickupMaintainedState.nextPickupSequence,
+    nextPickupSequence:
+      pickupMaintainedState.nextPickupSequence +
+      defeatedHostileCount * pickupContract.crystal.enemyDropCount,
     nextHostileSequence: spawnMaintainedState.nextHostileSequence,
     runStats: {
       ...pickupResolvedState.runStats,

@@ -1,7 +1,7 @@
 import type { WorldPoint } from "@engine/geometry/primitives";
 import { sampleDeterministicSignature } from "@engine/world/worldContract";
 
-import { pickupContract } from "./pickupContract";
+import { pickupContract, resolveXpRequiredForLevel } from "./pickupContract";
 import type {
   FloatingDamageNumber,
   RunStats,
@@ -59,6 +59,23 @@ const applyHealing = (entity: SimulatedEntity, healing: number): SimulatedEntity
     currentHealth: Math.min(entity.combat.maxHealth, entity.combat.currentHealth + healing)
   }
 });
+
+const applyCrystalXpGain = (runStats: RunStats): RunStats => {
+  let nextLevel = Math.max(1, runStats.currentLevel);
+  let nextXp = Math.max(0, runStats.currentXp) + pickupContract.crystal.xpValue;
+
+  while (nextXp >= resolveXpRequiredForLevel(nextLevel)) {
+    nextXp -= resolveXpRequiredForLevel(nextLevel);
+    nextLevel += 1;
+  }
+
+  return {
+    ...runStats,
+    crystalsCollected: runStats.crystalsCollected + 1,
+    currentLevel: nextLevel,
+    currentXp: nextXp
+  };
+};
 
 const createFloatingDamageNumber = (
   entity: SimulatedEntity,
@@ -301,6 +318,11 @@ export const resolvePickupCollection = ({
         Math.ceil(nextPlayerEntity.combat.maxHealth * pickupContract.healingKit.healRatio)
       );
       nextRunStats.healingKitsCollected += 1;
+      continue;
+    }
+
+    if (entity.pickupProfile.kind === "crystal") {
+      Object.assign(nextRunStats, applyCrystalXpGain(nextRunStats));
       continue;
     }
 

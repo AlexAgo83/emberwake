@@ -20,6 +20,8 @@ type EntitySceneProps = {
   currentTick: number;
   entities: Array<PresentedEntity<SimulatedEntity>>;
   floatingDamageNumbers: FloatingDamageNumber[];
+  playerLevel: number;
+  playerName: string;
   renderSurfaceMode: EmberwakeRenderSurfaceMode;
   viewport: {
     fitScale: number;
@@ -43,6 +45,21 @@ const floatingDamageTextStyle = {
   fill: "#fff1dc",
   fontFamily: "monospace",
   fontSize: 18,
+  fontWeight: "700" as const,
+  letterSpacing: 1
+};
+
+const playerIdentityTextStyle = {
+  align: "center" as const,
+  dropShadow: {
+    alpha: 0.52,
+    blur: 2,
+    color: "#09070f",
+    distance: 1
+  },
+  fill: "#f6eee8",
+  fontFamily: "monospace",
+  fontSize: 14,
   fontWeight: "700" as const,
   letterSpacing: 1
 };
@@ -143,20 +160,50 @@ const drawEntity =
   }
 
   if (entity.role === "pickup") {
+    const pickupRadius = entity.footprint.radius;
+
     graphics.setFillStyle({ alpha: 0.34, color: tint });
-    graphics.circle(entity.worldPosition.x, entity.worldPosition.y, entity.footprint.radius);
+
+    if (entity.pickupProfile?.kind === "crystal") {
+      graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y - pickupRadius);
+      graphics.lineTo(entity.worldPosition.x + pickupRadius * 0.72, entity.worldPosition.y);
+      graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y + pickupRadius);
+      graphics.lineTo(entity.worldPosition.x - pickupRadius * 0.72, entity.worldPosition.y);
+      graphics.closePath();
+      graphics.fill();
+      graphics.setStrokeStyle({
+        alpha: 0.92,
+        color: 0xf6eee8,
+        width: 2
+      });
+      graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y - pickupRadius);
+      graphics.lineTo(entity.worldPosition.x + pickupRadius * 0.72, entity.worldPosition.y);
+      graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y + pickupRadius);
+      graphics.lineTo(entity.worldPosition.x - pickupRadius * 0.72, entity.worldPosition.y);
+      graphics.closePath();
+      graphics.stroke();
+      graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y - pickupRadius * 0.38);
+      graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y + pickupRadius * 0.38);
+      graphics.moveTo(entity.worldPosition.x - pickupRadius * 0.26, entity.worldPosition.y);
+      graphics.lineTo(entity.worldPosition.x + pickupRadius * 0.26, entity.worldPosition.y);
+      graphics.stroke();
+
+      return;
+    }
+
+    graphics.circle(entity.worldPosition.x, entity.worldPosition.y, pickupRadius);
     graphics.fill();
     graphics.setStrokeStyle({
       alpha: 0.92,
       color: 0xf6eee8,
       width: 2
     });
-    graphics.circle(entity.worldPosition.x, entity.worldPosition.y, entity.footprint.radius);
+    graphics.circle(entity.worldPosition.x, entity.worldPosition.y, pickupRadius);
     graphics.stroke();
-    graphics.moveTo(entity.worldPosition.x - entity.footprint.radius * 0.55, entity.worldPosition.y);
-    graphics.lineTo(entity.worldPosition.x + entity.footprint.radius * 0.55, entity.worldPosition.y);
-    graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y - entity.footprint.radius * 0.55);
-    graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y + entity.footprint.radius * 0.55);
+    graphics.moveTo(entity.worldPosition.x - pickupRadius * 0.55, entity.worldPosition.y);
+    graphics.lineTo(entity.worldPosition.x + pickupRadius * 0.55, entity.worldPosition.y);
+    graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y - pickupRadius * 0.55);
+    graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y + pickupRadius * 0.55);
     graphics.stroke();
 
     return;
@@ -240,6 +287,8 @@ export function EntityScene({
   currentTick,
   entities,
   floatingDamageNumbers,
+  playerLevel,
+  playerName,
   renderSurfaceMode,
   viewport
 }: EntitySceneProps) {
@@ -251,6 +300,18 @@ export function EntityScene({
       {entities.map((entity) => (
         <pixiContainer key={entity.id}>
           <pixiGraphics draw={drawEntity(entity, currentTick)} />
+          {entity.role === "player" ? (
+            <pixiText
+              anchor={0.5}
+              eventMode="none"
+              resolution={2}
+              scale={1 / scale}
+              style={playerIdentityTextStyle}
+              text={`${playerName} · Lv ${playerLevel}`}
+              x={entity.worldPosition.x}
+              y={entity.worldPosition.y - entity.footprint.radius - 38}
+            />
+          ) : null}
           {debugLabelsVisible ? (
             <pixiText
               anchor={0.5}

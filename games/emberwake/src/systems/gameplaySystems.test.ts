@@ -53,6 +53,9 @@ describe("gameplaySystems", () => {
         nextPickupSequence: 0,
         nextHostileSequence: 0,
         runStats: {
+          crystalsCollected: 2,
+          currentLevel: 1,
+          currentXp: 50,
           goldCollected: 0,
           healingKitsCollected: 0,
           hostileDefeats: 0
@@ -67,6 +70,9 @@ describe("gameplaySystems", () => {
         nextPickupSequence: 0,
         nextHostileSequence: 0,
         runStats: {
+          crystalsCollected: 0,
+          currentLevel: 1,
+          currentXp: 0,
           goldCollected: 0,
           healingKitsCollected: 0,
           hostileDefeats: 0
@@ -84,6 +90,8 @@ describe("gameplaySystems", () => {
 
     expect(nextState.progression.runtimeTicksSurvived).toBe(1);
     expect(nextState.progression.traversalDistanceWorldUnits).toBe(10);
+    expect(nextState.progression.crystalsCollected).toBe(2);
+    expect(nextState.progression.currentXp).toBe(50);
     expect(nextState.autonomy.lastAutonomyTick).toBe(1);
     expect(nextState.lifecycle.lastCompletedPhase).toBe("outcomes");
     expect(nextState.lifecycle.recentSignals).toContain("progression.traversal-recorded");
@@ -91,7 +99,9 @@ describe("gameplaySystems", () => {
     expect(createGameplaySystemDiagnostics(nextState)).toMatchObject({
       activeStatusEffects: 0,
       combatState: "dormant",
+      currentXp: 50,
       gameplayOutcome: "none",
+      nextLevelXpRequired: 100,
       progressionTicksSurvived: 1
     });
   });
