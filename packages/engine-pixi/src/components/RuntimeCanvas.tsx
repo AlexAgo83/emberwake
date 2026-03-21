@@ -30,7 +30,9 @@ export function RuntimeCanvas({
   const [surfaceElement, setSurfaceElement] = useState<HTMLDivElement | null>(null);
   const handleSurfaceRef = useCallback(
     (element: HTMLDivElement | null) => {
-      setSurfaceElement(element);
+      setSurfaceElement((currentElement) =>
+        currentElement === element ? currentElement : element
+      );
       onSurfaceElementChange?.(element);
     },
     [onSurfaceElementChange]

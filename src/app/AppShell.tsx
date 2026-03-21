@@ -39,6 +39,10 @@ export function AppShell() {
   const [runtimeSurfaceElement, setRuntimeSurfaceElement] = useState<HTMLDivElement | null>(null);
   useDocumentViewportLock();
   const handleRuntimeSurfaceElementChange = useCallback((element: HTMLDivElement | null) => {
+    if (runtimeSurfaceRef.current === element) {
+      return;
+    }
+
     runtimeSurfaceRef.current = element;
     setRuntimeSurfaceElement(element);
   }, []);

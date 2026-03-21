@@ -13,9 +13,10 @@ export function useSampledValue<T>(value: T, { enabled, intervalMs }: UseSampled
 
   useEffect(() => {
     if (!enabled) {
-      setSampledValue(value);
       return;
     }
+
+    setSampledValue(latestValueRef.current);
 
     const intervalId = window.setInterval(() => {
       setSampledValue(latestValueRef.current);
@@ -24,7 +25,7 @@ export function useSampledValue<T>(value: T, { enabled, intervalMs }: UseSampled
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [enabled, intervalMs, value]);
+  }, [enabled, intervalMs]);
 
   return enabled ? sampledValue : value;
 }

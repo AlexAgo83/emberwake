@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export type RendererMetrics = {
   attempt: number;
@@ -56,33 +56,51 @@ export function useRendererHealth() {
     };
   }, [rendererState.status]);
 
-  return {
-    markReady: () => {
-      const rendererReadyAtMs = getNowMs();
+  const markReady = useCallback(() => {
+    const rendererReadyAtMs = getNowMs();
 
-      setRendererState({
+    setRendererState((currentState) => {
+      if (currentState.status === "ready") {
+        return currentState;
+      }
+
+      return {
         metrics: {
-          ...rendererState.metrics,
-          rendererReadyMs: rendererReadyAtMs - rendererState.metrics.bootStartedAtMs
+          ...currentState.metrics,
+          rendererReadyMs: rendererReadyAtMs - currentState.metrics.bootStartedAtMs
         },
         message: "Pixi runtime ready.",
         status: "ready"
-      });
-    },
-    markFailed: (message: string) => {
-      setRendererState({
-        metrics: rendererState.metrics,
+      };
+    });
+  }, []);
+
+  const markFailed = useCallback((message: string) => {
+    setRendererState((currentState) => {
+      if (currentState.status === "failed" && currentState.message === message) {
+        return currentState;
+      }
+
+      return {
+        metrics: currentState.metrics,
         message,
         status: "failed"
-      });
-    },
-    reset: () => {
-      setRendererState((currentState) => ({
-        metrics: createRendererMetrics(currentState.metrics.attempt + 1),
-        message: "Retrying Pixi runtime readiness signal.",
-        status: "initializing"
-      }));
-    },
+      };
+    });
+  }, []);
+
+  const reset = useCallback(() => {
+    setRendererState((currentState) => ({
+      metrics: createRendererMetrics(currentState.metrics.attempt + 1),
+      message: "Retrying Pixi runtime readiness signal.",
+      status: "initializing"
+    }));
+  }, []);
+
+  return {
+    markFailed,
+    markReady,
+    reset,
     rendererState
   };
 }
