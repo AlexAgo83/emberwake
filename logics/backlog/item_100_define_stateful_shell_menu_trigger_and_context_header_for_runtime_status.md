@@ -1,9 +1,9 @@
 ## item_100_define_stateful_shell_menu_trigger_and_context_header_for_runtime_status - Define a stateful shell-menu trigger and context header for runtime status
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,7 +48,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`
 - Request: `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b`
-- Primary task(s): None yet
+- Primary task(s): `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`
 
 # Priority
 - Impact: High
@@ -57,3 +57,5 @@ flowchart LR
 # Notes
 - Derived from request `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b`.
 - Source file: `logics/request/req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b.md`.
+- Implemented through `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`.
+- The shell menu trigger and opened-menu header now derive explicit runtime-state copy from the existing shell scene model so the deck communicates `Live`, `Paused`, `Settings`, recovery, boot, and failure posture before command rows are parsed.

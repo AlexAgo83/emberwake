@@ -1,9 +1,9 @@
 ## item_101_define_command_deck_grouping_and_primary_action_hierarchy_for_shell_menu_option_b - Define command-deck grouping and primary action hierarchy for shell menu Option B
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 97%
-> Confidence: 94%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,7 +50,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request: `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b`
-- Primary task(s): None yet
+- Primary task(s): `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`
 
 # Priority
 - Impact: High
@@ -59,3 +59,5 @@ flowchart LR
 # Notes
 - Derived from request `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b`.
 - Source file: `logics/request/req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b.md`.
+- Implemented through `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`.
+- The shell menu now groups controls into `Session`, `View`, and `Tools`, exposes a state-aware primary CTA for `Pause`, `Resume`, or `Retry runtime`, and relegates diagnostics and inspection to a lower-priority tools band without losing access.

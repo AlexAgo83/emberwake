@@ -1,8 +1,8 @@
 ## req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b - Define a command-deck shell menu and button hierarchy for runtime Option B
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 96%
-> Confidence: 93%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -115,7 +115,7 @@ flowchart TD
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request(s): `req_017_redesign_runtime_overlay_into_a_single_floating_menu`, `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
-- Task(s): `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`
+- Task(s): `task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu`, `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`
 
 # Backlog
 - `define_stateful_shell_menu_trigger_and_context_header_for_runtime_status`
@@ -123,4 +123,5 @@ flowchart TD
 - `define_mobile_sheet_presentation_and_button_treatment_for_shell_menu_option_b`
 
 # Delivery note
-- Draft only. This request reframes the existing floating menu as a more intentional command deck and should be implemented as a UX refinement wave rather than a fresh shell architecture reset.
+- Implemented through `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`.
+- The accepted shell posture now includes a stateful command-deck trigger, a contextual header inside the menu, grouped `Session / View / Tools` actions, a primary current-state CTA, and a mobile opened-menu sheet treatment while preserving the current shell-owned runtime model.

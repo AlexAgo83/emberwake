@@ -319,6 +319,7 @@ export function AppShell() {
           isOpen={isMenuOpen}
           isFullscreen={isFullscreen}
           isFullscreenSupported={isSupported}
+          layoutMode={viewport.layoutMode}
           onEnterFullscreen={handleRequestFullscreen}
           onInstall={handleInstall}
           onOpenChange={handleMenuOpenChange}

@@ -13,6 +13,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof ShellMenu>> 
   isOpen: true,
   isFullscreen: false,
   isFullscreenSupported: true,
+  layoutMode: "large-screen" as const,
   onEnterFullscreen: vi.fn(),
   onInstall: vi.fn(),
   onOpenChange: vi.fn(),
@@ -106,5 +107,18 @@ describe("ShellMenu", () => {
     expect(within(panel).getByText("Session pause")).toBeInTheDocument();
     expect(within(panel).getByText("Paused")).toBeInTheDocument();
     expect(within(panel).getByText(/shell owns the pause scene/i)).toBeInTheDocument();
+  });
+
+  it("marks the command deck as mobile when the shell is in mobile layout mode", () => {
+    const props = createProps({
+      layoutMode: "mobile"
+    });
+
+    render(<ShellMenu {...props} />);
+
+    expect(screen.getByLabelText("Shell menu").closest(".shell-menu")).toHaveAttribute(
+      "data-layout-mode",
+      "mobile"
+    );
   });
 });

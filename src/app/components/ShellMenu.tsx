@@ -2,6 +2,7 @@ import { memo, useEffect, useId, useRef } from "react";
 
 import type { CameraMode } from "../../game/camera/model/cameraMode";
 import type { AppSceneId } from "../model/appScene";
+import type { LayoutMode } from "../../shared/types/layout";
 
 type ShellMenuProps = {
   activeScene: AppSceneId;
@@ -13,6 +14,7 @@ type ShellMenuProps = {
   isOpen: boolean;
   isFullscreen: boolean;
   isFullscreenSupported: boolean;
+  layoutMode: LayoutMode;
   onEnterFullscreen: () => void;
   onInstall: () => void;
   onOpenChange: (isOpen: boolean) => void;
@@ -89,6 +91,7 @@ export const ShellMenu = memo(function ShellMenu({
   isOpen,
   isFullscreen,
   isFullscreenSupported,
+  layoutMode,
   onEnterFullscreen,
   onInstall,
   onOpenChange,
@@ -167,6 +170,7 @@ export const ShellMenu = memo(function ShellMenu({
   return (
     <div
       className="shell-menu"
+      data-layout-mode={layoutMode}
       data-open={isOpen}
       ref={menuRef}
     >

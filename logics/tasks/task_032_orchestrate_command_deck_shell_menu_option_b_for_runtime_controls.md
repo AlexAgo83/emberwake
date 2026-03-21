@@ -1,9 +1,9 @@
 ## task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls - Orchestrate command-deck shell menu Option B for runtime controls
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -28,13 +28,13 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Define and implement a stateful shell-menu trigger and contextual header so the menu communicates runtime or shell status before the user parses command rows.
-- [ ] 2. Define and implement the command-deck grouping model, including a primary current-state action and clearer priority separation between session commands, view controls, and debug or utility tools.
-- [ ] 3. Define and implement the mobile opened-menu posture as a more intentional sheet with touch-appropriate row and button treatment while keeping the trigger stable.
-- [ ] 4. Update shell UX copy, styling, and interaction notes so the resulting menu reads as a deliberate control surface rather than a flat action list.
-- [ ] 5. Update linked request, backlog, task, and any architecture-adjacent docs needed to preserve traceability for the new shell posture.
-- [ ] 6. Validate the resulting UX wave against current repository delivery constraints and responsive shell behavior.
-- [ ] FINAL: Create dedicated git commit(s) for this orchestration scope.
+- [x] 1. Define and implement a stateful shell-menu trigger and contextual header so the menu communicates runtime or shell status before the user parses command rows.
+- [x] 2. Define and implement the command-deck grouping model, including a primary current-state action and clearer priority separation between session commands, view controls, and debug or utility tools.
+- [x] 3. Define and implement the mobile opened-menu posture as a more intentional sheet with touch-appropriate row and button treatment while keeping the trigger stable.
+- [x] 4. Update shell UX copy, styling, and interaction notes so the resulting menu reads as a deliberate control surface rather than a flat action list.
+- [x] 5. Update linked request, backlog, task, and any architecture-adjacent docs needed to preserve traceability for the new shell posture.
+- [x] 6. Validate the resulting UX wave against current repository delivery constraints and responsive shell behavior.
+- [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
 
 # AC Traceability
 - `item_100` -> Stateful trigger and context header are explicit. Proof target: trigger state mapping, header structure, status copy.
@@ -61,12 +61,17 @@ flowchart LR
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] The shell exposes a clearer stateful trigger, a contextual command-deck header, and a stronger hierarchy between primary, secondary, and utility actions.
-- [ ] The mobile opened-menu posture behaves as a touch-first sheet without changing the current trigger ownership or menu-driven shell model.
-- [ ] Linked request, backlog, task, and related docs are updated with proofs and status.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] The shell exposes a clearer stateful trigger, a contextual command-deck header, and a stronger hierarchy between primary, secondary, and utility actions.
+- [x] The mobile opened-menu posture behaves as a touch-first sheet without changing the current trigger ownership or menu-driven shell model.
+- [x] Linked request, backlog, task, and related docs are updated with proofs and status.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-- Pending.
+- Reworked `src/app/components/ShellMenu.tsx` into a state-aware command deck that now exposes runtime-context labels, a contextual header, a primary current-state CTA, and grouped `Session`, `View`, and `Tools` sections.
+- Updated `src/app/AppShell.tsx` so the shell passes retry and layout-mode context into the command deck without reopening shell ownership or the existing runtime boundary model.
+- Reworked `src/app/styles/app.css` so the shell menu now has stronger trigger and header treatment, clearer command hierarchy, and a bottom-sheet posture with larger touch targets on mobile.
+- Extended `src/app/components/ShellMenu.test.tsx` to cover the stateful trigger, contextual header, primary pause or resume or retry path, grouped command families, and mobile-layout marking.
+- Updated `scripts/testing/runBrowserSmoke.mjs` so repository smoke validation targets the new stateful command-deck trigger instead of the retired static `Menu` label.
+- Visual sanity checks were performed against the running app in browser on desktop and mobile-sized viewports to confirm the new trigger, grouped command deck, and mobile sheet posture.

@@ -1,9 +1,9 @@
 ## item_102_define_mobile_sheet_presentation_and_button_treatment_for_shell_menu_option_b - Define mobile sheet presentation and button treatment for shell menu Option B
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -50,7 +50,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request: `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b`
-- Primary task(s): None yet
+- Primary task(s): `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`
 
 # Priority
 - Impact: Medium
@@ -59,3 +59,5 @@ flowchart LR
 # Notes
 - Derived from request `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b`.
 - Source file: `logics/request/req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b.md`.
+- Implemented through `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`.
+- On mobile, the command deck now opens as a bottom-anchored sheet with larger touch targets and adapted segmented controls while the persistent trigger remains in the same top-right shell position.

@@ -133,7 +133,7 @@ try {
   }
 
   await page.getByRole("button", {
-    name: "Menu"
+    name: /Command deck/i
   }).click();
   await page.getByRole("button", {
     name: /Inspecteur/i
