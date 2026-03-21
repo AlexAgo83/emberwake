@@ -1,9 +1,9 @@
 ## item_103_define_tactical_console_geometry_for_shell_buttons_panels_and_state_chips - Define tactical-console geometry for shell buttons, panels, and state chips
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 96%
-> Confidence: 94%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,7 +48,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request: `req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus`
-- Primary task(s): None yet
+- Primary task(s): `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`
 
 # Priority
 - Impact: High
@@ -57,3 +57,5 @@ flowchart LR
 # Notes
 - Derived from request `req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus`.
 - Source file: `logics/request/req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus.md`.
+- Implemented through `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`.
+- Shell controls, panels, chips, diagnostics cards, and inspection cards now use lower radii, stronger border framing, reduced pill geometry, and less blur-led identity while keeping the current command-deck model intact.

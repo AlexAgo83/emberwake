@@ -1,9 +1,9 @@
 ## item_105_define_responsive_tactical_console_treatment_for_mobile_sheet_and_desktop_command_deck - Define responsive tactical-console treatment for mobile sheet and desktop command deck
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 95%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,7 +48,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request: `req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus`
-- Primary task(s): None yet
+- Primary task(s): `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`
 
 # Priority
 - Impact: Medium
@@ -57,3 +57,5 @@ flowchart LR
 # Notes
 - Derived from request `req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus`.
 - Source file: `logics/request/req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus.md`.
+- Implemented through `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`.
+- Desktop and mobile now share the same tactical-console framing, with mobile-specific trigger density, sheet geometry, and touch spacing layered on top of the existing shell-owned command-deck model.

@@ -1,9 +1,9 @@
 ## item_104_define_tactical_console_hierarchy_for_primary_secondary_and_utility_shell_controls - Define tactical-console hierarchy for primary, secondary, and utility shell controls
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,7 +48,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request: `req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus`
-- Primary task(s): None yet
+- Primary task(s): `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`
 
 # Priority
 - Impact: High
@@ -57,3 +57,5 @@ flowchart LR
 # Notes
 - Derived from request `req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus`.
 - Source file: `logics/request/req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus.md`.
+- Implemented through `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`.
+- The command deck now exposes a labeled primary CTA module plus explicit `secondary` and `utility` action treatments so session/view commands and tool toggles no longer compete with equal visual authority.

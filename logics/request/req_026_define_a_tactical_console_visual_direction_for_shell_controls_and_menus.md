@@ -1,8 +1,8 @@
 ## req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus - Define a tactical-console visual direction for shell controls and menus
 > From version: 0.2.1
-> Status: Draft
-> Understanding: 96%
-> Confidence: 94%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -103,6 +103,7 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request(s): `req_017_redesign_runtime_overlay_into_a_single_floating_menu`, `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b`
 - Task(s): `task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu`, `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`
+  `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`
 
 # Backlog
 - `define_tactical_console_geometry_for_shell_buttons_panels_and_state_chips`
@@ -110,4 +111,5 @@ flowchart TD
 - `define_responsive_tactical_console_treatment_for_mobile_sheet_and_desktop_command_deck`
 
 # Delivery note
-- Draft only. This request recommends a tactical-console shell direction as the next visual refinement wave on top of the existing command-deck model.
+- Implemented through `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`.
+- The accepted shell posture now uses lower-radius tactical geometry, stronger framed sections, a more module-like primary CTA, explicit secondary vs utility action treatment, and a breakpoint-aware mobile sheet that preserves the same command-deck identity as desktop.
