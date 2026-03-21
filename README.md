@@ -162,17 +162,6 @@ npm run logics:lint
 npm run release:ready:advisory
 ```
 
-```mermaid
-flowchart TD
-    Dev[npm run dev]
-    Build[npm run build]
-    Test[npm run test]
-    CI[npm run ci]
-    Full[npm run ci:full]
-    Smoke[npm run test:browser:smoke]
-    Perf[npm run performance:validate]
-```
-
 ## Controls
 
 - **Mobile:** virtual stick for direct movement.
@@ -250,28 +239,11 @@ flowchart LR
 - Node.js `>= 20`
 - npm
 
-```mermaid
-flowchart LR
-    Node[Node >= 20] --> Install[npm ci]
-    Npm[npm] --> Install
-```
-
 ## Contributing
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-```mermaid
-flowchart LR
-    Contributor[Contributor] --> Guide[CONTRIBUTING.md]
-    Guide --> Repo[emberwake workflow]
-```
 
 ## License
 
 MIT, see [`LICENSE`](LICENSE).
-
-```mermaid
-flowchart LR
-    Project[Emberwake] --> MIT[MIT license]
-    MIT --> LicenseFile[LICENSE]
-```
