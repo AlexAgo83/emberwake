@@ -136,6 +136,9 @@ try {
     name: /Command deck/i
   }).click();
   await page.getByRole("button", {
+    name: /^Tools\b/i
+  }).click();
+  await page.getByRole("button", {
     name: /Inspecteur/i
   }).click();
 

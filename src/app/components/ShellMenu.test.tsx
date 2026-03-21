@@ -69,7 +69,7 @@ describe("ShellMenu", () => {
     expect(props.onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("exposes a single session section with nested view and tools groups inside the shell panel", () => {
+  it("keeps Session as the root menu and routes View and Tools through dedicated submenus", () => {
     const props = createProps();
 
     render(<ShellMenu {...props} />);
@@ -77,17 +77,15 @@ describe("ShellMenu", () => {
     const panel = screen.getByLabelText("Shell menu");
 
     expect(within(panel).getByText("Session")).toBeInTheDocument();
-    expect(within(panel).getByText("View")).toBeInTheDocument();
-    expect(within(panel).getByText("Tools")).toBeInTheDocument();
-    expect(within(panel).getByRole("button", { name: /Diagnostics/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: /Settings/i })).toBeInTheDocument();
-    expect(within(panel).getByRole("button", { name: "Free" })).toBeInTheDocument();
-    expect(within(panel).getByRole("button", { name: "Follow entity" })).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: /View/i })).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: /Tools/i })).toBeInTheDocument();
+    expect(within(panel).queryByText(/^Diagnostics$/)).not.toBeInTheDocument();
+    expect(within(panel).queryByRole("button", { name: /^Free$/ })).not.toBeInTheDocument();
     expect(panel.querySelectorAll(".shell-menu__section")).toHaveLength(1);
-    expect(panel.querySelectorAll(".shell-menu__subsection")).toHaveLength(2);
   });
 
-  it("marks session and view actions as secondary while tools stay utility-weight", () => {
+  it("marks root session actions as secondary while the tools submenu entry stays utility-weight", () => {
     const props = createProps({
       canInstall: true
     });
@@ -95,53 +93,64 @@ describe("ShellMenu", () => {
     render(<ShellMenu {...props} />);
 
     expect(screen.getByRole("button", { name: /Settings/i })).toHaveClass("shell-menu__item--secondary");
-    expect(screen.getByRole("button", { name: /Reset camera/i })).toHaveClass(
-      "shell-menu__item--secondary"
-    );
-    expect(screen.getByRole("button", { name: /Diagnostics/i })).toHaveClass(
-      "shell-menu__item--utility"
-    );
-    expect(screen.getByRole("button", { name: /Install app/i })).toHaveClass(
+    expect(screen.getByRole("button", { name: /View/i })).toHaveClass("shell-menu__item--secondary");
+    expect(screen.getByRole("button", { name: /Tools/i })).toHaveClass(
       "shell-menu__item--utility"
     );
   });
 
-  it("keeps view controls nested inside the session section without changing camera access", () => {
+  it("opens a dedicated View submenu without keeping camera controls on the root screen", () => {
     const props = createProps();
 
     render(<ShellMenu {...props} />);
 
-    const sessionSection = screen.getByText("Session").closest(".shell-menu__section");
-    expect(sessionSection).not.toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: /View/i }));
 
-    const viewSection = within(sessionSection as HTMLElement)
-      .getByText("View")
-      .closest(".shell-menu__subsection");
+    const panel = screen.getByLabelText("Shell menu");
 
-    expect(viewSection).toHaveClass("shell-menu__subsection--view");
-    expect(within(viewSection as HTMLElement).getByRole("button", { name: /Reset camera/i })).toBeInTheDocument();
-    expect(within(viewSection as HTMLElement).getByRole("button", { name: "Free" })).toBeInTheDocument();
-    expect(within(viewSection as HTMLElement).getByRole("button", { name: "Follow entity" })).toBeInTheDocument();
+    expect(within(panel).getByText("View")).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: /Back to Session/i })).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: /Reset camera/i })).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: "Free" })).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: "Follow entity" })).toBeInTheDocument();
+    expect(within(panel).queryByRole("button", { name: /Settings/i })).not.toBeInTheDocument();
   });
 
-  it("keeps utility tools nested inside the session section without returning to peer top-level clutter", () => {
+  it("opens a dedicated Tools submenu instead of keeping utility controls on the root screen", () => {
     const props = createProps({
       canInstall: true
     });
 
     render(<ShellMenu {...props} />);
 
-    const sessionSection = screen.getByText("Session").closest(".shell-menu__section");
-    expect(sessionSection).not.toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: /Tools/i }));
 
-    const toolsSection = within(sessionSection as HTMLElement)
-      .getByText("Tools")
-      .closest(".shell-menu__subsection");
+    const panel = screen.getByLabelText("Shell menu");
 
-    expect(toolsSection).toHaveClass("shell-menu__subsection--tools");
-    expect(within(toolsSection as HTMLElement).getByRole("button", { name: /Inspecteur/i })).toBeInTheDocument();
-    expect(within(toolsSection as HTMLElement).getByRole("button", { name: /Diagnostics/i })).toBeInTheDocument();
-    expect(within(toolsSection as HTMLElement).getByRole("button", { name: /Install app/i })).toBeInTheDocument();
+    expect(within(panel).getByText("Tools")).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: /Back to Session/i })).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: /Inspecteur/i })).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: /Diagnostics/i })).toBeInTheDocument();
+    expect(within(panel).getByRole("button", { name: /Install app/i })).toBeInTheDocument();
+    expect(within(panel).queryByRole("button", { name: /Settings/i })).not.toBeInTheDocument();
+  });
+
+  it("returns to Session and resets submenu navigation when the menu closes", () => {
+    const props = createProps();
+    const { rerender } = render(<ShellMenu {...props} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /View/i }));
+    expect(screen.getByRole("button", { name: /Back to Session/i })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /Back to Session/i }));
+    expect(screen.getByRole("button", { name: /Settings/i })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /Tools/i }));
+    rerender(<ShellMenu {...props} isOpen={false} />);
+    rerender(<ShellMenu {...props} isOpen />);
+
+    expect(screen.getByRole("button", { name: /Settings/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Back to Session/i })).not.toBeInTheDocument();
   });
 
   it("renders a stateful command deck trigger and contextual header for the live runtime", () => {
@@ -154,18 +163,15 @@ describe("ShellMenu", () => {
     expect(screen.getByRole("button", { name: /Command deck/i })).toHaveTextContent("Live");
   });
 
-  it("renders paused shell context inside the opened command deck", () => {
+  it("keeps the primary action aligned with the paused shell scene without the removed context panel", () => {
     const props = createProps({
       activeScene: "pause"
     });
 
     render(<ShellMenu {...props} />);
 
-    const panel = screen.getByLabelText("Shell menu");
-
-    expect(within(panel).getByText("Session pause")).toBeInTheDocument();
-    expect(within(panel).getByText("Paused")).toBeInTheDocument();
-    expect(within(panel).getByText(/shell owns the pause scene/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Resume runtime/i })).toBeInTheDocument();
+    expect(screen.queryByText("Session pause")).not.toBeInTheDocument();
   });
 
   it("marks the command deck as mobile when the shell is in mobile layout mode", () => {

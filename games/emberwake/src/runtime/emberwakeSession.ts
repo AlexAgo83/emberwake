@@ -10,6 +10,6 @@ export const emberwakeRuntimeSessionSeedOptions = [
 
 export const createDefaultEmberwakeRuntimeSessionState = (): RuntimeSessionState => ({
   cameraState: emberwakeRuntimeBootstrap.cameraState ?? createDefaultCameraState(),
-  cameraMode: "free",
+  cameraMode: "follow-entity",
   worldSeed: emberwakeRuntimeBootstrap.worldSeed
 });
