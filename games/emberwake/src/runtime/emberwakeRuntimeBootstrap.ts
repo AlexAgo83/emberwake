@@ -106,10 +106,13 @@ export const emberwakeRuntimeBootstrap: EmberwakeRuntimeBootstrap = {
   worldSeed: worldContract.defaultSeed
 };
 
-export const createDeterministicRuntimeSupportEntities = (): SimulatedEntity[] =>
+export const deterministicRuntimeSupportEntities: readonly SimulatedEntity[] =
   emberwakeRuntimeBootstrap.supportEntities.map((entityBlueprint, index) =>
     createScenarioEntity(
       entityBlueprint,
       index === 0 ? "inactive" : index === 2 ? "moving" : "idle"
     )
   );
+
+export const createDeterministicRuntimeSupportEntities = () =>
+  deterministicRuntimeSupportEntities;

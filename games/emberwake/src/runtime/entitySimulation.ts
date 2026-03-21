@@ -10,7 +10,7 @@ import type { SingleEntityControlState } from "@game/input/singleEntityControlCo
 import { singleEntityControlContract } from "@game/input/singleEntityControlContract";
 import type { EntityState, WorldEntity } from "@game/content/entities/entityContract";
 import {
-  createDeterministicRuntimeSupportEntities,
+  deterministicRuntimeSupportEntities,
   emberwakeRuntimeBootstrap
 } from "@game/runtime/emberwakeRuntimeBootstrap";
 import { resolvePseudoPhysicalMovement } from "@game/runtime/pseudoPhysics";
@@ -153,7 +153,7 @@ export const advanceSimulationState = (
     footprintRadius: simulationState.entity.footprint.radius,
     isBlockedAtPosition: (worldPosition, footprintRadius) =>
       isWorldPositionBlockedByObstacle(worldPosition, footprintRadius, worldSeed),
-    staticColliders: createDeterministicRuntimeSupportEntities(),
+    staticColliders: deterministicRuntimeSupportEntities,
     stepSeconds,
     surfaceModifierKind: surfaceSample.modifierKind
   });
