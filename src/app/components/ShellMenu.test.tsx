@@ -85,6 +85,25 @@ describe("ShellMenu", () => {
     expect(within(panel).getByRole("button", { name: "Follow entity" })).toBeInTheDocument();
   });
 
+  it("marks session and view actions as secondary while tools stay utility-weight", () => {
+    const props = createProps({
+      canInstall: true
+    });
+
+    render(<ShellMenu {...props} />);
+
+    expect(screen.getByRole("button", { name: /Settings/i })).toHaveClass("shell-menu__item--secondary");
+    expect(screen.getByRole("button", { name: /Reset camera/i })).toHaveClass(
+      "shell-menu__item--secondary"
+    );
+    expect(screen.getByRole("button", { name: /Diagnostics/i })).toHaveClass(
+      "shell-menu__item--utility"
+    );
+    expect(screen.getByRole("button", { name: /Install app/i })).toHaveClass(
+      "shell-menu__item--utility"
+    );
+  });
+
   it("renders a stateful command deck trigger and contextual header for the live runtime", () => {
     const props = createProps({
       isOpen: false
