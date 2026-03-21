@@ -1,9 +1,9 @@
 ## item_092_define_frame_pacing_profiling_and_validation_for_unified_runtime_scheduling - Define frame pacing profiling and validation for unified runtime scheduling
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,8 +48,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`
+- Architecture decision(s): `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`, `adr_026_validate_unified_runtime_scheduling_with_frame_pacing_telemetry_and_browser_smoke`
 - Request: `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
+- Primary task(s): `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
 
 # Priority
 - Impact: High
@@ -58,3 +59,4 @@ flowchart LR
 # Notes
 - Derived from request `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`.
 - Source file: `logics/request/req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling.md`.
+- Implemented through `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`.

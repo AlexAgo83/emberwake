@@ -1,8 +1,8 @@
 ## req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling - Define a unified frame loop architecture for runtime stability and render scheduling
 > From version: 0.1.2
-> Status: Ready
-> Understanding: 98%
-> Confidence: 95%
+> Status: Done
+> Understanding: 99%
+> Confidence: 96%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -83,11 +83,15 @@ flowchart TD
 
 # Companion docs
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_015_define_engine_to_game_runtime_contract_boundaries`, `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`, `adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer`, `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`, `adr_023_model_gameplay_systems_as_game_owned_state_slices_around_the_game_module`
+- Architecture decision(s): `adr_015_define_engine_to_game_runtime_contract_boundaries`, `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`, `adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer`, `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`, `adr_023_model_gameplay_systems_as_game_owned_state_slices_around_the_game_module`, `adr_024_drive_live_runtime_from_the_pixi_visual_frame_while_engine_keeps_fixed_step_authority`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`, `adr_026_validate_unified_runtime_scheduling_with_frame_pacing_telemetry_and_browser_smoke`
 - Request(s): `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`, `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`
-- Task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`, `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`
+- Task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`, `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`, `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
 
 # Backlog
 - `define_the_target_master_frame_loop_between_runtime_runner_presentation_and_pixi_render_submission`
 - `define_hot_path_state_publication_rules_between_runtime_shell_and_diagnostics_surfaces`
 - `define_frame_pacing_profiling_and_validation_for_unified_runtime_scheduling`
+
+# Delivery note
+- Implemented through `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`.
+- Accepted architecture decisions now cover Pixi-driven live frame transport with engine-owned fixed-step authority, sampled diagnostics and event-driven shell chrome publication, and frame-pacing validation through runtime telemetry plus browser smoke.

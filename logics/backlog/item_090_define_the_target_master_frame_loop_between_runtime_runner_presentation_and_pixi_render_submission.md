@@ -1,9 +1,9 @@
 ## item_090_define_the_target_master_frame_loop_between_runtime_runner_presentation_and_pixi_render_submission - Define the target master frame loop between runtime runner presentation and Pixi render submission
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,8 +48,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_015_define_engine_to_game_runtime_contract_boundaries`, `adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer`, `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`
+- Architecture decision(s): `adr_015_define_engine_to_game_runtime_contract_boundaries`, `adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer`, `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`, `adr_024_drive_live_runtime_from_the_pixi_visual_frame_while_engine_keeps_fixed_step_authority`
 - Request: `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
+- Primary task(s): `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
 
 # Priority
 - Impact: High
@@ -58,3 +59,4 @@ flowchart LR
 # Notes
 - Derived from request `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`.
 - Source file: `logics/request/req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling.md`.
+- Implemented through `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`.

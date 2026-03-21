@@ -1,9 +1,9 @@
 ## item_091_define_hot_path_state_publication_rules_between_runtime_shell_and_diagnostics_surfaces - Define hot path state publication rules between runtime shell and diagnostics surfaces
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,8 +48,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`, `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`
+- Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`, `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request: `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
+- Primary task(s): `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
 
 # Priority
 - Impact: Medium
@@ -58,3 +59,4 @@ flowchart LR
 # Notes
 - Derived from request `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`.
 - Source file: `logics/request/req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling.md`.
+- Implemented through `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`.
