@@ -376,6 +376,7 @@ export function ActiveRuntimeShellContent({
             fps={simulationState.runtime.fps}
             isMobile={isMobileLayout}
             playerName={runtimeSession.playerName || "Wanderer"}
+            zoomMultiplier={cameraState.zoom}
           />
         ) : null}
 

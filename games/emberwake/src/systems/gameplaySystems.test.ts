@@ -89,6 +89,6 @@ describe("gameplaySystems", () => {
       "outcomes"
     ]);
     expect(gameplaySystemsContract.signalPosture).toContain("narrow-phase-signals");
-    expect(createDefaultCameraState().zoom).toBe(1);
+    expect(createDefaultCameraState().zoom).toBe(1.25);
   });
 });

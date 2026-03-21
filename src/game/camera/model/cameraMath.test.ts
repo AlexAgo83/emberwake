@@ -19,7 +19,7 @@ describe("cameraMath", () => {
     expect(createDefaultCameraState()).toEqual({
       rotation: 0,
       worldPosition: { x: 0, y: 0 },
-      zoom: 1
+      zoom: 1.25
     });
   });
 
@@ -44,7 +44,7 @@ describe("cameraMath", () => {
     const zoomed = zoomCamera(createDefaultCameraState(), -200);
     const rotated = rotateCamera(createDefaultCameraState(), cameraContract.rotationStepRadians);
 
-    expect(zoomed.zoom).toBeGreaterThan(1);
+    expect(zoomed.zoom).toBeGreaterThan(1.25);
     expect(rotated.rotation).toBe(cameraContract.rotationStepRadians);
   });
 });

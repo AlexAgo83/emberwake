@@ -9,12 +9,14 @@ describe("PlayerHudCard", () => {
         fps={58.7}
         isMobile={false}
         playerName="Wanderer"
+        zoomMultiplier={1.25}
       />
     );
 
     expect(screen.getByTestId("player-hud")).toBeInTheDocument();
     expect(screen.getByText("Wanderer")).toBeInTheDocument();
     expect(screen.getByText("59")).toBeInTheDocument();
+    expect(screen.getByText("1.25x")).toBeInTheDocument();
     expect(screen.queryByText(/WASD \/ arrows/i)).not.toBeInTheDocument();
     expect(screen.queryByTestId("player-hud-hint")).not.toBeInTheDocument();
   });
@@ -25,9 +27,11 @@ describe("PlayerHudCard", () => {
         fps={61.2}
         isMobile
         playerName="Ash"
+        zoomMultiplier={0.8}
       />
     );
 
     expect(screen.getByText("Glissez pour guider le deplacement.")).toBeInTheDocument();
+    expect(screen.getByText("0.80x")).toBeInTheDocument();
   });
 });
