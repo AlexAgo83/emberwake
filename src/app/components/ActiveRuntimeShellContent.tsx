@@ -172,8 +172,9 @@ export function ActiveRuntimeShellContent({
     viewport
   });
   const entityWorld = useEntityWorld({
-    primaryEntity: simulationState.entity,
+    primaryEntityId: simulationState.entity.id,
     selectedWorldPoint: worldDiagnostics.selectedWorldPoint,
+    simulatedEntities: simulationState.entities,
     visibleChunks: chunkVisibility.visibleChunks
   });
   const showShellTools = activeScene !== "main-menu" && activeScene !== "new-game";
@@ -371,6 +372,7 @@ export function ActiveRuntimeShellContent({
           <PlayerHudCard
             fps={simulationState.runtime.fps}
             isMobile={isMobileLayout}
+            playerHealth={simulationState.entity.combat.currentHealth}
             playerName={runtimeSession.playerName || "Wanderer"}
             zoomMultiplier={cameraState.zoom}
           />

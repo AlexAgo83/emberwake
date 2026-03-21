@@ -14,7 +14,8 @@ import type { ChunkCoordinate, WorldPoint } from "../../world/types";
 import type { SimulatedEntity } from "../model/entitySimulation";
 
 type UseEntityWorldOptions = {
-  primaryEntity: SimulatedEntity;
+  primaryEntityId: string;
+  simulatedEntities: SimulatedEntity[];
   selectedWorldPoint: WorldPoint | null;
   visibleChunks: ChunkCoordinate[];
 };
@@ -36,15 +37,16 @@ const presentEntitySelection = (
 });
 
 export function useEntityWorld({
-  primaryEntity,
+  primaryEntityId,
+  simulatedEntities,
   selectedWorldPoint,
   visibleChunks
 }: UseEntityWorldOptions): EntityWorldState {
   const trackedEntities = useMemo(() => {
     const scenarioEntities = createDeterministicRuntimeSupportEntities();
 
-    return [primaryEntity, ...scenarioEntities];
-  }, [primaryEntity]);
+    return [...simulatedEntities, ...scenarioEntities];
+  }, [simulatedEntities]);
   const visibleChunkIds = useMemo(
     () => new Set(visibleChunks.map((chunkCoordinate) => chunkCoordinateToId(chunkCoordinate))),
     [visibleChunks]
@@ -55,7 +57,7 @@ export function useEntityWorld({
   );
   const entitiesByChunk = useMemo(() => indexEntitiesByChunk(trackedEntities), [trackedEntities]);
   const overlappingPairs = useMemo(() => detectEntityOverlaps(trackedEntities), [trackedEntities]);
-  const [selectedEntityId, setSelectedEntityId] = useState<string | null>(primaryEntity.id);
+  const [selectedEntityId, setSelectedEntityId] = useState<string | null>(primaryEntityId);
 
   useEffect(() => {
     if (!selectedWorldPoint) {
@@ -69,6 +71,8 @@ export function useEntityWorld({
     }
   }, [selectedWorldPoint, trackedEntities]);
 
+  const primaryEntity =
+    simulatedEntities.find((entity) => entity.id === primaryEntityId) ?? simulatedEntities[0];
   const selectedEntity =
     trackedEntities.find((entity) => entity.id === selectedEntityId) ?? primaryEntity;
 

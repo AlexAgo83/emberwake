@@ -7,7 +7,7 @@ import {
 import type { GameplayShellOutcome } from "./gameplayOutcome";
 
 export type CombatSystemState = {
-  encounterState: "dormant";
+  encounterState: "active" | "dormant";
   lastCombatTick: number | null;
 };
 
@@ -125,7 +125,13 @@ export const advanceGameplaySystemsState = ({
     ...previousState.autonomy,
     lastAutonomyTick: timing.tick + 1
   };
-  const combat = previousState.combat;
+  const hostileCount = simulationAfterUpdate.entities.filter(
+    (entity) => entity.role === "hostile"
+  ).length;
+  const combat: CombatSystemState = {
+    encounterState: hostileCount > 0 ? "active" : "dormant",
+    lastCombatTick: hostileCount > 0 ? timing.tick + 1 : previousState.combat.lastCombatTick
+  };
   const statusEffects = previousState.statusEffects;
   const progression = {
     ...previousState.progression,
@@ -133,9 +139,17 @@ export const advanceGameplaySystemsState = ({
     traversalDistanceWorldUnits:
       previousState.progression.traversalDistanceWorldUnits + traversalDistanceWorldUnits
   };
-  const outcome = previousState.outcome.kind === "none"
-    ? createIdleGameplayOutcome()
-    : previousState.outcome;
+  const outcome =
+    simulationAfterUpdate.entity.combat.currentHealth <= 0
+      ? {
+          detail: "The hostile swarm overran the active run.",
+          emittedAtTick: timing.tick + 1,
+          kind: "defeat" as const,
+          shellScene: "defeat" as const
+        }
+      : previousState.outcome.kind === "none"
+        ? createIdleGameplayOutcome()
+        : previousState.outcome;
   const recentSignals = trimSignals([
     ...previousState.lifecycle.recentSignals,
     "autonomy.tick-advanced",

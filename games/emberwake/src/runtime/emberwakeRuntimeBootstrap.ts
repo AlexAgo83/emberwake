@@ -42,7 +42,13 @@ const createScenarioEntity = (
     },
     worldPosition: entityBlueprint.worldPosition
   }),
+  combat: {
+    currentHealth: 1,
+    maxHealth: 1
+  },
   movementSurfaceModifier: "normal",
+  role: "support",
+  spawnedAtTick: 0,
   velocity: {
     x: 0,
     y: 0

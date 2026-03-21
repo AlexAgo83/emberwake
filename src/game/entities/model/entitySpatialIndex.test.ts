@@ -22,7 +22,13 @@ const createSimulatedEntity = (
       y
     }
   }),
+  combat: {
+    currentHealth: 100,
+    maxHealth: 100
+  },
   movementSurfaceModifier: "normal",
+  role: "player",
+  spawnedAtTick: 0,
   velocity: {
     x: 0,
     y: 0

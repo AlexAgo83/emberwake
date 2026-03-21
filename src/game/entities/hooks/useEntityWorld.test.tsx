@@ -14,8 +14,9 @@ describe("useEntityWorld", () => {
     const visibleChunks = [worldPointToChunkCoordinate(primaryEntity.worldPosition)];
     const { result } = renderHook(() =>
       useEntityWorld({
-        primaryEntity,
+        primaryEntityId: primaryEntity.id,
         selectedWorldPoint: null,
+        simulatedEntities: [primaryEntity],
         visibleChunks
       })
     );
@@ -35,8 +36,9 @@ describe("useEntityWorld", () => {
     const { result, rerender } = renderHook(
       ({ selectedWorldPoint }) =>
         useEntityWorld({
-          primaryEntity,
+          primaryEntityId: primaryEntity.id,
           selectedWorldPoint,
+          simulatedEntities: [primaryEntity],
           visibleChunks
         }),
       {

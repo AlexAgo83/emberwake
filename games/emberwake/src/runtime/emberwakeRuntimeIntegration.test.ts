@@ -6,7 +6,9 @@ import {
 } from "./emberwakeRuntimeRunner";
 import { emberwakeGameModule, entitySimulationContract } from "./emberwakeGameModule";
 import { createInitialEmberwakeGameState } from "./emberwakeGameModule";
+import { createGenericMoverEntity } from "../content/entities/entityContract";
 import { entityContract } from "../content/entities/entityContract";
+import { hostileCombatContract } from "./hostileCombatContract";
 
 const activeRightControlState = {
   controlledEntityId: entityContract.primaryEntityId,
@@ -60,13 +62,23 @@ describe("Emberwake runtime integration", () => {
     expect(presentation.cameraTarget?.worldPosition).toEqual(
       nextState.simulation.entity.worldPosition
     );
+    expect(presentation.entities).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: nextState.simulation.entity.id,
+          worldPosition: nextState.simulation.entity.worldPosition
+        })
+      ])
+    );
     expect(presentation.entities[0]).toMatchObject({
       id: nextState.simulation.entity.id,
       worldPosition: nextState.simulation.entity.worldPosition
     });
     expect(presentation.diagnostics).toMatchObject({
       combatState: "dormant",
+      hostileCount: 0,
       gameplayOutcome: "none",
+      playerHealth: 100,
       progressionTicksSurvived: 1
     });
     expect(presentation.overlays?.runtimeOutcome).toMatchObject({
@@ -91,8 +103,13 @@ describe("Emberwake runtime integration", () => {
     expect(snapshot.runtime.visualFrameCount).toBe(2);
     expect(snapshot.state.systems.progression.runtimeTicksSurvived).toBe(1);
     expect(snapshot.state.simulation.entity.worldPosition.x).toBeGreaterThan(0);
-    expect(snapshot.presentation.entities[0].worldPosition).toEqual(
-      snapshot.state.simulation.entity.worldPosition
+    expect(snapshot.presentation.entities).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: snapshot.state.simulation.entity.id,
+          worldPosition: snapshot.state.simulation.entity.worldPosition
+        })
+      ])
     );
   });
 
@@ -145,5 +162,91 @@ describe("Emberwake runtime integration", () => {
     expect(snapshot.state.simulation.tick).toBe(12);
     expect(snapshot.state.simulation.entity.worldPosition).toEqual({ x: 320, y: -96 });
     expect(snapshot.state.systems.progression.runtimeTicksSurvived).toBe(12);
+  });
+
+  it("emits a defeat outcome when hostile contact reduces the player to zero health", () => {
+    const state = createInitialEmberwakeGameState();
+
+    state.simulation.entity = {
+      ...state.simulation.entity,
+      automaticAttack: {
+        ...state.simulation.entity.automaticAttack!,
+        lastAttackTick: 0
+      },
+      combat: {
+        ...state.simulation.entity.combat,
+        currentHealth: hostileCombatContract.hostile.contactDamage
+      }
+    };
+    state.simulation.entities = [
+      state.simulation.entity,
+      {
+        ...createGenericMoverEntity({
+          id: "entity:hostile:overlap",
+          visual: {
+            kind: "debug-sentinel",
+            tint: "#ff6d78"
+          },
+          worldPosition: {
+            x: -20,
+            y: 0
+          }
+        }),
+        combat: {
+          currentHealth: hostileCombatContract.hostile.maxHealth,
+          maxHealth: hostileCombatContract.hostile.maxHealth
+        },
+        contactDamageProfile: {
+          cooldownTicks: hostileCombatContract.hostile.contactDamageCooldownTicks,
+          damage: hostileCombatContract.hostile.contactDamage,
+          lastDamageTick: null
+        },
+        focusState: {
+          acquisitionRadiusWorldUnits: hostileCombatContract.hostile.acquisitionRadiusWorldUnits,
+          targetEntityId: null
+        },
+        movementSurfaceModifier: "normal",
+        role: "hostile" as const,
+        spawnedAtTick: 0,
+        state: "idle" as const,
+        velocity: {
+          x: 0,
+          y: 0
+        }
+      }
+    ];
+    state.simulation.nextHostileSequence = 1;
+    state.simulation.tick = 1;
+
+    const nextState = emberwakeGameModule.update({
+      action: {
+        controlState: {
+          controlledEntityId: entityContract.primaryEntityId,
+          debugCameraModifierActive: false,
+          inputOwner: "none",
+          movementIntent: {
+            isActive: false,
+            magnitude: 0,
+            source: "none",
+            vector: {
+              x: 0,
+              y: 0
+            }
+          }
+        }
+      },
+      context: undefined,
+      state,
+      timing: {
+        deltaMs: entitySimulationContract.fixedStepMs,
+        fixedStepMs: entitySimulationContract.fixedStepMs,
+        nowMs: entitySimulationContract.fixedStepMs,
+        tick: 1
+      }
+    });
+
+    expect(nextState.simulation.entity.combat.currentHealth).toBe(0);
+    expect(nextState.systems.outcome.kind).toBe("defeat");
+    expect(nextState.systems.outcome.shellScene).toBe("defeat");
   });
 });

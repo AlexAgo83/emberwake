@@ -11,49 +11,52 @@ import {
 describe("gameplaySystems", () => {
   it("tracks progression and system seams separately from the raw simulation slice", () => {
     const previousState = createInitialGameplaySystemsState();
+    const beforeEntity = {
+      archetype: "generic-mover" as const,
+      combat: {
+        currentHealth: 100,
+        maxHealth: 100
+      },
+      footprint: { radius: 40 },
+      id: "entity:player:primary",
+      movementSurfaceModifier: "normal" as const,
+      orientation: 0,
+      renderLayer: 100,
+      role: "player" as const,
+      spawnedAtTick: 0,
+      state: "idle" as const,
+      velocity: { x: 0, y: 0 },
+      visual: {
+        kind: "ember-core" as const,
+        tint: "#ff7b3f"
+      },
+      worldPosition: {
+        x: 0,
+        y: 0
+      }
+    };
+    const afterEntity = {
+      ...beforeEntity,
+      state: "moving" as const,
+      velocity: { x: 10, y: 0 },
+      worldPosition: {
+        x: 10,
+        y: 0
+      }
+    };
     const nextState = advanceGameplaySystemsState({
       previousState,
       simulationAfterUpdate: {
-        entity: {
-          archetype: "generic-mover",
-          footprint: { radius: 40 },
-          id: "entity:player:primary",
-          movementSurfaceModifier: "normal",
-          orientation: 0,
-          renderLayer: 100,
-          state: "moving",
-          velocity: { x: 10, y: 0 },
-          visual: {
-            kind: "ember-core",
-            tint: "#ff7b3f"
-          },
-          worldPosition: {
-            x: 10,
-            y: 0
-          }
-        },
+        entities: [afterEntity],
+        entity: afterEntity,
+        nextHostileSequence: 0,
         tick: 1,
         worldSeed: "emberwake-default-seed"
       },
       simulationBeforeUpdate: {
-        entity: {
-          archetype: "generic-mover",
-          footprint: { radius: 40 },
-          id: "entity:player:primary",
-          movementSurfaceModifier: "normal",
-          orientation: 0,
-          renderLayer: 100,
-          state: "idle",
-          velocity: { x: 0, y: 0 },
-          visual: {
-            kind: "ember-core",
-            tint: "#ff7b3f"
-          },
-          worldPosition: {
-            x: 0,
-            y: 0
-          }
-        },
+        entities: [beforeEntity],
+        entity: beforeEntity,
+        nextHostileSequence: 0,
         tick: 0,
         worldSeed: "emberwake-default-seed"
       },

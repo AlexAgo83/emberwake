@@ -103,19 +103,19 @@ export const emberwakeGameModule: GameModule<
     },
     diagnostics: {
       entityState: state.simulation.entity.state,
+      hostileCount: state.simulation.entities.filter((entity) => entity.role === "hostile").length,
       movementSurfaceModifier: state.simulation.entity.movementSurfaceModifier,
+      playerHealth: state.simulation.entity.combat.currentHealth,
       tick: state.simulation.tick,
       ...createGameplaySystemDiagnostics(state.systems)
     },
-    entities: [
-      {
-        id: state.simulation.entity.id,
-        kind: state.simulation.entity.visual.kind,
-        orientation: state.simulation.entity.orientation,
-        tint: parseTint(state.simulation.entity.visual.tint),
-        worldPosition: state.simulation.entity.worldPosition
-      }
-    ],
+    entities: state.simulation.entities.map((entity) => ({
+      id: entity.id,
+      kind: entity.visual.kind,
+      orientation: entity.orientation,
+      tint: parseTint(entity.visual.tint),
+      worldPosition: entity.worldPosition
+    })),
     overlays: {
       runtimeOutcome: state.systems.outcome ?? createIdleGameplayOutcome()
     },
