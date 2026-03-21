@@ -6,7 +6,7 @@ export const hostileCombatContract = {
     contactDamage: 10,
     contactDamageCooldownTicks: 30,
     despawnDistanceWorldUnits: chunkWorldSize * 3.5,
-    localPopulationCap: 5,
+    localPopulationCap: 20,
     maxHealth: 40,
     moveSpeedWorldUnitsPerSecond: 168,
     safeSpawnDistanceWorldUnits: chunkWorldSize * 0.9,
