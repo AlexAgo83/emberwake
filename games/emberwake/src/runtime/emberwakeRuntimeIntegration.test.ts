@@ -164,6 +164,32 @@ describe("Emberwake runtime integration", () => {
     expect(snapshot.state.systems.progression.runtimeTicksSurvived).toBe(12);
   });
 
+  it("normalizes a legacy restored runtime state that only persisted the primary entity", () => {
+    const legacyState = createInitialEmberwakeGameState();
+
+    // Simulate a pre-combat save shape persisted before multi-entity runtime state existed.
+    (legacyState.simulation as unknown as { entities?: unknown; nextHostileSequence?: unknown }).entities =
+      undefined;
+    (legacyState.simulation as unknown as { nextHostileSequence?: unknown }).nextHostileSequence =
+      undefined;
+    (legacyState.simulation.entity as unknown as { combat?: unknown; role?: unknown }).combat =
+      undefined;
+    (legacyState.simulation.entity as unknown as { combat?: unknown; role?: unknown }).role =
+      undefined;
+
+    const runner = createEmberwakeRuntimeRunner(legacyState);
+    const snapshot = runner.getSnapshot();
+
+    expect(snapshot.state.simulation.entities).toHaveLength(1);
+    expect(snapshot.state.simulation.entity.role).toBe("player");
+    expect(snapshot.state.simulation.entity.combat.currentHealth).toBe(100);
+    expect(snapshot.presentation.entities).toHaveLength(1);
+    expect(snapshot.presentation.diagnostics).toMatchObject({
+      hostileCount: 0,
+      playerHealth: 100
+    });
+  });
+
   it("emits a defeat outcome when hostile contact reduces the player to zero health", () => {
     const state = createInitialEmberwakeGameState();
 

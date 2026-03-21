@@ -69,6 +69,11 @@ export type EntitySimulationState = {
   worldSeed: string;
 };
 
+type LegacySimulationState = Partial<EntitySimulationState> & {
+  entity?: Partial<SimulatedEntity> & Pick<WorldEntity, "id" | "worldPosition">;
+  entities?: Array<Partial<SimulatedEntity> & Pick<WorldEntity, "id" | "worldPosition">>;
+};
+
 export type SimulationSpeedOption = (typeof entitySimulationContract.speedOptions)[number];
 
 type SimulationCommand = {
@@ -131,6 +136,11 @@ const createCombatState = (maxHealth: number): EntityCombatState => ({
   maxHealth
 });
 
+const createPlayerAutomaticAttackProfile = (): AutomaticAttackProfile => ({
+  ...hostileCombatContract.player.automaticConeAttack,
+  lastAttackTick: null
+});
+
 const createPlayerEntity = (): SimulatedEntity => ({
   ...createGenericMoverEntity({
     archetype: emberwakeRuntimeBootstrap.playerEntity.archetype,
@@ -142,8 +152,7 @@ const createPlayerEntity = (): SimulatedEntity => ({
     worldPosition: emberwakeRuntimeBootstrap.playerEntity.worldPosition
   }),
   automaticAttack: {
-    ...hostileCombatContract.player.automaticConeAttack,
-    lastAttackTick: null
+    ...createPlayerAutomaticAttackProfile()
   },
   combat: createCombatState(hostileCombatContract.player.maxHealth),
   movementSurfaceModifier: "normal",
@@ -227,6 +236,142 @@ export const createInitialSimulationState = (): EntitySimulationState => {
     nextHostileSequence: 0,
     tick: 0,
     worldSeed: emberwakeRuntimeBootstrap.worldSeed
+  };
+};
+
+const normalizeCombatState = (
+  combat: Partial<EntityCombatState> | undefined,
+  maxHealth: number
+): EntityCombatState => ({
+  currentHealth: Math.max(
+    0,
+    Math.min(combat?.currentHealth ?? maxHealth, combat?.maxHealth ?? maxHealth)
+  ),
+  maxHealth: combat?.maxHealth ?? maxHealth
+});
+
+const normalizeEntityRole = (
+  entity: Partial<SimulatedEntity> & Pick<WorldEntity, "id" | "worldPosition">
+): SimulatedEntityRole =>
+  entity.role ??
+  (entity.id === emberwakeRuntimeBootstrap.playerEntity.id
+    ? "player"
+    : entity.id.startsWith("entity:hostile:")
+      ? "hostile"
+      : "support");
+
+const normalizeSimulatedEntity = (
+  entity: Partial<SimulatedEntity> & Pick<WorldEntity, "id" | "worldPosition">
+): SimulatedEntity => {
+  const role = normalizeEntityRole(entity);
+  const baseEntity = createGenericMoverEntity({
+    archetype: entity.archetype ?? "generic-mover",
+    id: entity.id,
+    orientation: entity.orientation ?? 0,
+    renderLayer: entity.renderLayer ?? 100,
+    state: entity.state ?? "idle",
+    visual: {
+      kind:
+        entity.visual?.kind ??
+        (role === "hostile"
+          ? "debug-sentinel"
+          : role === "support"
+            ? "debug-anchor"
+            : emberwakeRuntimeBootstrap.playerEntity.visualKind),
+      tint:
+        entity.visual?.tint ??
+        (role === "hostile"
+          ? "#ff6d78"
+          : role === "support"
+            ? "#4ce2ff"
+            : emberwakeRuntimeBootstrap.playerEntity.tint)
+    },
+    worldPosition: entity.worldPosition
+  });
+
+  if (role === "player") {
+    return {
+      ...baseEntity,
+      automaticAttack: {
+        ...createPlayerAutomaticAttackProfile(),
+        ...entity.automaticAttack
+      },
+      combat: normalizeCombatState(entity.combat, hostileCombatContract.player.maxHealth),
+      movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
+      role,
+      spawnedAtTick: entity.spawnedAtTick ?? 0,
+      velocity: entity.velocity ?? { x: 0, y: 0 }
+    };
+  }
+
+  if (role === "hostile") {
+    return {
+      ...baseEntity,
+      combat: normalizeCombatState(entity.combat, hostileCombatContract.hostile.maxHealth),
+      contactDamageProfile: {
+        cooldownTicks:
+          entity.contactDamageProfile?.cooldownTicks ??
+          hostileCombatContract.hostile.contactDamageCooldownTicks,
+        damage:
+          entity.contactDamageProfile?.damage ?? hostileCombatContract.hostile.contactDamage,
+        lastDamageTick: entity.contactDamageProfile?.lastDamageTick ?? null
+      },
+      focusState: {
+        acquisitionRadiusWorldUnits:
+          entity.focusState?.acquisitionRadiusWorldUnits ??
+          hostileCombatContract.hostile.acquisitionRadiusWorldUnits,
+        targetEntityId: entity.focusState?.targetEntityId ?? null
+      },
+      movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
+      role,
+      spawnedAtTick: entity.spawnedAtTick ?? 0,
+      velocity: entity.velocity ?? { x: 0, y: 0 }
+    };
+  }
+
+  return {
+    ...baseEntity,
+    combat: normalizeCombatState(entity.combat, 1),
+    movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
+    role,
+    spawnedAtTick: entity.spawnedAtTick ?? 0,
+    velocity: entity.velocity ?? { x: 0, y: 0 }
+  };
+};
+
+export const normalizeEntitySimulationState = (
+  simulationState: LegacySimulationState | EntitySimulationState
+): EntitySimulationState => {
+  const initialState = createInitialSimulationState();
+  const sourceEntities =
+    simulationState.entities && simulationState.entities.length > 0
+      ? simulationState.entities
+      : simulationState.entity
+        ? [simulationState.entity]
+        : initialState.entities;
+  const normalizedEntities = sourceEntities.map((entity) => normalizeSimulatedEntity(entity));
+  const playerEntity =
+    normalizedEntities.find(
+      (entity) => entity.role === "player" || entity.id === emberwakeRuntimeBootstrap.playerEntity.id
+    ) ?? initialState.entity;
+  const nextHostileSequence = normalizedEntities.reduce((highestSequence, entity) => {
+    if (entity.role !== "hostile") {
+      return highestSequence;
+    }
+
+    const hostileSuffix = Number.parseInt(entity.id.split(":").at(-1) ?? "", 10);
+
+    return Number.isNaN(hostileSuffix)
+      ? highestSequence
+      : Math.max(highestSequence, hostileSuffix + 1);
+  }, simulationState.nextHostileSequence ?? 0);
+
+  return {
+    entities: normalizedEntities,
+    entity: playerEntity,
+    nextHostileSequence,
+    tick: simulationState.tick ?? 0,
+    worldSeed: simulationState.worldSeed ?? emberwakeRuntimeBootstrap.worldSeed
   };
 };
 

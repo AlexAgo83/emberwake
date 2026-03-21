@@ -10,7 +10,8 @@ import type { SingleEntityControlState } from "@game/input/singleEntityControlCo
 import {
   advanceSimulationState,
   createInitialSimulationState,
-  entitySimulationContract
+  entitySimulationContract,
+  normalizeEntitySimulationState
 } from "@game/runtime/entitySimulation";
 import type { EntitySimulationState } from "@game/runtime/entitySimulation";
 import { emberwakeRuntimeBootstrap } from "@game/runtime/emberwakeRuntimeBootstrap";
@@ -87,29 +88,39 @@ export const emberwakeGameModule: GameModule<
   EmberwakeGameAction,
   EmberwakeGameState | undefined
 > = {
-  initialize: ({ init }) =>
-    init ?? {
-      simulation: createInitialSimulationState(),
-      systems: createInitialGameplaySystemsState(),
-      worldSeed: emberwakeRuntimeBootstrap.worldSeed
-    },
+  initialize: ({ init }) => {
+    const initialState =
+      init ?? {
+        simulation: createInitialSimulationState(),
+        systems: createInitialGameplaySystemsState(),
+        worldSeed: emberwakeRuntimeBootstrap.worldSeed
+      };
+
+    return {
+      ...initialState,
+      simulation: normalizeEntitySimulationState(initialState.simulation)
+    };
+  },
   mapInput: ({ input }) => ({
     controlState: createControlStateFromInput(input)
   }),
-  present: ({ state }): EnginePresentationModel => ({
+  present: ({ state }): EnginePresentationModel => {
+    const normalizedSimulation = normalizeEntitySimulationState(state.simulation);
+
+    return ({
     cameraTarget: {
       mode: "follow",
-      worldPosition: state.simulation.entity.worldPosition
+      worldPosition: normalizedSimulation.entity.worldPosition
     },
     diagnostics: {
-      entityState: state.simulation.entity.state,
-      hostileCount: state.simulation.entities.filter((entity) => entity.role === "hostile").length,
-      movementSurfaceModifier: state.simulation.entity.movementSurfaceModifier,
-      playerHealth: state.simulation.entity.combat.currentHealth,
-      tick: state.simulation.tick,
+      entityState: normalizedSimulation.entity.state,
+      hostileCount: normalizedSimulation.entities.filter((entity) => entity.role === "hostile").length,
+      movementSurfaceModifier: normalizedSimulation.entity.movementSurfaceModifier,
+      playerHealth: normalizedSimulation.entity.combat.currentHealth,
+      tick: normalizedSimulation.tick,
       ...createGameplaySystemDiagnostics(state.systems)
     },
-    entities: state.simulation.entities.map((entity) => ({
+    entities: normalizedSimulation.entities.map((entity) => ({
       id: entity.id,
       kind: entity.visual.kind,
       orientation: entity.orientation,
@@ -122,9 +133,10 @@ export const emberwakeGameModule: GameModule<
     world: {
       visibleChunks: []
     }
-  }),
+  })},
   update: ({ action, state, timing }) => {
-    const nextSimulation = advanceSimulationState(state.simulation, {
+    const normalizedSimulation = normalizeEntitySimulationState(state.simulation);
+    const nextSimulation = advanceSimulationState(normalizedSimulation, {
       controlState: action.controlState,
       worldSeed: state.worldSeed
     });
@@ -134,7 +146,7 @@ export const emberwakeGameModule: GameModule<
       systems: advanceGameplaySystemsState({
         previousState: state.systems,
         simulationAfterUpdate: nextSimulation,
-        simulationBeforeUpdate: state.simulation,
+        simulationBeforeUpdate: normalizedSimulation,
         timing
       }),
       worldSeed: state.worldSeed
