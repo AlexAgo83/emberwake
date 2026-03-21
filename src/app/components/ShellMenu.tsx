@@ -273,114 +273,113 @@ export const ShellMenu = memo(function ShellMenu({
                   {!isFullscreenSupported ? "Unavailable" : isFullscreen ? "Active" : "Enter"}
                 </span>
               </button>
-            </div>
-          </section>
-
-          <section
-            aria-labelledby={`${menuId}-view`}
-            className="shell-menu__section"
-            data-section-tone="secondary"
-          >
-            <p className="shell-menu__section-title" id={`${menuId}-view`}>
-              View
-            </p>
-            <div className="shell-menu__section-body">
-              <button
-                className="shell-menu__item shell-menu__item--action shell-menu__item--secondary"
-                onClick={() => {
-                  runAction(onResetCamera);
-                }}
-                type="button"
+              <section
+                aria-labelledby={`${menuId}-view`}
+                className="shell-menu__subsection"
+                data-subsection-tone="secondary"
               >
-                <span className="shell-menu__item-label">Reset camera</span>
-                <span className="shell-menu__item-value">Recenter view</span>
-              </button>
-              <div
-                className="shell-menu__group shell-menu__group--secondary"
-                role="group"
-                aria-label="Camera mode"
-              >
-                <div className="shell-menu__item shell-menu__item--static">
-                  <span className="shell-menu__item-label">Camera mode</span>
-                  <span className="shell-menu__item-value">
-                    {cameraMode === "free" ? "Free" : "Follow entity"}
-                  </span>
-                </div>
-                <div className="shell-menu__choice-grid">
+                <p className="shell-menu__subsection-title" id={`${menuId}-view`}>
+                  View
+                </p>
+                <div className="shell-menu__subsection-body">
                   <button
-                    aria-pressed={cameraMode === "free"}
-                    className="shell-menu__choice"
+                    className="shell-menu__item shell-menu__item--action shell-menu__item--secondary"
                     onClick={() => {
-                      onSetCameraMode("free");
+                      runAction(onResetCamera);
                     }}
                     type="button"
                   >
-                    Free
+                    <span className="shell-menu__item-label">Reset camera</span>
+                    <span className="shell-menu__item-value">Recenter view</span>
                   </button>
+                  <div
+                    className="shell-menu__group shell-menu__group--secondary"
+                    role="group"
+                    aria-label="Camera mode"
+                  >
+                    <div className="shell-menu__item shell-menu__item--static">
+                      <span className="shell-menu__item-label">Camera mode</span>
+                      <span className="shell-menu__item-value">
+                        {cameraMode === "free" ? "Free" : "Follow entity"}
+                      </span>
+                    </div>
+                    <div className="shell-menu__choice-grid">
+                      <button
+                        aria-pressed={cameraMode === "free"}
+                        className="shell-menu__choice"
+                        onClick={() => {
+                          onSetCameraMode("free");
+                        }}
+                        type="button"
+                      >
+                        Free
+                      </button>
+                      <button
+                        aria-pressed={cameraMode === "follow-entity"}
+                        className="shell-menu__choice"
+                        onClick={() => {
+                          onSetCameraMode("follow-entity");
+                        }}
+                        type="button"
+                      >
+                        Follow entity
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section
+                aria-labelledby={`${menuId}-tools`}
+                className="shell-menu__subsection"
+                data-subsection-tone="utility"
+              >
+                <p className="shell-menu__subsection-title" id={`${menuId}-tools`}>
+                  Tools
+                </p>
+                <div className="shell-menu__subsection-body">
                   <button
-                    aria-pressed={cameraMode === "follow-entity"}
-                    className="shell-menu__choice"
+                    className="shell-menu__item shell-menu__item--action shell-menu__item--utility"
                     onClick={() => {
-                      onSetCameraMode("follow-entity");
+                      runAction(onToggleInspecteur);
                     }}
                     type="button"
                   >
-                    Follow entity
+                    <span className="shell-menu__item-label">Inspecteur</span>
+                    <span className="shell-menu__item-value">
+                      {inspecteurVisible ? "Visible" : "Hidden"}
+                    </span>
                   </button>
+
+                  {diagnosticsEnabled ? (
+                    <button
+                      className="shell-menu__item shell-menu__item--action shell-menu__item--utility"
+                      onClick={() => {
+                        runAction(onToggleDiagnostics);
+                      }}
+                      type="button"
+                    >
+                      <span className="shell-menu__item-label">Diagnostics</span>
+                      <span className="shell-menu__item-value">
+                        {diagnosticsVisible ? "Visible" : "Hidden"}
+                      </span>
+                    </button>
+                  ) : null}
+
+                  {canInstall ? (
+                    <button
+                      className="shell-menu__item shell-menu__item--action shell-menu__item--utility"
+                      onClick={() => {
+                        runAction(onInstall);
+                      }}
+                      type="button"
+                    >
+                      <span className="shell-menu__item-label">Install app</span>
+                      <span className="shell-menu__item-value">PWA</span>
+                    </button>
+                  ) : null}
                 </div>
-              </div>
-            </div>
-          </section>
-
-          <section
-            aria-labelledby={`${menuId}-tools`}
-            className="shell-menu__section"
-            data-section-tone="utility"
-          >
-            <p className="shell-menu__section-title" id={`${menuId}-tools`}>
-              Tools
-            </p>
-            <div className="shell-menu__section-body">
-              <button
-                className="shell-menu__item shell-menu__item--action shell-menu__item--utility"
-                onClick={() => {
-                  runAction(onToggleInspecteur);
-                }}
-                type="button"
-              >
-                <span className="shell-menu__item-label">Inspecteur</span>
-                <span className="shell-menu__item-value">
-                  {inspecteurVisible ? "Visible" : "Hidden"}
-                </span>
-              </button>
-
-              {diagnosticsEnabled ? (
-                <button
-                  className="shell-menu__item shell-menu__item--action shell-menu__item--utility"
-                  onClick={() => {
-                    runAction(onToggleDiagnostics);
-                  }}
-                  type="button"
-                >
-                  <span className="shell-menu__item-label">Diagnostics</span>
-                  <span className="shell-menu__item-value">
-                    {diagnosticsVisible ? "Visible" : "Hidden"}
-                  </span>
-                </button>
-              ) : null}
-
-              {canInstall ? (
-                <button
-                  className="shell-menu__item shell-menu__item--action shell-menu__item--utility"
-                  onClick={() => {
-                    runAction(onInstall);
-                  }}
-                  type="button"
-                >
-                  <span className="shell-menu__item-label">Install app</span>
-                  <span className="shell-menu__item-value">PWA</span>
-                </button>
-              ) : null}
+              </section>
             </div>
           </section>
         </section>

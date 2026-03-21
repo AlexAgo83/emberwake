@@ -430,6 +430,26 @@
   border-color: rgba(76, 226, 255, 0.12);
 }
 
+.shell-menu__subsection {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.shell-menu__subsection-title {
+  margin: 0;
+  padding: 0.2rem 0.68rem 0;
+  color: var(--emberwake-copy-dim);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.shell-menu__subsection-body {
+  display: grid;
+  gap: 0.2rem;
+}
+
 .shell-menu__item {
   width: 100%;
   position: relative;
@@ -942,6 +962,11 @@
   .shell-menu__section-title {
     padding-inline: 0.82rem;
     font-size: 0.6rem;
+  }
+
+  .shell-menu__subsection-title {
+    padding-inline: 0.6rem;
+    font-size: 0.55rem;
   }
 
   .shell-menu__item {

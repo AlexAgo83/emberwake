@@ -69,7 +69,7 @@ describe("ShellMenu", () => {
     expect(props.onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("exposes session, view, and tool groupings inside the shell panel", () => {
+  it("exposes a single session section with nested view and tools groups inside the shell panel", () => {
     const props = createProps();
 
     render(<ShellMenu {...props} />);
@@ -83,6 +83,8 @@ describe("ShellMenu", () => {
     expect(within(panel).getByRole("button", { name: /Settings/i })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: "Free" })).toBeInTheDocument();
     expect(within(panel).getByRole("button", { name: "Follow entity" })).toBeInTheDocument();
+    expect(panel.querySelectorAll(".shell-menu__section")).toHaveLength(1);
+    expect(panel.querySelectorAll(".shell-menu__subsection")).toHaveLength(2);
   });
 
   it("marks session and view actions as secondary while tools stay utility-weight", () => {
