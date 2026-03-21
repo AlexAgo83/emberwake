@@ -46,6 +46,10 @@ export function useAppScene({ rendererStatus, runtimeOutcome }: UseAppSceneOptio
     setRequestedScene("new-game");
     setShellSurface("none");
   }, []);
+  const showChangelogsScene = useCallback(() => {
+    setRequestedScene("changelogs");
+    setShellSurface("none");
+  }, []);
   const showSettingsScene = useCallback(() => {
     setRequestedScene("settings");
     setShellSurface("none");
@@ -61,6 +65,7 @@ export function useAppScene({ rendererStatus, runtimeOutcome }: UseAppSceneOptio
     resumeRuntime,
     runtimeOutcome,
     shellSurface,
+    showChangelogsScene,
     showMainMenuScene,
     showNewGameScene,
     showPauseScene,

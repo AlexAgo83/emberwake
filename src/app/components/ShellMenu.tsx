@@ -54,6 +54,12 @@ const sceneStatusMap: Record<
     title: "Runtime boot sequence",
     tone: "cold"
   },
+  changelogs: {
+    detail: "Release notes are displayed in a shell-owned reader.",
+    stateLabel: "Changelog",
+    title: "Release history",
+    tone: "neutral"
+  },
   defeat: {
     detail: "The shell is handling a defeat state.",
     stateLabel: "Recovery",

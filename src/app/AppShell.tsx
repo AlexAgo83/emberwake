@@ -70,6 +70,7 @@ export function AppShell() {
     openMenu,
     requestedScene,
     resumeRuntime,
+    showChangelogsScene,
     showMainMenuScene,
     showNewGameScene,
     showPauseScene,
@@ -264,6 +265,7 @@ export function AppShell() {
       onBeginNewGame={handleBeginNewGame}
       onCharacterNameChange={handleCharacterNameChange}
       onLoadGame={handleLoadGame}
+      onOpenChangelogs={showChangelogsScene}
       onOpenNewGame={handleOpenNewGame}
       onOpenSettings={handleOpenSettings}
       onReturnToMainMenu={handleReturnToMainMenu}

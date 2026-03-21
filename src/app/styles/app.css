@@ -14,6 +14,40 @@
     var(--emberwake-bg);
 }
 
+.app-shell::before,
+.app-shell::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.app-shell::before {
+  background:
+    radial-gradient(circle at 18% 24%, rgba(255, 164, 94, 0.18), transparent 22%),
+    radial-gradient(circle at 74% 18%, rgba(87, 206, 255, 0.16), transparent 24%),
+    radial-gradient(circle at 54% 78%, rgba(255, 119, 182, 0.12), transparent 28%);
+  animation: app-shell-main-menu-drift 18s linear infinite;
+}
+
+.app-shell::after {
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(255, 184, 96, 0.08) 48%, transparent 100%),
+    linear-gradient(0deg, transparent 0%, rgba(94, 216, 255, 0.06) 52%, transparent 100%);
+  background-size: 18rem 18rem, 20rem 20rem;
+  mix-blend-mode: screen;
+  animation: app-shell-main-menu-grid 12s linear infinite;
+}
+
+.app-shell[data-scene="main-menu"]::before,
+.app-shell[data-scene="main-menu"]::after,
+.app-shell[data-scene="changelogs"]::before,
+.app-shell[data-scene="changelogs"]::after {
+  opacity: 1;
+}
+
 .app-shell__runtime {
   position: absolute;
   inset: 0;
@@ -103,6 +137,40 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.03);
   transform: translate(-50%, -50%);
   pointer-events: auto;
+}
+
+.app-meta-scene[data-scene="changelogs"] {
+  width: min(42rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  max-height: min(42rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 5rem));
+  display: grid;
+}
+
+.app-meta-scene[data-scene="main-menu"] {
+  overflow: hidden;
+}
+
+.app-meta-scene[data-scene="main-menu"]::before {
+  content: "";
+  position: absolute;
+  inset: -28% auto auto -18%;
+  width: 16rem;
+  height: 16rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 162, 88, 0.24), transparent 68%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.app-meta-scene[data-scene="main-menu"]::after {
+  content: "";
+  position: absolute;
+  inset: auto -12% -26% auto;
+  width: 17rem;
+  height: 17rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(86, 214, 255, 0.18), transparent 66%);
+  opacity: 0.9;
+  pointer-events: none;
 }
 
 .app-meta-scene__eyebrow,
@@ -208,6 +276,92 @@
   color: #ff9b8e;
 }
 
+.app-meta-scene__changelog-list {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  overflow: auto;
+  padding-right: 0.2rem;
+}
+
+.app-meta-scene__changelog-card {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.9rem;
+  border: 1px solid rgba(76, 226, 255, 0.12);
+  border-radius: 0.85rem;
+  background: rgba(8, 14, 22, 0.46);
+}
+
+.app-meta-scene__changelog-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+}
+
+.app-meta-scene__changelog-version,
+.app-meta-scene__changelog-tag {
+  margin: 0;
+}
+
+.app-meta-scene__changelog-version {
+  color: var(--emberwake-copy);
+  font-size: 0.94rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-meta-scene__changelog-tag {
+  color: var(--emberwake-accent-warm);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.app-meta-scene__changelog-content {
+  margin: 0;
+  color: var(--emberwake-copy-dim);
+  font-family: inherit;
+  font-size: 0.76rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.app-meta-scene__viewport-footer {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--shell-offset-bottom) + 0.2rem);
+  z-index: 4;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid rgba(76, 226, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(8, 14, 22, 0.48);
+  box-shadow: 0 12px 28px rgba(4, 8, 12, 0.18);
+  color: var(--emberwake-copy-dim);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+  pointer-events: auto;
+}
+
+.app-meta-scene__viewport-footer:hover,
+.app-meta-scene__viewport-footer:focus-visible {
+  border-color: rgba(76, 226, 255, 0.26);
+  background: rgba(12, 20, 30, 0.7);
+  color: var(--emberwake-copy);
+}
+
 
 .shell-control {
   pointer-events: auto;
@@ -229,6 +383,27 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+@keyframes app-shell-main-menu-drift {
+  0% {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, 1.5%, 0) scale(1.04);
+  }
+  100% {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+}
+
+@keyframes app-shell-main-menu-grid {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(2rem, 1.4rem, 0);
+  }
 }
 
 .shell-menu {

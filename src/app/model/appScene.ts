@@ -2,6 +2,7 @@ export type RendererLifecycleStatus = "degraded" | "failed" | "initializing" | "
 
 export type AppSceneId =
   | "boot"
+  | "changelogs"
   | "defeat"
   | "failure"
   | "main-menu"
@@ -22,7 +23,7 @@ export type RuntimeShellOutcome = {
 
 export const appSceneContract = {
   initialScene: "main-menu",
-  metaScenes: ["main-menu", "new-game", "pause", "settings", "defeat", "victory"],
+  metaScenes: ["main-menu", "new-game", "changelogs", "pause", "settings", "defeat", "victory"],
   outcomeScenes: ["defeat", "pause", "victory"],
   shellOwnedSurfaces: ["menu"],
   terminalScenes: ["failure", "defeat", "victory"]

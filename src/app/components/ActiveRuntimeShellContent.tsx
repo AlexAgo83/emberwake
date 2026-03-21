@@ -185,7 +185,8 @@ export function ActiveRuntimeShellContent({
     simulatedEntities: simulationState.entities,
     visibleChunks: chunkVisibility.visibleChunks
   });
-  const showShellTools = activeScene !== "main-menu" && activeScene !== "new-game";
+  const showShellTools =
+    activeScene !== "main-menu" && activeScene !== "new-game" && activeScene !== "changelogs";
   const isMobileLayout = viewport.layoutMode === "mobile";
 
   const handleToggleDiagnostics = useCallback(() => {

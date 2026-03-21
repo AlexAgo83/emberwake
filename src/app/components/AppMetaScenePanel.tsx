@@ -1,9 +1,11 @@
-import { lazy, memo, Suspense } from "react";
 import { useEffect } from "react";
+import { lazy, memo, Suspense } from "react";
 
 import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
+import { releaseChangelogEntries } from "../model/releaseChangelogs";
 import { characterNameMaxLength } from "../model/characterName";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
+import { appConfig } from "../../shared/config/appConfig";
 
 export type GameOverRecap = {
   defeatDetail: string;
@@ -37,6 +39,7 @@ type AppMetaScenePanelProps = {
   onBeginNewGame: () => void;
   onCharacterNameChange: (value: string) => void;
   onLoadGame: () => void;
+  onOpenChangelogs: () => void;
   onOpenNewGame: () => void;
   onOpenSettings: () => void;
   onReturnToMainMenu: () => void;
@@ -61,6 +64,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   onBeginNewGame,
   onCharacterNameChange,
   onLoadGame,
+  onOpenChangelogs,
   onOpenNewGame,
   onOpenSettings,
   onReturnToMainMenu,
@@ -74,6 +78,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   const isShellOwnedScene =
     scene === "main-menu" ||
     scene === "new-game" ||
+    scene === "changelogs" ||
     scene === "settings" ||
     scene === "defeat" ||
     scene === "victory";
@@ -95,6 +100,8 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       ? "Main menu"
       : scene === "new-game"
         ? "New game"
+        : scene === "changelogs"
+          ? "Changelogs"
         : scene === "settings"
           ? "Settings"
           : scene === "defeat"
@@ -107,6 +114,8 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         : "Start a new run or open settings."
       : scene === "new-game"
         ? "Name your character before the run starts."
+        : scene === "changelogs"
+          ? "Read the latest curated Emberwake release notes without leaving the shell."
         : scene === "settings"
           ? ""
           : scene === "defeat" && gameOverRecap
@@ -132,9 +141,10 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       ? canResumeSession
         ? onResumeRuntime
         : null
-      : scene === "new-game" || scene === "settings" || scene === "defeat"
+      : scene === "new-game" || scene === "changelogs" || scene === "settings" || scene === "defeat"
         ? onReturnToMainMenu
         : null;
+  const projectVersionLabel = `${appConfig.name} v${appConfig.version}`;
 
   useEffect(() => {
     if (shouldHidePanel || !handleEscapeAction) {
@@ -176,178 +186,221 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   }
 
   return (
-    <aside className="app-meta-scene" aria-label={title}>
-      <p className="app-meta-scene__eyebrow">Meta flow</p>
-      <h2 className="app-meta-scene__title">{title}</h2>
-      {detail ? <p className="app-meta-scene__detail">{detail}</p> : null}
-      {scene === "main-menu" ? (
-        <>
-          <dl className="app-meta-scene__facts">
-            <div>
-              <dt>Session</dt>
-              <dd>{canResumeSession ? `Active run / ${playerName}` : "No active run"}</dd>
-            </div>
-          </dl>
-          <div className="app-meta-scene__actions">
-            {canResumeSession ? (
-              <button className="shell-control shell-control--button" onClick={onResumeRuntime} type="button">
-                {resumeLabel}
-              </button>
-            ) : null}
-            {canSaveSession ? (
-              <button className="shell-control shell-control--button" onClick={onSaveGame} type="button">
-                Save game
-              </button>
-            ) : null}
-            <button className="shell-control shell-control--button" onClick={onOpenNewGame} type="button">
-              Start new game
-            </button>
-            <button
-              className="shell-control shell-control--button"
-              disabled={!isLoadAvailable}
-              onClick={onLoadGame}
-              type="button"
-            >
-              Load game
-            </button>
-            <button className="shell-control shell-control--button" onClick={onOpenSettings} type="button">
-              Settings
-            </button>
-          </div>
-        </>
-      ) : scene === "new-game" ? (
-        <>
-          <div className="app-meta-scene__form">
-            <label className="app-meta-scene__field">
-              <span className="app-meta-scene__field-label">Character name</span>
-              <input
-                className="app-meta-scene__field-input"
-                maxLength={characterNameMaxLength}
-                onChange={(event) => {
-                  onCharacterNameChange(event.target.value);
-                }}
-                placeholder="Wanderer"
-                type="text"
-                value={pendingCharacterName}
-              />
-            </label>
-            <p className="app-meta-scene__field-help">
-              3-20 chars. Letters, numbers, spaces, apostrophes, and hyphens only.
-            </p>
-            {characterNameError ? (
-              <p className="app-meta-scene__field-error" role="alert">
-                {characterNameError}
-              </p>
-            ) : null}
-          </div>
-          <div className="app-meta-scene__actions">
-            <button className="shell-control shell-control--button" onClick={onReturnToMainMenu} type="button">
-              Back to menu
-            </button>
-            <button
-              className="shell-control shell-control--button"
-              disabled={characterNameError !== null}
-              onClick={onBeginNewGame}
-              type="button"
-            >
-              Begin
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          {scene === "settings" ? (
-            <>
-              <Suspense
-                fallback={
-                  <p className="settings-controls__status">Loading desktop control bindings…</p>
-                }
-              >
-                <LazyDesktopControlSettingsSection
-                  bindings={desktopControlBindings}
-                  onApply={onApplyDesktopControlBindings}
-                />
-              </Suspense>
-              <div className="app-meta-scene__actions">
-                <button
-                  className="shell-control shell-control--button"
-                  onClick={onReturnToMainMenu}
-                  type="button"
-                >
-                  Back to menu
-                </button>
+    <>
+      <aside className="app-meta-scene" aria-label={title} data-scene={scene}>
+        <p className="app-meta-scene__eyebrow">Meta flow</p>
+        <h2 className="app-meta-scene__title">{title}</h2>
+        {detail ? <p className="app-meta-scene__detail">{detail}</p> : null}
+        {scene === "main-menu" ? (
+          <>
+            <dl className="app-meta-scene__facts">
+              <div>
+                <dt>Session</dt>
+                <dd>{canResumeSession ? `Active run / ${playerName}` : "No active run"}</dd>
               </div>
-            </>
-          ) : scene === "defeat" ? (
-            <>
-              <dl className="app-meta-scene__facts">
-                <div>
-                  <dt>Session</dt>
-                  <dd>{gameOverRecap?.playerName || playerName || "Wanderer"}</dd>
-                </div>
-                <div>
-                  <dt>Survived</dt>
-                  <dd>{formatRunDuration(gameOverRecap?.ticksSurvived ?? 0)}</dd>
-                </div>
-                <div>
-                  <dt>Traversal</dt>
-                  <dd>{Math.round(gameOverRecap?.traversalDistanceWorldUnits ?? 0)} wu</dd>
-                </div>
-                <div>
-                  <dt>Hostile defeats</dt>
-                  <dd>{gameOverRecap?.hostileDefeats ?? 0}</dd>
-                </div>
-                <div>
-                  <dt>Gold</dt>
-                  <dd>{gameOverRecap?.goldCollected ?? 0}</dd>
-                </div>
-              </dl>
-              <div className="app-meta-scene__actions">
-                <button
-                  className="shell-control shell-control--button"
-                  onClick={onReturnToMainMenu}
-                  type="button"
-                >
-                  Back to main menu
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <dl className="app-meta-scene__facts">
-                <div>
-                  <dt>Runtime re-entry</dt>
-                  <dd>Resume current session</dd>
-                </div>
-                <div>
-                  <dt>Fullscreen preference</dt>
-                  <dd>{fullscreenPreferred ? "remembered" : "off"}</dd>
-                </div>
-                <div>
-                  <dt>Ownership</dt>
-                  <dd>{ownershipLabel}</dd>
-                </div>
-              </dl>
-              <div className="app-meta-scene__actions">
-                <button
-                  className="shell-control shell-control--button"
-                  onClick={onResumeRuntime}
-                  type="button"
-                >
+            </dl>
+            <div className="app-meta-scene__actions">
+              {canResumeSession ? (
+                <button className="shell-control shell-control--button" onClick={onResumeRuntime} type="button">
                   {resumeLabel}
                 </button>
-                <button
-                  className="shell-control shell-control--button"
-                  onClick={onOpenSettings}
-                  type="button"
-                >
-                  Settings
+              ) : null}
+              {canSaveSession ? (
+                <button className="shell-control shell-control--button" onClick={onSaveGame} type="button">
+                  Save game
                 </button>
-              </div>
-            </>
-          )}
-        </>
-      )}
-    </aside>
+              ) : null}
+              <button
+                className="shell-control shell-control--button"
+                disabled={!isLoadAvailable}
+                onClick={onLoadGame}
+                type="button"
+              >
+                Load game
+              </button>
+              <button className="shell-control shell-control--button" onClick={onOpenNewGame} type="button">
+                Start new game
+              </button>
+              <button className="shell-control shell-control--button" onClick={onOpenSettings} type="button">
+                Settings
+              </button>
+              <button className="shell-control shell-control--button" onClick={onOpenChangelogs} type="button">
+                Changelogs
+              </button>
+            </div>
+          </>
+        ) : scene === "new-game" ? (
+          <>
+            <div className="app-meta-scene__form">
+              <label className="app-meta-scene__field">
+                <span className="app-meta-scene__field-label">Character name</span>
+                <input
+                  className="app-meta-scene__field-input"
+                  maxLength={characterNameMaxLength}
+                  onChange={(event) => {
+                    onCharacterNameChange(event.target.value);
+                  }}
+                  placeholder="Wanderer"
+                  type="text"
+                  value={pendingCharacterName}
+                />
+              </label>
+              <p className="app-meta-scene__field-help">
+                3-20 chars. Letters, numbers, spaces, apostrophes, and hyphens only.
+              </p>
+              {characterNameError ? (
+                <p className="app-meta-scene__field-error" role="alert">
+                  {characterNameError}
+                </p>
+              ) : null}
+            </div>
+            <div className="app-meta-scene__actions">
+              <button className="shell-control shell-control--button" onClick={onReturnToMainMenu} type="button">
+                Back to menu
+              </button>
+              <button
+                className="shell-control shell-control--button"
+                disabled={characterNameError !== null}
+                onClick={onBeginNewGame}
+                type="button"
+              >
+                Begin
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            {scene === "changelogs" ? (
+              <>
+                <div className="app-meta-scene__changelog-list">
+                  {releaseChangelogEntries.map((entry) => {
+                    const formattedBody = entry.content.replace(/^#\s+.+$/m, "").trim();
+
+                    return (
+                      <article className="app-meta-scene__changelog-card" key={entry.slug}>
+                        <div className="app-meta-scene__changelog-card-header">
+                          <h3 className="app-meta-scene__changelog-version">{entry.version}</h3>
+                          <span className="app-meta-scene__changelog-tag">Release notes</span>
+                        </div>
+                        <pre className="app-meta-scene__changelog-content">{formattedBody}</pre>
+                      </article>
+                    );
+                  })}
+                </div>
+                <div className="app-meta-scene__actions">
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onReturnToMainMenu}
+                    type="button"
+                  >
+                    Back to menu
+                  </button>
+                </div>
+              </>
+            ) : scene === "settings" ? (
+              <>
+                <Suspense
+                  fallback={
+                    <p className="settings-controls__status">Loading desktop control bindings…</p>
+                  }
+                >
+                  <LazyDesktopControlSettingsSection
+                    bindings={desktopControlBindings}
+                    onApply={onApplyDesktopControlBindings}
+                  />
+                </Suspense>
+                <div className="app-meta-scene__actions">
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onReturnToMainMenu}
+                    type="button"
+                  >
+                    Back to menu
+                  </button>
+                </div>
+              </>
+            ) : scene === "defeat" ? (
+              <>
+                <dl className="app-meta-scene__facts">
+                  <div>
+                    <dt>Session</dt>
+                    <dd>{gameOverRecap?.playerName || playerName || "Wanderer"}</dd>
+                  </div>
+                  <div>
+                    <dt>Survived</dt>
+                    <dd>{formatRunDuration(gameOverRecap?.ticksSurvived ?? 0)}</dd>
+                  </div>
+                  <div>
+                    <dt>Traversal</dt>
+                    <dd>{Math.round(gameOverRecap?.traversalDistanceWorldUnits ?? 0)} wu</dd>
+                  </div>
+                  <div>
+                    <dt>Hostile defeats</dt>
+                    <dd>{gameOverRecap?.hostileDefeats ?? 0}</dd>
+                  </div>
+                  <div>
+                    <dt>Gold</dt>
+                    <dd>{gameOverRecap?.goldCollected ?? 0}</dd>
+                  </div>
+                </dl>
+                <div className="app-meta-scene__actions">
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onReturnToMainMenu}
+                    type="button"
+                  >
+                    Back to main menu
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <dl className="app-meta-scene__facts">
+                  <div>
+                    <dt>Runtime re-entry</dt>
+                    <dd>Resume current session</dd>
+                  </div>
+                  <div>
+                    <dt>Fullscreen preference</dt>
+                    <dd>{fullscreenPreferred ? "remembered" : "off"}</dd>
+                  </div>
+                  <div>
+                    <dt>Ownership</dt>
+                    <dd>{ownershipLabel}</dd>
+                  </div>
+                </dl>
+                <div className="app-meta-scene__actions">
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onResumeRuntime}
+                    type="button"
+                  >
+                    {resumeLabel}
+                  </button>
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onOpenSettings}
+                    type="button"
+                  >
+                    Settings
+                  </button>
+                </div>
+              </>
+            )}
+          </>
+        )}
+      </aside>
+
+      {scene === "main-menu" ? (
+        <a
+          className="app-meta-scene__viewport-footer"
+          href={appConfig.projectUrl}
+          rel="noreferrer"
+          target="_blank"
+        >
+          {projectVersionLabel}
+        </a>
+      ) : null}
+    </>
   );
 });

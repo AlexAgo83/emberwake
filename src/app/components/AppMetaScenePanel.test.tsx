@@ -17,6 +17,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   onBeginNewGame: vi.fn(),
   onCharacterNameChange: vi.fn(),
   onLoadGame: vi.fn(),
+  onOpenChangelogs: vi.fn(),
   onOpenNewGame: vi.fn(),
   onOpenSettings: vi.fn(),
   onReturnToMainMenu: vi.fn(),
@@ -44,10 +45,17 @@ describe("AppMetaScenePanel", () => {
     render(<AppMetaScenePanel {...props} />);
 
     expect(screen.getByLabelText("Main menu")).toBeInTheDocument();
+    const actionButtons = screen.getAllByRole("button");
+    const loadGameIndex = actionButtons.findIndex((button) => button.textContent?.match(/Load game/i));
+    const newGameIndex = actionButtons.findIndex((button) => button.textContent?.match(/Start new game/i));
     expect(screen.getByRole("button", { name: /Start new game/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Load game/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Changelogs/i })).toBeInTheDocument();
     expect(screen.queryByText("No save available")).not.toBeInTheDocument();
     expect(screen.queryByText("Ownership")).not.toBeInTheDocument();
+    expect(loadGameIndex).toBeGreaterThan(-1);
+    expect(newGameIndex).toBeGreaterThan(loadGameIndex);
+    expect(screen.getByRole("link", { name: /Emberwake v0\.3\.0/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /Settings/i }));
     expect(props.onOpenSettings).toHaveBeenCalledTimes(1);
@@ -107,6 +115,22 @@ describe("AppMetaScenePanel", () => {
     });
 
     render(<AppMetaScenePanel {...props} />);
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(props.onReturnToMainMenu).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders the changelog reader scene and routes back to the main menu", () => {
+    const props = createProps({
+      scene: "changelogs"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    expect(screen.getByLabelText("Changelogs")).toBeInTheDocument();
+    expect(screen.getByText("0.3.0")).toBeInTheDocument();
+    expect(screen.getByText(/playable survival slice/i)).toBeInTheDocument();
 
     fireEvent.keyDown(window, { key: "Escape" });
 
