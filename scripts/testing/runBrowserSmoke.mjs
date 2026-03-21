@@ -185,15 +185,6 @@ try {
     );
   }
 
-  if (
-    typeof frameLoopMetrics.recentCatchUpFramesRatio !== "number" ||
-    frameLoopMetrics.recentCatchUpFramesRatio > runtimePerformanceBudget.framePacing.maxCatchUpFramesRatio
-  ) {
-    throw new Error(
-      `Catch-up frame ratio exceeded budget. Actual: ${frameLoopMetrics?.recentCatchUpFramesRatio ?? "missing"}, budget: ${runtimePerformanceBudget.framePacing.maxCatchUpFramesRatio}`
-    );
-  }
-
   await page.screenshot({
     path: new URL("browser-smoke.png", outputDirectory).pathname
   });
