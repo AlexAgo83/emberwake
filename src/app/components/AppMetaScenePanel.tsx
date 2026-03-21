@@ -14,6 +14,7 @@ const LazyDesktopControlSettingsSection = lazy(async () => {
 
 type AppMetaScenePanelProps = {
   canResumeSession: boolean;
+  canSaveSession: boolean;
   characterNameError: string | null;
   desktopControlBindings: DesktopControlBindings;
   fullscreenPreferred: boolean;
@@ -21,18 +22,22 @@ type AppMetaScenePanelProps = {
   onApplyDesktopControlBindings: (bindings: DesktopControlBindings) => void;
   onBeginNewGame: () => void;
   onCharacterNameChange: (value: string) => void;
+  onLoadGame: () => void;
   onOpenNewGame: () => void;
   onOpenSettings: () => void;
   onReturnToMainMenu: () => void;
   onResumeRuntime: () => void;
+  onSaveGame: () => void;
   pendingCharacterName: string;
   playerName: string;
   runtimeOutcome?: RuntimeShellOutcome | null;
+  savedSlotSummary: string | null;
   scene: AppSceneId;
 };
 
 export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   canResumeSession,
+  canSaveSession,
   characterNameError,
   desktopControlBindings,
   fullscreenPreferred,
@@ -40,13 +45,16 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   onApplyDesktopControlBindings,
   onBeginNewGame,
   onCharacterNameChange,
+  onLoadGame,
   onOpenNewGame,
   onOpenSettings,
   onReturnToMainMenu,
   onResumeRuntime,
+  onSaveGame,
   pendingCharacterName,
   playerName,
   runtimeOutcome,
+  savedSlotSummary,
   scene
 }: AppMetaScenePanelProps) {
   if (
@@ -116,12 +124,12 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               <dt>Session</dt>
               <dd>{canResumeSession ? `Active run / ${playerName}` : "No active run"}</dd>
             </div>
-            <div>
-              <dt>Load game</dt>
-              <dd>{isLoadAvailable ? "Slot ready" : "No save available"}</dd>
-            </div>
-            <div>
-              <dt>Ownership</dt>
+                <div>
+                  <dt>Load game</dt>
+                  <dd>{savedSlotSummary ?? "No save available"}</dd>
+                </div>
+                <div>
+                  <dt>Ownership</dt>
               <dd>{ownershipLabel}</dd>
             </div>
           </dl>
@@ -131,10 +139,20 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 {resumeLabel}
               </button>
             ) : null}
+            {canSaveSession ? (
+              <button className="shell-control shell-control--button" onClick={onSaveGame} type="button">
+                Save game
+              </button>
+            ) : null}
             <button className="shell-control shell-control--button" onClick={onOpenNewGame} type="button">
               Start new game
             </button>
-            <button className="shell-control shell-control--button" disabled={!isLoadAvailable} type="button">
+            <button
+              className="shell-control shell-control--button"
+              disabled={!isLoadAvailable}
+              onClick={onLoadGame}
+              type="button"
+            >
               Load game
             </button>
             <button className="shell-control shell-control--button" onClick={onOpenSettings} type="button">

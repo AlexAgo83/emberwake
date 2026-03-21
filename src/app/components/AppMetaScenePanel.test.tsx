@@ -6,6 +6,7 @@ import { createDefaultDesktopControlBindings } from "../../game/input/model/sing
 
 const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScenePanel>> = {}) => ({
   canResumeSession: false,
+  canSaveSession: false,
   characterNameError: null,
   desktopControlBindings: createDefaultDesktopControlBindings(),
   fullscreenPreferred: false,
@@ -13,13 +14,16 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   onApplyDesktopControlBindings: vi.fn(),
   onBeginNewGame: vi.fn(),
   onCharacterNameChange: vi.fn(),
+  onLoadGame: vi.fn(),
   onOpenNewGame: vi.fn(),
   onOpenSettings: vi.fn(),
   onReturnToMainMenu: vi.fn(),
   onResumeRuntime: vi.fn(),
+  onSaveGame: vi.fn(),
   pendingCharacterName: "Wanderer",
   playerName: "",
   runtimeOutcome: null,
+  savedSlotSummary: null,
   scene: "runtime" as const,
   ...overrides
 });
@@ -33,6 +37,7 @@ describe("AppMetaScenePanel", () => {
 
   it("renders the main menu hub before runtime start", () => {
     const props = createProps({
+      savedSlotSummary: null,
       scene: "main-menu"
     });
 
@@ -44,6 +49,24 @@ describe("AppMetaScenePanel", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /Settings/i }));
     expect(props.onOpenSettings).toHaveBeenCalledTimes(1);
+  });
+
+  it("surfaces save and load actions when the menu has an active or persisted session", () => {
+    const props = createProps({
+      canResumeSession: true,
+      canSaveSession: true,
+      isLoadAvailable: true,
+      savedSlotSummary: "Ash / 21 mars, 12:00",
+      scene: "main-menu"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Save game/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Load game/i }));
+
+    expect(props.onSaveGame).toHaveBeenCalledTimes(1);
+    expect(props.onLoadGame).toHaveBeenCalledTimes(1);
   });
 
   it("renders the new-game naming step and gates Begin on invalid input", () => {

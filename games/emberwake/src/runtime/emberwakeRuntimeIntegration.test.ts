@@ -5,6 +5,7 @@ import {
   createEngineInputFrameFromControlState
 } from "./emberwakeRuntimeRunner";
 import { emberwakeGameModule, entitySimulationContract } from "./emberwakeGameModule";
+import { createInitialEmberwakeGameState } from "./emberwakeGameModule";
 import { entityContract } from "../content/entities/entityContract";
 
 const activeRightControlState = {
@@ -93,5 +94,19 @@ describe("Emberwake runtime integration", () => {
     expect(snapshot.presentation.entities[0].worldPosition).toEqual(
       snapshot.state.simulation.entity.worldPosition
     );
+  });
+
+  it("restores the runtime from a provided initial game state", () => {
+    const restoredState = createInitialEmberwakeGameState();
+    restoredState.simulation.tick = 12;
+    restoredState.simulation.entity.worldPosition = { x: 320, y: -96 };
+    restoredState.systems.progression.runtimeTicksSurvived = 12;
+
+    const runner = createEmberwakeRuntimeRunner(restoredState);
+    const snapshot = runner.getSnapshot();
+
+    expect(snapshot.state.simulation.tick).toBe(12);
+    expect(snapshot.state.simulation.entity.worldPosition).toEqual({ x: 320, y: -96 });
+    expect(snapshot.state.systems.progression.runtimeTicksSurvived).toBe(12);
   });
 });

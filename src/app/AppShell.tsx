@@ -16,6 +16,7 @@ import { defaultCharacterName, validateCharacterName } from "./model/characterNa
 import type {
   DesktopControlBindings
 } from "../game/input/model/singleEntityControlContract";
+import type { EmberwakeGameState } from "@game/runtime/emberwakeGameModule";
 import { appConfig } from "../shared/config/appConfig";
 
 const LazyActiveRuntimeShellContent = lazy(async () => {
@@ -28,6 +29,7 @@ const LazyActiveRuntimeShellContent = lazy(async () => {
 
 export function AppShell() {
   const shellRef = useRef<HTMLElement>(null);
+  const latestGameStateRef = useRef<EmberwakeGameState | null>(null);
   const [pendingCharacterName, setPendingCharacterName] = useState(defaultCharacterName);
   const [runtimeOutcome, setRuntimeOutcome] = useState<RuntimeShellOutcome | null>(null);
   useDocumentViewportLock();
@@ -39,7 +41,11 @@ export function AppShell() {
   const {
     createNewSession,
     cycleWorldSeed,
+    loadSavedSession,
     runtimeSession,
+    saveActiveSession,
+    savedSessionSlot,
+    sessionInitState,
     setCameraMode,
     setCameraState
   } = useRuntimeSession();
@@ -148,17 +154,61 @@ export function AppShell() {
   const handleOpenSettings = useCallback(() => {
     showSettingsScene();
   }, [showSettingsScene]);
+  const handleLoadGame = useCallback(() => {
+    if (!savedSessionSlot) {
+      return;
+    }
+
+    if (
+      runtimeSession.hasActiveSession &&
+      !window.confirm("Loading a saved game will replace the current active session. Continue?")
+    ) {
+      return;
+    }
+
+    if (!loadSavedSession()) {
+      return;
+    }
+
+    resetRenderer();
+    resumeRuntime();
+  }, [loadSavedSession, resetRenderer, resumeRuntime, runtimeSession.hasActiveSession, savedSessionSlot]);
+  const handleSaveGame = useCallback(() => {
+    if (!runtimeSession.hasActiveSession || !latestGameStateRef.current) {
+      return;
+    }
+
+    saveActiveSession(latestGameStateRef.current);
+  }, [runtimeSession.hasActiveSession, saveActiveSession]);
+  const savedSlotSummary = useMemo(() => {
+    if (!savedSessionSlot) {
+      return null;
+    }
+
+    const savedAtDate = new Date(savedSessionSlot.metadata.savedAtIso);
+    const timestampLabel = Number.isNaN(savedAtDate.getTime())
+      ? "Saved slot"
+      : savedAtDate.toLocaleString("fr-FR", {
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          month: "short"
+        });
+
+    return `${savedSessionSlot.metadata.playerName} / ${timestampLabel}`;
+  }, [savedSessionSlot]);
   const handleApplyDesktopControlBindings = useCallback(
     (nextBindings: DesktopControlBindings) => {
       applyDesktopControlBindings(nextBindings);
     },
     [applyDesktopControlBindings]
   );
-  const isLoadAvailable = false;
+  const isLoadAvailable = savedSessionSlot !== null;
   const hasRuntimeLayer = runtimeSession.hasActiveSession;
   const metaScenePanel = (
     <AppMetaScenePanel
       canResumeSession={runtimeSession.hasActiveSession}
+      canSaveSession={runtimeSession.hasActiveSession}
       characterNameError={characterNameValidation.error}
       desktopControlBindings={desktopControlBindings}
       fullscreenPreferred={preferences.prefersFullscreen}
@@ -166,13 +216,16 @@ export function AppShell() {
       onApplyDesktopControlBindings={handleApplyDesktopControlBindings}
       onBeginNewGame={handleBeginNewGame}
       onCharacterNameChange={handleCharacterNameChange}
+      onLoadGame={handleLoadGame}
       onOpenNewGame={handleOpenNewGame}
       onOpenSettings={handleOpenSettings}
       onReturnToMainMenu={handleReturnToMainMenu}
       onResumeRuntime={resumeRuntime}
+      onSaveGame={handleSaveGame}
       pendingCharacterName={pendingCharacterName}
       playerName={runtimeSession.playerName}
       runtimeOutcome={runtimeOutcome}
+      savedSlotSummary={savedSlotSummary}
       scene={activeScene}
     />
   );
@@ -225,6 +278,9 @@ export function AppShell() {
             onRetryRuntime={handleRetryRuntime}
             onResumeRuntime={resumeRuntime}
             onRuntimeOutcomeChange={setRuntimeOutcome}
+            onRuntimeStateChange={(gameState) => {
+              latestGameStateRef.current = gameState;
+            }}
             onSetCameraMode={setCameraMode}
             onSetCameraState={setCameraState}
             onSetDebugPanelVisible={setDebugPanelVisible}
@@ -237,6 +293,7 @@ export function AppShell() {
             preferences={preferences}
             rendererState={rendererState}
             runtimeSession={runtimeSession}
+            sessionInitState={sessionInitState}
             shellRequestedScene={shellRequestedScene}
             viewport={viewport}
           />

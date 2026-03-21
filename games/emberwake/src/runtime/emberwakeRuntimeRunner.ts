@@ -37,16 +37,18 @@ export const createEngineInputFrameFromControlState = (
   };
 };
 
-export const createEmberwakeRuntimeRunner = (): RuntimeRunner<
+export const createEmberwakeRuntimeRunner = (
+  initialState?: EmberwakeGameState
+): RuntimeRunner<
   EmberwakeGameState,
   EmberwakeGameAction,
-  undefined,
+  EmberwakeGameState | undefined,
   undefined
 > =>
   createRuntimeRunner({
     context: undefined,
     fixedStepMs: entitySimulationContract.fixedStepMs,
-    init: undefined,
+    init: initialState,
     maxCatchUpStepsPerFrame: entitySimulationContract.maxCatchUpStepsPerFrame,
     module: emberwakeGameModule
   });

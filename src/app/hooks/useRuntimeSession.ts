@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { createInitialEmberwakeGameState } from "@game/runtime/emberwakeGameModule";
+import type { EmberwakeGameState } from "@game/runtime/emberwakeGameModule";
 import {
   createDefaultRuntimeSessionState,
   readRuntimeSessionState,
@@ -9,12 +11,25 @@ import {
 import type { RuntimeSessionState } from "../../shared/lib/runtimeSessionStorage";
 import type { CameraMode } from "../../game/camera/model/cameraMode";
 import type { CameraState } from "../../game/camera/model/cameraMath";
+import {
+  readSavedRuntimeSessionSlot,
+  writeSavedRuntimeSessionSlot
+} from "../../shared/lib/savedRuntimeSessionStorage";
 import { normalizeCharacterName } from "../model/characterName";
 
 export function useRuntimeSession() {
-  const [runtimeSession, setRuntimeSession] = useState<RuntimeSessionState>(() =>
-    readRuntimeSessionState(createDefaultRuntimeSessionState())
-  );
+  const [savedSessionSlot, setSavedSessionSlot] = useState(() => readSavedRuntimeSessionSlot());
+  const [runtimeSession, setRuntimeSession] = useState<RuntimeSessionState>(() => {
+    const persistedSession = readRuntimeSessionState(createDefaultRuntimeSessionState());
+
+    return persistedSession.hasActiveSession
+      ? {
+          ...persistedSession,
+          hasActiveSession: false
+        }
+      : persistedSession;
+  });
+  const [sessionInitState, setSessionInitState] = useState<EmberwakeGameState | undefined>();
 
   useEffect(() => {
     writeRuntimeSessionState(runtimeSession);
@@ -51,6 +66,7 @@ export function useRuntimeSession() {
 
   const createNewSession = useCallback((playerName: string) => {
     const normalizedPlayerName = normalizeCharacterName(playerName);
+    setSessionInitState(createInitialEmberwakeGameState());
 
     setRuntimeSession((currentSession) => {
       const defaultSession = createDefaultRuntimeSessionState();
@@ -65,10 +81,57 @@ export function useRuntimeSession() {
     });
   }, []);
 
+  const loadSavedSession = useCallback(() => {
+    if (!savedSessionSlot) {
+      return false;
+    }
+
+    setSessionInitState(savedSessionSlot.gameState);
+    setRuntimeSession((currentSession) => ({
+      ...savedSessionSlot.runtimeSession,
+      hasActiveSession: true,
+      sessionRevision: currentSession.sessionRevision + 1
+    }));
+
+    return true;
+  }, [savedSessionSlot]);
+
+  const saveActiveSession = useCallback(
+    (gameState: EmberwakeGameState) => {
+      if (!runtimeSession.hasActiveSession) {
+        return false;
+      }
+
+      const savedSlot = {
+        gameState,
+        metadata: {
+          playerName: runtimeSession.playerName,
+          savedAtIso: new Date().toISOString(),
+          sessionRevision: runtimeSession.sessionRevision,
+          worldSeed: runtimeSession.worldSeed
+        },
+        runtimeSession: {
+          ...runtimeSession,
+          hasActiveSession: true
+        }
+      };
+
+      writeSavedRuntimeSessionSlot(savedSlot);
+      setSavedSessionSlot(savedSlot);
+
+      return true;
+    },
+    [runtimeSession]
+  );
+
   return {
     createNewSession,
     cycleWorldSeed,
+    loadSavedSession,
     runtimeSession,
+    saveActiveSession,
+    savedSessionSlot,
+    sessionInitState,
     setCameraMode,
     setCameraState
   };

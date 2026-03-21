@@ -1,6 +1,12 @@
 import type { VersionedStorageDomainContract } from "./storageDomain";
 
 export const persistenceDomainCatalog = {
+  savedRuntimeSessionSlot: {
+    domainId: "saved-runtime-session-slot",
+    storageBackend: "localStorage",
+    storageKey: "emberwake.saved-runtime-session-slot",
+    storageVersion: 1
+  },
   runtimeSession: {
     domainId: "runtime-session",
     storageBackend: "localStorage",

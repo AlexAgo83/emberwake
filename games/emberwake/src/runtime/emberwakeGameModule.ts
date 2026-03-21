@@ -80,11 +80,16 @@ const parseTint = (tint: string): number | undefined => {
   return Number.isNaN(parsedTint) ? undefined : parsedTint;
 };
 
-export const emberwakeGameModule: GameModule<EmberwakeGameState, EmberwakeGameAction> = {
-  initialize: () => ({
-    simulation: createInitialSimulationState(),
-    systems: createInitialGameplaySystemsState()
-  }),
+export const emberwakeGameModule: GameModule<
+  EmberwakeGameState,
+  EmberwakeGameAction,
+  EmberwakeGameState | undefined
+> = {
+  initialize: ({ init }) =>
+    init ?? {
+      simulation: createInitialSimulationState(),
+      systems: createInitialGameplaySystemsState()
+    },
   mapInput: ({ input }) => ({
     controlState: createControlStateFromInput(input)
   }),

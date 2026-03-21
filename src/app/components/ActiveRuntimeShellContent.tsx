@@ -31,6 +31,7 @@ import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage"
 import type { ReturnTypeUseLogicalViewportModel } from "../../game/debug/types";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
 import { describeDesktopMovementBindings } from "../model/desktopControlBindings";
+import type { EmberwakeGameState } from "@game/runtime/emberwakeGameModule";
 
 type ActiveRuntimeShellContentProps = {
   activeScene: AppSceneId;
@@ -52,6 +53,7 @@ type ActiveRuntimeShellContentProps = {
   onRetryRuntime: () => void;
   onResumeRuntime: () => void;
   onRuntimeOutcomeChange: (runtimeOutcome: RuntimeShellOutcome | null) => void;
+  onRuntimeStateChange: (gameState: EmberwakeGameState) => void;
   onSetCameraMode: (cameraMode: CameraMode) => void;
   onSetCameraState: (cameraState: CameraState) => void;
   onSetDebugPanelVisible: (visible: boolean) => void;
@@ -64,6 +66,7 @@ type ActiveRuntimeShellContentProps = {
   preferences: ShellPreferences;
   rendererState: RendererState;
   runtimeSession: RuntimeSessionState;
+  sessionInitState?: EmberwakeGameState;
   shellRequestedScene: AppSceneId;
   viewport: ReturnTypeUseLogicalViewportModel;
 };
@@ -88,6 +91,7 @@ export function ActiveRuntimeShellContent({
   onRetryRuntime,
   onResumeRuntime,
   onRuntimeOutcomeChange,
+  onRuntimeStateChange,
   onSetCameraMode,
   onSetCameraState,
   onSetDebugPanelVisible,
@@ -100,6 +104,7 @@ export function ActiveRuntimeShellContent({
   preferences,
   rendererState,
   runtimeSession,
+  sessionInitState,
   shellRequestedScene,
   viewport
 }: ActiveRuntimeShellContentProps) {
@@ -135,7 +140,11 @@ export function ActiveRuntimeShellContent({
           },
     [runtimeControlState, shellRequestedScene]
   );
-  const simulationState = useEntitySimulation({ controlState });
+  const simulationState = useEntitySimulation({
+    controlState,
+    initialGameState: sessionInitState,
+    sessionRevision: runtimeSession.sessionRevision
+  });
   const runtimeOutcome = useMemo(() => {
     const rawRuntimeOutcome = simulationState.presentation.overlays?.runtimeOutcome;
 
@@ -247,6 +256,10 @@ export function ActiveRuntimeShellContent({
   useEffect(() => {
     onRuntimeOutcomeChange(runtimeOutcome);
   }, [onRuntimeOutcomeChange, runtimeOutcome]);
+
+  useEffect(() => {
+    onRuntimeStateChange(simulationState.gameState);
+  }, [onRuntimeStateChange, simulationState.gameState]);
 
   useRuntimeTelemetryBridge({
     activeScene,

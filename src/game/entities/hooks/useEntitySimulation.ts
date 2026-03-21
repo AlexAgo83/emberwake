@@ -16,6 +16,8 @@ import type { SingleEntityControlState } from "../../input/model/singleEntityCon
 
 type UseEntitySimulationOptions = {
   controlState?: SingleEntityControlState;
+  initialGameState?: EmberwakeGameState;
+  sessionRevision?: number;
 };
 
 type SimulationRuntimeMetrics = {
@@ -45,19 +47,30 @@ type EntitySimulationControls = {
 
 type UseEntitySimulationResult = EntitySimulationState & {
   controls: EntitySimulationControls;
+  gameState: EmberwakeGameState;
   presentation: EnginePresentationModel;
   runtime: SimulationRuntimeMetrics;
 };
 
-export function useEntitySimulation({ controlState }: UseEntitySimulationOptions = {}) {
+export function useEntitySimulation({
+  controlState,
+  initialGameState,
+  sessionRevision = 0
+}: UseEntitySimulationOptions = {}) {
   const runnerRef = useRef<ReturnType<typeof createEmberwakeRuntimeRunner> | null>(null);
-  if (runnerRef.current === null) {
-    runnerRef.current = createEmberwakeRuntimeRunner();
+  const runnerVersionRef = useRef<number | null>(null);
+  if (runnerRef.current === null || runnerVersionRef.current !== sessionRevision) {
+    runnerRef.current = createEmberwakeRuntimeRunner(initialGameState);
+    runnerVersionRef.current = sessionRevision;
   }
   const runner = runnerRef.current;
   const [snapshot, setSnapshot] = useState<RuntimeRunnerSnapshot<EmberwakeGameState>>(() =>
     runner.getSnapshot()
   );
+
+  useEffect(() => {
+    setSnapshot(runner.getSnapshot());
+  }, [runner]);
 
   useEffect(() => {
     const unsubscribe = runner.subscribe((nextSnapshot) => {
@@ -100,6 +113,7 @@ export function useEntitySimulation({ controlState }: UseEntitySimulationOptions
   return {
     ...snapshot.state.simulation,
     controls,
+    gameState: snapshot.state,
     presentation: snapshot.presentation,
     runtime: {
       ...snapshot.runtime,
