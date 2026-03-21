@@ -57,16 +57,13 @@ flowchart LR
 ## Current Status
 
 Latest tagged release:
-- `v0.1.2`
+- `v0.2.1`
 
 What `main` now carries beyond that release:
-- a modular `app / engine / engine-pixi / game` runtime split
-- shell-owned scene and meta-flow orchestration for `runtime`, `pause`, `settings`, `defeat`, and `victory`
-- lazy runtime boot behind a shell boundary instead of eager Pixi startup
-- a unified live frame loop where Pixi drives visual frames while the engine runner keeps fixed-step authority
-- typed gameplay content and ordered gameplay systems in `games/emberwake`
-- public package entrypoints and targeted lint rules to keep architecture boundaries honest
-- runtime interaction recovery after delayed surface mount and regression coverage for the mobile virtual stick
+- a tactical console shell language for the floating command deck instead of the earlier rounded capsule treatment
+- a session-first command deck hierarchy with true `View` and `Tools` submenus instead of one dense control screen
+- a tighter shell menu header that drops redundant runtime prose in favor of direct action access
+- default runtime camera bootstrapping on `follow-entity` for fresh sessions
 
 ## Planned Stack
 
