@@ -52,6 +52,7 @@ describe("Emberwake runtime integration", () => {
 
     expect(action.controlState.inputOwner).toBe("player-entity");
     expect(nextState.simulation.entity.state).toBe("moving");
+    expect(nextState.systems.progression.runtimeTicksSurvived).toBe(1);
     expect(nextState.simulation.entity.worldPosition.x).toBeGreaterThan(
       initialState.simulation.entity.worldPosition.x
     );
@@ -61,6 +62,10 @@ describe("Emberwake runtime integration", () => {
     expect(presentation.entities[0]).toMatchObject({
       id: nextState.simulation.entity.id,
       worldPosition: nextState.simulation.entity.worldPosition
+    });
+    expect(presentation.diagnostics).toMatchObject({
+      combatState: "dormant",
+      progressionTicksSurvived: 1
     });
   });
 
@@ -75,6 +80,7 @@ describe("Emberwake runtime integration", () => {
 
     expect(snapshot.timing.tick).toBe(1);
     expect(snapshot.runtime.simulationStepsLastFrame).toBe(1);
+    expect(snapshot.state.systems.progression.runtimeTicksSurvived).toBe(1);
     expect(snapshot.state.simulation.entity.worldPosition.x).toBeGreaterThan(0);
     expect(snapshot.presentation.entities[0].worldPosition).toEqual(
       snapshot.state.simulation.entity.worldPosition

@@ -1,0 +1,78 @@
+import { describe, expect, it } from "vitest";
+
+import { createDefaultCameraState } from "@engine/camera/cameraMath";
+import {
+  advanceGameplaySystemsState,
+  createGameplaySystemDiagnostics,
+  createInitialGameplaySystemsState,
+  gameplaySystemsContract
+} from "./gameplaySystems";
+
+describe("gameplaySystems", () => {
+  it("tracks progression and system seams separately from the raw simulation slice", () => {
+    const previousState = createInitialGameplaySystemsState();
+    const nextState = advanceGameplaySystemsState({
+      previousState,
+      simulationAfterUpdate: {
+        entity: {
+          archetype: "generic-mover",
+          footprint: { radius: 40 },
+          id: "entity:player:primary",
+          orientation: 0,
+          renderLayer: 100,
+          state: "moving",
+          velocity: { x: 10, y: 0 },
+          visual: {
+            kind: "ember-core",
+            tint: "#ff7b3f"
+          },
+          worldPosition: {
+            x: 10,
+            y: 0
+          }
+        },
+        tick: 1
+      },
+      simulationBeforeUpdate: {
+        entity: {
+          archetype: "generic-mover",
+          footprint: { radius: 40 },
+          id: "entity:player:primary",
+          orientation: 0,
+          renderLayer: 100,
+          state: "idle",
+          velocity: { x: 0, y: 0 },
+          visual: {
+            kind: "ember-core",
+            tint: "#ff7b3f"
+          },
+          worldPosition: {
+            x: 0,
+            y: 0
+          }
+        },
+        tick: 0
+      },
+      timing: {
+        deltaMs: 1000 / 60,
+        fixedStepMs: 1000 / 60,
+        nowMs: 1000 / 60,
+        tick: 0
+      }
+    });
+
+    expect(nextState.progression.runtimeTicksSurvived).toBe(1);
+    expect(nextState.progression.traversalDistanceWorldUnits).toBe(10);
+    expect(nextState.autonomy.lastAutonomyTick).toBe(1);
+    expect(createGameplaySystemDiagnostics(nextState)).toMatchObject({
+      activeStatusEffects: 0,
+      combatState: "dormant",
+      progressionTicksSurvived: 1
+    });
+  });
+
+  it("documents gameplay-system ownership without leaking render-adapter concerns", () => {
+    expect(gameplaySystemsContract.seams.presentation).toContain("render-adapters");
+    expect(createDefaultCameraState().zoom).toBe(1);
+  });
+});

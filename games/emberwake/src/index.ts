@@ -80,8 +80,21 @@ export {
   emberwakeRuntimeSessionSeedOptions
 } from "./runtime/emberwakeSession";
 export {
+  advanceGameplaySystemsState,
+  createGameplaySystemDiagnostics,
+  createInitialGameplaySystemsState,
+  gameplaySystemsContract
+} from "./systems/gameplaySystems";
+export {
   emberwakeRenderBoundaryContract,
   emberwakeRuntimeRenderLayerOrder,
   emberwakeRuntimeRenderLayers
 } from "./presentation/emberwakeRenderLayers";
 export type { EmberwakeRuntimeRenderLayerId } from "./presentation/emberwakeRenderLayers";
+export type {
+  AutonomySystemState,
+  CombatSystemState,
+  EmberwakeGameplaySystemsState,
+  ProgressionSystemState,
+  StatusEffectSystemState
+} from "./systems/gameplaySystems";

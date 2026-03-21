@@ -13,9 +13,16 @@ import {
   entitySimulationContract
 } from "@game/runtime/entitySimulation";
 import type { EntitySimulationState } from "@game/runtime/entitySimulation";
+import {
+  advanceGameplaySystemsState,
+  createGameplaySystemDiagnostics,
+  createInitialGameplaySystemsState
+} from "@game/systems/gameplaySystems";
+import type { EmberwakeGameplaySystemsState } from "@game/systems/gameplaySystems";
 
 type EmberwakeGameState = {
   simulation: EntitySimulationState;
+  systems: EmberwakeGameplaySystemsState;
 };
 
 type EmberwakeGameAction = {
@@ -74,7 +81,8 @@ const parseTint = (tint: string): number | undefined => {
 
 export const emberwakeGameModule: GameModule<EmberwakeGameState, EmberwakeGameAction> = {
   initialize: () => ({
-    simulation: createInitialSimulationState()
+    simulation: createInitialSimulationState(),
+    systems: createInitialGameplaySystemsState()
   }),
   mapInput: ({ input }) => ({
     controlState: createControlStateFromInput(input)
@@ -86,7 +94,8 @@ export const emberwakeGameModule: GameModule<EmberwakeGameState, EmberwakeGameAc
     },
     diagnostics: {
       entityState: state.simulation.entity.state,
-      tick: state.simulation.tick
+      tick: state.simulation.tick,
+      ...createGameplaySystemDiagnostics(state.systems)
     },
     entities: [
       {
@@ -101,11 +110,21 @@ export const emberwakeGameModule: GameModule<EmberwakeGameState, EmberwakeGameAc
       visibleChunks: []
     }
   }),
-  update: ({ action, state }) => ({
-    simulation: advanceSimulationState(state.simulation, {
+  update: ({ action, state, timing }) => {
+    const nextSimulation = advanceSimulationState(state.simulation, {
       controlState: action.controlState
-    })
-  })
+    });
+
+    return {
+      simulation: nextSimulation,
+      systems: advanceGameplaySystemsState({
+        previousState: state.systems,
+        simulationAfterUpdate: nextSimulation,
+        simulationBeforeUpdate: state.simulation,
+        timing
+      })
+    };
+  }
 };
 
 export const createInitialEmberwakeGameState = () =>
@@ -148,13 +167,15 @@ export const advanceEmberwakeSimulationState = (
             }
           },
           state: {
-            simulation: simulationState
+            simulation: simulationState,
+            systems: createInitialGameplaySystemsState()
           }
         }).controlState
     },
     context: undefined,
     state: {
-      simulation: simulationState
+      simulation: simulationState,
+      systems: createInitialGameplaySystemsState()
     },
     timing: createTimingSnapshot(simulationState.tick)
   }).simulation;
