@@ -1,9 +1,9 @@
 ## item_087_define_runtime_performance_budgets_profiling_and_mobile_limits_for_shell_and_pixi_startup - Define runtime performance budgets profiling and mobile limits for shell and Pixi startup
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,8 +48,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`
+- Architecture decision(s): `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`, `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`
 - Request: `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`
+- Primary task(s): `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`
 
 # Priority
 - Impact: High
@@ -58,3 +59,4 @@ flowchart LR
 # Notes
 - Derived from request `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`.
 - Source file: `logics/request/req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave.md`.
+- Implemented through `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`.

@@ -1,9 +1,9 @@
 ## item_088_define_product_meta_flow_architecture_for_pause_settings_failure_and_runtime_reentry - Define product meta flow architecture for pause settings failure and runtime reentry
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,8 +48,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
-- Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`
+- Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`
 - Request: `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`
+- Primary task(s): `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`
 
 # Priority
 - Impact: High
@@ -58,3 +59,4 @@ flowchart LR
 # Notes
 - Derived from request `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`.
 - Source file: `logics/request/req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave.md`.
+- Implemented through `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`.

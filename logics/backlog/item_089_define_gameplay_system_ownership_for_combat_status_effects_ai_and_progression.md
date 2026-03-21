@@ -1,9 +1,9 @@
 ## item_089_define_gameplay_system_ownership_for_combat_status_effects_ai_and_progression - Define gameplay system ownership for combat status effects AI and progression
 > From version: 0.1.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -48,8 +48,9 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): `adr_015_define_engine_to_game_runtime_contract_boundaries`, `adr_018_validate_emberwake_content_as_a_typed_cross_catalog_graph`
+- Architecture decision(s): `adr_015_define_engine_to_game_runtime_contract_boundaries`, `adr_018_validate_emberwake_content_as_a_typed_cross_catalog_graph`, `adr_023_model_gameplay_systems_as_game_owned_state_slices_around_the_game_module`
 - Request: `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`
+- Primary task(s): `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`
 
 # Priority
 - Impact: High
@@ -58,3 +59,4 @@ flowchart LR
 # Notes
 - Derived from request `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`.
 - Source file: `logics/request/req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave.md`.
+- Implemented through `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`.
