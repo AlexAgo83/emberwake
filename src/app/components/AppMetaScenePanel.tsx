@@ -71,15 +71,14 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   runtimeOutcome,
   scene
 }: AppMetaScenePanelProps) {
-  if (
-    scene !== "main-menu" &&
-    scene !== "new-game" &&
-    scene !== "settings" &&
-    scene !== "defeat" &&
-    scene !== "victory"
-  ) {
-    return null;
-  }
+  const isShellOwnedScene =
+    scene === "main-menu" ||
+    scene === "new-game" ||
+    scene === "settings" ||
+    scene === "defeat" ||
+    scene === "victory";
+
+  const shouldHidePanel = !isShellOwnedScene;
 
   const formatRunDuration = (ticks: number) => {
     const totalSeconds = Math.max(
@@ -97,10 +96,10 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       : scene === "new-game"
         ? "New game"
         : scene === "settings"
-        ? "Settings"
-        : scene === "defeat"
-          ? "Game over"
-          : "Victory";
+          ? "Settings"
+          : scene === "defeat"
+            ? "Game over"
+            : "Victory";
   const detail =
     scene === "main-menu"
       ? canResumeSession
@@ -108,14 +107,14 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         : "Start a new run or open settings."
       : scene === "new-game"
         ? "Name your character before the run starts."
-      : scene === "settings"
-        ? ""
-        : scene === "defeat" && gameOverRecap
-          ? gameOverRecap.defeatDetail
-        : runtimeOutcome?.detail ??
-          (scene === "defeat"
-            ? "The run ended. Review the recap."
-            : "Review the latest runtime outcome.");
+        : scene === "settings"
+          ? ""
+          : scene === "defeat" && gameOverRecap
+            ? gameOverRecap.defeatDetail
+            : runtimeOutcome?.detail ??
+              (scene === "defeat"
+                ? "The run ended. Review the recap."
+                : "Review the latest runtime outcome.");
   const resumeLabel =
     scene === "defeat"
       ? "Return to main menu"
@@ -138,7 +137,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         : null;
 
   useEffect(() => {
-    if (!handleEscapeAction) {
+    if (shouldHidePanel || !handleEscapeAction) {
       return;
     }
 
@@ -170,7 +169,11 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
     return () => {
       window.removeEventListener("keydown", handleWindowKeyDown);
     };
-  }, [handleEscapeAction, isShellMenuOpen]);
+  }, [handleEscapeAction, isShellMenuOpen, shouldHidePanel]);
+
+  if (shouldHidePanel) {
+    return null;
+  }
 
   return (
     <aside className="app-meta-scene" aria-label={title}>

@@ -1,8 +1,8 @@
 ## req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors - Refine spawn, bootstrap, pause surface, and escape-navigation behaviors
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -132,3 +132,20 @@ flowchart TD
 - `refine_forward_biased_hostile_spawn_behavior_during_player_motion`
 - `remove_fake_bootstrap_entities_from_player_facing_runtime_start`
 - `remove_runtime_paused_panel_and_align_escape_navigation_with_visible_back_or_resume_actions`
+
+# Outcome
+- Hostile spawning now uses attempt-ordered front and front-side sectors before any rear fallback, and the hostile safe spawn distance was raised so incoming threats appear farther out.
+- Player-facing runtime presentation now filters bootstrap/support entities out of normal rendering, selection, and targeting while leaving runtime support data available to the simulation layer.
+- The dedicated `Runtime paused` card no longer renders; pause remains shell-owned through the command deck and scene state alone.
+- `Escape` now mirrors visible shell actions:
+  - command-deck submenus step back before the deck closes
+  - command-deck root closes on `Escape`
+  - `Main menu` maps `Escape` to `Resume runtime` when available
+  - `Settings`, `New game`, and `Game over` map `Escape` to their visible back action
+  - active text input and desktop-control rebinding capture consume `Escape` before shell navigation
+
+# Validation
+- `npx vitest run src/app/components/ShellMenu.test.tsx src/app/components/AppMetaScenePanel.test.tsx src/app/components/DesktopControlSettingsSection.test.tsx src/game/entities/hooks/useEntityWorld.test.tsx games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`

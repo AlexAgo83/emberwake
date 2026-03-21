@@ -1,9 +1,9 @@
 ## item_160_align_escape_navigation_with_visible_back_and_resume_actions - Align escape navigation with visible back and resume actions
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors`.
+- Implemented in `ShellMenu` for submenu back/close behavior and in `AppMetaScenePanel` for scene-level `Back` and `Resume runtime` behavior.
+- Local text input focus and desktop-control rebinding capture now block broader shell `Escape` handling until the local interaction is resolved.

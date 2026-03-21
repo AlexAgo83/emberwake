@@ -1,9 +1,9 @@
 ## item_159_remove_fake_bootstrap_entities_and_pause_overlay_surface - Remove fake bootstrap entities and pause overlay surface
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors`.
+- Implemented by filtering support/bootstrap entities out of `useEntityWorld` unless diagnostics explicitly opts in.
+- Implemented by removing pause from `AppMetaScenePanel` rendering so no dedicated `Runtime paused` card appears during shell-owned pause.

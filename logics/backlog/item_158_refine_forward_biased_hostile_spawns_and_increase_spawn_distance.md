@@ -1,9 +1,9 @@
 ## item_158_refine_forward_biased_hostile_spawns_and_increase_spawn_distance - Refine forward-biased hostile spawns and increase spawn distance
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors`.
+- Implemented by ordering hostile spawn sectors by attempt so front and front-side sectors are tried first, with rear sectors preserved only as deterministic late fallback.
+- Implemented by raising `hostileCombatContract.hostile.safeSpawnDistanceWorldUnits` and widening the sampled spawn distance band outward.
