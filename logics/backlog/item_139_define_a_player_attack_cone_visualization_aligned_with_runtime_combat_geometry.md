@@ -1,9 +1,9 @@
 ## item_139_define_a_player_attack_cone_visualization_aligned_with_runtime_combat_geometry - Define a player attack-cone visualization aligned with runtime combat geometry
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization`.
+- Implemented in `13db4e2`.
+- The player’s automatic attack now renders a short world-space cone pulse that follows the live orientation and uses the same arc/range as the combat contract.

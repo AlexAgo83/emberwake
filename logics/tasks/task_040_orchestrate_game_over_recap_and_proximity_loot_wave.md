@@ -1,9 +1,9 @@
 ## task_040_orchestrate_game_over_recap_and_proximity_loot_wave - Orchestrate game-over recap and proximity-loot wave
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,15 +30,15 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Define and implement a shell-owned `Game over` recap surface for defeated runs with bounded first-slice summary data.
-- [ ] 2. Define and implement post-recap routing back to `Main menu`, with clear re-entry options around `Load game` and `Start new game`.
-- [ ] 3. Define and implement a player attack-cone visualization aligned with the real combat geometry and bounded display timing.
-- [ ] 4. Define and implement nearby pickup spawn rules around the player, respecting local caps, safe spawn distance, and traversable world space.
-- [ ] 5. Define and implement a first healing-kit pickup that restores `25%` of player max health with a max-health clamp.
-- [ ] 6. Define and implement gold as the default fallback pickup plus a first runtime currency counter or count posture.
-- [ ] 7. Validate the resulting loop end to end so defeat, re-entry, and nearby pickups all behave coherently.
-- [ ] 8. Update linked requests, backlog, task, and supporting notes so the wave remains traceable.
-- [ ] FINAL: Create dedicated git commit(s) for this orchestration scope.
+- [x] 1. Define and implement a shell-owned `Game over` recap surface for defeated runs with bounded first-slice summary data.
+- [x] 2. Define and implement post-recap routing back to `Main menu`, with clear re-entry options around `Load game` and `Start new game`.
+- [x] 3. Define and implement a player attack-cone visualization aligned with the real combat geometry and bounded display timing.
+- [x] 4. Define and implement nearby pickup spawn rules around the player, respecting local caps, safe spawn distance, and traversable world space.
+- [x] 5. Define and implement a first healing-kit pickup that restores `25%` of player max health with a max-health clamp.
+- [x] 6. Define and implement gold as the default fallback pickup plus a first runtime currency counter or count posture.
+- [x] 7. Validate the resulting loop end to end so defeat, re-entry, and nearby pickups all behave coherently.
+- [x] 8. Update linked requests, backlog, task, and supporting notes so the wave remains traceable.
+- [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
 
 # Links
 - Backlog item(s): `item_137_define_a_game_over_recap_surface_for_defeated_runs`, `item_138_define_post_recap_return_to_main_menu_and_reentry_options`, `item_139_define_a_player_attack_cone_visualization_aligned_with_runtime_combat_geometry`, `item_140_define_nearby_pickup_spawn_rules_around_the_player`, `item_141_define_a_first_healing_kit_pickup_that_restores_25_percent_health`, `item_142_define_gold_as_the_default_fallback_pickup_and_first_runtime_currency_counter`
@@ -49,12 +49,20 @@ flowchart TD
 - `npm run test:browser:smoke`
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
+# Implementation notes
+- `13db4e2` introduced the gameplay/product wave:
+  - shell-owned `Game over` recap with bounded run stats
+  - defeat dismissal back to `Main menu` with the dead run cleared
+  - world-space pulse for the automatic player cone attack
+  - bounded nearby pickups with blocked-space checks and safe spawn distance
+  - `20%` healing kits, `80%` gold, auto-pickup, and runtime gold counting
+
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Defeat resolves through a readable game-over recap and returns cleanly to `Main menu`.
-- [ ] The player’s attack cone is visually readable in runtime and aligned with the actual combat geometry.
-- [ ] Nearby pickups can appear near the player without spawning inside blocked space or directly on top of the player.
-- [ ] Healing kits and gold both work inside the first pickup loop with bounded behavior.
-- [ ] Linked requests, backlog, and task docs are updated with proofs and status.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Defeat resolves through a readable game-over recap and returns cleanly to `Main menu`.
+- [x] The player’s attack cone is visually readable in runtime and aligned with the actual combat geometry.
+- [x] Nearby pickups can appear near the player without spawning inside blocked space or directly on top of the player.
+- [x] Healing kits and gold both work inside the first pickup loop with bounded behavior.
+- [x] Linked requests, backlog, and task docs are updated with proofs and status.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.

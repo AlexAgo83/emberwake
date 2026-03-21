@@ -1,8 +1,8 @@
 ## req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization - Define a game-over recap flow and player attack-cone visualization
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -107,6 +107,20 @@ flowchart TD
 - AC4: The request defines the post-defeat next-step posture around `Load game` and `Start new game`, rather than emphasizing runtime resume for the dead run.
 - AC5: The request defines a first visual treatment for the player attack cone that is clearly tied to the actual combat geometry.
 - AC6: The request keeps the slice intentionally narrow and does not reopen broad combat-FX, reward-summary, or save-system redesign work.
+
+# Outcome
+- Done in `13db4e2`.
+- Defeat now resolves into a shell-owned `Game over` recap instead of a thin interruption panel.
+- The recap now summarizes the finished run through player identity, survival time, traversal distance, hostile defeats, and collected gold.
+- Acknowledging the recap now returns to `Main menu` and clears the dead run instead of suggesting that it can resume.
+- The player’s automatic melee attack now renders a bounded world-space cone pulse aligned with the real range and arc of the combat contract.
+
+# Validation
+- `npx vitest run src/app/components/AppMetaScenePanel.test.tsx src/app/components/PlayerHudCard.test.tsx`
+- `npx vitest run src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Open questions
 - Should the recap auto-return to `Main menu` after a short delay or only on explicit acknowledgment?

@@ -1,9 +1,9 @@
 ## item_142_define_gold_as_the_default_fallback_pickup_and_first_runtime_currency_counter - Define gold as the default fallback pickup and first runtime currency counter
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_038_define_a_first_proximity_loot_spawn_wave_with_healing_kits_and_gold`.
+- Implemented in `13db4e2`.
+- Gold now acts as the default fallback pickup and increments the first runtime currency counter used by the HUD and game-over recap.

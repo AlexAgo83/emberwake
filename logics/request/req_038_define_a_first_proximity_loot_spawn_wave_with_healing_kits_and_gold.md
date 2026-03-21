@@ -1,8 +1,8 @@
 ## req_038_define_a_first_proximity_loot_spawn_wave_with_healing_kits_and_gold - Define a first proximity loot-spawn wave with healing kits and gold
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
+> Confidence: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -103,6 +103,22 @@ flowchart TD
 - AC4: The request defines how pickups appear near the player without spawning directly on top of them or inside blocked world space.
 - AC5: The request defines a first pickup collection posture without reopening full inventory or economy systems.
 - AC6: The request remains intentionally narrow and does not drift into item rarity, vendors, or authored treasure design.
+
+# Outcome
+- Done in `13db4e2`.
+- The runtime now maintains a bounded nearby pickup population around the player instead of remaining reward-empty between encounters.
+- The first loot table is now live with deterministic local spawns:
+  - `20%` healing kit
+  - `80%` gold
+- Healing kits now restore `25%` of player max health with a max-health clamp on contact.
+- Gold now acts as the default fallback pickup and increments a first runtime currency counter that is visible in the HUD and recap.
+
+# Validation
+- `npx vitest run src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts`
+- `npx vitest run games/emberwake/src/systems/gameplaySystems.test.ts src/app/components/PlayerHudCard.test.tsx`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
 
 # Open questions
 - Should nearby loot spawn continuously or only maintain a bounded local cap?

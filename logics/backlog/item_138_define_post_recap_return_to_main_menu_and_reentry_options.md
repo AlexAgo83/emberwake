@@ -1,9 +1,9 @@
 ## item_138_define_post_recap_return_to_main_menu_and_reentry_options - Define post-recap return to main menu and re-entry options
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization`.
+- Implemented in `13db4e2`.
+- Acknowledging the recap now routes cleanly back to `Main menu`, clears the dead active session, and leaves `Load game` / `Start new game` as the natural next actions.

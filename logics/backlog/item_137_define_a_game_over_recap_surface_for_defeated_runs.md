@@ -1,9 +1,9 @@
 ## item_137_define_a_game_over_recap_surface_for_defeated_runs - Define a game-over recap surface for defeated runs
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization`.
+- Implemented in `13db4e2`.
+- The `defeat` scene now renders a true `Game over` recap with bounded run-summary facts instead of a generic interruption panel.

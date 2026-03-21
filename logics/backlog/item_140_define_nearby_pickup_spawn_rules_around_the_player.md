@@ -1,9 +1,9 @@
 ## item_140_define_nearby_pickup_spawn_rules_around_the_player - Define nearby pickup spawn rules around the player
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_038_define_a_first_proximity_loot_spawn_wave_with_healing_kits_and_gold`.
+- Implemented in `13db4e2`.
+- The runtime now maintains a bounded nearby pickup cap, enforces safe spawn distance from the player, and rejects blocked spawn positions.

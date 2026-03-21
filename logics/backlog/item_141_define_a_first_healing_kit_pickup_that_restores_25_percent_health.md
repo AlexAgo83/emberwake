@@ -1,9 +1,9 @@
 ## item_141_define_a_first_healing_kit_pickup_that_restores_25_percent_health - Define a first healing-kit pickup that restores 25 percent health
 > From version: 0.2.3
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -35,3 +35,5 @@ flowchart LR
 
 # Notes
 - Derived from request `req_038_define_a_first_proximity_loot_spawn_wave_with_healing_kits_and_gold`.
+- Implemented in `13db4e2`.
+- Healing kits now collect automatically on contact and restore `25%` of player max health with a max-health clamp.
