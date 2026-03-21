@@ -2,10 +2,11 @@
 
 Static frontend game project built around a fullscreen 2D top-down world, designed for `React + TypeScript + PixiJS`, with `PWA` delivery and no backend runtime.
 
-This repository is currently in early implementation:
-- the product, architecture, backlog, and execution flow are already structured
-- the frontend runtime foundation is now bootstrapped
-- the first shell, viewport, diagnostics, and delivery tasks are being executed incrementally
+This repository is now past the first bootstrap slice:
+- the product, architecture, backlog, and execution flow are structured under `logics/`
+- the frontend runtime is split across shell, engine, Pixi adapter, and game modules
+- the playable loop runs through a shell-owned boot boundary with a Pixi-driven visual frame loop
+- mobile virtual-stick input, diagnostics sampling, gameplay outcomes, and release validation are all part of the current baseline
 
 This README is meant to evolve with the project.
 
@@ -53,6 +54,20 @@ flowchart LR
     E --> F[Desktop fallback controls]
 ```
 
+## Current Status
+
+Latest tagged release:
+- `v0.1.2`
+
+What `main` now carries beyond that release:
+- a modular `app / engine / engine-pixi / game` runtime split
+- shell-owned scene and meta-flow orchestration for `runtime`, `pause`, `settings`, `defeat`, and `victory`
+- lazy runtime boot behind a shell boundary instead of eager Pixi startup
+- a unified live frame loop where Pixi drives visual frames while the engine runner keeps fixed-step authority
+- typed gameplay content and ordered gameplay systems in `games/emberwake`
+- public package entrypoints and targeted lint rules to keep architecture boundaries honest
+- runtime interaction recovery after delayed surface mount and regression coverage for the mobile virtual stick
+
 ## Planned Stack
 
 - `React`
@@ -61,24 +76,46 @@ flowchart LR
 - `@pixi/react`
 - `Vite`
 - `vite-plugin-pwa`
+- `Vitest`
+- `Playwright`
+- `ESLint`
 - `Render` for static hosting
 - `GitHub Actions` for CI
 
+## Local Development
+
+Bootstrap:
+- `npm ci`
+
+Run the app locally:
+- `npm run dev`
+
+Main validation commands:
+- `npm run test`
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `npm run release:ready:advisory`
+
 ## Repository Status
 
-At the moment, this repository contains both the operating model and the first runtime slice:
+At the moment, this repository contains both the operating model and an active modular runtime:
 - requests
 - backlog items
 - execution tasks
 - ADRs
 - product briefs
-- a Vite + React + PixiJS + PWA frontend foundation
+- a Vite + React + PixiJS + PWA frontend shell
+- a reusable engine core package
+- a reusable Pixi adapter package
+- an Emberwake game package with runtime, content, presentation, and gameplay systems
 
-The implementation backbone already starts in:
-- [logics/tasks/task_000_bootstrap_react_pixi_pwa_project_foundation.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_000_bootstrap_react_pixi_pwa_project_foundation.md)
-- [logics/tasks/task_001_implement_fullscreen_viewport_ownership_and_input_isolation.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_001_implement_fullscreen_viewport_ownership_and_input_isolation.md)
-- [logics/tasks/task_002_add_stable_logical_viewport_and_world_space_shell_contract.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_002_add_stable_logical_viewport_and_world_space_shell_contract.md)
-- [logics/tasks/task_003_add_render_diagnostics_fallback_handling_and_shell_preferences.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_003_add_render_diagnostics_fallback_handling_and_shell_preferences.md)
+Recent orchestration waves:
+- [task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse.md)
+- [task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening.md)
+- [task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement.md)
+- [task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture.md)
+- [task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling.md)
+- [task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave.md)
 
 ## Runtime Topology
 
@@ -87,7 +124,13 @@ The repository now carries an explicit modular runtime split:
 - `packages/engine-core` owns reusable runtime math, contracts, camera, world, and input primitives
 - `packages/engine-pixi` owns reusable Pixi composition primitives
 - `games/emberwake` owns Emberwake gameplay rules, content, scenarios, and runtime adapters
-- `src/` still contains shell, assets, and transitional feature adapters that are being kept stable during the migration
+- `src/` owns the shell, shared frontend services, assets, and a narrowing set of app-facing adapters
+
+Public TypeScript entrypoints:
+- `@app/*`
+- `@engine`
+- `@engine-pixi`
+- `@game`
 
 Reference decisions:
 - [adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies.md](/Users/alexandreagostini/Documents/emberwake/logics/architecture/adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies.md)
@@ -123,12 +166,16 @@ flowchart LR
 ## Key Rules Already Fixed
 
 - `React` owns the app shell and DOM overlays
-- `PixiJS` owns the interactive world render surface
+- `PixiJS` owns the interactive world render surface and drives live visual frames
 - viewport behavior must not arbitrarily distort world scale or position
-- simulation is intended to run on a fixed timestep
+- the engine runner keeps fixed-timestep authority for simulation
 - world identity must be deterministic from seed and coordinates
 - debug instrumentation is a first-class concern
 - runtime input must be isolated from browser page behavior
+- shell scenes and meta surfaces are shell-owned rather than gameplay-owned
+- gameplay outcomes are exposed to the shell through narrow contracts instead of gameplay internals
+- diagnostics stay off the runtime hot path through sampled publication
+- public module boundaries are enforced with targeted deep-import rules
 - no large source files beyond the repository rule fixed in ADRs
 - React side effects should be isolated into dedicated hooks or modules
 
@@ -275,9 +322,9 @@ Reference contract:
 Authoring data now follows a typed TypeScript baseline instead of scattered literals.
 
 Current ownership:
-- world-authored terrain data lives in `src/game/world/data`
-- entity-authored archetypes and visuals live in `src/game/entities/data`
-- canonical debug scenarios live in `src/game/debug/data`
+- world-authored terrain data lives in `games/emberwake/src/content/world`
+- entity-authored archetypes and visuals live in `games/emberwake/src/content/entities`
+- canonical debug scenarios live in `games/emberwake/src/content/scenarios`
 - asset ids remain owned by `src/assets/assetCatalog.ts`
 - runtime config stays in `src/shared/config`
 
@@ -285,11 +332,12 @@ Current rules:
 - static game data, runtime configuration, debug scenarios, and executable logic stay in separate modules
 - cross-domain references happen through explicit ids rather than ad-hoc literals
 - the official debug scenario is shared by runtime defaults, entity debug content, and automated tests
-- validation starts with TypeScript and module-level assertions, while leaving room for stricter schemas later
+- validation starts with TypeScript, module-level assertions, and typed catalog authoring guards, while leaving room for stricter schemas later
 
 Reference contracts:
 - [dataAuthoringContract.ts](/Users/alexandreagostini/Documents/emberwake/src/shared/config/dataAuthoringContract.ts)
-- [officialDebugScenario.ts](/Users/alexandreagostini/Documents/emberwake/src/game/debug/data/officialDebugScenario.ts)
+- [contentAuthoring.ts](/Users/alexandreagostini/Documents/emberwake/games/emberwake/src/content/contentAuthoring.ts)
+- [officialDebugScenario.ts](/Users/alexandreagostini/Documents/emberwake/games/emberwake/src/content/scenarios/officialDebugScenario.ts)
 - [assetCatalog.ts](/Users/alexandreagostini/Documents/emberwake/src/assets/assetCatalog.ts)
 
 ## Testing Strategy
@@ -363,9 +411,11 @@ Early runtime profiling should stay lightweight, deterministic, and reproducible
 - start with the in-app diagnostics overlay before opening external profiling tools
 - use the reference mobile viewport `390 x 844` and the deterministic default seed when comparing changes
 - reset the camera before taking before/after readings so chunk and entity counts stay comparable
-- capture at minimum `FPS`, `frame time`, `simulation speed`, `tick`, `visible chunks`, and selected-entity motion signals
+- capture at minimum `FPS`, `frame time`, `simulation speed`, `tick`, `visible chunks`, scheduler mode, and selected-entity motion signals
 - when a performance-sensitive change is introduced, compare the same runtime posture before and after the change
 - if the in-app overlay suggests a regression, escalate to a browser trace or devtools recording instead of guessing
+- keep startup and frame-pacing checks aligned with `src/shared/config/runtimePerformanceBudget.json`
+- use `npm run performance:validate` when touching runtime startup, chunk visibility, or diagnostics publication behavior
 
 This keeps performance review grounded in the same runtime contract used by the shell and diagnostics tasks.
 
@@ -374,42 +424,24 @@ Residual bundle risk:
 - Pixi-heavy startup cost is still treated as a tracked delivery risk while the runtime grows
 - if chunk warnings or cold-start cost return, narrow imports first and then review deeper runtime partitioning
 
-## Current Execution Order
+## Recent Delivery Waves
 
-The current development backbone is intentionally sequential:
+The main branch has recently closed these larger runtime waves:
 
-1. project bootstrap
-2. fullscreen shell ownership
-3. stable logical viewport contract
-4. debug and fallback shell tooling
-5. static delivery and CI
-6. deterministic world model
-7. camera controls
-8. entity contract
-9. fixed-step entity movement
-10. player control boundaries
-11. mobile virtual stick
-12. semantic versioning and changelog discipline
+1. engine/gameplay boundary extraction and reusable runtime contracts
+2. runtime convergence onto modular `engine-core`, `engine-pixi`, and `games/emberwake`
+3. shell scene architecture, lazy runtime boot, content validation, and render-layer contracts
+4. startup performance budgets, shell-owned meta flow, and gameplay system ownership seams
+5. unified frame-loop scheduling and hot-path diagnostics sampling
+6. gameplay-to-shell outcomes, render phase separation, public entrypoint hardening, and lazy-mount input reliability
 
-Each completed task should end with its own dedicated git commit.
-
-```mermaid
-flowchart TD
-    T0[task_000 bootstrap] --> T1[task_001 fullscreen shell]
-    T1 --> T2[task_002 logical viewport]
-    T2 --> T3[task_003 diagnostics and preferences]
-    T0 --> T4[task_004 Render blueprint]
-    T4 --> T5[task_005 CI quality gates]
-    T2 --> T6[task_006 deterministic world model]
-    T6 --> T7[task_007 camera controls]
-    T6 --> T8[task_008 entity contract]
-    T8 --> T9[task_009 fixed-step movement]
-    T7 --> T10[task_010 control boundaries]
-    T9 --> T10
-    T10 --> T11[task_011 mobile virtual stick]
-    T4 --> T12[task_012 semantic versioning and changelog]
-    T5 --> T12
-```
+The detailed orchestration trail lives in:
+- [task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse.md)
+- [task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening.md)
+- [task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement.md)
+- [task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture.md)
+- [task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling.md)
+- [task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave.md](/Users/alexandreagostini/Documents/emberwake/logics/tasks/task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave.md)
 
 ## Updating This README
 
