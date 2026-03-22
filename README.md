@@ -42,8 +42,8 @@ What `main` reflects today:
 
 - The project has moved beyond a navigation-only slice into a first playable survival/combat loop.
 - Runtime ownership is split between a React shell, reusable engine packages, a Pixi adapter, and Emberwake-specific gameplay modules.
-- The latest wave tightened shell escape behavior, compacted the desktop-controls settings surface, reduced stripe-like tile generation artifacts, lowered some runtime render churn, and split the runtime simulation monolith into narrower modules.
-- The next active work focuses on combat/game-feel follow-ups, continued runtime memory verification, and additional generation polish.
+- The latest wave cleaned shell-facing copy and changelog rendering, made desktop movement view-relative under camera rotation, and externalized retunable gameplay/system constants into validated JSON contracts.
+- The repo now also includes a scripted long-session profiling harness with scenario-driven player automation, invincibility/no-death support, and stable profiling artifacts under `output/playwright/long-session/`.
 
 ```mermaid
 flowchart LR
@@ -57,11 +57,26 @@ flowchart LR
 
 - Start or load a run from a shell-owned main menu.
 - Name the player character before entering runtime.
+- Open the `Command deck` during live runtime to pause safely without dropping the current run.
 - Traverse an infinite world with deterministic terrain, obstacles, and movement modifiers.
 - Fight hostile entities that spawn around the player, pursue, and deal contact damage.
 - Trigger the player attack automatically with a forward cone.
 - Collect healing kits and gold.
 - Lose the run into a `Game over` recap, then return to the main menu.
+
+## Tuning Contracts
+
+- `games/emberwake/src/config/gameplayTuning.json` is the editable balance surface for hostile, player, pickup, progression, and hostile-spawn values.
+- `games/emberwake/src/config/systemTuning.json` is the editable technical tuning surface for input feel, viewport sizing, runtime presentation, pathfinding, and movement-surface response.
+- Both JSON files are consumed through validated TypeScript adapters before runtime systems read them; new retunable numbers should default to one of these contracts instead of reappearing as local literals.
+
+```mermaid
+flowchart LR
+    GameplayJSON[gameplayTuning.json] --> GameplayTS[validated adapter]
+    SystemJSON[systemTuning.json] --> SystemTS[validated adapter]
+    GameplayTS --> Runtime[Runtime systems]
+    SystemTS --> Runtime
+```
 
 ```mermaid
 flowchart LR
@@ -79,7 +94,7 @@ flowchart LR
 - **Rendering:** PixiJS, `@pixi/react`
 - **PWA:** `vite-plugin-pwa`
 - **Testing:** Vitest, Testing Library, Playwright
-- **Quality:** ESLint, TypeScript typecheck, runtime budget checks, browser smoke
+- **Quality:** ESLint, TypeScript typecheck, runtime budget checks, browser smoke, long-session profiling runner
 - **Hosting:** Render static hosting
 
 ```mermaid
@@ -158,6 +173,7 @@ npm run test
 npm run ci
 npm run ci:full
 npm run test:browser:smoke
+npm run test:browser:profile:long -- --scenario traversal-baseline --duration 120s
 npm run performance:validate
 npm run logics:lint
 npm run release:ready:advisory
@@ -167,6 +183,7 @@ npm run release:ready:advisory
 
 - **Mobile:** virtual stick for direct movement.
 - **Desktop:** remappable movement and rotation controls from `Settings > Desktop controls`.
+- **View-relative movement:** desktop movement always follows the player view, even when the camera is rotated.
 - **Shell shortcuts:** `Escape` is used for shell navigation and menu/back behavior depending on the active surface.
 
 ```mermaid
@@ -226,7 +243,7 @@ flowchart LR
 - `package.json` is the source of truth for the app version.
 - Each release must have a matching curated changelog in `changelogs/`.
 - Release tags use `vX.Y.Z`.
-- The current release changelog is [`changelogs/CHANGELOGS_0_3_0.md`](changelogs/CHANGELOGS_0_3_0.md).
+- The current release changelog is [`changelogs/CHANGELOGS_0_3_1.md`](changelogs/CHANGELOGS_0_3_1.md).
 
 ```mermaid
 flowchart LR

@@ -6,6 +6,7 @@ import { pickupContract } from "./pickupContract";
 import { gameplayTuning } from "@game/config/gameplayTuning";
 import type { SingleEntityControlState } from "@game/input/singleEntityControlContract";
 import type { SimulatedEntity, SimulatedPickupKind } from "./entitySimulation";
+import type { ProfilingSpawnMode } from "./runtimeProfiling";
 
 type SpawnCommand = {
   controlState?: SingleEntityControlState;
@@ -141,6 +142,7 @@ export const maintainLocalHostilePopulation = ({
   createHostileEntity,
   entities,
   nextHostileSequence,
+  spawnMode = "normal",
   spawnHeadingMemoryTicks,
   tick,
   worldSeed
@@ -159,6 +161,7 @@ export const maintainLocalHostilePopulation = ({
   ) => SimulatedEntity;
   entities: readonly SimulatedEntity[];
   nextHostileSequence: number;
+  spawnMode?: ProfilingSpawnMode;
   spawnHeadingMemoryTicks: number;
   tick: number;
   worldSeed: string;
@@ -181,10 +184,12 @@ export const maintainLocalHostilePopulation = ({
   );
 
   const localHostileCount = countLocalHostiles(retainedEntities, playerEntity);
+  const spawnCooldownTicks =
+    spawnMode === "fixed-spawn-pressure" ? 1 : hostileCombatContract.hostile.spawnCooldownTicks;
 
   if (
     localHostileCount >= hostileCombatContract.hostile.localPopulationCap ||
-    tick % hostileCombatContract.hostile.spawnCooldownTicks !== 0
+    tick % spawnCooldownTicks !== 0
   ) {
     return {
       entities: retainedEntities,
@@ -297,6 +302,7 @@ export const maintainNearbyPickupPopulation = ({
   createPickupEntity,
   entities,
   nextPickupSequence,
+  spawnMode = "normal",
   tick,
   worldSeed
 }: {
@@ -314,9 +320,17 @@ export const maintainNearbyPickupPopulation = ({
   ) => SimulatedEntity;
   entities: readonly SimulatedEntity[];
   nextPickupSequence: number;
+  spawnMode?: ProfilingSpawnMode;
   tick: number;
   worldSeed: string;
 }) => {
+  if (spawnMode === "no-spawn") {
+    return {
+      entities: [...entities],
+      nextPickupSequence
+    };
+  }
+
   const playerEntity = getPlayerEntity(entities);
 
   if (!playerEntity || !isAlive(playerEntity)) {

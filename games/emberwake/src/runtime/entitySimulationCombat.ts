@@ -205,7 +205,8 @@ const isEntityPairOverlapping = (leftEntity: SimulatedEntity, rightEntity: Simul
 export const resolveHostileContactDamage = (
   entities: readonly SimulatedEntity[],
   previousEntities: readonly SimulatedEntity[],
-  tick: number
+  tick: number,
+  playerInvincible = false
 ): {
   entities: SimulatedEntity[];
   floatingDamageNumbers: FloatingDamageNumber[];
@@ -214,6 +215,13 @@ export const resolveHostileContactDamage = (
   const previousPlayerEntity = getPlayerEntity(previousEntities);
 
   if (!playerEntity || !isAlive(playerEntity)) {
+    return {
+      entities: [...entities],
+      floatingDamageNumbers: []
+    };
+  }
+
+  if (playerInvincible) {
     return {
       entities: [...entities],
       floatingDamageNumbers: []

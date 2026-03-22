@@ -73,7 +73,6 @@ export type ObstacleKind = keyof typeof obstacleDefinitions;
 export const movementSurfaceModifierDefinitions = {
   normal: {
     accentColor: null,
-    controlResponsiveness: 1,
     label: "Normal",
     ...systemTuning.movementSurfaceModifiers.normal
   },

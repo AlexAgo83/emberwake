@@ -6,7 +6,7 @@ import { readFiniteNumber, readObject } from "./tuningValidation";
 const resolveSystemTuning = (rawValue: unknown) => {
   const root = readObject(rawValue, "systemTuning");
   const input = readObject(root.input, "systemTuning.input");
-  const virtualStick = readObject(root.input?.virtualStick, "systemTuning.input.virtualStick");
+  const virtualStick = readObject(input.virtualStick, "systemTuning.input.virtualStick");
   const viewport = readObject(root.viewport, "systemTuning.viewport");
   const runtimePresentation = readObject(
     root.runtimePresentation,

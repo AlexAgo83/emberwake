@@ -22,8 +22,13 @@ import {
 } from "@game/systems/gameplaySystems";
 import { createIdleGameplayOutcome } from "@game/systems/gameplayOutcome";
 import type { EmberwakeGameplaySystemsState } from "@game/systems/gameplaySystems";
+import {
+  resolveRuntimeProfilingConfig,
+  type RuntimeProfilingConfig
+} from "@game/runtime/runtimeProfiling";
 
 type EmberwakeGameState = {
+  profiling: RuntimeProfilingConfig;
   simulation: EntitySimulationState;
   systems: EmberwakeGameplaySystemsState;
   worldSeed: string;
@@ -93,11 +98,13 @@ export const emberwakeGameModule: GameModule<
       init ?? {
         simulation: createInitialSimulationState(),
         systems: createInitialGameplaySystemsState(),
+        profiling: resolveRuntimeProfilingConfig(),
         worldSeed: emberwakeRuntimeBootstrap.worldSeed
       };
 
     return {
       ...initialState,
+      profiling: resolveRuntimeProfilingConfig(initialState.profiling),
       simulation: normalizeEntitySimulationState(initialState.simulation)
     };
   },
@@ -106,6 +113,7 @@ export const emberwakeGameModule: GameModule<
   }),
   present: ({ state }): EnginePresentationModel => {
     const normalizedSimulation = normalizeEntitySimulationState(state.simulation);
+    const profiling = resolveRuntimeProfilingConfig(state.profiling);
 
     return ({
     cameraTarget: {
@@ -117,6 +125,8 @@ export const emberwakeGameModule: GameModule<
       hostileCount: normalizedSimulation.entities.filter((entity) => entity.role === "hostile").length,
       movementSurfaceModifier: normalizedSimulation.entity.movementSurfaceModifier,
       playerHealth: normalizedSimulation.entity.combat.currentHealth,
+      profilingInvincible: profiling.playerInvincible,
+      profilingSpawnMode: profiling.spawnMode,
       tick: normalizedSimulation.tick,
       ...createGameplaySystemDiagnostics(state.systems)
     },
@@ -138,10 +148,12 @@ export const emberwakeGameModule: GameModule<
     const normalizedSimulation = normalizeEntitySimulationState(state.simulation);
     const nextSimulation = advanceSimulationState(normalizedSimulation, {
       controlState: action.controlState,
+      profiling: state.profiling,
       worldSeed: state.worldSeed
     });
 
     return {
+      profiling: state.profiling,
       simulation: nextSimulation,
       systems: advanceGameplaySystemsState({
         previousState: state.systems,
@@ -154,10 +166,14 @@ export const emberwakeGameModule: GameModule<
   }
 };
 
-export const createInitialEmberwakeGameState = (worldSeed = emberwakeRuntimeBootstrap.worldSeed) =>
+export const createInitialEmberwakeGameState = (
+  worldSeed = emberwakeRuntimeBootstrap.worldSeed,
+  profiling = resolveRuntimeProfilingConfig()
+) =>
   emberwakeGameModule.initialize({
     context: undefined,
     init: {
+      profiling,
       simulation: {
         ...createInitialSimulationState(),
         worldSeed
@@ -201,6 +217,7 @@ export const advanceEmberwakeSimulationState = (
             }
           },
           state: {
+            profiling: resolveRuntimeProfilingConfig(),
             simulation: simulationState,
             systems: createInitialGameplaySystemsState(),
             worldSeed: simulationState.worldSeed
@@ -209,6 +226,7 @@ export const advanceEmberwakeSimulationState = (
     },
     context: undefined,
     state: {
+      profiling: resolveRuntimeProfilingConfig(),
       simulation: simulationState,
       systems: createInitialGameplaySystemsState(),
       worldSeed: simulationState.worldSeed

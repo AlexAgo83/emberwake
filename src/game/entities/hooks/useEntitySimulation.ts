@@ -13,10 +13,12 @@ import {
 import type { EntitySimulationState } from "../model/entitySimulation";
 import type { SimulationSpeedOption } from "../model/entitySimulation";
 import type { SingleEntityControlState } from "../../input/model/singleEntityControlContract";
+import type { RuntimeProfilingConfig } from "@game";
 
 type UseEntitySimulationOptions = {
   controlState?: SingleEntityControlState;
   initialGameState?: EmberwakeGameState;
+  profilingConfig?: RuntimeProfilingConfig;
   sessionRevision?: number;
 };
 
@@ -61,13 +63,15 @@ type UseEntitySimulationResult = EntitySimulationState & {
 export function useEntitySimulation({
   controlState,
   initialGameState,
+  profilingConfig,
   sessionRevision = 0
 }: UseEntitySimulationOptions = {}) {
   const runnerRef = useRef<ReturnType<typeof createEmberwakeRuntimeRunner> | null>(null);
-  const runnerVersionRef = useRef<number | null>(null);
-  if (runnerRef.current === null || runnerVersionRef.current !== sessionRevision) {
+  const runnerVersionRef = useRef<string | null>(null);
+  const runnerVersion = `${sessionRevision}:${JSON.stringify(profilingConfig ?? null)}`;
+  if (runnerRef.current === null || runnerVersionRef.current !== runnerVersion) {
     runnerRef.current = createEmberwakeRuntimeRunner(initialGameState);
-    runnerVersionRef.current = sessionRevision;
+    runnerVersionRef.current = runnerVersion;
   }
   const runner = runnerRef.current;
   const [snapshot, setSnapshot] = useState<RuntimeRunnerSnapshot<EmberwakeGameState>>(() =>

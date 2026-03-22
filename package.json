@@ -16,6 +16,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:browser:smoke": "npm run build && node scripts/testing/runBrowserSmoke.mjs",
+    "test:browser:profile:long": "npm run build && node scripts/testing/runLongSessionProfile.mjs",
     "logics:lint": "python3 logics/skills/logics-doc-linter/scripts/logics_lint.py",
     "release:ready": "node scripts/release/verifyReleaseReadiness.mjs",
     "release:ready:advisory": "node scripts/release/verifyReleaseReadiness.mjs --allow-non-release",

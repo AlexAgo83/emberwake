@@ -1,0 +1,381 @@
+import { mkdir, writeFile } from "node:fs/promises";
+import { spawn } from "node:child_process";
+import { createServer } from "node:net";
+import process from "node:process";
+import { setTimeout as sleep } from "node:timers/promises";
+import { URL } from "node:url";
+
+import { chromium } from "playwright";
+import runtimePerformanceBudget from "../../src/shared/config/runtimePerformanceBudget.json" with { type: "json" };
+
+const previewHost = "127.0.0.1";
+const outputDirectory = new URL("../../output/playwright/long-session/", import.meta.url);
+const externalSmokeUrl = process.env.BROWSER_SMOKE_URL;
+
+const parseArgs = (argv) => {
+  const parsedArgs = {
+    durationMs: 120_000,
+    headed: false,
+    invincible: undefined,
+    loop: undefined,
+    sampleIntervalMs: 1_000,
+    scenarioId: "traversal-baseline",
+    spawnMode: undefined
+  };
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const argument = argv[index];
+    const nextArgument = argv[index + 1];
+
+    if (argument === "--scenario" && nextArgument) {
+      parsedArgs.scenarioId = nextArgument;
+      index += 1;
+      continue;
+    }
+
+    if (argument === "--duration" && nextArgument) {
+      parsedArgs.durationMs = parseDuration(nextArgument);
+      index += 1;
+      continue;
+    }
+
+    if (argument === "--sample-interval" && nextArgument) {
+      parsedArgs.sampleIntervalMs = Number(nextArgument);
+      index += 1;
+      continue;
+    }
+
+    if (argument === "--spawn-mode" && nextArgument) {
+      parsedArgs.spawnMode = nextArgument;
+      index += 1;
+      continue;
+    }
+
+    if (argument === "--invincible") {
+      parsedArgs.invincible = true;
+      continue;
+    }
+
+    if (argument === "--no-invincible") {
+      parsedArgs.invincible = false;
+      continue;
+    }
+
+    if (argument === "--loop") {
+      parsedArgs.loop = true;
+      continue;
+    }
+
+    if (argument === "--no-loop") {
+      parsedArgs.loop = false;
+      continue;
+    }
+
+    if (argument === "--headed") {
+      parsedArgs.headed = true;
+    }
+  }
+
+  return parsedArgs;
+};
+
+const parseDuration = (value) => {
+  const normalizedValue = value.trim().toLowerCase();
+  const durationMatch = normalizedValue.match(/^(\d+)(ms|s|m)$/);
+
+  if (!durationMatch) {
+    throw new Error(`Unsupported duration format: ${value}`);
+  }
+
+  const durationValue = Number(durationMatch[1]);
+  const durationUnit = durationMatch[2];
+
+  if (durationUnit === "ms") {
+    return durationValue;
+  }
+
+  if (durationUnit === "s") {
+    return durationValue * 1_000;
+  }
+
+  return durationValue * 60_000;
+};
+
+const resolveFreePort = () =>
+  new Promise((resolve, reject) => {
+    const server = createServer();
+
+    server.unref();
+    server.on("error", reject);
+    server.listen(0, previewHost, () => {
+      const address = server.address();
+
+      if (!address || typeof address === "string") {
+        server.close(() => {
+          reject(new Error("Could not resolve a free preview port for long-session profiling."));
+        });
+        return;
+      }
+
+      const { port } = address;
+
+      server.close((closeError) => {
+        if (closeError) {
+          reject(closeError);
+          return;
+        }
+
+        resolve(port);
+      });
+    });
+  });
+
+const formatTimestampLabel = (date) => date.toISOString().replace(/[:.]/g, "-");
+
+const waitForPreview = async (previewUrl) => {
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < 15_000) {
+    try {
+      const response = await globalThis.fetch(previewUrl);
+
+      if (response.ok) {
+        return;
+      }
+    } catch {
+      await sleep(250);
+      continue;
+    }
+
+    await sleep(250);
+  }
+
+  throw new Error(`Preview server did not start within 15s: ${previewUrl}`);
+};
+
+const readProfilingSnapshot = async (page) =>
+  page.evaluate(() => {
+    const runtimeMetrics = globalThis.window.__EMBERWAKE_RUNTIME_METRICS__ ?? null;
+    const profilingBridge = globalThis.window.__EMBERWAKE_PROFILING__;
+    const shellStatus = profilingBridge?.getShellStatus?.() ?? null;
+    const runtimeStatus = profilingBridge?.getRuntimeStatus?.() ?? null;
+    const memory = globalThis.performance?.memory
+      ? {
+          jsHeapSizeLimit: globalThis.performance.memory.jsHeapSizeLimit,
+          totalJSHeapSize: globalThis.performance.memory.totalJSHeapSize,
+          usedJSHeapSize: globalThis.performance.memory.usedJSHeapSize
+        }
+      : null;
+
+    return {
+      memory,
+      runtimeMetrics,
+      runtimeStatus,
+      shellStatus,
+      timestampMs: globalThis.performance.now()
+    };
+  });
+
+const summarizeSamples = (samples) => {
+  const heapSamples = samples
+    .map((sample) => sample.memory?.usedJSHeapSize ?? null)
+    .filter((heapValue) => typeof heapValue === "number");
+  const fpsSamples = samples
+    .map((sample) => sample.runtimeMetrics?.frameLoop?.fps ?? null)
+    .filter((fpsValue) => typeof fpsValue === "number");
+  const entityCountSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.entityCount ?? null)
+    .filter((entityCount) => typeof entityCount === "number");
+
+  return {
+    entityCount: {
+      final: entityCountSamples.at(-1) ?? null,
+      max: entityCountSamples.length > 0 ? Math.max(...entityCountSamples) : null
+    },
+    fps: {
+      average:
+        fpsSamples.length > 0
+          ? Number((fpsSamples.reduce((total, value) => total + value, 0) / fpsSamples.length).toFixed(2))
+          : null,
+      min: fpsSamples.length > 0 ? Math.min(...fpsSamples) : null
+    },
+    heapUsedBytes: {
+      delta:
+        heapSamples.length > 1
+          ? heapSamples.at(-1) - heapSamples[0]
+          : null,
+      max: heapSamples.length > 0 ? Math.max(...heapSamples) : null,
+      min: heapSamples.length > 0 ? Math.min(...heapSamples) : null
+    }
+  };
+};
+
+const cliOptions = parseArgs(process.argv.slice(2));
+const previewPort = externalSmokeUrl ? null : await resolveFreePort();
+const previewUrl = externalSmokeUrl ?? `http://${previewHost}:${previewPort}`;
+const previewServer =
+  externalSmokeUrl === undefined
+    ? spawn(
+        "npm",
+        ["run", "preview", "--", "--host", previewHost, "--port", String(previewPort), "--strictPort"],
+        {
+          cwd: new URL("../../", import.meta.url),
+          env: {
+            ...process.env,
+            CI: "1",
+            VITE_APP_ENV: process.env.VITE_APP_ENV ?? "preview"
+          },
+          stdio: "inherit"
+        }
+      )
+    : null;
+
+let browser;
+
+try {
+  if (externalSmokeUrl === undefined) {
+    await waitForPreview(previewUrl);
+  }
+
+  await mkdir(outputDirectory, {
+    recursive: true
+  });
+
+  browser = await chromium.launch({
+    args: ["--enable-precise-memory-info"],
+    headless: !cliOptions.headed
+  });
+
+  const page = await browser.newPage({
+    viewport: {
+      width: 1280,
+      height: 800
+    }
+  });
+
+  await page.goto(previewUrl, {
+    waitUntil: "networkidle"
+  });
+  await page.waitForFunction(() => Boolean(globalThis.window.__EMBERWAKE_PROFILING__?.setConfig));
+
+  const scenarioCatalog = await page.evaluate(
+    () => globalThis.window.__EMBERWAKE_PROFILING__?.listScenarios?.() ?? []
+  );
+  const scenarioDefinition = scenarioCatalog.find(
+    (scenario) => scenario.id === cliOptions.scenarioId
+  );
+
+  if (!scenarioDefinition) {
+    throw new Error(`Unknown profiling scenario: ${cliOptions.scenarioId}`);
+  }
+
+  const effectiveConfig = {
+    ...scenarioDefinition.recommendedConfig,
+    ...(cliOptions.invincible === undefined
+      ? {}
+      : {
+          playerInvincible: cliOptions.invincible
+        }),
+    ...(cliOptions.spawnMode === undefined
+      ? {}
+      : {
+          spawnMode: cliOptions.spawnMode
+        })
+  };
+
+  await page.evaluate((nextConfig) => {
+    globalThis.window.__EMBERWAKE_PROFILING__?.setConfig?.(nextConfig);
+  }, effectiveConfig);
+
+  await page.getByLabel("Main menu").waitFor({
+    timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
+  });
+  await page.getByRole("button", {
+    name: /Start new game/i
+  }).click();
+  await page.getByRole("button", {
+    name: /^Begin$/i
+  }).click();
+
+  await page.locator('.app-shell[data-renderer-status="ready"]').waitFor({
+    timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
+  });
+  await page.waitForFunction(
+    () => Boolean(globalThis.window.__EMBERWAKE_PROFILING__?.startScenario),
+    undefined,
+    {
+      timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
+    }
+  );
+
+  const rendererMetrics = await page.evaluate(() => globalThis.window.__EMBERWAKE_RUNTIME_METRICS__);
+
+  if (
+    typeof rendererMetrics?.rendererReadyMs !== "number" ||
+    rendererMetrics.rendererReadyMs > runtimePerformanceBudget.runtimeActivation.maxRendererReadyMs
+  ) {
+    throw new Error(
+      `Renderer readiness exceeded budget. Actual: ${rendererMetrics?.rendererReadyMs ?? "missing"}ms, budget: ${runtimePerformanceBudget.runtimeActivation.maxRendererReadyMs}ms`
+    );
+  }
+
+  await page.evaluate(
+    ({ loop, scenarioId }) =>
+      globalThis.window.__EMBERWAKE_PROFILING__?.startScenario?.({ loop, scenarioId }),
+    {
+      loop: cliOptions.loop ?? scenarioDefinition.defaultLoop,
+      scenarioId: cliOptions.scenarioId
+    }
+  );
+
+  const startedAt = Date.now();
+  const samples = [];
+
+  while (Date.now() - startedAt < cliOptions.durationMs) {
+    samples.push(await readProfilingSnapshot(page));
+    await page.waitForTimeout(cliOptions.sampleIntervalMs);
+  }
+
+  samples.push(await readProfilingSnapshot(page));
+  await page.evaluate(() => {
+    globalThis.window.__EMBERWAKE_PROFILING__?.stopScenario?.();
+    globalThis.window.__EMBERWAKE_PROFILING__?.resetConfig?.();
+  });
+
+  const timestamp = new Date();
+  const timestampLabel = formatTimestampLabel(timestamp);
+  const baseArtifactName = `${cliOptions.scenarioId}-${timestampLabel}`;
+  const summary = summarizeSamples(samples);
+  const artifact = {
+    durationMs: cliOptions.durationMs,
+    endedAtIso: timestamp.toISOString(),
+    runtimeSummary: summary,
+    sampleCount: samples.length,
+    sampleIntervalMs: cliOptions.sampleIntervalMs,
+    scenario: {
+      ...scenarioDefinition,
+      appliedConfig: effectiveConfig,
+      loop: cliOptions.loop ?? scenarioDefinition.defaultLoop
+    },
+    samples,
+    startedAtIso: new Date(timestamp.getTime() - cliOptions.durationMs).toISOString()
+  };
+
+  await page.screenshot({
+    path: new URL(`${baseArtifactName}.png`, outputDirectory).pathname
+  });
+  await writeFile(
+    new URL(`${baseArtifactName}.json`, outputDirectory),
+    JSON.stringify(artifact, null, 2)
+  );
+  await writeFile(
+    new URL("latest.json", outputDirectory),
+    JSON.stringify(artifact, null, 2)
+  );
+} finally {
+  await browser?.close();
+
+  if (previewServer && !previewServer.killed) {
+    previewServer.kill("SIGTERM");
+  }
+}

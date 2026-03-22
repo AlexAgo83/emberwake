@@ -12,11 +12,20 @@ import { useRendererHealth } from "./hooks/useRendererHealth";
 import { useRuntimeSession } from "./hooks/useRuntimeSession";
 import { useShellPreferences } from "./hooks/useShellPreferences";
 import { deriveAppSceneId } from "./model/appScene";
-import type { RuntimeShellOutcome } from "./model/appScene";
+import type { AppSceneId, RuntimeShellOutcome } from "./model/appScene";
 import {
   pickRandomCharacterName,
   validateCharacterName
 } from "./model/characterName";
+import {
+  clearRuntimeProfilingBridge,
+  patchRuntimeProfilingBridge
+} from "./model/runtimeProfilingBridge";
+import {
+  defaultRuntimeProfilingConfigDraft,
+  resolveRuntimeProfilingConfigDraft
+} from "./model/runtimeProfilingConfig";
+import { listRuntimeProfilingScenarios } from "./model/runtimeProfilingScenarios";
 import type {
   DesktopControlBindings
 } from "../game/input/model/singleEntityControlContract";
@@ -40,6 +49,9 @@ export function AppShell() {
   );
   const [gameOverRecap, setGameOverRecap] = useState<GameOverRecap | null>(null);
   const [runtimeOutcome, setRuntimeOutcome] = useState<RuntimeShellOutcome | null>(null);
+  const [runtimeProfilingConfig, setRuntimeProfilingConfig] = useState(
+    defaultRuntimeProfilingConfigDraft
+  );
   useDocumentViewportLock();
   const { applyDesktopControlBindings, desktopControlBindings } = useDesktopControlBindings();
   const { canInstall, promptInstall } = useInstallPrompt();
@@ -110,6 +122,40 @@ export function AppShell() {
 
     previousActiveSceneRef.current = activeScene;
   }, [activeScene]);
+  useEffect(() => {
+    patchRuntimeProfilingBridge({
+      getConfig: () => runtimeProfilingConfig,
+      getShellStatus: () => ({
+        activeScene,
+        hasActiveSession: runtimeSession.hasActiveSession,
+        requestedScene
+      }),
+      listScenarios: () => listRuntimeProfilingScenarios(),
+      resetConfig: () => {
+        const nextConfig = resolveRuntimeProfilingConfigDraft();
+        setRuntimeProfilingConfig(nextConfig);
+        return nextConfig;
+      },
+      setConfig: (partialConfig) => {
+        const nextConfig = resolveRuntimeProfilingConfigDraft({
+          ...runtimeProfilingConfig,
+          ...partialConfig
+        });
+        setRuntimeProfilingConfig(nextConfig);
+        return nextConfig;
+      }
+    });
+
+    return () => {
+      clearRuntimeProfilingBridge([
+        "getConfig",
+        "getShellStatus",
+        "listScenarios",
+        "resetConfig",
+        "setConfig"
+      ]);
+    };
+  }, [activeScene, requestedScene, runtimeProfilingConfig, runtimeSession.hasActiveSession]);
   const {
     preferences,
     setDebugPanelVisible,
@@ -359,6 +405,7 @@ export function AppShell() {
             onShowPauseScene={showPauseScene}
             onShowSettingsScene={handleOpenSettings}
             preferences={preferences}
+            profilingConfig={runtimeProfilingConfig}
             rendererState={rendererState}
             runtimeSession={runtimeSession}
             sessionInitState={sessionInitState}

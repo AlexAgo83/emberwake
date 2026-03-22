@@ -10,6 +10,14 @@ declare global {
       attempt: number;
       bootStartedAtMs: number;
       diagnosticsVisible: boolean;
+      runtimeState: {
+        entityCount: number;
+        floatingDamageNumberCount: number;
+        hostileCount: number;
+        pickupCount: number;
+        playerHealth: number;
+        tick: number;
+      };
       frameLoop: {
         catchUpFramesRatio: number;
         droppedFrameTimeMsTotal: number;
@@ -50,6 +58,14 @@ type RuntimeTelemetryBridgeOptions = {
     runtimeScene: string;
     shellChrome: string;
   };
+  runtimeState: {
+    entityCount: number;
+    floatingDamageNumberCount: number;
+    hostileCount: number;
+    pickupCount: number;
+    playerHealth: number;
+    tick: number;
+  };
   rendererState: RendererState;
   runtime: {
     droppedFrameTimeMsTotal: number;
@@ -74,6 +90,7 @@ export function useRuntimeTelemetryBridge({
   activeScene,
   diagnosticsVisible,
   publication,
+  runtimeState,
   rendererState,
   runtime
 }: RuntimeTelemetryBridgeOptions) {
@@ -190,6 +207,7 @@ export function useRuntimeTelemetryBridge({
       attempt: rendererState.metrics.attempt,
       bootStartedAtMs: rendererState.metrics.bootStartedAtMs,
       diagnosticsVisible,
+      runtimeState,
       frameLoop: {
         catchUpFramesRatio: Number(catchUpFramesRatio.toFixed(4)),
         droppedFrameTimeMsTotal: Number(droppedFrameTimeMsTotalSinceReady.toFixed(2)),
@@ -219,7 +237,7 @@ export function useRuntimeTelemetryBridge({
       rendererReadyMs: rendererState.metrics.rendererReadyMs,
       status: rendererState.status
     };
-  }, [activeScene, diagnosticsVisible, publication, rendererState, runtime]);
+  }, [activeScene, diagnosticsVisible, publication, rendererState, runtime, runtimeState]);
 }
 
 export {};

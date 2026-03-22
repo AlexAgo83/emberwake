@@ -28,6 +28,10 @@ import {
   maintainNearbyPickupPopulation
 } from "@game/runtime/entitySimulationSpawn";
 import type { MovementSurfaceModifierKind } from "@game/content/world/worldData";
+import {
+  resolveRuntimeProfilingConfig,
+  type RuntimeProfilingConfig
+} from "@game/runtime/runtimeProfiling";
 
 export const entitySimulationContract = {
   fixedStepMs: 1000 / 60,
@@ -143,6 +147,7 @@ export type SimulationSpeedOption = (typeof entitySimulationContract.speedOption
 
 export type SimulationCommand = {
   controlState?: SingleEntityControlState;
+  profiling?: RuntimeProfilingConfig;
   worldSeed?: string;
 };
 
@@ -701,21 +706,30 @@ export const advanceSimulationState = (
   command: SimulationCommand = {}
 ): EntitySimulationState => {
   const worldSeed = command.worldSeed ?? simulationState.worldSeed;
+  const profiling = resolveRuntimeProfilingConfig(command.profiling);
   const nextTick = simulationState.tick + 1;
-  const pickupMaintainedState = maintainNearbyPickupPopulation({
-    canSpawnEntityAtPosition,
-    createPickupEntity,
-    entities: simulationState.entities,
-    nextPickupSequence: simulationState.nextPickupSequence,
-    tick: nextTick,
-    worldSeed
-  });
+  const pickupMaintainedState =
+    profiling.spawnMode === "no-spawn"
+      ? {
+          entities: [...simulationState.entities],
+          nextPickupSequence: simulationState.nextPickupSequence
+        }
+      : maintainNearbyPickupPopulation({
+          canSpawnEntityAtPosition,
+          createPickupEntity,
+          entities: simulationState.entities,
+          nextPickupSequence: simulationState.nextPickupSequence,
+          spawnMode: profiling.spawnMode,
+          tick: nextTick,
+          worldSeed
+        });
   const spawnMaintainedState = maintainLocalHostilePopulation({
     canSpawnEntityAtPosition,
     command,
     createHostileEntity,
     entities: pickupMaintainedState.entities,
     nextHostileSequence: simulationState.nextHostileSequence,
+    spawnMode: profiling.spawnMode,
     spawnHeadingMemoryTicks: entityCombatPresentationContract.spawnHeadingMemoryTicks,
     tick: nextTick,
     worldSeed
@@ -743,7 +757,8 @@ export const advanceSimulationState = (
   const combatResolvedState = resolveHostileContactDamage(
     attackResolvedState.entities,
     spawnMaintainedState.entities,
-    nextTick
+    nextTick,
+    profiling.playerInvincible
   );
   const pickupResolvedState = resolvePickupCollection({
     entities: (() => {
@@ -779,10 +794,21 @@ export const advanceSimulationState = (
     (entity) => entity.role === "player" || isAlive(entity)
   );
   const nextPlayerEntity = getPlayerEntity(survivingEntities);
+  const profiledPlayerEntity = profiling.playerInvincible
+    ? {
+        ...nextPlayerEntity,
+        combat: {
+          ...nextPlayerEntity.combat,
+          currentHealth: nextPlayerEntity.combat.maxHealth
+        }
+      }
+    : nextPlayerEntity;
 
   return {
-    entities: survivingEntities,
-    entity: nextPlayerEntity,
+    entities: survivingEntities.map((entity) =>
+      entity.id === profiledPlayerEntity.id ? profiledPlayerEntity : entity
+    ),
+    entity: profiledPlayerEntity,
     floatingDamageNumbers: pruneFloatingDamageNumbers(
       [
         ...simulationState.floatingDamageNumbers,

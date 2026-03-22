@@ -83,6 +83,14 @@ export {
   emberwakeRuntimeSessionSeedOptions
 } from "./runtime/emberwakeSession";
 export {
+  defaultRuntimeProfilingConfig,
+  resolveRuntimeProfilingConfig
+} from "./runtime/runtimeProfiling";
+export type {
+  ProfilingSpawnMode,
+  RuntimeProfilingConfig
+} from "./runtime/runtimeProfiling";
+export {
   advanceGameplaySystemsState,
   createGameplaySystemDiagnostics,
   createInitialGameplaySystemsState,

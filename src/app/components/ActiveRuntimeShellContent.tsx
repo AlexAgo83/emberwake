@@ -19,6 +19,7 @@ import { MobileVirtualStickOverlay } from "../../game/input/components/MobileVir
 import { useMobileVirtualStick } from "../../game/input/hooks/useMobileVirtualStick";
 import { useSingleEntityControl } from "../../game/input/hooks/useSingleEntityControl";
 import { createIdleMovementIntent } from "../../game/input/model/singleEntityControlContract";
+import { useRuntimeAutomation } from "../hooks/useRuntimeAutomation";
 import { useWorldInteractionDiagnostics } from "../../game/world/hooks/useWorldInteractionDiagnostics";
 import { useVisibleChunkSet } from "../../game/world/hooks/useVisibleChunkSet";
 import { appConfig } from "../../shared/config/appConfig";
@@ -33,6 +34,7 @@ import type { ReturnTypeUseLogicalViewportModel } from "../../game/debug/types";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
 import { createInitialEmberwakeGameState } from "@game";
 import type { EmberwakeGameState } from "@game";
+import type { RuntimeProfilingConfig } from "@game";
 
 type ActiveRuntimeShellContentProps = {
   activeScene: AppSceneId;
@@ -66,6 +68,7 @@ type ActiveRuntimeShellContentProps = {
   onShowPauseScene: () => void;
   onShowSettingsScene: () => void;
   preferences: ShellPreferences;
+  profilingConfig: RuntimeProfilingConfig;
   rendererState: RendererState;
   runtimeSession: RuntimeSessionState;
   sessionInitState?: EmberwakeGameState;
@@ -105,6 +108,7 @@ export function ActiveRuntimeShellContent({
   onShowPauseScene,
   onShowSettingsScene,
   preferences,
+  profilingConfig,
   rendererState,
   runtimeSession,
   sessionInitState,
@@ -132,25 +136,40 @@ export function ActiveRuntimeShellContent({
     viewRotationRadians: runtimeSession.cameraState.rotation,
     touchMovementIntent: mobileVirtualStick.movementIntent
   });
+  const runtimeAutomation = useRuntimeAutomation();
+  const effectiveRuntimeControlState = useMemo(
+    () =>
+      runtimeAutomation.movementIntent.isActive
+        ? {
+            ...runtimeControlState,
+            inputOwner: "player-entity" as const,
+            movementIntent: runtimeAutomation.movementIntent
+          }
+        : runtimeControlState,
+    [runtimeAutomation.movementIntent, runtimeControlState]
+  );
   const controlState = useMemo(
     () =>
       shellRequestedScene === "runtime"
-        ? runtimeControlState
+        ? effectiveRuntimeControlState
         : {
-            ...runtimeControlState,
+            ...effectiveRuntimeControlState,
             debugCameraModifierActive: false,
             inputOwner: "none" as const,
             movementIntent: createIdleMovementIntent("none")
           },
-    [runtimeControlState, shellRequestedScene]
+    [effectiveRuntimeControlState, shellRequestedScene]
   );
   const effectiveSessionInitState = useMemo(
-    () => sessionInitState ?? createInitialEmberwakeGameState(runtimeSession.worldSeed),
-    [runtimeSession.worldSeed, sessionInitState]
+    () =>
+      sessionInitState ??
+      createInitialEmberwakeGameState(runtimeSession.worldSeed, profilingConfig),
+    [profilingConfig, runtimeSession.worldSeed, sessionInitState]
   );
   const simulationState = useEntitySimulation({
     controlState,
     initialGameState: effectiveSessionInitState,
+    profilingConfig,
     sessionRevision: runtimeSession.sessionRevision
   });
   const runtimeOutcome = useMemo(() => {
@@ -278,7 +297,15 @@ export function ActiveRuntimeShellContent({
     diagnosticsVisible,
     publication: runtimePublicationContract.hotPathSurfaceModes,
     rendererState,
-    runtime: simulationState.runtime
+    runtime: simulationState.runtime,
+    runtimeState: {
+      entityCount: simulationState.entities.length,
+      floatingDamageNumberCount: simulationState.floatingDamageNumbers.length,
+      hostileCount: simulationState.entities.filter((entity) => entity.role === "hostile").length,
+      pickupCount: simulationState.entities.filter((entity) => entity.role === "pickup").length,
+      playerHealth: simulationState.entity.combat.currentHealth,
+      tick: simulationState.tick
+    }
   });
 
   useDebugPanelHotkey({

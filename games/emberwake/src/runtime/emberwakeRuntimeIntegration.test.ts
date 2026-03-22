@@ -9,6 +9,7 @@ import { createInitialEmberwakeGameState } from "./emberwakeGameModule";
 import { createGenericMoverEntity } from "../content/entities/entityContract";
 import { entityContract } from "../content/entities/entityContract";
 import { hostileCombatContract } from "./hostileCombatContract";
+import { resolveRuntimeProfilingConfig } from "./runtimeProfiling";
 
 const activeRightControlState = {
   controlledEntityId: entityContract.primaryEntityId,
@@ -278,6 +279,132 @@ describe("Emberwake runtime integration", () => {
     expect(nextState.simulation.entity.combat.currentHealth).toBe(0);
     expect(nextState.systems.outcome.kind).toBe("defeat");
     expect(nextState.systems.outcome.shellScene).toBe("defeat");
+  });
+
+  it("keeps the player alive under profiling invincibility", () => {
+    const state = createInitialEmberwakeGameState(
+      undefined,
+      resolveRuntimeProfilingConfig({
+        playerInvincible: true
+      })
+    );
+
+    state.simulation.entity = {
+      ...state.simulation.entity,
+      combat: {
+        ...state.simulation.entity.combat,
+        currentHealth: hostileCombatContract.hostile.contactDamage
+      }
+    };
+    state.simulation.entities = [
+      state.simulation.entity,
+      {
+        ...createGenericMoverEntity({
+          id: "entity:hostile:invincible-test",
+          visual: {
+            kind: "debug-sentinel",
+            tint: "#ff6d78"
+          },
+          worldPosition: {
+            x: -20,
+            y: 0
+          }
+        }),
+        combat: {
+          currentHealth: hostileCombatContract.hostile.maxHealth,
+          maxHealth: hostileCombatContract.hostile.maxHealth
+        },
+        contactDamageProfile: {
+          cooldownTicks: hostileCombatContract.hostile.contactDamageCooldownTicks,
+          damage: hostileCombatContract.hostile.contactDamage,
+          lastDamageTick: null
+        },
+        focusState: {
+          acquisitionRadiusWorldUnits: hostileCombatContract.hostile.acquisitionRadiusWorldUnits,
+          targetEntityId: null
+        },
+        movementSurfaceModifier: "normal",
+        role: "hostile" as const,
+        spawnedAtTick: 0,
+        state: "idle" as const,
+        velocity: {
+          x: 0,
+          y: 0
+        }
+      }
+    ];
+
+    const nextState = emberwakeGameModule.update({
+      action: {
+        controlState: {
+          controlledEntityId: entityContract.primaryEntityId,
+          debugCameraModifierActive: false,
+          inputOwner: "none",
+          movementIntent: {
+            isActive: false,
+            magnitude: 0,
+            source: "none",
+            vector: {
+              x: 0,
+              y: 0
+            }
+          }
+        }
+      },
+      context: undefined,
+      state,
+      timing: {
+        deltaMs: entitySimulationContract.fixedStepMs,
+        fixedStepMs: entitySimulationContract.fixedStepMs,
+        nowMs: entitySimulationContract.fixedStepMs,
+        tick: state.simulation.tick
+      }
+    });
+
+    expect(nextState.simulation.entity.combat.currentHealth).toBe(
+      nextState.simulation.entity.combat.maxHealth
+    );
+    expect(nextState.systems.outcome.kind).toBe("none");
+  });
+
+  it("suppresses local runtime spawning under the no-spawn profiling mode", () => {
+    const state = createInitialEmberwakeGameState(
+      undefined,
+      resolveRuntimeProfilingConfig({
+        spawnMode: "no-spawn"
+      })
+    );
+
+    const nextState = emberwakeGameModule.update({
+      action: {
+        controlState: {
+          controlledEntityId: entityContract.primaryEntityId,
+          debugCameraModifierActive: false,
+          inputOwner: "none",
+          movementIntent: {
+            isActive: false,
+            magnitude: 0,
+            source: "none",
+            vector: {
+              x: 0,
+              y: 0
+            }
+          }
+        }
+      },
+      context: undefined,
+      state,
+      timing: {
+        deltaMs: entitySimulationContract.fixedStepMs,
+        fixedStepMs: entitySimulationContract.fixedStepMs,
+        nowMs: entitySimulationContract.fixedStepMs,
+        tick: state.simulation.tick
+      }
+    });
+
+    expect(nextState.simulation.entities).toHaveLength(1);
+    expect(nextState.simulation.nextHostileSequence).toBe(0);
+    expect(nextState.simulation.nextPickupSequence).toBe(0);
   });
 
 });
