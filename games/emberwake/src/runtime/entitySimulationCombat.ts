@@ -2,17 +2,14 @@ import type { WorldPoint } from "@engine/geometry/primitives";
 import { sampleDeterministicSignature } from "@engine/world/worldContract";
 
 import { pickupContract, resolveXpRequiredForLevel } from "./pickupContract";
+import { systemTuning } from "@game/config/systemTuning";
 import type {
   FloatingDamageNumber,
   RunStats,
   SimulatedEntity
 } from "./entitySimulation";
 
-export const entityCombatPresentationContract = {
-  floatingDamageNumberLifetimeTicks: 24,
-  hitReactionVisibleTicks: 10,
-  spawnHeadingMemoryTicks: 18
-} as const;
+export const entityCombatPresentationContract = systemTuning.runtimePresentation;
 
 const isAlive = (entity: SimulatedEntity) => entity.combat.currentHealth > 0;
 

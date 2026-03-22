@@ -1,3 +1,5 @@
+import { systemTuning } from "@game/config/systemTuning";
+
 export const desktopControlDirections = ["up", "left", "down", "right"] as const;
 export const desktopCameraControlDirections = ["rotateLeft", "rotateRight"] as const;
 
@@ -33,7 +35,7 @@ export const normalizeKeyboardBindingKey = (key: string) =>
 
 export const singleEntityControlContract = {
   debugCameraModifierKey: "Shift",
-  desktopMoveSpeedWorldUnitsPerSecond: 240,
+  desktopMoveSpeedWorldUnitsPerSecond: systemTuning.input.desktopMoveSpeedWorldUnitsPerSecond,
   keyboardBindings: defaultDesktopControlBindings,
   ownership: {
     cameraDebug: "debug-camera",
@@ -48,8 +50,8 @@ export const singleEntityControlContract = {
     primaryInteraction: "steer-controlled-entity"
   },
   virtualStick: {
-    deadZonePixels: 20,
-    maxRadiusPixels: 88
+    deadZonePixels: systemTuning.input.virtualStick.deadZonePixels,
+    maxRadiusPixels: systemTuning.input.virtualStick.maxRadiusPixels
   }
 } as const;
 

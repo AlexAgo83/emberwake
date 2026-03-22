@@ -1,5 +1,3 @@
-export const logicalViewport = {
-  mobileWidth: 900,
-  mobileHeight: 1600,
-  breakpoint: 900
-} as const;
+import { systemTuning } from "@game/config/systemTuning";
+
+export const logicalViewport = systemTuning.viewport;

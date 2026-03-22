@@ -3,6 +3,7 @@ import { sampleDeterministicSignature } from "@engine/world/worldContract";
 
 import { hostileCombatContract } from "./hostileCombatContract";
 import { pickupContract } from "./pickupContract";
+import { gameplayTuning } from "@game/config/gameplayTuning";
 import type { SingleEntityControlState } from "@game/input/singleEntityControlContract";
 import type { SimulatedEntity, SimulatedPickupKind } from "./entitySimulation";
 
@@ -108,18 +109,7 @@ const sampleHostileSpawnPosition = ({
     tick
   });
   const sectorDefinitions =
-    preferredHeadingRadians === null
-      ? null
-      : [
-          { centerOffsetRadians: 0, widthRadians: (70 * Math.PI) / 180 },
-          { centerOffsetRadians: (55 * Math.PI) / 180, widthRadians: (42 * Math.PI) / 180 },
-          { centerOffsetRadians: (-55 * Math.PI) / 180, widthRadians: (42 * Math.PI) / 180 },
-          { centerOffsetRadians: (105 * Math.PI) / 180, widthRadians: (34 * Math.PI) / 180 },
-          { centerOffsetRadians: (-105 * Math.PI) / 180, widthRadians: (34 * Math.PI) / 180 },
-          { centerOffsetRadians: (145 * Math.PI) / 180, widthRadians: (26 * Math.PI) / 180 },
-          { centerOffsetRadians: (-145 * Math.PI) / 180, widthRadians: (26 * Math.PI) / 180 },
-          { centerOffsetRadians: Math.PI, widthRadians: (20 * Math.PI) / 180 }
-        ];
+    preferredHeadingRadians === null ? null : gameplayTuning.hostileSpawn.sectors;
   const sectorDefinition =
     sectorDefinitions?.[attempt % sectorDefinitions.length] ?? null;
   const angleRadians =
@@ -131,7 +121,11 @@ const sampleHostileSpawnPosition = ({
           sectorWidthRadians: sectorDefinition.widthRadians,
           signature: angleSignature
         });
-  const distanceRatio = 1.05 + (distanceSignature % 46) / 100;
+  const distanceRatioRange =
+    gameplayTuning.hostileSpawn.distanceRatioMax - gameplayTuning.hostileSpawn.distanceRatioMin;
+  const distanceRatio =
+    gameplayTuning.hostileSpawn.distanceRatioMin +
+    ((distanceSignature % 1000) / 999) * distanceRatioRange;
   const radialDistance =
     hostileCombatContract.hostile.safeSpawnDistanceWorldUnits * distanceRatio;
 

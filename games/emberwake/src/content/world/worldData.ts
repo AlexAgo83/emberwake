@@ -1,4 +1,5 @@
 import type { MapAssetId } from "@src/assets/assetCatalog";
+import { systemTuning } from "@game/config/systemTuning";
 
 export const terrainDefinitions = {
   ashfield: {
@@ -74,22 +75,17 @@ export const movementSurfaceModifierDefinitions = {
     accentColor: null,
     controlResponsiveness: 1,
     label: "Normal",
-    speedMultiplier: 1,
-    velocityRetainFactor: 0
+    ...systemTuning.movementSurfaceModifiers.normal
   },
   slippery: {
     accentColor: 0x8fd6ff,
-    controlResponsiveness: 0.14,
     label: "Slippery",
-    speedMultiplier: 1,
-    velocityRetainFactor: 0.96
+    ...systemTuning.movementSurfaceModifiers.slippery
   },
   slow: {
     accentColor: 0xffc36e,
-    controlResponsiveness: 1,
     label: "Slow",
-    speedMultiplier: 0.58,
-    velocityRetainFactor: 0
+    ...systemTuning.movementSurfaceModifiers.slow
   }
 } as const;
 

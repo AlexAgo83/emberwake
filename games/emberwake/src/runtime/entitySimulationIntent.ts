@@ -9,6 +9,7 @@ import {
 import type { SingleEntityControlState } from "@game/input/singleEntityControlContract";
 import { singleEntityControlContract } from "@game/input/singleEntityControlContract";
 import { obstacleDefinitions, sampleWorldTileLayers } from "@game/content/world/worldGeneration";
+import { systemTuning } from "@game/config/systemTuning";
 import { hostileCombatContract } from "./hostileCombatContract";
 import type { HostilePathfindingState, ScriptedPhase, SimulatedEntity } from "./entitySimulation";
 
@@ -104,12 +105,7 @@ const createEmptyHostilePathfindingState = (): HostilePathfindingState => ({
   targetTile: null
 });
 
-const pathfindingContract = {
-  maxExploredTilesPerSolve: 64,
-  recomputeCadenceTicks: 30,
-  searchRadiusInTiles: 12,
-  waypointAdvanceDistanceWorldUnits: worldContract.tileSizeInWorldUnits * 0.4
-} as const;
+const pathfindingContract = systemTuning.hostilePathfinding;
 
 const findBoundedPathTiles = ({
   startTile,

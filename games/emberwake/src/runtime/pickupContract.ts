@@ -1,30 +1,12 @@
-import { chunkWorldSize } from "@engine/world/worldContract";
+import { gameplayTuning } from "@game/config/gameplayTuning";
 
 export const pickupContract = {
-  crystal: {
-    enemyDropCount: 1,
-    xpValue: 25
-  },
-  gold: {
-    value: 1
-  },
-  healingKit: {
-    healRatio: 0.25,
-    spawnChancePercent: 20
-  },
-  progression: {
-    baseLevelXpRequired: 100,
-    levelXpStep: 50
-  },
-  pickup: {
-    despawnDistanceWorldUnits: chunkWorldSize * 2.8,
-    localPopulationCap: 4,
-    pickupRadiusWorldUnits: 22,
-    safeSpawnDistanceWorldUnits: chunkWorldSize * 0.45,
-    spawnAttemptCount: 8,
-    spawnCooldownTicks: 24
-  }
-} as const;
+  crystal: gameplayTuning.pickup.crystal,
+  gold: gameplayTuning.pickup.gold,
+  healingKit: gameplayTuning.pickup.healingKit,
+  pickup: gameplayTuning.pickup.spawn,
+  progression: gameplayTuning.progression
+};
 
 export const resolveXpRequiredForLevel = (level: number) =>
   pickupContract.progression.baseLevelXpRequired +

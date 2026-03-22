@@ -1,0 +1,63 @@
+{
+  "hostile": {
+    "acquisitionRadiusChunks": 1.8,
+    "contactDamage": 10,
+    "contactDamageCooldownTicks": 30,
+    "despawnDistanceChunks": 3.5,
+    "localPopulationCap": 20,
+    "maxHealth": 40,
+    "moveSpeedWorldUnitsPerSecond": 168,
+    "safeSpawnDistanceChunks": 0.9,
+    "spawnAttemptCount": 8,
+    "spawnCooldownTicks": 36
+  },
+  "hostileSpawn": {
+    "distanceRatioMax": 1.5,
+    "distanceRatioMin": 1.05,
+    "sectors": [
+      { "centerOffsetDegrees": 0, "widthDegrees": 70 },
+      { "centerOffsetDegrees": 55, "widthDegrees": 42 },
+      { "centerOffsetDegrees": -55, "widthDegrees": 42 },
+      { "centerOffsetDegrees": 105, "widthDegrees": 34 },
+      { "centerOffsetDegrees": -105, "widthDegrees": 34 },
+      { "centerOffsetDegrees": 145, "widthDegrees": 26 },
+      { "centerOffsetDegrees": -145, "widthDegrees": 26 },
+      { "centerOffsetDegrees": 180, "widthDegrees": 20 }
+    ]
+  },
+  "pickup": {
+    "crystal": {
+      "enemyDropCount": 1,
+      "xpValue": 25
+    },
+    "gold": {
+      "value": 1
+    },
+    "healingKit": {
+      "healRatio": 0.25,
+      "spawnChancePercent": 20
+    },
+    "spawn": {
+      "despawnDistanceChunks": 2.8,
+      "localPopulationCap": 4,
+      "pickupRadiusWorldUnits": 22,
+      "safeSpawnDistanceChunks": 0.45,
+      "spawnAttemptCount": 8,
+      "spawnCooldownTicks": 24
+    }
+  },
+  "player": {
+    "automaticConeAttack": {
+      "arcDegrees": 120,
+      "cooldownTicks": 18,
+      "damage": 20,
+      "rangeWorldUnits": 172,
+      "visibleTicks": 8
+    },
+    "maxHealth": 100
+  },
+  "progression": {
+    "baseLevelXpRequired": 100,
+    "levelXpStep": 50
+  }
+}

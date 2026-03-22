@@ -1,0 +1,42 @@
+{
+  "hostilePathfinding": {
+    "maxExploredTilesPerSolve": 64,
+    "recomputeCadenceTicks": 30,
+    "searchRadiusInTiles": 12,
+    "waypointAdvanceDistanceTiles": 0.4
+  },
+  "input": {
+    "desktopMoveSpeedWorldUnitsPerSecond": 240,
+    "virtualStick": {
+      "deadZonePixels": 20,
+      "maxRadiusPixels": 88
+    }
+  },
+  "movementSurfaceModifiers": {
+    "normal": {
+      "controlResponsiveness": 1,
+      "speedMultiplier": 1,
+      "velocityRetainFactor": 0
+    },
+    "slippery": {
+      "controlResponsiveness": 0.14,
+      "speedMultiplier": 1,
+      "velocityRetainFactor": 0.96
+    },
+    "slow": {
+      "controlResponsiveness": 1,
+      "speedMultiplier": 0.58,
+      "velocityRetainFactor": 0
+    }
+  },
+  "runtimePresentation": {
+    "floatingDamageNumberLifetimeTicks": 24,
+    "hitReactionVisibleTicks": 10,
+    "spawnHeadingMemoryTicks": 18
+  },
+  "viewport": {
+    "breakpoint": 900,
+    "mobileHeight": 1600,
+    "mobileWidth": 900
+  }
+}

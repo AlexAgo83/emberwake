@@ -25,6 +25,8 @@ export {
   createMovementIntent,
   singleEntityControlContract
 } from "./input/singleEntityControlContract";
+export { gameplayTuning } from "./config/gameplayTuning";
+export { systemTuning } from "./config/systemTuning";
 export type {
   EntitySimulationState,
   SimulatedEntity,
