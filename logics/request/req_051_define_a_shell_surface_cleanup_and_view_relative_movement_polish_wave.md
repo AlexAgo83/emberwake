@@ -1,6 +1,6 @@
 ## req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave - Define a shell-surface cleanup and view-relative movement polish wave
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: High

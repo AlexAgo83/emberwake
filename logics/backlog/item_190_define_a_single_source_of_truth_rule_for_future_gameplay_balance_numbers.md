@@ -1,9 +1,9 @@
 ## item_190_define_a_single_source_of_truth_rule_for_future_gameplay_balance_numbers - Define a single-source-of-truth rule for future gameplay balance numbers
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Low
 > Theme: Data
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

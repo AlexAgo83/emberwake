@@ -1,9 +1,9 @@
 ## item_185_define_command_deck_open_behavior_as_a_runtime_pause_trigger - Define command-deck-open behavior as a runtime pause trigger
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

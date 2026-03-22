@@ -1,9 +1,9 @@
 ## item_197_define_a_long_session_browser_profiling_runner_for_memory_and_runtime_metrics - Define a long-session browser profiling runner for memory and runtime metrics
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 99%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

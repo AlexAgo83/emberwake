@@ -1,9 +1,9 @@
 ## item_194_define_a_first_rollout_for_input_viewport_pathfinding_and_runtime_presentation_tuning - Define a first rollout for input, viewport, pathfinding, and runtime-presentation tuning
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

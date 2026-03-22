@@ -42,7 +42,7 @@ What `main` reflects today:
 
 - The project has moved beyond a navigation-only slice into a first playable survival/combat loop.
 - Runtime ownership is split between a React shell, reusable engine packages, a Pixi adapter, and Emberwake-specific gameplay modules.
-- The latest wave cleaned shell-facing copy and changelog rendering, made desktop movement view-relative under camera rotation, and externalized retunable gameplay/system constants into validated JSON contracts.
+- The latest wave cleaned shell-facing copy and changelog rendering, kept the `Changelogs` back action visible on constrained viewports, made desktop movement view-relative under camera rotation, and externalized retunable gameplay/system constants into validated JSON contracts.
 - The repo now also includes a scripted long-session profiling harness with scenario-driven player automation, invincibility/no-death support, and stable profiling artifacts under `output/playwright/long-session/`.
 
 ```mermaid

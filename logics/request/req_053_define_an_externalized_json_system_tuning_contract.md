@@ -1,6 +1,6 @@
 ## req_053_define_an_externalized_json_system_tuning_contract - Define an externalized JSON system-tuning contract
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
 > Complexity: Medium

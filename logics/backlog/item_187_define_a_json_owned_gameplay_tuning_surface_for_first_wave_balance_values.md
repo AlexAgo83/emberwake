@@ -1,9 +1,9 @@
 ## item_187_define_a_json_owned_gameplay_tuning_surface_for_first_wave_balance_values - Define a JSON-owned gameplay-tuning surface for first-wave balance values
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 99%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

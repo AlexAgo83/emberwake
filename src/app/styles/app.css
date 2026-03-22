@@ -87,7 +87,7 @@
   width: min(42rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
   max-height: min(42rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 5rem));
   display: grid;
-  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   overflow: hidden;
 }
 

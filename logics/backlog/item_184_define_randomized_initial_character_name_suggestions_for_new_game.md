@@ -1,9 +1,9 @@
 ## item_184_define_randomized_initial_character_name_suggestions_for_new_game - Define randomized initial character-name suggestions for new game
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Low
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

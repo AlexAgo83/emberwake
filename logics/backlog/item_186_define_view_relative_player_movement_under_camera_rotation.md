@@ -1,9 +1,9 @@
 ## item_186_define_view_relative_player_movement_under_camera_rotation - Define view-relative player movement under camera rotation
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

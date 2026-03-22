@@ -2,7 +2,7 @@
 > From version: 0.3.1
 > Status: Done
 > Understanding: 100%
-> Confidence: 99%
+> Confidence: 100%
 > Progress: 100%
 > Complexity: High
 > Theme: Architecture
@@ -13,6 +13,7 @@
 - Related request(s): `req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave`, `req_052_define_an_externalized_json_gameplay_tuning_contract`, `req_053_define_an_externalized_json_system_tuning_contract`.
 - Related architecture decision(s): `adr_036_externalize_retunable_gameplay_and_system_tuning_as_validated_json_contracts`.
 - The repository now has a stronger shell flow, a broader combat/runtime loop, and explicit tuning-contract direction, but the next wave still needs to remove leftover shell residue, tighten runtime control feel, and establish the first concrete gameplay/system tuning contracts so iteration stops depending on code search.
+- Post-wave follow-up: the `Changelogs` surface now keeps its `Back to menu` action visible on constrained viewports after correcting the internal panel grid layout.
 
 # Dependencies
 - Blocking: `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave`, `task_044_orchestrate_main_menu_polish_and_first_crystal_progression_wave`.
@@ -49,6 +50,7 @@ flowchart TD
 - `npm run ci`
 - `npm run test:browser:smoke`
 - `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`
+- Manual constrained-viewport verification of `Changelogs` confirms the `Back to menu` action remains visible after the layout correction.
 
 # Definition of Done (DoD)
 - [x] Covered backlog items are implemented or explicitly split further with updated traceability.

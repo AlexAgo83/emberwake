@@ -1,6 +1,6 @@
 ## req_054_define_a_scripted_long_session_runtime_profiling_and_player_simulation_harness - Define a scripted long-session runtime profiling and player-simulation harness
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 99%
 > Confidence: 98%
 > Complexity: High

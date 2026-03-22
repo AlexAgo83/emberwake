@@ -1,9 +1,9 @@
 ## item_181_define_a_cleaner_main_menu_surface_without_meta_or_session_residue - Define a cleaner main-menu surface without meta or session residue
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

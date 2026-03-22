@@ -1,9 +1,9 @@
 ## item_182_define_stateful_apply_revert_and_reset_action_rules_for_settings_controls - Define stateful apply, revert, and reset action rules for settings controls
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

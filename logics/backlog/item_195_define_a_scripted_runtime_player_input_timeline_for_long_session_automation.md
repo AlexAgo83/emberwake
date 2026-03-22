@@ -1,9 +1,9 @@
 ## item_195_define_a_scripted_runtime_player_input_timeline_for_long_session_automation - Define a scripted runtime player-input timeline for long-session automation
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

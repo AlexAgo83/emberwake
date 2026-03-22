@@ -1,9 +1,9 @@
 ## item_183_define_a_structured_markdown_rendering_posture_for_shell_changelogs - Define a structured markdown-rendering posture for shell changelogs
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

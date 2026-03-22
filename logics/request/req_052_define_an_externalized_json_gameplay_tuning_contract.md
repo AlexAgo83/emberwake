@@ -1,6 +1,6 @@
 ## req_052_define_an_externalized_json_gameplay_tuning_contract - Define an externalized JSON gameplay-tuning contract
 > From version: 0.3.1
-> Status: Draft
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
 > Complexity: Medium
