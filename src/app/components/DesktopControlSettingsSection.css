@@ -17,8 +17,8 @@
 .settings-controls__binding[data-capture="true"]{border-color:rgba(76,226,255,.58);color:var(--emberwake-accent-cold)}
 .settings-controls__binding[data-conflict="true"]{border-color:rgba(255,155,142,.6);color:#ffb0a7}
 .settings-controls__actions{display:grid;gap:.55rem}
-.settings-controls__actions-secondary{gap:.5rem}
-.settings-controls__apply{width:fit-content;min-width:12rem}
+.settings-controls__actions-secondary{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.5rem}
+.settings-controls__actions-secondary .shell-control,.settings-controls__apply{width:100%}
 
 @media (min-width: 860px){
   .settings-controls__grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}

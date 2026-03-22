@@ -3,14 +3,24 @@ import { describe, expect, it } from "vitest";
 import {
   characterNameMaxLength,
   characterNameMinLength,
+  characterNameSuggestions,
   defaultCharacterName,
   normalizeCharacterName,
+  pickRandomCharacterName,
   validateCharacterName
 } from "./characterName";
 
 describe("characterName", () => {
-  it("keeps one stable default name for first entry", () => {
+  it("keeps a stable fallback name when no suggestion is available", () => {
     expect(defaultCharacterName).toBe("Wanderer");
+  });
+
+  it("exposes curated random suggestions and avoids repeating the current draft when possible", () => {
+    expect(characterNameSuggestions.length).toBeGreaterThan(3);
+    expect(pickRandomCharacterName(0)).toBe(characterNameSuggestions[0]);
+    expect(pickRandomCharacterName(0, characterNameSuggestions[0])).toBe(
+      characterNameSuggestions[1]
+    );
   });
 
   it("trims and collapses repeated whitespace", () => {

@@ -129,6 +129,7 @@ export function ActiveRuntimeShellContent({
   const runtimeControlState = useSingleEntityControl({
     controlledEntityId: entityContract.primaryEntityId,
     keyboardBindings: desktopControlBindings,
+    viewRotationRadians: runtimeSession.cameraState.rotation,
     touchMovementIntent: mobileVirtualStick.movementIntent
   });
   const controlState = useMemo(
@@ -302,7 +303,7 @@ export function ActiveRuntimeShellContent({
       return;
     }
 
-    if (activeScene === "runtime") {
+    if (activeScene === "runtime" && !isMenuOpen) {
       simulationState.controls.resume();
       onSetLastMetaScene("none");
       return;
@@ -310,7 +311,7 @@ export function ActiveRuntimeShellContent({
 
     simulationState.controls.pause();
     onSetLastMetaScene("none");
-  }, [activeScene, onSetLastMetaScene, simulationState.controls]);
+  }, [activeScene, isMenuOpen, onSetLastMetaScene, simulationState.controls]);
 
   const selectedEntityChunk = worldPointToChunkCoordinate(entityWorld.selectedEntity.worldPosition);
   const playerHudVisible =

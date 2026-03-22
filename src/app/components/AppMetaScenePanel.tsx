@@ -3,7 +3,8 @@ import { lazy, memo, Suspense } from "react";
 
 import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
 import { releaseChangelogEntries } from "../model/releaseChangelogs";
-import { characterNameMaxLength } from "../model/characterName";
+import { characterNameMaxLength, defaultCharacterName } from "../model/characterName";
+import { renderChangelogMarkdown } from "../model/changelogMarkdown";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
 import { appConfig } from "../../shared/config/appConfig";
 
@@ -109,13 +110,11 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             : "Victory";
   const detail =
     scene === "main-menu"
-      ? canResumeSession
-        ? "Resume the run, start a new one, or open settings."
-        : "Start a new run or open settings."
+      ? ""
       : scene === "new-game"
         ? "Name your character before the run starts."
         : scene === "changelogs"
-          ? "Read the latest curated Emberwake release notes without leaving the shell."
+          ? "Read the latest curated Emberwake release notes."
         : scene === "settings"
           ? ""
           : scene === "defeat" && gameOverRecap
@@ -188,17 +187,10 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   return (
     <>
       <aside className="app-meta-scene" aria-label={title} data-scene={scene}>
-        <p className="app-meta-scene__eyebrow">Meta flow</p>
         <h2 className="app-meta-scene__title">{title}</h2>
         {detail ? <p className="app-meta-scene__detail">{detail}</p> : null}
         {scene === "main-menu" ? (
           <>
-            <dl className="app-meta-scene__facts">
-              <div>
-                <dt>Session</dt>
-                <dd>{canResumeSession ? `Active run / ${playerName}` : "No active run"}</dd>
-              </div>
-            </dl>
             <div className="app-meta-scene__actions">
               {canResumeSession ? (
                 <button className="shell-control shell-control--button" onClick={onResumeRuntime} type="button">
@@ -240,7 +232,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                   onChange={(event) => {
                     onCharacterNameChange(event.target.value);
                   }}
-                  placeholder="Wanderer"
                   type="text"
                   value={pendingCharacterName}
                 />
@@ -274,15 +265,15 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               <>
                 <div className="app-meta-scene__changelog-list">
                   {releaseChangelogEntries.map((entry) => {
-                    const formattedBody = entry.content.replace(/^#\s+.+$/m, "").trim();
-
                     return (
                       <article className="app-meta-scene__changelog-card" key={entry.slug}>
                         <div className="app-meta-scene__changelog-card-header">
                           <h3 className="app-meta-scene__changelog-version">{entry.version}</h3>
                           <span className="app-meta-scene__changelog-tag">Release notes</span>
                         </div>
-                        <pre className="app-meta-scene__changelog-content">{formattedBody}</pre>
+                        <div className="app-meta-scene__changelog-content">
+                          {renderChangelogMarkdown(entry.content)}
+                        </div>
                       </article>
                     );
                   })}
@@ -324,7 +315,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 <dl className="app-meta-scene__facts">
                   <div>
                     <dt>Session</dt>
-                    <dd>{gameOverRecap?.playerName || playerName || "Wanderer"}</dd>
+                    <dd>{gameOverRecap?.playerName || playerName || defaultCharacterName}</dd>
                   </div>
                   <div>
                     <dt>Survived</dt>

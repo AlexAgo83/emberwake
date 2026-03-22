@@ -55,4 +55,16 @@ describe("singleEntityControlContract", () => {
       }
     });
   });
+
+  it("rotates keyboard movement into world space using the current view rotation", () => {
+    const movementIntent = createKeyboardMovementIntent(
+      new Set([singleEntityControlContract.keyboardBindings.right[0]]),
+      singleEntityControlContract.keyboardBindings,
+      Math.PI / 2
+    );
+
+    expect(movementIntent.isActive).toBe(true);
+    expect(movementIntent.vector.x).toBeCloseTo(0, 5);
+    expect(movementIntent.vector.y).toBeCloseTo(-1, 5);
+  });
 });

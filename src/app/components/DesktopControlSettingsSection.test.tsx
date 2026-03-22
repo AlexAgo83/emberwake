@@ -87,4 +87,23 @@ describe("DesktopControlSettingsSection", () => {
       up: ["w", "ArrowUp"]
     });
   });
+
+  it("keeps reset available while revert and apply only activate for unsaved changes", () => {
+    render(
+      <DesktopControlSettingsSection
+        bindings={createDefaultDesktopControlBindings()}
+        onApply={vi.fn()}
+      />
+    );
+
+    expect(screen.getByRole("button", { name: /Revert/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Apply controls/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Reset defaults/i })).toBeEnabled();
+
+    fireEvent.click(screen.getByRole("button", { name: "W" }));
+    fireEvent.keyDown(window, { key: "i" });
+
+    expect(screen.getByRole("button", { name: /Revert/i })).toBeEnabled();
+    expect(screen.getByRole("button", { name: /Apply controls/i })).toBeEnabled();
+  });
 });

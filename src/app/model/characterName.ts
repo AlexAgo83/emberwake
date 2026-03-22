@@ -1,6 +1,20 @@
 export const defaultCharacterName = "Wanderer";
 export const characterNameMinLength = 3;
 export const characterNameMaxLength = 20;
+export const characterNameSuggestions = [
+  "Ash Voss",
+  "Cinder Vale",
+  "Ember Rook",
+  "Lena Voss",
+  "Kael Rune",
+  "Nyra Flint",
+  "Orin Vale",
+  "Sable Drift",
+  "Tarin Ash",
+  "Veya Rune",
+  "Iris Coal",
+  "Marek Dusk"
+] as const;
 
 const allowedCharacterPattern = /^[\p{L}\d' -]+$/u;
 const numericOnlyPattern = /^\d+$/u;
@@ -59,4 +73,30 @@ export const validateCharacterName = (rawValue: string) => {
     isValid: true,
     normalizedValue
   } as const;
+};
+
+export const pickRandomCharacterName = (
+  randomValue: number = Math.random(),
+  previousName?: string
+) => {
+  if (characterNameSuggestions.length === 0) {
+    return defaultCharacterName;
+  }
+
+  const boundedRandomValue = Math.max(0, Math.min(0.999999, randomValue));
+  const initialIndex = Math.floor(boundedRandomValue * characterNameSuggestions.length);
+  const initialSuggestion = characterNameSuggestions[initialIndex] ?? defaultCharacterName;
+
+  if (
+    characterNameSuggestions.length === 1 ||
+    previousName === undefined ||
+    initialSuggestion !== previousName
+  ) {
+    return initialSuggestion;
+  }
+
+  return (
+    characterNameSuggestions[(initialIndex + 1) % characterNameSuggestions.length] ??
+    defaultCharacterName
+  );
 };

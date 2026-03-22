@@ -51,6 +51,9 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByRole("button", { name: /Start new game/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Load game/i })).toBeDisabled();
     expect(screen.getByRole("button", { name: /Changelogs/i })).toBeInTheDocument();
+    expect(screen.queryByText(/Meta flow/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Session$/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Resume the run, start a new one/i)).not.toBeInTheDocument();
     expect(screen.queryByText("No save available")).not.toBeInTheDocument();
     expect(screen.queryByText("Ownership")).not.toBeInTheDocument();
     expect(loadGameIndex).toBeGreaterThan(-1);
@@ -134,8 +137,10 @@ describe("AppMetaScenePanel", () => {
     render(<AppMetaScenePanel {...props} />);
 
     expect(screen.getByLabelText("Changelogs")).toBeInTheDocument();
-    expect(screen.getByText("0.3.1")).toBeInTheDocument();
-    expect(screen.getByText(/playable survival slice/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "0.3.1" })).toBeInTheDocument();
+    expect(screen.getAllByRole("heading", { name: /Highlights/i }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("heading", { name: /Technical Notes/i }).length).toBeGreaterThan(0);
+    expect(screen.queryByText(/without leaving the shell/i)).not.toBeInTheDocument();
 
     fireEvent.keyDown(window, { key: "Escape" });
 

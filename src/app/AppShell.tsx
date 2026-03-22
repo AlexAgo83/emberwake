@@ -13,7 +13,10 @@ import { useRuntimeSession } from "./hooks/useRuntimeSession";
 import { useShellPreferences } from "./hooks/useShellPreferences";
 import { deriveAppSceneId } from "./model/appScene";
 import type { RuntimeShellOutcome } from "./model/appScene";
-import { defaultCharacterName, validateCharacterName } from "./model/characterName";
+import {
+  pickRandomCharacterName,
+  validateCharacterName
+} from "./model/characterName";
 import type {
   DesktopControlBindings
 } from "../game/input/model/singleEntityControlContract";
@@ -31,7 +34,10 @@ const LazyActiveRuntimeShellContent = lazy(async () => {
 export function AppShell() {
   const shellRef = useRef<HTMLElement>(null);
   const latestGameStateRef = useRef<EmberwakeGameState | null>(null);
-  const [pendingCharacterName, setPendingCharacterName] = useState(defaultCharacterName);
+  const previousActiveSceneRef = useRef<AppSceneId>("main-menu");
+  const [pendingCharacterName, setPendingCharacterName] = useState(() =>
+    pickRandomCharacterName()
+  );
   const [gameOverRecap, setGameOverRecap] = useState<GameOverRecap | null>(null);
   const [runtimeOutcome, setRuntimeOutcome] = useState<RuntimeShellOutcome | null>(null);
   useDocumentViewportLock();
@@ -94,6 +100,16 @@ export function AppShell() {
       }),
     [rendererState.status, requestedScene, runtimeOutcome]
   );
+  useEffect(() => {
+    if (
+      activeScene === "new-game" &&
+      previousActiveSceneRef.current !== "new-game"
+    ) {
+      setPendingCharacterName((currentName) => pickRandomCharacterName(Math.random(), currentName));
+    }
+
+    previousActiveSceneRef.current = activeScene;
+  }, [activeScene]);
   const {
     preferences,
     setDebugPanelVisible,

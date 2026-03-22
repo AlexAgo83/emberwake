@@ -104,22 +104,12 @@
     rgba(10, 12, 19, 0.94);
 }
 
-.app-meta-scene__eyebrow,
 .app-meta-scene__title,
 .app-meta-scene__detail {
   margin: 0;
 }
 
-.app-meta-scene__eyebrow {
-  color: var(--emberwake-copy-dim);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
 .app-meta-scene__title {
-  margin-top: 0.45rem;
   color: var(--emberwake-copy);
   font-size: 1.35rem;
   font-weight: 700;
@@ -261,12 +251,48 @@
 }
 
 .app-meta-scene__changelog-content {
-  margin: 0;
+  display: grid;
+  gap: 0.72rem;
   color: var(--emberwake-copy-dim);
-  font-family: inherit;
   font-size: 0.76rem;
   line-height: 1.55;
-  white-space: pre-wrap;
+}
+
+.app-meta-scene__markdown-heading,
+.app-meta-scene__markdown-paragraph,
+.app-meta-scene__markdown-list {
+  margin: 0;
+}
+
+.app-meta-scene__markdown-heading {
+  color: var(--emberwake-copy);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-meta-scene__markdown-list {
+  display: grid;
+  gap: 0.42rem;
+  padding-left: 1rem;
+}
+
+.app-meta-scene__markdown-list-item::marker {
+  color: var(--emberwake-accent-warm);
+}
+
+.app-meta-scene__markdown-code {
+  padding: 0.08rem 0.28rem;
+  border-radius: 0.3rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--emberwake-copy);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.app-meta-scene__markdown-link {
+  color: var(--emberwake-accent-cold);
+  text-underline-offset: 0.16rem;
 }
 
 .app-meta-scene__viewport-footer {
@@ -274,11 +300,7 @@
   left: 50%;
   bottom: calc(var(--shell-offset-bottom) + 0.2rem);
   z-index: 4;
-  padding: 0.45rem 0.8rem;
-  border: 1px solid rgba(76, 226, 255, 0.12);
-  border-radius: 999px;
-  background: rgba(8, 14, 22, 0.48);
-  box-shadow: 0 12px 28px rgba(4, 8, 12, 0.18);
+  padding: 0.2rem 0.35rem;
   color: var(--emberwake-copy-dim);
   font-size: 0.72rem;
   font-weight: 700;
@@ -288,16 +310,14 @@
   transform: translateX(-50%);
   transition:
     color 160ms ease,
-    border-color 160ms ease,
-    background-color 160ms ease;
+    text-decoration-color 160ms ease;
   pointer-events: auto;
 }
 
 .app-meta-scene__viewport-footer:hover,
 .app-meta-scene__viewport-footer:focus-visible {
-  border-color: rgba(76, 226, 255, 0.26);
-  background: rgba(12, 20, 30, 0.7);
   color: var(--emberwake-copy);
+  text-decoration: underline;
 }
 
 

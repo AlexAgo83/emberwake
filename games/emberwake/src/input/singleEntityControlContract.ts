@@ -128,7 +128,8 @@ const keyboardAxis = (
 
 export const createKeyboardMovementIntent = (
   pressedKeys: ReadonlySet<string>,
-  keyboardBindings: DesktopControlBindings = singleEntityControlContract.keyboardBindings
+  keyboardBindings: DesktopControlBindings = singleEntityControlContract.keyboardBindings,
+  viewRotationRadians = 0
 ): MovementIntent => {
   const horizontal = keyboardAxis(
     pressedKeys,
@@ -141,5 +142,12 @@ export const createKeyboardMovementIntent = (
     keyboardBindings.down
   );
 
-  return createMovementIntent(horizontal, vertical, "keyboard");
+  const cosine = Math.cos(viewRotationRadians);
+  const sine = Math.sin(viewRotationRadians);
+
+  return createMovementIntent(
+    cosine * horizontal + sine * vertical,
+    -sine * horizontal + cosine * vertical,
+    "keyboard"
+  );
 };

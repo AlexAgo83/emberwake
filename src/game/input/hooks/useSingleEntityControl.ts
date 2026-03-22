@@ -15,12 +15,14 @@ import type {
 type UseSingleEntityControlOptions = {
   controlledEntityId: string;
   keyboardBindings?: DesktopControlBindings;
+  viewRotationRadians?: number;
   touchMovementIntent?: MovementIntent;
 };
 
 export function useSingleEntityControl({
   controlledEntityId,
   keyboardBindings = singleEntityControlContract.keyboardBindings,
+  viewRotationRadians = 0,
   touchMovementIntent = createIdleMovementIntent("touch")
 }: UseSingleEntityControlOptions): SingleEntityControlState {
   const [debugCameraModifierActive, setDebugCameraModifierActive] = useState(false);
@@ -78,7 +80,11 @@ export function useSingleEntityControl({
   }, []);
 
   return useMemo(() => {
-    const keyboardMovementIntent = createKeyboardMovementIntent(pressedKeys, keyboardBindings);
+    const keyboardMovementIntent = createKeyboardMovementIntent(
+      pressedKeys,
+      keyboardBindings,
+      viewRotationRadians
+    );
     const movementIntent = touchMovementIntent.isActive
       ? touchMovementIntent
       : keyboardMovementIntent;
@@ -94,5 +100,12 @@ export function useSingleEntityControl({
       inputOwner,
       movementIntent
     };
-  }, [controlledEntityId, debugCameraModifierActive, keyboardBindings, pressedKeys, touchMovementIntent]);
+  }, [
+    controlledEntityId,
+    debugCameraModifierActive,
+    keyboardBindings,
+    pressedKeys,
+    touchMovementIntent,
+    viewRotationRadians
+  ]);
 }
