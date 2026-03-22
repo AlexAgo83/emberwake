@@ -55,7 +55,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.queryByText("Ownership")).not.toBeInTheDocument();
     expect(loadGameIndex).toBeGreaterThan(-1);
     expect(newGameIndex).toBeGreaterThan(loadGameIndex);
-    expect(screen.getByRole("link", { name: /Emberwake v0\.3\.0/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Emberwake v0\.3\.1/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /Settings/i }));
     expect(props.onOpenSettings).toHaveBeenCalledTimes(1);
@@ -134,7 +134,7 @@ describe("AppMetaScenePanel", () => {
     render(<AppMetaScenePanel {...props} />);
 
     expect(screen.getByLabelText("Changelogs")).toBeInTheDocument();
-    expect(screen.getByText("0.3.0")).toBeInTheDocument();
+    expect(screen.getByText("0.3.1")).toBeInTheDocument();
     expect(screen.getByText(/playable survival slice/i)).toBeInTheDocument();
 
     fireEvent.keyDown(window, { key: "Escape" });
