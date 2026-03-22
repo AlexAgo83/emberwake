@@ -102,6 +102,11 @@ describe("AppMetaScenePanel", () => {
 
     expect(screen.getByLabelText("New game")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Begin/i })).toBeDisabled();
+    const actionButtons = screen.getAllByRole("button");
+    const beginIndex = actionButtons.findIndex((button) => button.textContent?.match(/^Begin$/i));
+    const backIndex = actionButtons.findIndex((button) => button.textContent?.match(/Back to menu/i));
+    expect(beginIndex).toBeGreaterThan(-1);
+    expect(backIndex).toBeGreaterThan(beginIndex);
     fireEvent.change(screen.getByLabelText(/Character name/i), {
       target: { value: "Ash" }
     });

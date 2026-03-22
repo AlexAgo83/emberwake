@@ -254,17 +254,17 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 </p>
               ) : null}
             </div>
-            <div className="app-meta-scene__actions">
-              <button className="shell-control shell-control--button" onClick={onReturnToMainMenu} type="button">
-                Back to menu
-              </button>
+            <div className="app-meta-scene__actions app-meta-scene__actions--new-game">
               <button
-                className="shell-control shell-control--button"
+                className="shell-control shell-control--button shell-control--button-primary"
                 disabled={characterNameError !== null}
                 onClick={onBeginNewGame}
                 type="button"
               >
                 Begin
+              </button>
+              <button className="shell-control shell-control--button" onClick={onReturnToMainMenu} type="button">
+                Back to menu
               </button>
             </div>
           </>

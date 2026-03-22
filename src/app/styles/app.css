@@ -26,19 +26,19 @@
 
 .app-shell::before {
   background:
-    radial-gradient(circle at 18% 24%, rgba(255, 164, 94, 0.18), transparent 22%),
-    radial-gradient(circle at 74% 18%, rgba(87, 206, 255, 0.16), transparent 24%),
-    radial-gradient(circle at 54% 78%, rgba(255, 119, 182, 0.12), transparent 28%);
-  animation: app-shell-main-menu-drift 18s linear infinite;
+    radial-gradient(circle at 18% 24%, rgba(255, 164, 94, 0.12), transparent 24%),
+    radial-gradient(circle at 74% 18%, rgba(87, 206, 255, 0.1), transparent 28%),
+    radial-gradient(circle at 54% 78%, rgba(255, 119, 182, 0.08), transparent 34%);
+  animation: app-shell-main-menu-drift 24s ease-in-out infinite;
 }
 
 .app-shell::after {
   background:
-    linear-gradient(90deg, transparent 0%, rgba(255, 184, 96, 0.08) 48%, transparent 100%),
-    linear-gradient(0deg, transparent 0%, rgba(94, 216, 255, 0.06) 52%, transparent 100%);
-  background-size: 18rem 18rem, 20rem 20rem;
+    linear-gradient(135deg, rgba(255, 179, 92, 0.05), transparent 38%),
+    linear-gradient(315deg, rgba(94, 216, 255, 0.04), transparent 42%);
+  background-size: 100% 100%, 100% 100%;
   mix-blend-mode: screen;
-  animation: app-shell-main-menu-grid 12s linear infinite;
+  animation: app-shell-main-menu-breathe 14s ease-in-out infinite;
 }
 
 .app-shell[data-scene="main-menu"]::before,
@@ -87,6 +87,8 @@
   width: min(42rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
   max-height: min(42rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 5rem));
   display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  overflow: hidden;
 }
 
 .app-meta-scene[data-scene="settings"] {
@@ -97,30 +99,9 @@
 
 .app-meta-scene[data-scene="main-menu"] {
   overflow: hidden;
-}
-
-.app-meta-scene[data-scene="main-menu"]::before {
-  content: "";
-  position: absolute;
-  inset: -28% auto auto -18%;
-  width: 16rem;
-  height: 16rem;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(255, 162, 88, 0.24), transparent 68%);
-  opacity: 0.9;
-  pointer-events: none;
-}
-
-.app-meta-scene[data-scene="main-menu"]::after {
-  content: "";
-  position: absolute;
-  inset: auto -12% -26% auto;
-  width: 17rem;
-  height: 17rem;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(86, 214, 255, 0.18), transparent 66%);
-  opacity: 0.9;
-  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(16, 11, 28, 0.97), rgba(8, 14, 22, 0.95)),
+    rgba(10, 12, 19, 0.94);
 }
 
 .app-meta-scene__eyebrow,
@@ -189,6 +170,11 @@
   margin-top: 1rem;
 }
 
+.app-meta-scene__actions--new-game {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: stretch;
+}
+
 .app-meta-scene__field {
   display: grid;
   gap: 0.35rem;
@@ -230,8 +216,10 @@
   display: grid;
   gap: 0.8rem;
   margin-top: 1rem;
+  min-height: 0;
   overflow: auto;
   padding-right: 0.2rem;
+  scrollbar-gutter: stable;
 }
 
 .app-meta-scene__changelog-card {
@@ -337,22 +325,28 @@
 
 @keyframes app-shell-main-menu-drift {
   0% {
-    transform: translate3d(-2%, -1%, 0) scale(1);
+    transform: translate3d(-1%, -0.6%, 0) scale(1);
   }
   50% {
-    transform: translate3d(2%, 1.5%, 0) scale(1.04);
+    transform: translate3d(1%, 0.8%, 0) scale(1.02);
   }
   100% {
-    transform: translate3d(-2%, -1%, 0) scale(1);
+    transform: translate3d(-1%, -0.6%, 0) scale(1);
   }
 }
 
-@keyframes app-shell-main-menu-grid {
+@keyframes app-shell-main-menu-breathe {
   0% {
-    transform: translate3d(0, 0, 0);
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.04);
   }
   100% {
-    transform: translate3d(2rem, 1.4rem, 0);
+    opacity: 0.5;
+    transform: scale(1);
   }
 }
 
@@ -734,6 +728,30 @@
   outline-offset: 2px;
 }
 
+.shell-control--button-primary {
+  justify-content: center;
+  border-color: rgba(255, 179, 92, 0.7);
+  background:
+    linear-gradient(180deg, rgba(62, 28, 11, 0.96), rgba(28, 16, 10, 0.92)),
+    rgba(49, 24, 12, 0.86);
+  box-shadow:
+    0 12px 30px rgba(255, 150, 64, 0.18),
+    inset 0 0 0 1px rgba(255, 231, 204, 0.08);
+  color: #fff4e8;
+}
+
+.shell-control--button-primary:hover {
+  border-color: rgba(255, 196, 120, 0.9);
+  background:
+    linear-gradient(180deg, rgba(76, 34, 12, 0.98), rgba(36, 19, 10, 0.94)),
+    rgba(62, 29, 12, 0.9);
+  color: #fff8ef;
+}
+
+.shell-control--button-primary:disabled {
+  opacity: 0.82;
+}
+
 .shell-control--status {
   color: var(--emberwake-copy-dim);
 }
@@ -809,6 +827,10 @@
     min-height: 2.8rem;
     padding: 0.62rem 0.55rem;
     font-size: 0.66rem;
+  }
+
+  .app-meta-scene__actions--new-game {
+    grid-template-columns: 1fr;
   }
 
 }
