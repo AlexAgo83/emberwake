@@ -1,7 +1,7 @@
 ## prod_002_readable_world_traversal_and_presence - Readable world traversal and presence
 > Date: 2026-03-17
 > Status: Draft
-> Related request: `req_014_define_world_occupancy_navigation_and_interaction_rules`
+> Related request: `req_014_define_world_occupancy_navigation_and_interaction_rules`, `req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave`
 > Related backlog: (none yet)
 > Related task: (none yet)
 > Related architecture: `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_005_make_world_identity_deterministic_from_seed_and_coordinates`
@@ -45,6 +45,7 @@ The project already defines a moving entity in an infinite world, but if travers
 - The world should feel continuous when the entity moves; chunk structure must not leak into player perception.
 - The entity should read as occupying space in the world, not as a purely symbolic cursor.
 - Early traversal may stay mechanically simple, but it must still feel visually and spatially coherent.
+- When the player view rotates, directional movement should remain aligned with the viewed orientation so controls continue to match what the player sees on screen.
 - Overlaps and simplified occupancy may exist technically early on, but the player-facing result should still prioritize readability.
 
 # Success signals
@@ -55,6 +56,7 @@ The project already defines a moving entity in an infinite world, but if travers
 
 # References
 - `req_014_define_world_occupancy_navigation_and_interaction_rules`
+- `req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave`
 - `req_001_render_top_down_infinite_chunked_world_map`
 - `req_002_render_evolving_world_entities_on_the_map`
 - `prod_000_initial_single_entity_navigation_loop`
