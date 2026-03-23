@@ -243,7 +243,7 @@ flowchart LR
 - `package.json` is the source of truth for the app version.
 - Each release must have a matching curated changelog in `changelogs/`.
 - Release tags use `vX.Y.Z`.
-- The current release changelog is [`changelogs/CHANGELOGS_0_3_2.md`](changelogs/CHANGELOGS_0_3_2.md).
+- The current release changelog is [`changelogs/CHANGELOGS_0_4_0.md`](changelogs/CHANGELOGS_0_4_0.md).
 
 ```mermaid
 flowchart LR
