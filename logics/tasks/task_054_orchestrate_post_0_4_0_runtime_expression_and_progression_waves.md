@@ -1,9 +1,9 @@
 ## task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves - Orchestrate post-0.4.0 runtime expression and progression waves
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,15 +30,15 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Implement the second-pass weapon feedback polish wave, keeping the transient seam and strengthening under-expressed roles without widening into a projectile rewrite.
-- [ ] 2. Implement the runtime HUD relayout wave with anchored techno-shinobi HUD blocks, reserved build slots, compact top-right chrome, and mobile full-screen menu entry routing.
-- [ ] 3. Implement the shell codex/archive family with `Grimoire` and `Bestiary` scenes plus a shared discovery-gating posture for unknown entries.
-- [ ] 4. Implement the game-over skill analysis toggle with a bounded post-run skill-performance summary contract and compact ranking view.
-- [ ] 5. Implement the first authored time-phase run escalation wave with bounded pressure levers and light phase signaling.
-- [ ] 6. Run targeted validation across combat readability, HUD/UI coherence, archive-surface clarity, outcome analysis credibility, and time-owned pacing.
-- [ ] 7. Update linked request, backlog, product, ADR, and task docs as the grouped waves land so traceability stays synchronized.
-- [ ] CHECKPOINT: leave each completed slice commit-ready before moving to the next one.
-- [ ] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
+- [x] 1. Implement the second-pass weapon feedback polish wave, keeping the transient seam and strengthening under-expressed roles without widening into a projectile rewrite.
+- [x] 2. Implement the runtime HUD relayout wave with anchored techno-shinobi HUD blocks, reserved build slots, compact top-right chrome, and mobile full-screen menu entry routing.
+- [x] 3. Implement the shell codex/archive family with `Grimoire` and `Bestiary` scenes plus a shared discovery-gating posture for unknown entries.
+- [x] 4. Implement the game-over skill analysis toggle with a bounded post-run skill-performance summary contract and compact ranking view.
+- [x] 5. Implement the first authored time-phase run escalation wave with bounded pressure levers and light phase signaling.
+- [x] 6. Run targeted validation across combat readability, HUD/UI coherence, archive-surface clarity, outcome analysis credibility, and time-owned pacing.
+- [x] 7. Update linked request, backlog, product, ADR, and task docs as the grouped waves land so traceability stays synchronized.
+- [x] CHECKPOINT: leave each completed slice commit-ready before moving to the next one.
+- [x] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
 
 # Delivery checkpoints
 - Keep the second-pass weapon polish on top of the transient feedback seam from `task_053`; do not reopen projectile architecture unless a later subwave proves it necessary.
@@ -81,13 +81,22 @@ flowchart TD
 - Manual or scripted verification that time-based escalation phases are perceptible and affect gameplay pressure in authored beats.
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Second-pass combat skill polish lands without breaking the transient-feedback architecture.
-- [ ] Runtime HUD relayout lands with techno-shinobi coherence and mobile-consistent menu entry behavior.
-- [ ] `Grimoire` and `Bestiary` exist as shell-owned discovery-gated archive scenes.
-- [ ] The game-over screen can toggle to a compact skill-ranking analysis view backed by bounded outcome summaries.
-- [ ] The run gains a readable first-pass time-owned escalation arc.
-- [ ] Validation commands are executed and results are captured in the task or linked artifacts.
-- [ ] Linked request, backlog, product, ADR, and task docs are updated during the wave and at closure.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Second-pass combat skill polish lands without breaking the transient-feedback architecture.
+- [x] Runtime HUD relayout lands with techno-shinobi coherence and mobile-consistent menu entry behavior.
+- [x] `Grimoire` and `Bestiary` exist as shell-owned discovery-gated archive scenes.
+- [x] The game-over screen can toggle to a compact skill-ranking analysis view backed by bounded outcome summaries.
+- [x] The run gains a readable first-pass time-owned escalation arc.
+- [x] Validation commands are executed and results are captured in the task or linked artifacts.
+- [x] Linked request, backlog, product, ADR, and task docs are updated during the wave and at closure.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
+
+# Implementation notes
+- Extended the transient combat-feedback seam so `Cinder Arc` now emits bounded travel cues, `Orbit Sutra` holds orbital presence more clearly, `Null Canister` owns space more visibly, and `Guided Senbon` / `Shade Kunai` separate more clearly by silhouette.
+- Split the runtime HUD into anchored techno-shinobi surfaces: compact progression block top-left, quiet FPS text top-right, and reserved active/passive build-slot rows bottom-right.
+- Reintroduced `pause` as a full-screen shell-owned hold surface so the mobile menu trigger can route to a coherent runtime shell entry instead of opening the floating deck.
+- Added shell-owned `Grimoire` and `Bestiary` archive scenes with discovery-gated unknown-entry posture, while lazy-loading codex data so the initial shell bundle remains within the runtime budget.
+- Added bounded post-run `skillPerformanceSummaries` and a defeat-screen toggle between recap and ranked skill analysis.
+- Added authored time phases that now affect runtime pressure through spawn cadence, local hostile cap, and hostile spawn-time stat scaling while surfacing the current phase in the HUD.
+- Closed linked requests, product briefs, ADRs, and backlog items to `Done` / `Accepted` in the Logics corpus.

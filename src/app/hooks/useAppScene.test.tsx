@@ -10,7 +10,9 @@ describe("useAppScene", () => {
         detail: string;
         emittedAtTick: number | null;
         kind: "defeat" | "none" | "recovery" | "restart-needed" | "victory";
+        phaseId: string | null;
         shellScene: "defeat" | "none" | "pause" | "victory";
+        skillPerformanceSummaries: [];
       };
     };
     const { result, rerender } = renderHook(
@@ -35,7 +37,9 @@ describe("useAppScene", () => {
         detail: "Recovery required",
         emittedAtTick: 12,
         kind: "restart-needed" as const,
-        shellScene: "pause" as const
+        phaseId: null,
+        shellScene: "pause" as const,
+        skillPerformanceSummaries: []
       }
     });
 
@@ -47,7 +51,9 @@ describe("useAppScene", () => {
         detail: "Victory should not override renderer failure",
         emittedAtTick: 24,
         kind: "victory" as const,
-        shellScene: "victory" as const
+        phaseId: null,
+        shellScene: "victory" as const,
+        skillPerformanceSummaries: []
       }
     });
 

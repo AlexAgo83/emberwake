@@ -1,7 +1,7 @@
 ## req_066_define_a_game_over_skill_ranking_view_toggle - Define a game over skill ranking view toggle
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium
 > Theme: UI

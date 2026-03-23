@@ -1,9 +1,9 @@
 ## item_241_route_the_mobile_runtime_menu_trigger_to_the_full_screen_shell_surface - Route the mobile runtime menu trigger to the full-screen shell surface
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

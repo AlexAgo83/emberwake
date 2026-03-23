@@ -1,9 +1,9 @@
 ## item_236_define_clearer_visual_role_separation_between_guided_senbon_and_shade_kunai - Define clearer visual role separation between Guided Senbon and Shade Kunai
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

@@ -57,7 +57,7 @@ describe("entitySimulation", () => {
     expect(simulationState.entities).toHaveLength(1);
     expect(simulationState.entity.combat.currentHealth).toBe(hostileCombatContract.player.maxHealth);
     expect(simulationState.entity.movementSurfaceModifier).toBe("normal");
-    expect(simulationState.runStats).toEqual({
+    expect(simulationState.runStats).toMatchObject({
       crystalsCollected: 0,
       currentLevel: 1,
       currentXp: 0,

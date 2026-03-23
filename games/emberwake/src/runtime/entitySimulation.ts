@@ -29,6 +29,7 @@ import {
 } from "@game/runtime/entitySimulationSpawn";
 import {
   addPendingLevelUps,
+  activeWeaponIds,
   type ActiveWeaponId,
   type FusionId,
   advanceChestMilestone,
@@ -40,11 +41,19 @@ import {
   resolveChestDropCount,
   type BuildState
 } from "@game/runtime/buildSystem";
+import {
+  resolveCreatureCodexIdFromVisualKind,
+  type CreatureCodexId
+} from "@game/content/entities/creatureCodex";
 import type { MovementSurfaceModifierKind } from "@game/content/world/worldData";
 import {
   resolveRuntimeProfilingConfig,
   type RuntimeProfilingConfig
 } from "@game/runtime/runtimeProfiling";
+import {
+  resolveRunProgressionPhase,
+  type RunProgressionPhaseId
+} from "@game/runtime/runProgressionPhases";
 
 export const entitySimulationContract = {
   fixedStepMs: 1000 / 60,
@@ -87,6 +96,15 @@ export type PickupProfile = {
 };
 
 export type RunStats = {
+  activeWeaponPerformance: Record<
+    ActiveWeaponId,
+    {
+      attacksTriggered: number;
+      hostileDefeats: number;
+      totalDamage: number;
+    }
+  >;
+  creatureDefeatCounts: Partial<Record<CreatureCodexId, number>>;
   crystalsCollected: number;
   currentLevel: number;
   currentXp: number;
@@ -111,6 +129,7 @@ export type FloatingDamageNumber = {
 
 export type CombatSkillFeedbackKind =
   | "cinder-burst"
+  | "cinder-travel"
   | "needle-trace"
   | "orbit-pulse"
   | "slash-ribbon"
@@ -246,6 +265,17 @@ const createDamageReactionState = (): DamageReactionState => ({
 });
 
 const createInitialRunStats = (): RunStats => ({
+  activeWeaponPerformance: Object.fromEntries(
+    activeWeaponIds.map((weaponId) => [
+      weaponId,
+      {
+        attacksTriggered: 0,
+        hostileDefeats: 0,
+        totalDamage: 0
+      }
+    ])
+  ) as RunStats["activeWeaponPerformance"],
+  creatureDefeatCounts: {},
   crystalsCollected: 0,
   currentLevel: 1,
   currentXp: 0,
@@ -301,7 +331,8 @@ const createPlayerEntity = (buildState = createInitialBuildState()): SimulatedEn
 const createHostileEntity = (
   hostileSequence: number,
   worldPosition: WorldPoint,
-  spawnedAtTick: number
+  spawnedAtTick: number,
+  phaseId: RunProgressionPhaseId
 ): SimulatedEntity => ({
   ...createGenericMoverEntity({
     archetype: "generic-mover",
@@ -312,10 +343,24 @@ const createHostileEntity = (
     },
     worldPosition
   }),
-  combat: createCombatState(hostileCombatContract.hostile.maxHealth),
+  combat: createCombatState(
+    Math.max(
+      1,
+      Math.round(
+        hostileCombatContract.hostile.maxHealth *
+          resolveRunProgressionPhase(spawnedAtTick).hostileMaxHealthMultiplier
+      )
+    )
+  ),
   contactDamageProfile: {
     cooldownTicks: hostileCombatContract.hostile.contactDamageCooldownTicks,
-    damage: hostileCombatContract.hostile.contactDamage,
+    damage: Math.max(
+      1,
+      Math.round(
+        hostileCombatContract.hostile.contactDamage *
+          resolveRunProgressionPhase(spawnedAtTick).hostileContactDamageMultiplier
+      )
+    ),
     lastDamageTick: null
   },
   focusState: {
@@ -331,6 +376,7 @@ const createHostileEntity = (
   },
   role: "hostile",
   spawnedAtTick,
+  state: phaseId === "kill-grid" ? "moving" : "idle",
   velocity: {
     x: 0,
     y: 0
@@ -834,6 +880,7 @@ export const advanceSimulationState = (
   }
 
   const nextTick = simulationState.tick + 1;
+  const activeRunProgressionPhase = resolveRunProgressionPhase(nextTick);
   const pickupMaintainedState =
     profiling.spawnMode === "no-spawn"
       ? {
@@ -852,10 +899,26 @@ export const advanceSimulationState = (
   const spawnMaintainedState = maintainLocalHostilePopulation({
     canSpawnEntityAtPosition,
     command,
-    createHostileEntity,
+    createHostileEntity: (hostileSequence, worldPosition, spawnedAtTick) =>
+      createHostileEntity(
+        hostileSequence,
+        worldPosition,
+        spawnedAtTick,
+        activeRunProgressionPhase.id
+      ),
     entities: pickupMaintainedState.entities,
+    localPopulationCap:
+      hostileCombatContract.hostile.localPopulationCap +
+      activeRunProgressionPhase.localPopulationCapBonus,
     nextHostileSequence: simulationState.nextHostileSequence,
     spawnMode: profiling.spawnMode,
+    spawnCooldownTicks: Math.max(
+      1,
+      Math.round(
+        hostileCombatContract.hostile.spawnCooldownTicks *
+          activeRunProgressionPhase.spawnCooldownMultiplier
+      )
+    ),
     spawnHeadingMemoryTicks: entityCombatPresentationContract.spawnHeadingMemoryTicks,
     tick: nextTick,
     worldSeed
@@ -882,7 +945,8 @@ export const advanceSimulationState = (
   const attackResolvedState = resolveAutomaticPlayerAttack(
     movedEntities,
     nextTick,
-    choiceAppliedBuildState
+    choiceAppliedBuildState,
+    simulationState.runStats
   );
   const combatResolvedState = resolveHostileContactDamage(
     attackResolvedState.entities,
@@ -935,11 +999,26 @@ export const advanceSimulationState = (
 
       return [...combatResolvedState.entities, ...droppedCrystalEntities, ...droppedCacheEntities];
     })(),
-    runStats: simulationState.runStats
+    runStats: attackResolvedState.runStats
   });
-  const defeatedHostileCount = combatResolvedState.entities.filter(
+  const defeatedHostiles = combatResolvedState.entities.filter(
     (entity) => entity.role === "hostile" && !isAlive(entity)
-  ).length;
+  );
+  const defeatedHostileCount = defeatedHostiles.length;
+  const nextCreatureDefeatCounts = {
+    ...pickupResolvedState.runStats.creatureDefeatCounts
+  };
+
+  for (const defeatedHostile of defeatedHostiles) {
+    const creatureCodexId = resolveCreatureCodexIdFromVisualKind(defeatedHostile.visual.kind);
+
+    if (!creatureCodexId) {
+      continue;
+    }
+
+    nextCreatureDefeatCounts[creatureCodexId] =
+      (nextCreatureDefeatCounts[creatureCodexId] ?? 0) + 1;
+  }
   const survivingEntities = pickupResolvedState.entities.filter(
     (entity) => entity.role === "player" || isAlive(entity)
   );
@@ -1007,6 +1086,7 @@ export const advanceSimulationState = (
     nextHostileSequence: spawnMaintainedState.nextHostileSequence,
     runStats: {
       ...pickupResolvedState.runStats,
+      creatureDefeatCounts: nextCreatureDefeatCounts,
       hostileDefeats: pickupResolvedState.runStats.hostileDefeats + defeatedHostileCount
     },
     tick: nextTick,

@@ -1,9 +1,9 @@
 ## item_250_define_a_compact_skill_ranking_presentation_for_game_over_analysis - Define a compact skill ranking presentation for game over analysis
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

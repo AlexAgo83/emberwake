@@ -1,9 +1,9 @@
 ## item_246_define_a_shared_discovery_gating_and_unknown_entry_posture_for_codex_archive_scenes - Define a shared discovery gating and unknown-entry posture for codex archive scenes
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

@@ -1,7 +1,7 @@
 ## req_065_define_a_bestiary_scene_for_discovered_and_defeated_creatures - Define a bestiary scene for discovered and defeated creatures
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium
 > Theme: UI

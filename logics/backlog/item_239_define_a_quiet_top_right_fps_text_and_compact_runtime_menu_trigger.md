@@ -1,9 +1,9 @@
 ## item_239_define_a_quiet_top_right_fps_text_and_compact_runtime_menu_trigger - Define a quiet top-right FPS text and compact runtime menu trigger
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

@@ -1,9 +1,9 @@
 ## prod_014_shell_codex_archive_direction_for_grimoire_and_bestiary - Shell codex archive direction for grimoire and bestiary
 > Date: 2026-03-23
-> Status: Draft
+> Status: Validated
 > Related request: `req_064_define_a_grimoire_scene_for_skill_discovery_and_future_unlock_gating`, `req_065_define_a_bestiary_scene_for_discovered_and_defeated_creatures`
 > Related backlog: `item_243_define_main_menu_codex_archive_entry_posture_for_grimoire_and_bestiary_access`, `item_244_define_a_player_facing_grimoire_scene_for_skill_discovery_and_future_unlock_gating`, `item_245_define_a_player_facing_bestiary_scene_for_discovered_creatures_and_defeat_tracking`, `item_246_define_a_shared_discovery_gating_and_unknown_entry_posture_for_codex_archive_scenes`, `item_247_define_techno_shinobi_codex_archive_presentation_and_validation_for_grimoire_and_bestiary`
-> Related task: `TBD after request approval`
+> Related task: `task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves`
 > Related architecture: `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_045_model_grimoire_and_bestiary_as_shell_owned_discovery_gated_archive_scenes`
 > Reminder: Update status, linked refs, scope, decisions, success signals, and open questions when you edit this doc.
 

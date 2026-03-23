@@ -1,9 +1,9 @@
 ## item_244_define_a_player_facing_grimoire_scene_for_skill_discovery_and_future_unlock_gating - Define a player-facing grimoire scene for skill discovery and future unlock gating
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

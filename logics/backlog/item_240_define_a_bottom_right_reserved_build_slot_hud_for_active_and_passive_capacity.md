@@ -1,9 +1,9 @@
 ## item_240_define_a_bottom_right_reserved_build_slot_hud_for_active_and_passive_capacity - Define a bottom-right reserved build-slot HUD for active and passive capacity
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

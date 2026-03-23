@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { createDefaultCameraState } from "@engine/camera/cameraMath";
+import { createInitialEmberwakeGameState } from "@game/runtime/emberwakeGameModule";
 import { createInitialBuildState } from "@game/runtime/buildSystem";
 import {
   advanceGameplaySystemsState,
@@ -12,6 +13,7 @@ import {
 describe("gameplaySystems", () => {
   it("tracks progression and system seams separately from the raw simulation slice", () => {
     const previousState = createInitialGameplaySystemsState();
+    const initialRunStats = createInitialEmberwakeGameState().simulation.runStats;
     const beforeEntity = {
       archetype: "generic-mover" as const,
       combat: {
@@ -56,6 +58,7 @@ describe("gameplaySystems", () => {
         nextPickupSequence: 0,
         nextHostileSequence: 0,
         runStats: {
+          ...initialRunStats,
           crystalsCollected: 2,
           currentLevel: 1,
           currentXp: 50,
@@ -75,6 +78,7 @@ describe("gameplaySystems", () => {
         nextPickupSequence: 0,
         nextHostileSequence: 0,
         runStats: {
+          ...initialRunStats,
           crystalsCollected: 0,
           currentLevel: 1,
           currentXp: 0,

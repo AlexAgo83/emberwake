@@ -1,9 +1,9 @@
 ## item_245_define_a_player_facing_bestiary_scene_for_discovered_creatures_and_defeat_tracking - Define a player-facing bestiary scene for discovered creatures and defeat tracking
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

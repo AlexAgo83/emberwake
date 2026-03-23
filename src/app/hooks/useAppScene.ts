@@ -50,6 +50,14 @@ export function useAppScene({ rendererStatus, runtimeOutcome }: UseAppSceneOptio
     setRequestedScene("changelogs");
     setShellSurface("none");
   }, []);
+  const showGrimoireScene = useCallback(() => {
+    setRequestedScene("grimoire");
+    setShellSurface("none");
+  }, []);
+  const showBestiaryScene = useCallback(() => {
+    setRequestedScene("bestiary");
+    setShellSurface("none");
+  }, []);
   const showSettingsScene = useCallback(() => {
     setRequestedScene("settings");
     setShellSurface("none");
@@ -64,8 +72,10 @@ export function useAppScene({ rendererStatus, runtimeOutcome }: UseAppSceneOptio
     requestedScene,
     resumeRuntime,
     runtimeOutcome,
+    showBestiaryScene,
     shellSurface,
     showChangelogsScene,
+    showGrimoireScene,
     showMainMenuScene,
     showNewGameScene,
     showPauseScene,

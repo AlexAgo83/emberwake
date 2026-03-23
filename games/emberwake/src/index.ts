@@ -21,13 +21,19 @@ export {
 export { pickupContract } from "./runtime/pickupContract";
 export {
   addPendingLevelUps,
+  activeWeaponIds,
+  fusionIds,
   applyLevelUpChoice,
   buildSystemContract,
   createInitialBuildState,
   getActiveWeaponDefinition,
   getFusionDefinition,
   getPassiveItemDefinition,
+  listActiveWeaponDefinitions,
+  listFusionDefinitions,
+  listPassiveItemDefinitions,
   normalizeBuildState,
+  passiveItemIds,
   recordActiveWeaponAttack,
   resolveActiveWeaponRuntimeStats,
   resolveBuildDisplayLabel,
@@ -55,13 +61,16 @@ export type {
 } from "./runtime/entitySimulation";
 export type {
   ActiveWeaponId,
+  ActiveWeaponDefinition,
   ActiveWeaponSlot,
   BuildChoice,
   BuildChoiceSelectionKind,
   BuildChoiceSlotKind,
   BuildState,
   FusionId,
+  FusionDefinition,
   PassiveItemId,
+  PassiveItemDefinition,
   PassiveItemSlot,
   ResolvedActiveWeaponRuntimeStats
 } from "./runtime/buildSystem";
@@ -89,10 +98,17 @@ export {
   entityArchetypeDefinitions,
   entityVisualDefinitions
 } from "./content/entities/entityData";
+export {
+  creatureCodexEntries,
+  creatureCodexIds,
+  getCreatureCodexEntry,
+  resolveCreatureCodexIdFromVisualKind
+} from "./content/entities/creatureCodex";
 export type {
   EntityArchetypeId,
   EntityVisualKind
 } from "./content/entities/entityData";
+export type { CreatureCodexEntry, CreatureCodexId } from "./content/entities/creatureCodex";
 export {
   debugScenarioAuthoringContract,
   officialDebugScenario,
@@ -119,10 +135,17 @@ export {
   defaultRuntimeProfilingConfig,
   resolveRuntimeProfilingConfig
 } from "./runtime/runtimeProfiling";
+export {
+  initialRunProgressionPhaseId,
+  resolveNextRunProgressionPhase,
+  resolveRunProgressionPhase,
+  runProgressionPhases
+} from "./runtime/runProgressionPhases";
 export type {
   ProfilingSpawnMode,
   RuntimeProfilingConfig
 } from "./runtime/runtimeProfiling";
+export type { RunProgressionPhase, RunProgressionPhaseId } from "./runtime/runProgressionPhases";
 export {
   advanceGameplaySystemsState,
   createGameplaySystemDiagnostics,
@@ -149,4 +172,9 @@ export type {
   ProgressionSystemState,
   StatusEffectSystemState
 } from "./systems/gameplaySystems";
-export type { GameplayOutcomeKind, GameplayShellOutcome, GameplayShellSceneHint } from "./systems/gameplayOutcome";
+export type {
+  GameplayOutcomeKind,
+  GameplayShellOutcome,
+  GameplayShellSceneHint,
+  SkillPerformanceSummary
+} from "./systems/gameplayOutcome";

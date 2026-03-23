@@ -1,12 +1,28 @@
 import type { EngineTiming } from "@engine/contracts/gameModule";
 import type { EntitySimulationState } from "@game/runtime/entitySimulation";
+import {
+  listActiveWeaponDefinitions,
+  resolveBuildDisplayLabel,
+  resolveBuildSummary,
+  type ActiveWeaponId,
+  type FusionId,
+  type PassiveItemId
+} from "@game/runtime/buildSystem";
 import { resolveXpRequiredForLevel } from "@game/runtime/pickupContract";
-import { resolveBuildSummary } from "@game/runtime/buildSystem";
+import {
+  resolveCreatureCodexIdFromVisualKind,
+  type CreatureCodexId
+} from "@game/content/entities/creatureCodex";
+import {
+  resolveNextRunProgressionPhase,
+  resolveRunProgressionPhase,
+  type RunProgressionPhaseId
+} from "@game/runtime/runProgressionPhases";
 import {
   createIdleGameplayOutcome,
   gameplayOutcomeContract
 } from "./gameplayOutcome";
-import type { GameplayShellOutcome } from "./gameplayOutcome";
+import type { GameplayShellOutcome, SkillPerformanceSummary } from "./gameplayOutcome";
 
 export type CombatSystemState = {
   encounterState: "active" | "dormant";
@@ -28,17 +44,28 @@ export type ProgressionSystemState = {
   crystalsCollected: number;
   currentLevel: number;
   currentXp: number;
+  discoveredActiveWeaponIds: ActiveWeaponId[];
+  discoveredCreatureIds: CreatureCodexId[];
+  discoveredFusionIds: FusionId[];
+  discoveredPassiveItemIds: PassiveItemId[];
+  discoveredSkillIds: string[];
+  phaseLabel: string;
+  phaseStartsAtTick: number;
+  phaseTone: "alert" | "cold" | "warm";
   fusedActiveCount: number;
   fusionReadyCount: number;
   goldCollected: number;
   highestUnlockedTier: 0;
   healingKitsCollected: number;
   hostileDefeats: number;
+  nextPhaseStartsAtTick: number | null;
   nextLevelXpRequired: number;
   passiveSlotsFilled: number;
   pendingChoiceCount: number;
+  runPhaseId: RunProgressionPhaseId;
   runtimeTicksSurvived: number;
   traversalDistanceWorldUnits: number;
+  creatureDefeatCounts: Partial<Record<CreatureCodexId, number>>;
 };
 
 export type EmberwakeGameplaySystemsState = {
@@ -63,10 +90,61 @@ export type GameplaySystemPhaseId =
 export type GameplaySystemSignalId =
   | "autonomy.tick-advanced"
   | "combat.idle"
+  | "phase.escalated"
   | "outcome.idle"
   | "progression.runtime-tick-advanced"
   | "progression.traversal-recorded"
   | "status-effects.stable";
+
+const buildDiscoveredSkillIds = ({
+  activeWeaponIds,
+  fusionIds,
+  passiveItemIds
+}: {
+  activeWeaponIds: readonly ActiveWeaponId[];
+  fusionIds: readonly FusionId[];
+  passiveItemIds: readonly PassiveItemId[];
+}) =>
+  [
+    ...activeWeaponIds.map((activeWeaponId) => `active:${activeWeaponId}`),
+    ...passiveItemIds.map((passiveItemId) => `passive:${passiveItemId}`),
+    ...fusionIds.map((fusionId) => `fusion:${fusionId}`)
+  ];
+
+const createSkillPerformanceSummaries = (
+  simulationAfterUpdate: EntitySimulationState
+): SkillPerformanceSummary[] =>
+  listActiveWeaponDefinitions()
+    .map((weaponDefinition) => {
+      const finalActiveSlot = simulationAfterUpdate.buildState.activeSlots.find(
+        (activeSlot) => activeSlot.weaponId === weaponDefinition.id
+      );
+      const performance = simulationAfterUpdate.runStats.activeWeaponPerformance[weaponDefinition.id];
+
+      return {
+        attacksTriggered: performance.attacksTriggered,
+        fusionId: finalActiveSlot?.fusionId ?? null,
+        hostileDefeats: performance.hostileDefeats,
+        label:
+          finalActiveSlot !== undefined
+            ? resolveBuildDisplayLabel(simulationAfterUpdate.buildState, finalActiveSlot)
+            : weaponDefinition.label,
+        totalDamage: performance.totalDamage,
+        weaponId: weaponDefinition.id
+      };
+    })
+    .filter((summary) => summary.attacksTriggered > 0 || summary.totalDamage > 0)
+    .sort((leftSummary, rightSummary) => {
+      if (rightSummary.totalDamage !== leftSummary.totalDamage) {
+        return rightSummary.totalDamage - leftSummary.totalDamage;
+      }
+
+      if (rightSummary.hostileDefeats !== leftSummary.hostileDefeats) {
+        return rightSummary.hostileDefeats - leftSummary.hostileDefeats;
+      }
+
+      return rightSummary.attacksTriggered - leftSummary.attacksTriggered;
+    });
 
 export const gameplaySystemsContract = {
   ownership: {
@@ -111,15 +189,26 @@ export const createInitialGameplaySystemsState = (): EmberwakeGameplaySystemsSta
     crystalsCollected: 0,
     currentLevel: 1,
     currentXp: 0,
+    creatureDefeatCounts: {},
+    discoveredActiveWeaponIds: ["ash-lash"],
+    discoveredCreatureIds: [],
+    discoveredFusionIds: [],
+    discoveredPassiveItemIds: [],
+    discoveredSkillIds: ["active:ash-lash"],
+    phaseLabel: resolveRunProgressionPhase(0).label,
+    phaseStartsAtTick: resolveRunProgressionPhase(0).startsAtTick,
+    phaseTone: resolveRunProgressionPhase(0).tone,
     fusedActiveCount: 0,
     fusionReadyCount: 0,
     goldCollected: 0,
     highestUnlockedTier: 0,
     healingKitsCollected: 0,
     hostileDefeats: 0,
+    nextPhaseStartsAtTick: resolveNextRunProgressionPhase(0)?.startsAtTick ?? null,
     nextLevelXpRequired: resolveXpRequiredForLevel(1),
     passiveSlotsFilled: 0,
     pendingChoiceCount: 0,
+    runPhaseId: resolveRunProgressionPhase(0).id,
     runtimeTicksSurvived: 0,
     traversalDistanceWorldUnits: 0
   },
@@ -149,6 +238,32 @@ export const advanceGameplaySystemsState = ({
   const traversalDistanceWorldUnits = Math.hypot(deltaX, deltaY);
   const simulationTickDelta = Math.max(0, simulationAfterUpdate.tick - simulationBeforeUpdate.tick);
   const buildSummary = resolveBuildSummary(simulationAfterUpdate.buildState);
+  const runtimeTicksSurvived =
+    previousState.progression.runtimeTicksSurvived + simulationTickDelta;
+  const activeRunPhase = resolveRunProgressionPhase(runtimeTicksSurvived);
+  const nextRunPhase = resolveNextRunProgressionPhase(runtimeTicksSurvived);
+  const discoveredActiveWeaponIds = simulationAfterUpdate.buildState.activeSlots.map(
+    (activeSlot) => activeSlot.weaponId
+  );
+  const discoveredPassiveItemIds = simulationAfterUpdate.buildState.passiveSlots.map(
+    (passiveSlot) => passiveSlot.passiveId
+  );
+  const discoveredFusionIds = simulationAfterUpdate.buildState.activeSlots.flatMap((activeSlot) =>
+    activeSlot.fusionId ? [activeSlot.fusionId] : []
+  );
+  const discoveredCreatureIds = Array.from(
+    new Set([
+      ...previousState.progression.discoveredCreatureIds,
+      ...simulationAfterUpdate.entities.flatMap((entity) => {
+        const creatureCodexId =
+          entity.role === "hostile"
+            ? resolveCreatureCodexIdFromVisualKind(entity.visual.kind)
+            : null;
+
+        return creatureCodexId ? [creatureCodexId] : [];
+      })
+    ])
+  );
   const autonomy = {
     ...previousState.autonomy,
     lastAutonomyTick: previousState.autonomy.lastAutonomyTick + simulationTickDelta
@@ -167,16 +282,30 @@ export const advanceGameplaySystemsState = ({
     crystalsCollected: simulationAfterUpdate.runStats.crystalsCollected,
     currentLevel: simulationAfterUpdate.runStats.currentLevel,
     currentXp: simulationAfterUpdate.runStats.currentXp,
+    creatureDefeatCounts: simulationAfterUpdate.runStats.creatureDefeatCounts,
+    discoveredActiveWeaponIds,
+    discoveredCreatureIds,
+    discoveredFusionIds,
+    discoveredPassiveItemIds,
+    discoveredSkillIds: buildDiscoveredSkillIds({
+      activeWeaponIds: discoveredActiveWeaponIds,
+      fusionIds: discoveredFusionIds,
+      passiveItemIds: discoveredPassiveItemIds
+    }),
+    phaseLabel: activeRunPhase.label,
+    phaseStartsAtTick: activeRunPhase.startsAtTick,
+    phaseTone: activeRunPhase.tone,
     fusedActiveCount: buildSummary.fusedActiveCount,
     fusionReadyCount: buildSummary.fusionReadyCount,
     goldCollected: simulationAfterUpdate.runStats.goldCollected,
     healingKitsCollected: simulationAfterUpdate.runStats.healingKitsCollected,
     hostileDefeats: simulationAfterUpdate.runStats.hostileDefeats,
+    nextPhaseStartsAtTick: nextRunPhase?.startsAtTick ?? null,
     nextLevelXpRequired: resolveXpRequiredForLevel(simulationAfterUpdate.runStats.currentLevel),
     passiveSlotsFilled: buildSummary.passiveCount,
     pendingChoiceCount: buildSummary.pendingChoiceCount,
-    runtimeTicksSurvived:
-      previousState.progression.runtimeTicksSurvived + simulationTickDelta,
+    runPhaseId: activeRunPhase.id,
+    runtimeTicksSurvived,
     traversalDistanceWorldUnits:
       previousState.progression.traversalDistanceWorldUnits + traversalDistanceWorldUnits
   };
@@ -184,9 +313,12 @@ export const advanceGameplaySystemsState = ({
     simulationAfterUpdate.entity.combat.currentHealth <= 0
       ? {
           detail: "The hostile swarm overran the active run.",
-          emittedAtTick: previousState.progression.runtimeTicksSurvived + simulationTickDelta,
+          emittedAtTick: runtimeTicksSurvived,
           kind: "defeat" as const,
+          phaseId: activeRunPhase.id,
           shellScene: "defeat" as const
+          ,
+          skillPerformanceSummaries: createSkillPerformanceSummaries(simulationAfterUpdate)
         }
       : previousState.outcome.kind === "none"
         ? createIdleGameplayOutcome()
@@ -196,6 +328,9 @@ export const advanceGameplaySystemsState = ({
     ...(simulationTickDelta > 0 ? (["autonomy.tick-advanced"] as GameplaySystemSignalId[]) : []),
     "combat.idle",
     "status-effects.stable",
+    ...(activeRunPhase.id !== previousState.progression.runPhaseId
+      ? (["phase.escalated"] as GameplaySystemSignalId[])
+      : []),
     ...(simulationTickDelta > 0
       ? (["progression.runtime-tick-advanced"] as GameplaySystemSignalId[])
       : []),
@@ -230,6 +365,8 @@ export const createGameplaySystemDiagnostics = (
   goldCollected: systemsState.progression.goldCollected,
   hostileDefeats: systemsState.progression.hostileDefeats,
   nextLevelXpRequired: systemsState.progression.nextLevelXpRequired,
+  runPhaseId: systemsState.progression.runPhaseId,
+  runPhaseLabel: systemsState.progression.phaseLabel,
   progressionTicksSurvived: systemsState.progression.runtimeTicksSurvived,
   traversalDistanceWorldUnits: Number(
     systemsState.progression.traversalDistanceWorldUnits.toFixed(2)
@@ -240,5 +377,6 @@ export const createGameplaySystemDiagnostics = (
   fusedActiveCount: systemsState.progression.fusedActiveCount,
   fusionReadyCount: systemsState.progression.fusionReadyCount,
   passiveSlotsFilled: systemsState.progression.passiveSlotsFilled,
-  pendingChoiceCount: systemsState.progression.pendingChoiceCount
+  pendingChoiceCount: systemsState.progression.pendingChoiceCount,
+  discoveredCreatureCount: systemsState.progression.discoveredCreatureIds.length
 });

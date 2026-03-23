@@ -1,7 +1,7 @@
 ## req_062_define_a_second_combat_skill_feedback_polish_wave_for_underexpressed_weapons - Define a second combat skill feedback polish wave for underexpressed weapons
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay

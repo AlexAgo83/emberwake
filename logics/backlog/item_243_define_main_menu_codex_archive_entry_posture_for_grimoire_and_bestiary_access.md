@@ -1,9 +1,9 @@
 ## item_243_define_main_menu_codex_archive_entry_posture_for_grimoire_and_bestiary_access - Define main-menu codex archive entry posture for grimoire and bestiary access
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

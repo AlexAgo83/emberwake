@@ -1,9 +1,9 @@
 ## item_248_define_a_game_over_view_toggle_between_recap_and_skill_ranking_analysis - Define a game over view toggle between recap and skill ranking analysis
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

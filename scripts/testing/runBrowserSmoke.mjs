@@ -149,7 +149,7 @@ try {
 
   if (!(await inspectionPanel.isVisible())) {
     await page.getByRole("button", {
-      name: /Command deck/i
+      name: /Menu/i
     }).click();
     await page.getByRole("button", {
       name: /^Tools\b/i

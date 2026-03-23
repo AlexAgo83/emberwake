@@ -153,7 +153,7 @@ const drawCombatSkillFeedback =
       case "needle-trace":
       case "kunai-fan": {
         const lineWidth =
-          combatSkillFeedbackEvent.kind === "needle-trace" ? 2 + fusionIntensity : 3 + fusionIntensity;
+          combatSkillFeedbackEvent.kind === "needle-trace" ? 2 + fusionIntensity : 3.6 + fusionIntensity;
         for (const targetWorldPoint of combatSkillFeedbackEvent.targetWorldPoints) {
           graphics.setStrokeStyle({
             alpha: 0.28 * alpha,
@@ -179,13 +179,82 @@ const drawCombatSkillFeedback =
           graphics.lineTo(targetWorldPoint.x, targetWorldPoint.y);
           graphics.stroke();
 
-          graphics.setFillStyle({
-            alpha: 0.78 * alpha,
-            color: core
-          });
-          graphics.circle(targetWorldPoint.x, targetWorldPoint.y, 4 + fusionIntensity);
-          graphics.fill();
+          if (combatSkillFeedbackEvent.kind === "needle-trace") {
+            graphics.setStrokeStyle({
+              alpha: 0.82 * alpha,
+              color: core,
+              width: 2
+            });
+            graphics.rect(
+              targetWorldPoint.x - (6 + fusionIntensity),
+              targetWorldPoint.y - (6 + fusionIntensity),
+              12 + fusionIntensity * 2,
+              12 + fusionIntensity * 2
+            );
+            graphics.stroke();
+          } else {
+            const deltaX = targetWorldPoint.x - combatSkillFeedbackEvent.originWorldPoint.x;
+            const deltaY = targetWorldPoint.y - combatSkillFeedbackEvent.originWorldPoint.y;
+            const bladeAngle = Math.atan2(deltaY, deltaX);
+            const bladeLength = 14 + fusionIntensity * 3;
+            const bladeWidth = 6 + fusionIntensity * 2;
+
+            graphics.setFillStyle({
+              alpha: 0.82 * alpha,
+              color: core
+            });
+            graphics.moveTo(
+              targetWorldPoint.x + Math.cos(bladeAngle) * bladeLength,
+              targetWorldPoint.y + Math.sin(bladeAngle) * bladeLength
+            );
+            graphics.lineTo(
+              targetWorldPoint.x + Math.cos(bladeAngle + Math.PI * 0.72) * bladeWidth,
+              targetWorldPoint.y + Math.sin(bladeAngle + Math.PI * 0.72) * bladeWidth
+            );
+            graphics.lineTo(
+              targetWorldPoint.x + Math.cos(bladeAngle - Math.PI * 0.72) * bladeWidth,
+              targetWorldPoint.y + Math.sin(bladeAngle - Math.PI * 0.72) * bladeWidth
+            );
+            graphics.closePath();
+            graphics.fill();
+          }
         }
+        break;
+      }
+      case "cinder-travel": {
+        const targetWorldPoint =
+          combatSkillFeedbackEvent.targetWorldPoints[0] ?? combatSkillFeedbackEvent.originWorldPoint;
+        const controlWorldPoint = {
+          x: (combatSkillFeedbackEvent.originWorldPoint.x + targetWorldPoint.x) / 2,
+          y:
+            Math.min(combatSkillFeedbackEvent.originWorldPoint.y, targetWorldPoint.y) -
+            radius * (0.18 + fusionIntensity * 0.04)
+        };
+
+        graphics.setStrokeStyle({
+          alpha: 0.42 * alpha,
+          color: glow,
+          width: 4 + fusionIntensity
+        });
+        graphics.moveTo(
+          combatSkillFeedbackEvent.originWorldPoint.x,
+          combatSkillFeedbackEvent.originWorldPoint.y
+        );
+        graphics.quadraticCurveTo(
+          controlWorldPoint.x,
+          controlWorldPoint.y,
+          targetWorldPoint.x,
+          targetWorldPoint.y
+        );
+        graphics.stroke();
+
+        graphics.setStrokeStyle({
+          alpha: 0.76 * alpha,
+          color: core,
+          width: 2 + fusionIntensity
+        });
+        graphics.circle(targetWorldPoint.x, targetWorldPoint.y, 10 + fusionIntensity * 2);
+        graphics.stroke();
         break;
       }
       case "cinder-burst": {
@@ -200,6 +269,8 @@ const drawCombatSkillFeedback =
           width: 3 + fusionIntensity
         });
         graphics.circle(centerWorldPoint.x, centerWorldPoint.y, burstRadius);
+        graphics.stroke();
+        graphics.circle(centerWorldPoint.x, centerWorldPoint.y, burstRadius * 0.54);
         graphics.stroke();
 
         const spokeCount = 4 + fusionIntensity * 2;
@@ -245,6 +316,21 @@ const drawCombatSkillFeedback =
         );
         graphics.stroke();
 
+        for (let markerIndex = 0; markerIndex < 3 + fusionIntensity; markerIndex += 1) {
+          const markerAngle =
+            progress * Math.PI * 2 + (Math.PI * 2 * markerIndex) / (3 + fusionIntensity);
+          graphics.setFillStyle({
+            alpha: 0.65 * alpha,
+            color: core
+          });
+          graphics.circle(
+            combatSkillFeedbackEvent.originWorldPoint.x + Math.cos(markerAngle) * orbitRadius,
+            combatSkillFeedbackEvent.originWorldPoint.y + Math.sin(markerAngle) * orbitRadius,
+            5 + fusionIntensity
+          );
+          graphics.fill();
+        }
+
         if (fusionIntensity > 0) {
           graphics.circle(
             combatSkillFeedbackEvent.originWorldPoint.x,
@@ -271,6 +357,22 @@ const drawCombatSkillFeedback =
         graphics.lineTo(centerWorldPoint.x + sealRadius * 0.72, centerWorldPoint.y);
         graphics.moveTo(centerWorldPoint.x, centerWorldPoint.y - sealRadius * 0.72);
         graphics.lineTo(centerWorldPoint.x, centerWorldPoint.y + sealRadius * 0.72);
+        graphics.moveTo(
+          centerWorldPoint.x - sealRadius * 0.44,
+          centerWorldPoint.y - sealRadius * 0.44
+        );
+        graphics.lineTo(
+          centerWorldPoint.x + sealRadius * 0.44,
+          centerWorldPoint.y + sealRadius * 0.44
+        );
+        graphics.moveTo(
+          centerWorldPoint.x + sealRadius * 0.44,
+          centerWorldPoint.y - sealRadius * 0.44
+        );
+        graphics.lineTo(
+          centerWorldPoint.x - sealRadius * 0.44,
+          centerWorldPoint.y + sealRadius * 0.44
+        );
         graphics.stroke();
 
         if (fusionIntensity > 0) {

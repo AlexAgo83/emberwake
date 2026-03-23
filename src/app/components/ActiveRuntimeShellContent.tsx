@@ -485,7 +485,9 @@ export function ActiveRuntimeShellContent({
             goldCollected={simulationState.gameState.systems.progression.goldCollected}
             isMobile={isMobileLayout}
             nextLevelXpRequired={simulationState.gameState.systems.progression.nextLevelXpRequired}
+            phaseLabel={simulationState.gameState.systems.progression.phaseLabel}
             playerHealth={simulationState.entity.combat.currentHealth}
+            playerHealthMax={simulationState.entity.combat.maxHealth}
             playerName={runtimeSession.playerName || "Wanderer"}
           />
         ) : null}

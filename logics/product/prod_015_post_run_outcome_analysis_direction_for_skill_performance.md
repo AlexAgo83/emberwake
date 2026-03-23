@@ -1,9 +1,9 @@
 ## prod_015_post_run_outcome_analysis_direction_for_skill_performance - Post-run outcome analysis direction for skill performance
 > Date: 2026-03-23
-> Status: Draft
+> Status: Validated
 > Related request: `req_066_define_a_game_over_skill_ranking_view_toggle`
 > Related backlog: `item_248_define_a_game_over_view_toggle_between_recap_and_skill_ranking_analysis`, `item_249_define_a_first_pass_skill_performance_summary_contract_for_post_run_ranking`, `item_250_define_a_compact_skill_ranking_presentation_for_game_over_analysis`, `item_251_define_targeted_validation_for_game_over_skill_analysis_readability_and_metric_credibility`
-> Related task: `TBD after request approval`
+> Related task: `task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves`
 > Related architecture: `adr_027_expose_gameplay_outcomes_as_a_game_owned_shell_consumable_contract`, `adr_046_expose_post_run_skill_performance_summaries_as_shell_consumable_outcome_data`
 > Reminder: Update status, linked refs, scope, decisions, success signals, and open questions when you edit this doc.
 

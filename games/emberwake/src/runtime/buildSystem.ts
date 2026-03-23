@@ -60,7 +60,7 @@ export type BuildState = {
   recentFusionId: FusionId | null;
 };
 
-type ActiveWeaponDefinition = {
+export type ActiveWeaponDefinition = {
   attackKind: ActiveWeaponAttackKind;
   baseAreaRadiusWorldUnits?: number;
   baseArcRadians?: number;
@@ -80,7 +80,7 @@ type ActiveWeaponDefinition = {
   visibleTickStep?: number;
 };
 
-type PassiveItemDefinition = {
+export type PassiveItemDefinition = {
   id: PassiveItemId;
   label: string;
   maxLevel: number;
@@ -94,7 +94,7 @@ type PassiveItemDefinition = {
     | "pickup-radius";
 };
 
-type FusionDefinition = {
+export type FusionDefinition = {
   activeWeaponId: ActiveWeaponId;
   cooldownMultiplier: number;
   damageMultiplier: number;
@@ -258,6 +258,9 @@ const passiveItemDefinitions: Record<PassiveItemId, PassiveItemDefinition> = {
   }
 };
 
+export const activeWeaponIds = Object.keys(activeWeaponDefinitions) as ActiveWeaponId[];
+export const passiveItemIds = Object.keys(passiveItemDefinitions) as PassiveItemId[];
+
 const fusionDefinitions: Record<FusionId, FusionDefinition> = {
   "blackfile-volley": {
     activeWeaponId: "shade-kunai",
@@ -300,6 +303,8 @@ const fusionDefinitions: Record<FusionId, FusionDefinition> = {
     targetCountBonus: 3
   }
 };
+
+export const fusionIds = Object.keys(fusionDefinitions) as FusionId[];
 
 type PassiveModifierState = {
   areaMultiplier: number;
@@ -395,6 +400,15 @@ export const getPassiveItemDefinition = (passiveItemId: PassiveItemId) =>
   passiveItemDefinitions[passiveItemId];
 
 export const getFusionDefinition = (fusionId: FusionId) => fusionDefinitions[fusionId];
+
+export const listActiveWeaponDefinitions = () =>
+  activeWeaponIds.map((weaponId) => activeWeaponDefinitions[weaponId]);
+
+export const listPassiveItemDefinitions = () =>
+  passiveItemIds.map((passiveItemId) => passiveItemDefinitions[passiveItemId]);
+
+export const listFusionDefinitions = () =>
+  fusionIds.map((fusionId) => fusionDefinitions[fusionId]);
 
 export const createInitialBuildState = (): BuildState => ({
   activeSlots: [

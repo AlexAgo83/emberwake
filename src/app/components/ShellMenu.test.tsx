@@ -205,14 +205,14 @@ describe("ShellMenu", () => {
     expect(props.onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it("renders a stateful command deck trigger and contextual header for the live runtime", () => {
+  it("renders a compact stateful menu trigger and contextual header for the live runtime", () => {
     const props = createProps({
       isOpen: false
     });
 
     render(<ShellMenu {...props} />);
 
-    expect(screen.getByRole("button", { name: /Command deck/i })).toHaveTextContent("Live");
+    expect(screen.getByRole("button", { name: /Menu/i })).toHaveTextContent("Live");
   });
 
   it("keeps the primary action aligned with the paused shell scene without the removed context panel", () => {

@@ -54,6 +54,12 @@ const sceneStatusMap: Record<
     title: "Runtime boot sequence",
     tone: "cold"
   },
+  bestiary: {
+    detail: "The shell is presenting the creature archive.",
+    stateLabel: "Archive",
+    title: "Bestiary archive",
+    tone: "neutral"
+  },
   changelogs: {
     detail: "Release notes are displayed in a shell-owned reader.",
     stateLabel: "Changelog",
@@ -71,6 +77,12 @@ const sceneStatusMap: Record<
     stateLabel: "Failure",
     title: "Renderer recovery",
     tone: "alert"
+  },
+  grimoire: {
+    detail: "The shell is presenting the skill archive.",
+    stateLabel: "Archive",
+    title: "Grimoire archive",
+    tone: "neutral"
   },
   "main-menu": {
     detail: "The main menu is the entry and return hub.",
@@ -236,10 +248,16 @@ export const ShellMenu = memo(function ShellMenu({
     >
       <button
         aria-controls={menuId}
-        aria-expanded={isOpen}
-        aria-haspopup="dialog"
+        aria-expanded={layoutMode === "mobile" ? false : isOpen}
+        aria-haspopup={layoutMode === "mobile" ? undefined : "dialog"}
         className="shell-menu__trigger shell-control shell-control--button"
         onClick={() => {
+          if (layoutMode === "mobile") {
+            onOpenChange(false);
+            onShowPauseScene();
+            return;
+          }
+
           onOpenChange(!isOpen);
         }}
         type="button"
@@ -250,7 +268,7 @@ export const ShellMenu = memo(function ShellMenu({
           <span />
         </span>
         <span className="shell-menu__trigger-copy">
-          <span className="shell-menu__trigger-label">Command deck</span>
+          <span className="shell-menu__trigger-label">Menu</span>
           <span
             className="shell-menu__trigger-state"
             data-tone={sceneStatus.tone}

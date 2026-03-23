@@ -1,7 +1,7 @@
 ## req_063_define_a_techno_shinobi_runtime_hud_relayout_and_mobile_menu_entry_wave - Define a techno-shinobi runtime HUD relayout and mobile menu entry wave
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium
 > Theme: UI

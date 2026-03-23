@@ -16,9 +16,11 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   isLoadAvailable: false,
   onApplyDesktopControlBindings: vi.fn(),
   onBeginNewGame: vi.fn(),
+  onOpenBestiary: vi.fn(),
   onCharacterNameChange: vi.fn(),
   onLoadGame: vi.fn(),
   onOpenChangelogs: vi.fn(),
+  onOpenGrimoire: vi.fn(),
   onOpenNewGame: vi.fn(),
   onOpenSettings: vi.fn(),
   onReturnToMainMenu: vi.fn(),
@@ -26,6 +28,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   onSaveGame: vi.fn(),
   pendingCharacterName: "Wanderer",
   playerName: "",
+  progressionSnapshot: null,
   runtimeOutcome: null,
   scene: "runtime" as const,
   ...overrides
@@ -51,6 +54,8 @@ describe("AppMetaScenePanel", () => {
     const newGameIndex = actionButtons.findIndex((button) => button.textContent?.match(/Start new game/i));
     expect(screen.getByRole("button", { name: /Start new game/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Load game/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Grimoire/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Bestiary/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Changelogs/i })).toBeInTheDocument();
     expect(screen.queryByText(/Meta flow/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/^Session$/i)).not.toBeInTheDocument();
@@ -162,12 +167,14 @@ describe("AppMetaScenePanel", () => {
     expect(props.onReturnToMainMenu).not.toHaveBeenCalled();
   });
 
-  it("stays hidden for the removed pause overlay surface", () => {
-    const { container } = render(
-      <AppMetaScenePanel {...createProps({ scene: "pause" })} />
-    );
+  it("renders the pause scene as a full-screen field-hold surface", () => {
+    const props = createProps({ scene: "pause" });
 
-    expect(container).toBeEmptyDOMElement();
+    render(<AppMetaScenePanel {...props} />);
+
+    expect(screen.getByLabelText("Field hold")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /Resume runtime/i }));
+    expect(props.onResumeRuntime).toHaveBeenCalledTimes(1);
   });
 
   it("renders settings as a compact desktop-controls surface", () => {
@@ -209,7 +216,9 @@ describe("AppMetaScenePanel", () => {
             detail: "Traversal goal reached without shell-owned defeat handling leaking into gameplay internals.",
             emittedAtTick: 42,
             kind: "victory",
-            shellScene: "victory"
+            phaseId: null,
+            shellScene: "victory",
+            skillPerformanceSummaries: []
           },
           scene: "victory"
         })}
@@ -228,6 +237,8 @@ describe("AppMetaScenePanel", () => {
         goldCollected: 7,
         hostileDefeats: 3,
         playerName: "Wanderer",
+        runPhaseLabel: "Black Rain",
+        skillPerformanceSummaries: [],
         ticksSurvived: 9000,
         traversalDistanceWorldUnits: 420
       },
@@ -235,7 +246,9 @@ describe("AppMetaScenePanel", () => {
         detail: "The hostile swarm overran the active run.",
         emittedAtTick: 9000,
         kind: "defeat",
-        shellScene: "defeat"
+        phaseId: "black-rain",
+        shellScene: "defeat",
+        skillPerformanceSummaries: []
       },
       scene: "defeat"
     });

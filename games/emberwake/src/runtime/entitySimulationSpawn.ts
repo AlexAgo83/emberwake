@@ -141,8 +141,10 @@ export const maintainLocalHostilePopulation = ({
   command,
   createHostileEntity,
   entities,
+  localPopulationCap,
   nextHostileSequence,
   spawnMode = "normal",
+  spawnCooldownTicks,
   spawnHeadingMemoryTicks,
   tick,
   worldSeed
@@ -160,8 +162,10 @@ export const maintainLocalHostilePopulation = ({
     spawnedAtTick: number
   ) => SimulatedEntity;
   entities: readonly SimulatedEntity[];
+  localPopulationCap?: number;
   nextHostileSequence: number;
   spawnMode?: ProfilingSpawnMode;
+  spawnCooldownTicks?: number;
   spawnHeadingMemoryTicks: number;
   tick: number;
   worldSeed: string;
@@ -184,12 +188,16 @@ export const maintainLocalHostilePopulation = ({
   );
 
   const localHostileCount = countLocalHostiles(retainedEntities, playerEntity);
-  const spawnCooldownTicks =
-    spawnMode === "fixed-spawn-pressure" ? 1 : hostileCombatContract.hostile.spawnCooldownTicks;
+  const resolvedSpawnCooldownTicks =
+    spawnMode === "fixed-spawn-pressure"
+      ? 1
+      : spawnCooldownTicks ?? hostileCombatContract.hostile.spawnCooldownTicks;
+  const resolvedLocalPopulationCap =
+    localPopulationCap ?? hostileCombatContract.hostile.localPopulationCap;
 
   if (
-    localHostileCount >= hostileCombatContract.hostile.localPopulationCap ||
-    tick % spawnCooldownTicks !== 0
+    localHostileCount >= resolvedLocalPopulationCap ||
+    tick % resolvedSpawnCooldownTicks !== 0
   ) {
     return {
       entities: retainedEntities,

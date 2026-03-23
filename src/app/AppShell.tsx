@@ -88,7 +88,9 @@ export function AppShell() {
     openMenu,
     requestedScene,
     resumeRuntime,
+    showBestiaryScene,
     showChangelogsScene,
+    showGrimoireScene,
     showMainMenuScene,
     showNewGameScene,
     showPauseScene,
@@ -309,6 +311,8 @@ export function AppShell() {
       goldCollected: gameState.systems.progression.goldCollected,
       hostileDefeats: gameState.systems.progression.hostileDefeats,
       playerName: runtimeSession.playerName || "Wanderer",
+      runPhaseLabel: gameState.systems.progression.phaseLabel,
+      skillPerformanceSummaries: gameState.systems.outcome.skillPerformanceSummaries,
       ticksSurvived: gameState.systems.progression.runtimeTicksSurvived,
       traversalDistanceWorldUnits: gameState.systems.progression.traversalDistanceWorldUnits
     });
@@ -335,7 +339,9 @@ export function AppShell() {
       onBeginNewGame={handleBeginNewGame}
       onCharacterNameChange={handleCharacterNameChange}
       onLoadGame={handleLoadGame}
+      onOpenBestiary={showBestiaryScene}
       onOpenChangelogs={showChangelogsScene}
+      onOpenGrimoire={showGrimoireScene}
       onOpenNewGame={handleOpenNewGame}
       onOpenSettings={handleOpenSettings}
       onReturnToMainMenu={handleReturnToMainMenu}
@@ -343,6 +349,7 @@ export function AppShell() {
       onSaveGame={handleSaveGame}
       pendingCharacterName={pendingCharacterName}
       playerName={runtimeSession.playerName}
+      progressionSnapshot={(latestGameStateRef.current ?? sessionInitState)?.systems.progression ?? null}
       runtimeOutcome={runtimeOutcome}
       scene={activeScene}
     />

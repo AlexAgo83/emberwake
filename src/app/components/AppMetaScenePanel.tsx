@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { lazy, memo, Suspense } from "react";
 
 import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
@@ -7,14 +7,26 @@ import { characterNameMaxLength, defaultCharacterName } from "../model/character
 import { renderChangelogMarkdown } from "../model/changelogMarkdown";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
 import { appConfig } from "../../shared/config/appConfig";
+import type { SkillPerformanceSummary } from "@game";
 
 export type GameOverRecap = {
   defeatDetail: string;
   goldCollected: number;
   hostileDefeats: number;
   playerName: string;
+  runPhaseLabel: string;
+  skillPerformanceSummaries: SkillPerformanceSummary[];
   ticksSurvived: number;
   traversalDistanceWorldUnits: number;
+};
+
+export type CodexProgressionSnapshot = {
+  creatureDefeatCounts: Record<string, number> | Partial<Record<string, number>>;
+  discoveredActiveWeaponIds: string[];
+  discoveredCreatureIds: string[];
+  discoveredFusionIds: string[];
+  discoveredPassiveItemIds: string[];
+  phaseLabel: string;
 };
 
 const LazyDesktopControlSettingsSection = lazy(async () => {
@@ -22,6 +34,14 @@ const LazyDesktopControlSettingsSection = lazy(async () => {
 
   return {
     default: module.DesktopControlSettingsSection
+  };
+});
+
+const LazyCodexArchiveScene = lazy(async () => {
+  const module = await import("./CodexArchiveScene");
+
+  return {
+    default: module.CodexArchiveScene
   };
 });
 
@@ -39,9 +59,11 @@ type AppMetaScenePanelProps = {
   isLoadAvailable: boolean;
   onApplyDesktopControlBindings: (bindings: DesktopControlBindings) => void;
   onBeginNewGame: () => void;
+  onOpenBestiary: () => void;
   onCharacterNameChange: (value: string) => void;
   onLoadGame: () => void;
   onOpenChangelogs: () => void;
+  onOpenGrimoire: () => void;
   onOpenNewGame: () => void;
   onOpenSettings: () => void;
   onReturnToMainMenu: () => void;
@@ -49,6 +71,7 @@ type AppMetaScenePanelProps = {
   onSaveGame: () => void;
   pendingCharacterName: string;
   playerName: string;
+  progressionSnapshot: CodexProgressionSnapshot | null;
   runtimeOutcome?: RuntimeShellOutcome | null;
   scene: AppSceneId;
 };
@@ -65,9 +88,11 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   isLoadAvailable,
   onApplyDesktopControlBindings,
   onBeginNewGame,
+  onOpenBestiary,
   onCharacterNameChange,
   onLoadGame,
   onOpenChangelogs,
+  onOpenGrimoire,
   onOpenNewGame,
   onOpenSettings,
   onReturnToMainMenu,
@@ -75,13 +100,18 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   onSaveGame,
   pendingCharacterName,
   playerName,
+  progressionSnapshot,
   runtimeOutcome,
   scene
 }: AppMetaScenePanelProps) {
+  const [defeatView, setDefeatView] = useState<"recap" | "skills">("recap");
   const isShellOwnedScene =
     scene === "main-menu" ||
     scene === "new-game" ||
     scene === "changelogs" ||
+    scene === "grimoire" ||
+    scene === "bestiary" ||
+    scene === "pause" ||
     scene === "settings" ||
     scene === "defeat" ||
     scene === "victory";
@@ -105,6 +135,12 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         ? "New game"
         : scene === "changelogs"
           ? "Changelogs"
+          : scene === "grimoire"
+            ? "Grimoire"
+            : scene === "bestiary"
+              ? "Bestiary"
+              : scene === "pause"
+                ? "Field hold"
         : scene === "settings"
           ? "Settings"
           : scene === "defeat"
@@ -117,6 +153,12 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         ? "Name your character before the run starts."
         : scene === "changelogs"
           ? "Read the latest curated Emberwake release notes."
+          : scene === "grimoire"
+            ? "Review discovered active, passive, and fusion techniques."
+            : scene === "bestiary"
+              ? "Inspect the field archive of encountered hostile forms."
+              : scene === "pause"
+                ? "The run is held while the shell exposes full-screen runtime controls."
         : scene === "settings"
           ? ""
           : scene === "defeat" && gameOverRecap
@@ -142,7 +184,13 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       ? canResumeSession
         ? onResumeRuntime
         : null
-      : scene === "new-game" || scene === "changelogs" || scene === "settings" || scene === "defeat"
+      : scene === "new-game" ||
+          scene === "changelogs" ||
+          scene === "grimoire" ||
+          scene === "bestiary" ||
+          scene === "pause" ||
+          scene === "settings" ||
+          scene === "defeat"
         ? onReturnToMainMenu
         : null;
   const projectVersionLabel = `${appConfig.name} v${appConfig.version}`;
@@ -153,6 +201,10 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         ? "Run initiation"
         : scene === "changelogs"
           ? "Archive"
+          : scene === "grimoire" || scene === "bestiary"
+            ? "Codex archive"
+            : scene === "pause"
+              ? "Field hold"
           : scene === "settings"
             ? "Control bench"
             : scene === "defeat"
@@ -165,19 +217,36 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         ? "Readying run"
         : scene === "changelogs"
           ? "Release ledger"
-          : scene === "settings"
-            ? "Techno dojo"
-            : scene === "defeat"
+          : scene === "grimoire"
+            ? "Skill archive"
+            : scene === "bestiary"
+              ? "Creature archive"
+              : scene === "pause"
+                ? "Hold state"
+        : scene === "settings"
+          ? "Techno dojo"
+          : scene === "defeat"
               ? "Run lost"
               : "Run cleared";
   const sceneTone =
     scene === "new-game" || scene === "victory"
       ? "ember"
-      : scene === "changelogs" || scene === "settings"
+      : scene === "changelogs" ||
+          scene === "settings" ||
+          scene === "grimoire" ||
+          scene === "bestiary" ||
+          scene === "pause"
         ? "steel"
         : scene === "defeat"
           ? "alert"
           : "ice";
+
+  const skillPerformanceSummaries =
+    gameOverRecap?.skillPerformanceSummaries ?? runtimeOutcome?.skillPerformanceSummaries ?? [];
+
+  useEffect(() => {
+    setDefeatView("recap");
+  }, [scene]);
 
   useEffect(() => {
     if (shouldHidePanel || !handleEscapeAction) {
@@ -282,6 +351,20 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               </button>
               <button
                 className="shell-control shell-control--button shell-control--button-quiet"
+                onClick={onOpenGrimoire}
+                type="button"
+              >
+                Grimoire
+              </button>
+              <button
+                className="shell-control shell-control--button shell-control--button-quiet"
+                onClick={onOpenBestiary}
+                type="button"
+              >
+                Bestiary
+              </button>
+              <button
+                className="shell-control shell-control--button shell-control--button-quiet"
                 onClick={onOpenChangelogs}
                 type="button"
               >
@@ -362,6 +445,83 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                   </button>
                 </div>
               </>
+            ) : scene === "grimoire" ? (
+              <>
+                <Suspense fallback={<p className="settings-controls__status">Loading codex archive…</p>}>
+                  <LazyCodexArchiveScene
+                    progressionSnapshot={progressionSnapshot}
+                    scene="grimoire"
+                  />
+                </Suspense>
+                <div className="app-meta-scene__actions">
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onReturnToMainMenu}
+                    type="button"
+                  >
+                    Back to menu
+                  </button>
+                </div>
+              </>
+            ) : scene === "bestiary" ? (
+              <>
+                <Suspense fallback={<p className="settings-controls__status">Loading codex archive…</p>}>
+                  <LazyCodexArchiveScene
+                    progressionSnapshot={progressionSnapshot}
+                    scene="bestiary"
+                  />
+                </Suspense>
+                <div className="app-meta-scene__actions">
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onReturnToMainMenu}
+                    type="button"
+                  >
+                    Back to menu
+                  </button>
+                </div>
+              </>
+            ) : scene === "pause" ? (
+              <>
+                <div className="app-meta-scene__subsurface app-meta-scene__subsurface--outcome">
+                  <p className="app-meta-scene__lead">
+                    The field is paused. Resume the run or branch into shell-owned controls.
+                  </p>
+                </div>
+                <dl className="app-meta-scene__facts">
+                  <div>
+                    <dt>Session</dt>
+                    <dd>{playerName || defaultCharacterName}</dd>
+                  </div>
+                  <div>
+                    <dt>Current phase</dt>
+                    <dd>{progressionSnapshot?.phaseLabel ?? "Ember Watch"}</dd>
+                  </div>
+                </dl>
+                <div className="app-meta-scene__actions">
+                  <button
+                    className="shell-control shell-control--button shell-control--button-primary"
+                    onClick={onResumeRuntime}
+                    type="button"
+                  >
+                    Resume runtime
+                  </button>
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onOpenSettings}
+                    type="button"
+                  >
+                    Settings
+                  </button>
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onReturnToMainMenu}
+                    type="button"
+                  >
+                    Back to menu
+                  </button>
+                </div>
+              </>
             ) : scene === "settings" ? (
               <>
                 <div className="app-meta-scene__scene-body app-meta-scene__scene-body--settings">
@@ -399,28 +559,77 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 <div className="app-meta-scene__subsurface app-meta-scene__subsurface--outcome">
                   <p className="app-meta-scene__lead">Record the fall, then decide the next move.</p>
                 </div>
-                <dl className="app-meta-scene__facts">
-                  <div>
-                    <dt>Session</dt>
-                    <dd>{gameOverRecap?.playerName || playerName || defaultCharacterName}</dd>
+                <div className="app-meta-scene__toggle-row" role="tablist" aria-label="Game over views">
+                  <button
+                    aria-selected={defeatView === "recap"}
+                    className="app-meta-scene__toggle"
+                    onClick={() => {
+                      setDefeatView("recap");
+                    }}
+                    role="tab"
+                    type="button"
+                  >
+                    Recap
+                  </button>
+                  <button
+                    aria-selected={defeatView === "skills"}
+                    className="app-meta-scene__toggle"
+                    onClick={() => {
+                      setDefeatView("skills");
+                    }}
+                    role="tab"
+                    type="button"
+                  >
+                    Skill ranking
+                  </button>
+                </div>
+                {defeatView === "recap" ? (
+                  <dl className="app-meta-scene__facts">
+                    <div>
+                      <dt>Session</dt>
+                      <dd>{gameOverRecap?.playerName || playerName || defaultCharacterName}</dd>
+                    </div>
+                    <div>
+                      <dt>Survived</dt>
+                      <dd>{formatRunDuration(gameOverRecap?.ticksSurvived ?? 0)}</dd>
+                    </div>
+                    <div>
+                      <dt>Traversal</dt>
+                      <dd>{Math.round(gameOverRecap?.traversalDistanceWorldUnits ?? 0)} wu</dd>
+                    </div>
+                    <div>
+                      <dt>Hostile defeats</dt>
+                      <dd>{gameOverRecap?.hostileDefeats ?? 0}</dd>
+                    </div>
+                    <div>
+                      <dt>Gold</dt>
+                      <dd>{gameOverRecap?.goldCollected ?? 0}</dd>
+                    </div>
+                    <div>
+                      <dt>Final phase</dt>
+                      <dd>{gameOverRecap?.runPhaseLabel ?? progressionSnapshot?.phaseLabel ?? "Ember Watch"}</dd>
+                    </div>
+                  </dl>
+                ) : (
+                  <div className="app-meta-scene__skill-ranking">
+                    {skillPerformanceSummaries.length > 0 ? (
+                      skillPerformanceSummaries.map((summary, summaryIndex) => (
+                        <article className="app-meta-scene__skill-row" key={summary.weaponId}>
+                          <div className="app-meta-scene__skill-rank">{summaryIndex + 1}</div>
+                          <div className="app-meta-scene__skill-copy">
+                            <h3>{summary.label}</h3>
+                            <p>
+                              {summary.totalDamage} total damage · {summary.attacksTriggered} casts ·{" "}
+                              {summary.hostileDefeats} defeats
+                            </p>
+                          </div>
+                        </article>
+                      ))
+                    ) : (
+                      <p className="app-meta-scene__lead">No reliable skill performance sample was captured for this run.</p>
+                    )}
                   </div>
-                  <div>
-                    <dt>Survived</dt>
-                    <dd>{formatRunDuration(gameOverRecap?.ticksSurvived ?? 0)}</dd>
-                  </div>
-                  <div>
-                    <dt>Traversal</dt>
-                    <dd>{Math.round(gameOverRecap?.traversalDistanceWorldUnits ?? 0)} wu</dd>
-                  </div>
-                  <div>
-                    <dt>Hostile defeats</dt>
-                    <dd>{gameOverRecap?.hostileDefeats ?? 0}</dd>
-                  </div>
-                  <div>
-                    <dt>Gold</dt>
-                    <dd>{gameOverRecap?.goldCollected ?? 0}</dd>
-                  </div>
-                </dl>
+                )}
                 <div className="app-meta-scene__actions">
                   <button
                     className="shell-control shell-control--button"

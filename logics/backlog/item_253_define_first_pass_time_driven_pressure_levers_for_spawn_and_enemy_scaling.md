@@ -1,9 +1,9 @@
 ## item_253_define_first_pass_time_driven_pressure_levers_for_spawn_and_enemy_scaling - Define first-pass time-driven pressure levers for spawn and enemy scaling
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

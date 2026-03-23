@@ -1,7 +1,7 @@
 ## req_067_define_a_time_driven_run_progression_and_difficulty_escalation_wave - Define a time driven run progression and difficulty escalation wave
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay

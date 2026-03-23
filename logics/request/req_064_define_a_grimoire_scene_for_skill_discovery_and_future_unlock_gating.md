@@ -1,7 +1,7 @@
 ## req_064_define_a_grimoire_scene_for_skill_discovery_and_future_unlock_gating - Define a grimoire scene for skill discovery and future unlock gating
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium
 > Theme: UI

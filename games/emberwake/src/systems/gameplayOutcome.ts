@@ -1,3 +1,6 @@
+import type { ActiveWeaponId, FusionId } from "@game/runtime/buildSystem";
+import type { RunProgressionPhaseId } from "@game/runtime/runProgressionPhases";
+
 export type GameplayOutcomeKind =
   | "defeat"
   | "none"
@@ -7,11 +10,22 @@ export type GameplayOutcomeKind =
 
 export type GameplayShellSceneHint = "defeat" | "none" | "pause" | "victory";
 
+export type SkillPerformanceSummary = {
+  attacksTriggered: number;
+  fusionId: FusionId | null;
+  hostileDefeats: number;
+  label: string;
+  totalDamage: number;
+  weaponId: ActiveWeaponId;
+};
+
 export type GameplayShellOutcome = {
   detail: string;
   emittedAtTick: number | null;
   kind: GameplayOutcomeKind;
+  phaseId: RunProgressionPhaseId | null;
   shellScene: GameplayShellSceneHint;
+  skillPerformanceSummaries: SkillPerformanceSummary[];
 };
 
 export const gameplayOutcomeContract = {
@@ -32,6 +46,7 @@ export const createIdleGameplayOutcome = (): GameplayShellOutcome => ({
   detail: gameplayOutcomeContract.defaults.detail,
   emittedAtTick: null,
   kind: "none",
-  shellScene: gameplayOutcomeContract.defaults.shellScene
+  phaseId: null,
+  shellScene: gameplayOutcomeContract.defaults.shellScene,
+  skillPerformanceSummaries: []
 });
-

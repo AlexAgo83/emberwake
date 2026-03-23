@@ -1,9 +1,9 @@
 ## item_234_define_a_stronger_cinder_arc_anticipation_and_travel_signature_without_full_projectiles - Define a stronger Cinder Arc anticipation and travel signature without full projectiles
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

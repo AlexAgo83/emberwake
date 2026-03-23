@@ -459,6 +459,213 @@ html[data-app-display-mode="browser"] .app-shell {
   line-height: 1.6;
 }
 
+.app-meta-scene__codex-grid,
+.app-meta-scene__skill-ranking {
+  display: grid;
+  gap: 0.8rem;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 0.2rem;
+  scrollbar-gutter: stable;
+}
+
+.app-meta-scene__codex-section {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.app-meta-scene__codex-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.app-meta-scene__codex-count {
+  color: var(--emberwake-copy-dim);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.app-meta-scene__codex-cards {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.app-meta-scene__codex-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.92rem 0.98rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.95rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent),
+    rgba(9, 13, 17, 0.74);
+}
+
+.app-meta-scene__codex-card[data-state="unknown"] {
+  border-style: dashed;
+  opacity: 0.84;
+}
+
+.app-meta-scene__codex-icon {
+  width: 2.8rem;
+  height: 2.8rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(115, 216, 255, 0.18);
+  border-radius: 0.82rem;
+  background: rgba(115, 216, 255, 0.05);
+  color: var(--emberwake-copy);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.app-meta-scene__codex-card[data-state="unknown"] .app-meta-scene__codex-icon {
+  border-style: dashed;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--emberwake-copy-muted);
+}
+
+.app-meta-scene__codex-copy {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.app-meta-scene__codex-copy h3,
+.app-meta-scene__codex-copy p {
+  margin: 0;
+}
+
+.app-meta-scene__codex-copy h3 {
+  color: var(--emberwake-copy);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.app-meta-scene__codex-copy p,
+.app-meta-scene__codex-unknown-line {
+  color: var(--emberwake-copy-dim);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.app-meta-scene__codex-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0.28rem 0 0;
+}
+
+.app-meta-scene__codex-stats div {
+  display: grid;
+  gap: 0.18rem;
+  padding: 0.58rem 0.64rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0.72rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.app-meta-scene__codex-stats dt {
+  color: var(--emberwake-copy-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.app-meta-scene__codex-stats dd {
+  margin: 0;
+  color: var(--emberwake-copy);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.app-meta-scene__toggle-row {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+  padding: 0.32rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.app-meta-scene__toggle {
+  min-height: 2rem;
+  padding: 0.38rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--emberwake-copy-dim);
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.app-meta-scene__toggle[aria-selected="true"] {
+  background: rgba(115, 216, 255, 0.08);
+  color: var(--emberwake-copy);
+}
+
+.app-meta-scene__skill-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.82rem 0.88rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.9rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
+    rgba(9, 13, 17, 0.74);
+}
+
+.app-meta-scene__skill-rank {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255, 183, 104, 0.18);
+  border-radius: 0.72rem;
+  background: rgba(255, 183, 104, 0.08);
+  color: var(--emberwake-accent-warm);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.app-meta-scene__skill-copy {
+  display: grid;
+  gap: 0.16rem;
+}
+
+.app-meta-scene__skill-copy h3,
+.app-meta-scene__skill-copy p {
+  margin: 0;
+}
+
+.app-meta-scene__skill-copy h3 {
+  color: var(--emberwake-copy);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.app-meta-scene__skill-copy p {
+  color: var(--emberwake-copy-dim);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
 .app-meta-scene__markdown-heading,
 .app-meta-scene__markdown-paragraph,
 .app-meta-scene__markdown-list {

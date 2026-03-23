@@ -1,9 +1,9 @@
 ## prod_016_time_owned_run_arc_and_authored_difficulty_phases - Time-owned run arc and authored difficulty phases
 > Date: 2026-03-23
-> Status: Draft
+> Status: Validated
 > Related request: `req_067_define_a_time_driven_run_progression_and_difficulty_escalation_wave`
 > Related backlog: `item_252_define_an_authored_time_phase_model_for_run_progression_beats`, `item_253_define_first_pass_time_driven_pressure_levers_for_spawn_and_enemy_scaling`, `item_254_define_player_facing_phase_signaling_for_time_driven_run_escalation`, `item_255_define_targeted_validation_for_time_owned_run_pacing_and_difficulty_escalation`
-> Related task: `TBD after request approval`
+> Related task: `task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves`
 > Related architecture: `adr_039_structure_the_first_survivor_build_loop_around_separate_active_and_passive_slots`, `adr_047_structure_first_pass_run_difficulty_escalation_as_authored_time_phases`
 > Reminder: Update status, linked refs, scope, decisions, success signals, and open questions when you edit this doc.
 

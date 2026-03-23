@@ -1,9 +1,9 @@
 ## item_238_define_a_compact_top_left_player_progression_hud_block - Define a compact top-left player progression HUD block
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

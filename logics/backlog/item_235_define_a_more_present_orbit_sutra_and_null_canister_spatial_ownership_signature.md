@@ -1,9 +1,9 @@
 ## item_235_define_a_more_present_orbit_sutra_and_null_canister_spatial_ownership_signature - Define a more present Orbit Sutra and Null Canister spatial ownership signature
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

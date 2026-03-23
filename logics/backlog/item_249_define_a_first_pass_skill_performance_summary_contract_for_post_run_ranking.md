@@ -1,9 +1,9 @@
 ## item_249_define_a_first_pass_skill_performance_summary_contract_for_post_run_ranking - Define a first-pass skill performance summary contract for post-run ranking
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 99%
+> Status: Done
+> Understanding: 100%
 > Confidence: 98%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
