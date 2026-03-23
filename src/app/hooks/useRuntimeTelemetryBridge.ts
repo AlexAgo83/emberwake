@@ -11,10 +11,34 @@ declare global {
       bootStartedAtMs: number;
       diagnosticsVisible: boolean;
       runtimeState: {
+        combatSkillFeedbackEventCount: number;
         entityCount: number;
+        entityRoleCounts: {
+          hostile: number;
+          pickup: number;
+          player: number;
+          support: number;
+        };
         floatingDamageNumberCount: number;
         hostileCount: number;
+        hostileProfileCounts: {
+          ashDrifter: number;
+          sentinelHusk: number;
+          watchglass: number;
+          watchglassPrime: number;
+        };
         pickupCount: number;
+        pickupKindCounts: {
+          cache: number;
+          crystal: number;
+          gold: number;
+          healingKit: number;
+        };
+        pickupStackTotals: {
+          crystal: number;
+          gold: number;
+          total: number;
+        };
         playerHealth: number;
         tick: number;
       };
@@ -59,10 +83,34 @@ type RuntimeTelemetryBridgeOptions = {
     shellChrome: string;
   };
   runtimeState: {
+    combatSkillFeedbackEventCount: number;
     entityCount: number;
+    entityRoleCounts: {
+      hostile: number;
+      pickup: number;
+      player: number;
+      support: number;
+    };
     floatingDamageNumberCount: number;
     hostileCount: number;
+    hostileProfileCounts: {
+      ashDrifter: number;
+      sentinelHusk: number;
+      watchglass: number;
+      watchglassPrime: number;
+    };
     pickupCount: number;
+    pickupKindCounts: {
+      cache: number;
+      crystal: number;
+      gold: number;
+      healingKit: number;
+    };
+    pickupStackTotals: {
+      crystal: number;
+      gold: number;
+      total: number;
+    };
     playerHealth: number;
     tick: number;
   };

@@ -1,3 +1,4 @@
+import { createWriteStream } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { createServer } from "node:net";
@@ -176,7 +177,42 @@ const readProfilingSnapshot = async (page) =>
     };
   });
 
+const captureHeapSnapshot = async ({ cdpSession, fileUrl, label, page }) => {
+  await cdpSession.send("HeapProfiler.enable");
+
+  try {
+    await cdpSession.send("HeapProfiler.collectGarbage");
+  } catch {}
+
+  const outputStream = createWriteStream(fileUrl);
+  const handleChunk = ({ chunk }) => {
+    outputStream.write(chunk);
+  };
+
+  cdpSession.on("HeapProfiler.addHeapSnapshotChunk", handleChunk);
+
+  try {
+    await page.waitForTimeout(50);
+    await cdpSession.send("HeapProfiler.takeHeapSnapshot", {
+      reportProgress: false
+    });
+  } finally {
+    cdpSession.off("HeapProfiler.addHeapSnapshotChunk", handleChunk);
+    outputStream.end();
+    await new Promise((resolve, reject) => {
+      outputStream.on("finish", resolve);
+      outputStream.on("error", reject);
+    });
+  }
+
+  return {
+    label,
+    path: fileUrl.pathname
+  };
+};
+
 const summarizeSamples = (samples) => {
+  const safeMax = (values) => (values.length > 0 ? Math.max(...values) : null);
   const heapSamples = samples
     .map((sample) => sample.memory?.usedJSHeapSize ?? null)
     .filter((heapValue) => typeof heapValue === "number");
@@ -186,11 +222,54 @@ const summarizeSamples = (samples) => {
   const entityCountSamples = samples
     .map((sample) => sample.runtimeMetrics?.runtimeState?.entityCount ?? null)
     .filter((entityCount) => typeof entityCount === "number");
+  const pickupCountSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.pickupCount ?? null)
+    .filter((pickupCount) => typeof pickupCount === "number");
+  const crystalPickupSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.pickupKindCounts?.crystal ?? null)
+    .filter((pickupCount) => typeof pickupCount === "number");
+  const crystalPickupStackSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.pickupStackTotals?.crystal ?? null)
+    .filter((pickupCount) => typeof pickupCount === "number");
+  const goldPickupSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.pickupKindCounts?.gold ?? null)
+    .filter((pickupCount) => typeof pickupCount === "number");
+  const goldPickupStackSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.pickupStackTotals?.gold ?? null)
+    .filter((pickupCount) => typeof pickupCount === "number");
+  const cachePickupSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.pickupKindCounts?.cache ?? null)
+    .filter((pickupCount) => typeof pickupCount === "number");
+  const healingPickupSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.pickupKindCounts?.healingKit ?? null)
+    .filter((pickupCount) => typeof pickupCount === "number");
+  const floatingDamageNumberSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.floatingDamageNumberCount ?? null)
+    .filter((count) => typeof count === "number");
+  const combatSkillFeedbackSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.combatSkillFeedbackEventCount ?? null)
+    .filter((count) => typeof count === "number");
+  const ashDrifterSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.hostileProfileCounts?.ashDrifter ?? null)
+    .filter((count) => typeof count === "number");
+  const sentinelHuskSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.hostileProfileCounts?.sentinelHusk ?? null)
+    .filter((count) => typeof count === "number");
+  const watchglassSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.hostileProfileCounts?.watchglass ?? null)
+    .filter((count) => typeof count === "number");
+  const watchglassPrimeSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.hostileProfileCounts?.watchglassPrime ?? null)
+    .filter((count) => typeof count === "number");
 
   return {
+    combatSkillFeedbackEventCount: {
+      final: combatSkillFeedbackSamples.at(-1) ?? null,
+      max: safeMax(combatSkillFeedbackSamples)
+    },
     entityCount: {
       final: entityCountSamples.at(-1) ?? null,
-      max: entityCountSamples.length > 0 ? Math.max(...entityCountSamples) : null
+      max: safeMax(entityCountSamples)
     },
     fps: {
       average:
@@ -199,13 +278,35 @@ const summarizeSamples = (samples) => {
           : null,
       min: fpsSamples.length > 0 ? Math.min(...fpsSamples) : null
     },
+    floatingDamageNumberCount: {
+      final: floatingDamageNumberSamples.at(-1) ?? null,
+      max: safeMax(floatingDamageNumberSamples)
+    },
     heapUsedBytes: {
       delta:
         heapSamples.length > 1
           ? heapSamples.at(-1) - heapSamples[0]
           : null,
-      max: heapSamples.length > 0 ? Math.max(...heapSamples) : null,
+      max: safeMax(heapSamples),
       min: heapSamples.length > 0 ? Math.min(...heapSamples) : null
+    },
+    hostileProfileCounts: {
+      ashDrifterMax: safeMax(ashDrifterSamples),
+      sentinelHuskMax: safeMax(sentinelHuskSamples),
+      watchglassMax: safeMax(watchglassSamples),
+      watchglassPrimeMax: safeMax(watchglassPrimeSamples)
+    },
+    pickupCount: {
+      final: pickupCountSamples.at(-1) ?? null,
+      max: safeMax(pickupCountSamples)
+    },
+    pickupKinds: {
+      cacheMax: safeMax(cachePickupSamples),
+      crystalEntityMax: safeMax(crystalPickupSamples),
+      crystalStackMax: safeMax(crystalPickupStackSamples),
+      goldEntityMax: safeMax(goldPickupSamples),
+      goldStackMax: safeMax(goldPickupStackSamples),
+      healingKitMax: safeMax(healingPickupSamples)
     }
   };
 };
@@ -256,6 +357,7 @@ try {
   await page.goto(previewUrl, {
     waitUntil: "networkidle"
   });
+  const cdpSession = await page.context().newCDPSession(page);
   await page.waitForFunction(() => Boolean(globalThis.window.__EMBERWAKE_PROFILING__?.setConfig));
 
   const scenarioCatalog = await page.evaluate(
@@ -319,6 +421,10 @@ try {
     );
   }
 
+  const runTimestamp = new Date();
+  const timestampLabel = formatTimestampLabel(runTimestamp);
+  const baseArtifactName = `${cliOptions.scenarioId}-${timestampLabel}`;
+
   await page.evaluate(
     ({ loop, scenarioId, speedMultiplier }) =>
       globalThis.window.__EMBERWAKE_PROFILING__?.startScenario?.({
@@ -335,25 +441,56 @@ try {
 
   const startedAt = Date.now();
   const samples = [];
+  const heapSnapshots = [];
+
+  heapSnapshots.push(
+    await captureHeapSnapshot({
+      cdpSession,
+      fileUrl: new URL(`${baseArtifactName}-heap-start.heapsnapshot`, outputDirectory),
+      label: "start",
+      page
+    })
+  );
+  let midpointSnapshotCaptured = false;
 
   while (Date.now() - startedAt < cliOptions.durationMs) {
     samples.push(await readProfilingSnapshot(page));
+
+    if (!midpointSnapshotCaptured && Date.now() - startedAt >= cliOptions.durationMs / 2) {
+      midpointSnapshotCaptured = true;
+      heapSnapshots.push(
+        await captureHeapSnapshot({
+          cdpSession,
+          fileUrl: new URL(`${baseArtifactName}-heap-mid.heapsnapshot`, outputDirectory),
+          label: "mid",
+          page
+        })
+      );
+    }
+
     await page.waitForTimeout(cliOptions.sampleIntervalMs);
   }
 
   samples.push(await readProfilingSnapshot(page));
+  heapSnapshots.push(
+    await captureHeapSnapshot({
+      cdpSession,
+      fileUrl: new URL(`${baseArtifactName}-heap-end.heapsnapshot`, outputDirectory),
+      label: "end",
+      page
+    })
+  );
   await page.evaluate(() => {
     globalThis.window.__EMBERWAKE_PROFILING__?.stopScenario?.();
     globalThis.window.__EMBERWAKE_PROFILING__?.resetConfig?.();
   });
 
   const timestamp = new Date();
-  const timestampLabel = formatTimestampLabel(timestamp);
-  const baseArtifactName = `${cliOptions.scenarioId}-${timestampLabel}`;
   const summary = summarizeSamples(samples);
   const artifact = {
     durationMs: cliOptions.durationMs,
     endedAtIso: timestamp.toISOString(),
+    heapSnapshots,
     runtimeSummary: summary,
     sampleCount: samples.length,
     sampleIntervalMs: cliOptions.sampleIntervalMs,

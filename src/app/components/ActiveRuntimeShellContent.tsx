@@ -224,6 +224,72 @@ export function ActiveRuntimeShellContent({
   const buildState = simulationState.gameState.simulation.buildState;
   const levelUpChoices = buildState.levelUpChoices;
   const levelUpVisible = activeScene === "runtime" && levelUpChoices.length > 0;
+  const runtimeEntityBreakdown = useMemo(() => {
+    const entityRoleCounts = {
+      hostile: 0,
+      pickup: 0,
+      player: 0,
+      support: 0
+    };
+    const hostileProfileCounts = {
+      ashDrifter: 0,
+      sentinelHusk: 0,
+      watchglass: 0,
+      watchglassPrime: 0
+    };
+    const pickupKindCounts = {
+      cache: 0,
+      crystal: 0,
+      gold: 0,
+      healingKit: 0
+    };
+    const pickupStackTotals = {
+      crystal: 0,
+      gold: 0,
+      total: 0
+    };
+
+    for (const entity of simulationState.entities) {
+      entityRoleCounts[entity.role] += 1;
+
+      if (entity.role === "hostile") {
+        if (entity.hostileProfileId === "ash-drifter") {
+          hostileProfileCounts.ashDrifter += 1;
+        } else if (entity.hostileProfileId === "sentinel-husk") {
+          hostileProfileCounts.sentinelHusk += 1;
+        } else if (entity.hostileProfileId === "watchglass") {
+          hostileProfileCounts.watchglass += 1;
+        } else if (entity.hostileProfileId === "watchglass-prime") {
+          hostileProfileCounts.watchglassPrime += 1;
+        }
+      }
+
+      if (entity.role === "pickup" && entity.pickupProfile) {
+        const pickupStackCount = Math.max(1, entity.pickupProfile.stackCount ?? 1);
+
+        if (entity.pickupProfile.kind === "cache") {
+          pickupKindCounts.cache += 1;
+        } else if (entity.pickupProfile.kind === "crystal") {
+          pickupKindCounts.crystal += 1;
+          pickupStackTotals.crystal += pickupStackCount;
+          pickupStackTotals.total += pickupStackCount;
+        } else if (entity.pickupProfile.kind === "gold") {
+          pickupKindCounts.gold += 1;
+          pickupStackTotals.gold += pickupStackCount;
+          pickupStackTotals.total += pickupStackCount;
+        } else if (entity.pickupProfile.kind === "healing-kit") {
+          pickupKindCounts.healingKit += 1;
+        }
+      }
+    }
+
+    return {
+      entityRoleCounts,
+      hostileProfileCounts,
+      pickupKindCounts,
+      pickupStackTotals
+    };
+  }, [simulationState.entities]);
   const levelUpChoiceSignature = useMemo(
     () => levelUpChoices.map((choice) => choice.id).join("|"),
     [levelUpChoices]
@@ -367,10 +433,15 @@ export function ActiveRuntimeShellContent({
     rendererState,
     runtime: simulationState.runtime,
     runtimeState: {
+      combatSkillFeedbackEventCount: simulationState.combatSkillFeedbackEvents.length,
       entityCount: simulationState.entities.length,
+      entityRoleCounts: runtimeEntityBreakdown.entityRoleCounts,
       floatingDamageNumberCount: simulationState.floatingDamageNumbers.length,
       hostileCount: simulationState.entities.filter((entity) => entity.role === "hostile").length,
+      hostileProfileCounts: runtimeEntityBreakdown.hostileProfileCounts,
       pickupCount: simulationState.entities.filter((entity) => entity.role === "pickup").length,
+      pickupKindCounts: runtimeEntityBreakdown.pickupKindCounts,
+      pickupStackTotals: runtimeEntityBreakdown.pickupStackTotals,
       playerHealth: simulationState.entity.combat.currentHealth,
       tick: simulationState.tick
     }

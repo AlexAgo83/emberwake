@@ -179,6 +179,30 @@ npm run logics:lint
 npm run release:ready:advisory
 ```
 
+## Long-Session Memory Profiling
+
+The repeatable memory-pressure scenario we use most often right now is `left-right-pendulum`.
+It alternates the player `5s` right / `5s` left in a loop, runs under Playwright, auto-picks level-up choices, forces runtime simulation to `4x`, and writes JSON plus heap snapshots under `output/playwright/long-session/`.
+
+Quick rerun:
+
+```bash
+npm run test:browser:profile:pendulum
+```
+
+Generic runner:
+
+```bash
+npm run test:browser:profile:long -- --scenario left-right-pendulum --duration 120s --loop
+```
+
+Artifacts to inspect after a run:
+
+- `output/playwright/long-session/latest.json`
+- `output/playwright/long-session/*-heap-start.heapsnapshot`
+- `output/playwright/long-session/*-heap-mid.heapsnapshot`
+- `output/playwright/long-session/*-heap-end.heapsnapshot`
+
 ## Controls
 
 - **Mobile:** virtual stick for direct movement.
