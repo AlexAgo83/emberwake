@@ -3,8 +3,8 @@
 > Status: Proposed
 > Drivers: Shell-owned scenes increasingly contain variable-height content, but the current layout posture mixes viewport locking, fixed panel heights, and `overflow: hidden`, which makes some screens clip or hide bottom actions instead of scrolling safely.
 > Related request: `req_068_define_a_viewport_safe_scroll_ownership_wave_for_shell_surfaces`
-> Related backlog: Pending split
-> Related task: Pending orchestration
+> Related backlog: `item_274_define_a_shared_viewport_safe_shell_surface_sizing_contract`, `item_275_define_a_single_scroll_owner_scene_body_posture_for_variable_height_shell_content`, `item_276_define_regression_fixes_for_existing_shell_scenes_under_the_viewport_safe_scroll_contract`, `item_277_define_targeted_validation_for_shell_viewport_fit_scroll_ownership_and_action_reachability`
+> Related task: `task_056_orchestrate_viewport_safe_scroll_ownership_for_shell_surfaces`
 > Related architecture: `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_044_split_runtime_hud_into_anchored_blocks_and_route_mobile_menu_entry_to_the_full_screen_shell_surface.md`
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
@@ -70,8 +70,5 @@ Shell-owned scenes should follow one shared viewport-safe layout contract:
 - Add validation expectations so future scene work checks scroll ownership before merge.
 
 # Follow-up work
-- Split `req_068` into backlog items for:
-  - shell surface sizing contract
-  - shared scene-body scroll posture
-  - regression fixes across existing panels
-  - mobile/non-PWA validation
+- Implement `task_056_orchestrate_viewport_safe_scroll_ownership_for_shell_surfaces`.
+- Use the resulting validation matrix to reject future shell scenes that reintroduce viewport clipping or missing scroll ownership.

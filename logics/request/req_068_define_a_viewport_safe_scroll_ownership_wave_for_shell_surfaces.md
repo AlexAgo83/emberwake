@@ -1,8 +1,8 @@
 ## req_068_define_a_viewport_safe_scroll_ownership_wave_for_shell_surfaces - Define a viewport-safe scroll ownership wave for shell surfaces
-> From version: 0.4.0
-> Status: Draft
-> Understanding: 96%
-> Confidence: 96%
+> From version: 0.4.1
+> Status: Ready
+> Understanding: 99%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -87,6 +87,10 @@ flowchart TD
 # Companion docs
 - Architecture decision(s): `adr_048_adopt_a_viewport_safe_scroll_owner_contract_for_shell_surfaces`
 - Request(s): `req_063_define_a_techno_shinobi_runtime_hud_relayout_and_mobile_menu_entry_wave`, `req_064_define_a_grimoire_scene_for_skill_discovery_and_future_unlock_gating`, `req_065_define_a_bestiary_scene_for_discovered_and_defeated_creatures`, `req_066_define_a_game_over_skill_ranking_view_toggle`
+- Primary task(s): `task_056_orchestrate_viewport_safe_scroll_ownership_for_shell_surfaces`
 
 # Backlog
-- Pending split
+- `item_274_define_a_shared_viewport_safe_shell_surface_sizing_contract`
+- `item_275_define_a_single_scroll_owner_scene_body_posture_for_variable_height_shell_content`
+- `item_276_define_regression_fixes_for_existing_shell_scenes_under_the_viewport_safe_scroll_contract`
+- `item_277_define_targeted_validation_for_shell_viewport_fit_scroll_ownership_and_action_reachability`
