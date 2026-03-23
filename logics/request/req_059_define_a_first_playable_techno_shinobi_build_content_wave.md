@@ -1,8 +1,8 @@
 ## req_059_define_a_first_playable_techno_shinobi_build_content_wave - Define a first playable techno-shinobi build content wave
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.

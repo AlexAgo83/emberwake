@@ -20,6 +20,26 @@ export {
 } from "./runtime/entitySimulation";
 export { pickupContract } from "./runtime/pickupContract";
 export {
+  addPendingLevelUps,
+  applyLevelUpChoice,
+  buildSystemContract,
+  createInitialBuildState,
+  getActiveWeaponDefinition,
+  getFusionDefinition,
+  getPassiveItemDefinition,
+  normalizeBuildState,
+  recordActiveWeaponAttack,
+  resolveActiveWeaponRuntimeStats,
+  resolveBuildDisplayLabel,
+  resolveBuildSummary,
+  resolveChestDropCount,
+  resolveChestReward,
+  resolveFusionReadyState,
+  resolveLevelUpChoices,
+  resolvePickupRadiusMultiplier,
+  advanceChestMilestone
+} from "./runtime/buildSystem";
+export {
   createIdleMovementIntent,
   createKeyboardMovementIntent,
   createMovementIntent,
@@ -32,6 +52,18 @@ export type {
   SimulatedEntity,
   SimulationSpeedOption
 } from "./runtime/entitySimulation";
+export type {
+  ActiveWeaponId,
+  ActiveWeaponSlot,
+  BuildChoice,
+  BuildChoiceSelectionKind,
+  BuildChoiceSlotKind,
+  BuildState,
+  FusionId,
+  PassiveItemId,
+  PassiveItemSlot,
+  ResolvedActiveWeaponRuntimeStats
+} from "./runtime/buildSystem";
 export type {
   InputOwner,
   MovementIntent,

@@ -1,8 +1,8 @@
 ## req_060_define_a_smoother_movement_inertia_and_mobile_shell_fit_wave - Define a smoother movement inertia and mobile shell fit wave
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.

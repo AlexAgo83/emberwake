@@ -1,9 +1,9 @@
 ## item_214_define_a_slot_limited_level_up_and_run_reward_model_for_build_growth - Define a slot-limited level-up and run reward model for build growth
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

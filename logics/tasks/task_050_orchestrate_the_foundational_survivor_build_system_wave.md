@@ -1,9 +1,9 @@
 ## task_050_orchestrate_the_foundational_survivor_build_system_wave - Orchestrate the foundational survivor build system wave
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -31,15 +31,15 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Implement the first foundational active roster and adapt the current frontal attack into the formal starter weapon.
-- [ ] 2. Implement the first foundational passive roster with clear build-shaping and fusion-key families.
-- [ ] 3. Implement the slot-limited level-up and reward loop that acquires and upgrades active/passive content during a run.
-- [ ] 4. Implement the first curated active + passive fusion payoff layer and its readiness rules.
-- [ ] 5. Implement player-facing build choice, slot-state, and fusion payoff presentation so the system is readable in practice.
-- [ ] 6. Run targeted validation across content, progression flow, fusion payoff, and player-facing readability.
-- [ ] 7. Update linked request, backlog, ADR, and task docs as the wave lands so traceability stays synchronized with implementation.
-- [ ] CHECKPOINT: leave each completed slice commit-ready before moving to the next one.
-- [ ] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
+- [x] 1. Implement the first foundational active roster and adapt the current frontal attack into the formal starter weapon.
+- [x] 2. Implement the first foundational passive roster with clear build-shaping and fusion-key families.
+- [x] 3. Implement the slot-limited level-up and reward loop that acquires and upgrades active/passive content during a run.
+- [x] 4. Implement the first curated active + passive fusion payoff layer and its readiness rules.
+- [x] 5. Implement player-facing build choice, slot-state, and fusion payoff presentation so the system is readable in practice.
+- [x] 6. Run targeted validation across content, progression flow, fusion payoff, and player-facing readability.
+- [x] 7. Update linked request, backlog, ADR, and task docs as the wave lands so traceability stays synchronized with implementation.
+- [x] CHECKPOINT: leave each completed slice commit-ready before moving to the next one.
+- [x] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
 
 # Delivery checkpoints
 - Land the starter weapon and active/passive content posture early so progression work targets stable content primitives.
@@ -82,12 +82,24 @@ flowchart TD
 - Manual verification that the build-state presentation remains understandable on desktop and mobile-sized viewports.
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] The first active and passive rosters exist in a coherent, bounded first-wave form.
-- [ ] The run-level slot and level-up loop is functional and readable.
-- [ ] At least one curated fusion payoff path is implemented under explicit readiness rules.
-- [ ] Build choice and fusion payoff presentation are readable in practice.
-- [ ] Validation commands are executed and results are captured in the task or linked artifacts.
-- [ ] Linked request, backlog, ADR, and task docs are updated during the wave and at closure.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] The first active and passive rosters exist in a coherent, bounded first-wave form.
+- [x] The run-level slot and level-up loop is functional and readable.
+- [x] At least one curated fusion payoff path is implemented under explicit readiness rules.
+- [x] Build choice and fusion payoff presentation are readable in practice.
+- [x] Validation commands are executed and results are captured in the task or linked artifacts.
+- [x] Linked request, backlog, ADR, and task docs are updated during the wave and at closure.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
+
+# Implementation notes
+- The foundational survivor loop is now live through the concrete techno-shinobi wave: `buildSystem.ts` formalizes separate active and passive slots, bounded level-up choices, chest rewards, fusion readiness, and first-wave fusion resolution.
+- `EntitySimulation`, `entitySimulationCombat`, `emberwakeGameModule`, and `gameplaySystems` now carry the build state as first-class runtime data instead of treating the original frontal attack as an isolated mechanic.
+- The runtime shell now exposes a level-up choice panel and build-state tracking in the feedback HUD, which satisfies the foundational presentation posture required by this orchestration.
+- The more concrete `task_051` implementation is the delivery vehicle that closed this broader foundational wave without splitting the architecture in two competing systems.
+
+# Report
+- Targeted build-system tests, runtime integration tests, gameplay-system tests, and shell component tests passed on the completed implementation.
+- `npm run ci` passed on the completed codebase.
+- `npm run test:browser:smoke` passed on the completed codebase.
+- Manual review confirmed that the first playable build loop now has a coherent starter weapon, readable build UI, bounded level-up choices, and chest-driven fusion payoff plumbing.

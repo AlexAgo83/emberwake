@@ -9,14 +9,18 @@ import { emberwakeGameModule, entitySimulationContract } from "@game/runtime/emb
 import type { EmberwakeGameAction, EmberwakeGameState } from "@game/runtime/emberwakeGameModule";
 
 export const createEngineInputFrameFromControlState = (
-  controlState?: SingleEntityControlState
+  controlState?: SingleEntityControlState,
+  buttons: Record<string, boolean> = {}
 ): EngineInputFrame => {
   if (!controlState) {
-    return createIdleEngineInputFrame();
+    return {
+      ...createIdleEngineInputFrame(),
+      buttons
+    };
   }
 
   return {
-    buttons: {},
+    buttons,
     debug: {
       modifierActive: controlState.debugCameraModifierActive
     },

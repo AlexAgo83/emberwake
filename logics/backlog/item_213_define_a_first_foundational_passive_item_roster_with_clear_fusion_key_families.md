@@ -1,9 +1,9 @@
 ## item_213_define_a_first_foundational_passive_item_roster_with_clear_fusion_key_families - Define a first foundational passive item roster with clear fusion-key families
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

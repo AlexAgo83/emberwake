@@ -1,6 +1,20 @@
 import "./PlayerHudCard.css";
 
 type PlayerHudCardProps = {
+  buildActives?: Array<{
+    id: string;
+    isFusionReady: boolean;
+    isFused: boolean;
+    label: string;
+    level: number;
+    maxLevel: number;
+  }>;
+  buildPassives?: Array<{
+    id: string;
+    label: string;
+    level: number;
+    maxLevel: number;
+  }>;
   currentLevel: number;
   currentXp: number;
   fps: number;
@@ -12,6 +26,8 @@ type PlayerHudCardProps = {
 };
 
 export function PlayerHudCard({
+  buildActives = [],
+  buildPassives = [],
   currentLevel,
   currentXp,
   fps,
@@ -72,6 +88,49 @@ export function PlayerHudCard({
           <strong>{Math.max(0, Math.round(fps))}</strong>
         </div>
       </div>
+
+      {buildActives.length > 0 ? (
+        <div className="player-hud__build">
+          <p className="player-hud__build-title">Actives</p>
+          <div className="player-hud__build-grid">
+            {buildActives.map((activeWeapon) => (
+              <span
+                className="player-hud__build-chip"
+                data-state={
+                  activeWeapon.isFused ? "fused" : activeWeapon.isFusionReady ? "ready" : "base"
+                }
+                key={activeWeapon.id}
+                title={`${activeWeapon.label} Lv ${activeWeapon.level}/${activeWeapon.maxLevel}`}
+              >
+                <strong>{activeWeapon.label}</strong>
+                <small>
+                  Lv {activeWeapon.level}/{activeWeapon.maxLevel}
+                </small>
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {buildPassives.length > 0 ? (
+        <div className="player-hud__build">
+          <p className="player-hud__build-title">Passives</p>
+          <div className="player-hud__build-grid">
+            {buildPassives.map((passiveItem) => (
+              <span
+                className="player-hud__build-chip player-hud__build-chip--passive"
+                key={passiveItem.id}
+                title={`${passiveItem.label} Lv ${passiveItem.level}/${passiveItem.maxLevel}`}
+              >
+                <strong>{passiveItem.label}</strong>
+                <small>
+                  Lv {passiveItem.level}/{passiveItem.maxLevel}
+                </small>
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {isMobile ? (
         <p className="player-hud__hint" data-testid="player-hud-hint">

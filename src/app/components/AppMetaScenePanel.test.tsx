@@ -11,6 +11,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   desktopControlBindings: createDefaultDesktopControlBindings(),
   fullscreenPreferred: false,
   gameOverRecap: null,
+  isMobileLayout: false,
   isShellMenuOpen: false,
   isLoadAvailable: false,
   onApplyDesktopControlBindings: vi.fn(),
@@ -183,6 +184,21 @@ describe("AppMetaScenePanel", () => {
     expect(screen.queryByText("Fullscreen")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Resume runtime/i })).not.toBeInTheDocument();
     expect(screen.getByText(/Loading desktop control bindings/i)).toBeInTheDocument();
+  });
+
+  it("hides desktop control calibration from the mobile settings surface", () => {
+    const props = createProps({
+      isMobileLayout: true,
+      scene: "settings"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    expect(
+      screen.getByText(/Desktop control calibration is only exposed on large-screen shell layouts/i)
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/Loading desktop control bindings/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/Desktop controls/i)).not.toBeInTheDocument();
   });
 
   it("renders gameplay outcomes through shell-owned meta scenes", () => {

@@ -1,9 +1,9 @@
 ## item_226_remove_desktop_control_settings_from_the_mobile_shell_surface - Remove desktop control settings from the mobile shell surface
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Low
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

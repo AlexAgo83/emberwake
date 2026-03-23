@@ -142,3 +142,66 @@
 .player-hud__hint--resolved {
   color: var(--emberwake-accent-cold);
 }
+
+.player-hud__build {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.player-hud__build-title {
+  margin: 0;
+  color: var(--emberwake-copy-muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.player-hud__build-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+}
+
+.player-hud__build-chip {
+  min-width: 0;
+  display: grid;
+  gap: 0.08rem;
+  padding: 0.42rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.72rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.player-hud__build-chip strong,
+.player-hud__build-chip small {
+  display: block;
+}
+
+.player-hud__build-chip strong {
+  color: var(--emberwake-copy);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.player-hud__build-chip small {
+  color: var(--emberwake-copy-dim);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.player-hud__build-chip[data-state="ready"] {
+  border-color: rgba(255, 183, 104, 0.28);
+  background: rgba(255, 183, 104, 0.08);
+}
+
+.player-hud__build-chip[data-state="fused"] {
+  border-color: rgba(115, 216, 255, 0.32);
+  background: rgba(115, 216, 255, 0.08);
+}
+
+.player-hud__build-chip--passive {
+  border-style: dashed;
+}

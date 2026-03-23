@@ -16,6 +16,11 @@ type ResolveMovementOptions = {
   currentPosition: WorldPoint;
   currentVelocity: WorldPoint;
   desiredVelocity: WorldPoint;
+  directionalInertiaProfile?: {
+    minimumSpeedWorldUnitsPerSecond: number;
+    reversalDotThreshold: number;
+    reversalResponsiveness: number;
+  };
   footprintRadius: number;
   isBlockedAtPosition: (position: WorldPoint, footprintRadius: number) => boolean;
   staticColliders?: readonly PseudoPhysicsCollider[];
@@ -32,24 +37,82 @@ type ResolveMovementResult = {
 const lerp = (currentValue: number, targetValue: number, weight: number) =>
   currentValue + (targetValue - currentValue) * weight;
 
+const magnitudeOf = (vector: WorldPoint) => Math.hypot(vector.x, vector.y);
+
+const resolveDirectionalResponsiveness = ({
+  currentVelocity,
+  desiredVelocity,
+  directionalInertiaProfile,
+  surfaceResponsiveness
+}: {
+  currentVelocity: WorldPoint;
+  desiredVelocity: WorldPoint;
+  directionalInertiaProfile: ResolveMovementOptions["directionalInertiaProfile"];
+  surfaceResponsiveness: number;
+}) => {
+  if (!directionalInertiaProfile) {
+    return surfaceResponsiveness;
+  }
+
+  const currentSpeed = magnitudeOf(currentVelocity);
+  const desiredSpeed = magnitudeOf(desiredVelocity);
+
+  if (
+    currentSpeed < directionalInertiaProfile.minimumSpeedWorldUnitsPerSecond ||
+    desiredSpeed < directionalInertiaProfile.minimumSpeedWorldUnitsPerSecond
+  ) {
+    return surfaceResponsiveness;
+  }
+
+  const currentDirection = {
+    x: currentVelocity.x / currentSpeed,
+    y: currentVelocity.y / currentSpeed
+  };
+  const desiredDirection = {
+    x: desiredVelocity.x / desiredSpeed,
+    y: desiredVelocity.y / desiredSpeed
+  };
+  const directionalDot =
+    currentDirection.x * desiredDirection.x + currentDirection.y * desiredDirection.y;
+
+  if (directionalDot > directionalInertiaProfile.reversalDotThreshold) {
+    return surfaceResponsiveness;
+  }
+
+  return Math.min(
+    surfaceResponsiveness,
+    directionalInertiaProfile.reversalResponsiveness
+  );
+};
+
 const applySurfaceVelocityProfile = ({
   currentVelocity,
   desiredVelocity,
+  directionalInertiaProfile,
   surfaceModifierKind
 }: {
   currentVelocity: WorldPoint;
   desiredVelocity: WorldPoint;
+  directionalInertiaProfile?: ResolveMovementOptions["directionalInertiaProfile"];
   surfaceModifierKind: MovementSurfaceModifierKind;
 }): WorldPoint => {
   const surfaceProfile = movementSurfaceModifierDefinitions[surfaceModifierKind];
+  const controlResponsiveness = resolveDirectionalResponsiveness({
+    currentVelocity,
+    desiredVelocity,
+    directionalInertiaProfile,
+    surfaceResponsiveness: surfaceProfile.controlResponsiveness
+  });
 
   if (surfaceProfile.controlResponsiveness >= 1 && surfaceProfile.velocityRetainFactor === 0) {
-    return desiredVelocity;
+    if (controlResponsiveness >= 1) {
+      return desiredVelocity;
+    }
   }
 
   const blendedVelocity = {
-    x: lerp(currentVelocity.x, desiredVelocity.x, surfaceProfile.controlResponsiveness),
-    y: lerp(currentVelocity.y, desiredVelocity.y, surfaceProfile.controlResponsiveness)
+    x: lerp(currentVelocity.x, desiredVelocity.x, controlResponsiveness),
+    y: lerp(currentVelocity.y, desiredVelocity.y, controlResponsiveness)
   };
 
   if (desiredVelocity.x === 0 && desiredVelocity.y === 0) {
@@ -151,6 +214,7 @@ export const resolvePseudoPhysicalMovement = ({
   currentPosition,
   currentVelocity,
   desiredVelocity,
+  directionalInertiaProfile,
   footprintRadius,
   isBlockedAtPosition,
   staticColliders = [],
@@ -163,6 +227,7 @@ export const resolvePseudoPhysicalMovement = ({
       x: desiredVelocity.x * movementSurfaceModifierDefinitions[surfaceModifierKind].speedMultiplier,
       y: desiredVelocity.y * movementSurfaceModifierDefinitions[surfaceModifierKind].speedMultiplier
     },
+    directionalInertiaProfile,
     surfaceModifierKind
   });
   const axisResolvedMovement = resolveAxisBlockedMovement({

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { createDefaultCameraState } from "@engine/camera/cameraMath";
+import { createInitialBuildState } from "@game/runtime/buildSystem";
 import {
   advanceGameplaySystemsState,
   createGameplaySystemDiagnostics,
@@ -47,6 +48,7 @@ describe("gameplaySystems", () => {
     const nextState = advanceGameplaySystemsState({
       previousState,
       simulationAfterUpdate: {
+        buildState: createInitialBuildState(),
         entities: [afterEntity],
         entity: afterEntity,
         floatingDamageNumbers: [],
@@ -64,6 +66,7 @@ describe("gameplaySystems", () => {
         worldSeed: "emberwake-default-seed"
       },
       simulationBeforeUpdate: {
+        buildState: createInitialBuildState(),
         entities: [beforeEntity],
         entity: beforeEntity,
         floatingDamageNumbers: [],

@@ -27,6 +27,17 @@ import {
   maintainLocalHostilePopulation,
   maintainNearbyPickupPopulation
 } from "@game/runtime/entitySimulationSpawn";
+import {
+  addPendingLevelUps,
+  advanceChestMilestone,
+  buildSystemContract,
+  createInitialBuildState,
+  normalizeBuildState,
+  applyLevelUpChoice,
+  resolveActiveWeaponRuntimeStats,
+  resolveChestDropCount,
+  type BuildState
+} from "@game/runtime/buildSystem";
 import type { MovementSurfaceModifierKind } from "@game/content/world/worldData";
 import {
   resolveRuntimeProfilingConfig,
@@ -40,7 +51,7 @@ export const entitySimulationContract = {
 } as const;
 export { entityCombatPresentationContract };
 
-export type SimulatedPickupKind = "crystal" | "gold" | "healing-kit";
+export type SimulatedPickupKind = "cache" | "crystal" | "gold" | "healing-kit";
 
 export type SimulatedEntityRole = "hostile" | "pickup" | "player" | "support";
 
@@ -128,6 +139,7 @@ export type SimulatedEntity = WorldEntity & {
 };
 
 export type EntitySimulationState = {
+  buildState: BuildState;
   entities: SimulatedEntity[];
   entity: SimulatedEntity;
   floatingDamageNumbers: FloatingDamageNumber[];
@@ -139,6 +151,7 @@ export type EntitySimulationState = {
 };
 
 type LegacySimulationState = Partial<EntitySimulationState> & {
+  buildState?: Partial<BuildState>;
   entity?: Partial<SimulatedEntity> & Pick<WorldEntity, "id" | "worldPosition">;
   entities?: Array<Partial<SimulatedEntity> & Pick<WorldEntity, "id" | "worldPosition">>;
 };
@@ -146,6 +159,7 @@ type LegacySimulationState = Partial<EntitySimulationState> & {
 export type SimulationSpeedOption = (typeof entitySimulationContract.speedOptions)[number];
 
 export type SimulationCommand = {
+  buildChoiceIndex?: number | null;
   controlState?: SingleEntityControlState;
   profiling?: RuntimeProfilingConfig;
   worldSeed?: string;
@@ -214,12 +228,27 @@ const createInitialRunStats = (): RunStats => ({
   hostileDefeats: 0
 });
 
-const createPlayerAutomaticAttackProfile = (): AutomaticAttackProfile => ({
-  ...hostileCombatContract.player.automaticConeAttack,
-  lastAttackTick: null
-});
+const createPlayerAutomaticAttackProfile = (buildState = createInitialBuildState()): AutomaticAttackProfile => {
+  const starterWeapon =
+    buildState.activeSlots.find(
+      (activeSlot) => activeSlot.weaponId === buildSystemContract.starterWeaponId
+    ) ?? buildState.activeSlots[0]!;
+  const runtimeStats = resolveActiveWeaponRuntimeStats(buildState, starterWeapon);
 
-const createPlayerEntity = (): SimulatedEntity => ({
+  return {
+    arcRadians:
+      runtimeStats.attackKind === "cone" || runtimeStats.attackKind === "fan"
+        ? hostileCombatContract.player.automaticConeAttack.arcRadians
+        : hostileCombatContract.player.automaticConeAttack.arcRadians,
+    cooldownTicks: runtimeStats.cooldownTicks,
+    damage: runtimeStats.damage,
+    lastAttackTick: starterWeapon.lastAttackTick,
+    rangeWorldUnits: runtimeStats.rangeWorldUnits,
+    visibleTicks: runtimeStats.visibleTicks
+  };
+};
+
+const createPlayerEntity = (buildState = createInitialBuildState()): SimulatedEntity => ({
   ...createGenericMoverEntity({
     archetype: emberwakeRuntimeBootstrap.playerEntity.archetype,
     id: emberwakeRuntimeBootstrap.playerEntity.id,
@@ -230,7 +259,7 @@ const createPlayerEntity = (): SimulatedEntity => ({
     worldPosition: emberwakeRuntimeBootstrap.playerEntity.worldPosition
   }),
   automaticAttack: {
-    ...createPlayerAutomaticAttackProfile()
+    ...createPlayerAutomaticAttackProfile(buildState)
   },
   combat: createCombatState(hostileCombatContract.player.maxHealth),
   damageReactionState: createDamageReactionState(),
@@ -297,13 +326,17 @@ const createPickupEntity = (
           ? "pickup-healing-kit"
           : pickupKind === "crystal"
             ? "pickup-crystal"
-            : "pickup-gold",
+            : pickupKind === "cache"
+              ? "pickup-cache"
+              : "pickup-gold",
       tint:
         pickupKind === "healing-kit"
           ? "#7dff9b"
           : pickupKind === "crystal"
             ? "#73f2ff"
-            : "#ffd76c"
+            : pickupKind === "cache"
+              ? "#9ae5ff"
+              : "#ffd76c"
     },
     worldPosition
   }),
@@ -336,10 +369,18 @@ const distanceBetweenWorldPoints = (left: WorldPoint, right: WorldPoint) =>
 
 const movementVectorMagnitude = (vector: WorldPoint) => Math.hypot(vector.x, vector.y);
 
+const playerDirectionalInertiaProfile = {
+  minimumSpeedWorldUnitsPerSecond: 18,
+  reversalDotThreshold: -0.35,
+  reversalResponsiveness: 0.18
+} as const;
+
 export const createInitialSimulationState = (): EntitySimulationState => {
-  const playerEntity = createPlayerEntity();
+  const buildState = createInitialBuildState();
+  const playerEntity = createPlayerEntity(buildState);
 
   return {
+    buildState,
     entities: [playerEntity],
     entity: playerEntity,
     floatingDamageNumbers: [],
@@ -499,6 +540,7 @@ export const normalizeEntitySimulationState = (
   simulationState: LegacySimulationState | EntitySimulationState
 ): EntitySimulationState => {
   const initialState = createInitialSimulationState();
+  const normalizedBuildState = normalizeBuildState(simulationState.buildState);
   const sourceEntities =
     simulationState.entities && simulationState.entities.length > 0
       ? simulationState.entities
@@ -510,6 +552,13 @@ export const normalizeEntitySimulationState = (
     normalizedEntities.find(
       (entity) => entity.role === "player" || entity.id === emberwakeRuntimeBootstrap.playerEntity.id
     ) ?? initialState.entity;
+  const normalizedPlayerEntity: SimulatedEntity = {
+    ...playerEntity,
+    automaticAttack: {
+      ...createPlayerAutomaticAttackProfile(normalizedBuildState),
+      ...(playerEntity.automaticAttack ?? {})
+    }
+  };
   const nextHostileSequence = normalizedEntities.reduce((highestSequence, entity) => {
     if (entity.role !== "hostile") {
       return highestSequence;
@@ -534,8 +583,11 @@ export const normalizeEntitySimulationState = (
   }, simulationState.nextPickupSequence ?? 0);
 
   return {
-    entities: normalizedEntities,
-    entity: playerEntity,
+    buildState: normalizedBuildState,
+    entities: normalizedEntities.map((entity) =>
+      entity.id === normalizedPlayerEntity.id ? normalizedPlayerEntity : entity
+    ),
+    entity: normalizedPlayerEntity,
     floatingDamageNumbers: simulationState.floatingDamageNumbers ?? [],
     nextPickupSequence,
     nextHostileSequence,
@@ -547,6 +599,14 @@ export const normalizeEntitySimulationState = (
     worldSeed: simulationState.worldSeed ?? emberwakeRuntimeBootstrap.worldSeed
   };
 };
+
+const syncPlayerAutomaticAttackToBuildState = (
+  playerEntity: SimulatedEntity,
+  buildState: BuildState
+): SimulatedEntity => ({
+  ...playerEntity,
+  automaticAttack: createPlayerAutomaticAttackProfile(buildState)
+});
 
 export const getScriptedEntityPhase = (tick: number): ScriptedPhase => {
   const normalizedTick = tick % totalCycleTicks;
@@ -638,6 +698,8 @@ const resolveEntityMovement = ({
     currentPosition: entity.worldPosition,
     currentVelocity: entity.velocity,
     desiredVelocity: intent.velocity,
+    directionalInertiaProfile:
+      entity.role === "player" ? playerDirectionalInertiaProfile : undefined,
     footprintRadius: entity.footprint.radius,
     isBlockedAtPosition: (worldPosition, footprintRadius) =>
       isWorldPositionBlockedByObstacle(worldPosition, footprintRadius, worldSeed),
@@ -707,6 +769,29 @@ export const advanceSimulationState = (
 ): EntitySimulationState => {
   const worldSeed = command.worldSeed ?? simulationState.worldSeed;
   const profiling = resolveRuntimeProfilingConfig(command.profiling);
+  const normalizedBuildState = normalizeBuildState(simulationState.buildState);
+  const choiceAppliedBuildState =
+    command.buildChoiceIndex !== null && command.buildChoiceIndex !== undefined
+      ? applyLevelUpChoice(normalizedBuildState, command.buildChoiceIndex, simulationState.tick)
+      : normalizedBuildState;
+
+  if (choiceAppliedBuildState.levelUpChoices.length > 0) {
+    const lockedPlayerEntity = syncPlayerAutomaticAttackToBuildState(
+      simulationState.entity,
+      choiceAppliedBuildState
+    );
+
+    return {
+      ...simulationState,
+      buildState: choiceAppliedBuildState,
+      entities: simulationState.entities.map((entity) =>
+        entity.id === lockedPlayerEntity.id ? lockedPlayerEntity : entity
+      ),
+      entity: lockedPlayerEntity,
+      worldSeed
+    };
+  }
+
   const nextTick = simulationState.tick + 1;
   const pickupMaintainedState =
     profiling.spawnMode === "no-spawn"
@@ -753,7 +838,11 @@ export const advanceSimulationState = (
       worldSeed
     })
   );
-  const attackResolvedState = resolveAutomaticPlayerAttack(movedEntities, nextTick);
+  const attackResolvedState = resolveAutomaticPlayerAttack(
+    movedEntities,
+    nextTick,
+    choiceAppliedBuildState
+  );
   const combatResolvedState = resolveHostileContactDamage(
     attackResolvedState.entities,
     spawnMaintainedState.entities,
@@ -761,12 +850,19 @@ export const advanceSimulationState = (
     profiling.playerInvincible
   );
   const pickupResolvedState = resolvePickupCollection({
+    buildState: attackResolvedState.buildState,
     entities: (() => {
       const defeatedHostiles = combatResolvedState.entities.filter(
         (entity) => entity.role === "hostile" && !isAlive(entity)
       );
+      const hostileDefeatCountAfterUpdate =
+        simulationState.runStats.hostileDefeats + defeatedHostiles.length;
+      const chestDropCount = resolveChestDropCount(
+        attackResolvedState.buildState,
+        hostileDefeatCountAfterUpdate
+      );
 
-      if (defeatedHostiles.length === 0) {
+      if (defeatedHostiles.length === 0 && chestDropCount === 0) {
         return combatResolvedState.entities;
       }
 
@@ -782,8 +878,21 @@ export const advanceSimulationState = (
           )
         )
       );
+      const droppedCacheEntities =
+        chestDropCount === 0
+          ? []
+          : Array.from({ length: chestDropCount }, (_, cacheIndex) =>
+              createPickupEntity(
+                pickupMaintainedState.nextPickupSequence +
+                  defeatedHostiles.length * pickupContract.crystal.enemyDropCount +
+                  cacheIndex,
+                "cache",
+                defeatedHostiles[cacheIndex]?.worldPosition ?? playerEntity.worldPosition,
+                nextTick
+              )
+            );
 
-      return [...combatResolvedState.entities, ...droppedCrystalEntities];
+      return [...combatResolvedState.entities, ...droppedCrystalEntities, ...droppedCacheEntities];
     })(),
     runStats: simulationState.runStats
   });
@@ -803,12 +912,35 @@ export const advanceSimulationState = (
         }
       }
     : nextPlayerEntity;
+  const nextBuildStateWithRewards = addPendingLevelUps(
+    defeatedHostileCount > -1
+      ? (() => {
+          const hostileDefeatCountAfterUpdate =
+            simulationState.runStats.hostileDefeats + defeatedHostileCount;
+          const chestDropCount = resolveChestDropCount(
+            pickupResolvedState.buildState,
+            hostileDefeatCountAfterUpdate
+          );
+
+          return chestDropCount > 0
+            ? advanceChestMilestone(pickupResolvedState.buildState)
+            : pickupResolvedState.buildState;
+        })()
+      : pickupResolvedState.buildState,
+    Math.max(0, pickupResolvedState.runStats.currentLevel - simulationState.runStats.currentLevel),
+    nextTick
+  );
+  const synchronizedPlayerEntity = syncPlayerAutomaticAttackToBuildState(
+    profiledPlayerEntity,
+    nextBuildStateWithRewards
+  );
 
   return {
+    buildState: nextBuildStateWithRewards,
     entities: survivingEntities.map((entity) =>
-      entity.id === profiledPlayerEntity.id ? profiledPlayerEntity : entity
+      entity.id === synchronizedPlayerEntity.id ? synchronizedPlayerEntity : entity
     ),
-    entity: profiledPlayerEntity,
+    entity: synchronizedPlayerEntity,
     floatingDamageNumbers: pruneFloatingDamageNumbers(
       [
         ...simulationState.floatingDamageNumbers,
@@ -819,7 +951,11 @@ export const advanceSimulationState = (
     ),
     nextPickupSequence:
       pickupMaintainedState.nextPickupSequence +
-      defeatedHostileCount * pickupContract.crystal.enemyDropCount,
+      defeatedHostileCount * pickupContract.crystal.enemyDropCount +
+      resolveChestDropCount(
+        choiceAppliedBuildState,
+        simulationState.runStats.hostileDefeats + defeatedHostileCount
+      ),
     nextHostileSequence: spawnMaintainedState.nextHostileSequence,
     runStats: {
       ...pickupResolvedState.runStats,

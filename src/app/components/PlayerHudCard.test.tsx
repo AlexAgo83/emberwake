@@ -6,6 +6,24 @@ describe("PlayerHudCard", () => {
   it("renders a compact runtime feedback card for desktop controls", () => {
     render(
       <PlayerHudCard
+        buildActives={[
+          {
+            id: "ash-lash",
+            isFused: false,
+            isFusionReady: false,
+            label: "Ash Lash",
+            level: 1,
+            maxLevel: 8
+          }
+        ]}
+        buildPassives={[
+          {
+            id: "overclock-seal",
+            label: "Overclock Seal",
+            level: 1,
+            maxLevel: 5
+          }
+        ]}
         currentLevel={3}
         currentXp={45}
         fps={58.7}
@@ -24,6 +42,10 @@ describe("PlayerHudCard", () => {
     expect(screen.getByText("45 / 150")).toBeInTheDocument();
     expect(screen.getByText("14")).toBeInTheDocument();
     expect(screen.getByText("59")).toBeInTheDocument();
+    expect(screen.getByText("Actives")).toBeInTheDocument();
+    expect(screen.getByText("Passives")).toBeInTheDocument();
+    expect(screen.getByText("Ash Lash")).toBeInTheDocument();
+    expect(screen.getByText("Overclock Seal")).toBeInTheDocument();
     expect(screen.queryByText(/WASD \/ arrows/i)).not.toBeInTheDocument();
     expect(screen.queryByTestId("player-hud-hint")).not.toBeInTheDocument();
   });

@@ -29,6 +29,10 @@ export const entityVisualDefinitions = {
     assetId: "entity.debug.drifter.placeholder",
     label: "Crystal pickup"
   },
+  "pickup-cache": {
+    assetId: "entity.debug.anchor.placeholder",
+    label: "Cache pickup"
+  },
   "pickup-healing-kit": {
     assetId: "entity.debug.anchor.placeholder",
     label: "Healing kit pickup"

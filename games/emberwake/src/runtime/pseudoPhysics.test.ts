@@ -79,4 +79,24 @@ describe("pseudoPhysics", () => {
     expect(slipperyResult.velocity.x).toBeGreaterThan(0);
     expect(slipperyResult.worldPosition.x).toBeGreaterThan(0);
   });
+
+  it("adds a short drift window when the desired direction hard-reverses", () => {
+    const reversalResult = resolvePseudoPhysicalMovement({
+      currentPosition: { x: 0, y: 0 },
+      currentVelocity: { x: 120, y: 0 },
+      desiredVelocity: { x: -120, y: 0 },
+      directionalInertiaProfile: {
+        minimumSpeedWorldUnitsPerSecond: 18,
+        reversalDotThreshold: -0.35,
+        reversalResponsiveness: 0.18
+      },
+      footprintRadius: 12,
+      isBlockedAtPosition: () => false,
+      stepSeconds: 1 / 60,
+      surfaceModifierKind: "normal"
+    });
+
+    expect(reversalResult.velocity.x).toBeGreaterThan(0);
+    expect(reversalResult.velocity.x).toBeLessThan(120);
+  });
 });

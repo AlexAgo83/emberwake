@@ -2,8 +2,8 @@
   position: relative;
   display: grid;
   width: 100vw;
-  min-height: 100dvh;
-  height: 100dvh;
+  min-height: var(--app-viewport-height, 100dvh);
+  height: var(--app-viewport-height, 100dvh);
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
@@ -12,6 +12,11 @@
   background:
     linear-gradient(145deg, rgba(15, 10, 25, 0.94), rgba(5, 11, 18, 0.92)),
     var(--emberwake-bg);
+}
+
+html[data-app-display-mode="browser"] .app-shell {
+  min-height: min(var(--app-viewport-height, 100dvh), 100svh);
+  height: min(var(--app-viewport-height, 100dvh), 100svh);
 }
 
 .app-shell::before,

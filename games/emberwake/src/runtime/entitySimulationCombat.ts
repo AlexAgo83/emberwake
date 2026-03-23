@@ -2,6 +2,13 @@ import type { WorldPoint } from "@engine/geometry/primitives";
 import { sampleDeterministicSignature } from "@engine/world/worldContract";
 
 import { pickupContract, resolveXpRequiredForLevel } from "./pickupContract";
+import {
+  recordActiveWeaponAttack,
+  resolveActiveWeaponRuntimeStats,
+  resolveChestReward,
+  resolvePickupRadiusMultiplier,
+  type BuildState
+} from "./buildSystem";
 import { systemTuning } from "@game/config/systemTuning";
 import type {
   FloatingDamageNumber,
@@ -32,6 +39,8 @@ const normalizeAngleDelta = (angleRadians: number) => {
 
   return normalizedAngle;
 };
+
+const isHostileTarget = (entity: SimulatedEntity) => entity.role === "hostile" && isAlive(entity);
 
 const applyDamage = (
   entity: SimulatedEntity,
@@ -106,94 +115,186 @@ export const pruneFloatingDamageNumbers = (
 
 export const resolveAutomaticPlayerAttack = (
   entities: readonly SimulatedEntity[],
-  tick: number
+  tick: number,
+  buildState: BuildState
 ): {
+  buildState: BuildState;
   entities: SimulatedEntity[];
   floatingDamageNumbers: FloatingDamageNumber[];
 } => {
   const playerEntity = getPlayerEntity(entities);
 
-  if (!playerEntity || !playerEntity.automaticAttack || !isAlive(playerEntity)) {
+  if (!playerEntity || !isAlive(playerEntity)) {
     return {
+      buildState,
       entities: [...entities],
       floatingDamageNumbers: []
     };
   }
 
-  const { automaticAttack } = playerEntity;
+  const livingHostiles = entities
+    .filter(isHostileTarget)
+    .sort(
+      (leftEntity, rightEntity) =>
+        distanceBetweenWorldPoints(playerEntity.worldPosition, leftEntity.worldPosition) -
+        distanceBetweenWorldPoints(playerEntity.worldPosition, rightEntity.worldPosition)
+    );
 
-  if (
-    automaticAttack.lastAttackTick !== null &&
-    tick - automaticAttack.lastAttackTick < automaticAttack.cooldownTicks
-  ) {
+  if (livingHostiles.length === 0) {
     return {
+      buildState,
       entities: [...entities],
       floatingDamageNumbers: []
     };
   }
 
-  const hitTargetIds = new Set(
-    entities
-      .filter((entity) => entity.role === "hostile" && isAlive(entity))
-      .filter((hostileEntity) => {
-        const distanceToHostile = distanceBetweenWorldPoints(
-          playerEntity.worldPosition,
-          hostileEntity.worldPosition
-        );
-
-        if (
-          distanceToHostile >
-          automaticAttack.rangeWorldUnits + hostileEntity.footprint.radius
-        ) {
-          return false;
-        }
-
-        const deltaX = hostileEntity.worldPosition.x - playerEntity.worldPosition.x;
-        const deltaY = hostileEntity.worldPosition.y - playerEntity.worldPosition.y;
-        const angleToHostile = Math.atan2(deltaY, deltaX);
-
-        return (
-          Math.abs(normalizeAngleDelta(angleToHostile - playerEntity.orientation)) <=
-          automaticAttack.arcRadians / 2
-        );
-      })
-      .map((entity) => entity.id)
-  );
-
-  if (hitTargetIds.size === 0) {
-    return {
-      entities: [...entities],
-      floatingDamageNumbers: []
-    };
-  }
-
+  let nextBuildState = buildState;
+  let nextEntities = [...entities];
   const floatingDamageNumbers: FloatingDamageNumber[] = [];
-  const nextEntities = entities.map((entity) => {
-    if (entity.id === playerEntity.id) {
+
+  const applyDamageToTargetIds = (targetIds: string[], damage: number) => {
+    if (targetIds.length === 0) {
+      return;
+    }
+
+    const targetIdSet = new Set(targetIds);
+    nextEntities = nextEntities.map((entity) => {
+      if (!targetIdSet.has(entity.id)) {
+        return entity;
+      }
+
+      const damagedEntity = applyDamage(entity, damage, tick);
+      floatingDamageNumbers.push(createFloatingDamageNumber(damagedEntity, damage, tick));
+      return damagedEntity;
+    });
+  };
+
+  for (const activeSlot of buildState.activeSlots) {
+    const runtimeStats = resolveActiveWeaponRuntimeStats(nextBuildState, activeSlot);
+
+    if (
+      activeSlot.lastAttackTick !== null &&
+      tick - activeSlot.lastAttackTick < runtimeStats.cooldownTicks
+    ) {
+      continue;
+    }
+
+    const currentPlayerEntity = getPlayerEntity(nextEntities);
+    const currentLivingHostiles = nextEntities
+      .filter(isHostileTarget)
+      .sort(
+        (leftEntity, rightEntity) =>
+          distanceBetweenWorldPoints(currentPlayerEntity.worldPosition, leftEntity.worldPosition) -
+          distanceBetweenWorldPoints(currentPlayerEntity.worldPosition, rightEntity.worldPosition)
+      );
+
+    if (currentLivingHostiles.length === 0) {
+      break;
+    }
+
+    const pickConeTargets = () =>
+      currentLivingHostiles
+        .filter((hostileEntity) => {
+          const distanceToHostile = distanceBetweenWorldPoints(
+            currentPlayerEntity.worldPosition,
+            hostileEntity.worldPosition
+          );
+
+          if (distanceToHostile > runtimeStats.rangeWorldUnits + hostileEntity.footprint.radius) {
+            return false;
+          }
+
+          const deltaX = hostileEntity.worldPosition.x - currentPlayerEntity.worldPosition.x;
+          const deltaY = hostileEntity.worldPosition.y - currentPlayerEntity.worldPosition.y;
+          const angleToHostile = Math.atan2(deltaY, deltaX);
+
+          return (
+            runtimeStats.arcRadians !== null &&
+            Math.abs(normalizeAngleDelta(angleToHostile - currentPlayerEntity.orientation)) <=
+              runtimeStats.arcRadians / 2
+          );
+        })
+        .slice(0, runtimeStats.targetCount)
+        .map((entity) => entity.id);
+
+    const pickTargetCluster = () => {
+      const anchorTarget = currentLivingHostiles.find(
+        (hostileEntity) =>
+          distanceBetweenWorldPoints(currentPlayerEntity.worldPosition, hostileEntity.worldPosition) <=
+          runtimeStats.rangeWorldUnits
+      );
+
+      if (!anchorTarget) {
+        return [];
+      }
+
+      return currentLivingHostiles
+        .filter(
+          (hostileEntity) =>
+            distanceBetweenWorldPoints(anchorTarget.worldPosition, hostileEntity.worldPosition) <=
+            runtimeStats.areaRadiusWorldUnits + hostileEntity.footprint.radius
+        )
+        .slice(0, runtimeStats.targetCount)
+        .map((entity) => entity.id);
+    };
+
+    const targetIds =
+      runtimeStats.attackKind === "cone" || runtimeStats.attackKind === "fan"
+        ? pickConeTargets()
+        : runtimeStats.attackKind === "auto-target"
+          ? currentLivingHostiles
+              .filter(
+                (hostileEntity) =>
+                  distanceBetweenWorldPoints(
+                    currentPlayerEntity.worldPosition,
+                    hostileEntity.worldPosition
+                  ) <= runtimeStats.rangeWorldUnits
+              )
+              .slice(0, runtimeStats.targetCount)
+              .map((entity) => entity.id)
+          : runtimeStats.attackKind === "orbit"
+            ? currentLivingHostiles
+                .filter(
+                  (hostileEntity) =>
+                    distanceBetweenWorldPoints(
+                      currentPlayerEntity.worldPosition,
+                      hostileEntity.worldPosition
+                    ) <= runtimeStats.areaRadiusWorldUnits + hostileEntity.footprint.radius
+                )
+                .slice(0, runtimeStats.targetCount)
+                .map((entity) => entity.id)
+            : pickTargetCluster();
+
+    if (targetIds.length === 0) {
+      continue;
+    }
+
+    nextBuildState = recordActiveWeaponAttack(nextBuildState, activeSlot.weaponId, tick);
+    applyDamageToTargetIds(targetIds, runtimeStats.damage);
+  }
+
+  return {
+    buildState: nextBuildState,
+    entities: nextEntities.map((entity) => {
+      if (entity.id !== playerEntity.id) {
+        return entity;
+      }
+
       return {
         ...entity,
         automaticAttack: {
-          ...automaticAttack,
-          lastAttackTick: tick
+          ...entity.automaticAttack!,
+          damage: resolveActiveWeaponRuntimeStats(
+            nextBuildState,
+            nextBuildState.activeSlots.find((activeSlot) => activeSlot.weaponId === "ash-lash") ??
+              nextBuildState.activeSlots[0]!
+          ).damage,
+          lastAttackTick:
+            nextBuildState.activeSlots.find((activeSlot) => activeSlot.weaponId === "ash-lash")
+              ?.lastAttackTick ?? entity.automaticAttack?.lastAttackTick ?? null
         }
       };
-    }
-
-    if (!hitTargetIds.has(entity.id)) {
-      return entity;
-    }
-
-    const damagedEntity = applyDamage(entity, automaticAttack.damage, tick);
-
-    floatingDamageNumbers.push(
-      createFloatingDamageNumber(damagedEntity, automaticAttack.damage, tick)
-    );
-
-    return damagedEntity;
-  });
-
-  return {
-    entities: nextEntities,
+    }),
     floatingDamageNumbers
   };
 };
@@ -287,9 +388,11 @@ export const resolveHostileContactDamage = (
 };
 
 export const resolvePickupCollection = ({
+  buildState,
   entities,
   runStats
 }: {
+  buildState: BuildState;
   entities: readonly SimulatedEntity[];
   runStats: RunStats;
 }) => {
@@ -297,14 +400,18 @@ export const resolvePickupCollection = ({
 
   if (!playerEntity || !isAlive(playerEntity)) {
     return {
+      buildState,
       entities: [...entities],
       runStats
     };
   }
 
   let nextPlayerEntity = playerEntity;
+  let nextBuildState = buildState;
   const nextRunStats = { ...runStats };
   const retainedEntities: SimulatedEntity[] = [];
+  const pickupRadiusWorldUnits =
+    pickupContract.pickup.pickupRadiusWorldUnits * resolvePickupRadiusMultiplier(buildState);
 
   for (const entity of entities) {
     if (entity.role !== "pickup" || !entity.pickupProfile) {
@@ -312,29 +419,36 @@ export const resolvePickupCollection = ({
       continue;
     }
 
-    if (!isEntityPairOverlapping(entity, nextPlayerEntity)) {
+    if (
+      distanceBetweenWorldPoints(entity.worldPosition, nextPlayerEntity.worldPosition) >
+      pickupRadiusWorldUnits + nextPlayerEntity.footprint.radius
+    ) {
       retainedEntities.push(entity);
       continue;
     }
 
-    if (entity.pickupProfile.kind === "healing-kit") {
-      nextPlayerEntity = applyHealing(
-        nextPlayerEntity,
-        Math.ceil(nextPlayerEntity.combat.maxHealth * pickupContract.healingKit.healRatio)
-      );
-      nextRunStats.healingKitsCollected += 1;
-      continue;
+    switch (entity.pickupProfile.kind) {
+      case "healing-kit":
+        nextPlayerEntity = applyHealing(
+          nextPlayerEntity,
+          Math.ceil(nextPlayerEntity.combat.maxHealth * pickupContract.healingKit.healRatio)
+        );
+        nextRunStats.healingKitsCollected += 1;
+        break;
+      case "crystal":
+        Object.assign(nextRunStats, applyCrystalXpGain(nextRunStats));
+        break;
+      case "cache":
+        nextBuildState = resolveChestReward(nextBuildState, nextRunStats.hostileDefeats);
+        break;
+      case "gold":
+        nextRunStats.goldCollected += pickupContract.gold.value;
+        break;
     }
-
-    if (entity.pickupProfile.kind === "crystal") {
-      Object.assign(nextRunStats, applyCrystalXpGain(nextRunStats));
-      continue;
-    }
-
-    nextRunStats.goldCollected += pickupContract.gold.value;
   }
 
   return {
+    buildState: nextBuildState,
     entities: retainedEntities.map((entity) =>
       entity.id === nextPlayerEntity.id ? nextPlayerEntity : entity
     ),

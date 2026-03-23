@@ -1,6 +1,7 @@
 import type { EngineTiming } from "@engine/contracts/gameModule";
 import type { EntitySimulationState } from "@game/runtime/entitySimulation";
 import { resolveXpRequiredForLevel } from "@game/runtime/pickupContract";
+import { resolveBuildSummary } from "@game/runtime/buildSystem";
 import {
   createIdleGameplayOutcome,
   gameplayOutcomeContract
@@ -23,14 +24,19 @@ export type StatusEffectSystemState = {
 };
 
 export type ProgressionSystemState = {
+  activeSlotsFilled: number;
   crystalsCollected: number;
   currentLevel: number;
   currentXp: number;
+  fusedActiveCount: number;
+  fusionReadyCount: number;
   goldCollected: number;
   highestUnlockedTier: 0;
   healingKitsCollected: number;
   hostileDefeats: number;
   nextLevelXpRequired: number;
+  passiveSlotsFilled: number;
+  pendingChoiceCount: number;
   runtimeTicksSurvived: number;
   traversalDistanceWorldUnits: number;
 };
@@ -101,14 +107,19 @@ export const createInitialGameplaySystemsState = (): EmberwakeGameplaySystemsSta
   },
   outcome: createIdleGameplayOutcome(),
   progression: {
+    activeSlotsFilled: 1,
     crystalsCollected: 0,
     currentLevel: 1,
     currentXp: 0,
+    fusedActiveCount: 0,
+    fusionReadyCount: 0,
     goldCollected: 0,
     highestUnlockedTier: 0,
     healingKitsCollected: 0,
     hostileDefeats: 0,
     nextLevelXpRequired: resolveXpRequiredForLevel(1),
+    passiveSlotsFilled: 0,
+    pendingChoiceCount: 0,
     runtimeTicksSurvived: 0,
     traversalDistanceWorldUnits: 0
   },
@@ -136,9 +147,11 @@ export const advanceGameplaySystemsState = ({
   const deltaY =
     simulationAfterUpdate.entity.worldPosition.y - simulationBeforeUpdate.entity.worldPosition.y;
   const traversalDistanceWorldUnits = Math.hypot(deltaX, deltaY);
+  const simulationTickDelta = Math.max(0, simulationAfterUpdate.tick - simulationBeforeUpdate.tick);
+  const buildSummary = resolveBuildSummary(simulationAfterUpdate.buildState);
   const autonomy = {
     ...previousState.autonomy,
-    lastAutonomyTick: timing.tick + 1
+    lastAutonomyTick: previousState.autonomy.lastAutonomyTick + simulationTickDelta
   };
   const hostileCount = simulationAfterUpdate.entities.filter(
     (entity) => entity.role === "hostile"
@@ -150,14 +163,20 @@ export const advanceGameplaySystemsState = ({
   const statusEffects = previousState.statusEffects;
   const progression = {
     ...previousState.progression,
+    activeSlotsFilled: buildSummary.activeCount,
     crystalsCollected: simulationAfterUpdate.runStats.crystalsCollected,
     currentLevel: simulationAfterUpdate.runStats.currentLevel,
     currentXp: simulationAfterUpdate.runStats.currentXp,
+    fusedActiveCount: buildSummary.fusedActiveCount,
+    fusionReadyCount: buildSummary.fusionReadyCount,
     goldCollected: simulationAfterUpdate.runStats.goldCollected,
     healingKitsCollected: simulationAfterUpdate.runStats.healingKitsCollected,
     hostileDefeats: simulationAfterUpdate.runStats.hostileDefeats,
     nextLevelXpRequired: resolveXpRequiredForLevel(simulationAfterUpdate.runStats.currentLevel),
-    runtimeTicksSurvived: timing.tick + 1,
+    passiveSlotsFilled: buildSummary.passiveCount,
+    pendingChoiceCount: buildSummary.pendingChoiceCount,
+    runtimeTicksSurvived:
+      previousState.progression.runtimeTicksSurvived + simulationTickDelta,
     traversalDistanceWorldUnits:
       previousState.progression.traversalDistanceWorldUnits + traversalDistanceWorldUnits
   };
@@ -165,7 +184,7 @@ export const advanceGameplaySystemsState = ({
     simulationAfterUpdate.entity.combat.currentHealth <= 0
       ? {
           detail: "The hostile swarm overran the active run.",
-          emittedAtTick: timing.tick + 1,
+          emittedAtTick: previousState.progression.runtimeTicksSurvived + simulationTickDelta,
           kind: "defeat" as const,
           shellScene: "defeat" as const
         }
@@ -174,10 +193,12 @@ export const advanceGameplaySystemsState = ({
         : previousState.outcome;
   const recentSignals = trimSignals([
     ...previousState.lifecycle.recentSignals,
-    "autonomy.tick-advanced",
+    ...(simulationTickDelta > 0 ? (["autonomy.tick-advanced"] as GameplaySystemSignalId[]) : []),
     "combat.idle",
     "status-effects.stable",
-    "progression.runtime-tick-advanced",
+    ...(simulationTickDelta > 0
+      ? (["progression.runtime-tick-advanced"] as GameplaySystemSignalId[])
+      : []),
     ...(traversalDistanceWorldUnits > 0 ? (["progression.traversal-recorded"] as GameplaySystemSignalId[]) : []),
     "outcome.idle"
   ]);
@@ -214,4 +235,10 @@ export const createGameplaySystemDiagnostics = (
     systemsState.progression.traversalDistanceWorldUnits.toFixed(2)
   ),
   activeStatusEffects: systemsState.statusEffects.activeEffects.length
+  ,
+  activeSlotsFilled: systemsState.progression.activeSlotsFilled,
+  fusedActiveCount: systemsState.progression.fusedActiveCount,
+  fusionReadyCount: systemsState.progression.fusionReadyCount,
+  passiveSlotsFilled: systemsState.progression.passiveSlotsFilled,
+  pendingChoiceCount: systemsState.progression.pendingChoiceCount
 });

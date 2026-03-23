@@ -1,9 +1,9 @@
 ## item_218_define_the_first_exact_techno_shinobi_active_roster_and_starter_weapon_delivery - Define the first exact techno-shinobi active roster and starter weapon delivery
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

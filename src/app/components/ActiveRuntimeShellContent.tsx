@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import "./ActiveRuntimeShellContent.css";
 import { EntityInspectionPanel } from "./EntityInspectionPanel";
 import { PlayerHudCard } from "./PlayerHudCard";
+import { RuntimeBuildChoicePanel } from "./RuntimeBuildChoicePanel";
 import { RuntimeSceneBoundary } from "./RuntimeSceneBoundary";
 import { ShellMenu } from "./ShellMenu";
 import { runtimePublicationContract } from "../model/runtimePublicationContract";
@@ -35,6 +36,12 @@ import type { DesktopControlBindings } from "../../game/input/model/singleEntity
 import { createInitialEmberwakeGameState } from "@game";
 import type { EmberwakeGameState } from "@game";
 import type { RuntimeProfilingConfig } from "@game";
+import {
+  getActiveWeaponDefinition,
+  getPassiveItemDefinition,
+  resolveBuildDisplayLabel,
+  resolveFusionReadyState
+} from "@game";
 
 type ActiveRuntimeShellContentProps = {
   activeScene: AppSceneId;
@@ -116,7 +123,9 @@ export function ActiveRuntimeShellContent({
   viewport
 }: ActiveRuntimeShellContentProps) {
   const runtimeSurfaceRef = useRef<HTMLDivElement | null>(null);
+  const pendingButtonStepRef = useRef<number | null>(null);
   const [runtimeSurfaceElement, setRuntimeSurfaceElement] = useState<HTMLDivElement | null>(null);
+  const [runtimeButtonPresses, setRuntimeButtonPresses] = useState<Record<string, boolean>>({});
   const handleRuntimeSurfaceElementChange = useCallback((element: HTMLDivElement | null) => {
     if (runtimeSurfaceRef.current === element) {
       return;
@@ -167,6 +176,7 @@ export function ActiveRuntimeShellContent({
     [profilingConfig, runtimeSession.worldSeed, sessionInitState]
   );
   const simulationState = useEntitySimulation({
+    buttonPresses: runtimeButtonPresses,
     controlState,
     initialGameState: effectiveSessionInitState,
     profilingConfig,
@@ -210,6 +220,9 @@ export function ActiveRuntimeShellContent({
   const showShellTools =
     activeScene !== "main-menu" && activeScene !== "new-game" && activeScene !== "changelogs";
   const isMobileLayout = viewport.layoutMode === "mobile";
+  const buildState = simulationState.gameState.simulation.buildState;
+  const levelUpChoices = buildState.levelUpChoices;
+  const levelUpVisible = activeScene === "runtime" && levelUpChoices.length > 0;
 
   const handleToggleDiagnostics = useCallback(() => {
     onSetDebugPanelVisible(!preferences.debugPanelVisible);
@@ -223,6 +236,28 @@ export function ActiveRuntimeShellContent({
   const handleCloseDiagnostics = useCallback(() => {
     onSetDebugPanelVisible(false);
   }, [onSetDebugPanelVisible]);
+  const handleSelectBuildChoice = useCallback(
+    (choiceIndex: number) => {
+      pendingButtonStepRef.current = simulationState.runtime.simulationStepsTotal;
+      setRuntimeButtonPresses({
+        [`build.choice.${choiceIndex}`]: true
+      });
+      simulationState.controls.stepOnce();
+    },
+    [simulationState.controls, simulationState.runtime.simulationStepsTotal]
+  );
+
+  useEffect(() => {
+    if (
+      pendingButtonStepRef.current === null ||
+      simulationState.runtime.simulationStepsTotal <= pendingButtonStepRef.current
+    ) {
+      return;
+    }
+
+    pendingButtonStepRef.current = null;
+    setRuntimeButtonPresses({});
+  }, [simulationState.runtime.simulationStepsTotal]);
 
   const diagnosticsPanelProps = useMemo(
     () => ({
@@ -325,9 +360,9 @@ export function ActiveRuntimeShellContent({
   ]);
 
   useEffect(() => {
-    if (activeScene === "pause" || activeScene === "settings") {
+    if (activeScene === "pause" || activeScene === "settings" || levelUpVisible) {
       simulationState.controls.pause();
-      onSetLastMetaScene(activeScene);
+      onSetLastMetaScene(activeScene === "runtime" ? "none" : activeScene);
       return;
     }
 
@@ -339,7 +374,30 @@ export function ActiveRuntimeShellContent({
 
     simulationState.controls.pause();
     onSetLastMetaScene("none");
-  }, [activeScene, isMenuOpen, onSetLastMetaScene, simulationState.controls]);
+  }, [activeScene, isMenuOpen, levelUpVisible, onSetLastMetaScene, simulationState.controls]);
+
+  const buildActives = useMemo(
+    () =>
+      buildState.activeSlots.map((activeSlot) => ({
+        id: activeSlot.weaponId,
+        isFusionReady: resolveFusionReadyState(buildState, activeSlot) !== null,
+        isFused: activeSlot.fusionId !== null,
+        label: resolveBuildDisplayLabel(buildState, activeSlot),
+        level: activeSlot.level,
+        maxLevel: getActiveWeaponDefinition(activeSlot.weaponId).maxLevel
+      })),
+    [buildState]
+  );
+  const buildPassives = useMemo(
+    () =>
+      buildState.passiveSlots.map((passiveSlot) => ({
+        id: passiveSlot.passiveId,
+        label: getPassiveItemDefinition(passiveSlot.passiveId).label,
+        level: passiveSlot.level,
+        maxLevel: getPassiveItemDefinition(passiveSlot.passiveId).maxLevel
+      })),
+    [buildState]
+  );
 
   const selectedEntityChunk = worldPointToChunkCoordinate(entityWorld.selectedEntity.worldPosition);
   const playerHudVisible =
@@ -418,6 +476,8 @@ export function ActiveRuntimeShellContent({
 
         {playerHudVisible ? (
           <PlayerHudCard
+            buildActives={buildActives}
+            buildPassives={buildPassives}
             currentLevel={simulationState.gameState.systems.progression.currentLevel}
             currentXp={simulationState.gameState.systems.progression.currentXp}
             fps={simulationState.runtime.fps}
@@ -426,6 +486,14 @@ export function ActiveRuntimeShellContent({
             nextLevelXpRequired={simulationState.gameState.systems.progression.nextLevelXpRequired}
             playerHealth={simulationState.entity.combat.currentHealth}
             playerName={runtimeSession.playerName || "Wanderer"}
+          />
+        ) : null}
+
+        {levelUpVisible ? (
+          <RuntimeBuildChoicePanel
+            choices={levelUpChoices}
+            isMobile={isMobileLayout}
+            onSelectChoice={handleSelectBuildChoice}
           />
         ) : null}
 

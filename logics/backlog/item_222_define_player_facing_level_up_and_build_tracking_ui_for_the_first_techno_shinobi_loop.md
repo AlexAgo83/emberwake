@@ -1,9 +1,9 @@
 ## item_222_define_player_facing_level_up_and_build_tracking_ui_for_the_first_techno_shinobi_loop - Define player-facing level-up and build tracking UI for the first techno-shinobi loop
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

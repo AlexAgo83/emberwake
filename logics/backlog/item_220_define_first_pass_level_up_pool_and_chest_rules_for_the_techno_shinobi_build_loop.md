@@ -1,9 +1,9 @@
 ## item_220_define_first_pass_level_up_pool_and_chest_rules_for_the_techno_shinobi_build_loop - Define first-pass level-up pool and chest rules for the techno-shinobi build loop
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

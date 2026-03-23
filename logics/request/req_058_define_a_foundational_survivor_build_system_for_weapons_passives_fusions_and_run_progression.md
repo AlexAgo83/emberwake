@@ -1,8 +1,8 @@
 ## req_058_define_a_foundational_survivor_build_system_for_weapons_passives_fusions_and_run_progression - Define a foundational survivor build system for weapons passives fusions and run progression
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.

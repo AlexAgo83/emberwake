@@ -328,6 +328,7 @@ export function AppShell() {
       desktopControlBindings={desktopControlBindings}
       fullscreenPreferred={preferences.prefersFullscreen}
       gameOverRecap={gameOverRecap}
+      isMobileLayout={viewport.layoutMode === "mobile"}
       isShellMenuOpen={isMenuOpen}
       isLoadAvailable={isLoadAvailable}
       onApplyDesktopControlBindings={handleApplyDesktopControlBindings}

@@ -34,6 +34,7 @@ type AppMetaScenePanelProps = {
   desktopControlBindings: DesktopControlBindings;
   fullscreenPreferred: boolean;
   gameOverRecap?: GameOverRecap | null;
+  isMobileLayout: boolean;
   isShellMenuOpen: boolean;
   isLoadAvailable: boolean;
   onApplyDesktopControlBindings: (bindings: DesktopControlBindings) => void;
@@ -59,6 +60,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   desktopControlBindings,
   fullscreenPreferred,
   gameOverRecap,
+  isMobileLayout,
   isShellMenuOpen,
   isLoadAvailable,
   onApplyDesktopControlBindings,
@@ -363,16 +365,24 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             ) : scene === "settings" ? (
               <>
                 <div className="app-meta-scene__scene-body app-meta-scene__scene-body--settings">
-                  <Suspense
-                    fallback={
-                      <p className="settings-controls__status">Loading desktop control bindings…</p>
-                    }
-                  >
-                    <LazyDesktopControlSettingsSection
-                      bindings={desktopControlBindings}
-                      onApply={onApplyDesktopControlBindings}
-                    />
-                  </Suspense>
+                  {isMobileLayout ? (
+                    <div className="app-meta-scene__subsurface app-meta-scene__subsurface--settings">
+                      <p className="app-meta-scene__lead">
+                        Desktop control calibration is only exposed on large-screen shell layouts.
+                      </p>
+                    </div>
+                  ) : (
+                    <Suspense
+                      fallback={
+                        <p className="settings-controls__status">Loading desktop control bindings…</p>
+                      }
+                    >
+                      <LazyDesktopControlSettingsSection
+                        bindings={desktopControlBindings}
+                        onApply={onApplyDesktopControlBindings}
+                      />
+                    </Suspense>
+                  )}
                 </div>
                 <div className="app-meta-scene__actions">
                   <button

@@ -27,14 +27,15 @@ import {
   type RuntimeProfilingConfig
 } from "@game/runtime/runtimeProfiling";
 
-type EmberwakeGameState = {
+export type EmberwakeGameState = {
   profiling: RuntimeProfilingConfig;
   simulation: EntitySimulationState;
   systems: EmberwakeGameplaySystemsState;
   worldSeed: string;
 };
 
-type EmberwakeGameAction = {
+export type EmberwakeGameAction = {
+  buildChoiceIndex?: number | null;
   controlState: SingleEntityControlState;
 };
 
@@ -69,6 +70,22 @@ const createControlStateFromInput = (input: EngineInputFrame): SingleEntityContr
     }
   }
 });
+
+const resolveBuildChoiceIndexFromInput = (input: EngineInputFrame) => {
+  for (const [buttonId, isPressed] of Object.entries(input.buttons)) {
+    if (!isPressed || !buttonId.startsWith("build.choice.")) {
+      continue;
+    }
+
+    const choiceIndex = Number.parseInt(buttonId.replace("build.choice.", ""), 10);
+
+    if (!Number.isNaN(choiceIndex)) {
+      return choiceIndex;
+    }
+  }
+
+  return null;
+};
 
 const createTimingSnapshot = (tick: number): EngineTiming => ({
   deltaMs: entitySimulationContract.fixedStepMs,
@@ -109,6 +126,7 @@ export const emberwakeGameModule: GameModule<
     };
   },
   mapInput: ({ input }) => ({
+    buildChoiceIndex: resolveBuildChoiceIndexFromInput(input),
     controlState: createControlStateFromInput(input)
   }),
   present: ({ state }): EnginePresentationModel => {
@@ -138,6 +156,7 @@ export const emberwakeGameModule: GameModule<
       worldPosition: entity.worldPosition
     })),
     overlays: {
+      buildState: normalizedSimulation.buildState,
       runtimeOutcome: state.systems.outcome ?? createIdleGameplayOutcome()
     },
     world: {
@@ -147,6 +166,7 @@ export const emberwakeGameModule: GameModule<
   update: ({ action, state, timing }) => {
     const normalizedSimulation = normalizeEntitySimulationState(state.simulation);
     const nextSimulation = advanceSimulationState(normalizedSimulation, {
+      buildChoiceIndex: action.buildChoiceIndex,
       controlState: action.controlState,
       profiling: state.profiling,
       worldSeed: state.worldSeed
@@ -235,4 +255,3 @@ export const advanceEmberwakeSimulationState = (
   }).simulation;
 
 export { entitySimulationContract };
-export type { EmberwakeGameAction, EmberwakeGameState };

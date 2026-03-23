@@ -1,9 +1,9 @@
 ## task_051_orchestrate_the_first_playable_techno_shinobi_build_content_wave - Orchestrate the first playable techno-shinobi build content wave
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -31,15 +31,15 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Implement the first exact techno-shinobi active roster and adapt the current frontal attack into `Ash Lash`.
-- [ ] 2. Implement the first exact passive roster with clear fusion-key families.
-- [ ] 3. Implement the first-pass level-up pool and chest rules for the bounded first roster.
-- [ ] 4. Implement the first curated fusion set and its readiness rules.
-- [ ] 5. Implement the level-up choice and build-tracking UI posture so the loop is readable in play.
-- [ ] 6. Tune the first playable loop and validate starter flow, progression pace, fusion payoff, and techno-shinobi readability.
-- [ ] 7. Update linked request, backlog, product, ADR, and task docs as the wave lands so traceability stays synchronized.
-- [ ] CHECKPOINT: leave each completed slice commit-ready before moving to the next one.
-- [ ] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
+- [x] 1. Implement the first exact techno-shinobi active roster and adapt the current frontal attack into `Ash Lash`.
+- [x] 2. Implement the first exact passive roster with clear fusion-key families.
+- [x] 3. Implement the first-pass level-up pool and chest rules for the bounded first roster.
+- [x] 4. Implement the first curated fusion set and its readiness rules.
+- [x] 5. Implement the level-up choice and build-tracking UI posture so the loop is readable in play.
+- [x] 6. Tune the first playable loop and validate starter flow, progression pace, fusion payoff, and techno-shinobi readability.
+- [x] 7. Update linked request, backlog, product, ADR, and task docs as the wave lands so traceability stays synchronized.
+- [x] CHECKPOINT: leave each completed slice commit-ready before moving to the next one.
+- [x] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
 
 # Delivery checkpoints
 - Lock the starter weapon and first active/passive names before widening implementation into pool logic and UI.
@@ -81,11 +81,23 @@ flowchart TD
 - Manual verification that the level-up and build-tracking UI remains readable on desktop and mobile-sized viewports.
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] The first exact techno-shinobi active, passive, and fusion roster exists in bounded playable form.
-- [ ] The first-pass level-up pool and chest posture is functional and readable.
-- [ ] The level-up and build-tracking UI communicates build state and readiness clearly enough in practice.
-- [ ] First-pass tuning and targeted validation are executed and captured in the task or linked artifacts.
-- [ ] Linked request, backlog, product, ADR, and task docs are updated during the wave and at closure.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] The first exact techno-shinobi active, passive, and fusion roster exists in bounded playable form.
+- [x] The first-pass level-up pool and chest posture is functional and readable.
+- [x] The level-up and build-tracking UI communicates build state and readiness clearly enough in practice.
+- [x] First-pass tuning and targeted validation are executed and captured in the task or linked artifacts.
+- [x] Linked request, backlog, product, ADR, and task docs are updated during the wave and at closure.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
+
+# Implementation notes
+- The first exact techno-shinobi roster is formalized in `games/emberwake/src/runtime/buildSystem.ts` with `Ash Lash`, `Guided Senbon`, `Shade Kunai`, `Cinder Arc`, `Orbit Sutra`, and `Null Canister` plus the first six passive keys and four curated fusions.
+- `EntitySimulation` now creates the player from the bounded starter build instead of a hard-coded one-off attack, and combat resolution iterates across owned active slots with passive modifiers and fusion multipliers.
+- Chest drops are now represented as cache pickups and resolve either a ready fusion or a deterministic bounded upgrade path, which keeps the first-wave reward posture aligned with the techno-shinobi brief.
+- `RuntimeBuildChoicePanel` and the expanded `PlayerHudCard` communicate level-up picks, owned build state, fusion readiness, and fused actives in the shell’s techno-shinobi language.
+
+# Report
+- Targeted tests passed for `buildSystem`, runtime integration, gameplay systems, `PlayerHudCard`, `AppMetaScenePanel`, and `pseudoPhysics`.
+- `npm run ci` passed on the completed codebase.
+- `npm run test:browser:smoke` passed on the completed codebase.
+- Manual mobile and shell review confirmed that the runtime feedback surface and level-up/build UI remain readable in the current shell presentation.

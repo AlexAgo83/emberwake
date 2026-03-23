@@ -1,0 +1,188 @@
+.runtime-build-choice {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 5;
+  width: min(54rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent),
+    rgba(8, 12, 16, 0.96);
+  box-shadow: var(--emberwake-shadow);
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.runtime-build-choice__header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.runtime-build-choice__eyebrow,
+.runtime-build-choice__title,
+.runtime-build-choice__detail,
+.runtime-build-choice__status {
+  margin: 0;
+}
+
+.runtime-build-choice__eyebrow {
+  color: var(--emberwake-copy-muted);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.runtime-build-choice__title {
+  margin-top: 0.2rem;
+  color: var(--emberwake-copy);
+  font-family: var(--emberwake-title-font);
+  font-size: 1.4rem;
+  letter-spacing: 0.04em;
+  line-height: 1.02;
+}
+
+.runtime-build-choice__detail {
+  margin-top: 0.32rem;
+  color: var(--emberwake-copy-dim);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.runtime-build-choice__status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.1rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(255, 183, 104, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 183, 104, 0.08);
+  color: var(--emberwake-accent-warm);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.runtime-build-choice__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  padding-top: 0.95rem;
+}
+
+.runtime-build-choice__card {
+  display: grid;
+  gap: 0.7rem;
+  min-height: 14rem;
+  padding: 0.95rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.92rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+    rgba(12, 18, 23, 0.86);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease,
+    transform 140ms ease;
+}
+
+.runtime-build-choice__card:hover {
+  border-color: rgba(115, 216, 255, 0.34);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
+    rgba(14, 21, 27, 0.92);
+  transform: translateY(-1px);
+}
+
+.runtime-build-choice__card:focus-visible {
+  outline: 2px solid rgba(76, 226, 255, 0.65);
+  outline-offset: 2px;
+}
+
+.runtime-build-choice__card-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.runtime-build-choice__tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.7rem;
+  padding: 0.26rem 0.52rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--emberwake-copy-muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.runtime-build-choice__tag--state {
+  color: var(--emberwake-accent-cold);
+}
+
+.runtime-build-choice__copy {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.runtime-build-choice__label {
+  color: var(--emberwake-copy);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.runtime-build-choice__role,
+.runtime-build-choice__effect,
+.runtime-build-choice__level {
+  color: var(--emberwake-copy-dim);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.runtime-build-choice__level {
+  color: var(--emberwake-copy-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.runtime-build-choice__fusion {
+  margin-top: 0.3rem;
+  color: var(--emberwake-accent-warm);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.runtime-build-choice--mobile {
+  width: min(30rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  padding: 0.82rem;
+}
+
+.runtime-build-choice--mobile .runtime-build-choice__header {
+  display: grid;
+}
+
+.runtime-build-choice--mobile .runtime-build-choice__grid {
+  grid-template-columns: 1fr;
+}
+
+.runtime-build-choice--mobile .runtime-build-choice__card {
+  min-height: auto;
+}

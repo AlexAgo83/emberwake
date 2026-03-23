@@ -16,6 +16,7 @@ import type { SingleEntityControlState } from "../../input/model/singleEntityCon
 import type { RuntimeProfilingConfig } from "@game";
 
 type UseEntitySimulationOptions = {
+  buttonPresses?: Record<string, boolean>;
   controlState?: SingleEntityControlState;
   initialGameState?: EmberwakeGameState;
   profilingConfig?: RuntimeProfilingConfig;
@@ -61,6 +62,7 @@ type UseEntitySimulationResult = EntitySimulationState & {
 };
 
 export function useEntitySimulation({
+  buttonPresses,
   controlState,
   initialGameState,
   profilingConfig,
@@ -93,8 +95,8 @@ export function useEntitySimulation({
   }, [runner]);
 
   useEffect(() => {
-    runner.setInputFrame(createEngineInputFrameFromControlState(controlState));
-  }, [controlState, runner]);
+    runner.setInputFrame(createEngineInputFrameFromControlState(controlState, buttonPresses));
+  }, [buttonPresses, controlState, runner]);
 
   const controls = useMemo<EntitySimulationControls>(
     () => ({

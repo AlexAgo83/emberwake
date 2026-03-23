@@ -1,9 +1,9 @@
 ## item_219_define_the_first_exact_techno_shinobi_passive_roster_and_fusion_key_delivery - Define the first exact techno-shinobi passive roster and fusion key delivery
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

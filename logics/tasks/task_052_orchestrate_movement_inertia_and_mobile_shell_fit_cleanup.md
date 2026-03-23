@@ -1,9 +1,9 @@
 ## task_052_orchestrate_movement_inertia_and_mobile_shell_fit_cleanup - Orchestrate movement inertia and mobile shell fit cleanup
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -30,13 +30,13 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Implement a light directional inertia posture for harsh player movement reversals.
-- [ ] 2. Implement a mobile non-PWA viewport-fit correction so bottom-edge shell content remains visible.
-- [ ] 3. Remove or hide desktop-control settings from the mobile shell surface while preserving desktop behavior.
-- [ ] 4. Run targeted validation covering reversal feel, mobile viewport fit, and desktop/mobile settings behavior.
-- [ ] 5. Update linked request, backlog, and task docs as the wave lands so traceability stays synchronized.
-- [ ] CHECKPOINT: leave each completed slice commit-ready before moving to the next one.
-- [ ] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
+- [x] 1. Implement a light directional inertia posture for harsh player movement reversals.
+- [x] 2. Implement a mobile non-PWA viewport-fit correction so bottom-edge shell content remains visible.
+- [x] 3. Remove or hide desktop-control settings from the mobile shell surface while preserving desktop behavior.
+- [x] 4. Run targeted validation covering reversal feel, mobile viewport fit, and desktop/mobile settings behavior.
+- [x] 5. Update linked request, backlog, and task docs as the wave lands so traceability stays synchronized.
+- [x] CHECKPOINT: leave each completed slice commit-ready before moving to the next one.
+- [x] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
 
 # Delivery checkpoints
 - Keep the movement-feel correction bounded to reversal behavior first.
@@ -77,12 +77,23 @@ flowchart TD
 - Manual shell/settings review that the final mobile UI remains coherent with `logics-ui-steering` guidance.
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Player reversal movement has a bounded drift or recovery feel without becoming heavy.
-- [ ] Non-PWA mobile browser usage shows the full shell without bottom truncation.
-- [ ] Desktop-control settings are not shown on mobile and remain available on desktop.
-- [ ] Shell and settings UI changes were guided by `logics-ui-steering` and manually reviewed for coherence.
-- [ ] Validation commands are executed and results are captured in the task or linked artifacts.
-- [ ] Linked request, backlog, and task docs are updated during the wave and at closure.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Player reversal movement has a bounded drift or recovery feel without becoming heavy.
+- [x] Non-PWA mobile browser usage shows the full shell without bottom truncation.
+- [x] Desktop-control settings are not shown on mobile and remain available on desktop.
+- [x] Shell and settings UI changes were guided by `logics-ui-steering` and manually reviewed for coherence.
+- [x] Validation commands are executed and results are captured in the task or linked artifacts.
+- [x] Linked request, backlog, and task docs are updated during the wave and at closure.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
+
+# Implementation notes
+- `resolvePseudoPhysicalMovement` now supports a bounded directional inertia profile, and the player movement path uses it only for strong reversals so steering stays responsive while left-right snapping picks up a small drift window.
+- `useDocumentViewportLock` now tracks the live visual viewport height and browser-vs-standalone display mode, while `.app-shell` consumes that height variable so non-PWA mobile browsers no longer clip bottom-edge shell content.
+- `AppMetaScenePanel` now suppresses desktop-control calibration on mobile settings surfaces and replaces it with a compact shell-consistent notice rather than exposing unusable desktop affordances.
+
+# Report
+- Targeted tests passed for `pseudoPhysics`, `AppMetaScenePanel`, `DesktopControlSettingsSection`, `useCameraController`, `PlayerHudCard`, `buildSystem`, runtime integration, and gameplay systems.
+- `npm run ci` passed on the completed codebase.
+- `npm run test:browser:smoke` passed on the completed codebase.
+- Manual mobile browser verification at `390x844` confirmed that main-menu and settings bottom-edge content remain fully visible before PWA installation and that desktop control settings are hidden on mobile.

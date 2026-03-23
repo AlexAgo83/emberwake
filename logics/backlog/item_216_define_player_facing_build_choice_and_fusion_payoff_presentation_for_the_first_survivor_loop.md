@@ -1,9 +1,9 @@
 ## item_216_define_player_facing_build_choice_and_fusion_payoff_presentation_for_the_first_survivor_loop - Define player-facing build choice and fusion payoff presentation for the first survivor loop
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

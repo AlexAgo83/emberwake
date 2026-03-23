@@ -1,9 +1,9 @@
 ## item_225_define_a_mobile_non_pwa_viewport_fit_posture_for_full_shell_visibility - Define a mobile non-PWA viewport fit posture for full shell visibility
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
