@@ -1,9 +1,9 @@
 ## item_231_define_first_pass_fusion_visual_intensification_rules_for_playable_weapon_feedback - Define first-pass fusion visual intensification rules for playable weapon feedback
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -65,3 +65,4 @@ flowchart LR
 # Notes
 - Derived from request `req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons`.
 - Source file: `logics/request/req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons.md`.
+- Implemented by carrying `fusionId` through the transient feedback seam and intensifying parent signatures through brighter palettes, extra strokes, and denser marks instead of unrelated effect families.

@@ -65,6 +65,7 @@ describe("entitySimulation", () => {
       healingKitsCollected: 0,
       hostileDefeats: 0
     });
+    expect(simulationState.combatSkillFeedbackEvents).toEqual([]);
     expect(simulationState.floatingDamageNumbers).toEqual([]);
     expect(simulationState.entity.velocity).toEqual({ x: 0, y: 0 });
   });
@@ -269,6 +270,15 @@ describe("entitySimulation", () => {
 
     expect(simulationState.entities.some((entity) => entity.id === hostileEntity.id)).toBe(false);
     expect(simulationState.entity.automaticAttack?.lastAttackTick).toBe(1);
+    expect(simulationState.combatSkillFeedbackEvents).toHaveLength(1);
+    expect(simulationState.combatSkillFeedbackEvents[0]).toMatchObject({
+      arcRadians: hostileCombatContract.player.automaticConeAttack.arcRadians,
+      fusionId: null,
+      kind: "slash-ribbon",
+      sourceEntityId: entityContract.primaryEntityId,
+      spawnedAtTick: 1,
+      weaponId: "ash-lash"
+    });
     expect(simulationState.floatingDamageNumbers).toHaveLength(1);
     expect(simulationState.floatingDamageNumbers[0]).toMatchObject({
       amount: hostileCombatContract.player.automaticConeAttack.damage,

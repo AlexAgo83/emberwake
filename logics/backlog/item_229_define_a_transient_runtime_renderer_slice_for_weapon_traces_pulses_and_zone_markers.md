@@ -1,9 +1,9 @@
 ## item_229_define_a_transient_runtime_renderer_slice_for_weapon_traces_pulses_and_zone_markers - Define a transient runtime renderer slice for weapon traces pulses and zone markers
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -65,3 +65,4 @@ flowchart LR
 # Notes
 - Derived from request `req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons`.
 - Source file: `logics/request/req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons.md`.
+- Implemented through `src/game/render/CombatSkillFeedbackScene.tsx` and runtime-surface wiring so the transient feedback layer stays separate from stable entity geometry.

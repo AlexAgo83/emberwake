@@ -1,9 +1,9 @@
 ## item_228_define_a_transient_attack_feedback_event_contract_for_first_wave_playable_weapons - Define a transient attack-feedback event contract for first-wave playable weapons
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -65,3 +65,4 @@ flowchart LR
 # Notes
 - Derived from request `req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons`.
 - Source file: `logics/request/req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons.md`.
+- Implemented through `games/emberwake/src/runtime/entitySimulation.ts` and `games/emberwake/src/runtime/entitySimulationCombat.ts` with bounded `combatSkillFeedbackEvents` emitted alongside authoritative combat resolution.

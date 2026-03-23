@@ -29,7 +29,7 @@ export const emberwakeRuntimeRenderLayers = {
   },
   feedback: {
     owner: "game",
-    role: "future-combat-traversal-and-reactive-fx"
+    role: "transient-combat-skill-feedback-and-reactive-fx"
   }
 } as const;
 

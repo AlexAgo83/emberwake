@@ -412,6 +412,7 @@ export function ActiveRuntimeShellContent({
       <section className="app-shell__runtime" aria-label="Interactive runtime shell">
         <RuntimeSceneBoundary
           camera={cameraState}
+          combatSkillFeedbackEvents={simulationState.combatSkillFeedbackEvents}
           currentTick={simulationState.tick}
           floatingDamageNumbers={simulationState.floatingDamageNumbers}
           onOpenSettings={onShowSettingsScene}

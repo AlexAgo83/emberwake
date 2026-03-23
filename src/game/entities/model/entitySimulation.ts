@@ -6,6 +6,7 @@ export {
   getScriptedEntityPhase
 } from "@game/runtime/entitySimulation";
 export type {
+  CombatSkillFeedbackEvent,
   FloatingDamageNumber,
   EntitySimulationState,
   SimulatedEntity,

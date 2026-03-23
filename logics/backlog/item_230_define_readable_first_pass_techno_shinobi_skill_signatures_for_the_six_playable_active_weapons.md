@@ -1,9 +1,9 @@
 ## item_230_define_readable_first_pass_techno_shinobi_skill_signatures_for_the_six_playable_active_weapons - Define readable first-pass techno-shinobi skill signatures for the six playable active weapons
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -65,3 +65,4 @@ flowchart LR
 # Notes
 - Derived from request `req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons`.
 - Source file: `logics/request/req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons.md`.
+- Implemented as first-pass signatures for `Ash Lash`, `Guided Senbon`, `Shade Kunai`, `Cinder Arc`, `Orbit Sutra`, and `Null Canister` using slash ribbons, needle traces, fan volleys, impact bursts, orbit pulses, and zone seals.

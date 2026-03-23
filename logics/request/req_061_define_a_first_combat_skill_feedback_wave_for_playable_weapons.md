@@ -1,8 +1,8 @@
 ## req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons - Define a first combat skill feedback wave for playable weapons
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -100,3 +100,9 @@ flowchart TD
 - `item_230_define_readable_first_pass_techno_shinobi_skill_signatures_for_the_six_playable_active_weapons`
 - `item_231_define_first_pass_fusion_visual_intensification_rules_for_playable_weapon_feedback`
 - `item_232_define_targeted_validation_for_first_wave_weapon_feedback_readability_and_runtime_cost`
+
+# Outcome
+- A bounded `combatSkillFeedbackEvents` seam now carries first-wave weapon feedback from combat resolution into presentation without widening into a persistent-projectile rewrite.
+- The runtime now owns a dedicated transient feedback layer for slash ribbons, traces, pulses, bursts, and temporary zone seals.
+- The six first-wave actives now read through distinct techno-shinobi feedback signatures, while fused states intensify the parent signature through palette and density changes.
+- Validation passed through targeted tests, `npm run ci`, `npm run test:browser:smoke`, and a manual preview run with invincible profiling config to confirm the feedback layer renders in live combat.

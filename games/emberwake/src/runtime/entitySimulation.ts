@@ -29,6 +29,8 @@ import {
 } from "@game/runtime/entitySimulationSpawn";
 import {
   addPendingLevelUps,
+  type ActiveWeaponId,
+  type FusionId,
   advanceChestMilestone,
   buildSystemContract,
   createInitialBuildState,
@@ -107,6 +109,29 @@ export type FloatingDamageNumber = {
   worldPosition: WorldPoint;
 };
 
+export type CombatSkillFeedbackKind =
+  | "cinder-burst"
+  | "needle-trace"
+  | "orbit-pulse"
+  | "slash-ribbon"
+  | "kunai-fan"
+  | "zone-seal";
+
+export type CombatSkillFeedbackEvent = {
+  arcRadians: number | null;
+  durationTicks: number;
+  fusionId: FusionId | null;
+  id: string;
+  kind: CombatSkillFeedbackKind;
+  orientationRadians: number | null;
+  originWorldPoint: WorldPoint;
+  radiusWorldUnits: number | null;
+  sourceEntityId: string;
+  spawnedAtTick: number;
+  targetWorldPoints: WorldPoint[];
+  weaponId: ActiveWeaponId;
+};
+
 type TilePoint = {
   x: number;
   y: number;
@@ -140,6 +165,7 @@ export type SimulatedEntity = WorldEntity & {
 
 export type EntitySimulationState = {
   buildState: BuildState;
+  combatSkillFeedbackEvents: CombatSkillFeedbackEvent[];
   entities: SimulatedEntity[];
   entity: SimulatedEntity;
   floatingDamageNumbers: FloatingDamageNumber[];
@@ -381,6 +407,7 @@ export const createInitialSimulationState = (): EntitySimulationState => {
 
   return {
     buildState,
+    combatSkillFeedbackEvents: [],
     entities: [playerEntity],
     entity: playerEntity,
     floatingDamageNumbers: [],
@@ -584,6 +611,7 @@ export const normalizeEntitySimulationState = (
 
   return {
     buildState: normalizedBuildState,
+    combatSkillFeedbackEvents: simulationState.combatSkillFeedbackEvents ?? [],
     entities: normalizedEntities.map((entity) =>
       entity.id === normalizedPlayerEntity.id ? normalizedPlayerEntity : entity
     ),
@@ -622,6 +650,15 @@ export const getScriptedEntityPhase = (tick: number): ScriptedPhase => {
 
   return scriptedPhases[0].phase;
 };
+
+export const pruneCombatSkillFeedbackEvents = (
+  combatSkillFeedbackEvents: readonly CombatSkillFeedbackEvent[],
+  tick: number
+) =>
+  combatSkillFeedbackEvents.filter(
+    (combatSkillFeedbackEvent) =>
+      tick - combatSkillFeedbackEvent.spawnedAtTick < combatSkillFeedbackEvent.durationTicks
+  );
 
 const circleIntersectsTileRect = (
   worldPosition: WorldPoint,
@@ -784,6 +821,10 @@ export const advanceSimulationState = (
     return {
       ...simulationState,
       buildState: choiceAppliedBuildState,
+      combatSkillFeedbackEvents: pruneCombatSkillFeedbackEvents(
+        simulationState.combatSkillFeedbackEvents,
+        simulationState.tick
+      ),
       entities: simulationState.entities.map((entity) =>
         entity.id === lockedPlayerEntity.id ? lockedPlayerEntity : entity
       ),
@@ -946,6 +987,13 @@ export const advanceSimulationState = (
         ...simulationState.floatingDamageNumbers,
         ...attackResolvedState.floatingDamageNumbers,
         ...combatResolvedState.floatingDamageNumbers
+      ],
+      nextTick
+    ),
+    combatSkillFeedbackEvents: pruneCombatSkillFeedbackEvents(
+      [
+        ...simulationState.combatSkillFeedbackEvents,
+        ...attackResolvedState.combatSkillFeedbackEvents
       ],
       nextTick
     ),

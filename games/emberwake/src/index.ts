@@ -48,6 +48,7 @@ export {
 export { gameplayTuning } from "./config/gameplayTuning";
 export { systemTuning } from "./config/systemTuning";
 export type {
+  CombatSkillFeedbackEvent,
   EntitySimulationState,
   SimulatedEntity,
   SimulationSpeedOption

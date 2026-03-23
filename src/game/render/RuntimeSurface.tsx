@@ -7,9 +7,14 @@ import {
   type EmberwakeRuntimeRenderLayerId
 } from "@game/presentation/emberwakeRenderLayers";
 import type { EmberwakeRenderSurfaceMode } from "@game";
+import { CombatSkillFeedbackScene } from "./CombatSkillFeedbackScene";
 import { EntityScene } from "../entities/render/EntityScene";
 import type { PresentedEntity } from "../entities/model/entityContract";
-import type { FloatingDamageNumber, SimulatedEntity } from "../entities/model/entitySimulation";
+import type {
+  CombatSkillFeedbackEvent,
+  FloatingDamageNumber,
+  SimulatedEntity
+} from "../entities/model/entitySimulation";
 import { WorldScene } from "../world/render/WorldScene";
 import type { ChunkCoordinate } from "../world/types";
 
@@ -21,6 +26,7 @@ type RuntimeSurfaceProps = {
   onSurfaceElementChange?: (element: HTMLDivElement | null) => void;
   renderSurfaceMode: EmberwakeRenderSurfaceMode;
   onVisualFrame?: (timestampMs: number) => void;
+  combatSkillFeedbackEvents: CombatSkillFeedbackEvent[];
   floatingDamageNumbers: FloatingDamageNumber[];
   visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
   visibleChunks: ChunkCoordinate[];
@@ -42,6 +48,7 @@ export function RuntimeSurface({
   onSurfaceElementChange,
   renderSurfaceMode,
   onVisualFrame,
+  combatSkillFeedbackEvents,
   floatingDamageNumbers,
   visibleEntities,
   visibleChunks,
@@ -59,7 +66,14 @@ export function RuntimeSurface({
         viewport={viewport}
       />
     ),
-    feedback: null,
+    feedback: (
+      <CombatSkillFeedbackScene
+        camera={camera}
+        combatSkillFeedbackEvents={combatSkillFeedbackEvents}
+        currentTick={currentTick}
+        viewport={viewport}
+      />
+    ),
     world: (
       <WorldScene
         camera={camera}

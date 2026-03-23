@@ -49,6 +49,7 @@ describe("gameplaySystems", () => {
       previousState,
       simulationAfterUpdate: {
         buildState: createInitialBuildState(),
+        combatSkillFeedbackEvents: [],
         entities: [afterEntity],
         entity: afterEntity,
         floatingDamageNumbers: [],
@@ -67,6 +68,7 @@ describe("gameplaySystems", () => {
       },
       simulationBeforeUpdate: {
         buildState: createInitialBuildState(),
+        combatSkillFeedbackEvents: [],
         entities: [beforeEntity],
         entity: beforeEntity,
         floatingDamageNumbers: [],

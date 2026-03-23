@@ -11,6 +11,7 @@ import {
 } from "./buildSystem";
 import { systemTuning } from "@game/config/systemTuning";
 import type {
+  CombatSkillFeedbackEvent,
   FloatingDamageNumber,
   RunStats,
   SimulatedEntity
@@ -119,6 +120,7 @@ export const resolveAutomaticPlayerAttack = (
   buildState: BuildState
 ): {
   buildState: BuildState;
+  combatSkillFeedbackEvents: CombatSkillFeedbackEvent[];
   entities: SimulatedEntity[];
   floatingDamageNumbers: FloatingDamageNumber[];
 } => {
@@ -127,6 +129,7 @@ export const resolveAutomaticPlayerAttack = (
   if (!playerEntity || !isAlive(playerEntity)) {
     return {
       buildState,
+      combatSkillFeedbackEvents: [],
       entities: [...entities],
       floatingDamageNumbers: []
     };
@@ -143,6 +146,7 @@ export const resolveAutomaticPlayerAttack = (
   if (livingHostiles.length === 0) {
     return {
       buildState,
+      combatSkillFeedbackEvents: [],
       entities: [...entities],
       floatingDamageNumbers: []
     };
@@ -150,6 +154,7 @@ export const resolveAutomaticPlayerAttack = (
 
   let nextBuildState = buildState;
   let nextEntities = [...entities];
+  const combatSkillFeedbackEvents: CombatSkillFeedbackEvent[] = [];
   const floatingDamageNumbers: FloatingDamageNumber[] = [];
 
   const applyDamageToTargetIds = (targetIds: string[], damage: number) => {
@@ -214,8 +219,7 @@ export const resolveAutomaticPlayerAttack = (
               runtimeStats.arcRadians / 2
           );
         })
-        .slice(0, runtimeStats.targetCount)
-        .map((entity) => entity.id);
+        .slice(0, runtimeStats.targetCount);
 
     const pickTargetCluster = () => {
       const anchorTarget = currentLivingHostiles.find(
@@ -225,20 +229,26 @@ export const resolveAutomaticPlayerAttack = (
       );
 
       if (!anchorTarget) {
-        return [];
+        return {
+          anchorTarget: null,
+          targets: []
+        };
       }
 
-      return currentLivingHostiles
-        .filter(
-          (hostileEntity) =>
-            distanceBetweenWorldPoints(anchorTarget.worldPosition, hostileEntity.worldPosition) <=
-            runtimeStats.areaRadiusWorldUnits + hostileEntity.footprint.radius
-        )
-        .slice(0, runtimeStats.targetCount)
-        .map((entity) => entity.id);
+      return {
+        anchorTarget,
+        targets: currentLivingHostiles
+          .filter(
+            (hostileEntity) =>
+              distanceBetweenWorldPoints(anchorTarget.worldPosition, hostileEntity.worldPosition) <=
+              runtimeStats.areaRadiusWorldUnits + hostileEntity.footprint.radius
+          )
+          .slice(0, runtimeStats.targetCount)
+      };
     };
 
-    const targetIds =
+    const clusteredTargets = pickTargetCluster();
+    const targetEntities =
       runtimeStats.attackKind === "cone" || runtimeStats.attackKind === "fan"
         ? pickConeTargets()
         : runtimeStats.attackKind === "auto-target"
@@ -251,7 +261,6 @@ export const resolveAutomaticPlayerAttack = (
                   ) <= runtimeStats.rangeWorldUnits
               )
               .slice(0, runtimeStats.targetCount)
-              .map((entity) => entity.id)
           : runtimeStats.attackKind === "orbit"
             ? currentLivingHostiles
                 .filter(
@@ -262,19 +271,65 @@ export const resolveAutomaticPlayerAttack = (
                     ) <= runtimeStats.areaRadiusWorldUnits + hostileEntity.footprint.radius
                 )
                 .slice(0, runtimeStats.targetCount)
-                .map((entity) => entity.id)
-            : pickTargetCluster();
+            : clusteredTargets.targets;
 
-    if (targetIds.length === 0) {
+    if (targetEntities.length === 0) {
       continue;
     }
 
+    const targetIds = targetEntities.map((entity) => entity.id);
     nextBuildState = recordActiveWeaponAttack(nextBuildState, activeSlot.weaponId, tick);
     applyDamageToTargetIds(targetIds, runtimeStats.damage);
+    combatSkillFeedbackEvents.push({
+      arcRadians: runtimeStats.arcRadians,
+      durationTicks:
+        runtimeStats.attackKind === "zone"
+          ? 28
+          : runtimeStats.attackKind === "orbit"
+            ? 20
+            : runtimeStats.attackKind === "lob"
+              ? 18
+              : 12,
+      fusionId: runtimeStats.fusionId,
+      id: `skill-feedback:${activeSlot.weaponId}:${tick}:${combatSkillFeedbackEvents.length}`,
+      kind:
+        runtimeStats.attackKind === "cone"
+          ? "slash-ribbon"
+          : runtimeStats.attackKind === "fan"
+            ? "kunai-fan"
+            : runtimeStats.attackKind === "auto-target"
+              ? "needle-trace"
+              : runtimeStats.attackKind === "orbit"
+                ? "orbit-pulse"
+                : runtimeStats.attackKind === "zone"
+                  ? "zone-seal"
+                  : "cinder-burst",
+      orientationRadians:
+        runtimeStats.attackKind === "cone" || runtimeStats.attackKind === "fan"
+          ? currentPlayerEntity.orientation
+          : null,
+      originWorldPoint:
+        runtimeStats.attackKind === "lob" || runtimeStats.attackKind === "zone"
+          ? clusteredTargets.anchorTarget?.worldPosition ?? targetEntities[0]!.worldPosition
+          : currentPlayerEntity.worldPosition,
+      radiusWorldUnits:
+        runtimeStats.attackKind === "orbit" ||
+        runtimeStats.attackKind === "lob" ||
+        runtimeStats.attackKind === "zone"
+          ? runtimeStats.areaRadiusWorldUnits
+          : runtimeStats.attackKind === "cone" || runtimeStats.attackKind === "fan"
+            ? runtimeStats.rangeWorldUnits
+            : null,
+      sourceEntityId: currentPlayerEntity.id,
+      spawnedAtTick: tick,
+      targetWorldPoints: targetEntities.map((targetEntity) => targetEntity.worldPosition),
+      weaponId: activeSlot.weaponId
+    });
   }
 
   return {
     buildState: nextBuildState,
+    combatSkillFeedbackEvents,
     entities: nextEntities.map((entity) => {
       if (entity.id !== playerEntity.id) {
         return entity;

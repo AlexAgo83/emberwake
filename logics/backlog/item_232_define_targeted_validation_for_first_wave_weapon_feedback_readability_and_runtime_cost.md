@@ -1,9 +1,9 @@
 ## item_232_define_targeted_validation_for_first_wave_weapon_feedback_readability_and_runtime_cost - Define targeted validation for first-wave weapon feedback readability and runtime cost
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -64,3 +64,4 @@ flowchart LR
 # Notes
 - Derived from request `req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons`.
 - Source file: `logics/request/req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons.md`.
+- Validation executed with `npm run test -- entitySimulation gameplaySystems emberwakeRuntimeIntegration`, `npm run typecheck`, `npm run ci`, `npm run test:browser:smoke`, and a manual preview run using invincible profiling config to verify live-render feedback.
