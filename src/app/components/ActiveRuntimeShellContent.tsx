@@ -123,6 +123,7 @@ export function ActiveRuntimeShellContent({
   viewport
 }: ActiveRuntimeShellContentProps) {
   const runtimeSurfaceRef = useRef<HTMLDivElement | null>(null);
+  const autoSelectedLevelUpSignatureRef = useRef<string | null>(null);
   const pendingButtonStepRef = useRef<number | null>(null);
   const [runtimeSurfaceElement, setRuntimeSurfaceElement] = useState<HTMLDivElement | null>(null);
   const [runtimeButtonPresses, setRuntimeButtonPresses] = useState<Record<string, boolean>>({});
@@ -223,6 +224,10 @@ export function ActiveRuntimeShellContent({
   const buildState = simulationState.gameState.simulation.buildState;
   const levelUpChoices = buildState.levelUpChoices;
   const levelUpVisible = activeScene === "runtime" && levelUpChoices.length > 0;
+  const levelUpChoiceSignature = useMemo(
+    () => levelUpChoices.map((choice) => choice.id).join("|"),
+    [levelUpChoices]
+  );
 
   const handleToggleDiagnostics = useCallback(() => {
     onSetDebugPanelVisible(!preferences.debugPanelVisible);
@@ -258,6 +263,29 @@ export function ActiveRuntimeShellContent({
     pendingButtonStepRef.current = null;
     setRuntimeButtonPresses({});
   }, [simulationState.runtime.simulationStepsTotal]);
+
+  useEffect(() => {
+    if (!runtimeAutomation.autoSelectBuildChoices || !levelUpVisible) {
+      autoSelectedLevelUpSignatureRef.current = null;
+      return;
+    }
+
+    if (pendingButtonStepRef.current !== null || levelUpChoiceSignature.length === 0) {
+      return;
+    }
+
+    if (autoSelectedLevelUpSignatureRef.current === levelUpChoiceSignature) {
+      return;
+    }
+
+    autoSelectedLevelUpSignatureRef.current = levelUpChoiceSignature;
+    handleSelectBuildChoice(0);
+  }, [
+    handleSelectBuildChoice,
+    levelUpChoiceSignature,
+    levelUpVisible,
+    runtimeAutomation.autoSelectBuildChoices
+  ]);
 
   const diagnosticsPanelProps = useMemo(
     () => ({
@@ -319,6 +347,10 @@ export function ActiveRuntimeShellContent({
       worldDiagnostics
     ]
   );
+
+  useEffect(() => {
+    simulationState.controls.setSpeedMultiplier(runtimeAutomation.speedMultiplier);
+  }, [runtimeAutomation.speedMultiplier, simulationState.controls]);
 
   useEffect(() => {
     onRuntimeStateChange(simulationState.gameState);

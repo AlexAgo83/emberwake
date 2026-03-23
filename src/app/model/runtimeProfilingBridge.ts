@@ -26,7 +26,11 @@ export type RuntimeProfilingBridge = {
   listScenarios?: () => RuntimeProfilingScenarioSummary[];
   resetConfig?: () => RuntimeProfilingConfigDraft;
   setConfig?: (partial: Partial<RuntimeProfilingConfigDraft>) => RuntimeProfilingConfigDraft;
-  startScenario?: (request: { loop?: boolean; scenarioId: string }) => RuntimeAutomationStatus | null;
+  startScenario?: (request: {
+    loop?: boolean;
+    scenarioId: string;
+    speedMultiplier?: 0.5 | 1 | 2 | 4;
+  }) => RuntimeAutomationStatus | null;
   stopScenario?: () => RuntimeAutomationStatus | null;
 };
 

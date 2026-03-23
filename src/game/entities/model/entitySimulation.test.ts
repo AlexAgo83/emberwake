@@ -50,6 +50,44 @@ describe("entitySimulation", () => {
     ...overrides
   });
 
+  const createPickupFixture = (
+    pickupKind: "crystal" | "gold",
+    overrides: Partial<SimulatedEntity> = {}
+  ): SimulatedEntity => ({
+    ...createGenericMoverEntity({
+      id: `entity:pickup:${pickupKind}:fixture`,
+      renderLayer: 90,
+      visual: {
+        kind: pickupKind === "crystal" ? "pickup-crystal" : "pickup-gold",
+        tint: pickupKind === "crystal" ? "#73f2ff" : "#ffd76c"
+      },
+      worldPosition: {
+        x: 128,
+        y: 0
+      }
+    }),
+    combat: {
+      currentHealth: 1,
+      maxHealth: 1
+    },
+    footprint: {
+      radius: 22
+    },
+    movementSurfaceModifier: "normal",
+    pickupProfile: {
+      kind: pickupKind,
+      stackCount: 1
+    },
+    role: "pickup",
+    spawnedAtTick: 0,
+    state: "idle",
+    velocity: {
+      x: 0,
+      y: 0
+    },
+    ...overrides
+  });
+
   it("starts from a deterministic idle state", () => {
     const simulationState = createInitialSimulationState();
 
@@ -563,5 +601,101 @@ describe("entitySimulation", () => {
     expect(crystalPickups).toHaveLength(1);
     expect(crystalPickups[0]?.pickupProfile?.stackCount).toBe(6);
     expect(nextState.runStats.hostileDefeats).toBe(4);
+  });
+
+  it("periodically compacts nearby stacked pickups that already exist in the world", () => {
+    const initialState = createInitialSimulationState();
+    const nextState = advanceSimulationState(
+      {
+        ...initialState,
+        entities: [
+          initialState.entity,
+          createPickupFixture("crystal", {
+            id: "entity:pickup:crystal:a",
+            pickupProfile: {
+              kind: "crystal",
+              stackCount: 1
+            },
+            worldPosition: { x: 128, y: 0 }
+          }),
+          createPickupFixture("crystal", {
+            id: "entity:pickup:crystal:b",
+            pickupProfile: {
+              kind: "crystal",
+              stackCount: 2
+            },
+            worldPosition: { x: 140, y: 0 }
+          }),
+          createPickupFixture("crystal", {
+            id: "entity:pickup:crystal:c",
+            pickupProfile: {
+              kind: "crystal",
+              stackCount: 3
+            },
+            worldPosition: { x: 154, y: 0 }
+          })
+        ],
+        tick: 29
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "no-spawn"
+        }
+      }
+    );
+    const crystalPickups = nextState.entities.filter(
+      (entity) => entity.role === "pickup" && entity.pickupProfile?.kind === "crystal"
+    );
+
+    expect(crystalPickups).toHaveLength(1);
+    expect(crystalPickups[0]?.pickupProfile?.stackCount).toBe(6);
+  });
+
+  it("creates a distant super crystal by compacting off-player pickup clusters", () => {
+    const initialState = createInitialSimulationState();
+    const nextState = advanceSimulationState(
+      {
+        ...initialState,
+        entities: [
+          initialState.entity,
+          createPickupFixture("crystal", {
+            id: "entity:pickup:crystal:remote-a",
+            worldPosition: { x: 2100, y: 80 }
+          }),
+          createPickupFixture("crystal", {
+            id: "entity:pickup:crystal:remote-b",
+            pickupProfile: {
+              kind: "crystal",
+              stackCount: 2
+            },
+            worldPosition: { x: 2190, y: 92 }
+          }),
+          createPickupFixture("crystal", {
+            id: "entity:pickup:crystal:remote-c",
+            pickupProfile: {
+              kind: "crystal",
+              stackCount: 4
+            },
+            worldPosition: { x: 2260, y: 108 }
+          })
+        ],
+        tick: 29
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "no-spawn"
+        }
+      }
+    );
+    const crystalPickups = nextState.entities.filter(
+      (entity) => entity.role === "pickup" && entity.pickupProfile?.kind === "crystal"
+    );
+
+    expect(crystalPickups).toHaveLength(1);
+    expect(crystalPickups[0]?.pickupProfile?.stackCount).toBe(7);
+    expect(crystalPickups[0]?.worldPosition.x).toBeGreaterThan(2100);
+    expect(crystalPickups[0]?.worldPosition.x).toBeLessThan(2260);
   });
 });

@@ -320,11 +320,16 @@ try {
   }
 
   await page.evaluate(
-    ({ loop, scenarioId }) =>
-      globalThis.window.__EMBERWAKE_PROFILING__?.startScenario?.({ loop, scenarioId }),
+    ({ loop, scenarioId, speedMultiplier }) =>
+      globalThis.window.__EMBERWAKE_PROFILING__?.startScenario?.({
+        loop,
+        scenarioId,
+        speedMultiplier
+      }),
     {
       loop: cliOptions.loop ?? scenarioDefinition.defaultLoop,
-      scenarioId: cliOptions.scenarioId
+      scenarioId: cliOptions.scenarioId,
+      speedMultiplier: 4
     }
   );
 
@@ -355,6 +360,7 @@ try {
     scenario: {
       ...scenarioDefinition,
       appliedConfig: effectiveConfig,
+      appliedSpeedMultiplier: 4,
       loop: cliOptions.loop ?? scenarioDefinition.defaultLoop
     },
     samples,

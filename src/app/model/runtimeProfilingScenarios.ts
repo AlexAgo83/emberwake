@@ -2,6 +2,8 @@ import type { RuntimeProfilingConfigDraft } from "./runtimeProfilingConfig";
 
 export type RuntimeProfilingScenarioId =
   | "eastbound-drift"
+  | "figure-eight"
+  | "left-right-pendulum"
   | "square-loop"
   | "traversal-baseline";
 
@@ -16,10 +18,12 @@ export type RuntimeProfilingScenarioStep = {
 };
 
 export type RuntimeProfilingScenario = {
+  autoSelectBuildChoices?: boolean;
   defaultLoop: boolean;
   description: string;
   id: RuntimeProfilingScenarioId;
   recommendedConfig: RuntimeProfilingConfigDraft;
+  speedMultiplier?: 0.5 | 1 | 2;
   steps: readonly RuntimeProfilingScenarioStep[];
 };
 
@@ -28,6 +32,7 @@ export const runtimeProfilingScenarioCatalog: Record<
   RuntimeProfilingScenario
 > = {
   "eastbound-drift": {
+    autoSelectBuildChoices: true,
     defaultLoop: true,
     description: "Drift continuously east to isolate traversal-only runtime pressure.",
     id: "eastbound-drift",
@@ -35,6 +40,7 @@ export const runtimeProfilingScenarioCatalog: Record<
       playerInvincible: true,
       spawnMode: "no-spawn"
     },
+    speedMultiplier: 1,
     steps: [
       {
         durationTicks: 240,
@@ -43,7 +49,46 @@ export const runtimeProfilingScenarioCatalog: Record<
       }
     ]
   },
+  "figure-eight": {
+    autoSelectBuildChoices: true,
+    defaultLoop: true,
+    description: "Traverse a looping figure-eight path to stress turning, overlap churn, and return passes.",
+    id: "figure-eight",
+    recommendedConfig: {
+      playerInvincible: true,
+      spawnMode: "normal"
+    },
+    speedMultiplier: 1,
+    steps: [
+      { durationTicks: 90, label: "right-loop east", magnitude: 0.72, vector: { x: 1, y: 0 } },
+      { durationTicks: 90, label: "right-loop southeast", magnitude: 0.72, vector: { x: 1, y: 1 } },
+      { durationTicks: 90, label: "right-loop south", magnitude: 0.72, vector: { x: 0, y: 1 } },
+      { durationTicks: 90, label: "right-loop southwest", magnitude: 0.72, vector: { x: -1, y: 1 } },
+      { durationTicks: 90, label: "center crossover northwest", magnitude: 0.72, vector: { x: -1, y: -1 } },
+      { durationTicks: 90, label: "left-loop west", magnitude: 0.72, vector: { x: -1, y: 0 } },
+      { durationTicks: 90, label: "left-loop northwest", magnitude: 0.72, vector: { x: -1, y: -1 } },
+      { durationTicks: 90, label: "left-loop north", magnitude: 0.72, vector: { x: 0, y: -1 } },
+      { durationTicks: 90, label: "left-loop northeast", magnitude: 0.72, vector: { x: 1, y: -1 } },
+      { durationTicks: 90, label: "center crossover southeast", magnitude: 0.72, vector: { x: 1, y: 1 } }
+    ]
+  },
+  "left-right-pendulum": {
+    autoSelectBuildChoices: true,
+    defaultLoop: true,
+    description: "Alternate five-second right and left drifts to stress repeated reversals and local spawn churn.",
+    id: "left-right-pendulum",
+    recommendedConfig: {
+      playerInvincible: true,
+      spawnMode: "normal"
+    },
+    speedMultiplier: 2,
+    steps: [
+      { durationTicks: 300, label: "right drift", magnitude: 0.8, vector: { x: 1, y: 0 } },
+      { durationTicks: 300, label: "left drift", magnitude: 0.8, vector: { x: -1, y: 0 } }
+    ]
+  },
   "square-loop": {
+    autoSelectBuildChoices: true,
     defaultLoop: true,
     description: "Traverse a square path to exercise chunk churn and camera-relative movement.",
     id: "square-loop",
@@ -51,6 +96,7 @@ export const runtimeProfilingScenarioCatalog: Record<
       playerInvincible: true,
       spawnMode: "normal"
     },
+    speedMultiplier: 1,
     steps: [
       { durationTicks: 180, label: "east", vector: { x: 1, y: 0 } },
       { durationTicks: 180, label: "south", vector: { x: 0, y: 1 } },
@@ -59,6 +105,7 @@ export const runtimeProfilingScenarioCatalog: Record<
     ]
   },
   "traversal-baseline": {
+    autoSelectBuildChoices: true,
     defaultLoop: true,
     description: "Alternate straight traversal and diagonals under normal hostile pressure.",
     id: "traversal-baseline",
@@ -66,6 +113,7 @@ export const runtimeProfilingScenarioCatalog: Record<
       playerInvincible: true,
       spawnMode: "normal"
     },
+    speedMultiplier: 1,
     steps: [
       { durationTicks: 150, label: "east", vector: { x: 1, y: 0 } },
       { durationTicks: 120, label: "southeast", vector: { x: 1, y: 1 } },
@@ -84,7 +132,9 @@ export const listRuntimeProfilingScenarios = () =>
     defaultLoop: scenario.defaultLoop,
     description: scenario.description,
     id: scenario.id,
+    autoSelectBuildChoices: scenario.autoSelectBuildChoices ?? false,
     recommendedConfig: scenario.recommendedConfig,
+    speedMultiplier: scenario.speedMultiplier ?? 1,
     stepCount: scenario.steps.length,
     totalDurationTicks: scenario.steps.reduce((total, step) => total + step.durationTicks, 0)
   }));

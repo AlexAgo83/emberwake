@@ -20,6 +20,7 @@ import {
 type ActiveScenarioState = {
   loop: boolean;
   scenarioId: string;
+  speedMultiplier?: 0.5 | 1 | 2 | 4;
   startMs: number;
 } | null;
 
@@ -50,7 +51,9 @@ export function useRuntimeAutomation() {
   const automationState = useMemo(() => {
     if (!activeScenario || !resolvedScenario) {
       return {
+        autoSelectBuildChoices: false,
         movementIntent: createIdleMovementIntent("none"),
+        speedMultiplier: 1 as const,
         status: {
           activeScenarioId: null,
           activeStepIndex: -1,
@@ -76,6 +79,7 @@ export function useRuntimeAutomation() {
     });
 
     return {
+      autoSelectBuildChoices: resolvedScenario.autoSelectBuildChoices ?? false,
       movementIntent: movementState.isActive
         ? createMovementIntent(
             movementState.vector.x * movementState.magnitude,
@@ -83,6 +87,7 @@ export function useRuntimeAutomation() {
             "keyboard"
           )
         : createIdleMovementIntent("none"),
+      speedMultiplier: activeScenario.speedMultiplier ?? resolvedScenario.speedMultiplier ?? 1,
       status: {
         activeScenarioId: resolvedScenario.id,
         activeStepIndex: movementState.activeStepIndex,
@@ -102,7 +107,7 @@ export function useRuntimeAutomation() {
     patchRuntimeProfilingBridge({
       getRuntimeStatus: () => automationStatusRef.current,
       listScenarios: () => listRuntimeProfilingScenarios(),
-      startScenario: ({ loop, scenarioId }) => {
+      startScenario: ({ loop, scenarioId, speedMultiplier }) => {
         const scenario = resolveRuntimeProfilingScenario(scenarioId);
 
         if (!scenario) {
@@ -112,6 +117,7 @@ export function useRuntimeAutomation() {
         setActiveScenario({
           loop: loop ?? scenario.defaultLoop,
           scenarioId: scenario.id,
+          speedMultiplier,
           startMs: currentTimeRef.current
         });
 
@@ -150,7 +156,9 @@ export function useRuntimeAutomation() {
   }, []);
 
   return {
+    autoSelectBuildChoices: automationState.autoSelectBuildChoices,
     movementIntent: automationState.movementIntent satisfies MovementIntent,
+    speedMultiplier: automationState.speedMultiplier,
     status: automationState.status
   };
 }

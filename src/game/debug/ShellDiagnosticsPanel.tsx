@@ -141,7 +141,7 @@ function ShellDiagnosticsPanelComponent({
         >
           Step sim
         </button>
-        {([0.5, 1, 2] as const).map((speedMultiplier) => (
+        {([0.5, 1, 2, 4] as const).map((speedMultiplier) => (
           <button
             className="shell-control shell-control--button"
             data-active={simulation.speedMultiplier === speedMultiplier}

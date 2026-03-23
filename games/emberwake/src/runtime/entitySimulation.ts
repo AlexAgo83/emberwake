@@ -2,6 +2,7 @@ import type { WorldPoint } from "@engine/geometry/primitives";
 import {
   tileCoordinateToWorldOrigin,
   worldContract,
+  worldPointToChunkCoordinate,
   worldPointToTileCoordinate
 } from "@engine/world/worldContract";
 import { createGenericMoverEntity } from "@game/content/entities/entityContract";
@@ -65,7 +66,7 @@ import { gameplayTuning } from "@game/config/gameplayTuning";
 export const entitySimulationContract = {
   fixedStepMs: 1000 / 60,
   maxCatchUpStepsPerFrame: 6,
-  speedOptions: [0.5, 1, 2] as const
+  speedOptions: [0.5, 1, 2, 4] as const
 } as const;
 export { entityCombatPresentationContract };
 
@@ -466,6 +467,9 @@ const createPickupEntity = (
 const isAlive = (entity: SimulatedEntity) => entity.combat.currentHealth > 0;
 
 const pickupStackMergeRadiusWorldUnits = pickupContract.pickup.pickupRadiusWorldUnits * 3;
+const pickupCompactionIntervalTicks = 30;
+const distantPickupMergeChunkDistance = 2;
+const distantPickupMergeRadiusWorldUnits = pickupStackMergeRadiusWorldUnits * 6;
 
 const isStackablePickupKind = (pickupKind: SimulatedPickupKind) =>
   pickupKind === "crystal" || pickupKind === "gold";
@@ -535,6 +539,162 @@ const mergeNewPickupEntities = (
   }
 
   return nextEntities;
+};
+
+const isDistantPickupCandidate = (
+  pickupEntity: SimulatedEntity,
+  playerEntity: SimulatedEntity
+) => {
+  const playerChunkCoordinate = worldPointToChunkCoordinate(playerEntity.worldPosition);
+  const pickupChunkCoordinate = worldPointToChunkCoordinate(pickupEntity.worldPosition);
+
+  return (
+    Math.max(
+      Math.abs(playerChunkCoordinate.x - pickupChunkCoordinate.x),
+      Math.abs(playerChunkCoordinate.y - pickupChunkCoordinate.y)
+    ) >= distantPickupMergeChunkDistance
+  );
+};
+
+const createMergedPickupEntity = (cluster: readonly SimulatedEntity[], preferCentroid: boolean) => {
+  if (cluster.length === 1) {
+    return cluster[0]!;
+  }
+
+  const anchorEntity = [...cluster].sort((leftEntity, rightEntity) => {
+    const stackDelta = resolvePickupStackCount(rightEntity) - resolvePickupStackCount(leftEntity);
+
+    if (stackDelta !== 0) {
+      return stackDelta;
+    }
+
+    return leftEntity.spawnedAtTick - rightEntity.spawnedAtTick;
+  })[0]!;
+  const totalStackCount = cluster.reduce(
+    (totalStackCount, pickupEntity) => totalStackCount + resolvePickupStackCount(pickupEntity),
+    0
+  );
+
+  if (!preferCentroid) {
+    return {
+      ...anchorEntity,
+      pickupProfile: {
+        ...anchorEntity.pickupProfile!,
+        stackCount: totalStackCount
+      }
+    };
+  }
+
+  const weightedWorldPosition = cluster.reduce(
+    (accumulator, pickupEntity) => {
+      const stackCount = resolvePickupStackCount(pickupEntity);
+
+      return {
+        totalStackCount: accumulator.totalStackCount + stackCount,
+        x: accumulator.x + pickupEntity.worldPosition.x * stackCount,
+        y: accumulator.y + pickupEntity.worldPosition.y * stackCount
+      };
+    },
+    {
+      totalStackCount: 0,
+      x: 0,
+      y: 0
+    }
+  );
+
+  return {
+    ...anchorEntity,
+    pickupProfile: {
+      ...anchorEntity.pickupProfile!,
+      stackCount: totalStackCount
+    },
+    worldPosition: {
+      x: weightedWorldPosition.x / weightedWorldPosition.totalStackCount,
+      y: weightedWorldPosition.y / weightedWorldPosition.totalStackCount
+    }
+  };
+};
+
+const compactStackablePickupEntities = (
+  entities: readonly SimulatedEntity[],
+  playerEntity: SimulatedEntity,
+  tick: number
+) => {
+  if (tick % pickupCompactionIntervalTicks !== 0) {
+    return [...entities];
+  }
+
+  const stackablePickups = entities.filter(
+    (entity) =>
+      entity.role === "pickup" &&
+      entity.pickupProfile &&
+      isStackablePickupKind(entity.pickupProfile.kind)
+  );
+
+  if (stackablePickups.length < 2) {
+    return [...entities];
+  }
+
+  const staticEntities = entities.filter(
+    (entity) =>
+      entity.role !== "pickup" ||
+      !entity.pickupProfile ||
+      !isStackablePickupKind(entity.pickupProfile.kind)
+  );
+  const compactedPickups: SimulatedEntity[] = [];
+
+  for (const pickupKind of ["crystal", "gold"] as const) {
+    const remainingKindPickups = stackablePickups.filter(
+      (entity) => entity.pickupProfile?.kind === pickupKind
+    );
+    const visitedPickupIds = new Set<string>();
+
+    for (const pickupEntity of remainingKindPickups) {
+      if (visitedPickupIds.has(pickupEntity.id)) {
+        continue;
+      }
+
+      const cluster = [pickupEntity];
+      const clusterHasDistantCandidate = { current: isDistantPickupCandidate(pickupEntity, playerEntity) };
+      visitedPickupIds.add(pickupEntity.id);
+
+      for (let clusterIndex = 0; clusterIndex < cluster.length; clusterIndex += 1) {
+        const currentClusterEntity = cluster[clusterIndex]!;
+        const currentEntityIsDistant = isDistantPickupCandidate(currentClusterEntity, playerEntity);
+        const mergeRadiusWorldUnits =
+          currentEntityIsDistant || clusterHasDistantCandidate.current
+            ? distantPickupMergeRadiusWorldUnits
+            : pickupStackMergeRadiusWorldUnits;
+
+        for (const candidateEntity of remainingKindPickups) {
+          if (visitedPickupIds.has(candidateEntity.id)) {
+            continue;
+          }
+
+          const distance = distanceBetweenWorldPoints(
+            currentClusterEntity.worldPosition,
+            candidateEntity.worldPosition
+          );
+
+          if (distance > mergeRadiusWorldUnits) {
+            continue;
+          }
+
+          clusterHasDistantCandidate.current =
+            clusterHasDistantCandidate.current ||
+            isDistantPickupCandidate(candidateEntity, playerEntity);
+          visitedPickupIds.add(candidateEntity.id);
+          cluster.push(candidateEntity);
+        }
+      }
+
+      compactedPickups.push(
+        createMergedPickupEntity(cluster, clusterHasDistantCandidate.current)
+      );
+    }
+  }
+
+  return [...staticEntities, ...compactedPickups];
 };
 
 const isDynamicCollider = (entity: SimulatedEntity) => entity.role !== "pickup" && isAlive(entity);
@@ -1119,9 +1279,8 @@ export const advanceSimulationState = (
     nextTick,
     profiling.playerInvincible
   );
-  const pickupResolvedState = resolvePickupCollection({
-    buildState: attackResolvedState.buildState,
-    entities: (() => {
+  const compactedEntities = compactStackablePickupEntities(
+    (() => {
       const defeatedHostiles = combatResolvedState.entities.filter(
         (entity) => entity.role === "hostile" && !isAlive(entity)
       );
@@ -1170,6 +1329,12 @@ export const advanceSimulationState = (
         ...droppedCacheEntities
       ]);
     })(),
+    playerEntity,
+    nextTick
+  );
+  const pickupResolvedState = resolvePickupCollection({
+    buildState: attackResolvedState.buildState,
+    entities: compactedEntities,
     runStats: attackResolvedState.runStats
   });
   const defeatedHostiles = combatResolvedState.entities.filter(
