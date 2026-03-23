@@ -399,7 +399,8 @@ describe("entitySimulation", () => {
           ? {
               ...entity,
               pickupProfile: {
-                kind: "gold"
+                kind: "gold",
+                stackCount: 3
               },
               worldPosition: { ...simulationState.entity.worldPosition }
             }
@@ -408,7 +409,7 @@ describe("entitySimulation", () => {
     });
 
     expect(collectedState.entities.some((entity) => entity.id === pickupEntity!.id)).toBe(false);
-    expect(collectedState.runStats.goldCollected).toBe(2);
+    expect(collectedState.runStats.goldCollected).toBe(6);
   });
 
   it("applies healing-kit pickups with a max-health clamp", () => {
@@ -502,5 +503,65 @@ describe("entitySimulation", () => {
     expect(leveledState.runStats.crystalsCollected).toBe(4);
     expect(leveledState.runStats.currentLevel).toBe(2);
     expect(leveledState.runStats.currentXp).toBe(22);
+  });
+
+  it("consolidates nearby hostile crystal drops into a single stacked pickup", () => {
+    const initialState = createInitialSimulationState();
+    const stackedCrystalPickup = {
+      ...createGenericMoverEntity({
+        id: "entity:pickup:crystal:existing",
+        renderLayer: 90,
+        visual: {
+          kind: "pickup-crystal",
+          tint: "#73f2ff"
+        },
+        worldPosition: { x: 128, y: 0 }
+      }),
+      combat: {
+        currentHealth: 1,
+        maxHealth: 1
+      },
+      footprint: {
+        radius: 22
+      },
+      movementSurfaceModifier: "normal" as const,
+      pickupProfile: {
+        kind: "crystal" as const,
+        stackCount: 2
+      },
+      role: "pickup" as const,
+      spawnedAtTick: 0,
+      state: "idle" as const,
+      velocity: {
+        x: 0,
+        y: 0
+      }
+    };
+    const defeatedHostiles = Array.from({ length: 4 }, (_, hostileIndex) =>
+      createHostileFixture({
+        combat: {
+          currentHealth: 0,
+          maxHealth: hostileCombatContract.hostile.maxHealth
+        },
+        id: `entity:hostile:defeated:${hostileIndex}`,
+        worldPosition: {
+          x: 128 + hostileIndex * 6,
+          y: 0
+        }
+      })
+    );
+
+    const nextState = advanceSimulationState({
+      ...initialState,
+      entities: [initialState.entity, stackedCrystalPickup, ...defeatedHostiles],
+      nextPickupSequence: 1
+    });
+    const crystalPickups = nextState.entities.filter(
+      (entity) => entity.role === "pickup" && entity.pickupProfile?.kind === "crystal"
+    );
+
+    expect(crystalPickups).toHaveLength(1);
+    expect(crystalPickups[0]?.pickupProfile?.stackCount).toBe(6);
+    expect(nextState.runStats.hostileDefeats).toBe(4);
   });
 });

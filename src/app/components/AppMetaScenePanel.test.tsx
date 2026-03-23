@@ -167,12 +167,12 @@ describe("AppMetaScenePanel", () => {
     expect(props.onReturnToMainMenu).not.toHaveBeenCalled();
   });
 
-  it("renders the pause scene as a full-screen field-hold surface", () => {
+  it("renders the pause scene as a full-screen paused surface", () => {
     const props = createProps({ scene: "pause" });
 
     render(<AppMetaScenePanel {...props} />);
 
-    expect(screen.getByLabelText("Field hold")).toBeInTheDocument();
+    expect(screen.getByLabelText("Paused")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /Resume runtime/i }));
     expect(props.onResumeRuntime).toHaveBeenCalledTimes(1);
   });

@@ -27,6 +27,10 @@ type PlayerHudCardProps = {
   playerHealth: number;
   playerHealthMax: number;
   playerName: string;
+  playerPosition: {
+    x: number;
+    y: number;
+  };
 };
 
 export function PlayerHudCard({
@@ -41,13 +45,16 @@ export function PlayerHudCard({
   phaseLabel,
   playerHealth,
   playerHealthMax,
-  playerName
+  playerName,
+  playerPosition
 }: PlayerHudCardProps) {
   const roundedLevel = Math.max(1, Math.round(currentLevel));
   const roundedHealth = Math.max(0, Math.round(playerHealth));
   const roundedHealthMax = Math.max(1, Math.round(playerHealthMax));
   const roundedXp = Math.max(0, Math.round(currentXp));
   const roundedNextLevelXp = Math.max(1, Math.round(nextLevelXpRequired));
+  const roundedPositionX = Math.round(playerPosition.x);
+  const roundedPositionY = Math.round(playerPosition.y);
   const hpProgressPercent = Math.min(100, Math.round((roundedHealth / roundedHealthMax) * 100));
   const xpProgressPercent = Math.min(100, Math.round((roundedXp / roundedNextLevelXp) * 100));
   const activeSlots: Array<PlayerHudSlot | null> = Array.from(
@@ -64,12 +71,8 @@ export function PlayerHudCard({
       <div className="player-hud__progression">
         <div className="player-hud__identity">
           <div>
-            <p className="player-hud__eyebrow">Field HUD</p>
+            <p className="player-hud__eyebrow">Level {roundedLevel}</p>
             <p className="player-hud__name">{playerName}</p>
-          </div>
-          <div className="player-hud__identity-chips">
-            <p className="player-hud__phase-chip">{phaseLabel}</p>
-            <p className="player-hud__level-chip">Lv {roundedLevel}</p>
           </div>
         </div>
 
@@ -81,6 +84,9 @@ export function PlayerHudCard({
             </strong>
           </div>
           <div className="player-hud__bar" aria-hidden="true">
+            <strong className="player-hud__bar-value">
+              {roundedHealth} / {roundedHealthMax}
+            </strong>
             <span
               className="player-hud__bar-fill player-hud__bar-fill--health"
               style={{ width: `${hpProgressPercent}%` }}
@@ -96,6 +102,9 @@ export function PlayerHudCard({
             </strong>
           </div>
           <div className="player-hud__bar" aria-hidden="true">
+            <strong className="player-hud__bar-value">
+              {roundedXp} / {roundedNextLevelXp}
+            </strong>
             <span
               className="player-hud__bar-fill player-hud__bar-fill--xp"
               style={{ width: `${xpProgressPercent}%` }}
@@ -105,14 +114,20 @@ export function PlayerHudCard({
 
         <div className="player-hud__gold-row">
           <span>Gold</span>
-          <strong>{Math.max(0, Math.round(goldCollected))}</strong>
+          <strong>
+            <span className="player-hud__gold-value">
+              <span aria-hidden="true" className="player-hud__coin-icon" />
+              {Math.max(0, Math.round(goldCollected))}
+            </span>
+          </strong>
         </div>
 
-        {isMobile ? (
-          <p className="player-hud__hint" data-testid="player-hud-hint">
-            Glissez pour guider le deplacement.
-          </p>
-        ) : null}
+        <div className="player-hud__position-row">
+          <span>Position</span>
+          <strong>
+            {roundedPositionX}, {roundedPositionY}
+          </strong>
+        </div>
       </div>
 
       <p className="player-hud__fps" aria-label="Runtime FPS">

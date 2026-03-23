@@ -349,6 +349,7 @@ export function AppShell() {
       onSaveGame={handleSaveGame}
       pendingCharacterName={pendingCharacterName}
       playerName={runtimeSession.playerName}
+      playerWorldPosition={(latestGameStateRef.current ?? sessionInitState)?.simulation.entity.worldPosition ?? null}
       progressionSnapshot={(latestGameStateRef.current ?? sessionInitState)?.systems.progression ?? null}
       runtimeOutcome={runtimeOutcome}
       scene={activeScene}

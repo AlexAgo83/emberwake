@@ -907,4 +907,8 @@ html[data-app-display-mode="browser"] .app-shell {
     grid-template-columns: 1fr;
   }
 
+  .app-meta-scene__codex-stats {
+    grid-template-columns: 1fr;
+  }
+
 }

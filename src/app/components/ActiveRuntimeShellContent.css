@@ -698,9 +698,28 @@
   }
 
   .shell-menu[data-layout-mode="mobile"] .shell-menu__trigger {
-    min-height: 2.55rem;
-    padding-inline: 0.85rem 0.95rem;
-    min-width: 12.5rem;
+    position: relative;
+    inline-size: 2.9rem;
+    min-width: 0;
+    min-height: 2.9rem;
+    padding: 0;
+    border-color: rgba(255, 255, 255, 0.04);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent),
+      rgba(8, 12, 16, 0.58);
+  }
+
+  .shell-menu[data-layout-mode="mobile"] .shell-menu__trigger-copy {
+    display: none;
+  }
+
+  .shell-menu[data-layout-mode="mobile"] .shell-menu__trigger-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
+    padding: 0.18rem;
+    transform: translate(-50%, -50%);
   }
 
   .shell-menu[data-layout-mode="mobile"] .shell-menu__panel {

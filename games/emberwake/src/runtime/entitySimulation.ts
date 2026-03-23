@@ -100,6 +100,7 @@ export type FocusState = {
 
 export type PickupProfile = {
   kind: SimulatedPickupKind;
+  stackCount?: number;
 };
 
 export type RunStats = {
@@ -418,7 +419,8 @@ const createPickupEntity = (
   pickupSequence: number,
   pickupKind: SimulatedPickupKind,
   worldPosition: WorldPoint,
-  spawnedAtTick: number
+  spawnedAtTick: number,
+  stackCount = 1
 ): SimulatedEntity => ({
   ...createGenericMoverEntity({
     id: `entity:pickup:${pickupKind}:${pickupSequence}`,
@@ -450,7 +452,8 @@ const createPickupEntity = (
   },
   movementSurfaceModifier: "normal",
   pickupProfile: {
-    kind: pickupKind
+    kind: pickupKind,
+    stackCount
   },
   role: "pickup",
   spawnedAtTick,
@@ -461,6 +464,78 @@ const createPickupEntity = (
 });
 
 const isAlive = (entity: SimulatedEntity) => entity.combat.currentHealth > 0;
+
+const pickupStackMergeRadiusWorldUnits = pickupContract.pickup.pickupRadiusWorldUnits * 3;
+
+const isStackablePickupKind = (pickupKind: SimulatedPickupKind) =>
+  pickupKind === "crystal" || pickupKind === "gold";
+
+const resolvePickupStackCount = (entity: SimulatedEntity) =>
+  Math.max(1, entity.pickupProfile?.stackCount ?? 1);
+
+const mergeNewPickupEntities = (
+  entities: readonly SimulatedEntity[],
+  newPickupEntities: readonly SimulatedEntity[]
+) => {
+  const nextEntities = [...entities];
+
+  for (const pickupEntity of newPickupEntities) {
+    const pickupKind = pickupEntity.pickupProfile?.kind;
+
+    if (!pickupKind || !isStackablePickupKind(pickupKind)) {
+      nextEntities.push(pickupEntity);
+      continue;
+    }
+
+    let mergeTargetIndex = -1;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+
+    for (let entityIndex = 0; entityIndex < nextEntities.length; entityIndex += 1) {
+      const candidateEntity = nextEntities[entityIndex];
+
+      if (
+        candidateEntity.role !== "pickup" ||
+        candidateEntity.pickupProfile?.kind !== pickupKind ||
+        !isStackablePickupKind(candidateEntity.pickupProfile.kind)
+      ) {
+        continue;
+      }
+
+      const distance = distanceBetweenWorldPoints(
+        candidateEntity.worldPosition,
+        pickupEntity.worldPosition
+      );
+
+      if (
+        distance > pickupStackMergeRadiusWorldUnits ||
+        distance >= nearestDistance
+      ) {
+        continue;
+      }
+
+      mergeTargetIndex = entityIndex;
+      nearestDistance = distance;
+    }
+
+    if (mergeTargetIndex === -1) {
+      nextEntities.push(pickupEntity);
+      continue;
+    }
+
+    const mergeTarget = nextEntities[mergeTargetIndex]!;
+
+    nextEntities[mergeTargetIndex] = {
+      ...mergeTarget,
+      pickupProfile: {
+        ...mergeTarget.pickupProfile!,
+        stackCount:
+          resolvePickupStackCount(mergeTarget) + resolvePickupStackCount(pickupEntity)
+      }
+    };
+  }
+
+  return nextEntities;
+};
 
 const isDynamicCollider = (entity: SimulatedEntity) => entity.role !== "pickup" && isAlive(entity);
 
@@ -659,7 +734,8 @@ const normalizeSimulatedEntity = (
       },
       movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
       pickupProfile: {
-        kind: inferredPickupKind
+        kind: inferredPickupKind,
+        stackCount: Math.max(1, entity.pickupProfile?.stackCount ?? 1)
       },
       role,
       spawnedAtTick: entity.spawnedAtTick ?? 0,
@@ -1089,7 +1165,10 @@ export const advanceSimulationState = (
               )
             );
 
-      return [...combatResolvedState.entities, ...droppedCrystalEntities, ...droppedCacheEntities];
+      return mergeNewPickupEntities(combatResolvedState.entities, [
+        ...droppedCrystalEntities,
+        ...droppedCacheEntities
+      ]);
     })(),
     runStats: attackResolvedState.runStats
   });

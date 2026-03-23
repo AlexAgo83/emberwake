@@ -76,18 +76,23 @@ const applyHealing = (entity: SimulatedEntity, healing: number): SimulatedEntity
   }
 });
 
-const applyCrystalXpGain = (runStats: RunStats): RunStats => {
+const applyCrystalXpGain = (runStats: RunStats, stackCount = 1): RunStats => {
   let nextLevel = Math.max(1, runStats.currentLevel);
-  let nextXp = Math.max(0, runStats.currentXp) + pickupContract.crystal.xpValue;
+  let nextXp = Math.max(0, runStats.currentXp);
+  const resolvedStackCount = Math.max(1, stackCount);
 
-  while (nextXp >= resolveXpRequiredForLevel(nextLevel)) {
-    nextXp -= resolveXpRequiredForLevel(nextLevel);
-    nextLevel += 1;
+  for (let crystalIndex = 0; crystalIndex < resolvedStackCount; crystalIndex += 1) {
+    nextXp += pickupContract.crystal.xpValue;
+
+    while (nextXp >= resolveXpRequiredForLevel(nextLevel)) {
+      nextXp -= resolveXpRequiredForLevel(nextLevel);
+      nextLevel += 1;
+    }
   }
 
   return {
     ...runStats,
-    crystalsCollected: runStats.crystalsCollected + 1,
+    crystalsCollected: runStats.crystalsCollected + resolvedStackCount,
     currentLevel: nextLevel,
     currentXp: nextXp
   };
@@ -590,6 +595,8 @@ export const resolvePickupCollection = ({
       continue;
     }
 
+    const pickupStackCount = Math.max(1, entity.pickupProfile.stackCount ?? 1);
+
     if (
       distanceBetweenWorldPoints(entity.worldPosition, nextPlayerEntity.worldPosition) >
       pickupRadiusWorldUnits + nextPlayerEntity.footprint.radius
@@ -607,13 +614,13 @@ export const resolvePickupCollection = ({
         nextRunStats.healingKitsCollected += 1;
         break;
       case "crystal":
-        Object.assign(nextRunStats, applyCrystalXpGain(nextRunStats));
+        Object.assign(nextRunStats, applyCrystalXpGain(nextRunStats, pickupStackCount));
         break;
       case "cache":
         nextBuildState = resolveChestReward(nextBuildState, nextRunStats.hostileDefeats);
         break;
       case "gold":
-        nextRunStats.goldCollected += pickupContract.gold.value;
+        nextRunStats.goldCollected += pickupContract.gold.value * pickupStackCount;
         break;
     }
   }

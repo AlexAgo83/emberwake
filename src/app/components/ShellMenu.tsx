@@ -250,6 +250,7 @@ export const ShellMenu = memo(function ShellMenu({
         aria-controls={menuId}
         aria-expanded={layoutMode === "mobile" ? false : isOpen}
         aria-haspopup={layoutMode === "mobile" ? undefined : "dialog"}
+        aria-label={layoutMode === "mobile" ? "Menu" : undefined}
         className="shell-menu__trigger shell-control shell-control--button"
         onClick={() => {
           if (layoutMode === "mobile") {

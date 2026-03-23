@@ -31,11 +31,6 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
   if (scene === "grimoire") {
     return (
       <>
-        <div className="app-meta-scene__subsurface app-meta-scene__subsurface--archive">
-          <p className="app-meta-scene__lead">
-            Skill doctrine, active tools, passive modifiers, and fusion paths known to the shell.
-          </p>
-        </div>
         <div className="app-meta-scene__codex-grid">
           <section className="app-meta-scene__codex-section" aria-labelledby="grimoire-actives">
             <div className="app-meta-scene__codex-section-header">
@@ -179,11 +174,6 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
 
   return (
     <>
-      <div className="app-meta-scene__subsurface app-meta-scene__subsurface--archive">
-        <p className="app-meta-scene__lead">
-          A shell-owned field archive of hostile forms you have already crossed.
-        </p>
-      </div>
       <div className="app-meta-scene__codex-cards app-meta-scene__codex-cards--bestiary">
         {creatureCodexEntries.map((creatureEntry) => {
           const isKnown = discoveredCreatureIds.has(creatureEntry.codexId);

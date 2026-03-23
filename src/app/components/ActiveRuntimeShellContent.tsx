@@ -489,6 +489,7 @@ export function ActiveRuntimeShellContent({
             playerHealth={simulationState.entity.combat.currentHealth}
             playerHealthMax={simulationState.entity.combat.maxHealth}
             playerName={runtimeSession.playerName || "Wanderer"}
+            playerPosition={simulationState.entity.worldPosition}
           />
         ) : null}
 

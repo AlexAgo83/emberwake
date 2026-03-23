@@ -29,6 +29,11 @@ export type CodexProgressionSnapshot = {
   phaseLabel: string;
 };
 
+type PlayerWorldPosition = {
+  x: number;
+  y: number;
+};
+
 const LazyDesktopControlSettingsSection = lazy(async () => {
   const module = await import("./DesktopControlSettingsSection");
 
@@ -71,6 +76,7 @@ type AppMetaScenePanelProps = {
   onSaveGame: () => void;
   pendingCharacterName: string;
   playerName: string;
+  playerWorldPosition?: PlayerWorldPosition | null;
   progressionSnapshot: CodexProgressionSnapshot | null;
   runtimeOutcome?: RuntimeShellOutcome | null;
   scene: AppSceneId;
@@ -100,6 +106,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   onSaveGame,
   pendingCharacterName,
   playerName,
+  playerWorldPosition,
   progressionSnapshot,
   runtimeOutcome,
   scene
@@ -140,7 +147,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             : scene === "bestiary"
               ? "Bestiary"
               : scene === "pause"
-                ? "Field hold"
+                ? "Paused"
         : scene === "settings"
           ? "Settings"
           : scene === "defeat"
@@ -158,7 +165,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             : scene === "bestiary"
               ? "Inspect the field archive of encountered hostile forms."
               : scene === "pause"
-                ? "The run is held while the shell exposes full-screen runtime controls."
+                ? ""
         : scene === "settings"
           ? ""
           : scene === "defeat" && gameOverRecap
@@ -204,30 +211,12 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           : scene === "grimoire" || scene === "bestiary"
             ? "Codex archive"
             : scene === "pause"
-              ? "Field hold"
+              ? "Pause"
           : scene === "settings"
             ? "Control bench"
             : scene === "defeat"
               ? "Recovery"
               : "Outcome";
-  const sceneStatusLabel =
-    scene === "main-menu"
-      ? "Entry hub"
-      : scene === "new-game"
-        ? "Readying run"
-        : scene === "changelogs"
-          ? "Release ledger"
-          : scene === "grimoire"
-            ? "Skill archive"
-            : scene === "bestiary"
-              ? "Creature archive"
-              : scene === "pause"
-                ? "Hold state"
-        : scene === "settings"
-          ? "Techno dojo"
-          : scene === "defeat"
-              ? "Run lost"
-              : "Run cleared";
   const sceneTone =
     scene === "new-game" || scene === "victory"
       ? "ember"
@@ -243,6 +232,9 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
 
   const skillPerformanceSummaries =
     gameOverRecap?.skillPerformanceSummaries ?? runtimeOutcome?.skillPerformanceSummaries ?? [];
+  const playerWorldPositionLabel = playerWorldPosition
+    ? `${Math.round(playerWorldPosition.x)}, ${Math.round(playerWorldPosition.y)}`
+    : null;
 
   useEffect(() => {
     setDefeatView("recap");
@@ -302,9 +294,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               <h2 className="app-meta-scene__title">{title}</h2>
               {detail ? <p className="app-meta-scene__detail">{detail}</p> : null}
             </div>
-            <p className="app-meta-scene__status" data-tone={sceneTone}>
-              {sceneStatusLabel}
-            </p>
           </header>
         {scene === "main-menu" ? (
           <>
@@ -417,9 +406,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           <>
             {scene === "changelogs" ? (
               <>
-                <div className="app-meta-scene__subsurface app-meta-scene__subsurface--archive">
-                  <p className="app-meta-scene__lead">Curated release history for the active shell.</p>
-                </div>
                 <div className="app-meta-scene__changelog-list">
                   {releaseChangelogEntries.map((entry) => {
                     return (
@@ -487,20 +473,17 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               </>
             ) : scene === "pause" ? (
               <>
-                <div className="app-meta-scene__subsurface app-meta-scene__subsurface--outcome">
-                  <p className="app-meta-scene__lead">
-                    The field is paused. Resume the run or branch into shell-owned controls.
-                  </p>
-                </div>
                 <dl className="app-meta-scene__facts">
                   <div>
                     <dt>Session</dt>
                     <dd>{playerName || defaultCharacterName}</dd>
                   </div>
-                  <div>
-                    <dt>Current phase</dt>
-                    <dd>{progressionSnapshot?.phaseLabel ?? "Ember Watch"}</dd>
-                  </div>
+                  {isMobileLayout && playerWorldPositionLabel ? (
+                    <div>
+                      <dt>Position</dt>
+                      <dd>{playerWorldPositionLabel}</dd>
+                    </div>
+                  ) : null}
                 </dl>
                 <div className="app-meta-scene__actions">
                   <button
