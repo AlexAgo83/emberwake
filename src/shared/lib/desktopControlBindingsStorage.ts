@@ -22,8 +22,6 @@ export const readDesktopControlBindings = (
     merge: (currentFallbackBindings, persistedBindings) => ({
       down: [...(persistedBindings.down ?? currentFallbackBindings.down)] as [string, string],
       left: [...(persistedBindings.left ?? currentFallbackBindings.left)] as [string, string],
-      rotateLeft: [...(persistedBindings.rotateLeft ?? currentFallbackBindings.rotateLeft)] as [string],
-      rotateRight: [...(persistedBindings.rotateRight ?? currentFallbackBindings.rotateRight)] as [string],
       right: [...(persistedBindings.right ?? currentFallbackBindings.right)] as [string, string],
       up: [...(persistedBindings.up ?? currentFallbackBindings.up)] as [string, string]
     }),

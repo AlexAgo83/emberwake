@@ -1,22 +1,17 @@
 import { systemTuning } from "@game/config/systemTuning";
 
 export const desktopControlDirections = ["up", "left", "down", "right"] as const;
-export const desktopCameraControlDirections = ["rotateLeft", "rotateRight"] as const;
+export const desktopCameraControlDirections = [] as const;
 
 export type DesktopControlDirection = (typeof desktopControlDirections)[number];
 export type DesktopCameraControlDirection = (typeof desktopCameraControlDirections)[number];
-export type DesktopControlBindingDirection =
-  | DesktopControlDirection
-  | DesktopCameraControlDirection;
+export type DesktopControlBindingDirection = DesktopControlDirection;
 
-export type DesktopControlBindings = Record<DesktopControlDirection, [string, string]> &
-  Record<DesktopCameraControlDirection, [string]>;
+export type DesktopControlBindings = Record<DesktopControlDirection, [string, string]>;
 
 const defaultDesktopControlBindings: DesktopControlBindings = {
   down: ["s", "ArrowDown"],
   left: ["a", "ArrowLeft"],
-  rotateLeft: ["q"],
-  rotateRight: ["e"],
   right: ["d", "ArrowRight"],
   up: ["w", "ArrowUp"]
 };
@@ -24,8 +19,6 @@ const defaultDesktopControlBindings: DesktopControlBindings = {
 export const createDefaultDesktopControlBindings = (): DesktopControlBindings => ({
   down: [...defaultDesktopControlBindings.down],
   left: [...defaultDesktopControlBindings.left],
-  rotateLeft: [...defaultDesktopControlBindings.rotateLeft],
-  rotateRight: [...defaultDesktopControlBindings.rotateRight],
   right: [...defaultDesktopControlBindings.right],
   up: [...defaultDesktopControlBindings.up]
 });

@@ -4,7 +4,6 @@ import { cameraContract } from "@engine/camera/cameraContract";
 import {
   createDefaultCameraState,
   panCamera,
-  rotateCamera,
   zoomCamera
 } from "@engine/camera/cameraMath";
 import type { CameraState } from "@engine/camera/cameraMath";
@@ -29,7 +28,6 @@ type UseCameraControllerOptions = {
 };
 
 type GestureState = {
-  previousAngle: number;
   previousCenterX: number;
   previousCenterY: number;
   previousDistance: number;
@@ -43,9 +41,6 @@ const getTouchCenter = (touches: TouchList) => ({
 
 const getTouchDistance = (touches: TouchList) =>
   Math.hypot(touches[1].clientX - touches[0].clientX, touches[1].clientY - touches[0].clientY);
-
-const getTouchAngle = (touches: TouchList) =>
-  Math.atan2(touches[1].clientY - touches[0].clientY, touches[1].clientX - touches[0].clientX);
 
 export function useCameraController({
   cameraMode,
@@ -149,27 +144,10 @@ export function useCameraController({
 
     const handleKeyDown = (event: KeyboardEvent) => {
       const normalizedKey = normalizeKeyboardBindingKey(event.key);
-      const rotateLeftKey = desktopControlBindings?.rotateLeft[0] ?? "q";
-      const rotateRightKey = desktopControlBindings?.rotateRight[0] ?? "e";
-      const isCameraDebugKey =
-        normalizedKey === rotateLeftKey ||
-        normalizedKey === rotateRightKey ||
-        normalizedKey === "r";
+      const isCameraDebugKey = normalizedKey === "r";
 
       if (isCameraDebugKey && !debugCameraEnabled) {
         return;
-      }
-
-      if (normalizedKey === rotateLeftKey) {
-        setCameraState((currentState) =>
-          rotateCamera(currentState, -cameraContract.rotationStepRadians)
-        );
-      }
-
-      if (normalizedKey === rotateRightKey) {
-        setCameraState((currentState) =>
-          rotateCamera(currentState, cameraContract.rotationStepRadians)
-        );
       }
 
       if (normalizedKey === "r") {
@@ -191,7 +169,6 @@ export function useCameraController({
       if (event.touches.length === 2) {
         const center = getTouchCenter(event.touches);
         touchGesture = {
-          previousAngle: getTouchAngle(event.touches),
           previousCenterX: center.x,
           previousCenterY: center.y,
           previousDistance: getTouchDistance(event.touches),
@@ -218,14 +195,11 @@ export function useCameraController({
       if (touchGesture.type === "gesture" && event.touches.length === 2) {
         const center = getTouchCenter(event.touches);
         const distance = getTouchDistance(event.touches);
-        const angle = getTouchAngle(event.touches);
         const deltaX = center.x - touchGesture.previousCenterX;
         const deltaY = center.y - touchGesture.previousCenterY;
         const distanceRatio = distance / Math.max(touchGesture.previousDistance, 1);
-        const angleDelta = angle - touchGesture.previousAngle;
 
         touchGesture = {
-          previousAngle: angle,
           previousCenterX: center.x,
           previousCenterY: center.y,
           previousDistance: distance,
@@ -241,8 +215,7 @@ export function useCameraController({
               Math.max(cameraContract.minZoom, pannedState.zoom * distanceRatio)
             )
           };
-
-          return rotateCamera(zoomedState, angleDelta);
+          return zoomedState;
         });
       }
     };

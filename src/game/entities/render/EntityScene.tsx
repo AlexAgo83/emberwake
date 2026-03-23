@@ -150,23 +150,17 @@ const drawPickupEntity =
 const drawCombatEntity =
   ({
     attackArcRadians,
-    attackChargeProgress,
     attackRangeWorldUnits,
-    healthRatio,
     hitReactionProgress,
     isSelected,
     radius,
-    role,
     tint
   }: {
     attackArcRadians: number | null;
-    attackChargeProgress: number;
     attackRangeWorldUnits: number | null;
-    healthRatio: number;
     hitReactionProgress: number;
     isSelected: boolean;
     radius: number;
-    role: PresentedEntity<SimulatedEntity>["role"];
     tint: number;
   }) =>
   (graphics: Graphics) => {
@@ -221,7 +215,21 @@ const drawCombatEntity =
     graphics.moveTo(0, 0);
     graphics.lineTo(Math.cos(0) * orientationLength, Math.sin(0) * orientationLength);
     graphics.stroke();
+  };
 
+const drawCombatEntityBars =
+  ({
+    attackChargeProgress,
+    healthRatio,
+    radius,
+    role
+  }: {
+    attackChargeProgress: number;
+    healthRatio: number;
+    radius: number;
+    role: PresentedEntity<SimulatedEntity>["role"];
+  }) =>
+  (graphics: Graphics) => {
     const barWidth = Math.max(36, radius * 2.35);
     const barHeight = 5;
     const barRadius = 2;
@@ -231,6 +239,7 @@ const drawCombatEntity =
     const chargeColor = role === "player" ? 0x5ce5ff : 0xffd76c;
     const baseX = -barWidth / 2;
 
+    graphics.clear();
     graphics.setFillStyle({ alpha: 0.82, color: 0x05070c });
     graphics.roundRect(baseX, healthBarY, barWidth, barHeight, barRadius);
     graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
@@ -270,53 +279,60 @@ const PickupEntityGraphic = memo(function PickupEntityGraphic({
 
 function CombatEntityGraphic({
   attackArcRadians,
-  attackChargeProgress,
   attackRangeWorldUnits,
-  healthRatio,
   hitReactionProgress,
   isSelected,
   radius,
-  role,
   tint
 }: {
   attackArcRadians: number | null;
-  attackChargeProgress: number;
   attackRangeWorldUnits: number | null;
-  healthRatio: number;
   hitReactionProgress: number;
   isSelected: boolean;
   radius: number;
-  role: PresentedEntity<SimulatedEntity>["role"];
   tint: number;
 }) {
   const draw = useMemo(
     () =>
       drawCombatEntity({
         attackArcRadians,
-        attackChargeProgress,
         attackRangeWorldUnits,
-        healthRatio,
         hitReactionProgress,
         isSelected,
         radius,
-        role,
         tint
       }),
     [
       attackArcRadians,
-      attackChargeProgress,
       attackRangeWorldUnits,
-      healthRatio,
       hitReactionProgress,
       isSelected,
       radius,
-      role,
       tint
     ]
   );
 
   return <pixiGraphics draw={draw} />;
 }
+
+const CombatEntityBars = memo(function CombatEntityBars({
+  attackChargeProgress,
+  healthRatio,
+  radius,
+  role
+}: {
+  attackChargeProgress: number;
+  healthRatio: number;
+  radius: number;
+  role: PresentedEntity<SimulatedEntity>["role"];
+}) {
+  const draw = useMemo(
+    () => drawCombatEntityBars({ attackChargeProgress, healthRatio, radius, role }),
+    [attackChargeProgress, healthRatio, radius, role]
+  );
+
+  return <pixiGraphics draw={draw} />;
+});
 
 export function EntityScene({
   camera,
@@ -353,7 +369,6 @@ export function EntityScene({
         return (
           <pixiContainer
             key={entity.id}
-            rotation={entity.role === "pickup" ? 0 : entity.orientation}
             x={entity.worldPosition.x}
             y={entity.worldPosition.y}
           >
@@ -364,30 +379,36 @@ export function EntityScene({
                 tint={tint}
               />
             ) : (
-              <CombatEntityGraphic
-                attackArcRadians={attackArcVisible ? entity.automaticAttack?.arcRadians ?? null : null}
-                attackChargeProgress={getAttackChargeProgress(entity, currentTick)}
-                attackRangeWorldUnits={
-                  attackArcVisible ? entity.automaticAttack?.rangeWorldUnits ?? null : null
-                }
-                healthRatio={
-                  entity.combat.maxHealth > 0
-                    ? Math.max(0, entity.combat.currentHealth / entity.combat.maxHealth)
-                    : 0
-                }
-                hitReactionProgress={hitReactionProgress}
-                isSelected={entity.isSelected}
-                radius={entity.footprint.radius}
-                role={entity.role}
-                tint={tint}
-              />
+              <>
+                <pixiContainer rotation={entity.orientation}>
+                  <CombatEntityGraphic
+                    attackArcRadians={attackArcVisible ? entity.automaticAttack?.arcRadians ?? null : null}
+                    attackRangeWorldUnits={
+                      attackArcVisible ? entity.automaticAttack?.rangeWorldUnits ?? null : null
+                    }
+                    hitReactionProgress={hitReactionProgress}
+                    isSelected={entity.isSelected}
+                    radius={entity.footprint.radius}
+                    tint={tint}
+                  />
+                </pixiContainer>
+                <CombatEntityBars
+                  attackChargeProgress={getAttackChargeProgress(entity, currentTick)}
+                  healthRatio={
+                    entity.combat.maxHealth > 0
+                      ? Math.max(0, entity.combat.currentHealth / entity.combat.maxHealth)
+                      : 0
+                  }
+                  radius={entity.footprint.radius}
+                  role={entity.role}
+                />
+              </>
             )}
             {debugLabelsVisible ? (
               <pixiText
                 anchor={0.5}
                 eventMode="none"
                 resolution={2}
-                rotation={entity.role === "pickup" ? 0 : -entity.orientation}
                 scale={1 / scale}
                 style={{
                   align: "center",

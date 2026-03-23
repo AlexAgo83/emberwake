@@ -40,7 +40,8 @@ export const readRuntimeSessionState = (
       ...persistedValue,
       cameraState: {
         ...fallbackValue.cameraState,
-        ...persistedValue.cameraState
+        ...persistedValue.cameraState,
+        rotation: fallbackValue.cameraState.rotation
       }
     }),
     payloadKey: "runtimeSession"

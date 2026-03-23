@@ -15,7 +15,6 @@ describe("desktopControlBindingsStorage", () => {
   it("round-trips desktop control bindings through local storage", () => {
     const bindings = createDefaultDesktopControlBindings();
     bindings.up[0] = "i";
-    bindings.rotateLeft[0] = "u";
 
     writeDesktopControlBindings(bindings);
 

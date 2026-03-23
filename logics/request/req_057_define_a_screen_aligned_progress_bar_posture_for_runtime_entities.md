@@ -1,8 +1,8 @@
 ## req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities - Define a screen-aligned progress-bar posture for runtime entities
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Low
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -115,3 +115,9 @@ flowchart TD
 - `item_209_define_a_screen_aligned_overhead_progress_bar_posture_for_combat_entities`
 - `item_210_remove_scene_rotation_controls_from_supported_player_input_and_settings`
 - `item_211_define_targeted_regression_validation_for_entity_bar_alignment_and_rotation_control_removal`
+
+# Outcome
+- Combat health and charge bars now stay horizontally readable above entities while body-facing geometry continues to rotate with entity orientation.
+- Scene-rotation controls are no longer exposed through supported player-facing desktop bindings or the `Settings` surface.
+- Persisted runtime camera rotation is normalized back to the default posture on session load so older rotated local state does not strand the player after the control removal.
+- Delivery was orchestrated through `task_049_orchestrate_screen_aligned_entity_feedback_and_scene_rotation_control_removal`, and the linked backlog slices `item_209` through `item_211` are complete.

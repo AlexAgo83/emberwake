@@ -16,10 +16,9 @@ describe("DesktopControlSettingsSection", () => {
     expect(screen.getByRole("heading", { name: /Desktop controls/i })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: /Movement bindings/i })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Movement/i })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: /Camera/i })).toBeInTheDocument();
-    expect(screen.getByText("Rotate left")).toBeInTheDocument();
-    expect(screen.getByText("Rotate right")).toBeInTheDocument();
-    expect(screen.getAllByText("Shift held")).toHaveLength(2);
+    expect(screen.queryByRole("heading", { name: /Camera/i })).not.toBeInTheDocument();
+    expect(screen.queryByText("Rotate left")).not.toBeInTheDocument();
+    expect(screen.queryByText("Rotate right")).not.toBeInTheDocument();
   });
 
   it("captures a replacement key for a selected movement slot", () => {
@@ -43,8 +42,6 @@ describe("DesktopControlSettingsSection", () => {
       down: ["s", "ArrowDown"],
       left: ["a", "ArrowLeft"],
       right: ["d", "ArrowRight"],
-      rotateLeft: ["q"],
-      rotateRight: ["e"],
       up: ["i", "ArrowUp"]
     });
   });
@@ -62,30 +59,6 @@ describe("DesktopControlSettingsSection", () => {
 
     expect(screen.getByText(/Resolve duplicate keys/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Apply controls/i })).toBeDisabled();
-  });
-
-  it("captures a replacement key for a rotation slot", () => {
-    const onApply = vi.fn();
-
-    render(
-      <DesktopControlSettingsSection
-        bindings={createDefaultDesktopControlBindings()}
-        onApply={onApply}
-      />
-    );
-
-    fireEvent.click(screen.getByRole("button", { name: "Q" }));
-    fireEvent.keyDown(window, { key: "u" });
-    fireEvent.click(screen.getByRole("button", { name: /Apply controls/i }));
-
-    expect(onApply).toHaveBeenCalledWith({
-      down: ["s", "ArrowDown"],
-      left: ["a", "ArrowLeft"],
-      right: ["d", "ArrowRight"],
-      rotateLeft: ["u"],
-      rotateRight: ["e"],
-      up: ["w", "ArrowUp"]
-    });
   });
 
   it("keeps reset available while revert and apply only activate for unsaved changes", () => {

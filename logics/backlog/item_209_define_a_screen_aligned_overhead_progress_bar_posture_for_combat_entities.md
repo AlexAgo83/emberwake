@@ -1,9 +1,9 @@
 ## item_209_define_a_screen_aligned_overhead_progress_bar_posture_for_combat_entities - Define a screen-aligned overhead progress-bar posture for combat entities
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -64,3 +64,4 @@ flowchart LR
 # Notes
 - Derived from request `req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities`.
 - Source file: `logics/request/req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities.md`.
+- Implemented in `task_049_orchestrate_screen_aligned_entity_feedback_and_scene_rotation_control_removal` by separating non-rotating combat bars from the rotating combat-entity body container in `src/game/entities/render/EntityScene.tsx`.

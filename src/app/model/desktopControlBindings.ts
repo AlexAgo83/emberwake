@@ -1,20 +1,16 @@
 import {
   createDefaultDesktopControlBindings,
-  desktopCameraControlDirections,
   desktopControlDirections,
   normalizeKeyboardBindingKey
 } from "../../game/input/model/singleEntityControlContract";
 import type {
-  DesktopCameraControlDirection,
   DesktopControlBindingDirection,
   DesktopControlBindings
 } from "../../game/input/model/singleEntityControlContract";
 
 export const desktopControlSlotOrder = [0, 1] as const;
-export const desktopCameraControlSlotOrder = [0] as const;
 
 export type DesktopControlSlotIndex = (typeof desktopControlSlotOrder)[number];
-export type DesktopCameraControlSlotIndex = (typeof desktopCameraControlSlotOrder)[number];
 
 const unsupportedBindingKeys = new Set([
   "Alt",
@@ -71,26 +67,17 @@ export const cloneDesktopControlBindings = (
 ): DesktopControlBindings => ({
   down: [...bindings.down],
   left: [...bindings.left],
-  rotateLeft: [...bindings.rotateLeft],
-  rotateRight: [...bindings.rotateRight],
   right: [...bindings.right],
   up: [...bindings.up]
 });
 
-const allDesktopControlDirections = [
-  ...desktopControlDirections,
-  ...desktopCameraControlDirections
-] as const satisfies readonly DesktopControlBindingDirection[];
+const allDesktopControlDirections =
+  desktopControlDirections as readonly DesktopControlBindingDirection[];
 
-export const isDesktopCameraControlDirection = (
-  direction: DesktopControlBindingDirection
-): direction is DesktopCameraControlDirection =>
-  (desktopCameraControlDirections as readonly string[]).includes(direction);
-
-export const getDesktopControlSlotOrder = (direction: DesktopControlBindingDirection) =>
-  isDesktopCameraControlDirection(direction)
-    ? desktopCameraControlSlotOrder
-    : desktopControlSlotOrder;
+export const getDesktopControlSlotOrder = (direction: DesktopControlBindingDirection) => {
+  void direction;
+  return desktopControlSlotOrder;
+};
 
 export const assignDesktopControlBinding = ({
   bindings,
@@ -101,7 +88,7 @@ export const assignDesktopControlBinding = ({
   bindings: DesktopControlBindings;
   direction: DesktopControlBindingDirection;
   key: string;
-  slotIndex: DesktopControlSlotIndex | DesktopCameraControlSlotIndex;
+  slotIndex: DesktopControlSlotIndex;
 }): DesktopControlBindings => {
   const nextBindings = cloneDesktopControlBindings(bindings);
   nextBindings[direction][slotIndex] = normalizeKeyboardBindingKey(key) as never;
@@ -118,7 +105,7 @@ export const getDesktopControlBindingConflicts = (bindings: DesktopControlBindin
     string,
     Array<{
       direction: DesktopControlBindingDirection;
-      slotIndex: DesktopControlSlotIndex | DesktopCameraControlSlotIndex;
+      slotIndex: DesktopControlSlotIndex;
     }>
   >();
 

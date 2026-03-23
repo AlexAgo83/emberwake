@@ -1,9 +1,9 @@
 ## item_211_define_targeted_regression_validation_for_entity_bar_alignment_and_rotation_control_removal - Define targeted regression validation for entity-bar alignment and rotation-control removal
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Low
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -64,3 +64,4 @@ flowchart LR
 # Notes
 - Derived from request `req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities`.
 - Source file: `logics/request/req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities.md`.
+- Implemented in `task_049_orchestrate_screen_aligned_entity_feedback_and_scene_rotation_control_removal` through targeted unit coverage for settings, binding storage, runtime-session normalization, and camera input, plus browser smoke and manual preview verification of horizontal overhead bars and the removed settings controls.

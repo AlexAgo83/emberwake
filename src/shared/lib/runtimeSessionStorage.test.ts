@@ -28,7 +28,13 @@ describe("runtimeSessionStorage", () => {
 
     writeRuntimeSessionState(runtimeSession);
 
-    expect(readRuntimeSessionState(createDefaultRuntimeSessionState())).toEqual(runtimeSession);
+    expect(readRuntimeSessionState(createDefaultRuntimeSessionState())).toEqual({
+      ...runtimeSession,
+      cameraState: {
+        ...runtimeSession.cameraState,
+        rotation: createDefaultRuntimeSessionState().cameraState.rotation
+      }
+    });
   });
 
   it("invalidates persisted state when the schema version does not match", () => {

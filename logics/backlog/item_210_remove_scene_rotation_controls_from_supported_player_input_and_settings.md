@@ -1,9 +1,9 @@
 ## item_210_remove_scene_rotation_controls_from_supported_player_input_and_settings - Remove scene-rotation controls from supported player input and settings
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -67,3 +67,4 @@ flowchart LR
 # Notes
 - Derived from request `req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities`.
 - Source file: `logics/request/req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities.md`.
+- Implemented in `task_049_orchestrate_screen_aligned_entity_feedback_and_scene_rotation_control_removal` by removing rotate-left / rotate-right from the desktop control contract and settings UI, disabling keyboard/touch rotation input paths in `src/game/camera/hooks/useCameraController.ts`, and normalizing persisted camera rotation on session load.

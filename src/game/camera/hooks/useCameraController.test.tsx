@@ -171,15 +171,13 @@ describe("useCameraController", () => {
     expect(result.current.cameraState).not.toEqual(initialCameraState);
   });
 
-  it("rotates with editable desktop camera bindings when debug mode is active", () => {
+  it("does not rotate from removed keyboard rotation controls even in debug mode", () => {
     const surfaceElement = document.createElement("div");
-    const customBindings = createDefaultDesktopControlBindings();
-    customBindings.rotateLeft[0] = "u";
     const { result } = renderHook(() =>
       useCameraController({
         cameraMode: "free",
         debugCameraEnabled: true,
-        desktopControlBindings: customBindings,
+        desktopControlBindings: createDefaultDesktopControlBindings(),
         followedWorldPosition: { x: 0, y: 0 },
         initialCameraState: createDefaultCameraState(),
         surfaceElement,
@@ -190,9 +188,10 @@ describe("useCameraController", () => {
     );
 
     act(() => {
-      window.dispatchEvent(new KeyboardEvent("keydown", { key: "u" }));
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "q" }));
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "e" }));
     });
 
-    expect(result.current.cameraState.rotation).toBeLessThan(0);
+    expect(result.current.cameraState.rotation).toBe(0);
   });
 });

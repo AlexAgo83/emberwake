@@ -1,9 +1,9 @@
 ## task_049_orchestrate_screen_aligned_entity_feedback_and_scene_rotation_control_removal - Orchestrate screen-aligned entity feedback and scene-rotation control removal
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -20,7 +20,7 @@
 - Unblocks: cleaner combat readability during turning, tighter player-facing control posture, and future settings cleanup that does not carry unsupported camera affordances.
 
 ```mermaid
-%% logics-signature: task|orchestrate-screen-aligned-entity-feedba|item-209-define-a-screen-aligned-overhea|1-restore-screen-aligned-overhead-bars-f|npm-run-test-entityscene-desktopcontrol
+%% logics-signature: task|orchestrate-screen-aligned-entity-feedba|item-209-define-a-screen-aligned-overhea|1-restore-screen-aligned-overhead-bars-f|npm-run-test-desktopcontrolsettingssect
 flowchart TD
     Bars[item_209 screen aligned overhead bars] --> Wave[Req 057 implementation wave]
     Controls[item_210 remove scene rotation controls] --> Wave
@@ -28,14 +28,14 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Restore screen-aligned overhead bars for combat entities without undoing the `0.4.0` local-space entity-render posture.
-- [ ] 2. Remove scene-rotation controls from supported player input and from the editable `Settings` surface.
-- [ ] 3. Update related control-binding defaults, validation, storage handling, and tests so the reduced control set is coherent across the repo.
-- [ ] 4. Run targeted regression validation covering entity-bar readability during turning and removal of player-facing scene-rotation controls.
-- [ ] 5. Update linked request, backlog, and task docs as the wave lands so traceability stays synchronized with implementation.
-- [ ] 6. Validate the completed wave through repository tests and manual runtime verification.
-- [ ] CHECKPOINT: leave each slice commit-ready before moving to the next one.
-- [ ] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
+- [x] 1. Restore screen-aligned overhead bars for combat entities without undoing the `0.4.0` local-space entity-render posture.
+- [x] 2. Remove scene-rotation controls from supported player input and from the editable `Settings` surface.
+- [x] 3. Update related control-binding defaults, validation, storage handling, and tests so the reduced control set is coherent across the repo.
+- [x] 4. Run targeted regression validation covering entity-bar readability during turning and removal of player-facing scene-rotation controls.
+- [x] 5. Update linked request, backlog, and task docs as the wave lands so traceability stays synchronized with implementation.
+- [x] 6. Validate the completed wave through repository tests and manual runtime verification.
+- [x] CHECKPOINT: leave each slice commit-ready before moving to the next one.
+- [x] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
 
 # Delivery checkpoints
 - Land the bar-alignment correction as a coherent render slice before mixing in settings/control cleanup if practical.
@@ -64,17 +64,30 @@ flowchart TD
 - Request(s): `req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities`
 
 # Validation
-- `npm run test -- EntityScene DesktopControlSettingsSection useCameraController desktopControlBindings`
+- `npm run test -- DesktopControlSettingsSection desktopControlBindings desktopControlBindingsStorage runtimeSessionStorage useCameraController`
 - `npm run ci`
+- `npm run test:browser:smoke`
 - Manual runtime verification that health and charge bars stay horizontal while entities rotate.
 - Manual verification that `Settings` no longer exposes scene-rotation bindings.
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Combat overhead bars remain screen-aligned while staying anchored above combat entities.
-- [ ] Player-facing scene-rotation bindings and settings affordances are removed.
-- [ ] Related tests and validation reflect the reduced supported control set.
-- [ ] Validation commands are executed and results are captured in the task or linked artifacts.
-- [ ] Linked request, backlog, and task docs are updated during the wave and at closure.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Combat overhead bars remain screen-aligned while staying anchored above combat entities.
+- [x] Player-facing scene-rotation bindings and settings affordances are removed.
+- [x] Related tests and validation reflect the reduced supported control set.
+- [x] Validation commands are executed and results are captured in the task or linked artifacts.
+- [x] Linked request, backlog, and task docs are updated during the wave and at closure.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
+
+# Implementation notes
+- `EntityScene` now keeps the positioned entity container unrotated at the world-position level, places body-facing combat geometry inside a rotating child container, and renders combat bars as a non-rotating sibling layer.
+- The desktop control contract now exposes movement bindings only, and `DesktopControlSettingsSection` no longer presents a camera subsection or rotation slots.
+- `useCameraController` no longer rotates the scene from supported keyboard input or two-touch debug gestures, while still preserving pan/zoom and reset behavior.
+- `readRuntimeSessionState` now restores persisted camera position and zoom while resetting camera rotation to the default posture on load.
+
+# Report
+- Targeted tests for settings, control binding helpers, desktop-control persistence, runtime-session normalization, and camera input all passed.
+- `npm run ci` passed on the completed codebase.
+- `npm run test:browser:smoke` passed on the completed codebase.
+- Manual preview verification confirmed that `Settings` only exposes movement bindings and that overhead combat bars remain horizontal while rotated hostile bodies render beneath them.
