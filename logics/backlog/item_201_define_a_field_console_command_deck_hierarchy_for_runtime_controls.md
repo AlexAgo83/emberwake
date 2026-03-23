@@ -1,9 +1,9 @@
 ## item_201_define_a_field_console_command_deck_hierarchy_for_runtime_controls - Define a field-console command deck hierarchy for runtime controls
 > From version: 0.3.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
-> Confidence: 95%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -70,3 +70,4 @@ flowchart LR
 - Derived from request `req_055_rework_all_shell_menus_with_a_techno_shinobi_visual_direction`.
 - Source file: `logics/request/req_055_rework_all_shell_menus_with_a_techno_shinobi_visual_direction.md`.
 - Request context seeded into this backlog item from `logics/request/req_055_rework_all_shell_menus_with_a_techno_shinobi_visual_direction.md`.
+- Implemented in `task_047_orchestrate_techno_shinobi_shell_menu_rewamp_wave` through the `ShellMenu` hierarchy rewrite and the lazy-loaded command-deck CSS in `src/app/components/ShellMenu.tsx` and `src/app/components/ActiveRuntimeShellContent.css`.

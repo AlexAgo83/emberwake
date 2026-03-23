@@ -1,25 +1,38 @@
 :root {
   color-scheme: dark;
-  --emberwake-bg: #09070f;
-  --emberwake-surface: rgba(17, 12, 29, 0.82);
-  --emberwake-surface-strong: rgba(24, 18, 42, 0.94);
-  --emberwake-border: rgba(118, 89, 168, 0.35);
-  --emberwake-copy: #f6eee8;
-  --emberwake-copy-dim: rgba(246, 238, 232, 0.72);
-  --emberwake-accent-hot: #ff7b3f;
-  --emberwake-accent-warm: #ffb35c;
-  --emberwake-accent-cold: #4ce2ff;
-  --emberwake-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  --emberwake-bg: #07090d;
+  --emberwake-surface: rgba(14, 18, 23, 0.92);
+  --emberwake-surface-strong: rgba(18, 23, 29, 0.98);
+  --emberwake-surface-ember: rgba(36, 22, 16, 0.96);
+  --emberwake-surface-steel: rgba(15, 24, 31, 0.96);
+  --emberwake-border: rgba(108, 128, 140, 0.28);
+  --emberwake-border-strong: rgba(142, 171, 183, 0.4);
+  --emberwake-copy: #f3efe6;
+  --emberwake-copy-dim: rgba(228, 235, 238, 0.68);
+  --emberwake-copy-muted: rgba(177, 191, 198, 0.58);
+  --emberwake-accent-hot: #ff8a4b;
+  --emberwake-accent-warm: #ffb768;
+  --emberwake-accent-cold: #73d8ff;
+  --emberwake-accent-steel: #9bb1ba;
+  --emberwake-danger: #ff7a63;
+  --emberwake-shadow: 0 22px 60px rgba(0, 0, 0, 0.42);
   --emberwake-title-font: "Alegreya Sans SC", "Trebuchet MS", sans-serif;
   --emberwake-body-font: "Space Grotesk", "Segoe UI", sans-serif;
 }
 
 body {
   background:
-    radial-gradient(circle at 20% 20%, rgba(243, 66, 125, 0.14), transparent 28%),
-    radial-gradient(circle at 80% 12%, rgba(76, 226, 255, 0.16), transparent 24%),
-    radial-gradient(circle at 50% 100%, rgba(255, 123, 63, 0.14), transparent 40%),
-    #09070f;
+    radial-gradient(circle at top left, rgba(255, 136, 74, 0.08), transparent 26%),
+    radial-gradient(circle at top right, rgba(115, 216, 255, 0.08), transparent 22%),
+    linear-gradient(180deg, rgba(10, 14, 19, 0.98), rgba(7, 9, 13, 1)),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.02) 0,
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px,
+      transparent 72px
+    ),
+    #07090d;
   color: var(--emberwake-copy);
   font-family: var(--emberwake-body-font);
 }

@@ -1,9 +1,9 @@
 ## task_047_orchestrate_techno_shinobi_shell_menu_rewamp_wave - Orchestrate techno shinobi shell menu rewamp wave
 > From version: 0.3.2
-> Status: Ready
-> Understanding: 98%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 99%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -31,15 +31,15 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Define and implement the shared `Techno-shinobi` visual system across shell tokens, typography, surfaces, emphasis rules, and reusable shell component roles.
-- [ ] 2. Define and implement a stronger front-door composition for `Main menu` and `New game`, including clearer entry hierarchy and a more deliberate initiation posture.
-- [ ] 3. Define and implement the field-console rewamp for the runtime `Command deck`, including desktop and mobile hierarchy.
-- [ ] 4. Define and implement the `Techno dojo` posture for `Settings > Desktop controls`, including clearer editing-state and action-state hierarchy.
-- [ ] 5. Define and implement archive and outcome scene differentiation for `Changelogs`, `Defeat`, and `Victory`.
-- [ ] 6. Define and implement HUD and adjacent overlay alignment so player-facing runtime chrome belongs to the same shell family without bloating the hot path.
-- [ ] 7. Validate desktop and mobile shell behavior, runtime readability, and doc traceability end to end.
-- [ ] CHECKPOINT: leave each completed slice commit-ready and update linked Logics docs before continuing.
-- [ ] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
+- [x] 1. Define and implement the shared `Techno-shinobi` visual system across shell tokens, typography, surfaces, emphasis rules, and reusable shell component roles.
+- [x] 2. Define and implement a stronger front-door composition for `Main menu` and `New game`, including clearer entry hierarchy and a more deliberate initiation posture.
+- [x] 3. Define and implement the field-console rewamp for the runtime `Command deck`, including desktop and mobile hierarchy.
+- [x] 4. Define and implement the `Techno dojo` posture for `Settings > Desktop controls`, including clearer editing-state and action-state hierarchy.
+- [x] 5. Define and implement archive and outcome scene differentiation for `Changelogs`, `Defeat`, and `Victory`.
+- [x] 6. Define and implement HUD and adjacent overlay alignment so player-facing runtime chrome belongs to the same shell family without bloating the hot path.
+- [x] 7. Validate desktop and mobile shell behavior, runtime readability, and doc traceability end to end.
+- [x] CHECKPOINT: leave each completed slice commit-ready and update linked Logics docs before continuing.
+- [x] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -75,14 +75,25 @@ flowchart TD
 - Manual desktop and mobile verification of `Main menu`, `New game`, `Settings`, `Changelogs`, `Defeat`, `Victory`, runtime `Command deck`, and player HUD/overlay readability.
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] The shell menu family reads as one coherent `Techno-shinobi` system rather than adjacent tactical-console variants.
-- [ ] `Main menu`, `New game`, `Settings`, `Changelogs`, `Defeat`, and `Victory` each have clearer scene-specific composition.
-- [ ] The runtime `Command deck` has stronger hierarchy on desktop and mobile without losing current capability.
-- [ ] Player-facing runtime chrome aligns with the new family while remaining compact and legible during play.
-- [ ] Validation commands are executed and results are captured.
-- [ ] Linked request/backlog/task docs are updated during completed waves and at closure.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] The shell menu family reads as one coherent `Techno-shinobi` system rather than adjacent tactical-console variants.
+- [x] `Main menu`, `New game`, `Settings`, `Changelogs`, `Defeat`, and `Victory` each have clearer scene-specific composition.
+- [x] The runtime `Command deck` has stronger hierarchy on desktop and mobile without losing current capability.
+- [x] Player-facing runtime chrome aligns with the new family while remaining compact and legible during play.
+- [x] Validation commands are executed and results are captured.
+- [x] Linked request/backlog/task docs are updated during completed waves and at closure.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Shared shell tokens and surface roles now push a darker `Techno-shinobi` posture across shell scenes and runtime chrome, including calmer ink backgrounds, steel/cyan/ember signaling, and stricter component hierarchy.
+- `Main menu`, `New game`, `Settings`, `Changelogs`, `Defeat`, and `Victory` now use differentiated scene headers, status chips, subsurfaces, and action groupings instead of one repeated shell card treatment.
+- The runtime `Command deck` now reads as a field console with a clearer trigger, panel header, hero action, section grouping, and a mobile bottom-sheet variant that preserves hierarchy.
+- `Settings > Desktop controls` now behaves like a compact technical workbench, with a scroll-safe scene body, stable back navigation visibility, and denser rebinding groups.
+- The player HUD and adjacent runtime overlay chrome now align with the same family, and mobile hides the HUD while the command deck is open to preserve local clarity.
+- A runtime React loop surfaced during validation around defeat recap updates; the orchestration fixed it by stabilizing the runtime-state callback passed from `AppShell`.
+- Validation passed with:
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `npm run logics:lint`
+- Manual browser verification passed on desktop and mobile for `Main menu`, `New game`, `Settings`, `Changelogs`, runtime `Command deck`, defeat presentation, and HUD readability, with artifacts captured under `output/playwright/`.

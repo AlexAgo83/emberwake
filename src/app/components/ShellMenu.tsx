@@ -87,7 +87,7 @@ const sceneStatusMap: Record<
   pause: {
     detail: "The runtime is paused and preserved.",
     stateLabel: "Paused",
-    title: "Session pause",
+    title: "Field hold",
     tone: "warm"
   },
   runtime: {
@@ -266,6 +266,17 @@ export const ShellMenu = memo(function ShellMenu({
           className="shell-menu__panel"
           id={menuId}
         >
+          <header className="shell-menu__panel-header">
+            <div className="shell-menu__panel-copy">
+              <p className="shell-menu__eyebrow">Field console</p>
+              <h2 className="shell-menu__panel-title">{sceneStatus.title}</h2>
+              <p className="shell-menu__panel-detail">{sceneStatus.detail}</p>
+            </div>
+            <p className="shell-menu__panel-state" data-tone={sceneStatus.tone}>
+              {sceneStatus.stateLabel}
+            </p>
+          </header>
+
           <button
             className="shell-menu__hero-action"
             data-tone={primaryAction.tone}
@@ -279,7 +290,7 @@ export const ShellMenu = memo(function ShellMenu({
             }}
             type="button"
           >
-            <span className="shell-menu__hero-kicker">Current action</span>
+            <span className="shell-menu__hero-kicker">Immediate action</span>
             <span className="shell-menu__hero-label">{primaryAction.label}</span>
             <span className="shell-menu__hero-detail">{primaryAction.detail}</span>
           </button>

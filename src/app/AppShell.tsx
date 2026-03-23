@@ -313,6 +313,13 @@ export function AppShell() {
       traversalDistanceWorldUnits: gameState.systems.progression.traversalDistanceWorldUnits
     });
   }, [runtimeSession.playerName]);
+  const handleRuntimeStateChange = useCallback((gameState: EmberwakeGameState) => {
+    latestGameStateRef.current = gameState;
+
+    if (gameState.systems.outcome.kind === "defeat") {
+      updateGameOverRecap(gameState);
+    }
+  }, [updateGameOverRecap]);
   const metaScenePanel = (
     <AppMetaScenePanel
       canResumeSession={runtimeSession.hasActiveSession}
@@ -388,12 +395,7 @@ export function AppShell() {
             onRetryRuntime={handleRetryRuntime}
             onResumeRuntime={resumeRuntime}
             onRuntimeOutcomeChange={setRuntimeOutcome}
-            onRuntimeStateChange={(gameState) => {
-              latestGameStateRef.current = gameState;
-              if (gameState.systems.outcome.kind === "defeat") {
-                updateGameOverRecap(gameState);
-              }
-            }}
+            onRuntimeStateChange={handleRuntimeStateChange}
             onSetCameraMode={setCameraMode}
             onSetCameraState={setCameraState}
             onSetDebugPanelVisible={setDebugPanelVisible}

@@ -144,6 +144,38 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         ? onReturnToMainMenu
         : null;
   const projectVersionLabel = `${appConfig.name} v${appConfig.version}`;
+  const sceneEyebrow =
+    scene === "main-menu"
+      ? "Shell entry"
+      : scene === "new-game"
+        ? "Run initiation"
+        : scene === "changelogs"
+          ? "Archive"
+          : scene === "settings"
+            ? "Control bench"
+            : scene === "defeat"
+              ? "Recovery"
+              : "Outcome";
+  const sceneStatusLabel =
+    scene === "main-menu"
+      ? "Entry hub"
+      : scene === "new-game"
+        ? "Readying run"
+        : scene === "changelogs"
+          ? "Release ledger"
+          : scene === "settings"
+            ? "Techno dojo"
+            : scene === "defeat"
+              ? "Run lost"
+              : "Run cleared";
+  const sceneTone =
+    scene === "new-game" || scene === "victory"
+      ? "ember"
+      : scene === "changelogs" || scene === "settings"
+        ? "steel"
+        : scene === "defeat"
+          ? "alert"
+          : "ice";
 
   useEffect(() => {
     if (shouldHidePanel || !handleEscapeAction) {
@@ -186,64 +218,112 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
 
   return (
     <>
-      <aside className="app-meta-scene" aria-label={title} data-scene={scene}>
-        <h2 className="app-meta-scene__title">{title}</h2>
-        {detail ? <p className="app-meta-scene__detail">{detail}</p> : null}
+      <aside
+        className="app-meta-scene"
+        aria-label={title}
+        data-scene={scene}
+        data-tone={sceneTone}
+      >
+        <div className="app-meta-scene__frame">
+          <header className="app-meta-scene__header">
+            <div className="app-meta-scene__header-copy">
+              <p className="app-meta-scene__eyebrow">{sceneEyebrow}</p>
+              <h2 className="app-meta-scene__title">{title}</h2>
+              {detail ? <p className="app-meta-scene__detail">{detail}</p> : null}
+            </div>
+            <p className="app-meta-scene__status" data-tone={sceneTone}>
+              {sceneStatusLabel}
+            </p>
+          </header>
         {scene === "main-menu" ? (
           <>
-            <div className="app-meta-scene__actions">
+            <div className="app-meta-scene__hero-band">
+              <p className="app-meta-scene__lead">Silent entry. Deliberate next move.</p>
+              <div className="app-meta-scene__signals">
+                <span className="app-meta-scene__signal" data-tone={canResumeSession ? "ice" : "steel"}>
+                  {canResumeSession ? "Active session ready" : "Fresh shell state"}
+                </span>
+                <span className="app-meta-scene__signal" data-tone={isLoadAvailable ? "ember" : "steel"}>
+                  {isLoadAvailable ? "Archive available" : "No saved archive"}
+                </span>
+              </div>
+            </div>
+            <div className="app-meta-scene__actions app-meta-scene__actions--main-menu">
               {canResumeSession ? (
-                <button className="shell-control shell-control--button" onClick={onResumeRuntime} type="button">
+                <button
+                  className="shell-control shell-control--button shell-control--button-quiet"
+                  onClick={onResumeRuntime}
+                  type="button"
+                >
                   {resumeLabel}
                 </button>
               ) : null}
               {canSaveSession ? (
-                <button className="shell-control shell-control--button" onClick={onSaveGame} type="button">
+                <button
+                  className="shell-control shell-control--button shell-control--button-quiet"
+                  onClick={onSaveGame}
+                  type="button"
+                >
                   Save game
                 </button>
               ) : null}
               <button
-                className="shell-control shell-control--button"
+                className="shell-control shell-control--button shell-control--button-quiet"
                 disabled={!isLoadAvailable}
                 onClick={onLoadGame}
                 type="button"
               >
                 Load game
               </button>
-              <button className="shell-control shell-control--button" onClick={onOpenNewGame} type="button">
+              <button
+                className="shell-control shell-control--button shell-control--button-primary"
+                onClick={onOpenNewGame}
+                type="button"
+              >
                 Start new game
               </button>
-              <button className="shell-control shell-control--button" onClick={onOpenSettings} type="button">
+              <button
+                className="shell-control shell-control--button shell-control--button-quiet"
+                onClick={onOpenSettings}
+                type="button"
+              >
                 Settings
               </button>
-              <button className="shell-control shell-control--button" onClick={onOpenChangelogs} type="button">
+              <button
+                className="shell-control shell-control--button shell-control--button-quiet"
+                onClick={onOpenChangelogs}
+                type="button"
+              >
                 Changelogs
               </button>
             </div>
           </>
         ) : scene === "new-game" ? (
           <>
-            <div className="app-meta-scene__form">
-              <label className="app-meta-scene__field">
-                <span className="app-meta-scene__field-label">Character name</span>
-                <input
-                  className="app-meta-scene__field-input"
-                  maxLength={characterNameMaxLength}
-                  onChange={(event) => {
-                    onCharacterNameChange(event.target.value);
-                  }}
-                  type="text"
-                  value={pendingCharacterName}
-                />
-              </label>
-              <p className="app-meta-scene__field-help">
-                3-20 chars. Letters, numbers, spaces, apostrophes, and hyphens only.
-              </p>
-              {characterNameError ? (
-                <p className="app-meta-scene__field-error" role="alert">
-                  {characterNameError}
+            <div className="app-meta-scene__subsurface app-meta-scene__subsurface--ritual">
+              <p className="app-meta-scene__lead">Prime the next run before the ash moves.</p>
+              <div className="app-meta-scene__form">
+                <label className="app-meta-scene__field">
+                  <span className="app-meta-scene__field-label">Character name</span>
+                  <input
+                    className="app-meta-scene__field-input"
+                    maxLength={characterNameMaxLength}
+                    onChange={(event) => {
+                      onCharacterNameChange(event.target.value);
+                    }}
+                    type="text"
+                    value={pendingCharacterName}
+                  />
+                </label>
+                <p className="app-meta-scene__field-help">
+                  3-20 chars. Letters, numbers, spaces, apostrophes, and hyphens only.
                 </p>
-              ) : null}
+                {characterNameError ? (
+                  <p className="app-meta-scene__field-error" role="alert">
+                    {characterNameError}
+                  </p>
+                ) : null}
+              </div>
             </div>
             <div className="app-meta-scene__actions app-meta-scene__actions--new-game">
               <button
@@ -263,6 +343,9 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           <>
             {scene === "changelogs" ? (
               <>
+                <div className="app-meta-scene__subsurface app-meta-scene__subsurface--archive">
+                  <p className="app-meta-scene__lead">Curated release history for the active shell.</p>
+                </div>
                 <div className="app-meta-scene__changelog-list">
                   {releaseChangelogEntries.map((entry) => {
                     return (
@@ -290,16 +373,23 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               </>
             ) : scene === "settings" ? (
               <>
-                <Suspense
-                  fallback={
-                    <p className="settings-controls__status">Loading desktop control bindings…</p>
-                  }
-                >
-                  <LazyDesktopControlSettingsSection
-                    bindings={desktopControlBindings}
-                    onApply={onApplyDesktopControlBindings}
-                  />
-                </Suspense>
+                <div className="app-meta-scene__scene-body app-meta-scene__scene-body--settings">
+                  <div className="app-meta-scene__subsurface app-meta-scene__subsurface--settings">
+                    <p className="app-meta-scene__lead">
+                      Tune capture, layout, and recovery posture without touching the active run.
+                    </p>
+                  </div>
+                  <Suspense
+                    fallback={
+                      <p className="settings-controls__status">Loading desktop control bindings…</p>
+                    }
+                  >
+                    <LazyDesktopControlSettingsSection
+                      bindings={desktopControlBindings}
+                      onApply={onApplyDesktopControlBindings}
+                    />
+                  </Suspense>
+                </div>
                 <div className="app-meta-scene__actions">
                   <button
                     className="shell-control shell-control--button"
@@ -312,6 +402,9 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               </>
             ) : scene === "defeat" ? (
               <>
+                <div className="app-meta-scene__subsurface app-meta-scene__subsurface--outcome">
+                  <p className="app-meta-scene__lead">Record the fall, then decide the next move.</p>
+                </div>
                 <dl className="app-meta-scene__facts">
                   <div>
                     <dt>Session</dt>
@@ -346,6 +439,9 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               </>
             ) : (
               <>
+                <div className="app-meta-scene__subsurface app-meta-scene__subsurface--outcome">
+                  <p className="app-meta-scene__lead">The shell has received a clear runtime outcome.</p>
+                </div>
                 <dl className="app-meta-scene__facts">
                   <div>
                     <dt>Runtime re-entry</dt>
@@ -380,6 +476,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             )}
           </>
         )}
+        </div>
       </aside>
 
       {scene === "main-menu" ? (

@@ -345,7 +345,8 @@ export function ActiveRuntimeShellContent({
     activeScene === "runtime" &&
     preferences.runtimeFeedbackVisible &&
     !diagnosticsVisible &&
-    !inspecteurVisible;
+    !inspecteurVisible &&
+    (!isMobileLayout || !isMenuOpen);
 
   return (
     <>

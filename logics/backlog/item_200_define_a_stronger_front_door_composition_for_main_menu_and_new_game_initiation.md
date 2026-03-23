@@ -1,9 +1,9 @@
 ## item_200_define_a_stronger_front_door_composition_for_main_menu_and_new_game_initiation - Define a stronger front-door composition for main menu and new game initiation
 > From version: 0.3.2
-> Status: Ready
+> Status: Done
 > Understanding: 98%
-> Confidence: 95%
-> Progress: 0%
+> Confidence: 100%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -70,3 +70,4 @@ flowchart LR
 - Derived from request `req_055_rework_all_shell_menus_with_a_techno_shinobi_visual_direction`.
 - Source file: `logics/request/req_055_rework_all_shell_menus_with_a_techno_shinobi_visual_direction.md`.
 - Request context seeded into this backlog item from `logics/request/req_055_rework_all_shell_menus_with_a_techno_shinobi_visual_direction.md`.
+- Implemented in `task_047_orchestrate_techno_shinobi_shell_menu_rewamp_wave` through the rewamped `Main menu` and `New game` composition in `src/app/components/AppMetaScenePanel.tsx` and `src/app/styles/app.css`.

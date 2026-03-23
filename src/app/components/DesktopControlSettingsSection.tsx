@@ -182,8 +182,9 @@ export function DesktopControlSettingsSection({
     <section className="settings-controls" aria-label="Desktop controls">
       <div className="settings-controls__header">
         <div>
+          <p className="settings-controls__eyebrow">Input calibration</p>
           <h3 className="settings-controls__title">Desktop controls</h3>
-          <p className="settings-controls__hint">Click a binding to replace it.</p>
+          <p className="settings-controls__hint">Click a binding to replace it. Escape cancels live capture.</p>
         </div>
         <p className="settings-controls__status" data-conflict={conflictSet.size > 0}>
           {statusCopy}
