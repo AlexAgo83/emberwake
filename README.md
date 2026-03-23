@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./public/icon.svg" alt="Emberwake icon" width="88" height="88" />
+</p>
+
 # Emberwake
 
 Emberwake is a TypeScript + React top-down survival action prototype built around a shell-owned game flow, a PixiJS runtime, and a deterministic chunked world.
@@ -14,11 +18,13 @@ Emberwake is a TypeScript + React top-down survival action prototype built aroun
 Emberwake currently includes:
 
 - A shell-owned `Main menu`, `New game`, `Load game`, `Settings`, and `Game over` flow.
+- A player-facing `Grimoire` and `Bestiary` archive in the shell.
 - A deterministic infinite world rendered in PixiJS with chunk-based generation.
-- Pseudo-physics foundations with blocking obstacles, slow surfaces, and slippery surfaces.
-- A first hostile combat loop with pursuit, contact damage, automatic player cone attacks, health, and defeat recap.
-- Nearby pickups with healing kits and gold collection.
-- Desktop control remapping, mobile virtual-stick control, and shell/runtime feedback surfaces.
+- Pseudo-physics foundations with blocking obstacles, slow surfaces, slippery surfaces, movement drift, and bounded turning.
+- A survivor-like combat loop with automatic weapons, passive modifiers, curated fusions, level-up choices, and chests.
+- Time-owned run phases, stronger enemy composition over time, and authored mini-boss beats.
+- Nearby pickups with healing kits, crystals, gold, and runtime pickup compaction to keep long sessions bounded.
+- Desktop movement remapping, mobile virtual-stick control, and techno-shinobi HUD/runtime feedback surfaces.
 - Local-first single-slot save/load and shell preference persistence.
 - A planning and delivery workflow tracked in `logics/`.
 
@@ -40,29 +46,33 @@ Current release target:
 
 What `main` reflects today:
 
-- The project has moved beyond a navigation-only slice into a first playable survival/combat loop.
+- The project has moved beyond a navigation-only slice into a first playable survival/combat loop with build growth.
 - Runtime ownership is split between a React shell, reusable engine packages, a Pixi adapter, and Emberwake-specific gameplay modules.
-- The latest wave rebuilt the shell-owned menus under a `Techno-shinobi` direction, tightened runtime shell defaults, and brought the HUD and changelog surfaces back into a cleaner player-facing posture.
-- The repo now also includes a scripted long-session profiling harness plus a first targeted runtime render hot-path optimization pass that reduced memory pressure under realistic traversal scenarios while keeping the profiling workflow reproducible under `output/playwright/long-session/`.
+- The shell-owned menus, HUD, codex/archive scenes, and runtime overlays now follow a stronger `Techno-shinobi` direction.
+- The runtime now includes a first authored build system with active weapons, passive seals, curated fusions, level-up choice panels, and outcome ranking data.
+- The repo includes a scripted long-session profiling harness with mobile/headed replay options, heap snapshots, and repeatable stress scenarios under `output/playwright/long-session/`.
+- Difficulty, progression, and hostile durability have all received a first tuning pass, but balancing is still in active iteration.
 
 ```mermaid
 flowchart LR
     Release[v0.4.0 target] --> Main[main branch]
     Main --> Playable[Playable survival loop]
     Main --> Modular[Modular runtime ownership]
-    Main --> Next[Perf, generation, settings, structure]
+    Main --> Next[Balance, profiling, codex, progression]
 ```
 
 ## Current Gameplay Slice
 
 - Start or load a run from a shell-owned main menu.
 - Name the player character before entering runtime.
-- Open the `Command deck` during live runtime to pause safely without dropping the current run.
+- Open the pause/menu shell during live runtime without dropping the current run.
 - Traverse an infinite world with deterministic terrain, obstacles, and movement modifiers.
-- Fight hostile entities that spawn around the player, pursue, and deal contact damage.
-- Trigger the player attack automatically with a forward cone.
-- Collect healing kits and gold.
-- Lose the run into a `Game over` recap, then return to the main menu.
+- Fight hostile entities that spawn around the player, pursue, deal contact damage, and escalate through authored run phases.
+- Auto-fire a first playable roster of active weapons, then expand the build through passive seals and curated fusions.
+- Resolve level-up choices and chest rewards during the run.
+- Collect healing kits, crystals, and gold.
+- Review discovered skills in the `Grimoire` and encountered creatures in the `Bestiary`.
+- Lose the run into a `Game over` recap or skill-ranking view, then return to the main menu.
 
 ## Tuning Contracts
 
@@ -174,6 +184,7 @@ npm run ci
 npm run ci:full
 npm run test:browser:smoke
 npm run test:browser:profile:long -- --scenario traversal-baseline --duration 120s
+npm run test:browser:profile:pendulum
 npm run performance:validate
 npm run logics:lint
 npm run release:ready:advisory
@@ -196,6 +207,12 @@ Generic runner:
 npm run test:browser:profile:long -- --scenario left-right-pendulum --duration 120s --loop
 ```
 
+Mobile headed rerun:
+
+```bash
+node scripts/testing/runLongSessionProfile.mjs --scenario left-right-pendulum --duration 120s --loop --mobile --headed
+```
+
 Artifacts to inspect after a run:
 
 - `output/playwright/long-session/latest.json`
@@ -206,14 +223,13 @@ Artifacts to inspect after a run:
 ## Controls
 
 - **Mobile:** virtual stick for direct movement.
-- **Desktop:** remappable movement and rotation controls from `Settings > Desktop controls`.
-- **View-relative movement:** desktop movement always follows the player view, even when the camera is rotated.
+- **Desktop:** remappable movement controls from `Settings > Desktop controls`.
 - **Shell shortcuts:** `Escape` is used for shell navigation and menu/back behavior depending on the active surface.
 
 ```mermaid
 flowchart LR
     Mobile[Virtual stick] --> Move[Direct movement]
-    Desktop[Desktop controls] --> Rebind[Remappable bindings]
+    Desktop[Desktop controls] --> Rebind[Remappable movement bindings]
     Escape[Escape] --> ShellNav[Menu or back navigation]
 ```
 
