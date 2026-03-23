@@ -170,7 +170,10 @@ export function DesktopControlSettingsSection({
       </div>
 
       <div className="settings-controls__grid">
-        <section className="settings-controls__group" aria-labelledby="settings-controls-movement">
+        <section
+          className="settings-controls__group settings-controls__group--movement"
+          aria-labelledby="settings-controls-movement"
+        >
           <div className="settings-controls__group-header">
             <h4 className="settings-controls__group-title" id="settings-controls-movement">
               Movement

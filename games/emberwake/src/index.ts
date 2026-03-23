@@ -150,7 +150,8 @@ export {
   advanceGameplaySystemsState,
   createGameplaySystemDiagnostics,
   createInitialGameplaySystemsState,
-  gameplaySystemsContract
+  gameplaySystemsContract,
+  normalizeGameplaySystemsState
 } from "./systems/gameplaySystems";
 export {
   createIdleGameplayOutcome,

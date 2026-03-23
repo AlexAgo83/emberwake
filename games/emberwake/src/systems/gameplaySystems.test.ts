@@ -7,7 +7,8 @@ import {
   advanceGameplaySystemsState,
   createGameplaySystemDiagnostics,
   createInitialGameplaySystemsState,
-  gameplaySystemsContract
+  gameplaySystemsContract,
+  normalizeGameplaySystemsState
 } from "./gameplaySystems";
 
 describe("gameplaySystems", () => {
@@ -126,5 +127,24 @@ describe("gameplaySystems", () => {
     ]);
     expect(gameplaySystemsContract.signalPosture).toContain("narrow-phase-signals");
     expect(createDefaultCameraState().zoom).toBe(1.25);
+  });
+
+  it("normalizes partially persisted system state so new fields do not crash diagnostics", () => {
+    const normalizedState = normalizeGameplaySystemsState({
+      progression: {
+        currentLevel: 4,
+        currentXp: 275
+      },
+      outcome: {
+        kind: "defeat"
+      }
+    } as Partial<ReturnType<typeof createInitialGameplaySystemsState>>);
+
+    expect(normalizedState.progression.currentLevel).toBe(4);
+    expect(normalizedState.progression.currentXp).toBe(275);
+    expect(normalizedState.progression.discoveredCreatureIds).toEqual([]);
+    expect(normalizedState.outcome.kind).toBe("defeat");
+    expect(normalizedState.outcome.skillPerformanceSummaries).toEqual([]);
+    expect(createGameplaySystemDiagnostics(normalizedState).discoveredCreatureCount).toBe(0);
   });
 });

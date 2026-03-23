@@ -18,7 +18,8 @@ import { emberwakeRuntimeBootstrap } from "@game/runtime/emberwakeRuntimeBootstr
 import {
   advanceGameplaySystemsState,
   createGameplaySystemDiagnostics,
-  createInitialGameplaySystemsState
+  createInitialGameplaySystemsState,
+  normalizeGameplaySystemsState
 } from "@game/systems/gameplaySystems";
 import { createIdleGameplayOutcome } from "@game/systems/gameplayOutcome";
 import type { EmberwakeGameplaySystemsState } from "@game/systems/gameplaySystems";
@@ -122,7 +123,8 @@ export const emberwakeGameModule: GameModule<
     return {
       ...initialState,
       profiling: resolveRuntimeProfilingConfig(initialState.profiling),
-      simulation: normalizeEntitySimulationState(initialState.simulation)
+      simulation: normalizeEntitySimulationState(initialState.simulation),
+      systems: normalizeGameplaySystemsState(initialState.systems)
     };
   },
   mapInput: ({ input }) => ({
@@ -131,6 +133,7 @@ export const emberwakeGameModule: GameModule<
   }),
   present: ({ state }): EnginePresentationModel => {
     const normalizedSimulation = normalizeEntitySimulationState(state.simulation);
+    const normalizedSystems = normalizeGameplaySystemsState(state.systems);
     const profiling = resolveRuntimeProfilingConfig(state.profiling);
 
     return ({
@@ -146,7 +149,7 @@ export const emberwakeGameModule: GameModule<
       profilingInvincible: profiling.playerInvincible,
       profilingSpawnMode: profiling.spawnMode,
       tick: normalizedSimulation.tick,
-      ...createGameplaySystemDiagnostics(state.systems)
+      ...createGameplaySystemDiagnostics(normalizedSystems)
     },
     entities: normalizedSimulation.entities.map((entity) => ({
       id: entity.id,
@@ -157,7 +160,7 @@ export const emberwakeGameModule: GameModule<
     })),
     overlays: {
       buildState: normalizedSimulation.buildState,
-      runtimeOutcome: state.systems.outcome ?? createIdleGameplayOutcome()
+      runtimeOutcome: normalizedSystems.outcome ?? createIdleGameplayOutcome()
     },
     world: {
       visibleChunks: []
@@ -165,6 +168,7 @@ export const emberwakeGameModule: GameModule<
   })},
   update: ({ action, state, timing }) => {
     const normalizedSimulation = normalizeEntitySimulationState(state.simulation);
+    const normalizedSystems = normalizeGameplaySystemsState(state.systems);
     const nextSimulation = advanceSimulationState(normalizedSimulation, {
       buildChoiceIndex: action.buildChoiceIndex,
       controlState: action.controlState,
@@ -176,7 +180,7 @@ export const emberwakeGameModule: GameModule<
       profiling: state.profiling,
       simulation: nextSimulation,
       systems: advanceGameplaySystemsState({
-        previousState: state.systems,
+        previousState: normalizedSystems,
         simulationAfterUpdate: nextSimulation,
         simulationBeforeUpdate: normalizedSimulation,
         timing

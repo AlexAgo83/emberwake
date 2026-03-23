@@ -37,6 +37,10 @@
     rgba(10, 14, 18, 0.68);
 }
 
+.settings-controls__group--movement {
+  width: 100%;
+}
+
 .settings-controls__group-rows {
   display: grid;
   gap: 0.55rem;
@@ -146,12 +150,30 @@
     align-items: start;
   }
 
+  .settings-controls__group--movement {
+    grid-column: 1 / -1;
+  }
+
   .settings-controls__row {
     gap: 0.9rem;
   }
 
+  .settings-controls__group--movement .settings-controls__row {
+    display: grid;
+    grid-template-columns: minmax(10rem, 13rem) minmax(0, 1fr);
+    align-items: center;
+  }
+
   .settings-controls__label {
     padding-top: 0.55rem;
+  }
+
+  .settings-controls__group--movement .settings-controls__label {
+    padding-top: 0;
+  }
+
+  .settings-controls__group--movement .settings-controls__bindings {
+    justify-content: flex-start;
   }
 }
 

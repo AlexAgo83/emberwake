@@ -218,6 +218,58 @@ export const createInitialGameplaySystemsState = (): EmberwakeGameplaySystemsSta
   }
 });
 
+export const normalizeGameplaySystemsState = (
+  systemsState?: Partial<EmberwakeGameplaySystemsState> | null
+): EmberwakeGameplaySystemsState => {
+  const initialState = createInitialGameplaySystemsState();
+  const progression = systemsState?.progression;
+  const lifecycle = systemsState?.lifecycle;
+  const outcome = systemsState?.outcome;
+
+  return {
+    autonomy: {
+      ...initialState.autonomy,
+      ...systemsState?.autonomy
+    },
+    combat: {
+      ...initialState.combat,
+      ...systemsState?.combat
+    },
+    lifecycle: {
+      ...initialState.lifecycle,
+      ...lifecycle,
+      recentSignals: lifecycle?.recentSignals ?? initialState.lifecycle.recentSignals
+    },
+    outcome: {
+      ...createIdleGameplayOutcome(),
+      ...outcome,
+      skillPerformanceSummaries:
+        outcome?.skillPerformanceSummaries ?? createIdleGameplayOutcome().skillPerformanceSummaries
+    },
+    progression: {
+      ...initialState.progression,
+      ...progression,
+      creatureDefeatCounts:
+        progression?.creatureDefeatCounts ?? initialState.progression.creatureDefeatCounts,
+      discoveredActiveWeaponIds:
+        progression?.discoveredActiveWeaponIds ?? initialState.progression.discoveredActiveWeaponIds,
+      discoveredCreatureIds:
+        progression?.discoveredCreatureIds ?? initialState.progression.discoveredCreatureIds,
+      discoveredFusionIds:
+        progression?.discoveredFusionIds ?? initialState.progression.discoveredFusionIds,
+      discoveredPassiveItemIds:
+        progression?.discoveredPassiveItemIds ?? initialState.progression.discoveredPassiveItemIds,
+      discoveredSkillIds:
+        progression?.discoveredSkillIds ?? initialState.progression.discoveredSkillIds
+    },
+    statusEffects: {
+      ...initialState.statusEffects,
+      ...systemsState?.statusEffects,
+      activeEffects: systemsState?.statusEffects?.activeEffects ?? initialState.statusEffects.activeEffects
+    }
+  };
+};
+
 const trimSignals = (signals: GameplaySystemSignalId[]) => signals.slice(-4);
 
 export const advanceGameplaySystemsState = ({
@@ -353,30 +405,33 @@ export const advanceGameplaySystemsState = ({
 
 export const createGameplaySystemDiagnostics = (
   systemsState: EmberwakeGameplaySystemsState
-) => ({
-  autonomyTick: systemsState.autonomy.lastAutonomyTick,
-  combatState: systemsState.combat.encounterState,
-  gameplayOutcome: systemsState.outcome.kind,
-  gameplayPhaseOrder: gameplaySystemsContract.phaseOrder.join(" -> "),
-  gameplaySignals: systemsState.lifecycle.recentSignals.join(", "),
-  crystalsCollected: systemsState.progression.crystalsCollected,
-  currentLevel: systemsState.progression.currentLevel,
-  currentXp: systemsState.progression.currentXp,
-  goldCollected: systemsState.progression.goldCollected,
-  hostileDefeats: systemsState.progression.hostileDefeats,
-  nextLevelXpRequired: systemsState.progression.nextLevelXpRequired,
-  runPhaseId: systemsState.progression.runPhaseId,
-  runPhaseLabel: systemsState.progression.phaseLabel,
-  progressionTicksSurvived: systemsState.progression.runtimeTicksSurvived,
-  traversalDistanceWorldUnits: Number(
-    systemsState.progression.traversalDistanceWorldUnits.toFixed(2)
-  ),
-  activeStatusEffects: systemsState.statusEffects.activeEffects.length
-  ,
-  activeSlotsFilled: systemsState.progression.activeSlotsFilled,
-  fusedActiveCount: systemsState.progression.fusedActiveCount,
-  fusionReadyCount: systemsState.progression.fusionReadyCount,
-  passiveSlotsFilled: systemsState.progression.passiveSlotsFilled,
-  pendingChoiceCount: systemsState.progression.pendingChoiceCount,
-  discoveredCreatureCount: systemsState.progression.discoveredCreatureIds.length
-});
+) => {
+  const normalizedState = normalizeGameplaySystemsState(systemsState);
+
+  return {
+    autonomyTick: normalizedState.autonomy.lastAutonomyTick,
+    combatState: normalizedState.combat.encounterState,
+    gameplayOutcome: normalizedState.outcome.kind,
+    gameplayPhaseOrder: gameplaySystemsContract.phaseOrder.join(" -> "),
+    gameplaySignals: normalizedState.lifecycle.recentSignals.join(", "),
+    crystalsCollected: normalizedState.progression.crystalsCollected,
+    currentLevel: normalizedState.progression.currentLevel,
+    currentXp: normalizedState.progression.currentXp,
+    goldCollected: normalizedState.progression.goldCollected,
+    hostileDefeats: normalizedState.progression.hostileDefeats,
+    nextLevelXpRequired: normalizedState.progression.nextLevelXpRequired,
+    runPhaseId: normalizedState.progression.runPhaseId,
+    runPhaseLabel: normalizedState.progression.phaseLabel,
+    progressionTicksSurvived: normalizedState.progression.runtimeTicksSurvived,
+    traversalDistanceWorldUnits: Number(
+      normalizedState.progression.traversalDistanceWorldUnits.toFixed(2)
+    ),
+    activeStatusEffects: normalizedState.statusEffects.activeEffects.length,
+    activeSlotsFilled: normalizedState.progression.activeSlotsFilled,
+    fusedActiveCount: normalizedState.progression.fusedActiveCount,
+    fusionReadyCount: normalizedState.progression.fusionReadyCount,
+    passiveSlotsFilled: normalizedState.progression.passiveSlotsFilled,
+    pendingChoiceCount: normalizedState.progression.pendingChoiceCount,
+    discoveredCreatureCount: normalizedState.progression.discoveredCreatureIds.length
+  };
+};
