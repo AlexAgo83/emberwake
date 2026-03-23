@@ -14,7 +14,10 @@ import { normalizeKeyboardBindingKey } from "../../input/model/singleEntityContr
 
 type ViewportForCamera = {
   fitScale: number;
+  layoutMode?: string;
 };
+
+const mobileRuntimeZoomOffset = 0.25;
 
 type UseCameraControllerOptions = {
   cameraMode: CameraMode;
@@ -57,17 +60,26 @@ export function useCameraController({
   );
   const previousCameraModeRef = useRef<CameraMode>(cameraMode);
   const resolvedCameraState = useMemo(
-    () =>
-      cameraMode === "follow-entity"
-        ? {
-            ...cameraState,
-            worldPosition: {
-              x: followedWorldPosition.x,
-              y: followedWorldPosition.y
+    () => {
+      const baseCameraState =
+        cameraMode === "follow-entity"
+          ? {
+              ...cameraState,
+              worldPosition: {
+                x: followedWorldPosition.x,
+                y: followedWorldPosition.y
+              }
             }
+          : cameraState;
+
+      return viewport.layoutMode === "mobile"
+        ? {
+            ...baseCameraState,
+            zoom: Math.max(0.0001, baseCameraState.zoom - mobileRuntimeZoomOffset)
           }
-        : cameraState,
-    [cameraMode, cameraState, followedWorldPosition.x, followedWorldPosition.y]
+        : baseCameraState;
+    },
+    [cameraMode, cameraState, followedWorldPosition.x, followedWorldPosition.y, viewport.layoutMode]
   );
 
   useEffect(() => {

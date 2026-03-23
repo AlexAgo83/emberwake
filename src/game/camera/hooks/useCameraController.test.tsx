@@ -194,4 +194,24 @@ describe("useCameraController", () => {
 
     expect(result.current.cameraState.rotation).toBe(0);
   });
+
+  it("applies an extra mobile-only zoom-out offset to the resolved camera", () => {
+    const surfaceElement = document.createElement("div");
+    const initialCameraState = createDefaultCameraState();
+    const { result } = renderHook(() =>
+      useCameraController({
+        cameraMode: "follow-entity",
+        debugCameraEnabled: false,
+        followedWorldPosition: { x: 0, y: 0 },
+        initialCameraState,
+        surfaceElement,
+        viewport: {
+          fitScale: 1,
+          layoutMode: "mobile"
+        }
+      })
+    );
+
+    expect(result.current.cameraState.zoom).toBeCloseTo(initialCameraState.zoom - 0.25);
+  });
 });

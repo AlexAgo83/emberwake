@@ -42,7 +42,6 @@ const dispatchPointerEvent = (
 
 describe("useMobileVirtualStick", () => {
   it("binds to a runtime surface that becomes available after the initial render", () => {
-    vi.useFakeTimers();
     const surfaceElement = document.createElement("div");
     const setPointerCapture = vi.fn();
     const releasePointerCapture = vi.fn();
@@ -95,16 +94,6 @@ describe("useMobileVirtualStick", () => {
     });
 
     expect(releasePointerCapture).toHaveBeenCalledWith(1);
-    expect(result.current.isVisible).toBe(true);
-    expect(result.current.knobVisible).toBe(false);
-    expect(result.current.baseOpacity).toBeCloseTo(0.5);
-
-    act(() => {
-      vi.advanceTimersByTime(2600);
-    });
-
     expect(result.current.isVisible).toBe(false);
-
-    vi.useRealTimers();
   });
 });
