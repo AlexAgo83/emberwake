@@ -5,7 +5,7 @@ Emberwake is a TypeScript + React top-down survival action prototype built aroun
 [![CI](https://github.com/AlexAgo83/emberwake/actions/workflows/ci.yml/badge.svg)](https://github.com/AlexAgo83/emberwake/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/AlexAgo83/emberwake)](LICENSE)
 [![Live Demo](https://img.shields.io/badge/live%20demo-Render-46E3B7?logo=render&logoColor=white)](https://emberwake.onrender.com/)
-![Version](https://img.shields.io/badge/version-v0.3.2-4C8BF5)
+![Version](https://img.shields.io/badge/version-v0.4.0-4C8BF5)
 ![Vite](https://img.shields.io/badge/Vite-6.2.0-646CFF?logo=vite&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.0.0-61DAFB?logo=react&logoColor=black)
 
@@ -36,18 +36,18 @@ flowchart TD
 
 Current release target:
 
-- `v0.3.2`
+- `v0.4.0`
 
 What `main` reflects today:
 
 - The project has moved beyond a navigation-only slice into a first playable survival/combat loop.
 - Runtime ownership is split between a React shell, reusable engine packages, a Pixi adapter, and Emberwake-specific gameplay modules.
-- The latest wave cleaned shell-facing copy and changelog rendering, kept the `Changelogs` back action visible on constrained viewports, made desktop movement view-relative under camera rotation, and externalized retunable gameplay/system constants into validated JSON contracts.
-- The repo now also includes a scripted long-session profiling harness with scenario-driven player automation, invincibility/no-death support, and stable profiling artifacts under `output/playwright/long-session/`.
+- The latest wave rebuilt the shell-owned menus under a `Techno-shinobi` direction, tightened runtime shell defaults, and brought the HUD and changelog surfaces back into a cleaner player-facing posture.
+- The repo now also includes a scripted long-session profiling harness plus a first targeted runtime render hot-path optimization pass that reduced memory pressure under realistic traversal scenarios while keeping the profiling workflow reproducible under `output/playwright/long-session/`.
 
 ```mermaid
 flowchart LR
-    Release[v0.3.2 target] --> Main[main branch]
+    Release[v0.4.0 target] --> Main[main branch]
     Main --> Playable[Playable survival loop]
     Main --> Modular[Modular runtime ownership]
     Main --> Next[Perf, generation, settings, structure]
