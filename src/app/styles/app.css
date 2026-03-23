@@ -114,10 +114,12 @@
 
 .app-meta-scene[data-scene="changelogs"] {
   width: min(46rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
-  max-height: min(42rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 5rem));
+  height: min(42rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 5rem));
+  overflow: hidden;
 }
 
 .app-meta-scene[data-scene="changelogs"] .app-meta-scene__frame {
+  height: 100%;
   grid-template-rows: auto auto minmax(0, 1fr) auto;
   min-height: 0;
 }
@@ -236,7 +238,6 @@
 
 .app-meta-scene__scene-body--settings {
   display: grid;
-  gap: 0.85rem;
   min-height: 0;
   overflow: auto;
   padding-right: 0.2rem;

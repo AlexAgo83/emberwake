@@ -22,8 +22,6 @@ type RuntimeSurfaceProps = {
   renderSurfaceMode: EmberwakeRenderSurfaceMode;
   onVisualFrame?: (timestampMs: number) => void;
   floatingDamageNumbers: FloatingDamageNumber[];
-  playerLevel: number;
-  playerName: string;
   visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
   visibleChunks: ChunkCoordinate[];
   viewport: {
@@ -45,8 +43,6 @@ export function RuntimeSurface({
   renderSurfaceMode,
   onVisualFrame,
   floatingDamageNumbers,
-  playerLevel,
-  playerName,
   visibleEntities,
   visibleChunks,
   viewport,
@@ -59,8 +55,6 @@ export function RuntimeSurface({
         currentTick={currentTick}
         entities={visibleEntities}
         floatingDamageNumbers={floatingDamageNumbers}
-        playerLevel={playerLevel}
-        playerName={playerName}
         renderSurfaceMode={renderSurfaceMode}
         viewport={viewport}
       />

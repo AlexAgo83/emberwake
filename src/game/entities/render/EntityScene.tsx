@@ -20,8 +20,6 @@ type EntitySceneProps = {
   currentTick: number;
   entities: Array<PresentedEntity<SimulatedEntity>>;
   floatingDamageNumbers: FloatingDamageNumber[];
-  playerLevel: number;
-  playerName: string;
   renderSurfaceMode: EmberwakeRenderSurfaceMode;
   viewport: {
     fitScale: number;
@@ -45,21 +43,6 @@ const floatingDamageTextStyle = {
   fill: "#fff1dc",
   fontFamily: "monospace",
   fontSize: 18,
-  fontWeight: "700" as const,
-  letterSpacing: 1
-};
-
-const playerIdentityTextStyle = {
-  align: "center" as const,
-  dropShadow: {
-    alpha: 0.52,
-    blur: 2,
-    color: "#09070f",
-    distance: 1
-  },
-  fill: "#f6eee8",
-  fontFamily: "monospace",
-  fontSize: 14,
   fontWeight: "700" as const,
   letterSpacing: 1
 };
@@ -287,8 +270,6 @@ export function EntityScene({
   currentTick,
   entities,
   floatingDamageNumbers,
-  playerLevel,
-  playerName,
   renderSurfaceMode,
   viewport
 }: EntitySceneProps) {
@@ -300,18 +281,6 @@ export function EntityScene({
       {entities.map((entity) => (
         <pixiContainer key={entity.id}>
           <pixiGraphics draw={drawEntity(entity, currentTick)} />
-          {entity.role === "player" ? (
-            <pixiText
-              anchor={0.5}
-              eventMode="none"
-              resolution={2}
-              scale={1 / scale}
-              style={playerIdentityTextStyle}
-              text={`${playerName} · Lv ${playerLevel}`}
-              x={entity.worldPosition.x}
-              y={entity.worldPosition.y - entity.footprint.radius - 38}
-            />
-          ) : null}
           {debugLabelsVisible ? (
             <pixiText
               anchor={0.5}

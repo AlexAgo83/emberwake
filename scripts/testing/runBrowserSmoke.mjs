@@ -145,17 +145,24 @@ try {
     );
   }
 
-  await page.getByRole("button", {
-    name: /Command deck/i
-  }).click();
-  await page.getByRole("button", {
-    name: /^Tools\b/i
-  }).click();
-  await page.getByRole("button", {
-    name: /Inspecteur/i
-  }).click();
-
   const inspectionPanel = page.getByTestId("entity-inspection");
+
+  if (!(await inspectionPanel.isVisible())) {
+    await page.getByRole("button", {
+      name: /Command deck/i
+    }).click();
+    await page.getByRole("button", {
+      name: /^Tools\b/i
+    }).click();
+    await page.getByRole("button", {
+      name: /^Inspecteur\b/i
+    }).click();
+  }
+
+  await inspectionPanel.waitFor({
+    state: "visible",
+    timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
+  });
   const worldPosition = inspectionPanel.getByTestId("entity-world");
 
   const initialPosition = parseWorldPosition((await worldPosition.textContent()) ?? "");

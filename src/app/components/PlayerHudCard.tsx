@@ -1,7 +1,6 @@
 import "./PlayerHudCard.css";
 
 type PlayerHudCardProps = {
-  currentLevel: number;
   currentXp: number;
   fps: number;
   goldCollected: number;
@@ -9,21 +8,17 @@ type PlayerHudCardProps = {
   nextLevelXpRequired: number;
   playerHealth: number;
   playerName: string;
-  zoomMultiplier: number;
 };
 
 export function PlayerHudCard({
-  currentLevel,
   currentXp,
   fps,
   goldCollected,
   isMobile,
   nextLevelXpRequired,
   playerHealth,
-  playerName,
-  zoomMultiplier
+  playerName
 }: PlayerHudCardProps) {
-  const roundedLevel = Math.max(1, Math.round(currentLevel));
   const roundedHealth = Math.max(0, Math.round(playerHealth));
   const roundedXp = Math.max(0, Math.round(currentXp));
   const roundedNextLevelXp = Math.max(1, Math.round(nextLevelXpRequired));
@@ -36,7 +31,6 @@ export function PlayerHudCard({
           <p className="player-hud__eyebrow">Field status</p>
           <p className="player-hud__name">{playerName}</p>
         </div>
-        <p className="player-hud__level-chip">Lv {roundedLevel}</p>
       </div>
 
       <div className="player-hud__rail">
@@ -66,20 +60,12 @@ export function PlayerHudCard({
 
       <div className="player-hud__metrics">
         <div className="player-hud__metric">
-          <span>Level</span>
-          <strong>{roundedLevel}</strong>
-        </div>
-        <div className="player-hud__metric">
           <span>Gold</span>
           <strong>{Math.max(0, Math.round(goldCollected))}</strong>
         </div>
         <div className="player-hud__metric">
           <span>FPS</span>
           <strong>{Math.max(0, Math.round(fps))}</strong>
-        </div>
-        <div className="player-hud__metric">
-          <span>Zoom</span>
-          <strong>{zoomMultiplier.toFixed(2)}x</strong>
         </div>
       </div>
 

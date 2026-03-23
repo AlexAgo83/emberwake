@@ -237,17 +237,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           </header>
         {scene === "main-menu" ? (
           <>
-            <div className="app-meta-scene__hero-band">
-              <p className="app-meta-scene__lead">Silent entry. Deliberate next move.</p>
-              <div className="app-meta-scene__signals">
-                <span className="app-meta-scene__signal" data-tone={canResumeSession ? "ice" : "steel"}>
-                  {canResumeSession ? "Active session ready" : "Fresh shell state"}
-                </span>
-                <span className="app-meta-scene__signal" data-tone={isLoadAvailable ? "ember" : "steel"}>
-                  {isLoadAvailable ? "Archive available" : "No saved archive"}
-                </span>
-              </div>
-            </div>
             <div className="app-meta-scene__actions app-meta-scene__actions--main-menu">
               {canResumeSession ? (
                 <button
@@ -374,11 +363,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             ) : scene === "settings" ? (
               <>
                 <div className="app-meta-scene__scene-body app-meta-scene__scene-body--settings">
-                  <div className="app-meta-scene__subsurface app-meta-scene__subsurface--settings">
-                    <p className="app-meta-scene__lead">
-                      Tune capture, layout, and recovery posture without touching the active run.
-                    </p>
-                  </div>
                   <Suspense
                     fallback={
                       <p className="settings-controls__status">Loading desktop control bindings…</p>

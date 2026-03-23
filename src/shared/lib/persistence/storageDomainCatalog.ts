@@ -23,6 +23,6 @@ export const persistenceDomainCatalog = {
     domainId: "shell-preferences",
     storageBackend: "localStorage",
     storageKey: "emberwake.shell-preferences",
-    storageVersion: 1
+    storageVersion: 2
   }
 } as const satisfies Record<string, VersionedStorageDomainContract>;

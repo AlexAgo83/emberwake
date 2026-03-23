@@ -21,8 +21,6 @@ type RuntimeSceneBoundaryProps = {
   camera: CameraState;
   currentTick: number;
   onOpenSettings?: () => void;
-  playerLevel: number;
-  playerName: string;
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
   onRetryRuntime?: () => void;
@@ -83,8 +81,6 @@ export function RuntimeSceneBoundary({
   camera,
   currentTick,
   onOpenSettings,
-  playerLevel,
-  playerName,
   onRendererError,
   onRendererReady,
   onRetryRuntime,
@@ -145,8 +141,6 @@ export function RuntimeSceneBoundary({
           onSurfaceElementChange={onSurfaceElementChange}
           onVisualFrame={onVisualFrame}
           floatingDamageNumbers={floatingDamageNumbers}
-          playerLevel={playerLevel}
-          playerName={playerName}
           visibleEntities={visibleEntities}
           visibleChunks={visibleChunks}
           viewport={viewport}

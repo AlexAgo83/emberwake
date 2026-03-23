@@ -361,8 +361,6 @@ export function ActiveRuntimeShellContent({
           onRetryRuntime={onRetryRuntime}
           onSurfaceElementChange={handleRuntimeSurfaceElementChange}
           onVisualFrame={simulationState.controls.advanceVisualFrame}
-          playerLevel={simulationState.gameState.systems.progression.currentLevel}
-          playerName={runtimeSession.playerName || "Wanderer"}
           renderSurfaceMode={diagnosticsVisible ? "diagnostics" : "player"}
           rendererMessage={rendererState.message}
           scene={activeScene}
@@ -419,7 +417,6 @@ export function ActiveRuntimeShellContent({
 
         {playerHudVisible ? (
           <PlayerHudCard
-            currentLevel={simulationState.gameState.systems.progression.currentLevel}
             currentXp={simulationState.gameState.systems.progression.currentXp}
             fps={simulationState.runtime.fps}
             goldCollected={simulationState.gameState.systems.progression.goldCollected}
@@ -427,7 +424,6 @@ export function ActiveRuntimeShellContent({
             nextLevelXpRequired={simulationState.gameState.systems.progression.nextLevelXpRequired}
             playerHealth={simulationState.entity.combat.currentHealth}
             playerName={runtimeSession.playerName || "Wanderer"}
-            zoomMultiplier={cameraState.zoom}
           />
         ) : null}
 
