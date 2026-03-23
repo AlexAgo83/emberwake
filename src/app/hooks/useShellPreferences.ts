@@ -16,7 +16,7 @@ export function useShellPreferences({
   const [preferences, setPreferences] = useState<ShellPreferences>(() =>
     readShellPreferences({
       debugPanelVisible: defaultDebugPanelVisible,
-      inspectionPanelVisible: true,
+      inspectionPanelVisible: false,
       lastMetaScene: "none",
       movementOnboardingDismissed: false,
       prefersFullscreen: false,

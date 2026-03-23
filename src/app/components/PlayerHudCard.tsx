@@ -1,6 +1,7 @@
 import "./PlayerHudCard.css";
 
 type PlayerHudCardProps = {
+  currentLevel: number;
   currentXp: number;
   fps: number;
   goldCollected: number;
@@ -11,6 +12,7 @@ type PlayerHudCardProps = {
 };
 
 export function PlayerHudCard({
+  currentLevel,
   currentXp,
   fps,
   goldCollected,
@@ -19,6 +21,7 @@ export function PlayerHudCard({
   playerHealth,
   playerName
 }: PlayerHudCardProps) {
+  const roundedLevel = Math.max(1, Math.round(currentLevel));
   const roundedHealth = Math.max(0, Math.round(playerHealth));
   const roundedXp = Math.max(0, Math.round(currentXp));
   const roundedNextLevelXp = Math.max(1, Math.round(nextLevelXpRequired));
@@ -31,6 +34,7 @@ export function PlayerHudCard({
           <p className="player-hud__eyebrow">Field status</p>
           <p className="player-hud__name">{playerName}</p>
         </div>
+        <p className="player-hud__level-chip">Lv {roundedLevel}</p>
       </div>
 
       <div className="player-hud__rail">

@@ -417,6 +417,7 @@ export function ActiveRuntimeShellContent({
 
         {playerHudVisible ? (
           <PlayerHudCard
+            currentLevel={simulationState.gameState.systems.progression.currentLevel}
             currentXp={simulationState.gameState.systems.progression.currentXp}
             fps={simulationState.runtime.fps}
             goldCollected={simulationState.gameState.systems.progression.goldCollected}
