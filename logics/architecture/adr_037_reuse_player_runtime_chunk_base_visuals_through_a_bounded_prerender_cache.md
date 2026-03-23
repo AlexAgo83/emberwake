@@ -1,10 +1,10 @@
 ## adr_037_reuse_player_runtime_chunk_base_visuals_through_a_bounded_prerender_cache - Reuse player-runtime chunk base visuals through a bounded prerender cache
 > Date: 2026-03-23
-> Status: Proposed
+> Status: Accepted
 > Drivers: Remove tile-by-tile chunk base redraw from the steady-state player frame loop; keep world identity deterministic; avoid turning performance fixes into unbounded render-resource retention; preserve the current game-to-Pixi ownership split.
 > Related request: `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`
 > Related backlog: `item_205_define_a_bounded_chunk_visual_reuse_strategy_for_player_runtime_world_rendering`
-> Related task: (none yet)
+> Related task: `task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing`
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview
@@ -22,29 +22,29 @@ This is not primarily a world-generation decision. World identity should remain 
 - how they are bounded and invalidated
 
 # Decision
-- Treat chunk base visuals as reusable render assets for the player runtime rather than as per-frame rebuilt `Graphics` instructions.
-- Use a bounded prerender/cache posture keyed by deterministic chunk identity.
+- Treat chunk base visuals as reusable player-runtime render nodes rather than as per-frame rebuilt `Graphics` instructions.
+- Keep chunk base geometry in local chunk space and retain stable draw callbacks while a chunk remains mounted in the player runtime.
+- Reuse the existing bounded chunk debug-data cache and avoid a more aggressive off-screen texture cache in this rollout.
 - Keep cache ownership at the render adapter boundary so game/world data stays declarative and Pixi resources stay adapter-owned.
-- Keep diagnostics-only overlays, labels, and other debug visuals outside this base chunk cache unless a later ADR explicitly extends the posture.
-- Prefer the simplest reusable representation that removes steady-state tile-by-tile redraw without widening into a renderer rewrite.
+- Keep diagnostics-only overlays, labels, and other debug visuals outside this base chunk reuse posture unless a later ADR explicitly extends it.
 
 # Alternatives considered
 - Keep rebuilding chunk tiles every frame. Rejected because it leaves an obvious hot path in place.
-- Build an unbounded cache of prerendered chunk visuals. Rejected because it trades frame time for unbounded memory retention.
+- Build an aggressive off-screen `cacheAsTexture` warm cache for many recent chunks. Rejected in this rollout because traversal-only profiling regressed under long eastbound drift.
 - Move full chunk visual ownership into game content/state. Rejected because Pixi resources belong in the render adapter layer, not the game-state layer.
-- Rewrite the world renderer around a more invasive batching system immediately. Rejected because this wave needs a bounded reuse seam first, not a larger renderer rewrite.
+- Rewrite the world renderer around a more invasive batching system immediately. Rejected because this wave needed a lower-risk reuse seam first, not a larger renderer rewrite.
 
 # Consequences
-- Steady-state player runtime should spend less frame time rebuilding static world visuals.
-- Chunk visual reuse becomes explicit and testable rather than accidental.
-- The render layer now carries a bounded resource lifecycle that must be validated and maintained carefully.
-- Memory posture may improve or worsen depending on cache discipline, so bounded lifecycle rules are part of the decision, not an implementation detail.
+- Steady-state player runtime spends less time rebuilding static world visuals while chunks stay mounted.
+- Chunk visual reuse is now explicit and testable rather than accidental.
+- This rollout favors stable retained graphics over a more aggressive off-screen texture cache, which keeps the resource lifecycle simpler and safer.
+- A deeper off-screen world-cache experiment remains possible later, but only if profiling proves it beats the current posture across all scenarios.
 
 # Migration and rollout
-- Introduce a deterministic chunk-visual cache key based on current chunk identity rules.
-- Move player-runtime chunk base preparation behind a bounded prerender/cache seam.
-- Keep diagnostics overlays out of the base cache for the first rollout.
-- Validate the new posture against existing long-session scenarios and compare frame-time/fps plus memory behavior.
+- Keep deterministic chunk identity as the ownership seam for chunk visual reuse.
+- Move player-runtime chunk base drawing into local chunk space with stable retained draw callbacks.
+- Keep diagnostics overlays out of the base chunk reuse path for the first rollout.
+- Validate the new posture against the long-session scenarios and reject more aggressive off-screen chunk caching if it regresses traversal-only profiling.
 
 # References
 - `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`
@@ -54,7 +54,6 @@ This is not primarily a world-generation decision. World identity should remain 
 - `adr_028_budget_player_runtime_and_debug_visuals_as_separate_render_modes`
 
 # Follow-up work
-- Decide the exact cached representation once implementation begins and profiling can compare alternatives.
+- Revisit a bounded off-screen chunk warm cache only if it can beat the current posture on `eastbound-drift` as well as on combat-heavy scenarios.
 - Revisit whether the full-screen background fill should join the same reuse posture after chunk base visuals land.
 - Extend the cache posture to diagnostics visuals only if a later wave proves that worthwhile.
-

@@ -1,5 +1,5 @@
 import { extend } from "@pixi/react";
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { Container, Graphics, Text } from "pixi.js";
 
 import {
@@ -37,18 +37,24 @@ type WorldSceneProps = {
 
 const tileSize = worldContract.tileSizeInWorldUnits;
 
-const drawChunkBase = (
-  origin: { x: number; y: number },
-  debugData: ReturnType<typeof createChunkDebugData>
-) => (graphics: Graphics) => {
+const backgroundExtent = 500_000;
+
+const drawWorldBackground = (graphics: Graphics) => {
+  graphics.clear();
+  graphics.setFillStyle({ alpha: 1, color: 0x09070f });
+  graphics.rect(-backgroundExtent, -backgroundExtent, backgroundExtent * 2, backgroundExtent * 2);
+  graphics.fill();
+};
+
+const drawChunkBase = (debugData: ReturnType<typeof createChunkDebugData>) => (graphics: Graphics) => {
   graphics.clear();
   graphics.setFillStyle({ alpha: 0.96, color: debugData.baseColor });
-  graphics.rect(origin.x, origin.y, chunkWorldSize, chunkWorldSize);
+  graphics.rect(0, 0, chunkWorldSize, chunkWorldSize);
   graphics.fill();
 
   for (const tile of debugData.tiles) {
     graphics.setFillStyle({ alpha: 0.82, color: tile.color });
-    graphics.rect(origin.x + tile.x * tileSize, origin.y + tile.y * tileSize, tileSize - 2, tileSize - 2);
+    graphics.rect(tile.x * tileSize, tile.y * tileSize, tileSize - 2, tileSize - 2);
     graphics.fill();
   }
 };
@@ -76,6 +82,24 @@ const drawChunkOverlay = (
   graphics.stroke();
 };
 
+const RetainedChunkBase = memo(function RetainedChunkBase({
+  debugData,
+  isVisible,
+  origin
+}: {
+  debugData: ReturnType<typeof createChunkDebugData>;
+  isVisible: boolean;
+  origin: { x: number; y: number };
+}) {
+  const draw = useMemo(() => drawChunkBase(debugData), [debugData]);
+
+  return (
+    <pixiContainer visible={isVisible} x={origin.x} y={origin.y}>
+      <pixiGraphics draw={draw} />
+    </pixiContainer>
+  );
+});
+
 export function WorldScene({
   camera,
   renderSurfaceMode,
@@ -84,6 +108,13 @@ export function WorldScene({
   worldSeed
 }: WorldSceneProps) {
   const scale = viewport.fitScale * camera.zoom;
+  const visibleChunkIdSet = useMemo(
+    () =>
+      new Set(
+        visibleChunks.map((chunkCoordinate) => chunkCoordinateToId(chunkCoordinate, worldSeed))
+      ),
+    [visibleChunks, worldSeed]
+  );
   const chunkDebugData = useMemo(
     () =>
       visibleChunks.map((chunkCoordinate) => ({
@@ -97,18 +128,16 @@ export function WorldScene({
 
   return (
     <WorldViewportContainer camera={camera} viewport={viewport}>
-      <pixiGraphics draw={(graphics) => {
-        graphics.clear();
-        graphics.setFillStyle({ alpha: 1, color: 0x09070f });
-        graphics.rect(camera.worldPosition.x - 10000, camera.worldPosition.y - 10000, 20000, 20000);
-        graphics.fill();
-      }} />
+      <pixiGraphics draw={drawWorldBackground} />
 
       {chunkDebugData.map(({ chunkCoordinate, debugData, origin }) => {
+        const chunkId = chunkCoordinateToId(chunkCoordinate, worldSeed);
+        const isVisible = visibleChunkIdSet.has(chunkId);
+
         return (
           <pixiContainer key={chunkCoordinateToId(chunkCoordinate, worldSeed)}>
-            <pixiGraphics draw={drawChunkBase(origin, debugData)} />
-            {debugVisualsEnabled ? (
+            <RetainedChunkBase debugData={debugData} isVisible={isVisible} origin={origin} />
+            {debugVisualsEnabled && isVisible ? (
               <>
                 <pixiGraphics draw={drawChunkOverlay(origin, debugData)} />
                 <pixiText

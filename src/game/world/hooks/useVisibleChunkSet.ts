@@ -14,6 +14,7 @@ type ViewportForChunkVisibility = {
 };
 
 type VisibleChunkSet = {
+  cachedChunks: ChunkCoordinate[];
   cachedChunkIds: string[];
   preloadMargin: number;
   visibleChunks: ChunkCoordinate[];
@@ -32,28 +33,34 @@ export function useVisibleChunkSet(
     () => getVisibleChunkCoordinates(camera, viewport, chunkVisibilityContract.preloadMargin),
     [camera, viewport]
   );
-  const [cachedChunkIds, setCachedChunkIds] = useState<string[]>([]);
+  const [cachedChunks, setCachedChunks] = useState<ChunkCoordinate[]>([]);
 
   useEffect(() => {
-    setCachedChunkIds((currentCache) => {
+    setCachedChunks((currentCache) => {
       const nextCache = [...currentCache];
 
       for (const chunkCoordinate of visibleChunks) {
-        const chunkId = chunkCoordinateToId(chunkCoordinate);
-        const existingIndex = nextCache.indexOf(chunkId);
+        const existingIndex = nextCache.findIndex(
+          (cachedChunk) =>
+            cachedChunk.x === chunkCoordinate.x && cachedChunk.y === chunkCoordinate.y
+        );
 
         if (existingIndex >= 0) {
           nextCache.splice(existingIndex, 1);
         }
 
-        nextCache.unshift(chunkId);
+        nextCache.unshift(chunkCoordinate);
       }
 
       const trimmedCache = nextCache.slice(0, chunkVisibilityContract.cacheLimit);
 
       if (
         trimmedCache.length === currentCache.length &&
-        trimmedCache.every((chunkId, index) => chunkId === currentCache[index])
+        trimmedCache.every(
+          (chunkCoordinate, index) =>
+            chunkCoordinate.x === currentCache[index]?.x &&
+            chunkCoordinate.y === currentCache[index]?.y
+        )
       ) {
         return currentCache;
       }
@@ -63,7 +70,8 @@ export function useVisibleChunkSet(
   }, [visibleChunks]);
 
   return {
-    cachedChunkIds,
+    cachedChunks,
+    cachedChunkIds: cachedChunks.map((chunkCoordinate) => chunkCoordinateToId(chunkCoordinate)),
     preloadMargin: chunkVisibilityContract.preloadMargin,
     visibleChunks
   };

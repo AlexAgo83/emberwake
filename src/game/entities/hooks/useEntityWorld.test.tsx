@@ -74,4 +74,47 @@ describe("useEntityWorld", () => {
       state: "moving"
     });
   });
+
+  it("keeps overlap diagnostics off the default player path", () => {
+    const simulationState = createInitialSimulationState();
+    const overlappingHostile = {
+      ...simulationState.entity,
+      id: "entity:hostile:test",
+      role: "hostile" as const
+    };
+    const visibleChunks = [worldPointToChunkCoordinate(simulationState.entity.worldPosition)];
+    const { result } = renderHook(() =>
+      useEntityWorld({
+        primaryEntityId: simulationState.entity.id,
+        selectedWorldPoint: null,
+        simulatedEntities: [simulationState.entity, overlappingHostile],
+        visibleChunks
+      })
+    );
+
+    expect(result.current.overlappingPairs).toEqual([]);
+    expect(result.current.entitiesByChunk.size).toBe(0);
+  });
+
+  it("can still compute overlap diagnostics when explicitly requested", () => {
+    const simulationState = createInitialSimulationState();
+    const overlappingHostile = {
+      ...simulationState.entity,
+      id: "entity:hostile:test",
+      role: "hostile" as const
+    };
+    const visibleChunks = [worldPointToChunkCoordinate(simulationState.entity.worldPosition)];
+    const { result } = renderHook(() =>
+      useEntityWorld({
+        includeSpatialDiagnostics: true,
+        primaryEntityId: simulationState.entity.id,
+        selectedWorldPoint: null,
+        simulatedEntities: [simulationState.entity, overlappingHostile],
+        visibleChunks
+      })
+    );
+
+    expect(result.current.overlappingPairs).toHaveLength(1);
+    expect(result.current.entitiesByChunk.size).toBe(1);
+  });
 });

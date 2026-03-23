@@ -1,5 +1,6 @@
 import { extend } from "@pixi/react";
 import { Graphics, Text } from "pixi.js";
+import { memo, useMemo } from "react";
 
 import { WorldViewportContainer, type CameraState } from "@engine-pixi";
 import type { EmberwakeRenderSurfaceMode } from "@game";
@@ -30,6 +31,12 @@ type EntitySceneProps = {
   };
 };
 
+type PickupKind = PresentedEntity<SimulatedEntity>["pickupProfile"] extends infer PickupProfile
+  ? PickupProfile extends { kind: infer Kind }
+    ? Kind
+    : never
+  : never;
+
 const hexColorToNumber = (color: string) => Number.parseInt(color.replace("#", ""), 16);
 
 const floatingDamageTextStyle = {
@@ -46,9 +53,6 @@ const floatingDamageTextStyle = {
   fontWeight: "700" as const,
   letterSpacing: 1
 };
-
-const isCombatant = (entity: PresentedEntity<SimulatedEntity>) =>
-  entity.role === "player" || entity.role === "hostile";
 
 const getAttackChargeProgress = (
   entity: PresentedEntity<SimulatedEntity>,
@@ -86,72 +90,25 @@ const getAttackChargeProgress = (
   return 0;
 };
 
-const drawEntity =
-  (entity: PresentedEntity<SimulatedEntity>, currentTick: number) => (graphics: Graphics) => {
-  const tint = hexColorToNumber(entity.visual.tint);
-  const isSelected = entity.isSelected;
-  const orientationLength = entity.footprint.radius + 16;
-  const automaticAttack = entity.automaticAttack;
-  const recentDamageTick = entity.damageReactionState?.lastDamageTick ?? null;
-  const hitReactionProgress =
-    recentDamageTick === null
-      ? 0
-      : Math.max(
-          0,
-          1 -
-            (currentTick - recentDamageTick) /
-              entityCombatPresentationContract.hitReactionVisibleTicks
-        );
-
-  graphics.clear();
-
-  if (
-    entity.role === "player" &&
-    automaticAttack &&
-    automaticAttack.lastAttackTick !== null &&
-    currentTick - automaticAttack.lastAttackTick <= automaticAttack.visibleTicks
-  ) {
-    const arcHalfRadians = automaticAttack.arcRadians / 2;
-
-    graphics.setFillStyle({ alpha: 0.14, color: tint });
-    graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y);
-    graphics.arc(
-      entity.worldPosition.x,
-      entity.worldPosition.y,
-      automaticAttack.rangeWorldUnits,
-      entity.orientation - arcHalfRadians,
-      entity.orientation + arcHalfRadians
-    );
-    graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y);
-    graphics.fill();
-
-    graphics.setStrokeStyle({
-      alpha: 0.36,
-      color: tint,
-      width: 2
-    });
-    graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y);
-    graphics.arc(
-      entity.worldPosition.x,
-      entity.worldPosition.y,
-      automaticAttack.rangeWorldUnits,
-      entity.orientation - arcHalfRadians,
-      entity.orientation + arcHalfRadians
-    );
-    graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y);
-    graphics.stroke();
-  }
-
-  if (entity.role === "pickup") {
-    const pickupRadius = entity.footprint.radius;
-
+const drawPickupEntity =
+  ({
+    pickupKind,
+    radius,
+    tint
+  }: {
+    pickupKind: PickupKind | null;
+    radius: number;
+    tint: number;
+  }) =>
+  (graphics: Graphics) => {
+    graphics.clear();
     graphics.setFillStyle({ alpha: 0.34, color: tint });
 
-    if (entity.pickupProfile?.kind === "crystal") {
-      graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y - pickupRadius);
-      graphics.lineTo(entity.worldPosition.x + pickupRadius * 0.72, entity.worldPosition.y);
-      graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y + pickupRadius);
-      graphics.lineTo(entity.worldPosition.x - pickupRadius * 0.72, entity.worldPosition.y);
+    if (pickupKind === "crystal") {
+      graphics.moveTo(0, -radius);
+      graphics.lineTo(radius * 0.72, 0);
+      graphics.lineTo(0, radius);
+      graphics.lineTo(-radius * 0.72, 0);
       graphics.closePath();
       graphics.fill();
       graphics.setStrokeStyle({
@@ -159,111 +116,207 @@ const drawEntity =
         color: 0xf6eee8,
         width: 2
       });
-      graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y - pickupRadius);
-      graphics.lineTo(entity.worldPosition.x + pickupRadius * 0.72, entity.worldPosition.y);
-      graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y + pickupRadius);
-      graphics.lineTo(entity.worldPosition.x - pickupRadius * 0.72, entity.worldPosition.y);
+      graphics.moveTo(0, -radius);
+      graphics.lineTo(radius * 0.72, 0);
+      graphics.lineTo(0, radius);
+      graphics.lineTo(-radius * 0.72, 0);
       graphics.closePath();
       graphics.stroke();
-      graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y - pickupRadius * 0.38);
-      graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y + pickupRadius * 0.38);
-      graphics.moveTo(entity.worldPosition.x - pickupRadius * 0.26, entity.worldPosition.y);
-      graphics.lineTo(entity.worldPosition.x + pickupRadius * 0.26, entity.worldPosition.y);
+      graphics.moveTo(0, -radius * 0.38);
+      graphics.lineTo(0, radius * 0.38);
+      graphics.moveTo(-radius * 0.26, 0);
+      graphics.lineTo(radius * 0.26, 0);
       graphics.stroke();
 
       return;
     }
 
-    graphics.circle(entity.worldPosition.x, entity.worldPosition.y, pickupRadius);
+    graphics.circle(0, 0, radius);
     graphics.fill();
     graphics.setStrokeStyle({
       alpha: 0.92,
       color: 0xf6eee8,
       width: 2
     });
-    graphics.circle(entity.worldPosition.x, entity.worldPosition.y, pickupRadius);
+    graphics.circle(0, 0, radius);
     graphics.stroke();
-    graphics.moveTo(entity.worldPosition.x - pickupRadius * 0.55, entity.worldPosition.y);
-    graphics.lineTo(entity.worldPosition.x + pickupRadius * 0.55, entity.worldPosition.y);
-    graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y - pickupRadius * 0.55);
-    graphics.lineTo(entity.worldPosition.x, entity.worldPosition.y + pickupRadius * 0.55);
+    graphics.moveTo(-radius * 0.55, 0);
+    graphics.lineTo(radius * 0.55, 0);
+    graphics.moveTo(0, -radius * 0.55);
+    graphics.lineTo(0, radius * 0.55);
     graphics.stroke();
+  };
 
-    return;
-  }
+const drawCombatEntity =
+  ({
+    attackArcRadians,
+    attackChargeProgress,
+    attackRangeWorldUnits,
+    healthRatio,
+    hitReactionProgress,
+    isSelected,
+    radius,
+    role,
+    tint
+  }: {
+    attackArcRadians: number | null;
+    attackChargeProgress: number;
+    attackRangeWorldUnits: number | null;
+    healthRatio: number;
+    hitReactionProgress: number;
+    isSelected: boolean;
+    radius: number;
+    role: PresentedEntity<SimulatedEntity>["role"];
+    tint: number;
+  }) =>
+  (graphics: Graphics) => {
+    const orientationLength = radius + 16;
 
-  if (hitReactionProgress > 0) {
+    graphics.clear();
+
+    if (attackArcRadians !== null && attackRangeWorldUnits !== null) {
+      const arcHalfRadians = attackArcRadians / 2;
+
+      graphics.setFillStyle({ alpha: 0.14, color: tint });
+      graphics.moveTo(0, 0);
+      graphics.arc(0, 0, attackRangeWorldUnits, -arcHalfRadians, arcHalfRadians);
+      graphics.lineTo(0, 0);
+      graphics.fill();
+
+      graphics.setStrokeStyle({
+        alpha: 0.36,
+        color: tint,
+        width: 2
+      });
+      graphics.moveTo(0, 0);
+      graphics.arc(0, 0, attackRangeWorldUnits, -arcHalfRadians, arcHalfRadians);
+      graphics.lineTo(0, 0);
+      graphics.stroke();
+    }
+
+    if (hitReactionProgress > 0) {
+      graphics.setFillStyle({
+        alpha: 0.12 + hitReactionProgress * 0.18,
+        color: 0xf6eee8
+      });
+      graphics.circle(0, 0, radius + 6 + hitReactionProgress * 6);
+      graphics.fill();
+    }
+
     graphics.setFillStyle({
-      alpha: 0.12 + hitReactionProgress * 0.18,
-      color: 0xf6eee8
+      alpha: isSelected ? 0.38 : 0.24,
+      color: tint
     });
-    graphics.circle(
-      entity.worldPosition.x,
-      entity.worldPosition.y,
-      entity.footprint.radius + 6 + hitReactionProgress * 6
-    );
+    graphics.circle(0, 0, radius);
     graphics.fill();
-  }
 
-  graphics.setFillStyle({
-    alpha: isSelected ? 0.38 : hitReactionProgress > 0 ? 0.34 : 0.24,
-    color: hitReactionProgress > 0 ? 0xfff1dc : tint
-  });
-  graphics.circle(entity.worldPosition.x, entity.worldPosition.y, entity.footprint.radius);
-  graphics.fill();
+    graphics.setStrokeStyle({
+      alpha: 0.95,
+      color: isSelected ? 0xf6eee8 : tint,
+      width: isSelected ? 5 : 3
+    });
+    graphics.circle(0, 0, radius);
+    graphics.stroke();
 
-  graphics.setStrokeStyle({
-    alpha: 0.95,
-    color: hitReactionProgress > 0 ? 0xfff1dc : isSelected ? 0xf6eee8 : tint,
-    width: isSelected ? 5 : 3
-  });
-  graphics.circle(entity.worldPosition.x, entity.worldPosition.y, entity.footprint.radius);
-  graphics.stroke();
+    graphics.moveTo(0, 0);
+    graphics.lineTo(Math.cos(0) * orientationLength, Math.sin(0) * orientationLength);
+    graphics.stroke();
 
-  graphics.moveTo(entity.worldPosition.x, entity.worldPosition.y);
-  graphics.lineTo(
-    entity.worldPosition.x + Math.cos(entity.orientation) * orientationLength,
-    entity.worldPosition.y + Math.sin(entity.orientation) * orientationLength
+    const barWidth = Math.max(36, radius * 2.35);
+    const barHeight = 5;
+    const barRadius = 2;
+    const healthBarY = -radius - 18;
+    const chargeBarY = healthBarY + 7;
+    const healthColor = role === "player" ? 0x7dff9b : 0xff7a88;
+    const chargeColor = role === "player" ? 0x5ce5ff : 0xffd76c;
+    const baseX = -barWidth / 2;
+
+    graphics.setFillStyle({ alpha: 0.82, color: 0x05070c });
+    graphics.roundRect(baseX, healthBarY, barWidth, barHeight, barRadius);
+    graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
+    graphics.fill();
+
+    graphics.setFillStyle({ alpha: 0.94, color: healthColor });
+    graphics.roundRect(baseX, healthBarY, barWidth * healthRatio, barHeight, barRadius);
+    graphics.fill();
+
+    graphics.setFillStyle({ alpha: 0.9, color: chargeColor });
+    graphics.roundRect(baseX, chargeBarY, barWidth * attackChargeProgress, barHeight, barRadius);
+    graphics.fill();
+
+    graphics.setStrokeStyle({
+      alpha: 0.55,
+      color: 0xf6eee8,
+      width: 1
+    });
+    graphics.roundRect(baseX, healthBarY, barWidth, barHeight, barRadius);
+    graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
+    graphics.stroke();
+  };
+
+const PickupEntityGraphic = memo(function PickupEntityGraphic({
+  pickupKind,
+  radius,
+  tint
+}: {
+  pickupKind: PickupKind | null;
+  radius: number;
+  tint: number;
+}) {
+  const draw = useMemo(() => drawPickupEntity({ pickupKind, radius, tint }), [pickupKind, radius, tint]);
+
+  return <pixiGraphics draw={draw} />;
+});
+
+function CombatEntityGraphic({
+  attackArcRadians,
+  attackChargeProgress,
+  attackRangeWorldUnits,
+  healthRatio,
+  hitReactionProgress,
+  isSelected,
+  radius,
+  role,
+  tint
+}: {
+  attackArcRadians: number | null;
+  attackChargeProgress: number;
+  attackRangeWorldUnits: number | null;
+  healthRatio: number;
+  hitReactionProgress: number;
+  isSelected: boolean;
+  radius: number;
+  role: PresentedEntity<SimulatedEntity>["role"];
+  tint: number;
+}) {
+  const draw = useMemo(
+    () =>
+      drawCombatEntity({
+        attackArcRadians,
+        attackChargeProgress,
+        attackRangeWorldUnits,
+        healthRatio,
+        hitReactionProgress,
+        isSelected,
+        radius,
+        role,
+        tint
+      }),
+    [
+      attackArcRadians,
+      attackChargeProgress,
+      attackRangeWorldUnits,
+      healthRatio,
+      hitReactionProgress,
+      isSelected,
+      radius,
+      role,
+      tint
+    ]
   );
-  graphics.stroke();
 
-  if (!isCombatant(entity) || entity.combat.maxHealth <= 0) {
-    return;
-  }
-
-  const barWidth = Math.max(36, entity.footprint.radius * 2.35);
-  const barHeight = 5;
-  const barRadius = 2;
-  const healthRatio = Math.max(0, entity.combat.currentHealth / entity.combat.maxHealth);
-  const attackChargeProgress = getAttackChargeProgress(entity, currentTick);
-  const baseX = entity.worldPosition.x - barWidth / 2;
-  const healthBarY = entity.worldPosition.y - entity.footprint.radius - 18;
-  const chargeBarY = healthBarY + 7;
-  const healthColor = entity.role === "player" ? 0x7dff9b : 0xff7a88;
-  const chargeColor = entity.role === "player" ? 0x5ce5ff : 0xffd76c;
-
-  graphics.setFillStyle({ alpha: 0.82, color: 0x05070c });
-  graphics.roundRect(baseX, healthBarY, barWidth, barHeight, barRadius);
-  graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
-  graphics.fill();
-
-  graphics.setFillStyle({ alpha: 0.94, color: healthColor });
-  graphics.roundRect(baseX, healthBarY, barWidth * healthRatio, barHeight, barRadius);
-  graphics.fill();
-
-  graphics.setFillStyle({ alpha: 0.9, color: chargeColor });
-  graphics.roundRect(baseX, chargeBarY, barWidth * attackChargeProgress, barHeight, barRadius);
-  graphics.fill();
-
-  graphics.setStrokeStyle({
-    alpha: 0.55,
-    color: 0xf6eee8,
-    width: 1
-  });
-  graphics.roundRect(baseX, healthBarY, barWidth, barHeight, barRadius);
-  graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
-  graphics.stroke();
-};
+  return <pixiGraphics draw={draw} />;
+}
 
 export function EntityScene({
   camera,
@@ -278,36 +331,86 @@ export function EntityScene({
 
   return (
     <WorldViewportContainer camera={camera} viewport={viewport}>
-      {entities.map((entity) => (
-        <pixiContainer key={entity.id}>
-          <pixiGraphics draw={drawEntity(entity, currentTick)} />
-          {debugLabelsVisible ? (
-            <pixiText
-              anchor={0.5}
-              eventMode="none"
-              resolution={2}
-              scale={1 / scale}
-              style={{
-                align: "center",
-                dropShadow: {
-                  alpha: 0.55,
-                  blur: 2,
-                  color: "#09070f",
-                  distance: 1
-                },
-                fill: entity.isSelected ? "#f6eee8" : entity.visual.tint,
-                fontFamily: "monospace",
-                fontSize: 15,
-                fontWeight: "700",
-                letterSpacing: 1
-              }}
-              text={`${entity.id.split(":").at(-1)} · ${entity.state}${entity.isSelected ? " · selected" : ""}`}
-              x={entity.worldPosition.x}
-              y={entity.worldPosition.y - entity.footprint.radius - 20}
-            />
-          ) : null}
-        </pixiContainer>
-      ))}
+      {entities.map((entity) => {
+        const tint = hexColorToNumber(entity.visual.tint);
+        const pickupKind = entity.pickupProfile?.kind ?? null;
+        const attackArcVisible =
+          entity.role === "player" &&
+          entity.automaticAttack &&
+          entity.automaticAttack.lastAttackTick !== null &&
+          currentTick - entity.automaticAttack.lastAttackTick <= entity.automaticAttack.visibleTicks;
+        const hitReactionProgress =
+          entity.damageReactionState?.lastDamageTick === null ||
+          entity.damageReactionState?.lastDamageTick === undefined
+            ? 0
+            : Math.max(
+                0,
+                1 -
+                  (currentTick - entity.damageReactionState.lastDamageTick) /
+                    entityCombatPresentationContract.hitReactionVisibleTicks
+              );
+
+        return (
+          <pixiContainer
+            key={entity.id}
+            rotation={entity.role === "pickup" ? 0 : entity.orientation}
+            x={entity.worldPosition.x}
+            y={entity.worldPosition.y}
+          >
+            {entity.role === "pickup" ? (
+              <PickupEntityGraphic
+                pickupKind={pickupKind}
+                radius={entity.footprint.radius}
+                tint={tint}
+              />
+            ) : (
+              <CombatEntityGraphic
+                attackArcRadians={attackArcVisible ? entity.automaticAttack?.arcRadians ?? null : null}
+                attackChargeProgress={getAttackChargeProgress(entity, currentTick)}
+                attackRangeWorldUnits={
+                  attackArcVisible ? entity.automaticAttack?.rangeWorldUnits ?? null : null
+                }
+                healthRatio={
+                  entity.combat.maxHealth > 0
+                    ? Math.max(0, entity.combat.currentHealth / entity.combat.maxHealth)
+                    : 0
+                }
+                hitReactionProgress={hitReactionProgress}
+                isSelected={entity.isSelected}
+                radius={entity.footprint.radius}
+                role={entity.role}
+                tint={tint}
+              />
+            )}
+            {debugLabelsVisible ? (
+              <pixiText
+                anchor={0.5}
+                eventMode="none"
+                resolution={2}
+                rotation={entity.role === "pickup" ? 0 : -entity.orientation}
+                scale={1 / scale}
+                style={{
+                  align: "center",
+                  dropShadow: {
+                    alpha: 0.55,
+                    blur: 2,
+                    color: "#09070f",
+                    distance: 1
+                  },
+                  fill: entity.isSelected ? "#f6eee8" : entity.visual.tint,
+                  fontFamily: "monospace",
+                  fontSize: 15,
+                  fontWeight: "700",
+                  letterSpacing: 1
+                }}
+                text={`${entity.id.split(":").at(-1)} · ${entity.state}${entity.isSelected ? " · selected" : ""}`}
+                x={0}
+                y={-entity.footprint.radius - 20}
+              />
+            ) : null}
+          </pixiContainer>
+        );
+      })}
       {floatingDamageNumbers.map((floatingDamageNumber) => {
         const lifetimeProgress =
           (currentTick - floatingDamageNumber.spawnedAtTick) /

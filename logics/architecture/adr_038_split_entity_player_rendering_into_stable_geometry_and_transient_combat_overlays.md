@@ -1,10 +1,10 @@
 ## adr_038_split_entity_player_rendering_into_stable_geometry_and_transient_combat_overlays - Split entity player rendering into stable geometry and transient combat overlays
 > Date: 2026-03-23
-> Status: Proposed
+> Status: Accepted
 > Drivers: Reduce per-entity redraw density in the player runtime; preserve combat readability; stop mixing stable body shapes with short-lived combat feedback in one dense draw posture; keep the current Pixi/runtime ownership model intact.
 > Related request: `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`
 > Related backlog: `item_206_define_a_split_entity_render_layer_posture_for_stable_shapes_and_transient_combat_fx`
-> Related task: (none yet)
+> Related task: `task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing`
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview
@@ -25,10 +25,9 @@ That single dense redraw posture is easy to extend but expensive to scale. The r
 - what becomes isolated, conditional, or cheaper
 
 # Decision
-- Treat stable entity body visuals as a different render concern from transient combat overlays and short-lived feedback.
-- Preserve essential player-facing readability, but do not require every combat readability element to share the same redraw cadence or render layer.
-- Keep floating combat numbers, hit flashes, attack arcs, and similar transient feedback isolated from the cheapest stable entity geometry path.
-- Keep diagnostics labels behind diagnostics mode rather than treating them as part of the player-runtime entity baseline.
+- Treat stable entity body visuals and transient combat feedback as separate concerns in code, even when they still share one `Graphics` node for the lightest player-runtime topology.
+- Render entities in local coordinates inside positioned containers so movement no longer forces world-position-heavy drawing math inside each callback.
+- Keep pickup visuals on a memoized stable path and keep diagnostics labels behind diagnostics mode rather than treating them as part of the player-runtime entity baseline.
 - Preserve current gameplay semantics and deterministic simulation; this ADR changes render composition, not combat rules.
 
 # Alternatives considered
@@ -38,15 +37,15 @@ That single dense redraw posture is easy to extend but expensive to scale. The r
 - Rewrite combat presentation around a different renderer stack. Rejected because the needed decision is about render composition, not renderer replacement.
 
 # Consequences
-- Entity rendering becomes easier to optimize incrementally because stable and transient work no longer have to move together.
-- Some existing visuals may need more explicit lifecycle or visibility rules.
-- The implementation will require discipline so readability does not regress while chasing lower redraw cost.
-- Future combat-feedback additions will have a clearer place to land without automatically bloating the stable entity path.
+- Entity rendering is easier to optimize incrementally because stable and transient concerns are now explicit in code.
+- The player-runtime display tree stays leaner than the first attempted multi-layer split, which reduced the risk of over-optimizing into a heavier scene graph.
+- Some existing visuals may still need more explicit lifecycle or visibility rules if combat density grows further.
+- Future combat-feedback additions have a clearer place to land without automatically bloating the stable pickup/body path.
 
 # Migration and rollout
-- Separate stable geometry from transient overlay concerns in entity render composition.
+- Move entity rendering into local coordinates inside positioned containers.
+- Keep stable pickup/body drawing memoized where practical.
 - Keep diagnostics labels behind diagnostics mode.
-- Re-evaluate which bars or transient cues must remain always visible in the player path.
 - Validate against scripted profiling scenarios plus manual combat-readability checks.
 
 # References

@@ -14,6 +14,7 @@ import type { ChunkCoordinate, WorldPoint } from "../../world/types";
 import type { SimulatedEntity } from "../model/entitySimulation";
 
 type UseEntityWorldOptions = {
+  includeSpatialDiagnostics?: boolean;
   includeSupportEntities?: boolean;
   primaryEntityId: string;
   simulatedEntities: SimulatedEntity[];
@@ -38,6 +39,7 @@ const presentEntitySelection = (
 });
 
 export function useEntityWorld({
+  includeSpatialDiagnostics = false,
   includeSupportEntities = false,
   primaryEntityId,
   simulatedEntities,
@@ -61,8 +63,14 @@ export function useEntityWorld({
     () => sortEntitiesForRendering(filterVisibleEntities(trackedEntities, visibleChunkIds)),
     [trackedEntities, visibleChunkIds]
   );
-  const entitiesByChunk = useMemo(() => indexEntitiesByChunk(trackedEntities), [trackedEntities]);
-  const overlappingPairs = useMemo(() => detectEntityOverlaps(trackedEntities), [trackedEntities]);
+  const entitiesByChunk = useMemo(
+    () => (includeSpatialDiagnostics ? indexEntitiesByChunk(trackedEntities) : new Map()),
+    [includeSpatialDiagnostics, trackedEntities]
+  );
+  const overlappingPairs = useMemo(
+    () => (includeSpatialDiagnostics ? detectEntityOverlaps(trackedEntities) : []),
+    [includeSpatialDiagnostics, trackedEntities]
+  );
   const [selectedEntityId, setSelectedEntityId] = useState<string | null>(primaryEntityId);
 
   useEffect(() => {

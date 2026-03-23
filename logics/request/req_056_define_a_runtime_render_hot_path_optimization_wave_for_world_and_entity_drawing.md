@@ -1,8 +1,8 @@
 ## req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing - Define a runtime render hot-path optimization wave for world and entity drawing
 > From version: 0.3.2
-> Status: Draft
+> Status: Done
 > Understanding: 97%
-> Confidence: 92%
+> Confidence: 95%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -130,3 +130,10 @@ flowchart TD
 - `item_206_define_a_split_entity_render_layer_posture_for_stable_shapes_and_transient_combat_fx`
 - `item_207_define_a_stricter_default_player_path_for_runtime_diagnostics_and_overlap_work`
 - `item_208_define_a_before_after_runtime_profiling_matrix_for_render_hot_path_changes`
+
+# Outcome
+- The wave implemented a lower-risk world-render reuse posture by keeping chunk base visuals in local chunk space with stable retained draw callbacks instead of rebuilding equivalent tile geometry every steady-state frame.
+- Entity rendering now uses local coordinates inside positioned containers, keeps pickup visuals on a memoized stable path, and makes stable versus transient combat concerns explicit without expanding the display tree into a heavier multi-layer graph.
+- Default player runtime no longer pays `entitiesByChunk` and overlap-detection costs unless diagnostics are explicitly enabled.
+- Validation now compares the same scripted scenarios before and after render changes using the long-session harness, with the most important result being a strong memory improvement under `traversal-baseline` and `square-loop`.
+- A more aggressive off-screen chunk warm-cache experiment was evaluated and rejected during the wave because it regressed `eastbound-drift`; the accepted implementation keeps the simpler retained visible-chunk posture.

@@ -200,6 +200,7 @@ export function ActiveRuntimeShellContent({
     viewport
   });
   const entityWorld = useEntityWorld({
+    includeSpatialDiagnostics: diagnosticsVisible,
     includeSupportEntities: diagnosticsVisible,
     primaryEntityId: simulationState.entity.id,
     selectedWorldPoint: worldDiagnostics.selectedWorldPoint,

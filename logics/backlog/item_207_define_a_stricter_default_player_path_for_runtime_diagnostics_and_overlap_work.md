@@ -1,9 +1,9 @@
 ## item_207_define_a_stricter_default_player_path_for_runtime_diagnostics_and_overlap_work - Define a stricter default player path for runtime diagnostics and overlap work
 > From version: 0.3.2
-> Status: Draft
+> Status: Done
 > Understanding: 95%
-> Confidence: 94%
-> Progress: 0%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -52,7 +52,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`, `adr_028_budget_player_runtime_and_debug_visuals_as_separate_render_modes`
 - Request: `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`
-- Primary task(s): (none yet)
+- Primary task(s): `task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing`
 
 # References
 - `src/app/components/ActiveRuntimeShellContent.tsx`
@@ -67,3 +67,4 @@ flowchart LR
 # Notes
 - Derived from request `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`.
 - Source file: `logics/request/req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing.md`.
+- Implemented in `task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing` by gating `entitiesByChunk` and overlap detection behind explicit diagnostics intent in `src/game/entities/hooks/useEntityWorld.ts`.

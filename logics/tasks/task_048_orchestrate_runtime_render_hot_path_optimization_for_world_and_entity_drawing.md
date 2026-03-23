@@ -1,9 +1,9 @@
 ## task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing - Orchestrate runtime render hot-path optimization for world and entity drawing
 > From version: 0.3.2
-> Status: Draft
+> Status: Done
 > Understanding: 97%
-> Confidence: 93%
-> Progress: 0%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -29,14 +29,14 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Define and implement bounded chunk-visual reuse so player-runtime world rendering stops rebuilding static chunk base visuals tile by tile each frame.
-- [ ] 2. Define and implement a split entity render posture so stable geometry is cheaper than transient combat overlays and feedback.
-- [ ] 3. Tighten diagnostics and overlap-work gating so debug-only costs stay off the default player path unless explicitly requested.
-- [ ] 4. Run before/after profiling across `eastbound-drift`, `traversal-baseline`, and `square-loop`, and capture how FPS, frame pacing, and memory posture changed.
-- [ ] 5. Update linked request, backlog, ADR, and task docs as the wave lands so traceability stays synchronized with the implementation.
-- [ ] 6. Validate the completed wave through repository checks, runtime smoke verification, and profiling artifacts.
-- [ ] CHECKPOINT: leave each completed optimization slice commit-ready before moving to the next one.
-- [ ] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
+- [x] 1. Define and implement bounded chunk-visual reuse so player-runtime world rendering stops rebuilding static chunk base visuals tile by tile each frame.
+- [x] 2. Define and implement a split entity render posture so stable geometry is cheaper than transient combat overlays and feedback.
+- [x] 3. Tighten diagnostics and overlap-work gating so debug-only costs stay off the default player path unless explicitly requested.
+- [x] 4. Run before/after profiling across `eastbound-drift`, `traversal-baseline`, and `square-loop`, and capture how FPS, frame pacing, and memory posture changed.
+- [x] 5. Update linked request, backlog, ADR, and task docs as the wave lands so traceability stays synchronized with the implementation.
+- [x] 6. Validate the completed wave through repository checks, runtime smoke verification, and profiling artifacts.
+- [x] CHECKPOINT: leave each completed optimization slice commit-ready before moving to the next one.
+- [x] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
 
 # Delivery checkpoints
 - Land world/chunk reuse as a coherent slice with bounded lifecycle rules before mixing it with entity-visual changes.
@@ -75,12 +75,30 @@ flowchart TD
 - Manual runtime verification that combat/traversal readability remains acceptable after render simplification.
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Player-runtime world rendering reuses static chunk visuals through a bounded posture instead of steady-state tile-by-tile rebuild.
-- [ ] Entity rendering separates stable geometry from transient combat overlays or equivalent redraw domains.
-- [ ] Diagnostics and overlap-heavy work stay off the default player path unless explicitly enabled.
-- [ ] Before/after profiling evidence exists for `eastbound-drift`, `traversal-baseline`, and `square-loop`.
-- [ ] Validation commands are executed and results are captured in the task or linked artifacts.
-- [ ] Linked request, backlog, ADR, and task docs are updated during the wave and at closure.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Player-runtime world rendering reuses static chunk visuals through a bounded posture instead of steady-state tile-by-tile rebuild.
+- [x] Entity rendering separates stable geometry from transient combat overlays or equivalent redraw domains.
+- [x] Diagnostics and overlap-heavy work stay off the default player path unless explicitly enabled.
+- [x] Before/after profiling evidence exists for `eastbound-drift`, `traversal-baseline`, and `square-loop`.
+- [x] Validation commands are executed and results are captured in the task or linked artifacts.
+- [x] Linked request, backlog, ADR, and task docs are updated during the wave and at closure.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
+
+# Implementation notes
+- World rendering now keeps chunk base visuals in local chunk space with stable retained draw callbacks, which removes repeated steady-state tile geometry rebuild while a chunk remains mounted.
+- The first attempt at a broader off-screen `cacheAsTexture` warm cache was intentionally rolled back because it degraded the long linear `eastbound-drift` profile.
+- Entity rendering now uses local coordinates inside positioned containers, keeps pickup visuals on a memoized stable path, and avoids the heavier multi-node entity graph that also regressed profiling.
+- `useEntityWorld` now skips overlap detection and chunk indexing on the default player path and only enables those diagnostics computations when explicitly requested.
+
+# Report
+- `traversal-baseline` preserved FPS around `120` while reducing post-30s heap from a `56.67-234.74 MB` band ending at `190.33 MB` to a `20.25-66.57 MB` band ending at `42.01 MB`.
+- `square-loop` preserved FPS around `120` while reducing post-30s heap from a `60.11-253.67 MB` band ending at `172.96 MB` to a `21.93-77.79 MB` band ending at `61.6 MB`.
+- `eastbound-drift` remained below the historical baseline after the wave, so the task explicitly rejected the more aggressive off-screen chunk-cache posture instead of hiding the regression.
+- Validation passed with:
+- `npm run ci`
+- `npm run test:browser:smoke`
+- `node scripts/testing/runLongSessionProfile.mjs --scenario eastbound-drift --duration 2m`
+- `node scripts/testing/runLongSessionProfile.mjs --scenario traversal-baseline --duration 2m`
+- `node scripts/testing/runLongSessionProfile.mjs --scenario square-loop --duration 2m`
+- `python3 logics/skills/logics-doc-linter/scripts/logics_lint.py`

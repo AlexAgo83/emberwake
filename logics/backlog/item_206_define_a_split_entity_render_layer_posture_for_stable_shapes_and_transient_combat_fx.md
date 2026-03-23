@@ -1,9 +1,9 @@
 ## item_206_define_a_split_entity_render_layer_posture_for_stable_shapes_and_transient_combat_fx - Define a split entity render-layer posture for stable shapes and transient combat FX
 > From version: 0.3.2
-> Status: Draft
+> Status: Done
 > Understanding: 96%
-> Confidence: 90%
-> Progress: 0%
+> Confidence: 93%
+> Progress: 100%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -52,7 +52,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer`, `adr_028_budget_player_runtime_and_debug_visuals_as_separate_render_modes`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_038_split_entity_player_rendering_into_stable_geometry_and_transient_combat_overlays`
 - Request: `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`
-- Primary task(s): (none yet)
+- Primary task(s): `task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing`
 
 # References
 - `src/game/entities/render/EntityScene.tsx`
@@ -67,3 +67,4 @@ flowchart LR
 # Notes
 - Derived from request `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`.
 - Source file: `logics/request/req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing.md`.
+- Implemented in `task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing` through the `EntityScene` rewrite that moved entity drawing into local coordinates, memoized pickup visuals, and made stable/transient concerns explicit without bloating the display tree.

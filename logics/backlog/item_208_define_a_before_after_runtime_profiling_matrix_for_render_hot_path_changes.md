@@ -1,9 +1,9 @@
 ## item_208_define_a_before_after_runtime_profiling_matrix_for_render_hot_path_changes - Define a before/after runtime profiling matrix for render hot-path changes
 > From version: 0.3.2
-> Status: Draft
+> Status: Done
 > Understanding: 97%
-> Confidence: 95%
-> Progress: 0%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -52,7 +52,7 @@ flowchart LR
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`
 - Architecture decision(s): `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`
 - Request: `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`
-- Primary task(s): (none yet)
+- Primary task(s): `task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing`
 
 # References
 - `scripts/testing/runLongSessionProfile.mjs`
@@ -67,3 +67,4 @@ flowchart LR
 # Notes
 - Derived from request `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`.
 - Source file: `logics/request/req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing.md`.
+- Implemented in `task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing` through the before/after profiling runs captured under `output/playwright/long-session/` for `eastbound-drift`, `traversal-baseline`, and `square-loop`.
