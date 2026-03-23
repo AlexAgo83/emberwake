@@ -177,7 +177,7 @@ describe("AppMetaScenePanel", () => {
     expect(props.onResumeRuntime).toHaveBeenCalledTimes(1);
   });
 
-  it("renders settings as a compact desktop-controls surface", () => {
+  it("renders settings as a compact desktop-controls surface", async () => {
     const props = createProps({
       canResumeSession: true,
       scene: "settings"
@@ -190,7 +190,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.queryByText("Session")).not.toBeInTheDocument();
     expect(screen.queryByText("Fullscreen")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Resume runtime/i })).not.toBeInTheDocument();
-    expect(screen.getByLabelText(/Desktop controls/i)).toBeInTheDocument();
+    expect(await screen.findByLabelText(/Desktop controls/i)).toBeInTheDocument();
   });
 
   it("hides desktop control calibration from the mobile settings surface", () => {
