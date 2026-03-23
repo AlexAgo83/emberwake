@@ -64,7 +64,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.queryByText("Ownership")).not.toBeInTheDocument();
     expect(loadGameIndex).toBeGreaterThan(-1);
     expect(newGameIndex).toBeGreaterThan(loadGameIndex);
-    expect(screen.getByRole("link", { name: /Emberwake v0\.4\.0/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Emberwake v0\.5\.0/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /Settings/i }));
     expect(props.onOpenSettings).toHaveBeenCalledTimes(1);
@@ -135,7 +135,7 @@ describe("AppMetaScenePanel", () => {
     expect(props.onReturnToMainMenu).toHaveBeenCalledTimes(1);
   });
 
-  it("renders the changelog reader scene and routes back to the main menu", () => {
+  it("renders the changelog reader scene and routes back to the main menu", async () => {
     const props = createProps({
       scene: "changelogs"
     });
@@ -143,7 +143,7 @@ describe("AppMetaScenePanel", () => {
     render(<AppMetaScenePanel {...props} />);
 
     expect(screen.getByLabelText("Changelogs")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "0.4.0" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "0.5.0" })).toBeInTheDocument();
     expect(screen.getAllByRole("heading", { name: /Highlights/i }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole("heading", { name: /Technical Notes/i }).length).toBeGreaterThan(0);
     expect(screen.queryByText(/without leaving the shell/i)).not.toBeInTheDocument();
@@ -190,7 +190,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.queryByText("Session")).not.toBeInTheDocument();
     expect(screen.queryByText("Fullscreen")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Resume runtime/i })).not.toBeInTheDocument();
-    expect(screen.getByText(/Loading desktop control bindings/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Desktop controls/i)).toBeInTheDocument();
   });
 
   it("hides desktop control calibration from the mobile settings surface", () => {

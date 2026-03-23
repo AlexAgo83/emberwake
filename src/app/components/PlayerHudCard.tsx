@@ -33,21 +33,20 @@ type PlayerHudCardProps = {
   };
 };
 
-export function PlayerHudCard({
-  buildActives = [],
-  buildPassives = [],
-  currentLevel,
-  currentXp,
-  fps,
-  goldCollected,
-  isMobile,
-  nextLevelXpRequired,
-  phaseLabel,
-  playerHealth,
-  playerHealthMax,
-  playerName,
-  playerPosition
-}: PlayerHudCardProps) {
+export function PlayerHudCard(props: PlayerHudCardProps) {
+  const {
+    buildActives = [],
+    buildPassives = [],
+    currentLevel,
+    currentXp,
+    fps,
+    goldCollected,
+    nextLevelXpRequired,
+    playerHealth,
+    playerHealthMax,
+    playerName,
+    playerPosition
+  } = props;
   const roundedLevel = Math.max(1, Math.round(currentLevel));
   const roundedHealth = Math.max(0, Math.round(playerHealth));
   const roundedHealthMax = Math.max(1, Math.round(playerHealthMax));

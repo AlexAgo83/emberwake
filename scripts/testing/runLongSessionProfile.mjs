@@ -188,7 +188,9 @@ const captureHeapSnapshot = async ({ cdpSession, fileUrl, label, page }) => {
 
   try {
     await cdpSession.send("HeapProfiler.collectGarbage");
-  } catch {}
+  } catch {
+    // Best-effort garbage collection before snapshotting.
+  }
 
   const outputStream = createWriteStream(fileUrl);
   const handleChunk = ({ chunk }) => {

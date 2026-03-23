@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { lazy, memo, Suspense } from "react";
 
 import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
-import { releaseChangelogEntries } from "../model/releaseChangelogs";
+import { loadReleaseChangelogEntries } from "../model/releaseChangelogs";
+import type { ReleaseChangelogEntry } from "../model/releaseChangelogs";
 import { characterNameMaxLength, defaultCharacterName } from "../model/characterName";
 import { renderChangelogMarkdown } from "../model/changelogMarkdown";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
@@ -112,6 +113,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   scene
 }: AppMetaScenePanelProps) {
   const [defeatView, setDefeatView] = useState<"recap" | "skills">("recap");
+  const [releaseChangelogEntries, setReleaseChangelogEntries] = useState<ReleaseChangelogEntry[] | null>(null);
   const isShellOwnedScene =
     scene === "main-menu" ||
     scene === "new-game" ||
@@ -238,6 +240,26 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
 
   useEffect(() => {
     setDefeatView("recap");
+  }, [scene]);
+
+  useEffect(() => {
+    if (scene !== "changelogs") {
+      return;
+    }
+
+    let isCancelled = false;
+
+    void loadReleaseChangelogEntries().then((entries) => {
+      if (isCancelled) {
+        return;
+      }
+
+      setReleaseChangelogEntries(entries);
+    });
+
+    return () => {
+      isCancelled = true;
+    };
   }, [scene]);
 
   useEffect(() => {
@@ -407,7 +429,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             {scene === "changelogs" ? (
               <>
                 <div className="app-meta-scene__changelog-list">
-                  {releaseChangelogEntries.map((entry) => {
+                  {(releaseChangelogEntries ?? []).map((entry) => {
                     return (
                       <article className="app-meta-scene__changelog-card" key={entry.slug}>
                         <div className="app-meta-scene__changelog-card-header">
@@ -420,6 +442,9 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                       </article>
                     );
                   })}
+                  {releaseChangelogEntries === null ? (
+                    <p className="settings-controls__status">Loading release notes…</p>
+                  ) : null}
                 </div>
                 <div className="app-meta-scene__actions">
                   <button

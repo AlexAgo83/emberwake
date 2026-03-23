@@ -1,14 +1,13 @@
-type ReleaseChangelogEntry = {
+export type ReleaseChangelogEntry = {
   content: string;
   slug: string;
   version: string;
 };
 
 const rawChangelogModules = import.meta.glob("../../../changelogs/CHANGELOGS_*.md", {
-  eager: true,
   import: "default",
   query: "?raw"
-}) as Record<string, string>;
+}) as Record<string, () => Promise<string>>;
 
 const parseVersionTuple = (version: string) => version.split(".").map((segment) => Number(segment) || 0);
 
@@ -28,15 +27,20 @@ const compareVersionsDescending = (left: string, right: string) => {
   return 0;
 };
 
-export const releaseChangelogEntries: ReleaseChangelogEntry[] = Object.entries(rawChangelogModules)
-  .map(([modulePath, content]) => {
-    const slug = modulePath.split("/").at(-1)?.replace(".md", "") ?? "CHANGELOGS_0_0_0";
-    const version = slug.replace("CHANGELOGS_", "").split("_").join(".");
+export const loadReleaseChangelogEntries = async (): Promise<ReleaseChangelogEntry[]> => {
+  const resolvedEntries = await Promise.all(
+    Object.entries(rawChangelogModules).map(async ([modulePath, loadContent]) => {
+      const slug = modulePath.split("/").at(-1)?.replace(".md", "") ?? "CHANGELOGS_0_0_0";
+      const version = slug.replace("CHANGELOGS_", "").split("_").join(".");
+      const content = await loadContent();
 
-    return {
-      content: content.trim(),
-      slug,
-      version
-    };
-  })
-  .sort((left, right) => compareVersionsDescending(left.version, right.version));
+      return {
+        content: content.trim(),
+        slug,
+        version
+      };
+    })
+  );
+
+  return resolvedEntries.sort((left, right) => compareVersionsDescending(left.version, right.version));
+};

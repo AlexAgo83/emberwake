@@ -48,12 +48,6 @@ export function useMobileVirtualStick({
     let activePointerId: number | null = null;
     let anchor: VirtualStickPoint | null = null;
 
-    const resetStick = () => {
-      activePointerId = null;
-      anchor = null;
-      setStickState(hiddenStickState);
-    };
-
     const handlePointerDown = (event: PointerEvent) => {
       if (event.pointerType !== "touch" || activePointerId !== null) {
         return;
