@@ -75,6 +75,7 @@ html[data-app-display-mode="browser"] .app-shell {
   left: 50%;
   z-index: 4;
   width: min(34rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  max-height: calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom));
   padding: 0;
   border: 1px solid var(--emberwake-border);
   border-radius: 1.1rem;
@@ -114,6 +115,7 @@ html[data-app-display-mode="browser"] .app-shell {
   z-index: 1;
   display: grid;
   gap: 1rem;
+  min-height: 0;
   padding: 1.15rem;
 }
 
@@ -139,6 +141,29 @@ html[data-app-display-mode="browser"] .app-shell {
   height: 100%;
   grid-template-rows: auto minmax(0, 1fr) auto;
   min-height: 0;
+}
+
+.app-meta-scene[data-scene="grimoire"],
+.app-meta-scene[data-scene="bestiary"] {
+  width: min(46rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  height: min(44rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 2rem));
+  overflow: hidden;
+}
+
+.app-meta-scene[data-scene="grimoire"] .app-meta-scene__frame,
+.app-meta-scene[data-scene="bestiary"] .app-meta-scene__frame {
+  height: 100%;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.app-meta-scene[data-scene="defeat"] {
+  height: min(42rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 2rem));
+  overflow: hidden;
+}
+
+.app-meta-scene[data-scene="defeat"] .app-meta-scene__frame {
+  height: 100%;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
 }
 
 .app-meta-scene[data-scene="main-menu"] {
@@ -243,6 +268,15 @@ html[data-app-display-mode="browser"] .app-shell {
 
 .app-meta-scene__scene-body--settings {
   display: grid;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 0.2rem;
+  scrollbar-gutter: stable;
+}
+
+.app-meta-scene__scene-body--scroll {
+  display: grid;
+  gap: 0.9rem;
   min-height: 0;
   overflow: auto;
   padding-right: 0.2rem;
@@ -464,9 +498,6 @@ html[data-app-display-mode="browser"] .app-shell {
   display: grid;
   gap: 0.8rem;
   min-height: 0;
-  overflow: auto;
-  padding-right: 0.2rem;
-  scrollbar-gutter: stable;
 }
 
 .app-meta-scene__codex-section {

@@ -1,9 +1,12 @@
 .runtime-build-choice {
   position: absolute;
-  top: 50%;
+  top: var(--shell-offset-top);
   left: 50%;
   z-index: 5;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   width: min(54rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  max-height: calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom));
   padding: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1rem;
@@ -11,8 +14,9 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent),
     rgba(8, 12, 16, 0.96);
   box-shadow: var(--emberwake-shadow);
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   pointer-events: auto;
+  overflow: hidden;
 }
 
 .runtime-build-choice__header {
@@ -75,7 +79,12 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.8rem;
+  min-height: 0;
+  overflow: auto;
   padding-top: 0.95rem;
+  padding-right: 0.2rem;
+  align-content: start;
+  scrollbar-gutter: stable;
 }
 
 .runtime-build-choice__card {

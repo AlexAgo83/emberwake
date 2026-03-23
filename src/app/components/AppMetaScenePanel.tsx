@@ -447,12 +447,14 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               </>
             ) : scene === "grimoire" ? (
               <>
-                <Suspense fallback={<p className="settings-controls__status">Loading codex archive…</p>}>
-                  <LazyCodexArchiveScene
-                    progressionSnapshot={progressionSnapshot}
-                    scene="grimoire"
-                  />
-                </Suspense>
+                <div className="app-meta-scene__scene-body app-meta-scene__scene-body--scroll">
+                  <Suspense fallback={<p className="settings-controls__status">Loading codex archive…</p>}>
+                    <LazyCodexArchiveScene
+                      progressionSnapshot={progressionSnapshot}
+                      scene="grimoire"
+                    />
+                  </Suspense>
+                </div>
                 <div className="app-meta-scene__actions">
                   <button
                     className="shell-control shell-control--button"
@@ -465,12 +467,14 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               </>
             ) : scene === "bestiary" ? (
               <>
-                <Suspense fallback={<p className="settings-controls__status">Loading codex archive…</p>}>
-                  <LazyCodexArchiveScene
-                    progressionSnapshot={progressionSnapshot}
-                    scene="bestiary"
-                  />
-                </Suspense>
+                <div className="app-meta-scene__scene-body app-meta-scene__scene-body--scroll">
+                  <Suspense fallback={<p className="settings-controls__status">Loading codex archive…</p>}>
+                    <LazyCodexArchiveScene
+                      progressionSnapshot={progressionSnapshot}
+                      scene="bestiary"
+                    />
+                  </Suspense>
+                </div>
                 <div className="app-meta-scene__actions">
                   <button
                     className="shell-control shell-control--button"
@@ -583,53 +587,55 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                     Skill ranking
                   </button>
                 </div>
-                {defeatView === "recap" ? (
-                  <dl className="app-meta-scene__facts">
-                    <div>
-                      <dt>Session</dt>
-                      <dd>{gameOverRecap?.playerName || playerName || defaultCharacterName}</dd>
+                <div className="app-meta-scene__scene-body app-meta-scene__scene-body--scroll">
+                  {defeatView === "recap" ? (
+                    <dl className="app-meta-scene__facts">
+                      <div>
+                        <dt>Session</dt>
+                        <dd>{gameOverRecap?.playerName || playerName || defaultCharacterName}</dd>
+                      </div>
+                      <div>
+                        <dt>Survived</dt>
+                        <dd>{formatRunDuration(gameOverRecap?.ticksSurvived ?? 0)}</dd>
+                      </div>
+                      <div>
+                        <dt>Traversal</dt>
+                        <dd>{Math.round(gameOverRecap?.traversalDistanceWorldUnits ?? 0)} wu</dd>
+                      </div>
+                      <div>
+                        <dt>Hostile defeats</dt>
+                        <dd>{gameOverRecap?.hostileDefeats ?? 0}</dd>
+                      </div>
+                      <div>
+                        <dt>Gold</dt>
+                        <dd>{gameOverRecap?.goldCollected ?? 0}</dd>
+                      </div>
+                      <div>
+                        <dt>Final phase</dt>
+                        <dd>{gameOverRecap?.runPhaseLabel ?? progressionSnapshot?.phaseLabel ?? "Ember Watch"}</dd>
+                      </div>
+                    </dl>
+                  ) : (
+                    <div className="app-meta-scene__skill-ranking">
+                      {skillPerformanceSummaries.length > 0 ? (
+                        skillPerformanceSummaries.map((summary, summaryIndex) => (
+                          <article className="app-meta-scene__skill-row" key={summary.weaponId}>
+                            <div className="app-meta-scene__skill-rank">{summaryIndex + 1}</div>
+                            <div className="app-meta-scene__skill-copy">
+                              <h3>{summary.label}</h3>
+                              <p>
+                                {summary.totalDamage} total damage · {summary.attacksTriggered} casts ·{" "}
+                                {summary.hostileDefeats} defeats
+                              </p>
+                            </div>
+                          </article>
+                        ))
+                      ) : (
+                        <p className="app-meta-scene__lead">No reliable skill performance sample was captured for this run.</p>
+                      )}
                     </div>
-                    <div>
-                      <dt>Survived</dt>
-                      <dd>{formatRunDuration(gameOverRecap?.ticksSurvived ?? 0)}</dd>
-                    </div>
-                    <div>
-                      <dt>Traversal</dt>
-                      <dd>{Math.round(gameOverRecap?.traversalDistanceWorldUnits ?? 0)} wu</dd>
-                    </div>
-                    <div>
-                      <dt>Hostile defeats</dt>
-                      <dd>{gameOverRecap?.hostileDefeats ?? 0}</dd>
-                    </div>
-                    <div>
-                      <dt>Gold</dt>
-                      <dd>{gameOverRecap?.goldCollected ?? 0}</dd>
-                    </div>
-                    <div>
-                      <dt>Final phase</dt>
-                      <dd>{gameOverRecap?.runPhaseLabel ?? progressionSnapshot?.phaseLabel ?? "Ember Watch"}</dd>
-                    </div>
-                  </dl>
-                ) : (
-                  <div className="app-meta-scene__skill-ranking">
-                    {skillPerformanceSummaries.length > 0 ? (
-                      skillPerformanceSummaries.map((summary, summaryIndex) => (
-                        <article className="app-meta-scene__skill-row" key={summary.weaponId}>
-                          <div className="app-meta-scene__skill-rank">{summaryIndex + 1}</div>
-                          <div className="app-meta-scene__skill-copy">
-                            <h3>{summary.label}</h3>
-                            <p>
-                              {summary.totalDamage} total damage · {summary.attacksTriggered} casts ·{" "}
-                              {summary.hostileDefeats} defeats
-                            </p>
-                          </div>
-                        </article>
-                      ))
-                    ) : (
-                      <p className="app-meta-scene__lead">No reliable skill performance sample was captured for this run.</p>
-                    )}
-                  </div>
-                )}
+                  )}
+                </div>
                 <div className="app-meta-scene__actions">
                   <button
                     className="shell-control shell-control--button"
