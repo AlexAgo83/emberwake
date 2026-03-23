@@ -1,8 +1,8 @@
 ## req_069_define_a_smoother_early_game_and_stronger_time_scaled_enemy_pressure_wave - Define a smoother early game and stronger time-scaled enemy pressure wave
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 96%
-> Confidence: 96%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.

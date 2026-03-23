@@ -1,9 +1,9 @@
 ## item_259_define_authored_mini_boss_beats_for_every_five_minutes_of_survival - Define authored mini-boss beats for every five minutes of survival
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

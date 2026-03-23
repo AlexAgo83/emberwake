@@ -1,8 +1,8 @@
 ## req_070_define_a_techno_shinobi_iconography_wave_for_active_passive_and_fusion_skills - Define a techno-shinobi iconography wave for active, passive, and fusion skills
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 95%
-> Confidence: 96%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.

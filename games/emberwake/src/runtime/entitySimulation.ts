@@ -54,6 +54,13 @@ import {
   resolveRunProgressionPhase,
   type RunProgressionPhaseId
 } from "@game/runtime/runProgressionPhases";
+import {
+  getHostileSpawnProfile,
+  isMiniBossBeatTick,
+  resolveHostileSpawnProfile,
+  type HostileProfileId
+} from "@game/runtime/hostilePressure";
+import { gameplayTuning } from "@game/config/gameplayTuning";
 
 export const entitySimulationContract = {
   fixedStepMs: 1000 / 60,
@@ -173,12 +180,15 @@ export type SimulatedEntity = WorldEntity & {
   contactDamageProfile?: ContactDamageProfile;
   damageReactionState?: DamageReactionState;
   focusState?: FocusState;
+  hostileProfileId?: HostileProfileId;
   movementSurfaceModifier: MovementSurfaceModifierKind;
+  movementSpeedWorldUnitsPerSecond?: number;
   movementHeadingMemory?: MovementHeadingMemory;
   pathfindingState?: HostilePathfindingState;
   pickupProfile?: PickupProfile;
   role: SimulatedEntityRole;
   spawnedAtTick: number;
+  turnRateRadiansPerSecond?: number;
   velocity: WorldPoint;
 };
 
@@ -320,8 +330,10 @@ const createPlayerEntity = (buildState = createInitialBuildState()): SimulatedEn
   combat: createCombatState(hostileCombatContract.player.maxHealth),
   damageReactionState: createDamageReactionState(),
   movementSurfaceModifier: "normal",
+  movementSpeedWorldUnitsPerSecond: undefined,
   role: "player",
   spawnedAtTick: 0,
+  turnRateRadiansPerSecond: gameplayTuning.playerTurning.turnRateRadiansPerSecond,
   velocity: {
     x: 0,
     y: 0
@@ -333,55 +345,74 @@ const createHostileEntity = (
   worldPosition: WorldPoint,
   spawnedAtTick: number,
   phaseId: RunProgressionPhaseId
-): SimulatedEntity => ({
-  ...createGenericMoverEntity({
-    archetype: "generic-mover",
-    id: `entity:hostile:${hostileSequence}`,
-    visual: {
-      kind: "debug-sentinel",
-      tint: "#ff6d78"
-    },
-    worldPosition
-  }),
-  combat: createCombatState(
-    Math.max(
-      1,
-      Math.round(
-        hostileCombatContract.hostile.maxHealth *
-          resolveRunProgressionPhase(spawnedAtTick).hostileMaxHealthMultiplier
-      )
-    )
-  ),
-  contactDamageProfile: {
-    cooldownTicks: hostileCombatContract.hostile.contactDamageCooldownTicks,
-    damage: Math.max(
-      1,
-      Math.round(
-        hostileCombatContract.hostile.contactDamage *
-          resolveRunProgressionPhase(spawnedAtTick).hostileContactDamageMultiplier
+): SimulatedEntity => {
+  const runPhase = resolveRunProgressionPhase(spawnedAtTick);
+  const hostileProfile = resolveHostileSpawnProfile({
+    hostileSequence,
+    phaseId,
+    spawnedAtTick
+  });
+
+  return {
+    ...createGenericMoverEntity({
+      archetype: "generic-mover",
+      footprint: {
+        radius: hostileProfile.footprintRadius
+      },
+      id: `entity:hostile:${hostileSequence}`,
+      renderLayer: hostileProfile.renderLayer,
+      visual: {
+        kind: hostileProfile.visualKind,
+        tint: hostileProfile.tint
+      },
+      worldPosition
+    }),
+    combat: createCombatState(
+      Math.max(
+        1,
+        Math.round(
+          hostileCombatContract.hostile.maxHealth *
+            runPhase.hostileMaxHealthMultiplier *
+            hostileProfile.maxHealthMultiplier
+        )
       )
     ),
-    lastDamageTick: null
-  },
-  focusState: {
-    acquisitionRadiusWorldUnits: hostileCombatContract.hostile.acquisitionRadiusWorldUnits,
-    targetEntityId: null
-  },
-  damageReactionState: createDamageReactionState(),
-  movementSurfaceModifier: "normal",
-  pathfindingState: {
-    lastComputedTick: null,
-    routeTiles: [],
-    targetTile: null
-  },
-  role: "hostile",
-  spawnedAtTick,
-  state: phaseId === "kill-grid" ? "moving" : "idle",
-  velocity: {
-    x: 0,
-    y: 0
-  }
-});
+    contactDamageProfile: {
+      cooldownTicks: hostileCombatContract.hostile.contactDamageCooldownTicks,
+      damage: Math.max(
+        1,
+        Math.round(
+          hostileCombatContract.hostile.contactDamage *
+            runPhase.hostileContactDamageMultiplier *
+            hostileProfile.contactDamageMultiplier
+        )
+      ),
+      lastDamageTick: null
+    },
+    focusState: {
+      acquisitionRadiusWorldUnits: hostileCombatContract.hostile.acquisitionRadiusWorldUnits,
+      targetEntityId: null
+    },
+    damageReactionState: createDamageReactionState(),
+    hostileProfileId: hostileProfile.id,
+    movementSurfaceModifier: "normal",
+    movementSpeedWorldUnitsPerSecond:
+      hostileCombatContract.hostile.moveSpeedWorldUnitsPerSecond *
+      hostileProfile.moveSpeedMultiplier,
+    pathfindingState: {
+      lastComputedTick: null,
+      routeTiles: [],
+      targetTile: null
+    },
+    role: "hostile",
+    spawnedAtTick,
+    state: phaseId === "kill-grid" || hostileProfile.isMiniBoss ? "moving" : "idle",
+    velocity: {
+      x: 0,
+      y: 0
+    }
+  } satisfies SimulatedEntity;
+};
 
 const createPickupEntity = (
   pickupSequence: number,
@@ -440,6 +471,36 @@ const distanceBetweenWorldPoints = (left: WorldPoint, right: WorldPoint) =>
   Math.hypot(left.x - right.x, left.y - right.y);
 
 const movementVectorMagnitude = (vector: WorldPoint) => Math.hypot(vector.x, vector.y);
+
+const normalizeAngleDelta = (angleDelta: number) => {
+  if (angleDelta > Math.PI) {
+    return angleDelta - Math.PI * 2;
+  }
+
+  if (angleDelta < -Math.PI) {
+    return angleDelta + Math.PI * 2;
+  }
+
+  return angleDelta;
+};
+
+const resolveBoundedOrientation = ({
+  currentOrientation,
+  maximumStepRadians,
+  targetOrientation
+}: {
+  currentOrientation: number;
+  maximumStepRadians: number;
+  targetOrientation: number;
+}) => {
+  const angleDelta = normalizeAngleDelta(targetOrientation - currentOrientation);
+
+  if (Math.abs(angleDelta) <= maximumStepRadians) {
+    return targetOrientation;
+  }
+
+  return currentOrientation + Math.sign(angleDelta) * maximumStepRadians;
+};
 
 const playerDirectionalInertiaProfile = {
   minimumSpeedWorldUnitsPerSecond: 18,
@@ -534,9 +595,12 @@ const normalizeSimulatedEntity = (
       combat: normalizeCombatState(entity.combat, hostileCombatContract.player.maxHealth),
       damageReactionState: normalizeDamageReactionState(entity.damageReactionState),
       movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
+      movementSpeedWorldUnitsPerSecond: entity.movementSpeedWorldUnitsPerSecond,
       movementHeadingMemory: entity.movementHeadingMemory,
       role,
       spawnedAtTick: entity.spawnedAtTick ?? 0,
+      turnRateRadiansPerSecond:
+        entity.turnRateRadiansPerSecond ?? gameplayTuning.playerTurning.turnRateRadiansPerSecond,
       velocity: entity.velocity ?? { x: 0, y: 0 }
     };
   }
@@ -560,7 +624,12 @@ const normalizeSimulatedEntity = (
         targetEntityId: entity.focusState?.targetEntityId ?? null
       },
       damageReactionState: normalizeDamageReactionState(entity.damageReactionState),
+      hostileProfileId:
+        entity.hostileProfileId ?? getHostileSpawnProfile("sentinel-husk").id,
       movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
+      movementSpeedWorldUnitsPerSecond:
+        entity.movementSpeedWorldUnitsPerSecond ??
+        hostileCombatContract.hostile.moveSpeedWorldUnitsPerSecond,
       pathfindingState: {
         lastComputedTick: entity.pathfindingState?.lastComputedTick ?? null,
         routeTiles: entity.pathfindingState?.routeTiles ?? [],
@@ -594,6 +663,7 @@ const normalizeSimulatedEntity = (
       },
       role,
       spawnedAtTick: entity.spawnedAtTick ?? 0,
+      turnRateRadiansPerSecond: entity.turnRateRadiansPerSecond,
       velocity: entity.velocity ?? { x: 0, y: 0 }
     };
   }
@@ -603,8 +673,10 @@ const normalizeSimulatedEntity = (
     combat: normalizeCombatState(entity.combat, 1),
     damageReactionState: normalizeDamageReactionState(entity.damageReactionState),
     movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
+    movementSpeedWorldUnitsPerSecond: entity.movementSpeedWorldUnitsPerSecond,
     role,
     spawnedAtTick: entity.spawnedAtTick ?? 0,
+    turnRateRadiansPerSecond: entity.turnRateRadiansPerSecond,
     velocity: entity.velocity ?? { x: 0, y: 0 }
   };
 };
@@ -790,11 +862,23 @@ const resolveEntityMovement = ({
     stepSeconds,
     surfaceModifierKind: surfaceSample.modifierKind
   });
-  const orientation =
-    resolvedMovement.velocity.x === 0 && resolvedMovement.velocity.y === 0
-      ? entity.orientation
-      : Math.atan2(resolvedMovement.velocity.y, resolvedMovement.velocity.x);
   const movementSpeed = movementVectorMagnitude(resolvedMovement.velocity);
+  const targetOrientation =
+    movementSpeed >= gameplayTuning.playerTurning.meaningfulVelocityWorldUnitsPerSecond
+      ? Math.atan2(resolvedMovement.velocity.y, resolvedMovement.velocity.x)
+      : entity.movementHeadingMemory &&
+          tick - entity.movementHeadingMemory.lastMeaningfulTick <=
+            entityCombatPresentationContract.spawnHeadingMemoryTicks
+        ? entity.movementHeadingMemory.headingRadians
+        : entity.orientation;
+  const orientation =
+    entity.turnRateRadiansPerSecond && targetOrientation !== entity.orientation
+      ? resolveBoundedOrientation({
+          currentOrientation: entity.orientation,
+          maximumStepRadians: entity.turnRateRadiansPerSecond * stepSeconds,
+          targetOrientation
+        })
+      : targetOrientation;
 
   return {
     ...entity,
@@ -807,7 +891,7 @@ const resolveEntityMovement = ({
     movementHeadingMemory:
       entity.role === "player" && movementSpeed > 0
         ? {
-            headingRadians: orientation,
+            headingRadians: targetOrientation,
             lastMeaningfulTick: tick
           }
         : entity.movementHeadingMemory,
@@ -907,18 +991,23 @@ export const advanceSimulationState = (
         activeRunProgressionPhase.id
       ),
     entities: pickupMaintainedState.entities,
-    localPopulationCap:
-      hostileCombatContract.hostile.localPopulationCap +
-      activeRunProgressionPhase.localPopulationCapBonus,
+    localPopulationCap: isMiniBossBeatTick(nextTick)
+      ? pickupMaintainedState.entities.filter(
+          (entity) => entity.role === "hostile" && isAlive(entity)
+        ).length + 1
+      : hostileCombatContract.hostile.localPopulationCap +
+        activeRunProgressionPhase.localPopulationCapBonus,
     nextHostileSequence: simulationState.nextHostileSequence,
     spawnMode: profiling.spawnMode,
-    spawnCooldownTicks: Math.max(
-      1,
-      Math.round(
-        hostileCombatContract.hostile.spawnCooldownTicks *
-          activeRunProgressionPhase.spawnCooldownMultiplier
-      )
-    ),
+    spawnCooldownTicks: isMiniBossBeatTick(nextTick)
+      ? 1
+      : Math.max(
+          1,
+          Math.round(
+            hostileCombatContract.hostile.spawnCooldownTicks *
+              activeRunProgressionPhase.spawnCooldownMultiplier
+          )
+        ),
     spawnHeadingMemoryTicks: entityCombatPresentationContract.spawnHeadingMemoryTicks,
     tick: nextTick,
     worldSeed
@@ -966,8 +1055,11 @@ export const advanceSimulationState = (
         attackResolvedState.buildState,
         hostileDefeatCountAfterUpdate
       );
+      const miniBossCacheDropCount = defeatedHostiles.filter(
+        (entity) => entity.hostileProfileId === "watchglass-prime"
+      ).length;
 
-      if (defeatedHostiles.length === 0 && chestDropCount === 0) {
+      if (defeatedHostiles.length === 0 && chestDropCount === 0 && miniBossCacheDropCount === 0) {
         return combatResolvedState.entities;
       }
 
@@ -984,9 +1076,9 @@ export const advanceSimulationState = (
         )
       );
       const droppedCacheEntities =
-        chestDropCount === 0
+        chestDropCount === 0 && miniBossCacheDropCount === 0
           ? []
-          : Array.from({ length: chestDropCount }, (_, cacheIndex) =>
+          : Array.from({ length: chestDropCount + miniBossCacheDropCount }, (_, cacheIndex) =>
               createPickupEntity(
                 pickupMaintainedState.nextPickupSequence +
                   defeatedHostiles.length * pickupContract.crystal.enemyDropCount +
@@ -1079,6 +1171,7 @@ export const advanceSimulationState = (
     nextPickupSequence:
       pickupMaintainedState.nextPickupSequence +
       defeatedHostileCount * pickupContract.crystal.enemyDropCount +
+      defeatedHostiles.filter((entity) => entity.hostileProfileId === "watchglass-prime").length +
       resolveChestDropCount(
         choiceAppliedBuildState,
         simulationState.runStats.hostileDefeats + defeatedHostileCount

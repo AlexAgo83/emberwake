@@ -1,9 +1,9 @@
 ## item_266_define_a_simulation_owned_turn_rate_contract_for_player_entity_facing - Define a simulation-owned turn-rate contract for player entity facing
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

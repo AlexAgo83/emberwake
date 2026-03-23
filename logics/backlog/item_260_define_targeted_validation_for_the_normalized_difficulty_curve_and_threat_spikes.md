@@ -1,9 +1,9 @@
 ## item_260_define_targeted_validation_for_the_normalized_difficulty_curve_and_threat_spikes - Define targeted validation for the normalized difficulty curve and threat spikes
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

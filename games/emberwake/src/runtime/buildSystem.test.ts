@@ -25,7 +25,7 @@ describe("buildSystem", () => {
     ]);
     expect(buildState.passiveSlots).toEqual([]);
     expect(buildState.pendingLevelUps).toBe(0);
-    expect(buildState.nextChestDefeatMilestone).toBe(8);
+    expect(buildState.nextChestDefeatMilestone).toBe(7);
   });
 
   it("creates level-up choices when pending levels are added", () => {

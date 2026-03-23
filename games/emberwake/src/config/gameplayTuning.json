@@ -1,15 +1,15 @@
 {
   "hostile": {
     "acquisitionRadiusChunks": 1.8,
-    "contactDamage": 10,
+    "contactDamage": 9,
     "contactDamageCooldownTicks": 30,
     "despawnDistanceChunks": 3.5,
-    "localPopulationCap": 20,
-    "maxHealth": 40,
-    "moveSpeedWorldUnitsPerSecond": 168,
+    "localPopulationCap": 12,
+    "maxHealth": 34,
+    "moveSpeedWorldUnitsPerSecond": 160,
     "safeSpawnDistanceChunks": 0.9,
     "spawnAttemptCount": 8,
-    "spawnCooldownTicks": 36
+    "spawnCooldownTicks": 48
   },
   "hostileSpawn": {
     "distanceRatioMax": 1.5,
@@ -28,10 +28,10 @@
   "pickup": {
     "crystal": {
       "enemyDropCount": 1,
-      "xpValue": 25
+      "xpValue": 28
     },
     "gold": {
-      "value": 1
+      "value": 2
     },
     "healingKit": {
       "healRatio": 0.25,
@@ -46,6 +46,10 @@
       "spawnCooldownTicks": 24
     }
   },
+  "playerTurning": {
+    "meaningfulVelocityWorldUnitsPerSecond": 20,
+    "turnRateDegreesPerSecond": 600
+  },
   "player": {
     "automaticConeAttack": {
       "arcDegrees": 120,
@@ -57,7 +61,7 @@
     "maxHealth": 100
   },
   "progression": {
-    "baseLevelXpRequired": 100,
-    "levelXpStep": 50
+    "baseLevelXpRequired": 90,
+    "levelXpStep": 45
   }
 }

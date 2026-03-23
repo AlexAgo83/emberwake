@@ -2,6 +2,8 @@ import "./RuntimeBuildChoicePanel.css";
 
 import type { BuildChoice } from "@game";
 
+import { SkillIcon } from "./SkillIcon";
+
 type RuntimeBuildChoicePanelProps = {
   choices: BuildChoice[];
   isMobile: boolean;
@@ -54,15 +56,25 @@ export function RuntimeBuildChoicePanel({
             type="button"
           >
             <div className="runtime-build-choice__card-header">
-              <span className="runtime-build-choice__tag">
-                {choiceTypeLabels[choice.slotKind]}
-              </span>
+              <div className="runtime-build-choice__identity">
+                <SkillIcon
+                  category={choice.slotKind}
+                  id={choice.itemId}
+                  label={choice.label}
+                  size="md"
+                />
+                <div className="runtime-build-choice__identity-copy">
+                  <span className="runtime-build-choice__tag">
+                    {choiceTypeLabels[choice.slotKind]}
+                  </span>
+                  <strong className="runtime-build-choice__label">{choice.label}</strong>
+                </div>
+              </div>
               <span className="runtime-build-choice__tag runtime-build-choice__tag--state">
                 {selectionKindLabels[choice.selectionKind]}
               </span>
             </div>
             <div className="runtime-build-choice__copy">
-              <strong className="runtime-build-choice__label">{choice.label}</strong>
               <span className="runtime-build-choice__role">{choice.roleLine}</span>
               <span className="runtime-build-choice__level">
                 Lv {choice.currentLevel} {"->"} {choice.nextLevel}

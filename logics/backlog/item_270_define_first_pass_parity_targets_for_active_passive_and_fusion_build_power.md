@@ -1,9 +1,9 @@
 ## item_270_define_first_pass_parity_targets_for_active_passive_and_fusion_build_power - Define first-pass parity targets for active, passive, and fusion build power
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

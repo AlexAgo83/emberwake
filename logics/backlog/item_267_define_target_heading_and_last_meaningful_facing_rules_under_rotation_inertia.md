@@ -1,9 +1,9 @@
 ## item_267_define_target_heading_and_last_meaningful_facing_rules_under_rotation_inertia - Define target heading and last meaningful facing rules under rotation inertia
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

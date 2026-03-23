@@ -1,9 +1,9 @@
 ## item_262_define_the_first_active_skill_icon_set_for_the_playable_roster - Define the first active skill icon set for the playable roster
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

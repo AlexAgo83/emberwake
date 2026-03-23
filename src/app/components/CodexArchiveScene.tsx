@@ -6,6 +6,7 @@ import {
 } from "@game";
 
 import type { CodexProgressionSnapshot } from "./AppMetaScenePanel";
+import { SkillIcon } from "./SkillIcon";
 
 type CodexArchiveSceneProps = {
   progressionSnapshot: CodexProgressionSnapshot | null;
@@ -56,7 +57,16 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
                     key={weaponDefinition.id}
                   >
                     <div className="app-meta-scene__codex-icon" aria-hidden="true">
-                      {isKnown ? weaponDefinition.label.slice(0, 2).toUpperCase() : "??"}
+                      {isKnown ? (
+                        <SkillIcon
+                          category="active"
+                          id={weaponDefinition.id}
+                          label={weaponDefinition.label}
+                          size="md"
+                        />
+                      ) : (
+                        "??"
+                      )}
                     </div>
                     <div className="app-meta-scene__codex-copy">
                       <h3>{isKnown ? weaponDefinition.label : "Undiscovered technique"}</h3>
@@ -87,7 +97,16 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
                     key={passiveDefinition.id}
                   >
                     <div className="app-meta-scene__codex-icon" aria-hidden="true">
-                      {isKnown ? passiveDefinition.label.slice(0, 2).toUpperCase() : "??"}
+                      {isKnown ? (
+                        <SkillIcon
+                          category="passive"
+                          id={passiveDefinition.id}
+                          label={passiveDefinition.label}
+                          size="md"
+                        />
+                      ) : (
+                        "??"
+                      )}
                     </div>
                     <div className="app-meta-scene__codex-copy">
                       <h3>{isKnown ? passiveDefinition.label : "Undiscovered seal"}</h3>
@@ -122,7 +141,16 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
                     key={fusionDefinition.fusionId}
                   >
                     <div className="app-meta-scene__codex-icon" aria-hidden="true">
-                      {isKnown ? fusionDefinition.label.slice(0, 2).toUpperCase() : "??"}
+                      {isKnown ? (
+                        <SkillIcon
+                          category="fusion"
+                          id={fusionDefinition.fusionId}
+                          label={fusionDefinition.label}
+                          size="md"
+                        />
+                      ) : (
+                        "??"
+                      )}
                     </div>
                     <div className="app-meta-scene__codex-copy">
                       <h3>{isKnown ? fusionDefinition.label : "Undiscovered fusion"}</h3>

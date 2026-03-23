@@ -1,9 +1,9 @@
 ## item_271_define_first_pass_run_economy_targets_for_xp_level_ups_chests_and_gold - Define first-pass run economy targets for XP, level-ups, chests, and gold
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

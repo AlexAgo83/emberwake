@@ -1,8 +1,8 @@
 ## req_072_define_a_first_playable_balance_wave_for_build_power_run_economy_and_difficulty_pacing - Define a first playable balance wave for build power, run economy, and difficulty pacing
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 96%
-> Confidence: 96%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.

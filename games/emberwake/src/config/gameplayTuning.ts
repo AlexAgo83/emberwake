@@ -9,6 +9,7 @@ const resolveGameplayTuning = (rawValue: unknown) => {
   const root = readObject(rawValue, "gameplayTuning");
   const hostile = readObject(root.hostile, "gameplayTuning.hostile");
   const player = readObject(root.player, "gameplayTuning.player");
+  const playerTurning = readObject(root.playerTurning, "gameplayTuning.playerTurning");
   const attack = readObject(
     player.automaticConeAttack,
     "gameplayTuning.player.automaticConeAttack"
@@ -272,6 +273,25 @@ const resolveGameplayTuning = (rawValue: unknown) => {
         path: "gameplayTuning.player.maxHealth",
         value: player.maxHealth
       })
+    },
+    playerTurning: {
+      meaningfulVelocityWorldUnitsPerSecond: readFiniteNumber({
+        minInclusive: 0,
+        path: "gameplayTuning.playerTurning.meaningfulVelocityWorldUnitsPerSecond",
+        value: playerTurning.meaningfulVelocityWorldUnitsPerSecond
+      }),
+      turnRateDegreesPerSecond: readFiniteNumber({
+        minExclusive: 0,
+        path: "gameplayTuning.playerTurning.turnRateDegreesPerSecond",
+        value: playerTurning.turnRateDegreesPerSecond
+      }),
+      turnRateRadiansPerSecond: degreesToRadians(
+        readFiniteNumber({
+          minExclusive: 0,
+          path: "gameplayTuning.playerTurning.turnRateDegreesPerSecond",
+          value: playerTurning.turnRateDegreesPerSecond
+        })
+      )
     },
     progression: {
       baseLevelXpRequired: readFiniteNumber({

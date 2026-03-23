@@ -1,9 +1,9 @@
 ## task_055_orchestrate_difficulty_iconography_rotation_and_balance_foundations - Orchestrate difficulty, iconography, rotation, and balance foundations
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 96%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -28,14 +28,14 @@ flowchart TD
 ```
 
 # Plan
-- [ ] 1. Implement the next authored difficulty slice: softer opening pressure, wider late density, stronger enemy composition, and periodic mini-boss beats.
-- [ ] 2. Implement the techno-shinobi skill iconography family and land it in HUD, `Grimoire`, and build-facing choice surfaces.
-- [ ] 3. Implement bounded player rotation inertia through a simulation-owned turn-rate posture with future modifier seams.
-- [ ] 4. Implement the first playable balance pass across build power, run economy, and pressure alignment.
-- [ ] 5. Run targeted validation for difficulty, icon readability, turning feel, and first-loop balance.
-- [ ] 6. Update linked requests, backlog items, ADRs, and this task as the wave lands.
-- [ ] CHECKPOINT: keep each subwave commit-ready before proceeding.
-- [ ] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
+- [x] 1. Implement the next authored difficulty slice: softer opening pressure, wider late density, stronger enemy composition, and periodic mini-boss beats.
+- [x] 2. Implement the techno-shinobi skill iconography family and land it in HUD, `Grimoire`, and build-facing choice surfaces.
+- [x] 3. Implement bounded player rotation inertia through a simulation-owned turn-rate posture with future modifier seams.
+- [x] 4. Implement the first playable balance pass across build power, run economy, and pressure alignment.
+- [x] 5. Run targeted validation for difficulty, icon readability, turning feel, and first-loop balance.
+- [x] 6. Update linked requests, backlog items, ADRs, and this task as the wave lands.
+- [x] CHECKPOINT: keep each subwave commit-ready before proceeding.
+- [x] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
 
 # Delivery checkpoints
 - Keep difficulty escalation authored and phase-driven; do not widen into a general adaptive director.
@@ -71,11 +71,11 @@ flowchart TD
 - Repeatable first-loop balance checks for build power, economy pacing, and escalation alignment.
 
 # Definition of Done (DoD)
-- [ ] Covered backlog items are implemented or explicitly split further with updated traceability.
-- [ ] Authored difficulty normalization, stronger enemy composition, and mini-boss beats land coherently.
-- [ ] The first techno-shinobi skill iconography family lands in real build-facing UI surfaces.
-- [ ] Player rotation inertia lands as a bounded simulation-owned turn-rate posture.
-- [ ] The first authored balance baseline lands with validation evidence.
-- [ ] Linked requests, backlog items, ADRs, and this task are updated during the wave and at closure.
-- [ ] Dedicated git commit(s) have been created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Covered backlog items are implemented or explicitly split further with updated traceability.
+- [x] Authored difficulty normalization, stronger enemy composition, and mini-boss beats land coherently.
+- [x] The first techno-shinobi skill iconography family lands in real build-facing UI surfaces.
+- [x] Player rotation inertia lands as a bounded simulation-owned turn-rate posture.
+- [x] The first authored balance baseline lands with validation evidence.
+- [x] Linked requests, backlog items, ADRs, and this task are updated during the wave and at closure.
+- [x] Dedicated git commit(s) have been created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.

@@ -1,9 +1,9 @@
 ## item_261_define_a_shared_techno_shinobi_icon_language_for_build_facing_skill_assets - Define a shared techno-shinobi icon language for build-facing skill assets
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

@@ -1,8 +1,8 @@
 ## req_071_define_a_bounded_entity_rotation_inertia_and_turn_rate_wave - Define a bounded entity rotation inertia and turn-rate wave
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 96%
-> Confidence: 97%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.

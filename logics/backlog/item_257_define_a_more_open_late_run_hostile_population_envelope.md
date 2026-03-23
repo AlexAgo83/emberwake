@@ -1,9 +1,9 @@
 ## item_257_define_a_more_open_late_run_hostile_population_envelope - Define a more open late-run hostile population envelope
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

@@ -239,6 +239,10 @@ export const resolveEntityIntent = ({
     };
   }
 
+  const hostileMoveSpeed =
+    entity.movementSpeedWorldUnitsPerSecond ??
+    hostileCombatContract.hostile.moveSpeedWorldUnitsPerSecond;
+
   const distanceToPlayer = distanceBetweenWorldPoints(
     entity.worldPosition,
     playerEntity.worldPosition
@@ -276,7 +280,7 @@ export const resolveEntityIntent = ({
       velocity: createVelocityTowardTarget(
         entity.worldPosition,
         playerEntity.worldPosition,
-        hostileCombatContract.hostile.moveSpeedWorldUnitsPerSecond
+        hostileMoveSpeed
       )
     };
   }
@@ -315,7 +319,7 @@ export const resolveEntityIntent = ({
       velocity: createVelocityTowardTarget(
         entity.worldPosition,
         playerEntity.worldPosition,
-        hostileCombatContract.hostile.moveSpeedWorldUnitsPerSecond
+        hostileMoveSpeed
       )
     };
   }
@@ -339,7 +343,7 @@ export const resolveEntityIntent = ({
     velocity: createVelocityTowardTarget(
       entity.worldPosition,
       createTileCenterWorldPoint(activeWaypointTile),
-      hostileCombatContract.hostile.moveSpeedWorldUnitsPerSecond
+      hostileMoveSpeed
     )
   };
 };

@@ -379,7 +379,7 @@ export function ActiveRuntimeShellContent({
   const buildActives = useMemo(
     () =>
       buildState.activeSlots.map((activeSlot) => ({
-        id: activeSlot.weaponId,
+        id: activeSlot.fusionId ?? activeSlot.weaponId,
         isFusionReady: resolveFusionReadyState(buildState, activeSlot) !== null,
         isFused: activeSlot.fusionId !== null,
         label: resolveBuildDisplayLabel(buildState, activeSlot),

@@ -8,6 +8,7 @@ import type { SimulatedEntity } from "./entitySimulation";
 import { createGenericMoverEntity, entityContract } from "./entityContract";
 import { singleEntityControlContract } from "../../input/model/singleEntityControlContract";
 import { hostileCombatContract } from "@game/runtime/hostileCombatContract";
+import { resolveRunProgressionPhase } from "@game/runtime/runProgressionPhases";
 import { sampleWorldTileLayers } from "../../world/model/worldGeneration";
 import { worldContract } from "../../world/model/worldContract";
 
@@ -134,12 +135,16 @@ describe("entitySimulation", () => {
       -singleEntityControlContract.desktopMoveSpeedWorldUnitsPerSecond *
         (entitySimulationContract.fixedStepMs / 1000)
     );
-    expect(simulationState.entity.orientation).toBeCloseTo(-Math.PI / 2);
+    expect(simulationState.entity.orientation).toBeLessThan(0);
+    expect(simulationState.entity.orientation).toBeGreaterThan(-Math.PI / 2);
   });
 
   it("spawns hostile entities near the player without exceeding the first local cap", () => {
     let simulationState = createInitialSimulationState();
-    const expectedFirstSpawnTick = hostileCombatContract.hostile.spawnCooldownTicks;
+    const expectedFirstSpawnTick = Math.round(
+      hostileCombatContract.hostile.spawnCooldownTicks *
+        resolveRunProgressionPhase(1).spawnCooldownMultiplier
+    );
 
     for (let step = 0; step < expectedFirstSpawnTick; step += 1) {
       simulationState = advanceSimulationState(simulationState);
@@ -165,8 +170,12 @@ describe("entitySimulation", () => {
 
   it("biases the first hostile spawn ahead of the player's active movement intent", () => {
     let simulationState = createInitialSimulationState();
+    const expectedFirstSpawnTick = Math.round(
+      hostileCombatContract.hostile.spawnCooldownTicks *
+        resolveRunProgressionPhase(1).spawnCooldownMultiplier
+    );
 
-    for (let step = 0; step < hostileCombatContract.hostile.spawnCooldownTicks; step += 1) {
+    for (let step = 0; step < expectedFirstSpawnTick; step += 1) {
       simulationState = advanceSimulationState(simulationState, {
         controlState: {
           controlledEntityId: entityContract.primaryEntityId,
@@ -189,6 +198,37 @@ describe("entitySimulation", () => {
 
     expect(hostileEntity).toBeDefined();
     expect(hostileEntity!.worldPosition.x).toBeGreaterThan(simulationState.entity.worldPosition.x);
+  });
+
+  it("introduces stronger hostile profiles once later phases open", () => {
+    const initialState = createInitialSimulationState();
+    const latePhaseSpawnTick = 5425;
+    const simulationState = advanceSimulationState({
+      ...initialState,
+      nextHostileSequence: 4,
+      tick: latePhaseSpawnTick - 1
+    });
+    const spawnedHostile = simulationState.entities.find((entity) => entity.role === "hostile");
+
+    expect(spawnedHostile).toBeDefined();
+    expect(spawnedHostile?.hostileProfileId).toBe("watchglass");
+    expect(spawnedHostile?.combat.maxHealth).toBeGreaterThan(
+      hostileCombatContract.hostile.maxHealth
+    );
+  });
+
+  it("spawns an authored mini-boss beat every five minutes of survival", () => {
+    const initialState = createInitialSimulationState();
+    const miniBossBeatTick = 300 * 60;
+    const simulationState = advanceSimulationState({
+      ...initialState,
+      tick: miniBossBeatTick - 1
+    });
+    const spawnedHostile = simulationState.entities.find((entity) => entity.role === "hostile");
+
+    expect(spawnedHostile).toBeDefined();
+    expect(spawnedHostile?.hostileProfileId).toBe("watchglass-prime");
+    expect(spawnedHostile?.footprint.radius).toBeGreaterThan(50);
   });
 
   it("moves hostiles toward the player when the player is in focus", () => {
@@ -281,7 +321,7 @@ describe("entitySimulation", () => {
     });
     expect(simulationState.floatingDamageNumbers).toHaveLength(1);
     expect(simulationState.floatingDamageNumbers[0]).toMatchObject({
-      amount: hostileCombatContract.player.automaticConeAttack.damage,
+      amount: 22,
       sourceEntityId: hostileEntity.id
     });
     expect(
@@ -368,7 +408,7 @@ describe("entitySimulation", () => {
     });
 
     expect(collectedState.entities.some((entity) => entity.id === pickupEntity!.id)).toBe(false);
-    expect(collectedState.runStats.goldCollected).toBe(1);
+    expect(collectedState.runStats.goldCollected).toBe(2);
   });
 
   it("applies healing-kit pickups with a max-health clamp", () => {
@@ -461,6 +501,6 @@ describe("entitySimulation", () => {
 
     expect(leveledState.runStats.crystalsCollected).toBe(4);
     expect(leveledState.runStats.currentLevel).toBe(2);
-    expect(leveledState.runStats.currentXp).toBe(0);
+    expect(leveledState.runStats.currentXp).toBe(22);
   });
 });

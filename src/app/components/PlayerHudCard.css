@@ -224,6 +224,10 @@
 }
 
 .player-hud__slot-glyph {
+  display: grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
   color: var(--emberwake-copy);
   font-size: 0.7rem;
   font-weight: 800;
@@ -235,6 +239,7 @@
   position: absolute;
   right: 0.18rem;
   bottom: 0.16rem;
+  z-index: 1;
   min-width: 1rem;
   padding: 0.08rem 0.16rem;
   border-radius: 999px;

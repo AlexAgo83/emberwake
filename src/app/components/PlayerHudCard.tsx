@@ -1,9 +1,12 @@
 import "./PlayerHudCard.css";
 
+import type { ActiveWeaponId, FusionId, PassiveItemId } from "@game";
 import { buildSystemContract } from "@game";
 
+import { SkillIcon } from "./SkillIcon";
+
 type PlayerHudSlot = {
-  id: string;
+  id: ActiveWeaponId | FusionId | PassiveItemId;
   isFused?: boolean;
   isFusionReady?: boolean;
   label: string;
@@ -26,14 +29,6 @@ type PlayerHudCardProps = {
   playerName: string;
 };
 
-const resolveSlotGlyph = (label: string) =>
-  label
-    .split(/\s+/)
-    .map((part) => part[0] ?? "")
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
 export function PlayerHudCard({
   buildActives = [],
   buildPassives = [],
@@ -55,8 +50,14 @@ export function PlayerHudCard({
   const roundedNextLevelXp = Math.max(1, Math.round(nextLevelXpRequired));
   const hpProgressPercent = Math.min(100, Math.round((roundedHealth / roundedHealthMax) * 100));
   const xpProgressPercent = Math.min(100, Math.round((roundedXp / roundedNextLevelXp) * 100));
-  const activeSlots = Array.from({ length: buildSystemContract.activeSlotLimit }, (_, index) => buildActives[index] ?? null);
-  const passiveSlots = Array.from({ length: buildSystemContract.passiveSlotLimit }, (_, index) => buildPassives[index] ?? null);
+  const activeSlots: Array<PlayerHudSlot | null> = Array.from(
+    { length: buildSystemContract.activeSlotLimit },
+    (_, index) => buildActives[index] ?? null
+  );
+  const passiveSlots: Array<PlayerHudSlot | null> = Array.from(
+    { length: buildSystemContract.passiveSlotLimit },
+    (_, index) => buildPassives[index] ?? null
+  );
 
   return (
     <section className="player-hud" aria-label="Player HUD" data-testid="player-hud">
@@ -141,9 +142,18 @@ export function PlayerHudCard({
                     : "Empty active slot"
                 }
               >
-                <span className="player-hud__slot-glyph" aria-hidden="true">
-                  {activeSlot ? resolveSlotGlyph(activeSlot.label) : "·"}
-                </span>
+                {activeSlot ? (
+                  <SkillIcon
+                    category={activeSlot.isFused ? "fusion" : "active"}
+                    id={activeSlot.id}
+                    label={activeSlot.label}
+                    size="sm"
+                  />
+                ) : (
+                  <span className="player-hud__slot-glyph" aria-hidden="true">
+                    ·
+                  </span>
+                )}
                 {activeSlot ? (
                   <span className="player-hud__slot-badge">
                     {activeSlot.level}
@@ -168,9 +178,18 @@ export function PlayerHudCard({
                     : "Empty passive slot"
                 }
               >
-                <span className="player-hud__slot-glyph" aria-hidden="true">
-                  {passiveSlot ? resolveSlotGlyph(passiveSlot.label) : "·"}
-                </span>
+                {passiveSlot ? (
+                  <SkillIcon
+                    category="passive"
+                    id={passiveSlot.id}
+                    label={passiveSlot.label}
+                    size="sm"
+                  />
+                ) : (
+                  <span className="player-hud__slot-glyph" aria-hidden="true">
+                    ·
+                  </span>
+                )}
                 {passiveSlot ? (
                   <span className="player-hud__slot-badge">
                     {passiveSlot.level}

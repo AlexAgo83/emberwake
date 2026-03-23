@@ -1,0 +1,84 @@
+.skill-icon {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.skill-icon[data-size="lg"] {
+  inline-size: 3.1rem;
+  block-size: 3.1rem;
+}
+
+.skill-icon[data-size="md"] {
+  inline-size: 2.65rem;
+  block-size: 2.65rem;
+}
+
+.skill-icon[data-size="sm"] {
+  inline-size: 1.7rem;
+  block-size: 1.7rem;
+}
+
+.skill-icon__svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.skill-icon__plate,
+.skill-icon__grid,
+.skill-icon__fill,
+.skill-icon__stroke {
+  transition:
+    fill 140ms ease,
+    opacity 140ms ease,
+    stroke 140ms ease;
+}
+
+.skill-icon__plate {
+  fill: rgba(8, 12, 16, 0.86);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1.2;
+}
+
+.skill-icon__grid {
+  fill: none;
+  stroke: rgba(214, 227, 233, 0.08);
+  stroke-width: 1;
+}
+
+.skill-icon__fill {
+  fill: rgba(115, 216, 255, 0.16);
+}
+
+.skill-icon__stroke {
+  fill: none;
+  stroke: var(--emberwake-accent-cold);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.skill-icon[data-category="active"] .skill-icon__fill {
+  fill: rgba(115, 216, 255, 0.16);
+}
+
+.skill-icon[data-category="active"] .skill-icon__stroke {
+  stroke: var(--emberwake-accent-cold);
+}
+
+.skill-icon[data-category="passive"] .skill-icon__fill {
+  fill: rgba(255, 183, 104, 0.14);
+}
+
+.skill-icon[data-category="passive"] .skill-icon__stroke {
+  stroke: var(--emberwake-accent-warm);
+}
+
+.skill-icon[data-category="fusion"] .skill-icon__fill {
+  fill: rgba(255, 114, 150, 0.18);
+}
+
+.skill-icon[data-category="fusion"] .skill-icon__stroke {
+  stroke: #ff7296;
+}

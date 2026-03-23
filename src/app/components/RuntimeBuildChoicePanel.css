@@ -116,6 +116,19 @@
   gap: 0.5rem;
 }
 
+.runtime-build-choice__identity {
+  display: flex;
+  align-items: center;
+  gap: 0.72rem;
+  min-width: 0;
+}
+
+.runtime-build-choice__identity-copy {
+  display: grid;
+  gap: 0.22rem;
+  min-width: 0;
+}
+
 .runtime-build-choice__tag {
   display: inline-flex;
   align-items: center;
@@ -145,6 +158,7 @@
   font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.03em;
+  line-height: 1.15;
 }
 
 .runtime-build-choice__role,
@@ -185,4 +199,8 @@
 
 .runtime-build-choice--mobile .runtime-build-choice__card {
   min-height: auto;
+}
+
+.runtime-build-choice--mobile .runtime-build-choice__identity {
+  gap: 0.58rem;
 }

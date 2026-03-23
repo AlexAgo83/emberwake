@@ -1,9 +1,9 @@
 ## item_272_define_pressure_alignment_between_build_growth_and_time_owned_escalation - Define pressure alignment between build growth and time-owned escalation
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

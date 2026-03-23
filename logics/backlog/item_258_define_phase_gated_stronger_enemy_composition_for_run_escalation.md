@@ -1,9 +1,9 @@
 ## item_258_define_phase_gated_stronger_enemy_composition_for_run_escalation - Define phase-gated stronger enemy composition for run escalation
 > From version: 0.4.0
-> Status: Draft
+> Status: Done
 > Understanding: 95%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

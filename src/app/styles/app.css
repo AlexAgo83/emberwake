@@ -516,6 +516,7 @@ html[data-app-display-mode="browser"] .app-shell {
   height: 2.8rem;
   display: grid;
   place-items: center;
+  overflow: hidden;
   border: 1px solid rgba(115, 216, 255, 0.18);
   border-radius: 0.82rem;
   background: rgba(115, 216, 255, 0.05);
