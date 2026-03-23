@@ -111,7 +111,7 @@ describe("gameplaySystems", () => {
       combatState: "dormant",
       currentXp: 50,
       gameplayOutcome: "none",
-      nextLevelXpRequired: 90,
+      nextLevelXpRequired: 160,
       progressionTicksSurvived: 1
     });
   });

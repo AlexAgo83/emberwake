@@ -85,17 +85,17 @@ const phaseCompositionWeights: Record<RunProgressionPhaseId, WeightedHostileProf
   "veil-break": [
     { profileId: "ash-drifter", weight: 2 },
     { profileId: "sentinel-husk", weight: 2 },
-    { profileId: "watchglass", weight: 1 }
+    { profileId: "watchglass", weight: 2 }
   ],
   "black-rain": [
     { profileId: "ash-drifter", weight: 1 },
-    { profileId: "sentinel-husk", weight: 3 },
-    { profileId: "watchglass", weight: 2 }
+    { profileId: "sentinel-husk", weight: 2 },
+    { profileId: "watchglass", weight: 4 }
   ],
   "kill-grid": [
     { profileId: "ash-drifter", weight: 1 },
-    { profileId: "sentinel-husk", weight: 2 },
-    { profileId: "watchglass", weight: 3 }
+    { profileId: "sentinel-husk", weight: 1 },
+    { profileId: "watchglass", weight: 6 }
   ]
 };
 

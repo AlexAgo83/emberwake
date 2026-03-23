@@ -5,7 +5,7 @@
     "contactDamageCooldownTicks": 30,
     "despawnDistanceChunks": 3.5,
     "localPopulationCap": 12,
-    "maxHealth": 34,
+    "maxHealth": 46,
     "moveSpeedWorldUnitsPerSecond": 160,
     "safeSpawnDistanceChunks": 0.9,
     "spawnAttemptCount": 8,
@@ -28,7 +28,7 @@
   "pickup": {
     "crystal": {
       "enemyDropCount": 1,
-      "xpValue": 28
+      "xpValue": 18
     },
     "gold": {
       "value": 2
@@ -61,7 +61,7 @@
     "maxHealth": 100
   },
   "progression": {
-    "baseLevelXpRequired": 90,
-    "levelXpStep": 45
+    "baseLevelXpRequired": 160,
+    "levelXpStep": 85
   }
 }

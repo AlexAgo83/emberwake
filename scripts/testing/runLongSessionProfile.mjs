@@ -6,7 +6,7 @@ import process from "node:process";
 import { setTimeout as sleep } from "node:timers/promises";
 import { URL } from "node:url";
 
-import { chromium } from "playwright";
+import { chromium, devices } from "playwright";
 import runtimePerformanceBudget from "../../src/shared/config/runtimePerformanceBudget.json" with { type: "json" };
 
 const previewHost = "127.0.0.1";
@@ -19,6 +19,7 @@ const parseArgs = (argv) => {
     headed: false,
     invincible: undefined,
     loop: undefined,
+    mobile: false,
     sampleIntervalMs: 1_000,
     scenarioId: "traversal-baseline",
     spawnMode: undefined
@@ -74,6 +75,11 @@ const parseArgs = (argv) => {
 
     if (argument === "--headed") {
       parsedArgs.headed = true;
+      continue;
+    }
+
+    if (argument === "--mobile") {
+      parsedArgs.mobile = true;
     }
   }
 
@@ -347,12 +353,20 @@ try {
     headless: !cliOptions.headed
   });
 
-  const page = await browser.newPage({
-    viewport: {
-      width: 1280,
-      height: 800
-    }
-  });
+  const mobileDeviceProfile = devices["Pixel 7"];
+  const context = await browser.newContext(
+    cliOptions.mobile
+      ? {
+          ...mobileDeviceProfile
+        }
+      : {
+          viewport: {
+            width: 1280,
+            height: 800
+          }
+        }
+  );
+  const page = await context.newPage();
 
   await page.goto(previewUrl, {
     waitUntil: "networkidle"
@@ -498,7 +512,8 @@ try {
       ...scenarioDefinition,
       appliedConfig: effectiveConfig,
       appliedSpeedMultiplier: 4,
-      loop: cliOptions.loop ?? scenarioDefinition.defaultLoop
+      loop: cliOptions.loop ?? scenarioDefinition.defaultLoop,
+      mobile: cliOptions.mobile
     },
     samples,
     startedAtIso: new Date(timestamp.getTime() - cliOptions.durationMs).toISOString()

@@ -9,5 +9,13 @@ export const pickupContract = {
 };
 
 export const resolveXpRequiredForLevel = (level: number) =>
-  pickupContract.progression.baseLevelXpRequired +
-  Math.max(0, level - 1) * pickupContract.progression.levelXpStep;
+  (() => {
+    const levelIndex = Math.max(0, level - 1);
+
+    return (
+      pickupContract.progression.baseLevelXpRequired +
+      levelIndex * pickupContract.progression.levelXpStep +
+      levelIndex * levelIndex * 12 +
+      Math.floor(levelIndex / 3) * 35
+    );
+  })();

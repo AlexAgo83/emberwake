@@ -240,7 +240,7 @@ describe("entitySimulation", () => {
 
   it("introduces stronger hostile profiles once later phases open", () => {
     const initialState = createInitialSimulationState();
-    const latePhaseSpawnTick = 5425;
+    const latePhaseSpawnTick = 4508;
     const simulationState = advanceSimulationState({
       ...initialState,
       nextHostileSequence: 4,
@@ -539,8 +539,8 @@ describe("entitySimulation", () => {
     });
 
     expect(leveledState.runStats.crystalsCollected).toBe(4);
-    expect(leveledState.runStats.currentLevel).toBe(2);
-    expect(leveledState.runStats.currentXp).toBe(22);
+    expect(leveledState.runStats.currentLevel).toBe(1);
+    expect(leveledState.runStats.currentXp).toBe(72);
   });
 
   it("consolidates nearby hostile crystal drops into a single stacked pickup", () => {
