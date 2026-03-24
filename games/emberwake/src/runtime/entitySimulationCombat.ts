@@ -122,11 +122,25 @@ export const pruneFloatingDamageNumbers = (
   floatingDamageNumbers: readonly FloatingDamageNumber[],
   tick: number
 ) =>
-  floatingDamageNumbers.filter(
-    (floatingDamageNumber) =>
-      tick - floatingDamageNumber.spawnedAtTick <
-      entityCombatPresentationContract.floatingDamageNumberLifetimeTicks
-  );
+  floatingDamageNumbers.filter((floatingDamageNumber) => {
+    if (
+      !Number.isFinite(tick) ||
+      !Number.isFinite(floatingDamageNumber.amount) ||
+      !Number.isFinite(floatingDamageNumber.driftX) ||
+      !Number.isFinite(floatingDamageNumber.spawnedAtTick) ||
+      !Number.isFinite(floatingDamageNumber.worldPosition.x) ||
+      !Number.isFinite(floatingDamageNumber.worldPosition.y)
+    ) {
+      return false;
+    }
+
+    const ageTicks = tick - floatingDamageNumber.spawnedAtTick;
+
+    return (
+      ageTicks >= 0 &&
+      ageTicks < entityCombatPresentationContract.floatingDamageNumberLifetimeTicks
+    );
+  });
 
 export const resolveAutomaticPlayerAttack = (
   entities: readonly SimulatedEntity[],

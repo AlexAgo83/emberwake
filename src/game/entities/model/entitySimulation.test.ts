@@ -2,7 +2,8 @@ import {
   advanceSimulationState,
   createInitialSimulationState,
   entitySimulationContract,
-  getScriptedEntityPhase
+  getScriptedEntityPhase,
+  normalizeEntitySimulationState
 } from "./entitySimulation";
 import type { SimulatedEntity } from "./entitySimulation";
 import { createGenericMoverEntity, entityContract } from "./entityContract";
@@ -417,6 +418,30 @@ describe("entitySimulation", () => {
     );
     expect(firstState.floatingDamageNumbers).toHaveLength(1);
     expect(secondState.entity.combat.currentHealth).toBe(firstState.entity.combat.currentHealth);
+  });
+
+  it("drops floating damage numbers with a spawned tick ahead of the current simulation tick", () => {
+    const initialState = createInitialSimulationState();
+
+    const normalizedState = normalizeEntitySimulationState({
+      ...initialState,
+      floatingDamageNumbers: [
+        {
+          amount: 48,
+          driftX: 2,
+          id: "floating-damage:future",
+          sourceEntityId: initialState.entity.id,
+          spawnedAtTick: 12,
+          worldPosition: {
+            x: 96,
+            y: 64
+          }
+        }
+      ],
+      tick: 4
+    });
+
+    expect(normalizedState.floatingDamageNumbers).toEqual([]);
   });
 
   it("spawns nearby pickups and increments gold when the player collects one", () => {

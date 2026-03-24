@@ -437,7 +437,7 @@ export function EntityScene({
           (currentTick - floatingDamageNumber.spawnedAtTick) /
           entityCombatPresentationContract.floatingDamageNumberLifetimeTicks;
 
-        if (lifetimeProgress >= 1) {
+        if (!Number.isFinite(lifetimeProgress) || lifetimeProgress < 0 || lifetimeProgress >= 1) {
           return null;
         }
 

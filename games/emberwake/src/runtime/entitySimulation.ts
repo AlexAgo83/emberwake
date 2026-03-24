@@ -970,7 +970,10 @@ export const normalizeEntitySimulationState = (
       entity.id === normalizedPlayerEntity.id ? normalizedPlayerEntity : entity
     ),
     entity: normalizedPlayerEntity,
-    floatingDamageNumbers: simulationState.floatingDamageNumbers ?? [],
+    floatingDamageNumbers: pruneFloatingDamageNumbers(
+      simulationState.floatingDamageNumbers ?? [],
+      simulationState.tick ?? 0
+    ),
     nextPickupSequence,
     nextHostileSequence,
     runStats: {

@@ -3,7 +3,8 @@ export {
   createInitialSimulationState,
   entityCombatPresentationContract,
   entitySimulationContract,
-  getScriptedEntityPhase
+  getScriptedEntityPhase,
+  normalizeEntitySimulationState
 } from "@game/runtime/entitySimulation";
 export type {
   CombatSkillFeedbackEvent,
