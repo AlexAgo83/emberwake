@@ -36,13 +36,18 @@ export {
   passiveItemIds,
   recordActiveWeaponAttack,
   resolveActiveWeaponRuntimeStats,
+  resolveBossDamageMultiplier,
   resolveBuildDisplayLabel,
   resolveBuildSummary,
   resolveChestDropCount,
   resolveChestReward,
+  resolveEmergencyAegisChargeCount,
+  resolveExecuteThresholdRatio,
   resolveFusionReadyState,
+  resolveGoldGainMultiplier,
   resolveLevelUpChoices,
   resolvePickupRadiusMultiplier,
+  resolveRetaliationDamage,
   advanceChestMilestone
 } from "./runtime/buildSystem";
 export {

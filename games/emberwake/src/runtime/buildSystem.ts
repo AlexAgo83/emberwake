@@ -1,16 +1,39 @@
-type ActiveWeaponAttackKind = "auto-target" | "cone" | "fan" | "lob" | "orbit" | "zone";
+type ActiveWeaponAttackKind =
+  | "auto-target"
+  | "boomerang"
+  | "chain"
+  | "cone"
+  | "fan"
+  | "lob"
+  | "nova"
+  | "orbit"
+  | "trail"
+  | "vacuum"
+  | "zone";
 
 export type ActiveWeaponId =
   | "ash-lash"
+  | "boomerang-arc"
+  | "burning-trail"
+  | "chain-lightning"
   | "guided-senbon"
+  | "halo-burst"
+  | "frost-nova"
   | "shade-kunai"
   | "cinder-arc"
+  | "orbiting-blades"
   | "orbit-sutra"
-  | "null-canister";
+  | "null-canister"
+  | "vacuum-pulse";
 
 export type PassiveItemId =
+  | "boss-hunter"
   | "overclock-seal"
+  | "emergency-aegis"
+  | "execution-sigil"
+  | "greed-engine"
   | "hardlight-sheath"
+  | "thorn-mail"
   | "wideband-coil"
   | "echo-thread"
   | "duplex-relay"
@@ -87,11 +110,16 @@ export type PassiveItemDefinition = {
   roleLine: string;
   statFamily:
     | "area"
+    | "boss-damage"
     | "cooldown"
     | "damage"
     | "duration"
+    | "economy"
+    | "execute"
+    | "guard"
     | "multiplicity"
-    | "pickup-radius";
+    | "pickup-radius"
+    | "retaliation";
 };
 
 export type FusionDefinition = {
@@ -147,6 +175,24 @@ const activeWeaponDefinitions: Record<ActiveWeaponId, ActiveWeaponDefinition> = 
     roleLine: "Auto-targeted precision burst",
     targetCountStep: 0
   },
+  "chain-lightning": {
+    attackKind: "chain",
+    baseAreaRadiusWorldUnits: 138,
+    baseCooldownTicks: 30,
+    baseDamage: 18,
+    baseRangeWorldUnits: 348,
+    baseTargetCount: 3,
+    baseVisibleTicks: 14,
+    cooldownStepTicks: 1,
+    damageStep: 3,
+    id: "chain-lightning",
+    label: "Chain Lightning",
+    maxLevel: 8,
+    rangeStepWorldUnits: 14,
+    roleLine: "Arcing chain clear across clustered hostiles",
+    targetCountStep: 1,
+    visibleTickStep: 1
+  },
   "shade-kunai": {
     attackKind: "fan",
     baseArcRadians: (50 * Math.PI) / 180,
@@ -179,6 +225,61 @@ const activeWeaponDefinitions: Record<ActiveWeaponId, ActiveWeaponDefinition> = 
     roleLine: "Heavy lobbed strike with delayed impact",
     targetCountStep: 1
   },
+  "burning-trail": {
+    attackKind: "trail",
+    baseAreaRadiusWorldUnits: 52,
+    baseCooldownTicks: 22,
+    baseDamage: 11,
+    baseRangeWorldUnits: 184,
+    baseTargetCount: 8,
+    baseVisibleTicks: 22,
+    cooldownStepTicks: 1,
+    damageStep: 2,
+    id: "burning-trail",
+    label: "Burning Trail",
+    maxLevel: 8,
+    rangeStepWorldUnits: 9,
+    roleLine: "Route-zoning burn line that rewards motion",
+    targetCountStep: 1,
+    visibleTickStep: 2
+  },
+  "boomerang-arc": {
+    attackKind: "boomerang",
+    baseArcRadians: (54 * Math.PI) / 180,
+    baseAreaRadiusWorldUnits: 96,
+    baseCooldownTicks: 28,
+    baseDamage: 16,
+    baseRangeWorldUnits: 292,
+    baseTargetCount: 4,
+    baseVisibleTicks: 16,
+    cooldownStepTicks: 1,
+    damageStep: 3,
+    id: "boomerang-arc",
+    label: "Boomerang Arc",
+    maxLevel: 8,
+    rangeStepWorldUnits: 11,
+    roleLine: "Forward-and-return lane pressure blade",
+    targetCountStep: 1,
+    visibleTickStep: 1
+  },
+  "orbiting-blades": {
+    attackKind: "orbit",
+    baseAreaRadiusWorldUnits: 112,
+    baseCooldownTicks: 24,
+    baseDamage: 14,
+    baseRangeWorldUnits: 112,
+    baseTargetCount: 4,
+    baseVisibleTicks: 24,
+    cooldownStepTicks: 1,
+    damageStep: 2,
+    id: "orbiting-blades",
+    label: "Orbiting Blades",
+    maxLevel: 8,
+    rangeStepWorldUnits: 6,
+    roleLine: "Close orbit control ring",
+    targetCountStep: 1,
+    visibleTickStep: 1
+  },
   "orbit-sutra": {
     attackKind: "orbit",
     baseAreaRadiusWorldUnits: 126,
@@ -210,10 +311,71 @@ const activeWeaponDefinitions: Record<ActiveWeaponId, ActiveWeaponDefinition> = 
     rangeStepWorldUnits: 8,
     roleLine: "Thrown hush field",
     targetCountStep: 1
+  },
+  "halo-burst": {
+    attackKind: "nova",
+    baseAreaRadiusWorldUnits: 164,
+    baseCooldownTicks: 42,
+    baseDamage: 30,
+    baseRangeWorldUnits: 164,
+    baseTargetCount: 12,
+    baseVisibleTicks: 18,
+    cooldownStepTicks: 1,
+    damageStep: 4,
+    id: "halo-burst",
+    label: "Halo Burst",
+    maxLevel: 8,
+    rangeStepWorldUnits: 8,
+    roleLine: "Defensive burst around the shell",
+    targetCountStep: 2,
+    visibleTickStep: 1
+  },
+  "frost-nova": {
+    attackKind: "nova",
+    baseAreaRadiusWorldUnits: 188,
+    baseCooldownTicks: 46,
+    baseDamage: 17,
+    baseRangeWorldUnits: 188,
+    baseTargetCount: 10,
+    baseVisibleTicks: 24,
+    cooldownStepTicks: 1,
+    damageStep: 3,
+    id: "frost-nova",
+    label: "Frost Nova",
+    maxLevel: 8,
+    rangeStepWorldUnits: 10,
+    roleLine: "Crowd-control frost pulse with a defensive window",
+    targetCountStep: 2,
+    visibleTickStep: 1
+  },
+  "vacuum-pulse": {
+    attackKind: "vacuum",
+    baseAreaRadiusWorldUnits: 156,
+    baseCooldownTicks: 34,
+    baseDamage: 13,
+    baseRangeWorldUnits: 156,
+    baseTargetCount: 12,
+    baseVisibleTicks: 20,
+    cooldownStepTicks: 1,
+    damageStep: 2,
+    id: "vacuum-pulse",
+    label: "Vacuum Pulse",
+    maxLevel: 8,
+    rangeStepWorldUnits: 8,
+    roleLine: "Pickup-flow pulse that clears breathing room",
+    targetCountStep: 2,
+    visibleTickStep: 1
   }
 };
 
 const passiveItemDefinitions: Record<PassiveItemId, PassiveItemDefinition> = {
+  "boss-hunter": {
+    id: "boss-hunter",
+    label: "Boss Hunter",
+    maxLevel: 5,
+    roleLine: "Focused finishing pressure against elite threats",
+    statFamily: "boss-damage"
+  },
   "duplex-relay": {
     id: "duplex-relay",
     label: "Duplex Relay",
@@ -221,12 +383,33 @@ const passiveItemDefinitions: Record<PassiveItemId, PassiveItemDefinition> = {
     roleLine: "Extra projectiles and duplicate casts",
     statFamily: "multiplicity"
   },
+  "emergency-aegis": {
+    id: "emergency-aegis",
+    label: "Emergency Aegis",
+    maxLevel: 5,
+    roleLine: "Last-chance guard before the run collapses",
+    statFamily: "guard"
+  },
   "echo-thread": {
     id: "echo-thread",
     label: "Echo Thread",
     maxLevel: 5,
     roleLine: "Longer persistence and sustained pressure",
     statFamily: "duration"
+  },
+  "execution-sigil": {
+    id: "execution-sigil",
+    label: "Execution Sigil",
+    maxLevel: 5,
+    roleLine: "Execute weakened hostiles before they can stabilize",
+    statFamily: "execute"
+  },
+  "greed-engine": {
+    id: "greed-engine",
+    label: "Greed Engine",
+    maxLevel: 5,
+    roleLine: "Turn the field economy into stronger long runs",
+    statFamily: "economy"
   },
   "hardlight-sheath": {
     id: "hardlight-sheath",
@@ -241,6 +424,13 @@ const passiveItemDefinitions: Record<PassiveItemId, PassiveItemDefinition> = {
     maxLevel: 5,
     roleLine: "Faster cadence and cooler hands",
     statFamily: "cooldown"
+  },
+  "thorn-mail": {
+    id: "thorn-mail",
+    label: "Thorn Mail",
+    maxLevel: 5,
+    roleLine: "Reflect pressure back into contact-heavy swarms",
+    statFamily: "retaliation"
   },
   "vacuum-tabi": {
     id: "vacuum-tabi",
@@ -308,10 +498,15 @@ export const fusionIds = Object.keys(fusionDefinitions) as FusionId[];
 
 type PassiveModifierState = {
   areaMultiplier: number;
+  bossDamageMultiplier: number;
   cooldownMultiplier: number;
   damageMultiplier: number;
   durationMultiplier: number;
+  emergencyAegisChargeCount: number;
+  executeThresholdRatio: number;
+  goldGainMultiplier: number;
   pickupRadiusMultiplier: number;
+  retaliationDamage: number;
   targetCountBonus: number;
 };
 
@@ -349,10 +544,15 @@ const sortDeterministically = <T extends { id: string }>(items: readonly T[], sa
 const createPassiveModifierState = (buildState: BuildState): PassiveModifierState => {
   const modifiers: PassiveModifierState = {
     areaMultiplier: 1,
+    bossDamageMultiplier: 1,
     cooldownMultiplier: 1,
     damageMultiplier: 1,
     durationMultiplier: 1,
+    emergencyAegisChargeCount: 0,
+    executeThresholdRatio: 0,
+    goldGainMultiplier: 1,
     pickupRadiusMultiplier: 1,
+    retaliationDamage: 0,
     targetCountBonus: 0
   };
 
@@ -366,6 +566,9 @@ const createPassiveModifierState = (buildState: BuildState): PassiveModifierStat
       case "hardlight-sheath":
         modifiers.damageMultiplier *= 1 + 0.14 * passiveSlot.level;
         break;
+      case "boss-hunter":
+        modifiers.bossDamageMultiplier *= 1 + 0.18 * passiveSlot.level;
+        break;
       case "wideband-coil":
         modifiers.areaMultiplier *= 1 + 0.12 * passiveSlot.level;
         break;
@@ -373,8 +576,26 @@ const createPassiveModifierState = (buildState: BuildState): PassiveModifierStat
         modifiers.durationMultiplier *= 1 + 0.16 * passiveSlot.level;
         modifiers.areaMultiplier *= 1 + 0.04 * passiveSlot.level;
         break;
+      case "execution-sigil":
+        modifiers.executeThresholdRatio = Math.max(
+          modifiers.executeThresholdRatio,
+          0.1 + 0.04 * passiveSlot.level
+        );
+        break;
+      case "greed-engine":
+        modifiers.goldGainMultiplier *= 1 + 0.18 * passiveSlot.level;
+        break;
       case "duplex-relay":
         modifiers.targetCountBonus += Math.max(1, passiveSlot.level - (passiveSlot.level > 3 ? 1 : 0));
+        break;
+      case "emergency-aegis":
+        modifiers.emergencyAegisChargeCount = Math.max(
+          modifiers.emergencyAegisChargeCount,
+          passiveSlot.level >= 5 ? 2 : 1
+        );
+        break;
+      case "thorn-mail":
+        modifiers.retaliationDamage += 6 + passiveSlot.level * 6;
         break;
       case "vacuum-tabi":
         modifiers.pickupRadiusMultiplier *= 1 + 0.32 * passiveSlot.level;
@@ -549,6 +770,21 @@ export const resolveActiveWeaponRuntimeStats = (
 
 export const resolvePickupRadiusMultiplier = (buildState: BuildState) =>
   createPassiveModifierState(buildState).pickupRadiusMultiplier;
+
+export const resolveBossDamageMultiplier = (buildState: BuildState) =>
+  createPassiveModifierState(buildState).bossDamageMultiplier;
+
+export const resolveEmergencyAegisChargeCount = (buildState: BuildState) =>
+  createPassiveModifierState(buildState).emergencyAegisChargeCount;
+
+export const resolveExecuteThresholdRatio = (buildState: BuildState) =>
+  createPassiveModifierState(buildState).executeThresholdRatio;
+
+export const resolveGoldGainMultiplier = (buildState: BuildState) =>
+  createPassiveModifierState(buildState).goldGainMultiplier;
+
+export const resolveRetaliationDamage = (buildState: BuildState) =>
+  createPassiveModifierState(buildState).retaliationDamage;
 
 const createActiveUnlockChoice = (
   buildState: BuildState,

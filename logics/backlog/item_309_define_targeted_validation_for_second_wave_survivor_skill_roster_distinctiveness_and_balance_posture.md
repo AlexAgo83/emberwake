@@ -1,13 +1,14 @@
 ## item_309_define_targeted_validation_for_second_wave_survivor_skill_roster_distinctiveness_and_balance_posture - Define targeted validation for second-wave survivor skill roster distinctiveness and balance posture
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: High
 > Theme: Combat
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
+> Related task: `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`
 
 # Problem
 - Expand the current Emberwake build roster with a second curated wave of survivor-style skills so runs can support more distinct build fantasies than the first playable roster alone.

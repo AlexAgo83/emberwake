@@ -1,13 +1,14 @@
 ## item_307_define_an_economy_and_boss_specialization_passive_skill_slice_for_greed_engine_and_boss_hunter - Define an economy and boss-specialization passive skill slice for Greed Engine and Boss Hunter
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: High
 > Theme: Combat
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
+> Related task: `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`
 
 # Problem
 - Expand the current Emberwake build roster with a second curated wave of survivor-style skills so runs can support more distinct build fantasies than the first playable roster alone.

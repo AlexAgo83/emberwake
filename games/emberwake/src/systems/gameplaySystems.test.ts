@@ -14,7 +14,8 @@ import {
 describe("gameplaySystems", () => {
   it("tracks progression and system seams separately from the raw simulation slice", () => {
     const previousState = createInitialGameplaySystemsState();
-    const initialRunStats = createInitialEmberwakeGameState().simulation.runStats;
+    const initialSimulation = createInitialEmberwakeGameState().simulation;
+    const initialRunStats = initialSimulation.runStats;
     const beforeEntity = {
       archetype: "generic-mover" as const,
       combat: {
@@ -51,6 +52,7 @@ describe("gameplaySystems", () => {
     const nextState = advanceGameplaySystemsState({
       previousState,
       simulationAfterUpdate: {
+        ...initialSimulation,
         buildState: createInitialBuildState(),
         combatSkillFeedbackEvents: [],
         entities: [afterEntity],
@@ -71,6 +73,7 @@ describe("gameplaySystems", () => {
         worldSeed: "emberwake-default-seed"
       },
       simulationBeforeUpdate: {
+        ...initialSimulation,
         buildState: createInitialBuildState(),
         combatSkillFeedbackEvents: [],
         entities: [beforeEntity],

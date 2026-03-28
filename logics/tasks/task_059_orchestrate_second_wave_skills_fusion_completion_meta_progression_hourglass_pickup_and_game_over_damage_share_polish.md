@@ -1,10 +1,10 @@
 ## task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish - Orchestrate second wave skills fusion completion meta progression hourglass pickup and game over damage share polish
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 96%
-> Confidence: 92%
-> Progress: 0%
+> Status: In progress
+> Understanding: 98%
+> Confidence: 94%
+> Progress: 18%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -39,8 +39,8 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm cross-request scope, freeze dependencies, and group delivery into coherent waves for skills, fusions, shell progression, meta-profile persistence, hourglass pickup, and game-over polish.
-- [ ] 2. Implement the second-wave skill roster slices from `item_303` through `item_309`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the skill-roster wave.
+- [x] 1. Confirm cross-request scope, freeze dependencies, and group delivery into coherent waves for skills, fusions, shell progression, meta-profile persistence, hourglass pickup, and game-over polish.
+- [x] 2. Implement the second-wave skill roster slices from `item_303` through `item_309`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the skill-roster wave.
 - [ ] 3. Implement the missing fusion completion slices from `item_310` through `item_313`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the fusion-completion wave.
 - [ ] 4. Implement the shell-owned shop and talent surface slices from `item_314` through `item_318`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the shell meta-progression wave.
 - [ ] 5. Implement the persistent meta-profile slices from `item_319` through `item_323`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the cross-run persistence wave.
@@ -117,3 +117,5 @@ flowchart LR
 - [ ] Status is `Done` and progress is `100%`.
 
 # Report
+- Wave 1 complete: shipped the second-wave skill roster across build-system, runtime combat, control effects, and shell/icon feedback seams.
+- Validation checkpoint: `npm run typecheck`, `npm run test -- games/emberwake/src/runtime/buildSystem.test.ts src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts games/emberwake/src/systems/gameplaySystems.test.ts`, `npm run logics:lint`.

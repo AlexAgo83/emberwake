@@ -4,10 +4,15 @@ import {
   addPendingLevelUps,
   applyLevelUpChoice,
   createInitialBuildState,
+  listActiveWeaponDefinitions,
+  listPassiveItemDefinitions,
   normalizeBuildState,
   resolveActiveWeaponRuntimeStats,
+  resolveBossDamageMultiplier,
   resolveBuildSummary,
   resolveChestReward,
+  resolveEmergencyAegisChargeCount,
+  resolveGoldGainMultiplier,
   resolvePickupRadiusMultiplier,
   resolveFusionReadyState
 } from "./buildSystem";
@@ -144,6 +149,87 @@ describe("buildSystem", () => {
     });
 
     expect(resolvePickupRadiusMultiplier(buildState)).toBeCloseTo(1.96);
+  });
+
+  it("exposes the full second-wave active and passive roster", () => {
+    expect(listActiveWeaponDefinitions().map((definition) => definition.id)).toEqual(
+      expect.arrayContaining([
+        "orbiting-blades",
+        "chain-lightning",
+        "burning-trail",
+        "boomerang-arc",
+        "halo-burst",
+        "frost-nova",
+        "vacuum-pulse"
+      ])
+    );
+    expect(listPassiveItemDefinitions().map((definition) => definition.id)).toEqual(
+      expect.arrayContaining([
+        "thorn-mail",
+        "execution-sigil",
+        "greed-engine",
+        "boss-hunter",
+        "emergency-aegis"
+      ])
+    );
+  });
+
+  it("keeps second-wave actives differentiated by role and runtime posture", () => {
+    const buildState = normalizeBuildState({
+      activeSlots: [
+        {
+          fusionId: null,
+          lastAttackTick: null,
+          level: 2,
+          weaponId: "orbiting-blades"
+        },
+        {
+          fusionId: null,
+          lastAttackTick: null,
+          level: 2,
+          weaponId: "halo-burst"
+        },
+        {
+          fusionId: null,
+          lastAttackTick: null,
+          level: 2,
+          weaponId: "vacuum-pulse"
+        }
+      ]
+    });
+
+    const orbitStats = resolveActiveWeaponRuntimeStats(buildState, buildState.activeSlots[0]!);
+    const haloStats = resolveActiveWeaponRuntimeStats(buildState, buildState.activeSlots[1]!);
+    const vacuumStats = resolveActiveWeaponRuntimeStats(buildState, buildState.activeSlots[2]!);
+
+    expect(orbitStats.attackKind).toBe("orbit");
+    expect(haloStats.attackKind).toBe("nova");
+    expect(vacuumStats.attackKind).toBe("vacuum");
+    expect(haloStats.areaRadiusWorldUnits).toBeGreaterThan(orbitStats.areaRadiusWorldUnits);
+    expect(vacuumStats.cooldownTicks).toBeLessThan(haloStats.cooldownTicks);
+  });
+
+  it("exposes economy boss and survivability passive modifiers for the second wave", () => {
+    const buildState = normalizeBuildState({
+      passiveSlots: [
+        {
+          level: 2,
+          passiveId: "greed-engine"
+        },
+        {
+          level: 3,
+          passiveId: "boss-hunter"
+        },
+        {
+          level: 1,
+          passiveId: "emergency-aegis"
+        }
+      ]
+    });
+
+    expect(resolveGoldGainMultiplier(buildState)).toBeGreaterThan(1);
+    expect(resolveBossDamageMultiplier(buildState)).toBeGreaterThan(1);
+    expect(resolveEmergencyAegisChargeCount(buildState)).toBe(1);
   });
 
   it("summarizes the current build state for diagnostics and HUD surfaces", () => {

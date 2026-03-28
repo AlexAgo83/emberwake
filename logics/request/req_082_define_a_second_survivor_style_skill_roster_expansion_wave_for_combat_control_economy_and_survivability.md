@@ -1,12 +1,14 @@
 ## req_082_define_a_second_survivor_style_skill_roster_expansion_wave_for_combat_control_economy_and_survivability - Define a second survivor style skill roster expansion wave for combat control economy and survivability
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 95%
-> Confidence: 92%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
 > Complexity: High
 > Theme: Combat
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Progress: 100%
+> Related backlog: `item_303_define_a_proximity_and_space_control_active_skill_slice_for_orbiting_blades_and_halo_burst`, `item_304_define_a_ranged_pressure_active_skill_slice_for_chain_lightning_boomerang_arc_and_burning_trail`, `item_305_define_a_control_and_pickup_flow_active_skill_slice_for_frost_nova_and_vacuum_pulse`, `item_306_define_a_defensive_and_execution_passive_skill_slice_for_thorn_mail_execution_sigil_and_emergency_aegis`, `item_307_define_an_economy_and_boss_specialization_passive_skill_slice_for_greed_engine_and_boss_hunter`, `item_308_define_second_wave_build_pool_integration_discovery_and_progression_posture_for_the_new_roster`, `item_309_define_targeted_validation_for_second_wave_survivor_skill_roster_distinctiveness_and_balance_posture`
 
 # Needs
 - Expand the current Emberwake build roster with a second curated wave of survivor-style skills so runs can support more distinct build fantasies than the first playable roster alone.

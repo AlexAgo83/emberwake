@@ -69,7 +69,13 @@ export const entitySimulationContract = {
 } as const;
 export { entityCombatPresentationContract };
 
-export type SimulatedPickupKind = "cache" | "crystal" | "gold" | "healing-kit" | "magnet";
+export type SimulatedPickupKind =
+  | "cache"
+  | "crystal"
+  | "gold"
+  | "healing-kit"
+  | "hourglass"
+  | "magnet";
 
 export type PickupAttractionSource = "magnet" | "proximity";
 
@@ -118,6 +124,10 @@ export type HostileBehaviorState = {
   phaseStartedAtTick: number | null;
 };
 
+export type HostileControlState = {
+  frozenUntilTick: number | null;
+};
+
 export type RunStats = {
   activeWeaponPerformance: Record<
     ActiveWeaponId,
@@ -152,12 +162,18 @@ export type FloatingDamageNumber = {
 };
 
 export type CombatSkillFeedbackKind =
+  | "boomerang-arc"
+  | "chain-arc"
   | "cinder-burst"
   | "cinder-travel"
+  | "frost-nova"
+  | "halo-burst"
   | "needle-trace"
   | "orbit-pulse"
+  | "trail-burn"
   | "slash-ribbon"
   | "kunai-fan"
+  | "vacuum-pulse"
   | "zone-seal";
 
 export type CombatSkillFeedbackEvent = {
@@ -198,6 +214,7 @@ export type SimulatedEntity = WorldEntity & {
   damageReactionState?: DamageReactionState;
   focusState?: FocusState;
   hostileBehaviorState?: HostileBehaviorState;
+  hostileControlState?: HostileControlState;
   hostileProfileId?: HostileProfileId;
   movementSurfaceModifier: MovementSurfaceModifierKind;
   movementSpeedWorldUnitsPerSecond?: number;
@@ -214,11 +231,14 @@ export type SimulatedEntity = WorldEntity & {
 export type EntitySimulationState = {
   buildState: BuildState;
   combatSkillFeedbackEvents: CombatSkillFeedbackEvent[];
+  emergencyAegisChargesSpent: number;
+  enemyTimeStopUntilTick: number;
   entities: SimulatedEntity[];
   entity: SimulatedEntity;
   floatingDamageNumbers: FloatingDamageNumber[];
   nextPickupSequence: number;
   nextHostileSequence: number;
+  pickupPulseUntilTick: number;
   runStats: RunStats;
   tick: number;
   worldSeed: string;
@@ -291,6 +311,10 @@ const createCombatState = (maxHealth: number): EntityCombatState => ({
 const createDamageReactionState = (): DamageReactionState => ({
   lastDamageAmount: null,
   lastDamageTick: null
+});
+
+const createHostileControlState = (): HostileControlState => ({
+  frozenUntilTick: null
 });
 
 const createInitialRunStats = (): RunStats => ({
@@ -824,11 +848,14 @@ export const createInitialSimulationState = (): EntitySimulationState => {
   return {
     buildState,
     combatSkillFeedbackEvents: [],
+    emergencyAegisChargesSpent: 0,
+    enemyTimeStopUntilTick: 0,
     entities: [playerEntity],
     entity: playerEntity,
     floatingDamageNumbers: [],
     nextPickupSequence: 0,
     nextHostileSequence: 0,
+    pickupPulseUntilTick: 0,
     runStats: createInitialRunStats(),
     tick: 0,
     worldSeed: emberwakeRuntimeBootstrap.worldSeed
@@ -949,6 +976,10 @@ const normalizeSimulatedEntity = (
           : entity.hostileBehaviorState,
       damageReactionState: normalizeDamageReactionState(entity.damageReactionState),
       hostileProfileId: resolvedHostileProfileId,
+      hostileControlState: {
+        ...createHostileControlState(),
+        ...entity.hostileControlState
+      },
       movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
       movementSpeedWorldUnitsPerSecond:
         entity.movementSpeedWorldUnitsPerSecond ??
@@ -1071,6 +1102,8 @@ export const normalizeEntitySimulationState = (
   return {
     buildState: normalizedBuildState,
     combatSkillFeedbackEvents: simulationState.combatSkillFeedbackEvents ?? [],
+    emergencyAegisChargesSpent: Math.max(0, simulationState.emergencyAegisChargesSpent ?? 0),
+    enemyTimeStopUntilTick: Math.max(0, simulationState.enemyTimeStopUntilTick ?? 0),
     entities: normalizedEntities.map((entity) =>
       entity.id === normalizedPlayerEntity.id ? normalizedPlayerEntity : entity
     ),
@@ -1081,6 +1114,7 @@ export const normalizeEntitySimulationState = (
     ),
     nextPickupSequence,
     nextHostileSequence,
+    pickupPulseUntilTick: Math.max(0, simulationState.pickupPulseUntilTick ?? 0),
     runStats: {
       ...createInitialRunStats(),
       ...simulationState.runStats
@@ -1389,14 +1423,18 @@ export const advanceSimulationState = (
     supportedMovedEntities,
     nextTick,
     choiceAppliedBuildState,
-    simulationState.runStats
+    simulationState.runStats,
+    simulationState.pickupPulseUntilTick
   );
-  const combatResolvedState = resolveHostileContactDamage(
-    attackResolvedState.entities,
-    spawnMaintainedState.entities,
-    nextTick,
-    profiling.playerInvincible
-  );
+  const combatResolvedState = resolveHostileContactDamage({
+    buildState: attackResolvedState.buildState,
+    currentEmergencyAegisChargesSpent: simulationState.emergencyAegisChargesSpent,
+    enemyDamageSuppressed: simulationState.enemyTimeStopUntilTick >= nextTick,
+    entities: attackResolvedState.entities,
+    previousEntities: spawnMaintainedState.entities,
+    tick: nextTick,
+    playerInvincible: profiling.playerInvincible
+  });
   const compactedEntities = compactStackablePickupEntities(
     (() => {
       const defeatedHostiles = combatResolvedState.entities.filter(
@@ -1427,6 +1465,8 @@ export const advanceSimulationState = (
   const pickupResolvedState = resolvePickupCollection({
     buildState: attackResolvedState.buildState,
     entities: compactedEntities,
+    pickupPulseUntilTick: attackResolvedState.pickupPulseUntilTick,
+    tick: nextTick,
     runStats: attackResolvedState.runStats
   });
   const defeatedHostiles = combatResolvedState.entities.filter(
@@ -1494,10 +1534,13 @@ export const advanceSimulationState = (
       ],
       nextTick
     ),
+    emergencyAegisChargesSpent: combatResolvedState.emergencyAegisChargesSpent,
+    enemyTimeStopUntilTick: simulationState.enemyTimeStopUntilTick,
     nextPickupSequence:
       pickupMaintainedState.nextPickupSequence +
       defeatedHostileCount * pickupContract.crystal.enemyDropCount,
     nextHostileSequence: spawnMaintainedState.nextHostileSequence,
+    pickupPulseUntilTick: pickupResolvedState.pickupPulseUntilTick,
     runStats: {
       ...pickupResolvedState.runStats,
       bossDefeats: pickupResolvedState.runStats.bossDefeats + defeatedBossCount,

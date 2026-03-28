@@ -4,11 +4,17 @@ import { sampleDeterministicSignature } from "@engine/world/worldContract";
 import { pickupContract, resolveXpRequiredForLevel } from "./pickupContract";
 import {
   recordActiveWeaponAttack,
+  resolveBossDamageMultiplier,
+  resolveEmergencyAegisChargeCount,
+  resolveExecuteThresholdRatio,
+  resolveGoldGainMultiplier,
   resolveActiveWeaponRuntimeStats,
   resolvePickupRadiusMultiplier,
+  resolveRetaliationDamage,
   type BuildState
 } from "./buildSystem";
 import { systemTuning } from "@game/config/systemTuning";
+import { getHostileSpawnProfile } from "./hostilePressure";
 import type {
   CombatSkillFeedbackEvent,
   FloatingDamageNumber,
@@ -118,6 +124,37 @@ const moveWorldPointTowardTarget = (
   };
 };
 
+const distanceBetweenSegmentAndPoint = (
+  segmentStart: WorldPoint,
+  segmentEnd: WorldPoint,
+  point: WorldPoint
+) => {
+  const segmentDeltaX = segmentEnd.x - segmentStart.x;
+  const segmentDeltaY = segmentEnd.y - segmentStart.y;
+  const segmentLengthSquared =
+    segmentDeltaX * segmentDeltaX + segmentDeltaY * segmentDeltaY;
+
+  if (segmentLengthSquared === 0) {
+    return distanceBetweenWorldPoints(segmentStart, point);
+  }
+
+  const projectedRatio = Math.max(
+    0,
+    Math.min(
+      1,
+      ((point.x - segmentStart.x) * segmentDeltaX +
+        (point.y - segmentStart.y) * segmentDeltaY) /
+        segmentLengthSquared
+    )
+  );
+  const nearestPoint = {
+    x: segmentStart.x + segmentDeltaX * projectedRatio,
+    y: segmentStart.y + segmentDeltaY * projectedRatio
+  };
+
+  return distanceBetweenWorldPoints(nearestPoint, point);
+};
+
 const createFloatingDamageNumber = (
   entity: SimulatedEntity,
   damage: number,
@@ -168,12 +205,14 @@ export const resolveAutomaticPlayerAttack = (
   entities: readonly SimulatedEntity[],
   tick: number,
   buildState: BuildState,
-  runStats: RunStats
+  runStats: RunStats,
+  currentPickupPulseUntilTick = 0
 ): {
   buildState: BuildState;
   combatSkillFeedbackEvents: CombatSkillFeedbackEvent[];
   entities: SimulatedEntity[];
   floatingDamageNumbers: FloatingDamageNumber[];
+  pickupPulseUntilTick: number;
   runStats: RunStats;
 } => {
   const playerEntity = getPlayerEntity(entities);
@@ -184,6 +223,7 @@ export const resolveAutomaticPlayerAttack = (
       combatSkillFeedbackEvents: [],
       entities: [...entities],
       floatingDamageNumbers: [],
+      pickupPulseUntilTick: currentPickupPulseUntilTick,
       runStats
     };
   }
@@ -201,11 +241,18 @@ export const resolveAutomaticPlayerAttack = (
   let nextEntities = [...entities];
   const combatSkillFeedbackEvents: CombatSkillFeedbackEvent[] = [];
   const floatingDamageNumbers: FloatingDamageNumber[] = [];
+  let nextPickupPulseUntilTick = currentPickupPulseUntilTick;
+  const bossDamageMultiplier = resolveBossDamageMultiplier(buildState);
+  const executeThresholdRatio = resolveExecuteThresholdRatio(buildState);
 
   const applyDamageToTargetIds = (
     targetIds: string[],
     damage: number,
-    weaponId: keyof RunStats["activeWeaponPerformance"]
+    weaponId: keyof RunStats["activeWeaponPerformance"],
+    options?: {
+      freezeDurationTicks?: number;
+      pickupPulseDurationTicks?: number;
+    }
   ) => {
     if (targetIds.length === 0) {
       return;
@@ -220,14 +267,43 @@ export const resolveAutomaticPlayerAttack = (
         return entity;
       }
 
-      totalDamageDealt += Math.min(damage, entity.combat.currentHealth);
-      const damagedEntity = applyDamage(entity, damage, tick);
+      const hostileProfile =
+        entity.role === "hostile" && entity.hostileProfileId
+          ? getHostileSpawnProfile(entity.hostileProfileId)
+          : null;
+      const executeDamage =
+        executeThresholdRatio > 0 &&
+        entity.combat.maxHealth > 0 &&
+        entity.combat.currentHealth / entity.combat.maxHealth <= executeThresholdRatio
+          ? entity.combat.currentHealth
+          : 0;
+      const resolvedDamage = Math.max(
+        damage,
+        executeDamage,
+        hostileProfile?.isMiniBoss ? Math.round(damage * bossDamageMultiplier) : damage
+      );
+
+      totalDamageDealt += Math.min(resolvedDamage, entity.combat.currentHealth);
+      const damagedEntity = applyDamage(entity, resolvedDamage, tick);
 
       if (entity.combat.currentHealth > 0 && damagedEntity.combat.currentHealth <= 0) {
         hostileDefeats += 1;
       }
 
-      floatingDamageNumbers.push(createFloatingDamageNumber(damagedEntity, damage, tick));
+      floatingDamageNumbers.push(createFloatingDamageNumber(damagedEntity, resolvedDamage, tick));
+
+      if (options?.freezeDurationTicks && entity.role === "hostile") {
+        return {
+          ...damagedEntity,
+          hostileControlState: {
+            frozenUntilTick: Math.max(
+              damagedEntity.hostileControlState?.frozenUntilTick ?? 0,
+              tick + options.freezeDurationTicks
+            )
+          }
+        };
+      }
+
       return damagedEntity;
     });
 
@@ -237,7 +313,39 @@ export const resolveAutomaticPlayerAttack = (
         nextRunStats.activeWeaponPerformance[weaponId].hostileDefeats + hostileDefeats,
       totalDamage: nextRunStats.activeWeaponPerformance[weaponId].totalDamage + totalDamageDealt
     };
+
+    if (options?.pickupPulseDurationTicks) {
+      nextPickupPulseUntilTick = Math.max(
+        nextPickupPulseUntilTick,
+        tick + options.pickupPulseDurationTicks
+      );
+    }
   };
+
+  const resolveFeedbackKind = (
+    attackKind: ReturnType<typeof resolveActiveWeaponRuntimeStats>["attackKind"]
+  ): CombatSkillFeedbackEvent["kind"] =>
+    attackKind === "cone"
+      ? "slash-ribbon"
+      : attackKind === "fan"
+        ? "kunai-fan"
+        : attackKind === "auto-target"
+          ? "needle-trace"
+          : attackKind === "orbit"
+            ? "orbit-pulse"
+            : attackKind === "zone"
+              ? "zone-seal"
+              : attackKind === "chain"
+                ? "chain-arc"
+                : attackKind === "boomerang"
+                  ? "boomerang-arc"
+                  : attackKind === "trail"
+                    ? "trail-burn"
+                    : attackKind === "nova"
+                      ? "halo-burst"
+                      : attackKind === "vacuum"
+                        ? "vacuum-pulse"
+                        : "cinder-burst";
 
   for (const activeSlot of buildState.activeSlots) {
     const runtimeStats = resolveActiveWeaponRuntimeStats(nextBuildState, activeSlot);
@@ -308,12 +416,102 @@ export const resolveAutomaticPlayerAttack = (
       };
     };
 
+    const pickNovaTargets = () =>
+      currentLivingHostiles
+        .filter(
+          (hostileEntity) =>
+            distanceBetweenWorldPoints(
+              currentPlayerEntity.worldPosition,
+              hostileEntity.worldPosition
+            ) <= runtimeStats.areaRadiusWorldUnits + hostileEntity.footprint.radius
+        )
+        .slice(0, runtimeStats.targetCount);
+
+    const pickChainTargets = () => {
+      const chainedTargets: SimulatedEntity[] = [];
+      let lastAnchor =
+        currentLivingHostiles.find(
+          (hostileEntity) =>
+            distanceBetweenWorldPoints(
+              currentPlayerEntity.worldPosition,
+              hostileEntity.worldPosition
+            ) <= runtimeStats.rangeWorldUnits
+        ) ?? null;
+
+      while (lastAnchor && chainedTargets.length < runtimeStats.targetCount) {
+        chainedTargets.push(lastAnchor);
+        const anchorWorldPoint = lastAnchor.worldPosition;
+        lastAnchor =
+          currentLivingHostiles
+            .filter(
+              (hostileEntity) =>
+                !chainedTargets.some((targetEntity) => targetEntity.id === hostileEntity.id) &&
+                distanceBetweenWorldPoints(anchorWorldPoint, hostileEntity.worldPosition) <=
+                  runtimeStats.areaRadiusWorldUnits + hostileEntity.footprint.radius
+            )
+            .sort(
+              (leftEntity, rightEntity) =>
+                distanceBetweenWorldPoints(anchorWorldPoint, leftEntity.worldPosition) -
+                distanceBetweenWorldPoints(anchorWorldPoint, rightEntity.worldPosition)
+            )[0] ?? null;
+      }
+
+      return chainedTargets;
+    };
+
+    const pickBoomerangTargets = () => {
+      const boomerangEndPoint = projectWorldPoint(
+        currentPlayerEntity.worldPosition,
+        currentPlayerEntity.orientation,
+        runtimeStats.rangeWorldUnits
+      );
+
+      return currentLivingHostiles
+        .filter(
+          (hostileEntity) =>
+            distanceBetweenSegmentAndPoint(
+              currentPlayerEntity.worldPosition,
+              boomerangEndPoint,
+              hostileEntity.worldPosition
+            ) <= runtimeStats.areaRadiusWorldUnits + hostileEntity.footprint.radius
+        )
+        .sort(
+          (leftEntity, rightEntity) =>
+            distanceBetweenWorldPoints(currentPlayerEntity.worldPosition, leftEntity.worldPosition) -
+            distanceBetweenWorldPoints(currentPlayerEntity.worldPosition, rightEntity.worldPosition)
+        )
+        .slice(0, runtimeStats.targetCount);
+    };
+
+    const pickTrailTargets = () => {
+      const trailEndPoint = projectWorldPoint(
+        currentPlayerEntity.worldPosition,
+        currentPlayerEntity.orientation + Math.PI,
+        runtimeStats.rangeWorldUnits
+      );
+
+      return currentLivingHostiles
+        .filter(
+          (hostileEntity) =>
+            distanceBetweenSegmentAndPoint(
+              currentPlayerEntity.worldPosition,
+              trailEndPoint,
+              hostileEntity.worldPosition
+            ) <= runtimeStats.areaRadiusWorldUnits + hostileEntity.footprint.radius
+        )
+        .slice(0, runtimeStats.targetCount);
+    };
+
     const clusteredTargets = pickTargetCluster();
     const previewWorldPoint = projectWorldPoint(
       currentPlayerEntity.worldPosition,
-      currentPlayerEntity.orientation,
+      runtimeStats.attackKind === "trail"
+        ? currentPlayerEntity.orientation + Math.PI
+        : currentPlayerEntity.orientation,
       runtimeStats.attackKind === "lob"
         ? Math.max(84, runtimeStats.rangeWorldUnits * 0.82)
+        : runtimeStats.attackKind === "trail"
+          ? runtimeStats.rangeWorldUnits
         : Math.max(64, runtimeStats.rangeWorldUnits * 0.7)
     );
     const targetEntities =
@@ -329,6 +527,14 @@ export const resolveAutomaticPlayerAttack = (
                   ) <= runtimeStats.rangeWorldUnits
               )
               .slice(0, runtimeStats.targetCount)
+          : runtimeStats.attackKind === "chain"
+            ? pickChainTargets()
+            : runtimeStats.attackKind === "boomerang"
+              ? pickBoomerangTargets()
+              : runtimeStats.attackKind === "trail"
+                ? pickTrailTargets()
+                : runtimeStats.attackKind === "nova" || runtimeStats.attackKind === "vacuum"
+                  ? pickNovaTargets()
           : runtimeStats.attackKind === "orbit"
             ? currentLivingHostiles
                 .filter(
@@ -344,7 +550,10 @@ export const resolveAutomaticPlayerAttack = (
     const canEmitPreviewWithoutTargets =
       runtimeStats.attackKind === "lob" ||
       runtimeStats.attackKind === "orbit" ||
-      runtimeStats.attackKind === "zone";
+      runtimeStats.attackKind === "zone" ||
+      runtimeStats.attackKind === "trail" ||
+      runtimeStats.attackKind === "nova" ||
+      runtimeStats.attackKind === "vacuum";
 
     if (targetEntities.length === 0) {
       if (!canEmitPreviewWithoutTargets) {
@@ -357,6 +566,13 @@ export const resolveAutomaticPlayerAttack = (
         attacksTriggered:
           nextRunStats.activeWeaponPerformance[activeSlot.weaponId].attacksTriggered + 1
       };
+
+      if (runtimeStats.attackKind === "vacuum") {
+        nextPickupPulseUntilTick = Math.max(
+          nextPickupPulseUntilTick,
+          tick + runtimeStats.visibleTicks
+        );
+      }
 
       if (runtimeStats.attackKind === "lob") {
         combatSkillFeedbackEvents.push({
@@ -382,15 +598,14 @@ export const resolveAutomaticPlayerAttack = (
             ? 34
             : runtimeStats.attackKind === "orbit"
               ? 28
+              : runtimeStats.attackKind === "trail"
+                ? 20
+                : runtimeStats.attackKind === "nova" || runtimeStats.attackKind === "vacuum"
+                  ? 18
               : 18,
         fusionId: runtimeStats.fusionId,
         id: `skill-feedback:${activeSlot.weaponId}:${tick}:${combatSkillFeedbackEvents.length}`,
-        kind:
-          runtimeStats.attackKind === "orbit"
-            ? "orbit-pulse"
-            : runtimeStats.attackKind === "zone"
-              ? "zone-seal"
-              : "cinder-burst",
+        kind: resolveFeedbackKind(runtimeStats.attackKind),
         orientationRadians:
           runtimeStats.attackKind === "zone" ? currentPlayerEntity.orientation : null,
         originWorldPoint:
@@ -415,7 +630,14 @@ export const resolveAutomaticPlayerAttack = (
       attacksTriggered:
         nextRunStats.activeWeaponPerformance[activeSlot.weaponId].attacksTriggered + 1
     };
-    applyDamageToTargetIds(targetIds, runtimeStats.damage, activeSlot.weaponId);
+    applyDamageToTargetIds(targetIds, runtimeStats.damage, activeSlot.weaponId, {
+      freezeDurationTicks:
+        activeSlot.weaponId === "frost-nova"
+          ? Math.max(36, runtimeStats.visibleTicks * 2)
+          : undefined,
+      pickupPulseDurationTicks:
+        runtimeStats.attackKind === "vacuum" ? runtimeStats.visibleTicks : undefined
+    });
 
     if (runtimeStats.attackKind === "lob") {
       combatSkillFeedbackEvents.push({
@@ -443,21 +665,14 @@ export const resolveAutomaticPlayerAttack = (
             ? 28
             : runtimeStats.attackKind === "lob"
               ? 18
+              : runtimeStats.attackKind === "trail"
+                ? 20
+                : runtimeStats.attackKind === "nova" || runtimeStats.attackKind === "vacuum"
+                  ? 18
               : 12,
       fusionId: runtimeStats.fusionId,
       id: `skill-feedback:${activeSlot.weaponId}:${tick}:${combatSkillFeedbackEvents.length}`,
-      kind:
-        runtimeStats.attackKind === "cone"
-          ? "slash-ribbon"
-          : runtimeStats.attackKind === "fan"
-            ? "kunai-fan"
-            : runtimeStats.attackKind === "auto-target"
-              ? "needle-trace"
-              : runtimeStats.attackKind === "orbit"
-                ? "orbit-pulse"
-                : runtimeStats.attackKind === "zone"
-                  ? "zone-seal"
-                  : "cinder-burst",
+      kind: resolveFeedbackKind(runtimeStats.attackKind),
       orientationRadians:
         runtimeStats.attackKind === "cone" ||
         runtimeStats.attackKind === "fan" ||
@@ -467,18 +682,28 @@ export const resolveAutomaticPlayerAttack = (
       originWorldPoint:
         runtimeStats.attackKind === "lob" || runtimeStats.attackKind === "zone"
           ? clusteredTargets.anchorTarget?.worldPosition ?? targetEntities[0]!.worldPosition
+          : runtimeStats.attackKind === "nova" || runtimeStats.attackKind === "vacuum"
+            ? currentPlayerEntity.worldPosition
           : currentPlayerEntity.worldPosition,
       radiusWorldUnits:
         runtimeStats.attackKind === "orbit" ||
         runtimeStats.attackKind === "lob" ||
-        runtimeStats.attackKind === "zone"
+        runtimeStats.attackKind === "zone" ||
+        runtimeStats.attackKind === "trail" ||
+        runtimeStats.attackKind === "nova" ||
+        runtimeStats.attackKind === "vacuum" ||
+        runtimeStats.attackKind === "boomerang" ||
+        runtimeStats.attackKind === "chain"
           ? runtimeStats.areaRadiusWorldUnits
           : runtimeStats.attackKind === "cone" || runtimeStats.attackKind === "fan"
             ? runtimeStats.rangeWorldUnits
             : null,
       sourceEntityId: currentPlayerEntity.id,
       spawnedAtTick: tick,
-      targetWorldPoints: targetEntities.map((targetEntity) => targetEntity.worldPosition),
+      targetWorldPoints:
+        runtimeStats.attackKind === "trail"
+          ? [previewWorldPoint, ...targetEntities.map((targetEntity) => targetEntity.worldPosition)]
+          : targetEntities.map((targetEntity) => targetEntity.worldPosition),
       weaponId: activeSlot.weaponId
     });
   }
@@ -507,6 +732,7 @@ export const resolveAutomaticPlayerAttack = (
       };
     }),
     floatingDamageNumbers,
+    pickupPulseUntilTick: nextPickupPulseUntilTick,
     runStats: nextRunStats
   };
 };
@@ -516,11 +742,25 @@ const isEntityPairOverlapping = (leftEntity: SimulatedEntity, rightEntity: Simul
   leftEntity.footprint.radius + rightEntity.footprint.radius + 0.5;
 
 export const resolveHostileContactDamage = (
-  entities: readonly SimulatedEntity[],
-  previousEntities: readonly SimulatedEntity[],
-  tick: number,
-  playerInvincible = false
+  {
+    buildState,
+    currentEmergencyAegisChargesSpent = 0,
+    enemyDamageSuppressed = false,
+    entities,
+    previousEntities,
+    tick,
+    playerInvincible = false
+  }: {
+    buildState: BuildState;
+    currentEmergencyAegisChargesSpent?: number;
+    enemyDamageSuppressed?: boolean;
+    entities: readonly SimulatedEntity[];
+    previousEntities: readonly SimulatedEntity[];
+    tick: number;
+    playerInvincible?: boolean;
+  }
 ): {
+  emergencyAegisChargesSpent: number;
   entities: SimulatedEntity[];
   floatingDamageNumbers: FloatingDamageNumber[];
 } => {
@@ -529,13 +769,15 @@ export const resolveHostileContactDamage = (
 
   if (!playerEntity || !isAlive(playerEntity)) {
     return {
+      emergencyAegisChargesSpent: currentEmergencyAegisChargesSpent,
       entities: [...entities],
       floatingDamageNumbers: []
     };
   }
 
-  if (playerInvincible) {
+  if (playerInvincible || enemyDamageSuppressed) {
     return {
+      emergencyAegisChargesSpent: currentEmergencyAegisChargesSpent,
       entities: [...entities],
       floatingDamageNumbers: []
     };
@@ -544,6 +786,9 @@ export const resolveHostileContactDamage = (
   let nextPlayerEntity = playerEntity;
   const nextEntities = entities.map((entity) => ({ ...entity }));
   const floatingDamageNumbers: FloatingDamageNumber[] = [];
+  const retaliationDamage = resolveRetaliationDamage(buildState);
+  const emergencyAegisChargeCount = resolveEmergencyAegisChargeCount(buildState);
+  let nextEmergencyAegisChargesSpent = currentEmergencyAegisChargesSpent;
 
   for (let index = 0; index < nextEntities.length; index += 1) {
     const hostileEntity = nextEntities[index];
@@ -552,6 +797,7 @@ export const resolveHostileContactDamage = (
       hostileEntity.role !== "hostile" ||
       !hostileEntity.contactDamageProfile ||
       !isAlive(hostileEntity) ||
+      (hostileEntity.hostileControlState?.frozenUntilTick ?? 0) > tick ||
       !isAlive(nextPlayerEntity)
     ) {
       continue;
@@ -582,16 +828,43 @@ export const resolveHostileContactDamage = (
     floatingDamageNumbers.push(
       createFloatingDamageNumber(nextPlayerEntity, contactDamageProfile.damage, tick)
     );
-    nextEntities[index] = {
+    let nextHostileEntity: SimulatedEntity = {
       ...hostileEntity,
       contactDamageProfile: {
         ...contactDamageProfile,
         lastDamageTick: tick
       }
     };
+
+    if (retaliationDamage > 0) {
+      nextHostileEntity = applyDamage(nextHostileEntity, retaliationDamage, tick);
+      floatingDamageNumbers.push(
+        createFloatingDamageNumber(nextHostileEntity, retaliationDamage, tick)
+      );
+    }
+
+    if (
+      nextPlayerEntity.combat.currentHealth <= 0 &&
+      nextEmergencyAegisChargesSpent < emergencyAegisChargeCount
+    ) {
+      nextEmergencyAegisChargesSpent += 1;
+      nextPlayerEntity = {
+        ...nextPlayerEntity,
+        combat: {
+          ...nextPlayerEntity.combat,
+          currentHealth: Math.max(
+            1,
+            Math.ceil(nextPlayerEntity.combat.maxHealth * 0.34)
+          )
+        }
+      };
+    }
+
+    nextEntities[index] = nextHostileEntity;
   }
 
   return {
+    emergencyAegisChargesSpent: nextEmergencyAegisChargesSpent,
     entities: nextEntities.map((entity) =>
       entity.id === nextPlayerEntity.id ? nextPlayerEntity : entity
     ),
@@ -602,10 +875,14 @@ export const resolveHostileContactDamage = (
 export const resolvePickupCollection = ({
   buildState,
   entities,
+  pickupPulseUntilTick,
+  tick,
   runStats
 }: {
   buildState: BuildState;
   entities: readonly SimulatedEntity[];
+  pickupPulseUntilTick: number;
+  tick: number;
   runStats: RunStats;
 }) => {
   const playerEntity = getPlayerEntity(entities);
@@ -614,6 +891,7 @@ export const resolvePickupCollection = ({
     return {
       buildState,
       entities: [...entities],
+      pickupPulseUntilTick,
       runStats
     };
   }
@@ -621,6 +899,7 @@ export const resolvePickupCollection = ({
   let nextPlayerEntity = playerEntity;
   const nextRunStats = { ...runStats };
   const retainedEntities: SimulatedEntity[] = [];
+  const goldGainMultiplier = resolveGoldGainMultiplier(buildState);
   const pickupRadiusWorldUnits =
     pickupContract.pickup.pickupRadiusWorldUnits * resolvePickupRadiusMultiplier(buildState);
   const crystalAttractionRadiusWorldUnits =
@@ -633,7 +912,7 @@ export const resolvePickupCollection = ({
       entity.pickupProfile?.kind === "magnet" &&
       distanceBetweenWorldPoints(entity.worldPosition, nextPlayerEntity.worldPosition) <=
         crystalCollectDistanceWorldUnits
-  );
+  ) || pickupPulseUntilTick >= tick;
 
   for (const entity of entities) {
     if (entity.role !== "pickup" || !entity.pickupProfile) {
@@ -682,7 +961,7 @@ export const resolvePickupCollection = ({
           ...entity.pickupProfile,
           attractionState: {
             source: attractionSource,
-            startedAtTick: entity.pickupProfile.attractionState?.startedAtTick ?? 0
+            startedAtTick: entity.pickupProfile.attractionState?.startedAtTick ?? tick
           }
         },
         worldPosition: movedWorldPosition
@@ -704,7 +983,10 @@ export const resolvePickupCollection = ({
         nextRunStats.healingKitsCollected += 1;
         break;
       case "gold":
-        nextRunStats.goldCollected += pickupContract.gold.value * pickupStackCount;
+        nextRunStats.goldCollected += Math.max(
+          1,
+          Math.round(pickupContract.gold.value * pickupStackCount * goldGainMultiplier)
+        );
         break;
       case "magnet":
         break;
@@ -716,6 +998,7 @@ export const resolvePickupCollection = ({
     entities: retainedEntities.map((entity) =>
       entity.id === nextPlayerEntity.id ? nextPlayerEntity : entity
     ),
+    pickupPulseUntilTick,
     runStats: nextRunStats
   };
 };

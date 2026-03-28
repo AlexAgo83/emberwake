@@ -45,15 +45,29 @@ const resolveWeaponPalette = (weaponId: ActiveWeaponId, fusionId: FusionId | nul
   const basePalette =
     weaponId === "ash-lash"
       ? { core: 0xffb768, glow: 0xff8a4b }
+      : weaponId === "boomerang-arc"
+        ? { core: 0xffd68f, glow: 0xffa65e }
+        : weaponId === "burning-trail"
+          ? { core: 0xff9a5f, glow: 0xff5a3f }
+          : weaponId === "chain-lightning"
+            ? { core: 0xb7f8ff, glow: 0x74e7ff }
       : weaponId === "guided-senbon"
         ? { core: 0x8be7ff, glow: 0x5ce5ff }
+        : weaponId === "halo-burst"
+          ? { core: 0xfff1a2, glow: 0xffd067 }
+          : weaponId === "frost-nova"
+            ? { core: 0xd2f6ff, glow: 0x8cdcff }
         : weaponId === "shade-kunai"
           ? { core: 0xe6e2ff, glow: 0x9bb1ba }
           : weaponId === "cinder-arc"
             ? { core: 0xffa45e, glow: 0xff7a63 }
+            : weaponId === "orbiting-blades"
+              ? { core: 0xd8fbff, glow: 0x88e1ff }
             : weaponId === "orbit-sutra"
               ? { core: 0xc4f3ff, glow: 0x73d8ff }
-              : { core: 0xb5cbd6, glow: 0x9ae5ff };
+              : weaponId === "vacuum-pulse"
+                ? { core: 0xf2d6ff, glow: 0xc290ff }
+                : { core: 0xb5cbd6, glow: 0x9ae5ff };
 
   if (fusionId === null) {
     return basePalette;
@@ -66,8 +80,8 @@ const resolveWeaponPalette = (weaponId: ActiveWeaponId, fusionId: FusionId | nul
         ? 0xffd58f
         : fusionId === "choir-of-pins"
           ? 0xd8fbff
-          : fusionId === "blackfile-volley"
-            ? 0xf2ddff
+            : fusionId === "blackfile-volley"
+              ? 0xf2ddff
             : 0xb9f4ff
   };
 };
@@ -221,6 +235,40 @@ const drawCombatSkillFeedback =
         }
         break;
       }
+      case "chain-arc":
+      case "boomerang-arc": {
+        const strokeWidth =
+          combatSkillFeedbackEvent.kind === "chain-arc"
+            ? 2.6 + fusionIntensity
+            : 4 + fusionIntensity;
+
+        for (const targetWorldPoint of combatSkillFeedbackEvent.targetWorldPoints) {
+          graphics.setStrokeStyle({
+            alpha: 0.28 * alpha,
+            color: glow,
+            width: strokeWidth + 4
+          });
+          graphics.moveTo(
+            combatSkillFeedbackEvent.originWorldPoint.x,
+            combatSkillFeedbackEvent.originWorldPoint.y
+          );
+          graphics.lineTo(targetWorldPoint.x, targetWorldPoint.y);
+          graphics.stroke();
+
+          graphics.setStrokeStyle({
+            alpha: 0.88 * alpha,
+            color: core,
+            width: strokeWidth
+          });
+          graphics.moveTo(
+            combatSkillFeedbackEvent.originWorldPoint.x,
+            combatSkillFeedbackEvent.originWorldPoint.y
+          );
+          graphics.lineTo(targetWorldPoint.x, targetWorldPoint.y);
+          graphics.stroke();
+        }
+        break;
+      }
       case "cinder-travel": {
         const targetWorldPoint =
           combatSkillFeedbackEvent.targetWorldPoints[0] ?? combatSkillFeedbackEvent.originWorldPoint;
@@ -285,6 +333,66 @@ const drawCombatSkillFeedback =
           graphics.lineTo(
             centerWorldPoint.x + Math.cos(spokeAngle) * outerRadius,
             centerWorldPoint.y + Math.sin(spokeAngle) * outerRadius
+          );
+          graphics.stroke();
+        }
+        break;
+      }
+      case "trail-burn": {
+        const trailEndPoint =
+          combatSkillFeedbackEvent.targetWorldPoints[0] ?? combatSkillFeedbackEvent.originWorldPoint;
+        graphics.setStrokeStyle({
+          alpha: 0.34 * alpha,
+          color: glow,
+          width: Math.max(8, radius * 0.28)
+        });
+        graphics.moveTo(
+          combatSkillFeedbackEvent.originWorldPoint.x,
+          combatSkillFeedbackEvent.originWorldPoint.y
+        );
+        graphics.lineTo(trailEndPoint.x, trailEndPoint.y);
+        graphics.stroke();
+        graphics.setStrokeStyle({
+          alpha: 0.84 * alpha,
+          color: core,
+          width: Math.max(3, radius * 0.11)
+        });
+        graphics.moveTo(
+          combatSkillFeedbackEvent.originWorldPoint.x,
+          combatSkillFeedbackEvent.originWorldPoint.y
+        );
+        graphics.lineTo(trailEndPoint.x, trailEndPoint.y);
+        graphics.stroke();
+        break;
+      }
+      case "halo-burst":
+      case "frost-nova":
+      case "vacuum-pulse": {
+        const burstRadius = radius * (0.32 + progress * 0.58);
+        graphics.setFillStyle({ alpha: 0.12 * alpha, color: glow });
+        graphics.circle(
+          combatSkillFeedbackEvent.originWorldPoint.x,
+          combatSkillFeedbackEvent.originWorldPoint.y,
+          burstRadius
+        );
+        graphics.fill();
+        graphics.setStrokeStyle({
+          alpha: 0.88 * alpha,
+          color: core,
+          width: 3 + fusionIntensity
+        });
+        graphics.circle(
+          combatSkillFeedbackEvent.originWorldPoint.x,
+          combatSkillFeedbackEvent.originWorldPoint.y,
+          burstRadius
+        );
+        graphics.stroke();
+
+        if (combatSkillFeedbackEvent.kind !== "vacuum-pulse") {
+          graphics.circle(
+            combatSkillFeedbackEvent.originWorldPoint.x,
+            combatSkillFeedbackEvent.originWorldPoint.y,
+            burstRadius * 0.6
           );
           graphics.stroke();
         }

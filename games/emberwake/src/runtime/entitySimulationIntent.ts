@@ -303,6 +303,17 @@ export const resolveEntityIntent = ({
     : null;
   const previousBehaviorState =
     entity.hostileBehaviorState ?? createEmptyHostileBehaviorState();
+  const frozenUntilTick = entity.hostileControlState?.frozenUntilTick ?? null;
+
+  if (frozenUntilTick !== null && tick < frozenUntilTick) {
+    return {
+      focusTargetEntityId: playerEntity.id,
+      hostileBehaviorState: previousBehaviorState,
+      pathfindingState: previousPathfindingState,
+      state: "idle",
+      velocity: { x: 0, y: 0 }
+    };
+  }
 
   if (hostileProfile?.behaviorKind === "telegraphed-charge") {
     let nextBehaviorState = previousBehaviorState;

@@ -1104,4 +1104,165 @@ describe("entitySimulation", () => {
     expect(mergedCrystal?.pickupProfile?.stackCount).toBe(51);
     expect(mergedCrystal?.visual.tint).toBe("#ff5a5a");
   });
+
+  it("lets vacuum pulse trigger map-wide crystal attraction when it fires", () => {
+    const initialState = createInitialSimulationState();
+    const vacuumState = normalizeEntitySimulationState({
+      ...initialState,
+      buildState: {
+        ...initialState.buildState,
+        activeSlots: [
+          {
+            fusionId: null,
+            lastAttackTick: null,
+            level: 1,
+            weaponId: "vacuum-pulse"
+          }
+        ]
+      },
+      entities: [
+        initialState.entity,
+        createHostileFixture({
+          id: "entity:hostile:vacuum-target",
+          worldPosition: { x: 96, y: 0 }
+        }),
+        createPickupFixture("crystal", {
+          id: "entity:pickup:crystal:vacuum",
+          worldPosition: { x: 240, y: 0 }
+        })
+      ]
+    });
+
+    const nextState = advanceSimulationState(vacuumState, {
+      profiling: {
+        playerInvincible: false,
+        spawnMode: "no-spawn"
+      }
+    });
+    const crystalEntity = nextState.entities.find(
+      (entity) => entity.id === "entity:pickup:crystal:vacuum"
+    );
+
+    expect(nextState.pickupPulseUntilTick).toBeGreaterThan(nextState.tick);
+    expect(crystalEntity?.worldPosition.x ?? Number.POSITIVE_INFINITY).toBeLessThan(240);
+  });
+
+  it("freezes nearby hostiles when frost nova resolves", () => {
+    const initialState = createInitialSimulationState();
+    const frostState = normalizeEntitySimulationState({
+      ...initialState,
+      buildState: {
+        ...initialState.buildState,
+        activeSlots: [
+          {
+            fusionId: null,
+            lastAttackTick: null,
+            level: 1,
+            weaponId: "frost-nova"
+          }
+        ]
+      },
+      entities: [
+        initialState.entity,
+        createHostileFixture({
+          id: "entity:hostile:frost-target",
+          worldPosition: { x: 72, y: 0 }
+        })
+      ]
+    });
+
+    const frozenState = advanceSimulationState(frostState, {
+      profiling: {
+        playerInvincible: false,
+        spawnMode: "no-spawn"
+      }
+    });
+    const frozenHostile = frozenState.entities.find(
+      (entity) => entity.id === "entity:hostile:frost-target"
+    );
+    const heldState = advanceSimulationState(frozenState, {
+      profiling: {
+        playerInvincible: false,
+        spawnMode: "no-spawn"
+      }
+    });
+    const heldHostile = heldState.entities.find(
+      (entity) => entity.id === "entity:hostile:frost-target"
+    );
+
+    expect(frozenHostile?.hostileControlState?.frozenUntilTick ?? 0).toBeGreaterThan(
+      frozenState.tick
+    );
+    expect(heldHostile?.velocity).toEqual({ x: 0, y: 0 });
+  });
+
+  it("amplifies collected gold when greed engine is equipped", () => {
+    const initialState = createInitialSimulationState();
+    const greedState = normalizeEntitySimulationState({
+      ...initialState,
+      buildState: {
+        ...initialState.buildState,
+        passiveSlots: [
+          {
+            level: 2,
+            passiveId: "greed-engine"
+          }
+        ]
+      },
+      entities: [
+        initialState.entity,
+        createPickupFixture("gold", {
+          id: "entity:pickup:gold:greed",
+          worldPosition: { x: 12, y: 0 }
+        })
+      ]
+    });
+
+    const nextState = advanceSimulationState(greedState, {
+      profiling: {
+        playerInvincible: false,
+        spawnMode: "no-spawn"
+      }
+    });
+
+    expect(nextState.runStats.goldCollected).toBeGreaterThan(2);
+  });
+
+  it("spends emergency aegis to keep the player alive after lethal contact", () => {
+    const initialState = createInitialSimulationState();
+    const aegisState = normalizeEntitySimulationState({
+      ...initialState,
+      buildState: {
+        ...initialState.buildState,
+        passiveSlots: [
+          {
+            level: 1,
+            passiveId: "emergency-aegis"
+          }
+        ]
+      },
+      entities: [
+        initialState.entity,
+        createHostileFixture({
+          id: "entity:hostile:aegis",
+          contactDamageProfile: {
+            cooldownTicks: hostileCombatContract.hostile.contactDamageCooldownTicks,
+            damage: 999,
+            lastDamageTick: null
+          },
+          worldPosition: { x: 0, y: 0 }
+        })
+      ]
+    });
+
+    const nextState = advanceSimulationState(aegisState, {
+      profiling: {
+        playerInvincible: false,
+        spawnMode: "no-spawn"
+      }
+    });
+
+    expect(nextState.entity.combat.currentHealth).toBeGreaterThan(0);
+    expect(nextState.emergencyAegisChargesSpent).toBe(1);
+  });
 });
