@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { AppMetaScenePanel } from "./AppMetaScenePanel";
+import { createDefaultMetaProfile } from "../model/metaProgression";
 import { createDefaultDesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
 import { appConfig } from "../../shared/config/appConfig";
 
@@ -15,14 +16,18 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   isMobileLayout: false,
   isShellMenuOpen: false,
   isLoadAvailable: false,
+  metaProfile: createDefaultMetaProfile(),
   onApplyDesktopControlBindings: vi.fn(),
   onBeginNewGame: vi.fn(),
   onOpenBestiary: vi.fn(),
   onCharacterNameChange: vi.fn(),
   onLoadGame: vi.fn(),
   onOpenChangelogs: vi.fn(),
+  onOpenGrowth: vi.fn(),
   onOpenGrimoire: vi.fn(),
   onOpenNewGame: vi.fn(),
+  onPurchaseShopUnlock: vi.fn(),
+  onPurchaseTalentRank: vi.fn(),
   onOpenSettings: vi.fn(),
   onReturnToMainMenu: vi.fn(),
   onResumeRuntime: vi.fn(),
@@ -58,6 +63,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByRole("button", { name: /Grimoire/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Bestiary/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Changelogs/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Growth/i })).toBeInTheDocument();
     expect(screen.queryByText(/Meta flow/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/^Session$/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Resume the run, start a new one/i)).not.toBeInTheDocument();
@@ -88,6 +94,24 @@ describe("AppMetaScenePanel", () => {
 
     expect(props.onSaveGame).toHaveBeenCalledTimes(1);
     expect(props.onLoadGame).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders the growth scene with shop and talent purchases", () => {
+    const props = createProps({
+      metaProfile: {
+        ...createDefaultMetaProfile(),
+        goldBalance: 99
+      },
+      scene: "growth"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    expect(screen.getByLabelText("Growth")).toBeInTheDocument();
+    expect(screen.getByText(/Banked gold: 99/i)).toBeInTheDocument();
+    fireEvent.click(screen.getAllByRole("button", { name: /Unlock|Buy rank/i })[0]!);
+
+    expect(props.onPurchaseShopUnlock).toHaveBeenCalledTimes(1);
   });
 
   it("maps Escape to Resume runtime from the main menu when that action is available", () => {

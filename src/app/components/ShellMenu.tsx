@@ -84,6 +84,12 @@ const sceneStatusMap: Record<
     title: "Grimoire archive",
     tone: "neutral"
   },
+  growth: {
+    detail: "Persistent talents and unlock purchases live in the shell.",
+    stateLabel: "Growth",
+    title: "Meta progression",
+    tone: "warm"
+  },
   "main-menu": {
     detail: "The main menu is the entry and return hub.",
     stateLabel: "Menu",

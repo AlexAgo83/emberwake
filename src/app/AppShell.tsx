@@ -30,11 +30,21 @@ import {
   resolveRuntimeProfilingConfigDraft
 } from "./model/runtimeProfilingConfig";
 import { listRuntimeProfilingScenarios } from "./model/runtimeProfilingScenarios";
+import {
+  bankGoldIntoMetaProfile,
+  createDefaultMetaProfile,
+  deriveBuildMetaProgression,
+  mergeArchiveProgress,
+  overlayArchiveProgress,
+  purchaseShopUnlock,
+  purchaseTalentRank
+} from "./model/metaProgression";
 import type {
   DesktopControlBindings
 } from "../game/input/model/singleEntityControlContract";
 import type { EmberwakeGameState } from "@game";
 import { appConfig } from "../shared/config/appConfig";
+import { readMetaProfile, writeMetaProfile } from "../shared/lib/metaProfileStorage";
 
 const LazyActiveRuntimeShellContent = lazy(async () => {
   const module = await import("./components/ActiveRuntimeShellContent");
@@ -47,7 +57,11 @@ const LazyActiveRuntimeShellContent = lazy(async () => {
 export function AppShell() {
   const shellRef = useRef<HTMLElement>(null);
   const latestGameStateRef = useRef<EmberwakeGameState | null>(null);
+  const settledRunRewardKeyRef = useRef<string | null>(null);
   const previousActiveSceneRef = useRef<AppSceneId>("main-menu");
+  const [metaProfile, setMetaProfile] = useState(() =>
+    readMetaProfile(createDefaultMetaProfile())
+  );
   const [pendingCharacterName, setPendingCharacterName] = useState(() =>
     pickRandomCharacterName()
   );
@@ -103,6 +117,7 @@ export function AppShell() {
     resumeRuntime,
     showBestiaryScene,
     showChangelogsScene,
+    showGrowthScene,
     showGrimoireScene,
     showMainMenuScene,
     showNewGameScene,
@@ -137,6 +152,9 @@ export function AppShell() {
 
     previousActiveSceneRef.current = activeScene;
   }, [activeScene]);
+  useEffect(() => {
+    writeMetaProfile(metaProfile);
+  }, [metaProfile]);
   useEffect(() => {
     patchRuntimeProfilingBridge({
       getConfig: () => runtimeProfilingConfig,
@@ -229,6 +247,9 @@ export function AppShell() {
   const handleOpenNewGame = useCallback(() => {
     showNewGameScene();
   }, [showNewGameScene]);
+  const handleOpenGrowth = useCallback(() => {
+    showGrowthScene();
+  }, [showGrowthScene]);
   const handleCharacterNameChange = useCallback((value: string) => {
     setPendingCharacterName(value);
   }, []);
@@ -244,6 +265,12 @@ export function AppShell() {
   const handleOpenSettings = useCallback(() => {
     showSettingsScene();
   }, [showSettingsScene]);
+  const handlePurchaseTalentRank = useCallback((talentId: Parameters<typeof purchaseTalentRank>[1]) => {
+    setMetaProfile((currentProfile) => purchaseTalentRank(currentProfile, talentId));
+  }, []);
+  const handlePurchaseShopUnlock = useCallback((unlockId: Parameters<typeof purchaseShopUnlock>[1]) => {
+    setMetaProfile((currentProfile) => purchaseShopUnlock(currentProfile, unlockId));
+  }, []);
   const handleLoadGame = useCallback(() => {
     if (!savedSessionSlot) {
       return;
@@ -328,6 +355,9 @@ export function AppShell() {
   }, [activeScene, isMenuOpen, showMainMenuScene]);
   const isLoadAvailable = savedSessionSlot !== null;
   const hasRuntimeLayer = runtimeSession.hasActiveSession;
+  useEffect(() => {
+    settledRunRewardKeyRef.current = null;
+  }, [runtimeSession.sessionRevision]);
   const updateGameOverRecap = useCallback((gameState: EmberwakeGameState | null) => {
     if (!gameState) {
       return;
@@ -347,10 +377,53 @@ export function AppShell() {
   const handleRuntimeStateChange = useCallback((gameState: EmberwakeGameState) => {
     latestGameStateRef.current = gameState;
 
+    if (
+      gameState.systems.outcome.kind === "defeat" ||
+      gameState.systems.outcome.kind === "victory"
+    ) {
+      const rewardKey = [
+        runtimeSession.sessionRevision,
+        gameState.systems.outcome.kind,
+        gameState.systems.outcome.emittedAtTick ?? gameState.simulation.tick
+      ].join(":");
+
+      if (settledRunRewardKeyRef.current !== rewardKey) {
+        settledRunRewardKeyRef.current = rewardKey;
+        setMetaProfile((currentProfile) =>
+          mergeArchiveProgress(
+            bankGoldIntoMetaProfile(currentProfile, gameState.systems.progression.goldCollected),
+            {
+              creatureDefeatCounts: gameState.systems.progression.creatureDefeatCounts,
+              discoveredActiveWeaponIds: gameState.systems.progression.discoveredActiveWeaponIds,
+              discoveredCreatureIds: gameState.systems.progression.discoveredCreatureIds,
+              discoveredFusionIds: gameState.systems.progression.discoveredFusionIds,
+              discoveredPassiveItemIds: gameState.systems.progression.discoveredPassiveItemIds
+            }
+          )
+        );
+      }
+    }
+
     if (gameState.systems.outcome.kind === "defeat") {
       updateGameOverRecap(gameState);
     }
-  }, [updateGameOverRecap]);
+  }, [runtimeSession.sessionRevision, updateGameOverRecap]);
+  const latestProgression = (latestGameStateRef.current ?? sessionInitState)?.systems.progression;
+  const progressionSnapshot = {
+    ...overlayArchiveProgress(
+      metaProfile,
+      latestProgression
+        ? {
+            creatureDefeatCounts: latestProgression.creatureDefeatCounts,
+            discoveredActiveWeaponIds: latestProgression.discoveredActiveWeaponIds,
+            discoveredCreatureIds: latestProgression.discoveredCreatureIds,
+            discoveredFusionIds: latestProgression.discoveredFusionIds,
+            discoveredPassiveItemIds: latestProgression.discoveredPassiveItemIds
+          }
+        : null
+    ),
+    phaseLabel: latestProgression?.phaseLabel ?? "Ember Watch"
+  };
   const metaScenePanel = (
     <AppMetaScenePanel
       canResumeSession={runtimeSession.hasActiveSession}
@@ -362,14 +435,18 @@ export function AppShell() {
       isMobileLayout={viewport.layoutMode === "mobile"}
       isShellMenuOpen={isMenuOpen}
       isLoadAvailable={isLoadAvailable}
+      metaProfile={metaProfile}
       onApplyDesktopControlBindings={handleApplyDesktopControlBindings}
       onBeginNewGame={handleBeginNewGame}
       onCharacterNameChange={handleCharacterNameChange}
       onLoadGame={handleLoadGame}
       onOpenBestiary={showBestiaryScene}
       onOpenChangelogs={showChangelogsScene}
+      onOpenGrowth={handleOpenGrowth}
       onOpenGrimoire={showGrimoireScene}
       onOpenNewGame={handleOpenNewGame}
+      onPurchaseShopUnlock={handlePurchaseShopUnlock}
+      onPurchaseTalentRank={handlePurchaseTalentRank}
       onOpenSettings={handleOpenSettings}
       onReturnToMainMenu={handleReturnToMainMenu}
       onResumeRuntime={resumeRuntime}
@@ -377,7 +454,7 @@ export function AppShell() {
       pendingCharacterName={pendingCharacterName}
       playerName={runtimeSession.playerName}
       playerWorldPosition={(latestGameStateRef.current ?? sessionInitState)?.simulation.entity.worldPosition ?? null}
-      progressionSnapshot={(latestGameStateRef.current ?? sessionInitState)?.systems.progression ?? null}
+      progressionSnapshot={progressionSnapshot}
       runtimeOutcome={runtimeOutcome}
       scene={activeScene}
     />
@@ -432,6 +509,7 @@ export function AppShell() {
             isMenuOpen={isMenuOpen}
             lastFullscreenError={lastError}
             metaOverlay={shellOverlay}
+            metaProgression={deriveBuildMetaProgression(metaProfile)}
             onEnterFullscreen={handleRequestFullscreen}
             onInstall={handleInstall}
             onMenuOpenChange={(nextIsOpen) => {

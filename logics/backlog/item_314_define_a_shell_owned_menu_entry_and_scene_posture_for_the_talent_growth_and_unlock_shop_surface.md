@@ -1,10 +1,10 @@
 ## item_314_define_a_shell_owned_menu_entry_and_scene_posture_for_the_talent_growth_and_unlock_shop_surface - Define a shell-owned menu entry and scene posture for the talent growth and unlock shop surface
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Meta progression
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -100,7 +100,10 @@ flowchart LR
 - Product brief(s): `prod_009_level_up_slots_and_run_progression_model_for_emberwake`, `prod_010_first_playable_techno_shinobi_build_content_and_progression_defaults`, `prod_013_techno_shinobi_runtime_hud_and_menu_entry_direction`, `prod_015_post_run_outcome_analysis_direction_for_skill_performance`
 - Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`, `adr_045_model_grimoire_and_bestiary_as_shell_owned_discovery_gated_archive_scenes`
 - Request: `req_084_define_a_shell_owned_talent_growth_and_unlock_shop_progression_surface`
-- Primary task(s): (none yet)
+- Primary task(s): `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`
+
+# Closure
+- Proof: `src/app/components/AppMetaScenePanel.tsx`, `src/app/hooks/useAppScene.ts`, `src/app/AppShell.tsx`.
 
 # AI Context
 - Summary: Define a shell owned meta-progression surface with a first unlock shop lane and a first ranked talent lane.

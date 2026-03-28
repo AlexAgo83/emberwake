@@ -8,6 +8,7 @@ import {
 import { createGenericMoverEntity } from "@game/content/entities/entityContract";
 import { obstacleDefinitions, sampleWorldPointLayers, sampleWorldTileLayers } from "@game/content/world/worldGeneration";
 import type { SingleEntityControlState } from "@game/input/singleEntityControlContract";
+import { singleEntityControlContract } from "@game/input/singleEntityControlContract";
 import type { EntityState, WorldEntity } from "@game/content/entities/entityContract";
 import {
   deterministicRuntimeSupportEntities,
@@ -37,6 +38,8 @@ import {
   createInitialBuildState,
   normalizeBuildState,
   applyLevelUpChoice,
+  resolveMaxHealthBonus,
+  resolveMoveSpeedMultiplier,
   resolveActiveWeaponRuntimeStats,
   type BuildState
 } from "@game/runtime/buildSystem";
@@ -371,10 +374,14 @@ const createPlayerEntity = (buildState = createInitialBuildState()): SimulatedEn
   automaticAttack: {
     ...createPlayerAutomaticAttackProfile(buildState)
   },
-  combat: createCombatState(hostileCombatContract.player.maxHealth),
+  combat: createCombatState(
+    hostileCombatContract.player.maxHealth + resolveMaxHealthBonus(buildState)
+  ),
   damageReactionState: createDamageReactionState(),
   movementSurfaceModifier: "normal",
-  movementSpeedWorldUnitsPerSecond: undefined,
+  movementSpeedWorldUnitsPerSecond:
+    singleEntityControlContract.desktopMoveSpeedWorldUnitsPerSecond *
+    resolveMoveSpeedMultiplier(buildState),
   role: "player",
   spawnedAtTick: 0,
   turnRateRadiansPerSecond: gameplayTuning.playerTurning.turnRateRadiansPerSecond,
@@ -841,8 +848,12 @@ const playerDirectionalInertiaProfile = {
   reversalResponsiveness: 0.18
 } as const;
 
-export const createInitialSimulationState = (): EntitySimulationState => {
-  const buildState = createInitialBuildState();
+export const createInitialSimulationState = (options?: {
+  metaProgression?: BuildState["metaProgression"];
+}): EntitySimulationState => {
+  const buildState = normalizeBuildState({
+    metaProgression: options?.metaProgression
+  });
   const playerEntity = createPlayerEntity(buildState);
 
   return {

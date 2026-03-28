@@ -6,6 +6,14 @@ import { loadReleaseChangelogEntries } from "../model/releaseChangelogs";
 import type { ReleaseChangelogEntry } from "../model/releaseChangelogs";
 import { characterNameMaxLength, defaultCharacterName } from "../model/characterName";
 import { renderChangelogMarkdown } from "../model/changelogMarkdown";
+import {
+  canPurchaseShopUnlock,
+  canPurchaseTalentRank,
+  resolveTalentNextCost,
+  shopUnlockCatalog,
+  talentCatalog
+} from "../model/metaProgression";
+import type { MetaProfile, MetaTalentId, ShopUnlockId } from "../model/metaProgression";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
 import { appConfig } from "../../shared/config/appConfig";
 import type { SkillPerformanceSummary } from "@game";
@@ -63,14 +71,18 @@ type AppMetaScenePanelProps = {
   isMobileLayout: boolean;
   isShellMenuOpen: boolean;
   isLoadAvailable: boolean;
+  metaProfile: MetaProfile;
   onApplyDesktopControlBindings: (bindings: DesktopControlBindings) => void;
   onBeginNewGame: () => void;
   onOpenBestiary: () => void;
   onCharacterNameChange: (value: string) => void;
   onLoadGame: () => void;
   onOpenChangelogs: () => void;
+  onOpenGrowth: () => void;
   onOpenGrimoire: () => void;
   onOpenNewGame: () => void;
+  onPurchaseShopUnlock: (unlockId: ShopUnlockId) => void;
+  onPurchaseTalentRank: (talentId: MetaTalentId) => void;
   onOpenSettings: () => void;
   onReturnToMainMenu: () => void;
   onResumeRuntime: () => void;
@@ -93,14 +105,18 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   isMobileLayout,
   isShellMenuOpen,
   isLoadAvailable,
+  metaProfile,
   onApplyDesktopControlBindings,
   onBeginNewGame,
   onOpenBestiary,
   onCharacterNameChange,
   onLoadGame,
   onOpenChangelogs,
+  onOpenGrowth,
   onOpenGrimoire,
   onOpenNewGame,
+  onPurchaseShopUnlock,
+  onPurchaseTalentRank,
   onOpenSettings,
   onReturnToMainMenu,
   onResumeRuntime,
@@ -118,6 +134,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
     scene === "main-menu" ||
     scene === "new-game" ||
     scene === "changelogs" ||
+    scene === "growth" ||
     scene === "grimoire" ||
     scene === "bestiary" ||
     scene === "pause" ||
@@ -144,6 +161,8 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         ? "New game"
         : scene === "changelogs"
           ? "Changelogs"
+          : scene === "growth"
+            ? "Growth"
           : scene === "grimoire"
             ? "Grimoire"
             : scene === "bestiary"
@@ -162,6 +181,8 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         ? "Name your character before the run starts."
         : scene === "changelogs"
           ? "Read the latest curated Emberwake release notes."
+          : scene === "growth"
+            ? "Spend persistent gold on permanent talents and future run unlocks."
           : scene === "grimoire"
             ? "Review discovered active, passive, and fusion techniques."
             : scene === "bestiary"
@@ -195,6 +216,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         : null
       : scene === "new-game" ||
           scene === "changelogs" ||
+          scene === "growth" ||
           scene === "grimoire" ||
           scene === "bestiary" ||
           scene === "pause" ||
@@ -210,6 +232,8 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         ? "Run initiation"
         : scene === "changelogs"
           ? "Archive"
+          : scene === "growth"
+            ? "Meta progression"
           : scene === "grimoire" || scene === "bestiary"
             ? "Codex archive"
             : scene === "pause"
@@ -223,6 +247,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
     scene === "new-game" || scene === "victory"
       ? "ember"
       : scene === "changelogs" ||
+          scene === "growth" ||
           scene === "settings" ||
           scene === "grimoire" ||
           scene === "bestiary" ||
@@ -355,6 +380,13 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               </button>
               <button
                 className="shell-control shell-control--button shell-control--button-quiet"
+                onClick={onOpenGrowth}
+                type="button"
+              >
+                Growth
+              </button>
+              <button
+                className="shell-control shell-control--button shell-control--button-quiet"
                 onClick={onOpenSettings}
                 type="button"
               >
@@ -420,6 +452,115 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 Begin
               </button>
               <button className="shell-control shell-control--button" onClick={onReturnToMainMenu} type="button">
+                Back to menu
+              </button>
+            </div>
+          </>
+        ) : scene === "growth" ? (
+          <>
+            <div className="app-meta-scene__subsurface app-meta-scene__subsurface--archive">
+              <p className="app-meta-scene__lead">Banked gold: {metaProfile.goldBalance}</p>
+            </div>
+            <div className="app-meta-scene__scene-body app-meta-scene__scene-body--scroll">
+              <div className="app-meta-scene__growth-grid">
+                <section className="app-meta-scene__growth-section" aria-labelledby="growth-shop">
+                  <div className="app-meta-scene__codex-section-header">
+                    <p className="app-meta-scene__eyebrow" id="growth-shop">
+                      Shop
+                    </p>
+                    <span className="app-meta-scene__codex-count">
+                      {metaProfile.purchasedShopUnlockIds.length}/{shopUnlockCatalog.length} owned
+                    </span>
+                  </div>
+                  <div className="app-meta-scene__growth-cards">
+                    {shopUnlockCatalog.map((unlockDefinition) => {
+                      const isOwned = metaProfile.purchasedShopUnlockIds.includes(unlockDefinition.id);
+                      const canPurchase = canPurchaseShopUnlock(metaProfile, unlockDefinition.id);
+
+                      return (
+                        <article
+                          className="app-meta-scene__growth-card"
+                          data-state={isOwned ? "owned" : "locked"}
+                          key={unlockDefinition.id}
+                        >
+                          <div className="app-meta-scene__growth-card-copy">
+                            <div className="app-meta-scene__growth-card-header">
+                              <h3>{unlockDefinition.label}</h3>
+                              <span className="app-meta-scene__growth-cost">
+                                {isOwned ? "Owned" : `${unlockDefinition.cost} gold`}
+                              </span>
+                            </div>
+                            <p>{unlockDefinition.description}</p>
+                          </div>
+                          <button
+                            className="shell-control shell-control--button"
+                            disabled={!canPurchase || isOwned}
+                            onClick={() => {
+                              onPurchaseShopUnlock(unlockDefinition.id);
+                            }}
+                            type="button"
+                          >
+                            {isOwned ? "Owned" : "Unlock"}
+                          </button>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </section>
+                <section className="app-meta-scene__growth-section" aria-labelledby="growth-talents">
+                  <div className="app-meta-scene__codex-section-header">
+                    <p className="app-meta-scene__eyebrow" id="growth-talents">
+                      Talents
+                    </p>
+                    <span className="app-meta-scene__codex-count">Escalating costs</span>
+                  </div>
+                  <div className="app-meta-scene__growth-cards">
+                    {talentCatalog.map((talentDefinition) => {
+                      const currentRank = metaProfile.talentRanks[talentDefinition.id];
+                      const nextCost = resolveTalentNextCost(metaProfile, talentDefinition.id);
+                      const canPurchase = canPurchaseTalentRank(metaProfile, talentDefinition.id);
+
+                      return (
+                        <article
+                          className="app-meta-scene__growth-card"
+                          data-state={nextCost === null ? "capped" : "active"}
+                          key={talentDefinition.id}
+                        >
+                          <div className="app-meta-scene__growth-card-copy">
+                            <div className="app-meta-scene__growth-card-header">
+                              <h3>{talentDefinition.label}</h3>
+                              <span className="app-meta-scene__growth-cost">
+                                Rank {currentRank}/{talentDefinition.costCurve.length}
+                              </span>
+                            </div>
+                            <p>{talentDefinition.description}</p>
+                            <p className="app-meta-scene__growth-meta">
+                              {nextCost === null ? "Maxed out." : `Next rank: ${nextCost} gold`}
+                            </p>
+                          </div>
+                          <button
+                            className="shell-control shell-control--button"
+                            disabled={!canPurchase || nextCost === null}
+                            onClick={() => {
+                              onPurchaseTalentRank(talentDefinition.id);
+                            }}
+                            type="button"
+                          >
+                            {nextCost === null ? "Maxed" : "Buy rank"}
+                          </button>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </section>
+              </div>
+            </div>
+            <div className="app-meta-scene__actions">
+              <button
+                className="shell-control shell-control--button"
+                onClick={onReturnToMainMenu}
+                type="button"
+              >
                 Back to menu
               </button>
             </div>

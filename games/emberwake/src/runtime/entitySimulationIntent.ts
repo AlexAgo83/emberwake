@@ -243,17 +243,21 @@ export const resolveEntityIntent = ({
       command.controlState?.controlledEntityId === entity.id ? command.controlState : null;
 
     if (controlledEntity) {
+      const playerMoveSpeed =
+        entity.movementSpeedWorldUnitsPerSecond ??
+        singleEntityControlContract.desktopMoveSpeedWorldUnitsPerSecond;
+
       return {
         state: controlledEntity.movementIntent.isActive ? "moving" : "idle",
         velocity: {
           x:
             controlledEntity.movementIntent.vector.x *
             controlledEntity.movementIntent.magnitude *
-            singleEntityControlContract.desktopMoveSpeedWorldUnitsPerSecond,
+            playerMoveSpeed,
           y:
             controlledEntity.movementIntent.vector.y *
             controlledEntity.movementIntent.magnitude *
-            singleEntityControlContract.desktopMoveSpeedWorldUnitsPerSecond
+            playerMoveSpeed
         }
       };
     }

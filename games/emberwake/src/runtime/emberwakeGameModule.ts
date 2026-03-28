@@ -21,6 +21,7 @@ import {
   createInitialGameplaySystemsState,
   normalizeGameplaySystemsState
 } from "@game/systems/gameplaySystems";
+import type { BuildMetaProgression } from "@game/runtime/buildSystem";
 import { createIdleGameplayOutcome } from "@game/systems/gameplayOutcome";
 import type { EmberwakeGameplaySystemsState } from "@game/systems/gameplaySystems";
 import {
@@ -192,14 +193,17 @@ export const emberwakeGameModule: GameModule<
 
 export const createInitialEmberwakeGameState = (
   worldSeed = emberwakeRuntimeBootstrap.worldSeed,
-  profiling = resolveRuntimeProfilingConfig()
+  profiling = resolveRuntimeProfilingConfig(),
+  metaProgression?: BuildMetaProgression
 ) =>
   emberwakeGameModule.initialize({
     context: undefined,
     init: {
       profiling,
       simulation: {
-        ...createInitialSimulationState(),
+        ...createInitialSimulationState({
+          metaProgression
+        }),
         worldSeed
       },
       systems: createInitialGameplaySystemsState(),

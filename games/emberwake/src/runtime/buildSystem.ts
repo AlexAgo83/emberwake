@@ -79,10 +79,26 @@ export type BuildChoice = {
 export type BuildState = {
   activeSlots: ActiveWeaponSlot[];
   levelUpChoices: BuildChoice[];
+  metaProgression: BuildMetaProgression;
   nextChestDefeatMilestone: number;
   passiveSlots: PassiveItemSlot[];
   pendingLevelUps: number;
   recentFusionId: FusionId | null;
+};
+
+export type BuildMetaProgression = {
+  availableActiveWeaponIds: ActiveWeaponId[];
+  availableFusionIds: FusionId[];
+  availablePassiveItemIds: PassiveItemId[];
+  talentModifiers: {
+    emergencyShieldCharges: number;
+    goldGainMultiplier: number;
+    maxHealthBonus: number;
+    moveSpeedMultiplier: number;
+    pickupRadiusMultiplier: number;
+    xpGainMultiplier: number;
+  };
+  unlockedPickupKinds: Array<"gold" | "healing-kit" | "hourglass" | "magnet">;
 };
 
 export type ActiveWeaponDefinition = {
@@ -142,6 +158,21 @@ export const buildSystemContract = {
   passiveSlotLimit: 6,
   starterWeaponId: "ash-lash" as const
 } as const;
+
+const createDefaultBuildMetaProgression = (): BuildMetaProgression => ({
+  availableActiveWeaponIds: [...activeWeaponIds],
+  availableFusionIds: [...fusionIds],
+  availablePassiveItemIds: [...passiveItemIds],
+  talentModifiers: {
+    emergencyShieldCharges: 0,
+    goldGainMultiplier: 1,
+    maxHealthBonus: 0,
+    moveSpeedMultiplier: 1,
+    pickupRadiusMultiplier: 1,
+    xpGainMultiplier: 1
+  },
+  unlockedPickupKinds: ["gold", "healing-kit", "magnet", "hourglass"]
+});
 
 const activeWeaponDefinitions: Record<ActiveWeaponId, ActiveWeaponDefinition> = {
   "ash-lash": {
@@ -663,6 +694,7 @@ export const createInitialBuildState = (): BuildState => ({
     }
   ],
   levelUpChoices: [],
+  metaProgression: createDefaultBuildMetaProgression(),
   nextChestDefeatMilestone: buildSystemContract.initialChestDefeatMilestone,
   passiveSlots: [],
   pendingLevelUps: 0,
@@ -671,6 +703,26 @@ export const createInitialBuildState = (): BuildState => ({
 
 export const normalizeBuildState = (buildState: Partial<BuildState> | undefined): BuildState => {
   const initialBuildState = createInitialBuildState();
+  const normalizedMetaProgression: BuildMetaProgression = {
+    ...initialBuildState.metaProgression,
+    ...buildState?.metaProgression,
+    availableActiveWeaponIds:
+      buildState?.metaProgression?.availableActiveWeaponIds ??
+      initialBuildState.metaProgression.availableActiveWeaponIds,
+    availableFusionIds:
+      buildState?.metaProgression?.availableFusionIds ??
+      initialBuildState.metaProgression.availableFusionIds,
+    availablePassiveItemIds:
+      buildState?.metaProgression?.availablePassiveItemIds ??
+      initialBuildState.metaProgression.availablePassiveItemIds,
+    talentModifiers: {
+      ...initialBuildState.metaProgression.talentModifiers,
+      ...buildState?.metaProgression?.talentModifiers
+    },
+    unlockedPickupKinds:
+      buildState?.metaProgression?.unlockedPickupKinds ??
+      initialBuildState.metaProgression.unlockedPickupKinds
+  };
 
   return {
     activeSlots:
@@ -679,8 +731,9 @@ export const normalizeBuildState = (buildState: Partial<BuildState> | undefined)
         lastAttackTick: activeSlot.lastAttackTick ?? null,
         level: Math.max(1, Math.min(activeSlot.level ?? 1, getActiveWeaponDefinition(activeSlot.weaponId).maxLevel)),
         weaponId: activeSlot.weaponId
-      })) ?? initialBuildState.activeSlots,
+    })) ?? initialBuildState.activeSlots,
     levelUpChoices: buildState?.levelUpChoices ?? [],
+    metaProgression: normalizedMetaProgression,
     nextChestDefeatMilestone:
       buildState?.nextChestDefeatMilestone ?? initialBuildState.nextChestDefeatMilestone,
     passiveSlots:
@@ -707,6 +760,10 @@ export const resolveFusionReadyState = (
   const fusionDefinition = getFusionDefinitionForActiveWeapon(activeSlot.weaponId);
 
   if (!fusionDefinition) {
+    return null;
+  }
+
+  if (!buildState.metaProgression.availableFusionIds.includes(fusionDefinition.fusionId)) {
     return null;
   }
 
@@ -812,22 +869,34 @@ export const resolveActiveWeaponRuntimeStats = (
 };
 
 export const resolvePickupRadiusMultiplier = (buildState: BuildState) =>
-  createPassiveModifierState(buildState).pickupRadiusMultiplier;
+  createPassiveModifierState(buildState).pickupRadiusMultiplier *
+  buildState.metaProgression.talentModifiers.pickupRadiusMultiplier;
 
 export const resolveBossDamageMultiplier = (buildState: BuildState) =>
   createPassiveModifierState(buildState).bossDamageMultiplier;
 
 export const resolveEmergencyAegisChargeCount = (buildState: BuildState) =>
-  createPassiveModifierState(buildState).emergencyAegisChargeCount;
+  createPassiveModifierState(buildState).emergencyAegisChargeCount +
+  buildState.metaProgression.talentModifiers.emergencyShieldCharges;
 
 export const resolveExecuteThresholdRatio = (buildState: BuildState) =>
   createPassiveModifierState(buildState).executeThresholdRatio;
 
 export const resolveGoldGainMultiplier = (buildState: BuildState) =>
-  createPassiveModifierState(buildState).goldGainMultiplier;
+  createPassiveModifierState(buildState).goldGainMultiplier *
+  buildState.metaProgression.talentModifiers.goldGainMultiplier;
+
+export const resolveMaxHealthBonus = (buildState: BuildState) =>
+  buildState.metaProgression.talentModifiers.maxHealthBonus;
+
+export const resolveMoveSpeedMultiplier = (buildState: BuildState) =>
+  buildState.metaProgression.talentModifiers.moveSpeedMultiplier;
 
 export const resolveRetaliationDamage = (buildState: BuildState) =>
   createPassiveModifierState(buildState).retaliationDamage;
+
+export const resolveXpGainMultiplier = (buildState: BuildState) =>
+  buildState.metaProgression.talentModifiers.xpGainMultiplier;
 
 const createActiveUnlockChoice = (
   buildState: BuildState,
@@ -937,10 +1006,10 @@ export const resolveLevelUpChoices = (
 ): BuildChoice[] => {
   const ownedActiveIds = new Set(buildState.activeSlots.map((activeSlot) => activeSlot.weaponId));
   const ownedPassiveIds = new Set(buildState.passiveSlots.map((passiveSlot) => passiveSlot.passiveId));
-  const unownedActives = (Object.keys(activeWeaponDefinitions) as ActiveWeaponId[])
+  const unownedActives = buildState.metaProgression.availableActiveWeaponIds
     .filter((weaponId) => !ownedActiveIds.has(weaponId))
     .map((weaponId) => createActiveUnlockChoice(buildState, weaponId));
-  const unownedPassives = (Object.keys(passiveItemDefinitions) as PassiveItemId[])
+  const unownedPassives = buildState.metaProgression.availablePassiveItemIds
     .filter((passiveItemId) => !ownedPassiveIds.has(passiveItemId))
     .map((passiveItemId) => createPassiveUnlockChoice(buildState, passiveItemId));
   const activeUpgrades = buildState.activeSlots

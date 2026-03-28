@@ -46,8 +46,11 @@ export {
   resolveFusionReadyState,
   resolveGoldGainMultiplier,
   resolveLevelUpChoices,
+  resolveMaxHealthBonus,
+  resolveMoveSpeedMultiplier,
   resolvePickupRadiusMultiplier,
   resolveRetaliationDamage,
+  resolveXpGainMultiplier,
   advanceChestMilestone
 } from "./runtime/buildSystem";
 export {
@@ -69,6 +72,7 @@ export type {
   ActiveWeaponDefinition,
   ActiveWeaponSlot,
   BuildChoice,
+  BuildMetaProgression,
   BuildChoiceSelectionKind,
   BuildChoiceSlotKind,
   BuildState,

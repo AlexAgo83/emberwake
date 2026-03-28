@@ -34,7 +34,7 @@ import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage"
 import type { ReturnTypeUseLogicalViewportModel } from "../../game/debug/types";
 import type { DesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
 import { createInitialEmberwakeGameState } from "@game";
-import type { EmberwakeGameState } from "@game";
+import type { BuildMetaProgression, EmberwakeGameState } from "@game";
 import type { RuntimeProfilingConfig } from "@game";
 import {
   getActiveWeaponDefinition,
@@ -55,6 +55,7 @@ type ActiveRuntimeShellContentProps = {
   isMenuOpen: boolean;
   lastFullscreenError: string | null;
   metaOverlay: ReactNode;
+  metaProgression: BuildMetaProgression;
   onEnterFullscreen: () => void;
   onInstall: () => void;
   onMenuOpenChange: (isOpen: boolean) => void;
@@ -96,6 +97,7 @@ export function ActiveRuntimeShellContent({
   isMenuOpen,
   lastFullscreenError,
   metaOverlay,
+  metaProgression,
   onEnterFullscreen,
   onInstall,
   onMenuOpenChange,
@@ -177,8 +179,8 @@ export function ActiveRuntimeShellContent({
   const effectiveSessionInitState = useMemo(
     () =>
       sessionInitState ??
-      createInitialEmberwakeGameState(runtimeSession.worldSeed, profilingConfig),
-    [profilingConfig, runtimeSession.worldSeed, sessionInitState]
+      createInitialEmberwakeGameState(runtimeSession.worldSeed, profilingConfig, metaProgression),
+    [metaProgression, profilingConfig, runtimeSession.worldSeed, sessionInitState]
   );
   const simulationState = useEntitySimulation({
     buttonPresses: runtimeButtonPresses,

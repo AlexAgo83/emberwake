@@ -1,9 +1,9 @@
 ## req_085_define_a_persistent_meta_profile_contract_for_gold_bestiary_and_grimoire_progression_across_runs - Define a persistent meta profile contract for gold bestiary and grimoire progression across runs
-> From version: 0.5.1
+> From version: 0.5.2
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: Meta progression
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -126,3 +126,9 @@ flowchart TD
 - `item_321_define_persistent_grimoire_discovery_progression_across_runs`
 - `item_322_define_persistent_bestiary_discovery_and_defeat_progression_across_runs`
 - `item_323_define_targeted_validation_for_cross_run_meta_profile_persistence_of_gold_grimoire_and_bestiary_data`
+
+# Closure
+- Landed through `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`.
+- Proof:
+  - `npm run typecheck`
+  - `npm run test -- src/app/components/AppMetaScenePanel.test.tsx src/app/AppShell.test.tsx src/app/hooks/useAppScene.test.tsx src/shared/lib/metaProfileStorage.test.ts`

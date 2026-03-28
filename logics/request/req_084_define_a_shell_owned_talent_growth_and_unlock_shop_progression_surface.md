@@ -1,9 +1,9 @@
 ## req_084_define_a_shell_owned_talent_growth_and_unlock_shop_progression_surface - Define a shell owned talent growth and unlock shop progression surface
-> From version: 0.5.1
+> From version: 0.5.2
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 94%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: High
 > Theme: Meta progression
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -153,3 +153,9 @@ flowchart TD
 - `item_316_define_a_first_ranked_talent_roster_with_escalating_cost_tiers_and_late_survivability_gating`
 - `item_317_define_purchase_application_and_owned_progression_integration_across_the_shell_and_runtime`
 - `item_318_define_targeted_validation_for_shell_progression_purchases_persistence_and_escalating_talent_costs`
+
+# Closure
+- Landed through `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`.
+- Proof:
+  - `npm run typecheck`
+  - `npm run test -- src/app/components/AppMetaScenePanel.test.tsx src/app/AppShell.test.tsx src/app/hooks/useAppScene.test.tsx src/shared/lib/metaProfileStorage.test.ts`

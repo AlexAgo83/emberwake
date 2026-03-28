@@ -60,7 +60,7 @@ describe("useAppScene", () => {
     expect(result.current.activeScene).toBe("failure");
   });
 
-  it("can route shell-owned main menu and new-game scenes directly", () => {
+  it("can route shell-owned main menu, new-game, and growth scenes directly", () => {
     const { result } = renderHook(() =>
       useAppScene({
         rendererStatus: "ready",
@@ -77,5 +77,10 @@ describe("useAppScene", () => {
       result.current.showMainMenuScene();
     });
     expect(result.current.requestedScene).toBe("main-menu");
+
+    act(() => {
+      result.current.showGrowthScene();
+    });
+    expect(result.current.requestedScene).toBe("growth");
   });
 });

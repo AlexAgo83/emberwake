@@ -1,10 +1,10 @@
 ## item_320_define_persistent_cross_run_gold_balance_ownership_for_meta_progression_economy - Define persistent cross-run gold balance ownership for meta progression economy
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Meta progression
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -72,7 +72,10 @@ flowchart LR
 - Product brief(s): `prod_014_shell_codex_archive_direction_for_grimoire_and_bestiary`, `prod_015_post_run_outcome_analysis_direction_for_skill_performance`
 - Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`, `adr_045_model_grimoire_and_bestiary_as_shell_owned_discovery_gated_archive_scenes`
 - Request: `req_085_define_a_persistent_meta_profile_contract_for_gold_bestiary_and_grimoire_progression_across_runs`
-- Primary task(s): (none yet)
+- Primary task(s): `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`
+
+# Closure
+- Proof: `src/app/model/metaProgression.ts`, `src/app/AppShell.tsx`, `src/shared/lib/metaProfileStorage.ts`.
 
 # AI Context
 - Summary: Define a persistent cross-run meta-profile contract for gold, bestiary progression, and grimoire progression.

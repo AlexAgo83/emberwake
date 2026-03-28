@@ -6,6 +6,7 @@ export type AppSceneId =
   | "changelogs"
   | "defeat"
   | "failure"
+  | "growth"
   | "grimoire"
   | "main-menu"
   | "new-game"
@@ -38,6 +39,7 @@ export const appSceneContract = {
     "main-menu",
     "new-game",
     "changelogs",
+    "growth",
     "grimoire",
     "bestiary",
     "pause",

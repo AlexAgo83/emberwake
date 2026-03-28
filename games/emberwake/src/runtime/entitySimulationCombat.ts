@@ -11,6 +11,7 @@ import {
   resolveActiveWeaponRuntimeStats,
   resolvePickupRadiusMultiplier,
   resolveRetaliationDamage,
+  resolveXpGainMultiplier,
   type BuildState
 } from "./buildSystem";
 import { systemTuning } from "@game/config/systemTuning";
@@ -83,13 +84,21 @@ const applyHealing = (entity: SimulatedEntity, healing: number): SimulatedEntity
   }
 });
 
-const applyCrystalXpGain = (runStats: RunStats, stackCount = 1): RunStats => {
+const applyCrystalXpGain = (
+  runStats: RunStats,
+  stackCount = 1,
+  xpGainMultiplier = 1
+): RunStats => {
   let nextLevel = Math.max(1, runStats.currentLevel);
   let nextXp = Math.max(0, runStats.currentXp);
   const resolvedStackCount = Math.max(1, stackCount);
+  const xpPerCrystal = Math.max(
+    1,
+    Math.round(pickupContract.crystal.xpValue * xpGainMultiplier)
+  );
 
   for (let crystalIndex = 0; crystalIndex < resolvedStackCount; crystalIndex += 1) {
-    nextXp += pickupContract.crystal.xpValue;
+    nextXp += xpPerCrystal;
 
     while (nextXp >= resolveXpRequiredForLevel(nextLevel)) {
       nextXp -= resolveXpRequiredForLevel(nextLevel);
@@ -913,6 +922,7 @@ export const resolvePickupCollection = ({
   const nextRunStats = { ...runStats };
   const retainedEntities: SimulatedEntity[] = [];
   const goldGainMultiplier = resolveGoldGainMultiplier(buildState);
+  const xpGainMultiplier = resolveXpGainMultiplier(buildState);
   const pickupRadiusWorldUnits =
     pickupContract.pickup.pickupRadiusWorldUnits * resolvePickupRadiusMultiplier(buildState);
   const crystalAttractionRadiusWorldUnits =
@@ -964,7 +974,10 @@ export const resolvePickupCollection = ({
       );
 
       if (movedDistanceToPlayer <= crystalCollectDistanceWorldUnits) {
-        Object.assign(nextRunStats, applyCrystalXpGain(nextRunStats, pickupStackCount));
+        Object.assign(
+          nextRunStats,
+          applyCrystalXpGain(nextRunStats, pickupStackCount, xpGainMultiplier)
+        );
         continue;
       }
 
