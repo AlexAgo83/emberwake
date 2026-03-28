@@ -72,6 +72,19 @@ const parseWorldPosition = (value) => {
   return { x, y };
 };
 
+const waitForFramePacingSampleWindow = async (page) => {
+  await page.waitForFunction(
+    (minimumTrackedFrames) => {
+      const metrics = globalThis.window.__EMBERWAKE_RUNTIME_METRICS__;
+      return metrics?.frameLoop?.recentFramesTracked >= minimumTrackedFrames;
+    },
+    runtimePerformanceBudget.framePacing.minTrackedVisualFrames,
+    {
+      timeout: 2000
+    }
+  );
+};
+
 const previewPort = externalSmokeUrl ? null : await resolveFreePort();
 const previewUrl = externalSmokeUrl ?? `http://${previewHost}:${previewPort}`;
 
@@ -190,21 +203,31 @@ try {
   }
 
   if (
-    typeof frameLoopMetrics.recentFramesTracked !== "number" ||
+    typeof frameLoopMetrics?.recentFramesTracked !== "number" ||
     frameLoopMetrics.recentFramesTracked < runtimePerformanceBudget.framePacing.minTrackedVisualFrames
   ) {
+    await waitForFramePacingSampleWindow(page);
+  }
+
+  const settledRuntimeMetrics = await page.evaluate(() => globalThis.window.__EMBERWAKE_RUNTIME_METRICS__);
+  const settledFrameLoopMetrics = settledRuntimeMetrics?.frameLoop;
+
+  if (
+    typeof settledFrameLoopMetrics?.recentFramesTracked !== "number" ||
+    settledFrameLoopMetrics.recentFramesTracked < runtimePerformanceBudget.framePacing.minTrackedVisualFrames
+  ) {
     throw new Error(
-      `Frame pacing sample window too small. Actual: ${frameLoopMetrics?.recentFramesTracked ?? "missing"}, minimum: ${runtimePerformanceBudget.framePacing.minTrackedVisualFrames}`
+      `Frame pacing sample window too small. Actual: ${settledFrameLoopMetrics?.recentFramesTracked ?? "missing"}, minimum: ${runtimePerformanceBudget.framePacing.minTrackedVisualFrames}`
     );
   }
 
   if (
-    typeof frameLoopMetrics.recentMaxSimulationStepsLastFrame !== "number" ||
-    frameLoopMetrics.recentMaxSimulationStepsLastFrame >
+    typeof settledFrameLoopMetrics.recentMaxSimulationStepsLastFrame !== "number" ||
+    settledFrameLoopMetrics.recentMaxSimulationStepsLastFrame >
       runtimePerformanceBudget.framePacing.maxSimulationStepsPerVisualFrame
   ) {
     throw new Error(
-      `Simulation step burst exceeded frame pacing budget. Actual: ${frameLoopMetrics?.recentMaxSimulationStepsLastFrame ?? "missing"}, budget: ${runtimePerformanceBudget.framePacing.maxSimulationStepsPerVisualFrame}`
+      `Simulation step burst exceeded frame pacing budget. Actual: ${settledFrameLoopMetrics?.recentMaxSimulationStepsLastFrame ?? "missing"}, budget: ${runtimePerformanceBudget.framePacing.maxSimulationStepsPerVisualFrame}`
     );
   }
 
@@ -216,7 +239,7 @@ try {
     JSON.stringify(
       {
         budgets: runtimePerformanceBudget,
-        runtimeMetrics
+        runtimeMetrics: settledRuntimeMetrics
       },
       null,
       2
