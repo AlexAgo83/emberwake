@@ -611,6 +611,43 @@ describe("entitySimulation", () => {
     expect(nextState.entities.some((entity) => entity.id === staleGoldPickup.id)).toBe(false);
   });
 
+  it("keeps utility pickup respawns available even when nearby crystals fill the area", () => {
+    const initialState = createInitialSimulationState();
+    const nextState = advanceSimulationState({
+      ...initialState,
+      entities: [
+        initialState.entity,
+        createPickupFixture("crystal", {
+          id: "entity:pickup:crystal:block-a",
+          worldPosition: { x: 120, y: 0 }
+        }),
+        createPickupFixture("crystal", {
+          id: "entity:pickup:crystal:block-b",
+          worldPosition: { x: 150, y: 20 }
+        }),
+        createPickupFixture("crystal", {
+          id: "entity:pickup:crystal:block-c",
+          worldPosition: { x: 180, y: -12 }
+        }),
+        createPickupFixture("crystal", {
+          id: "entity:pickup:crystal:block-d",
+          worldPosition: { x: 210, y: 8 }
+        })
+      ],
+      nextPickupSequence: 4,
+      tick: 23
+    });
+    const utilityPickups = nextState.entities.filter(
+      (entity) =>
+        entity.role === "pickup" &&
+        (entity.pickupProfile?.kind === "gold" ||
+          entity.pickupProfile?.kind === "healing-kit" ||
+          entity.pickupProfile?.kind === "magnet")
+    );
+
+    expect(utilityPickups.length).toBeGreaterThan(0);
+  });
+
   it("applies healing-kit pickups with a max-health clamp", () => {
     const initialState = createInitialSimulationState();
     const healingPickup = {

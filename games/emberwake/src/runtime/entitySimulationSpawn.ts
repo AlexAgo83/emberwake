@@ -24,6 +24,9 @@ const getPlayerEntity = (entities: readonly SimulatedEntity[]) =>
 const distanceBetweenWorldPoints = (left: WorldPoint, right: WorldPoint) =>
   Math.hypot(right.x - left.x, right.y - left.y);
 
+const isUtilityPickupKind = (pickupKind: SimulatedPickupKind | undefined) =>
+  pickupKind === "gold" || pickupKind === "healing-kit" || pickupKind === "magnet";
+
 const countLocalHostiles = (entities: readonly SimulatedEntity[], playerEntity: SimulatedEntity) =>
   entities.filter(
     (entity) =>
@@ -261,6 +264,7 @@ const countNearbyPickups = (entities: readonly SimulatedEntity[], playerEntity: 
   entities.filter(
     (entity) =>
       entity.role === "pickup" &&
+      isUtilityPickupKind(entity.pickupProfile?.kind) &&
       distanceBetweenWorldPoints(entity.worldPosition, playerEntity.worldPosition) <=
         pickupContract.pickup.despawnDistanceWorldUnits
   ).length;
@@ -272,7 +276,7 @@ const isStaleUtilityPickup = (
 ) => {
   const pickupKind = entity.pickupProfile?.kind;
 
-  if (pickupKind !== "gold" && pickupKind !== "healing-kit") {
+  if (!isUtilityPickupKind(pickupKind)) {
     return false;
   }
 
