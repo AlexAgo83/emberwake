@@ -346,6 +346,12 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               <h2 className="app-meta-scene__title">{title}</h2>
               {detail ? <p className="app-meta-scene__detail">{detail}</p> : null}
             </div>
+            {scene === "growth" ? (
+              <div className="app-meta-scene__header-chip" aria-label="Available gold">
+                <span className="app-meta-scene__header-chip-label">Available gold</span>
+                <span className="app-meta-scene__header-chip-value">{metaProfile.goldBalance}</span>
+              </div>
+            ) : null}
           </header>
         {scene === "main-menu" ? (
           <>
@@ -463,9 +469,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           </>
         ) : scene === "growth" ? (
           <>
-            <div className="app-meta-scene__subsurface app-meta-scene__subsurface--archive">
-              <p className="app-meta-scene__lead">Banked gold: {metaProfile.goldBalance}</p>
-            </div>
             <div className="app-meta-scene__scene-body app-meta-scene__scene-body--scroll">
               <div className="app-meta-scene__growth-grid">
                 <section className="app-meta-scene__growth-section" aria-labelledby="growth-shop">

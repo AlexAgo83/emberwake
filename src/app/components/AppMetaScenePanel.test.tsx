@@ -108,7 +108,8 @@ describe("AppMetaScenePanel", () => {
     render(<AppMetaScenePanel {...props} />);
 
     expect(screen.getByLabelText("Growth")).toBeInTheDocument();
-    expect(screen.getByText(/Banked gold: 99/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Available gold/i)).toBeInTheDocument();
+    expect(screen.getByText("99")).toBeInTheDocument();
     fireEvent.click(screen.getAllByRole("button", { name: /Unlock|Buy rank/i })[0]!);
 
     expect(props.onPurchaseShopUnlock).toHaveBeenCalledTimes(1);

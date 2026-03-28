@@ -337,6 +337,43 @@ html[data-app-display-mode="browser"] .app-shell {
   min-width: 0;
 }
 
+.app-meta-scene__header-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  align-self: start;
+  flex-shrink: 0;
+  min-height: 2.7rem;
+  padding: 0.72rem 0.95rem;
+  border: 1px solid rgba(255, 183, 104, 0.18);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 183, 104, 0.06), transparent),
+    rgba(14, 19, 24, 0.82);
+  white-space: nowrap;
+}
+
+.app-meta-scene__header-chip-label,
+.app-meta-scene__header-chip-value {
+  margin: 0;
+}
+
+.app-meta-scene__header-chip-label {
+  color: var(--emberwake-copy-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.app-meta-scene__header-chip-value {
+  color: #fff4d7;
+  font-family: var(--emberwake-title-font);
+  font-size: 1.28rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .app-meta-scene__eyebrow,
 .app-meta-scene__title,
 .app-meta-scene__detail,
@@ -1136,6 +1173,11 @@ html[data-app-display-mode="browser"] .app-shell {
 
   .app-meta-scene__status {
     align-self: start;
+  }
+
+  .app-meta-scene__header-chip {
+    justify-content: space-between;
+    width: 100%;
   }
 
   .app-meta-scene__signals {

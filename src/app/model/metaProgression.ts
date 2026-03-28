@@ -110,37 +110,37 @@ export const shopUnlockCatalog: ShopUnlockDefinition[] = [
 
 export const talentCatalog: TalentDefinition[] = [
   {
-    costCurve: [10, 18, 30, 48, 72],
+    costCurve: [14, 28, 46, 72, 108],
     description: "Raise starting max health for every run.",
     id: "max-health",
     label: "Max Health"
   },
   {
-    costCurve: [8, 15, 24, 38, 56],
+    costCurve: [12, 24, 38, 60, 90],
     description: "Widen pickup reach before skill modifiers stack on top.",
     id: "pickup-radius",
     label: "Pickup Radius"
   },
   {
-    costCurve: [8, 16, 26, 40, 60],
+    costCurve: [12, 24, 40, 64, 96],
     description: "Improve gold gain before shop inflation catches up.",
     id: "gold-gain",
     label: "Gold Gain"
   },
   {
-    costCurve: [10, 18, 30, 46, 68],
+    costCurve: [14, 28, 44, 70, 104],
     description: "Improve crystal conversion into run XP.",
     id: "xp-gain",
     label: "XP Gain"
   },
   {
-    costCurve: [10, 19, 32, 50, 74],
+    costCurve: [14, 30, 48, 76, 114],
     description: "Increase baseline move speed for evasive builds.",
     id: "move-speed",
     label: "Move Speed"
   },
   {
-    costCurve: [96, 160],
+    costCurve: [140, 240],
     description: "Adds extra emergency shield charges to late runs.",
     id: "shield",
     label: "Shield"
