@@ -1,11 +1,12 @@
 ## req_054_define_a_scripted_long_session_runtime_profiling_and_player_simulation_harness - Define a scripted long-session runtime profiling and player-simulation harness
-> From version: 0.3.1
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
+> Understanding: 100%
 > Confidence: 98%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Add a repeatable way to drive the runtime for tens of seconds or multiple minutes without manual play.
@@ -93,7 +94,7 @@ Scope excludes:
 - broad profiling of unrelated shell-only flows unless needed for a specific scenario
 
 ```mermaid
-%% logics-signature: request|define-a-scripted-long-session-runtime-p|add-a-repeatable-way-to-drive-the-runti|ac1-the-request-defines-a-scripted
+%% logics-signature: request|define-a-scripted-long-session-runtime-p|add-a-repeatable-way-to-drive|ac1-the-request-defines-a-scripted
 flowchart TD
     A[Suspected long-session leak] --> B[Short smoke test is insufficient]
     B --> C[Define scripted player simulation harness]
@@ -142,8 +143,14 @@ flowchart TD
 - Architecture decision(s): `adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request(s): `req_013_define_frontend_testing_strategy_for_rendering_simulation_and_world_logic`, `req_047_define_a_runtime_memory_growth_investigation_and_reduction_wave`
 
+# AI Context
+- Summary: Add a repeatable way to drive the runtime for tens of seconds or multiple minutes without manual play.
+- Keywords: scripted, long-session, runtime, profiling, and, player-simulation, harness, add
+- Use when: Use when framing scope, context, and acceptance checks for Define a scripted long-session runtime profiling and player-simulation harness.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_scripted_runtime_player_input_timeline_for_long_session_automation`
-- `define_a_profiling_safe_invincibility_and_survival_posture_for_automated_runtime_runs`
-- `define_a_long_session_browser_profiling_runner_for_memory_and_runtime_metrics`
-- `define_deterministic_runtime_profiling_artifacts_and_comparison_posture`
+- `item_195_define_a_scripted_runtime_player_input_timeline_for_long_session_automation`
+- `item_196_define_a_profiling_safe_invincibility_and_survival_posture_for_automated_runtime_runs`
+- `item_197_define_a_long_session_browser_profiling_runner_for_memory_and_runtime_metrics`
+- `item_198_define_deterministic_runtime_profiling_artifacts_and_comparison_posture`

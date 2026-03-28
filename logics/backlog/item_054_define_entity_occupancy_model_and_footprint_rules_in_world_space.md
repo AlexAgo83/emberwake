@@ -17,6 +17,7 @@
 - Out: Overlap policy details, terrain traversal richness, or full physics.
 
 ```mermaid
+%% logics-signature: backlog|define-entity-occupancy-model-and-footpr|req-014-define-world-occupancy-navigatio|entities-need-a-shared-rule-for|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

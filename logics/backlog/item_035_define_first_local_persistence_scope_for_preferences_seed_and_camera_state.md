@@ -17,6 +17,7 @@
 - Out: Cloud sync, full world snapshots, or multi-device continuity.
 
 ```mermaid
+%% logics-signature: backlog|define-first-local-persistence-scope-for|req-009-define-local-persistence-and-sav|local-persistence-needs-a-narrow-first|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

@@ -1,11 +1,12 @@
 ## req_003_create_render_static_free_plan_blueprint - Create Render static free plan blueprint
-> From version: 0.1.2
-> Status: Ready
-> Understanding: 96%
-> Confidence: 93%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Create a Render Blueprint for deploying the project as a static site on the Render free plan.
@@ -38,6 +39,7 @@ This request should also assume that Render is the source of truth for productio
 This request should also stay compatible with later work on the world map and entity layers. The hosting blueprint is part of delivery readiness for the same app, not a separate deployment experiment disconnected from the existing Logics requests.
 
 ```mermaid
+%% logics-signature: request|create-render-static-free-plan-blueprint|create-a-render-blueprint-for-deploying|ac1-the-request-produces-a-render
 flowchart TD
     A[Frontend only app shell exists] --> B[Target Render static hosting]
     B --> C[Create Git backed render yaml blueprint]
@@ -68,6 +70,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
+
+# AI Context
+- Summary: Create a Render Blueprint for deploying the project as a static site on the Render free plan.
+- Keywords: create, render, static, free, plan, blueprint, for, deploying
+- Use when: Use when framing scope, context, and acceptance checks for Create Render static free plan blueprint.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_014_define_render_static_site_blueprint_and_build_contract`

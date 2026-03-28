@@ -20,6 +20,7 @@
 - Unblocks: first playable mobile loop validation, onboarding, and browser smoke work.
 
 ```mermaid
+%% logics-signature: task|define-mobile-virtual-stick-steering-mod|item-025-define-mobile-virtual-stick-ste|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

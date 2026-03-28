@@ -1,11 +1,12 @@
 ## req_031_define_character_name_validation_and_constraints_for_new_game_entry - Define character-name validation and constraints for new-game entry
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: Low
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define a clear validation contract for the character-name field used by the `New game` entry flow so implementation does not drift between UI, persistence, and session creation.
@@ -104,10 +105,16 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`
 - Request(s): `req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow`
 
+# AI Context
+- Summary: Define a clear validation contract for the character-name field used by the New game entry flow so implementation...
+- Keywords: character-name, validation, and, constraints, for, new-game, entry, clear
+- Use when: Use when framing scope, context, and acceptance checks for Define character-name validation and constraints for new-game entry.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_character_name_validation_rules_for_new_game_entry`
-- `define_character_name_field_feedback_and_begin_gating_behavior`
-- `define_character_name_persistence_contract_for_session_creation`
+- `item_115_define_character_name_validation_rules_for_new_game_entry`
+- `item_116_define_character_name_field_feedback_and_begin_gating_behavior`
+- `item_117_define_character_name_persistence_contract_for_session_creation`
 
 # Implementation notes
 - Delivered through `src/app/model/characterName.ts` with one shared contract for normalization, validation, and downstream session creation.

@@ -17,7 +17,7 @@
 - Out: mobile/touch steering changes, broader camera redesign, or gamepad input work.
 
 ```mermaid
-%% logics-signature: backlog|define-view-relative-player-movement-und|req-051-define-a-shell-surface-cleanup-a|desktop-movement-still-feels|ac1-the-slice-defines
+%% logics-signature: backlog|define-view-relative-player-movement-und|req-051-define-a-shell-surface-cleanup-a|desktop-movement-still-feels-too-tied|ac1-the-slice-defines-that-desktop
 flowchart LR
     Req[Req 051 shell cleanup] --> Gap[Movement is not view-relative]
     Gap --> Slice[Camera-relative desktop movement]

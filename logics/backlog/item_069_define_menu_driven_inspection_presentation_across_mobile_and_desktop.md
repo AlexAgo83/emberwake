@@ -17,6 +17,7 @@
 - Out: Selection mechanics, diagnostics behavior, or broader command systems beyond contextual inspection visibility.
 
 ```mermaid
+%% logics-signature: backlog|define-menu-driven-inspection-presentati|req-017-redesign-runtime-overlay-into-a-|the-inspecteur-is-useful-but-it|ac1-the-inspecteur-is-hidden-by
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

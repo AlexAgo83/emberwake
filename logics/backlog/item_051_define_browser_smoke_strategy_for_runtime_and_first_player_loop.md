@@ -17,6 +17,7 @@
 - Out: Full scenario matrix or CI tiering rules.
 
 ```mermaid
+%% logics-signature: backlog|define-browser-smoke-strategy-for-runtim|req-013-define-frontend-testing-strategy|the-frontend-needs-a-lightweight-browser|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

@@ -17,7 +17,7 @@
 - Out: broad architecture rewrites or replacing existing env configuration posture.
 
 ```mermaid
-%% logics-signature: backlog|define-clear-boundaries-between-system-t|req-053-define-an-externalized-json-syst|once-both-gameplay-and|ac1-the-slice-defines
+%% logics-signature: backlog|define-clear-boundaries-between-system-t|req-053-define-an-externalized-json-syst|once-both-gameplay-and-technical-tuning|ac1-the-slice-defines-a-clear
 flowchart LR
     Req[Req 053 system tuning] --> Gap[Ownership boundaries could become ambiguous]
     Gap --> Slice[Boundary rules across tuning and config layers]

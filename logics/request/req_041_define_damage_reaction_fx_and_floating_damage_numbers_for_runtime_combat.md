@@ -1,11 +1,12 @@
 ## req_041_define_damage_reaction_fx_and_floating_damage_numbers_for_runtime_combat - Define damage-reaction FX and floating damage numbers for runtime combat
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Make received damage visually readable at the moment it happens.
@@ -123,7 +124,13 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request(s): `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`, `req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants`
 
+# AI Context
+- Summary: Make received damage visually readable at the moment it happens.
+- Keywords: damage-reaction, and, floating, damage, numbers, for, runtime, combat
+- Use when: Use when framing scope, context, and acceptance checks for Define damage-reaction FX and floating damage numbers for runtime combat.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_first_hit_reaction_fx_posture_for_damaged_runtime_combatants`
-- `define_floating_damage_numbers_above_damaged_entities`
-- `define_upward_fade_and_cleanup_rules_for_damage_number_lifetimes`
+- `item_149_define_a_first_hit_reaction_fx_posture_for_damaged_runtime_combatants`
+- `item_150_define_floating_damage_numbers_above_damaged_entities`
+- `item_151_define_upward_fade_and_cleanup_rules_for_damage_number_lifetimes`

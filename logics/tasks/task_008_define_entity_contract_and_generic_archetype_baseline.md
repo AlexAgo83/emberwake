@@ -21,6 +21,7 @@
 - Unblocks: `task_009_implement_fixed_step_entity_movement_and_state_update_loop`, `task_010_define_single_entity_control_contract_and_input_ownership_boundaries`, and later entity rendering tasks.
 
 ```mermaid
+%% logics-signature: task|define-entity-contract-and-generic-arche|item-009-define-entity-contract-and-gene|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

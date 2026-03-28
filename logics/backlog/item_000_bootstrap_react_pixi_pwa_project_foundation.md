@@ -27,6 +27,7 @@
 - Render diagnostics, fallback UX, and shell preference tooling beyond the minimal setup required to bootstrap
 
 ```mermaid
+%% logics-signature: backlog|bootstrap-react-pixi-pwa-project-foundat|req-000-bootstrap-fullscreen-2d-react-pw|the-project-needs-a-frontend-only-applic|ac1-the-project-targets-a-frontend-only
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

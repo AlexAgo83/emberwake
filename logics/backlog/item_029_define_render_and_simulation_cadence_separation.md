@@ -17,6 +17,7 @@
 - Out: Debug stepping controls or full entity movement logic.
 
 ```mermaid
+%% logics-signature: backlog|define-render-and-simulation-cadence-sep|req-007-define-simulation-loop-and-deter|rendering-and-simulation-must-not-be|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

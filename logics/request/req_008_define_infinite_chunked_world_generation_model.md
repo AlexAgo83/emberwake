@@ -1,11 +1,12 @@
 ## req_008_define_infinite_chunked_world_generation_model - Define infinite chunked world generation model
-> From version: 0.1.1
-> Status: Ready
-> Understanding: 93%
-> Confidence: 90%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the world-generation model for the infinite chunked top-down map so new chunks can be produced consistently as the camera explores the world.
@@ -26,6 +27,7 @@ The recommended default is strong determinism: the same seed and the same chunk 
 The request should remain compatible with the top-down viewpoint, chunk-based streaming, world-space coordinate model, and future entity placement or occupancy systems. It should not yet require a full content editor, handcrafted level authoring workflow, or advanced procedural-tuning UI.
 
 ```mermaid
+%% logics-signature: request|define-infinite-chunked-world-generation|define-the-world-generation-model-for-th|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[Infinite chunked map rendering exists] --> B[Chunk content still lacks generation rules]
     B --> C[Define deterministic world generation contract]
@@ -51,6 +53,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): (none yet)
 - Architecture decision(s): (none yet)
+
+# AI Context
+- Summary: Define the world-generation model for the infinite chunked top-down map so new chunks can be produced consistently as...
+- Keywords: infinite, chunked, world, generation, model, the, world-generation, for
+- Use when: Use when framing scope, context, and acceptance checks for Define infinite chunked world generation model.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_031_define_global_world_seed_and_chunk_identity_contract`

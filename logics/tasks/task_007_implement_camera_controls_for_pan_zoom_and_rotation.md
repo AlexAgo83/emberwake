@@ -21,6 +21,7 @@
 - Unblocks: player-control boundary work and later map rendering or diagnostics tasks.
 
 ```mermaid
+%% logics-signature: task|implement-camera-controls-for-pan-zoom-a|item-004-implement-camera-controls-for-p|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

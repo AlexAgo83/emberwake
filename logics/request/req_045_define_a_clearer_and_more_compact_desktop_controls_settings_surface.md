@@ -1,11 +1,12 @@
 ## req_045_define_a_clearer_and_more_compact_desktop_controls_settings_surface - Define a clearer and more compact desktop-controls settings surface
-> From version: 0.2.4
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 100%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Make the `Settings` surface feel less like an administrative grid and more like a usable player-facing control screen.
@@ -105,10 +106,16 @@ flowchart TD
 - Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`
 - Request(s): `req_029_define_a_lightweight_settings_scene_with_desktop_control_customization`
 
+# AI Context
+- Summary: Make the Settings surface feel less like an administrative grid and more like a usable player-facing control screen.
+- Keywords: clearer, and, more, compact, desktop-controls, settings, surface, make
+- Use when: Use when framing scope, context, and acceptance checks for Define a clearer and more compact desktop-controls settings surface.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_clearer_movement_and_camera_grouping_inside_desktop_controls_settings`
-- `define_a_denser_binding_row_posture_for_desktop_controls_settings`
-- `define_a_clearer_action_hierarchy_between_apply_reset_revert_and_back_navigation`
+- `item_162_define_clearer_movement_and_camera_grouping_inside_desktop_controls_settings`
+- `item_163_define_a_denser_binding_row_posture_for_desktop_controls_settings`
+- `item_164_define_a_clearer_action_hierarchy_between_apply_reset_revert_and_back_navigation`
 
 # Outcome
 - `Settings > Desktop controls` now separates bindings into clearer `Movement` and `Camera` groups.

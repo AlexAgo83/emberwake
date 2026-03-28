@@ -17,6 +17,7 @@
 - Out: Detailed diagnostics metric set or profiling process.
 
 ```mermaid
+%% logics-signature: backlog|define-debug-overlay-separation-from-pla|req-011-define-ui-hud-and-overlay-system|debug-information-must-remain-available-|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

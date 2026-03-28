@@ -1,11 +1,12 @@
 ## req_052_define_an_externalized_json_gameplay_tuning_contract - Define an externalized JSON gameplay-tuning contract
-> From version: 0.3.1
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 97%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Externalize gameplay tuning constants into a dedicated JSON artifact so balancing no longer requires searching through runtime code.
@@ -165,7 +166,7 @@ Scope excludes:
 - user-generated modding support
 
 ```mermaid
-%% logics-signature: request|define-an-externalized-json-gameplay-tun|externalize-gameplay-tuning-constants|ac1-the-request-defines-a-dedicated
+%% logics-signature: request|define-an-externalized-json-gameplay-tun|externalize-gameplay-tuning-constants-in|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[Gameplay tuning values live in code] --> B[Balancing requires code search]
     B --> C[Define externalized JSON gameplay tuning]
@@ -221,8 +222,14 @@ flowchart TD
 - Architecture decision(s): `adr_011_use_typed_typescript_as_the_initial_data_and_config_authoring_model`, `adr_018_validate_emberwake_content_as_a_typed_cross_catalog_graph`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_036_externalize_retunable_gameplay_and_system_tuning_as_validated_json_contracts`
 - Request(s): `req_010_define_game_data_and_configuration_model`, `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`, `req_038_define_a_first_proximity_loot_spawn_wave_with_healing_kits_and_gold`, `req_050_define_a_main_menu_polish_and_first_crystal_xp_progression_wave`
 
+# AI Context
+- Summary: Externalize gameplay tuning constants into a dedicated JSON artifact so balancing no longer requires searching through runtime code.
+- Keywords: externalized, json, gameplay-tuning, contract, externalize, gameplay, tuning, constants
+- Use when: Use when framing scope, context, and acceptance checks for Define an externalized JSON gameplay-tuning contract.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_json_owned_gameplay_tuning_surface_for_first_wave_balance_values`
-- `define_validation_and_adapter_rules_for_externalized_gameplay_tuning_json`
-- `define_a_migration_boundary_between_runtime_contract_constants_and_authored_tuning_data`
-- `define_a_single_source_of_truth_rule_for_future_gameplay_balance_numbers`
+- `item_187_define_a_json_owned_gameplay_tuning_surface_for_first_wave_balance_values`
+- `item_188_define_validation_and_adapter_rules_for_externalized_gameplay_tuning_json`
+- `item_189_define_a_migration_boundary_between_runtime_contract_constants_and_authored_tuning_data`
+- `item_190_define_a_single_source_of_truth_rule_for_future_gameplay_balance_numbers`

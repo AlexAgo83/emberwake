@@ -19,6 +19,7 @@
 - Unblocks: first understandable player loop, smoke testing for the loop, and later HUD growth.
 
 ```mermaid
+%% logics-signature: task|orchestrate-player-facing-interaction-fe|item-026-define-desktop-fallback-control|1-refine-desktop-fallback-input-and|npm-run-lint
 flowchart LR
     Input[item_026 desktop fallback] --> UX[Readable player-facing runtime]
     Selection[item_027 contextual interactions] --> UX

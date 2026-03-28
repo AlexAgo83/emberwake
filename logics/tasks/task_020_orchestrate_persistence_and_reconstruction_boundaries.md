@@ -19,6 +19,7 @@
 - Unblocks: stable save/load posture, deterministic reconstruction, and future progression state.
 
 ```mermaid
+%% logics-signature: task|orchestrate-persistence-and-reconstructi|item-035-define-first-local-persistence-|1-define-the-first-persisted-state|npm-run-lint
 flowchart LR
     Scope[item_035 persistence scope] --> Persistence[Versioned local persistence]
     Versioning[item_036 save versioning] --> Persistence

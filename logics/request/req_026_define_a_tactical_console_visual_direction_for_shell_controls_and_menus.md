@@ -1,11 +1,12 @@
 ## req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus - Define a tactical-console visual direction for shell controls and menus
-> From version: 0.2.1
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 96%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Refine the shell visual language after the command-deck wave because the current menu and button system still reads too rounded, soft, and capsule-driven for Emberwake.
@@ -105,10 +106,16 @@ flowchart TD
 - Task(s): `task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu`, `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`
   `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`
 
+# AI Context
+- Summary: Refine the shell visual language after the command-deck wave because the current menu and button system still reads...
+- Keywords: tactical-console, visual, direction, for, shell, controls, and, menus
+- Use when: Use when framing scope, context, and acceptance checks for Define a tactical-console visual direction for shell controls and menus.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_tactical_console_geometry_for_shell_buttons_panels_and_state_chips`
-- `define_tactical_console_hierarchy_for_primary_secondary_and_utility_shell_controls`
-- `define_responsive_tactical_console_treatment_for_mobile_sheet_and_desktop_command_deck`
+- `item_103_define_tactical_console_geometry_for_shell_buttons_panels_and_state_chips`
+- `item_104_define_tactical_console_hierarchy_for_primary_secondary_and_utility_shell_controls`
+- `item_105_define_responsive_tactical_console_treatment_for_mobile_sheet_and_desktop_command_deck`
 
 # Delivery note
 - Implemented through `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`.

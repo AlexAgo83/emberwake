@@ -17,6 +17,7 @@
 - Out: Primary mobile steering rules or inspection panel behavior.
 
 ```mermaid
+%% logics-signature: backlog|define-desktop-fallback-controls-and-deb|req-001-render-top-down-infinite-chunked|desktop-support-must-remain-practical-wi|ac1-the-request-defines-a-player
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

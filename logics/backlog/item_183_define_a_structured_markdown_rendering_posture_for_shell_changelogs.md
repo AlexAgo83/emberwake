@@ -17,7 +17,7 @@
 - Out: remote changelog fetching, full markdown-browser tooling, or rich document features beyond the curated shell reader.
 
 ```mermaid
-%% logics-signature: backlog|define-a-structured-markdown-rendering-p|req-051-define-a-shell-surface-cleanup-a|the-changelog-surface-still|ac1-the-slice-defines
+%% logics-signature: backlog|define-a-structured-markdown-rendering-p|req-051-define-a-shell-surface-cleanup-a|the-changelog-surface-still-carries-left|ac1-the-slice-defines-removal-of
 flowchart LR
     Req[Req 051 shell cleanup] --> Gap[Changelog markdown lacks hierarchy]
     Gap --> Slice[Structured changelog rendering]

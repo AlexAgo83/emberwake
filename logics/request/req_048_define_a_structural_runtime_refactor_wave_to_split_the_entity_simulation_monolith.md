@@ -1,11 +1,12 @@
 ## req_048_define_a_structural_runtime_refactor_wave_to_split_the_entity_simulation_monolith - Define a structural runtime refactor wave to split the entity-simulation monolith
-> From version: 0.2.4
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 100%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Reduce the structural risk concentrated in the current runtime simulation monolith.
@@ -111,10 +112,16 @@ flowchart TD
 - Architecture decision(s): `adr_014_adopt_a_modular_app_engine_game_topology_with_one_way_dependencies`, `adr_015_define_engine_to_game_runtime_contract_boundaries`
 - Request(s): `req_047_define_a_runtime_memory_growth_investigation_and_reduction_wave`
 
+# AI Context
+- Summary: Reduce the structural risk concentrated in the current runtime simulation monolith.
+- Keywords: structural, runtime, refactor, wave, split, the, entity-simulation, monolith
+- Use when: Use when framing scope, context, and acceptance checks for Define a structural runtime refactor wave to split the entity-simulation monolith.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `extract_runtime_spawn_logic_out_of_entity_simulation`
-- `extract_runtime_combat_and_damage_resolution_out_of_entity_simulation`
-- `extract_runtime_pathfinding_pickups_and_presentation_state_out_of_entity_simulation`
+- `item_171_extract_runtime_spawn_logic_out_of_entity_simulation`
+- `item_172_extract_runtime_combat_and_damage_resolution_out_of_entity_simulation`
+- `item_173_extract_runtime_pathfinding_pickups_and_presentation_state_out_of_entity_simulation`
 
 # Outcome
 - `entitySimulation.ts` no longer carries the same monolithic responsibility footprint.

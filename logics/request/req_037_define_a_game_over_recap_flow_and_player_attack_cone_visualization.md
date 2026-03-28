@@ -1,11 +1,12 @@
 ## req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization - Define a game-over recap flow and player attack-cone visualization
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Introduce a real `game over` posture so player defeat resolves into a readable product flow rather than a thin shell interruption.
@@ -145,7 +146,13 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_035_resolve_entity_collisions_as_lightweight_deterministic_separation`
 - Request(s): `req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow`, `req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry`, `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`
 
+# AI Context
+- Summary: Introduce a real game over posture so player defeat resolves into a readable product flow rather than a...
+- Keywords: game-over, recap, flow, and, player, attack-cone, visualization, introduce
+- Use when: Use when framing scope, context, and acceptance checks for Define a game-over recap flow and player attack-cone visualization.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_game_over_recap_surface_for_defeated_runs`
-- `define_post_recap_return_to_main_menu_and_reentry_options`
-- `define_a_player_attack_cone_visualization_aligned_with_runtime_combat_geometry`
+- `item_137_define_a_game_over_recap_surface_for_defeated_runs`
+- `item_138_define_post_recap_return_to_main_menu_and_reentry_options`
+- `item_139_define_a_player_attack_cone_visualization_aligned_with_runtime_combat_geometry`

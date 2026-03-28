@@ -17,6 +17,7 @@
 - Out: Quality-gate content, deployment jobs, or release automation.
 
 ```mermaid
+%% logics-signature: backlog|define-baseline-github-actions-workflow-|req-003-create-render-static-free-plan-b|ci-needs-a-minimal-but-explicit|ac1-the-request-defines-a-github
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

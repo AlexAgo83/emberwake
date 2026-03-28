@@ -17,6 +17,7 @@
 - Out: Permanent HUD bars, debug overlays, or full menu systems.
 
 ```mermaid
+%% logics-signature: backlog|define-minimal-player-facing-runtime-fee|req-011-define-ui-hud-and-overlay-system|the-first-player-loop-needs-just|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

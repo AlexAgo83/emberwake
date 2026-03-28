@@ -1,11 +1,12 @@
 ## req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk - Harden runtime interaction state release readiness and bundle risk
-> From version: 0.1.0
-> Status: Ready
-> Understanding: 97%
-> Confidence: 94%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Harden the first playable runtime against behavior that currently contradicts the intended product and architecture contracts.
@@ -28,6 +29,7 @@ The final issue is a residual risk rather than a current bug: the main Pixi bund
 This request should therefore define a hardening slice that closes those correctness gaps and records the residual bundle risk as an explicit quality concern. It should remain compatible with the current shell, world, entity, CI, and release contracts. It should not turn into a broad rewrite of input, selection, or bundling architecture.
 
 ```mermaid
+%% logics-signature: request|harden-runtime-interaction-state-release|harden-the-first-playable-runtime-agains|ac1-the-request-fixes-the-mobile-input
 flowchart TD
     A[Runtime and delivery foundation are implemented] --> B[Audit reveals contract gaps]
     B --> C[Harden touch input entity state and release readiness]
@@ -53,6 +55,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_002_readable_world_traversal_and_presence`
 - Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_007_isolate_runtime_input_from_browser_page_controls`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
+
+# AI Context
+- Summary: Harden the first playable runtime against behavior that currently contradicts the intended product and architecture contracts.
+- Keywords: harden, runtime, interaction, state, release, readiness, and, bundle
+- Use when: Use when framing scope, context, and acceptance checks for Harden runtime interaction state release readiness and bundle risk.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_062_harden_touch_input_ownership_against_camera_debug_gesture_leakage`

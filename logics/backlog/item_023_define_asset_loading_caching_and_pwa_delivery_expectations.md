@@ -17,6 +17,7 @@
 - Out: Folder ownership, logical sizing, or final atlas authoring details.
 
 ```mermaid
+%% logics-signature: backlog|define-asset-loading-caching-and-pwa-del|req-005-define-asset-pipeline-for-map-an|static-delivery-and-runtime-rendering-ne|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

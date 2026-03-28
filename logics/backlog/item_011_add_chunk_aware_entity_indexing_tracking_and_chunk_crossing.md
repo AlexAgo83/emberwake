@@ -25,6 +25,7 @@
 - Picking, selection, and inspection tooling
 
 ```mermaid
+%% logics-signature: backlog|add-chunk-aware-entity-indexing-tracking|req-002-render-evolving-world-entities-o|the-entity-layer-needs-chunk-aware-spati|ac1-entities-belong-to-world-space
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

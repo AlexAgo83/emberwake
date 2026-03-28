@@ -1,11 +1,12 @@
 ## req_049_define_a_documentation_release_and_logics_hygiene_wave_for_repository_coherence - Define a documentation, release, and logics-hygiene wave for repository coherence
-> From version: 0.2.4
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 100%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Restore coherence between repository state, release-facing docs, and the `logics/` planning surface.
@@ -85,10 +86,16 @@ flowchart TD
 - Architecture decision(s): `adr_012_require_curated_versioned_changelogs_for_releases`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Request(s): `req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors`
 
+# AI Context
+- Summary: Restore coherence between repository state, release-facing docs, and the logics/ planning surface.
+- Keywords: documentation, release, and, logics-hygiene, wave, for, repository, coherence
+- Use when: Use when framing scope, context, and acceptance checks for Define a documentation, release, and logics-hygiene wave for repository coherence.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `synchronize_readme_and_release_facing_repository_status`
-- `clean_up_request_and_task_status_drift_in_recent_waves`
-- `define_lightweight_logics_navigation_and_hygiene_rules_for_the_growing_corpus`
+- `item_174_synchronize_readme_and_release_facing_repository_status`
+- `item_175_clean_up_request_and_task_status_drift_in_recent_waves`
+- `item_176_define_lightweight_logics_navigation_and_hygiene_rules_for_the_growing_corpus`
 
 # Outcome
 - `README.md` now reflects the current playable slice, delivery workflow, repository topology, and release-facing version posture more accurately.

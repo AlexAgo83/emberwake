@@ -17,7 +17,7 @@
 - Out: schema-platform overbuild, runtime fallback magic, or a generic content system rewrite.
 
 ```mermaid
-%% logics-signature: backlog|define-validation-and-adapter-rules-for-|req-052-define-an-externalized-json-game|raw-json-alone-would-weaken|ac1-the-slice-defines
+%% logics-signature: backlog|define-validation-and-adapter-rules-for-|req-052-define-an-externalized-json-game|raw-json-alone-would-weaken-type|ac1-the-slice-defines-a-typescript
 flowchart LR
     Req[Req 052 gameplay tuning] --> Gap[JSON needs validation and derivation]
     Gap --> Slice[Gameplay tuning adapter rules]

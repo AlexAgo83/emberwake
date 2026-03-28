@@ -1,11 +1,12 @@
 ## req_040_define_directionally_biased_hostile_spawns_ahead_of_player_movement - Define directionally biased hostile spawns ahead of player movement
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Make hostile spawns feel more intentional relative to player movement instead of equally likely around the player.
@@ -122,7 +123,13 @@ flowchart TD
 - Architecture decision(s): `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_035_resolve_entity_collisions_as_lightweight_deterministic_separation`
 - Request(s): `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`
 
+# AI Context
+- Summary: Make hostile spawns feel more intentional relative to player movement instead of equally likely around the player.
+- Keywords: directionally, biased, hostile, spawns, ahead, player, movement, make
+- Use when: Use when framing scope, context, and acceptance checks for Define directionally biased hostile spawns ahead of player movement.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_forward_biased_spawn_sampling_for_moving_player_states`
-- `define_fallback_spawn_sector_rules_when_preferred_forward_positions_fail`
-- `define_neutral_spawn_behavior_when_player_motion_is_not_meaningful`
+- `item_146_define_forward_biased_spawn_sampling_for_moving_player_states`
+- `item_147_define_fallback_spawn_sector_rules_when_preferred_forward_positions_fail`
+- `item_148_define_neutral_spawn_behavior_when_player_motion_is_not_meaningful`

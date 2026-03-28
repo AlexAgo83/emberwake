@@ -25,6 +25,7 @@
 - Chunk visibility, culling, preload, and caching rules
 
 ```mermaid
+%% logics-signature: backlog|define-deterministic-chunked-world-model|req-001-render-top-down-infinite-chunked|the-map-layer-needs-a-deterministic|ac1-the-world-model-uses-fixed
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

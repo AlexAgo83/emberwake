@@ -19,6 +19,7 @@
 - Unblocks: richer terrain content, persistence boundaries, and future biome or density systems.
 
 ```mermaid
+%% logics-signature: task|orchestrate-deterministic-world-generati|item-031-define-global-world-seed-and-ch|1-promote-the-seed-and-chunk|npm-run-lint
 flowchart LR
     Seed[item_031 seed and chunk identity] --> Generation[Deterministic world generation]
     Baseline[item_032 chunk generation baseline] --> Generation

@@ -1,11 +1,12 @@
 ## req_053_define_an_externalized_json_system_tuning_contract - Define an externalized JSON system-tuning contract
-> From version: 0.3.1
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 97%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Externalize technical and system-level tuning constants into a dedicated JSON-owned surface so project-level tuning no longer requires searching across code modules.
@@ -163,7 +164,7 @@ Scope excludes:
 - in-app tools for editing technical tuning
 
 ```mermaid
-%% logics-signature: request|define-an-externalized-json-system-tuning|externalize-technical-and-system-level|ac1-the-request-defines-a
+%% logics-signature: request|define-an-externalized-json-system-tunin|externalize-technical-and-system-level-t|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[Technical tuning values live across code modules] --> B[Editing requires code search]
     B --> C[Define externalized system tuning contract]
@@ -216,8 +217,14 @@ flowchart TD
 - Architecture decision(s): `adr_010_treat_render_build_variables_as_public_frontend_configuration`, `adr_011_use_typed_typescript_as_the_initial_data_and_config_authoring_model`, `adr_018_validate_emberwake_content_as_a_typed_cross_catalog_graph`, `adr_036_externalize_retunable_gameplay_and_system_tuning_as_validated_json_contracts`
 - Request(s): `req_010_define_game_data_and_configuration_model`, `req_052_define_an_externalized_json_gameplay_tuning_contract`
 
+# AI Context
+- Summary: Externalize technical and system-level tuning constants into a dedicated JSON-owned surface so project-level tuning no longer requires searching...
+- Keywords: externalized, json, system-tuning, contract, externalize, technical, and, system-level
+- Use when: Use when framing scope, context, and acceptance checks for Define an externalized JSON system-tuning contract.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_json_owned_system_tuning_surface_for_externalizable_technical_constants`
-- `define_validation_and_adapter_rules_for_externalized_system_tuning_json`
-- `define_clear_boundaries_between_system_tuning_gameplay_tuning_structural_constants_and_env_config`
-- `define_a_first_rollout_for_input_viewport_pathfinding_and_runtime_presentation_tuning`
+- `item_191_define_a_json_owned_system_tuning_surface_for_externalizable_technical_constants`
+- `item_192_define_validation_and_adapter_rules_for_externalized_system_tuning_json`
+- `item_193_define_clear_boundaries_between_system_tuning_gameplay_tuning_structural_constants_and_env_config`
+- `item_194_define_a_first_rollout_for_input_viewport_pathfinding_and_runtime_presentation_tuning`

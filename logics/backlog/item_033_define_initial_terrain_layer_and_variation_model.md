@@ -17,6 +17,7 @@
 - Out: Entity interactions, art direction, or multi-layer world simulation.
 
 ```mermaid
+%% logics-signature: backlog|define-initial-terrain-layer-and-variati|req-008-define-infinite-chunked-world-ge|the-generated-world-needs-a-simple|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

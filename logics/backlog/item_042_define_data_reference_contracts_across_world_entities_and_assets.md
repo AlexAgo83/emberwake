@@ -17,6 +17,7 @@
 - Out: Runtime loaders, rendering logic, or scenario authoring UI.
 
 ```mermaid
+%% logics-signature: backlog|define-data-reference-contracts-across-w|req-010-define-game-data-and-configurati|world-entity-and-asset-systems-need|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

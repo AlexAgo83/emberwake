@@ -17,7 +17,7 @@
 - Out: full procedural naming systems, deeper character creation, or name-validation redesign.
 
 ```mermaid
-%% logics-signature: backlog|define-randomized-initial-character-name|req-051-define-a-shell-surface-cleanup-a|new-game-still-opens-with|ac1-the-slice-defines
+%% logics-signature: backlog|define-randomized-initial-character-name|req-051-define-a-shell-surface-cleanup-a|new-game-still-opens-with-the|ac1-the-slice-defines-removal-of
 flowchart LR
     Req[Req 051 shell cleanup] --> Gap[New game naming feels static]
     Gap --> Slice[Randomized initial name suggestion]

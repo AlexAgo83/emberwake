@@ -17,6 +17,7 @@
 - Out: Concrete mobile stick tuning, desktop fallback mapping details, or selection UI.
 
 ```mermaid
+%% logics-signature: backlog|define-single-entity-control-contract-an|req-001-render-top-down-infinite-chunked|the-first-playable-loop-needs-one|ac1-the-request-defines-a-player
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

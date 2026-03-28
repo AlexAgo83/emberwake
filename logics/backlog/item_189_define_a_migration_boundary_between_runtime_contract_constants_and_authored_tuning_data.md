@@ -17,7 +17,7 @@
 - Out: migrating all content or all technical constants in one wave.
 
 ```mermaid
-%% logics-signature: backlog|define-a-migration-boundary-between-runt|req-052-define-an-externalized-json-game|runtime-local-contract-objects|ac1-the-slice-defines
+%% logics-signature: backlog|define-a-migration-boundary-between-runt|req-052-define-an-externalized-json-game|runtime-local-contract-objects-currently|ac1-the-slice-defines-which-current
 flowchart LR
     Req[Req 052 gameplay tuning] --> Gap[No explicit migration boundary]
     Gap --> Slice[Boundary between code contracts and tuning data]

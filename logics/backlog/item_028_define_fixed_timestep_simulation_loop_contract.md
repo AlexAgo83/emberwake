@@ -17,6 +17,7 @@
 - Out: Render interpolation details or debug controls beyond what proves the contract.
 
 ```mermaid
+%% logics-signature: backlog|define-fixed-timestep-simulation-loop-co|req-007-define-simulation-loop-and-deter|world-and-entity-updates-need-an|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

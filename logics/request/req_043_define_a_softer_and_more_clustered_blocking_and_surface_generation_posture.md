@@ -1,11 +1,12 @@
 ## req_043_define_a_softer_and_more_clustered_blocking_and_surface_generation_posture - Define a softer and more clustered blocking and surface-generation posture
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: World generation
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Reduce the density of non-traversable walls and mobility-slowing zones in generated space.
@@ -125,7 +126,13 @@ flowchart TD
 - Architecture decision(s): `adr_032_separate_visual_terrain_blocking_obstacles_and_movement_surface_modifiers`, `adr_034_model_traversable_surface_effects_as_bounded_movement_modifiers`
 - Request(s): `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`, `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay`
 
+# AI Context
+- Summary: Reduce the density of non-traversable walls and mobility-slowing zones in generated space.
+- Keywords: softer, and, more, clustered, blocking, surface-generation, posture, reduce
+- Use when: Use when framing scope, context, and acceptance checks for Define a softer and more clustered blocking and surface-generation posture.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_reduced_wall_generation_density_for_runtime_world_chunks`
-- `define_a_reduced_surface_modifier_generation_density_for_runtime_world_chunks`
-- `define_blob_like_clustering_rules_for_obstacles_and_surface_modifier_patches`
+- `item_155_define_a_reduced_wall_generation_density_for_runtime_world_chunks`
+- `item_156_define_a_reduced_surface_modifier_generation_density_for_runtime_world_chunks`
+- `item_157_define_blob_like_clustering_rules_for_obstacles_and_surface_modifier_patches`

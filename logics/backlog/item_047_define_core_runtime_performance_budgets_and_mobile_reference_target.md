@@ -17,6 +17,7 @@
 - Out: Instrumentation metric details or profiling workflow mechanics.
 
 ```mermaid
+%% logics-signature: backlog|define-core-runtime-performance-budgets-|req-012-define-performance-budgets-profi|the-runtime-needs-an-explicit-baseline|ac1-the-request-defines-dedicated-perfor
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

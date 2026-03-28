@@ -17,6 +17,7 @@
 - Out: Reworking the whole entity state machine, redesigning inspection UI, or introducing a full UI-state framework.
 
 ```mermaid
+%% logics-signature: backlog|separate-entity-selection-presentation-f|req-016-harden-runtime-interaction-state|the-runtime-currently-overwrites-an-enti|ac1-selecting-an-entity-no-longer
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

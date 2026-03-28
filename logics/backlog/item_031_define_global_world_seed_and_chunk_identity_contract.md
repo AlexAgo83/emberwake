@@ -17,6 +17,7 @@
 - Out: Terrain generation details, biome richness, or rendering-layer concerns.
 
 ```mermaid
+%% logics-signature: backlog|define-global-world-seed-and-chunk-ident|req-008-define-infinite-chunked-world-ge|infinite-world-generation-needs-stable-i|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

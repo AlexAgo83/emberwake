@@ -1,11 +1,12 @@
 ## req_038_define_a_first_proximity_loot_spawn_wave_with_healing_kits_and_gold - Define a first proximity loot-spawn wave with healing kits and gold
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Introduce a first layer of nearby collectible objects so traversal and combat start producing tangible world pickups.
@@ -143,7 +144,13 @@ flowchart TD
 - Architecture decision(s): `adr_032_separate_visual_terrain_blocking_obstacles_and_movement_surface_modifiers`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request(s): `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`, `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`, `req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization`
 
+# AI Context
+- Summary: Introduce a first layer of nearby collectible objects so traversal and combat start producing tangible world pickups.
+- Keywords: first, proximity, loot-spawn, wave, healing, kits, and, gold
+- Use when: Use when framing scope, context, and acceptance checks for Define a first proximity loot-spawn wave with healing kits and gold.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_nearby_pickup_spawn_rules_around_the_player`
-- `define_a_first_healing_kit_pickup_that_restores_25_percent_health`
-- `define_gold_as_the_default_fallback_pickup_and_first_runtime_currency_counter`
+- `item_140_define_nearby_pickup_spawn_rules_around_the_player`
+- `item_141_define_a_first_healing_kit_pickup_that_restores_25_percent_health`
+- `item_142_define_gold_as_the_default_fallback_pickup_and_first_runtime_currency_counter`

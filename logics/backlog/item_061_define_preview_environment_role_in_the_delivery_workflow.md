@@ -17,6 +17,7 @@
 - Out: Implementing preview infrastructure or redefining production delivery.
 
 ```mermaid
+%% logics-signature: backlog|define-preview-environment-role-in-the-d|req-015-define-release-workflow-and-depl|if-previews-exist-later-they-need|ac1-the-request-defines-a-release-workfl
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

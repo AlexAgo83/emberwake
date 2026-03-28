@@ -1,11 +1,12 @@
 ## req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay - Define a first movement surface modifiers wave for runtime gameplay
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 97%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Introduce a first player-facing notion of movement-affecting surfaces without conflating them with blocking collision or raw terrain identity.
@@ -105,10 +106,16 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_032_separate_visual_terrain_blocking_obstacles_and_movement_surface_modifiers`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_034_model_traversable_surface_effects_as_bounded_movement_modifiers`
 - Request(s): `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`
 
+# AI Context
+- Summary: Introduce a first player-facing notion of movement-affecting surfaces without conflating them with blocking collision or raw terrain identity.
+- Keywords: first, movement, surface, modifiers, wave, for, runtime, gameplay
+- Use when: Use when framing scope, context, and acceptance checks for Define a first movement surface modifiers wave for runtime gameplay.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_first_movement_surface_modifier_contract_for_traversable_world_space`
-- `define_slow_surface_behavior_for_fixed_step_runtime_movement`
-- `define_optional_slippery_surface_behavior_without_reopening_full_physics_scope`
+- `item_127_define_a_first_movement_surface_modifier_contract_for_traversable_world_space`
+- `item_128_define_slow_surface_behavior_for_fixed_step_runtime_movement`
+- `item_129_define_optional_slippery_surface_behavior_without_reopening_full_physics_scope`
 
 # Implementation notes
 - Delivered through `worldData`, `worldGeneration`, `pseudoPhysics`, and runtime movement tests so traversable movement modifiers are now explicit and separate from both terrain identity and blocking obstacles.

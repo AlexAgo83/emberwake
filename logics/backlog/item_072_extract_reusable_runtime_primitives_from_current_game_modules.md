@@ -17,6 +17,7 @@
 - Out: Emberwake gameplay rules, content data, scenario authoring, progression systems, or aggressive generalization of unstable systems.
 
 ```mermaid
+%% logics-signature: backlog|extract-reusable-runtime-primitives-from|req-018-define-engine-and-gameplay-bound|the-current-src-game-area-contains|ac1-the-slice-identifies-which-current
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

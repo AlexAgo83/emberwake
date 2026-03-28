@@ -1,11 +1,12 @@
 ## req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants - Define overhead health and attack-charge bars for runtime combatants
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Make combat readability stronger by exposing entity health directly in world space.
@@ -125,7 +126,13 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request(s): `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`, `req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization`
 
+# AI Context
+- Summary: Make combat readability stronger by exposing entity health directly in world space.
+- Keywords: overhead, health, and, attack-charge, bars, for, runtime, combatants
+- Use when: Use when framing scope, context, and acceptance checks for Define overhead health and attack-charge bars for runtime combatants.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_overhead_health_bars_for_runtime_combatants`
-- `define_overhead_attack_charge_bars_for_runtime_combatants`
-- `define_world_space_layout_rules_for_stacked_combat_bars_above_entities`
+- `item_143_define_overhead_health_bars_for_runtime_combatants`
+- `item_144_define_overhead_attack_charge_bars_for_runtime_combatants`
+- `item_145_define_world_space_layout_rules_for_stacked_combat_bars_above_entities`

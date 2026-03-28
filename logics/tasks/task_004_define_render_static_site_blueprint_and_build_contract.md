@@ -20,6 +20,7 @@
 - Unblocks: `task_005_define_mandatory_frontend_and_logics_quality_gates_in_ci` and later release tasks.
 
 ```mermaid
+%% logics-signature: task|define-render-static-site-blueprint-and-|item-014-define-render-static-site-bluep|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

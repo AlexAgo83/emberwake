@@ -17,6 +17,7 @@
 - Out: Server-side secret management, runtime secret injection, or backend environment strategy.
 
 ```mermaid
+%% logics-signature: backlog|define-frontend-env-mirroring-and-render|req-000-bootstrap-fullscreen-2d-react-pw|frontend-delivery-needs-one-clear-rule|ac1-the-request-produces-a-render
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

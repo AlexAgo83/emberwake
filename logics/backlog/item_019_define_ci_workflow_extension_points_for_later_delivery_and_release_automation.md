@@ -17,6 +17,7 @@
 - Out: Implementing deployment, release, or preview automation itself.
 
 ```mermaid
+%% logics-signature: backlog|define-ci-workflow-extension-points-for-|req-003-create-render-static-free-plan-b|the-first-ci-workflow-should-not|ac1-the-request-defines-a-github
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

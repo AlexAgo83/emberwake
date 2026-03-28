@@ -21,6 +21,7 @@
 - Unblocks: `task_001_implement_fullscreen_viewport_ownership_and_input_isolation`, `task_002_add_stable_logical_viewport_and_world_space_shell_contract`, `task_004_define_render_static_site_blueprint_and_build_contract`, `task_005_define_mandatory_frontend_and_logics_quality_gates_in_ci`.
 
 ```mermaid
+%% logics-signature: task|bootstrap-react-pixi-pwa-project-foundat|item-000-bootstrap-react-pixi-pwa-projec|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

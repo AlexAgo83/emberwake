@@ -17,7 +17,7 @@
 - Out: enforcing every constant in the repo through one sweeping policy.
 
 ```mermaid
-%% logics-signature: backlog|define-a-single-source-of-truth-rule-fo|req-052-define-an-externalized-json-game|future-gameplay-work-could|ac1-the-slice-defines
+%% logics-signature: backlog|define-a-single-source-of-truth-rule-for|req-052-define-an-externalized-json-game|future-gameplay-work-could-easily-reintr|ac1-the-slice-defines-that-gameplay
 flowchart LR
     Req[Req 052 gameplay tuning] --> Gap[Future work could reintroduce local literals]
     Gap --> Slice[Single source of truth rule]

@@ -26,6 +26,7 @@
 - Diagnostics and picking beyond what is strictly needed to validate camera behavior
 
 ```mermaid
+%% logics-signature: backlog|implement-camera-controls-for-pan-zoom-a|req-001-render-top-down-infinite-chunked|the-world-map-layer-needs-a-concrete|ac1-the-default-desktop-controls-are
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

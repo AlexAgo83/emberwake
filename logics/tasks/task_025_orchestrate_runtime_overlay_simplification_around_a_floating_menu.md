@@ -15,6 +15,7 @@
 - This orchestration task groups the shell simplification work needed to replace scattered controls and always-on panels with a coherent floating-menu model.
 
 ```mermaid
+%% logics-signature: task|orchestrate-runtime-overlay-simplificati|item-066-define-floating-shell-menu-acti|1-replace-persistent-runtime-chrome-with|npm-run-lint
 flowchart LR
     Chrome[item_068 minimal chrome] --> Shell[Menu first runtime shell]
     Actions[item_066 fullscreen and reset] --> Shell

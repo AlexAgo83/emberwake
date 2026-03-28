@@ -17,6 +17,7 @@
 - Out: Logical sizing rules, atlas packaging, or runtime caching strategy.
 
 ```mermaid
+%% logics-signature: backlog|define-asset-directory-naming-and-owners|req-005-define-asset-pipeline-for-map-an|map-entity-and-overlay-assets-need|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

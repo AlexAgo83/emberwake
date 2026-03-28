@@ -17,6 +17,7 @@
 - Out: Storage engine implementation or full save UI.
 
 ```mermaid
+%% logics-signature: backlog|define-deterministic-world-reconstructio|req-009-define-local-persistence-and-sav|the-project-needs-a-rule-for|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

@@ -1,11 +1,12 @@
 ## req_012_define_performance_budgets_profiling_and_diagnostics - Define performance budgets profiling and diagnostics
-> From version: 0.1.2
-> Status: Ready
-> Understanding: 95%
-> Confidence: 92%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define performance budgets, profiling expectations, and diagnostics conventions for the static top-down 2D application.
@@ -30,6 +31,7 @@ Diagnostics should also be visible inside the app during development, not only i
 For the first controllable-entity loop, the in-app diagnostics should also expose the most actionable movement and world metrics, such as controlled-entity position, movement speed or vector, current chunk, and camera state.
 
 ```mermaid
+%% logics-signature: request|define-performance-budgets-profiling-and|define-performance-budgets-profiling-exp|ac1-the-request-defines-dedicated-perfor
 flowchart TD
     A[Client side rendering and simulation complexity grows] --> B[Performance expectations remain vague]
     B --> C[Define budgets profiling and diagnostics]
@@ -57,6 +59,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): (none yet)
+
+# AI Context
+- Summary: Define performance budgets, profiling expectations, and diagnostics conventions for the static top-down 2D application.
+- Keywords: performance, budgets, profiling, and, diagnostics, expectations, conventions, for
+- Use when: Use when framing scope, context, and acceptance checks for Define performance budgets profiling and diagnostics.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_047_define_core_runtime_performance_budgets_and_mobile_reference_target`

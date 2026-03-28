@@ -19,6 +19,7 @@
 - Unblocks: release readiness, deployable release branch operations, and later automation layers.
 
 ```mermaid
+%% logics-signature: task|orchestrate-static-delivery-and-ci-harde|item-015-define-frontend-env-mirroring-a|1-harden-frontend-env-mirroring-and|npm-run-ci
 flowchart LR
     Env[item_015 env contract] --> Delivery[Hardened static delivery]
     Free[item_016 free-plan notes] --> Delivery

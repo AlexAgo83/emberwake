@@ -17,6 +17,7 @@
 - Out: Detailed metric design, profiling workflows, or player-facing HUD content unrelated to diagnostics access.
 
 ```mermaid
+%% logics-signature: backlog|define-menu-driven-diagnostics-access-an|req-017-redesign-runtime-overlay-into-a-|diagnostics-are-useful-for-development-b|ac1-diagnostics-are-hidden-by-default
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

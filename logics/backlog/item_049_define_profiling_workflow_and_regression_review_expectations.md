@@ -17,6 +17,7 @@
 - Out: Metric implementation or release-operations policy.
 
 ```mermaid
+%% logics-signature: backlog|define-profiling-workflow-and-regression|req-012-define-performance-budgets-profi|performance-budgets-are-only-useful-if|ac1-the-request-defines-dedicated-perfor
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

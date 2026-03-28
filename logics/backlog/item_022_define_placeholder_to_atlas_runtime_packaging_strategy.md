@@ -17,6 +17,7 @@
 - Out: Asset naming, logical sizing, or runtime cache implementation.
 
 ```mermaid
+%% logics-signature: backlog|define-placeholder-to-atlas-runtime-pack|req-005-define-asset-pipeline-for-map-an|the-asset-pipeline-needs-a-practical|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

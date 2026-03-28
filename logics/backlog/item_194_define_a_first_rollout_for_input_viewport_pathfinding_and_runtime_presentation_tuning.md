@@ -17,7 +17,7 @@
 - Out: camera/view tuning in the first migration, or migrating every technical constant immediately.
 
 ```mermaid
-%% logics-signature: backlog|define-a-first-rollout-for-input-viewpor|req-053-define-an-externalized-json-syst|the-system-tuning-contract|ac1-the-slice-defines
+%% logics-signature: backlog|define-a-first-rollout-for-input-viewpor|req-053-define-an-externalized-json-syst|the-system-tuning-contract-risks-becomin|ac1-the-slice-defines-input-and
 flowchart LR
     Req[Req 053 system tuning] --> Gap[No deliberate rollout order]
     Gap --> Slice[First migration order]

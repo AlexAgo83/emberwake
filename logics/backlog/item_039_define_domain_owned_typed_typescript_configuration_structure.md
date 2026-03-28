@@ -17,6 +17,7 @@
 - Out: External CMS, JSON-first pipelines, or final validation tooling.
 
 ```mermaid
+%% logics-signature: backlog|define-domain-owned-typed-typescript-con|req-010-define-game-data-and-configurati|game-data-needs-a-first-class-authoring|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

@@ -17,7 +17,7 @@
 - Out: building a general-purpose autonomous player, replacing the short browser-smoke check, or relying only on long-form DOM-level keyboard driving.
 
 ```mermaid
-%% logics-signature: backlog|define-a-scripted-runtime-player-input-t|req-054-define-a-scripted-long-session-r|current-automation-can-prove|ac1-the-slice-defines
+%% logics-signature: backlog|define-a-scripted-runtime-player-input-t|req-054-define-a-scripted-long-session-r|current-automation-can-prove-that-the|ac1-the-slice-defines-a-scripted
 flowchart LR
     Req[Req 054 long-session profiling] --> Gap[No durable scripted player timeline]
     Gap --> Slice[Scripted runtime input timeline]

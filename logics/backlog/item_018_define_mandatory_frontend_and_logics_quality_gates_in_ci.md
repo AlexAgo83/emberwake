@@ -17,6 +17,7 @@
 - Out: Workflow triggers, caching strategy, or release/deploy jobs.
 
 ```mermaid
+%% logics-signature: backlog|define-mandatory-frontend-and-logics-qua|req-003-create-render-static-free-plan-b|the-repository-needs-a-single-baseline|ac1-the-request-defines-a-github
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

@@ -17,6 +17,7 @@
 - Out: Performance budget targets or regression governance.
 
 ```mermaid
+%% logics-signature: backlog|define-the-standard-in-app-diagnostics-m|req-012-define-performance-budgets-profi|runtime-diagnostics-need-a-standard-metr|ac1-the-request-defines-dedicated-perfor
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

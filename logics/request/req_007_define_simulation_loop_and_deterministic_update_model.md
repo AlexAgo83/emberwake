@@ -1,11 +1,12 @@
 ## req_007_define_simulation_loop_and_deterministic_update_model - Define simulation loop and deterministic update model
-> From version: 0.1.1
-> Status: Ready
-> Understanding: 93%
-> Confidence: 90%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the simulation-loop model that will drive world updates, entity updates, and time-based state changes independently from rendering cadence.
@@ -26,6 +27,7 @@ The recommended baseline is a strict fixed-timestep simulation loop. Rendering m
 The scope should stay compatible with a frontend-only PixiJS application and with the debugging and testing ambitions already implied by earlier requests. It should not yet define full gameplay rules, AI systems, or network synchronization.
 
 ```mermaid
+%% logics-signature: request|define-simulation-loop-and-deterministic|define-the-simulation-loop-model-that-wi|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[Rendered world and entities need time based behavior] --> B[Implicit frame driven logic becomes risky]
     B --> C[Define deterministic simulation loop contract]
@@ -51,6 +53,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): (none yet)
 - Architecture decision(s): (none yet)
+
+# AI Context
+- Summary: Define the simulation-loop model that will drive world updates, entity updates, and time-based state changes independently from rendering...
+- Keywords: simulation, loop, and, deterministic, update, model, the, simulation-loop
+- Use when: Use when framing scope, context, and acceptance checks for Define simulation loop and deterministic update model.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_028_define_fixed_timestep_simulation_loop_contract`

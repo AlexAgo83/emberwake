@@ -17,6 +17,7 @@
 - Out: Full command systems, permanent HUD design, or camera controls.
 
 ```mermaid
+%% logics-signature: backlog|define-selection-inspection-and-contextu|req-001-render-top-down-infinite-chunked|entity-interaction-needs-a-clear-path|ac1-the-request-defines-a-player
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

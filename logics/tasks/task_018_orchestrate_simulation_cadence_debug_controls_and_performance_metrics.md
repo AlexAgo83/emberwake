@@ -19,6 +19,7 @@
 - Unblocks: reliable perf budgets, richer browser smoke tests, and later density-heavy gameplay work.
 
 ```mermaid
+%% logics-signature: task|orchestrate-simulation-cadence-debug-con|item-028-define-fixed-timestep-simulatio|1-formalize-cadence-separation-and-fixed|npm-run-ci
 flowchart LR
     Loop[item_028 fixed-step contract] --> Runtime[Controlled simulation runtime]
     Cadence[item_029 render vs simulation cadence] --> Runtime

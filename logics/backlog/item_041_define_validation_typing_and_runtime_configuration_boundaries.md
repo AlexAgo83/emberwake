@@ -17,6 +17,7 @@
 - Out: Implementing all schemas or introducing remote config.
 
 ```mermaid
+%% logics-signature: backlog|define-validation-typing-and-runtime-con|req-010-define-game-data-and-configurati|the-project-needs-a-clean-boundary|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

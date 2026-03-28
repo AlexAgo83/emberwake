@@ -1,11 +1,12 @@
 ## req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay - Define a first collision and blocking-world wave for runtime gameplay
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Introduce a first real notion of physical constraint into the runtime so movement is no longer purely free traversal across the world.
@@ -102,10 +103,16 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`, `adr_032_separate_visual_terrain_blocking_obstacles_and_movement_surface_modifiers`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_035_resolve_entity_collisions_as_lightweight_deterministic_separation`
 - Request(s): `req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface`
 
+# AI Context
+- Summary: Introduce a first real notion of physical constraint into the runtime so movement is no longer purely free...
+- Keywords: first, collision, and, blocking-world, wave, for, runtime, gameplay
+- Use when: Use when framing scope, context, and acceptance checks for Define a first collision and blocking-world wave for runtime gameplay.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_first_obstacle_layer_representation_for_runtime_traversal`
-- `define_movement_resolution_against_non_traversable_world_space`
-- `define_a_lightweight_entity_separation_posture_for_runtime_collisions`
+- `item_124_define_a_first_obstacle_layer_representation_for_runtime_traversal`
+- `item_125_define_movement_resolution_against_non_traversable_world_space`
+- `item_126_define_a_lightweight_entity_separation_posture_for_runtime_collisions`
 
 # Implementation notes
 - Delivered through `worldData`, `worldGeneration`, `chunkDebugData`, `pseudoPhysics`, and `entitySimulation`, with terrain, obstacle, and movement-surface semantics now represented as separate layers.

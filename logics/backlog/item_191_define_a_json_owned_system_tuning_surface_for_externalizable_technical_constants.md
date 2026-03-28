@@ -17,7 +17,7 @@
 - Out: merging technical and gameplay tuning into one file, or moving all project constants into data files.
 
 ```mermaid
-%% logics-signature: backlog|define-a-json-owned-system-tuning-surfac|req-053-define-an-externalized-json-syst|retunable-technical-constants|ac1-the-slice-defines
+%% logics-signature: backlog|define-a-json-owned-system-tuning-surfac|req-053-define-an-externalized-json-syst|retunable-technical-constants-such-as-in|ac1-the-slice-defines-a-dedicated
 flowchart LR
     Req[Req 053 system tuning] --> Gap[Technical tuning values are scattered]
     Gap --> Slice[System tuning JSON surface]

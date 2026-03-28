@@ -1,11 +1,12 @@
 ## req_000_bootstrap_fullscreen_2d_react_pwa_shell - Bootstrap fullscreen 2D React Pixi PWA shell
-> From version: 0.1.1
-> Status: Ready
-> Understanding: 98%
-> Confidence: 96%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Bootstrap a new 2D game/rendering project based on React and TypeScript with static hosting only, no backend runtime.
@@ -79,6 +80,7 @@ This request should also anchor a shared vocabulary for the later world and enti
 Even at bootstrap stage, a minimal performance bar is useful. The shell does not need a heavy optimization target yet, but interaction and diagnostics should remain usable on a representative mobile-sized screen so later layers inherit a practical baseline rather than an unconstrained debug build.
 
 ```mermaid
+%% logics-signature: request|bootstrap-fullscreen-2d-react-pixi-pwa-s|bootstrap-a-new-2d-game-rendering|ac1-the-project-bootstrap-targets-a
 flowchart TD
     A[New project bootstrap] --> B[Choose React TS static PWA stack]
     B --> C[Use PixiJS and React wrapper baseline]
@@ -132,6 +134,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_001_enforce_bounded_file_size_and_isolate_react_side_effects`
+
+# AI Context
+- Summary: Bootstrap a new 2D game/rendering project based on React and TypeScript with static hosting only, no backend runtime.
+- Keywords: bootstrap, fullscreen, react, pixi, pwa, shell, new, game
+- Use when: Use when framing scope, context, and acceptance checks for Bootstrap fullscreen 2D React Pixi PWA shell.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_000_bootstrap_react_pixi_pwa_project_foundation`

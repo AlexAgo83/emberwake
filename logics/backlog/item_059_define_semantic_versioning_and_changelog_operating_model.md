@@ -17,6 +17,7 @@
 - Out: Smoke checks, rollback mechanics, or Render deployment config.
 
 ```mermaid
+%% logics-signature: backlog|define-semantic-versioning-and-changelog|req-015-define-release-workflow-and-depl|release-communication-needs-a-lightweigh|ac1-the-request-defines-a-release-workfl
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

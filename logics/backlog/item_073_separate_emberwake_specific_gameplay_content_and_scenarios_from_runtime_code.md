@@ -17,6 +17,7 @@
 - Out: Full gameplay redesign, new combat systems, or a final reusable content pipeline for many games.
 
 ```mermaid
+%% logics-signature: backlog|separate-emberwake-specific-gameplay-con|req-018-define-engine-and-gameplay-bound|several-current-runtime-modules-still-bl|ac1-the-slice-identifies-which-current
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

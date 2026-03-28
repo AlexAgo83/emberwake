@@ -17,3 +17,4 @@ logics/hybrid_assist_measurements.jsonl
 .env
 .env.*
 !.env.example
+logics/mutation_audit.jsonl

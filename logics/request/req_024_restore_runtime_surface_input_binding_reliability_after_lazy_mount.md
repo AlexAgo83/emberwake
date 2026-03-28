@@ -1,11 +1,12 @@
 ## req_024_restore_runtime_surface_input_binding_reliability_after_lazy_mount - Restore runtime surface input binding reliability after lazy mount
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 97%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Restore reliable runtime-surface input binding after the lazy-mounted Pixi runtime boundary so mobile joystick interaction works again and surface-bound controls are not silently lost when the runtime appears after shell mount.
@@ -71,10 +72,16 @@ flowchart TD
 - Request(s): `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
 - Task(s): `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`, `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`
 
+# AI Context
+- Summary: Restore reliable runtime-surface input binding after the lazy-mounted Pixi runtime boundary so mobile joystick interaction works again and...
+- Keywords: restore, runtime, surface, input, binding, reliability, lazy, mount
+- Use when: Use when framing scope, context, and acceptance checks for Restore runtime surface input binding reliability after lazy mount.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `restore_surface_bound_interaction_hooks_to_attach_after_lazy_runtime_mount`
-- `add_regression_coverage_for_mobile_joystick_and_surface_interactions_after_delayed_surface_availability`
-- `validate_runtime_surface_input_reliability_without_reopening_input_ownership_design`
+- `item_097_restore_surface_bound_interaction_hooks_to_attach_after_lazy_runtime_mount`
+- `item_098_add_regression_coverage_for_mobile_joystick_and_surface_interactions_after_delayed_surface_availability`
+- `item_099_validate_runtime_surface_input_reliability_without_reopening_input_ownership_design`
 
 # Delivery note
 - Implemented through `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`.

@@ -17,6 +17,7 @@
 - Out: Advanced pathfinding or final collision resolution.
 
 ```mermaid
+%% logics-signature: backlog|define-traversal-overlap-and-early-movem|req-014-define-world-occupancy-navigatio|the-early-runtime-needs-a-deliberate|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

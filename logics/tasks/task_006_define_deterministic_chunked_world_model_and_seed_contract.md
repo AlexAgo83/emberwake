@@ -21,6 +21,7 @@
 - Unblocks: `task_007_implement_camera_controls_for_pan_zoom_and_rotation`, `task_008_define_entity_contract_and_generic_archetype_baseline`, and later map streaming tasks.
 
 ```mermaid
+%% logics-signature: task|define-deterministic-chunked-world-model|item-005-define-deterministic-chunked-wo|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

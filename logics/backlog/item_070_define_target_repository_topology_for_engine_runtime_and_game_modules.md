@@ -17,6 +17,7 @@
 - Out: Full code extraction, final package publishing strategy, or implementation of engine-to-game contracts in depth.
 
 ```mermaid
+%% logics-signature: backlog|define-target-repository-topology-for-en|req-018-define-engine-and-gameplay-bound|the-repository-currently-has-useful-doma|ac1-the-slice-defines-an-explicit
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

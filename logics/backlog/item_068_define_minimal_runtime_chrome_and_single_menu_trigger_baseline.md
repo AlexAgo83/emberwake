@@ -17,6 +17,7 @@
 - Out: Specific menu-action behaviors, diagnostics details, or the full inspection-panel contract.
 
 ```mermaid
+%% logics-signature: backlog|define-minimal-runtime-chrome-and-single|req-017-redesign-runtime-overlay-into-a-|the-current-runtime-keeps-too-much|ac1-the-baseline-runtime-view-keeps
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

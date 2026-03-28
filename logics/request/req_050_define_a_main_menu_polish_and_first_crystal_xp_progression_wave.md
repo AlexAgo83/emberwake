@@ -1,11 +1,12 @@
 ## req_050_define_a_main_menu_polish_and_first_crystal_xp_progression_wave - Define a main-menu polish and first crystal-XP progression wave
-> From version: 0.3.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Improve the player-facing quality of the `Main menu` with better ordering, richer presentation, and direct access to recent changelogs.
@@ -135,11 +136,17 @@ flowchart TD
 - Architecture decision(s): `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request(s): `req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization`, `req_038_define_a_first_proximity_loot_spawn_wave_with_healing_kits_and_gold`, `req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants`, `req_045_define_a_clearer_and_more_compact_desktop_controls_settings_surface`
 
+# AI Context
+- Summary: Improve the player-facing quality of the Main menu with better ordering, richer presentation, and direct access to recent...
+- Keywords: main-menu, polish, and, first, crystal-xp, progression, wave, improve
+- Use when: Use when framing scope, context, and acceptance checks for Define a main-menu polish and first crystal-XP progression wave.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_main_menu_changelog_surface_and_release_history_entry`
-- `define_a_more_atmospheric_main_menu_presentation_with_footer_version_linking`
-- `define_first_crystal_xp_and_level_progression_feedback_for_the_player`
-- `define_player_identity_overhead_and_settings_compaction_for_the_next_shell_polish_slice`
+- `item_177_define_a_main_menu_changelog_surface_and_release_history_entry`
+- `item_178_define_a_more_atmospheric_main_menu_presentation_with_footer_version_linking`
+- `item_179_define_first_crystal_xp_level_and_runtime_progression_feedback`
+- `item_180_define_player_overhead_identity_and_compact_settings_mobile_control_polish`
 
 # Outcome
 - Added a shell-owned `Changelogs` scene in `Main menu`, reordered `Load game` before `Start new game`, and introduced a bottom-anchored in-surface app-version footer linking to the GitHub project.

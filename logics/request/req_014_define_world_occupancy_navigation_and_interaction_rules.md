@@ -1,11 +1,12 @@
 ## req_014_define_world_occupancy_navigation_and_interaction_rules - Define world occupancy navigation and interaction rules
-> From version: 0.1.2
-> Status: Ready
-> Understanding: 95%
-> Confidence: 92%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the rules that govern how entities occupy world space, move through it, and interact with terrain or other spatial constraints.
@@ -28,6 +29,7 @@ The scope should stay compatible with the top-down view, chunked streaming, enti
 For early slices, overlap situations can be tolerated and surfaced through diagnostics rather than fully resolved. That keeps the rules honest while avoiding premature complexity in collision or separation systems.
 
 ```mermaid
+%% logics-signature: request|define-world-occupancy-navigation-and-in|define-the-rules-that-govern-how|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[Entities exist inside a chunked world] --> B[Spatial rules between map and entities are still undefined]
     B --> C[Define occupancy navigation and interaction rules]
@@ -54,6 +56,13 @@ flowchart TD
 # Companion docs
 - Product brief(s): `prod_002_readable_world_traversal_and_presence`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): (none yet)
+
+# AI Context
+- Summary: Define the rules that govern how entities occupy world space, move through it, and interact with terrain or...
+- Keywords: world, occupancy, navigation, and, interaction, rules, the, govern
+- Use when: Use when framing scope, context, and acceptance checks for Define world occupancy navigation and interaction rules.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
 - `item_054_define_entity_occupancy_model_and_footprint_rules_in_world_space`
 - `item_055_define_traversal_overlap_and_early_movement_constraint_behavior`

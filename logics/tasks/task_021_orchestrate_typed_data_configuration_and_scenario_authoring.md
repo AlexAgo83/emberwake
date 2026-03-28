@@ -19,6 +19,7 @@
 - Unblocks: test fixtures, debug scenarios, and later content authoring beyond code-only prototypes.
 
 ```mermaid
+%% logics-signature: task|orchestrate-typed-data-configuration-and|item-039-define-domain-owned-typed-types|1-define-domain-owned-typed-configuratio|npm-run-lint
 flowchart LR
     Structure[item_039 typed config structure] --> Data[Typed authoring model]
     Scenarios[item_040 debug scenarios] --> Data

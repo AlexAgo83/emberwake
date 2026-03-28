@@ -19,6 +19,7 @@
 - Unblocks: entity-world integration, player-facing traversal validation, and browser smoke coverage for real runtime visuals.
 
 ```mermaid
+%% logics-signature: task|orchestrate-world-render-and-chunk-visib|item-006-render-debug-top-down-map-layer|1-establish-the-debug-top-down-map|npm-run-lint
 flowchart LR
     Item006[item_006 map layers] --> Render[Visible debug world render]
     Item007[item_007 chunk visibility] --> Render

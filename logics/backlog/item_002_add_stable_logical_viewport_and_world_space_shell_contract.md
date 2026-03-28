@@ -27,6 +27,7 @@
 - Map rendering, camera controls, and entity systems
 
 ```mermaid
+%% logics-signature: backlog|add-stable-logical-viewport-and-world-sp|req-000-bootstrap-fullscreen-2d-react-pw|the-shell-needs-a-stable-logical|ac1-the-shell-defines-explicit-logical
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

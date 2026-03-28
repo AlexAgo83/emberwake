@@ -1,11 +1,12 @@
 ## req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors - Refine spawn, bootstrap, pause surface, and escape-navigation behaviors
-> From version: 0.2.4
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 100%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Correct hostile spawn behavior so movement-biased spawns feel properly forward-facing instead of reading as rear-biased.
@@ -139,10 +140,17 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request(s): `req_040_define_directionally_biased_hostile_spawns_ahead_of_player_movement`, `req_042_define_a_low_cost_first_pathfinding_slice_for_runtime_entities`
 
+# AI Context
+- Summary: Correct hostile spawn behavior so movement-biased spawns feel properly forward-facing instead of reading as rear-biased.
+- Keywords: refine, spawn, bootstrap, pause, surface, and, escape-navigation, behaviors
+- Use when: Use when framing scope, context, and acceptance checks for Refine spawn, bootstrap, pause surface, and escape-navigation behaviors.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `refine_forward_biased_hostile_spawn_behavior_during_player_motion`
-- `remove_fake_bootstrap_entities_from_player_facing_runtime_start`
-- `remove_runtime_paused_panel_and_align_escape_navigation_with_visible_back_or_resume_actions`
+- `item_158_refine_forward_biased_hostile_spawns_and_increase_spawn_distance`
+- `item_159_remove_fake_bootstrap_entities_and_pause_overlay_surface`
+- `item_160_align_escape_navigation_with_visible_back_and_resume_actions`
+- `item_161_define_escape_from_live_runtime_to_main_menu_with_session_preservation`
 
 # Implementation note
 - The previously delivered slice already covers:

@@ -25,6 +25,7 @@
 - World-space rendering presentation details
 
 ```mermaid
+%% logics-signature: backlog|add-entity-picking-selection-inspection-|req-002-render-evolving-world-entities-o|the-entity-layer-needs-a-reproducible|ac1-a-deterministic-debug-scenario-exist
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

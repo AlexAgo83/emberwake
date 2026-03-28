@@ -17,6 +17,7 @@
 - Out: Test runner configuration or CI gating policy.
 
 ```mermaid
+%% logics-signature: backlog|define-deterministic-fixtures-and-scenar|req-013-define-frontend-testing-strategy|automated-tests-need-deterministic-fixtu|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

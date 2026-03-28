@@ -20,6 +20,7 @@
 - Unblocks: later release automation, changelog validation, and release-candidate tasks.
 
 ```mermaid
+%% logics-signature: task|define-semantic-versioning-and-changelog|item-059-define-semantic-versioning-and-|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

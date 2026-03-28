@@ -17,6 +17,7 @@
 - Out: Diagnostics visibility, inspection presentation, or broader menu styling beyond what is needed to make these actions usable.
 
 ```mermaid
+%% logics-signature: backlog|define-floating-shell-menu-actions-for-f|req-017-redesign-runtime-overlay-into-a-|fullscreen-and-camera-reset-actions-are-|ac1-fullscreen-and-reset-camera-are
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

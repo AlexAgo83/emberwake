@@ -27,6 +27,7 @@
 - Selection, inspection, and debug scenario behavior
 
 ```mermaid
+%% logics-signature: backlog|define-entity-contract-and-generic-arche|req-002-render-evolving-world-entities-o|the-entity-layer-needs-a-minimum|ac1-the-entity-layer-defines-a
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

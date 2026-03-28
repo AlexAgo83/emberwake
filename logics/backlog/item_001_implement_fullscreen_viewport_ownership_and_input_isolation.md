@@ -25,6 +25,7 @@
 - Debug overlay, fallback diagnostics, and persisted shell preferences
 
 ```mermaid
+%% logics-signature: backlog|implement-fullscreen-viewport-ownership-|req-000-bootstrap-fullscreen-2d-react-pw|the-shell-must-fully-own-the|ac1-the-shell-fills-the-full
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

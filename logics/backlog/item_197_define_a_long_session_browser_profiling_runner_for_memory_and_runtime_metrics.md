@@ -17,7 +17,7 @@
 - Out: collapsing this work into the short smoke suite, mandating deep heap snapshots in every run, or immediately enforcing strict failure budgets before a stable baseline exists.
 
 ```mermaid
-%% logics-signature: backlog|define-a-long-session-browser-profiling-|req-054-define-a-scripted-long-session-r|the-current-short-smoke|ac1-the-slice-defines
+%% logics-signature: backlog|define-a-long-session-browser-profiling-|req-054-define-a-scripted-long-session-r|the-current-short-smoke-runner-is|ac1-the-slice-defines-a-dedicated
 flowchart LR
     Req[Req 054 long-session profiling] --> Gap[No dedicated long-session profiling runner]
     Gap --> Slice[Long-session browser profiling runner]

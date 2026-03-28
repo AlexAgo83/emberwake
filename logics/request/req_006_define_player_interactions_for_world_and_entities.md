@@ -1,11 +1,12 @@
 ## req_006_define_player_interactions_for_world_and_entities - Define player interactions for world and entities
-> From version: 0.1.2
-> Status: Ready
-> Understanding: 95%
-> Confidence: 92%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the player interaction model for navigating the world and acting on entities in the top-down 2D application.
@@ -40,6 +41,7 @@ On mobile specifically, navigation should prefer direct gestures such as touch d
 For the first loop, gesture ownership should stay simple: one finger for entity steering, no competing gesture grammar for the same action space, and free camera controls reserved for debug usage or later phases.
 
 ```mermaid
+%% logics-signature: request|define-player-interactions-for-world-and|define-the-player-interaction-model-for|ac1-the-request-defines-a-player
 flowchart TD
     A[World and entities are visible] --> B[Player needs a coherent interaction grammar]
     B --> C[Define map and entity interaction contract]
@@ -70,6 +72,13 @@ flowchart TD
 # Companion docs
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_001_enforce_bounded_file_size_and_isolate_react_side_effects`
+
+# AI Context
+- Summary: Define the player interaction model for navigating the world and acting on entities in the top-down 2D application.
+- Keywords: player, interactions, for, world, and, entities, the, interaction
+- Use when: Use when framing scope, context, and acceptance checks for Define player interactions for world and entities.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
 - `item_024_define_single_entity_control_contract_and_input_ownership_boundaries`
 - `item_025_define_mobile_virtual_stick_steering_model_for_the_first_player_loop`

@@ -25,6 +25,7 @@
 - Selection, inspection, and lifecycle scenario tooling
 
 ```mermaid
+%% logics-signature: backlog|implement-fixed-step-entity-movement-and|req-002-render-evolving-world-entities-o|the-entity-layer-needs-a-deterministic|ac1-entity-updates-are-compatible-with
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

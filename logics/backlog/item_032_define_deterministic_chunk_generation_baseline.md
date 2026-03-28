@@ -17,6 +17,7 @@
 - Out: Advanced terrain diversity, asset styling, or entity placement policy.
 
 ```mermaid
+%% logics-signature: backlog|define-deterministic-chunk-generation-ba|req-008-define-infinite-chunked-world-ge|chunk-content-generation-needs-a-determi|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

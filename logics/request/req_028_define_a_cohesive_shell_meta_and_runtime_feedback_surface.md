@@ -1,11 +1,12 @@
 ## req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface - Define a cohesive shell meta and runtime feedback surface
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 97%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Carry the recent shell-menu improvements upward into a broader shell experience so the command deck is no longer the only surface with a strong tactical-console identity.
@@ -102,10 +103,16 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request(s): `req_011_define_ui_hud_and_overlay_system`, `req_017_redesign_runtime_overlay_into_a_single_floating_menu`, `req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus`, `req_027_restructure_the_shell_command_deck_around_a_primary_session_section`
 
+# AI Context
+- Summary: Carry the recent shell-menu improvements upward into a broader shell experience so the command deck is no longer...
+- Keywords: cohesive, shell, meta, and, runtime, feedback, surface, carry
+- Use when: Use when framing scope, context, and acceptance checks for Define a cohesive shell meta and runtime feedback surface.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_shared_tactical_console_family_for_shell_owned_meta_scenes`
-- `define_a_minimal_player_facing_runtime_feedback_band_outside_the_command_deck`
-- `define_boundaries_between_player_hud_information_and_shell_debug_utilities`
+- `item_109_define_a_shared_tactical_console_family_for_shell_owned_meta_scenes`
+- `item_110_define_a_minimal_player_facing_runtime_feedback_band_outside_the_command_deck`
+- `item_111_define_boundaries_between_player_hud_information_and_shell_debug_utilities`
 
 # Implementation notes
 - Delivered through a compacted `AppMetaScenePanel` and a runtime-only `PlayerHudCard`, so shell-owned scenes and the live runtime now read as one tactical-console family instead of separate overlay experiments.

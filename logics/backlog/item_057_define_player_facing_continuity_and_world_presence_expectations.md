@@ -17,6 +17,7 @@
 - Out: Technical collision rules or debug-only diagnostics.
 
 ```mermaid
+%% logics-signature: backlog|define-player-facing-continuity-and-worl|req-014-define-world-occupancy-navigatio|the-player-facing-movement-loop-needs-ex|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

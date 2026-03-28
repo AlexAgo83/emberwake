@@ -24,6 +24,7 @@
 - Picking, selection, and inspection UI
 
 ```mermaid
+%% logics-signature: backlog|render-debug-entity-layers-with-orientat|req-002-render-evolving-world-entities-o|the-entity-layer-needs-a-visible|ac1-entities-are-rendered-in-world
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

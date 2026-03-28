@@ -17,7 +17,7 @@
 - Out: a full benchmark platform, mandatory heap snapshots for every run, or online telemetry infrastructure.
 
 ```mermaid
-%% logics-signature: backlog|define-deterministic-runtime-profiling-a|req-054-define-a-scripted-long-session-r|even-with-a-long-session|ac1-the-slice-defines
+%% logics-signature: backlog|define-deterministic-runtime-profiling-a|req-054-define-a-scripted-long-session-r|even-with-a-long-session-runner-profilin|ac1-the-slice-defines-a-stable
 flowchart LR
     Req[Req 054 long-session profiling] --> Gap[Runs lack comparison-friendly artifacts]
     Gap --> Slice[Deterministic profiling artifacts]

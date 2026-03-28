@@ -1,11 +1,12 @@
 ## req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave - Define the next runtime, shell, render, and system boundary architecture wave
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 96%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the next architecture wave after runtime convergence and unified frame scheduling so Emberwake can grow from a technically stable slice into a product-ready runtime without reintroducing ownership ambiguity.
@@ -119,11 +120,17 @@ flowchart TD
 - Request(s): `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`, `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`, `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
 - Task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`, `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`, `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`, `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`
 
+# AI Context
+- Summary: Define the next architecture wave after runtime convergence and unified frame scheduling so Emberwake can grow from a...
+- Keywords: the, next, runtime, shell, render, and, system, boundary
+- Use when: Use when framing scope, context, and acceptance checks for Define the next runtime, shell, render, and system boundary architecture wave.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_gameplay_to_shell_outcome_contracts_for_defeat_victory_restart_and_runtime_recovery`
-- `define_sustained_runtime_performance_and_render_phase_two_architecture_for_density_redraw_and_debug_budgeting`
-- `define_gameplay_system_phase_two_ownership_for_ordered_phases_signals_and_progression_scale`
-- `define_public_entrypoint_hardening_and_architecture_regression_rules_for_app_engine_and_game_modules`
+- `item_093_define_gameplay_to_shell_outcome_contracts_for_defeat_victory_restart_and_runtime_recovery`
+- `item_094_define_sustained_runtime_performance_and_render_phase_two_architecture_for_density_redraw_and_debug_budgeting`
+- `item_095_define_gameplay_system_phase_two_ownership_for_ordered_phases_signals_and_progression_scale`
+- `item_096_define_public_entrypoint_hardening_and_architecture_regression_rules_for_app_engine_and_game_modules`
 
 # Delivery note
 - Implemented through `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave`.

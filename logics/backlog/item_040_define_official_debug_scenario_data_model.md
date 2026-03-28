@@ -17,6 +17,7 @@
 - Out: Full scenario editor or content pipeline tooling.
 
 ```mermaid
+%% logics-signature: backlog|define-official-debug-scenario-data-mode|req-010-define-game-data-and-configurati|debug-scenarios-need-to-be-official|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

@@ -25,6 +25,7 @@
 - Debug picking and reset tooling
 
 ```mermaid
+%% logics-signature: backlog|add-chunk-visibility-preload-caching-and|req-001-render-top-down-infinite-chunked|the-map-layer-needs-chunk-visibility|ac1-visible-chunks-are-resolved-from
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

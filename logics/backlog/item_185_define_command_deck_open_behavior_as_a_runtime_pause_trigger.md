@@ -17,7 +17,7 @@
 - Out: new pause overlays, broader command-deck redesign, or pause behavior for non-runtime shell scenes.
 
 ```mermaid
-%% logics-signature: backlog|define-command-deck-open-behavior-as-a-r|req-051-define-a-shell-surface-cleanup-a|opening-the-command-deck|ac1-the-slice-defines
+%% logics-signature: backlog|define-command-deck-open-behavior-as-a-r|req-051-define-a-shell-surface-cleanup-a|opening-the-command-deck-during-live|ac1-the-slice-defines-that-opening
 flowchart LR
     Req[Req 051 shell cleanup] --> Gap[Command deck can leave runtime active]
     Gap --> Slice[Deck opening pauses live runtime]

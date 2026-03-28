@@ -17,6 +17,7 @@
 - Out: Concrete storage implementation or cloud persistence.
 
 ```mermaid
+%% logics-signature: backlog|define-local-save-versioning-migration-a|req-009-define-local-persistence-and-sav|even-local-only-save-data-needs-an|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

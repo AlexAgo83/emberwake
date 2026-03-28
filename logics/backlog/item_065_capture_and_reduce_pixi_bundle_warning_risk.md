@@ -17,6 +17,7 @@
 - Out: Full rendering-architecture rewrite, premature micro-optimization, or broad asset-pipeline redesign.
 
 ```mermaid
+%% logics-signature: backlog|capture-and-reduce-pixi-bundle-warning-r|req-016-harden-runtime-interaction-state|the-runtime-builds-successfully-but-the|ac1-the-current-pixi-bundle-size-warning
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

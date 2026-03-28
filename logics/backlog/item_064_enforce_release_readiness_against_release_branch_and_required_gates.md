@@ -17,6 +17,7 @@
 - Out: Reworking versioning policy, changing Render Blueprint behavior, or expanding release automation beyond the current static-site scale.
 
 ```mermaid
+%% logics-signature: backlog|enforce-release-readiness-against-releas|req-016-harden-runtime-interaction-state|the-documented-release-readiness-posture|ac1-release-readiness-behavior-aligns-wi
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

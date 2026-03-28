@@ -17,6 +17,7 @@
 - Out: Desktop controls, camera debug input, or broader contextual interactions.
 
 ```mermaid
+%% logics-signature: backlog|define-mobile-virtual-stick-steering-mod|req-001-render-top-down-infinite-chunked|the-mobile-first-loop-needs-a-concrete|ac1-the-request-defines-a-player
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

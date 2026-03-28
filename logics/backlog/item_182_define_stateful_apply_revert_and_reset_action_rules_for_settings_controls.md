@@ -17,7 +17,7 @@
 - Out: rebinding logic redesign, new control categories, or settings-scene architecture changes.
 
 ```mermaid
-%% logics-signature: backlog|define-stateful-apply-revert-and-reset-a|req-051-define-a-shell-surface-cleanup-a|the-settings-action-row-does|ac1-the-slice-defines-a
+%% logics-signature: backlog|define-stateful-apply-revert-and-reset-a|req-051-define-a-shell-surface-cleanup-a|the-settings-action-row-does-not|ac1-the-slice-defines-that-revert
 flowchart LR
     Req[Req 051 shell cleanup] --> Gap[Settings actions lack clear stateful hierarchy]
     Gap --> Slice[Stateful Apply Revert Reset rules]

@@ -17,6 +17,7 @@
 - Out: The detailed implementation of every code move, final package publishing operations, or broad CI redesign unrelated to the extraction.
 
 ```mermaid
+%% logics-signature: backlog|define-incremental-migration-and-validat|req-018-define-engine-and-gameplay-bound|even-a-well-scoped-engine-or-gameplay|ac1-the-slice-defines-a-staged
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

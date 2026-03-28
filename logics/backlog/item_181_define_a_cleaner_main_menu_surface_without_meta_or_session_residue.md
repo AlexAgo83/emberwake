@@ -17,7 +17,7 @@
 - Out: broader main-menu IA changes, changelog rendering, or new-game naming behavior.
 
 ```mermaid
-%% logics-signature: backlog|define-a-cleaner-main-menu-surface-witho|req-051-define-a-shell-surface-cleanup-a|the-main-menu-still-shows|ac1-the-slice-defines-removal
+%% logics-signature: backlog|define-a-cleaner-main-menu-surface-witho|req-051-define-a-shell-surface-cleanup-a|the-main-menu-still-shows-leftover|ac1-the-slice-defines-removal-of
 flowchart LR
     Req[Req 051 shell cleanup] --> Gap[Main menu still shows meta residue]
     Gap --> Slice[Main menu cleanup]

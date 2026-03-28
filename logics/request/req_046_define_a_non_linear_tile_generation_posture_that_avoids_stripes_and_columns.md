@@ -1,11 +1,12 @@
 ## req_046_define_a_non_linear_tile_generation_posture_that_avoids_stripes_and_columns - Define a non-linear tile-generation posture that avoids stripes and columns
-> From version: 0.2.4
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 100%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Fix the current world-generation posture where some tile families still read as vertical or linear stripes instead of grouped areas.
@@ -88,10 +89,16 @@ flowchart TD
 - Architecture decision(s): `adr_032_separate_visual_terrain_blocking_obstacles_and_movement_surface_modifiers`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request(s): `req_043_define_a_softer_and_more_clustered_blocking_and_surface_generation_posture`
 
+# AI Context
+- Summary: Fix the current world-generation posture where some tile families still read as vertical or linear stripes instead of...
+- Keywords: non-linear, tile-generation, posture, avoids, stripes, and, columns, fix
+- Use when: Use when framing scope, context, and acceptance checks for Define a non-linear tile-generation posture that avoids stripes and columns.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_an_anti_stripe_generation_posture_for_special_tiles`
-- `define_blob_first_sampling_rules_for_non_base_tile_clusters`
-- `define_runtime_safe_deterministic_sampling_that_reduces_visible_column_artifacts`
+- `item_165_define_an_anti_stripe_generation_posture_for_special_tiles`
+- `item_166_define_blob_first_sampling_rules_for_non_base_tile_clusters`
+- `item_167_define_runtime_safe_deterministic_sampling_that_reduces_visible_column_artifacts`
 
 # Outcome
 - Special-tile generation now favors thicker clustered patches over thin stripe-like runs.

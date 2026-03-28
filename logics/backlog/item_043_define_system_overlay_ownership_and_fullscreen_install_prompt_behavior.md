@@ -17,6 +17,7 @@
 - Out: Player-facing onboarding copy or inspection panels.
 
 ```mermaid
+%% logics-signature: backlog|define-system-overlay-ownership-and-full|req-011-define-ui-hud-and-overlay-system|the-early-runtime-needs-clear-ownership|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

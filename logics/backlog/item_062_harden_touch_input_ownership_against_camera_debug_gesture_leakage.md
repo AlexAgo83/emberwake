@@ -17,6 +17,7 @@
 - Out: Reworking the full camera system, changing desktop controls, or redesigning the virtual stick.
 
 ```mermaid
+%% logics-signature: backlog|harden-touch-input-ownership-against-cam|req-016-harden-runtime-interaction-state|the-mobile-steering-loop-currently-allow|ac1-player-facing-touch-steering-no-long
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

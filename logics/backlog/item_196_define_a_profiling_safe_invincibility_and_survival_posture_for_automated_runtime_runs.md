@@ -17,7 +17,7 @@
 - Out: shipping invincibility as a player-facing gameplay feature, or flattening all profiling scenarios into one unrealistic always-safe mode.
 
 ```mermaid
-%% logics-signature: backlog|define-a-profiling-safe-invincibility-an|req-054-define-a-scripted-long-session-r|automated-long-sessions-can|ac1-the-slice-defines
+%% logics-signature: backlog|define-a-profiling-safe-invincibility-an|req-054-define-a-scripted-long-session-r|automated-long-sessions-can-end-early|ac1-the-slice-defines-a-profiling
 flowchart LR
     Req[Req 054 long-session profiling] --> Gap[Automated runs can die too early]
     Gap --> Slice[Profiling-safe survival posture]

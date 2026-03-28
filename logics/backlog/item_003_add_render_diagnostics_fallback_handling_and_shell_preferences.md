@@ -25,6 +25,7 @@
 - Logical world-space contract and map or entity diagnostics
 
 ```mermaid
+%% logics-signature: backlog|add-render-diagnostics-fallback-handling|req-000-bootstrap-fullscreen-2d-react-pw|the-shell-needs-a-single-standard|ac1-a-single-standard-shell-level-debug
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

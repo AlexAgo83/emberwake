@@ -1,11 +1,12 @@
 ## req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack - Define a first hostile combat loop with spawns, contact damage, and a player cone attack
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Introduce a first hostile gameplay loop so the runtime moves beyond traversal and into readable combat pressure.
@@ -144,8 +145,14 @@ flowchart TD
 - Architecture decision(s): `adr_032_separate_visual_terrain_blocking_obstacles_and_movement_surface_modifiers`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_035_resolve_entity_collisions_as_lightweight_deterministic_separation`
 - Request(s): `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`, `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay`
 
+# AI Context
+- Summary: Introduce a first hostile gameplay loop so the runtime moves beyond traversal and into readable combat pressure.
+- Keywords: first, hostile, combat, loop, spawns, contact, damage, and
+- Use when: Use when framing scope, context, and acceptance checks for Define a first hostile combat loop with spawns, contact damage, and a player cone attack.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_hostile_spawning_near_the_player_chunk_with_a_local_population_cap`
-- `define_shared_entity_health_and_damage_resolution_for_first_combatants`
-- `define_hostile_focus_pursuit_and_contact_damage_for_the_first_combat_loop`
-- `define_a_forward_player_cone_attack_for_first_hostile_combat`
+- `item_133_define_hostile_spawning_near_the_player_chunk_with_a_local_population_cap`
+- `item_134_define_shared_entity_health_and_damage_resolution_for_first_combatants`
+- `item_135_define_hostile_focus_pursuit_and_contact_damage_for_the_first_combat_loop`
+- `item_136_define_an_automatic_forward_player_cone_attack_for_first_hostile_combat`

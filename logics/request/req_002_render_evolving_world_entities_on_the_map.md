@@ -1,11 +1,12 @@
 ## req_002_render_evolving_world_entities_on_the_map - Render evolving world entities on the map
-> From version: 0.1.2
-> Status: Ready
-> Understanding: 98%
-> Confidence: 95%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Entities
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Render entities on top of the world map as objects that exist within the world space rather than as detached UI elements.
@@ -80,6 +81,7 @@ Collision, combat rules, advanced AI, and full animation systems remain outside 
 As with the shell and map layers, a modest performance bar is useful here too. A representative debug population of entities should remain inspectable and interactive on a mobile-sized screen so the entity layer does not normalize an unusable baseline.
 
 ```mermaid
+%% logics-signature: request|render-evolving-world-entities-on-the-ma|render-entities-on-top-of-the|ac1-entities-are-rendered-as-world-space
 flowchart TD
     A[Chunked world map ready] --> B[Place entities in world space]
     B --> C[Render debug friendly entity visuals]
@@ -135,6 +137,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_001_enforce_bounded_file_size_and_isolate_react_side_effects`
+
+# AI Context
+- Summary: Render entities on top of the world map as objects that exist within the world space rather than...
+- Keywords: render, evolving, world, entities, the, map, top, objects
+- Use when: Use when framing scope, context, and acceptance checks for Render evolving world entities on the map.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_009_define_entity_contract_and_generic_archetype_baseline`

@@ -19,6 +19,7 @@
 - Unblocks: richer map visuals, entity visuals, and UI surface styling without ad-hoc asset sprawl.
 
 ```mermaid
+%% logics-signature: task|orchestrate-asset-pipeline-and-runtime-p|item-020-define-asset-directory-naming-a|1-define-directory-ownership-and-naming|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Dir[item_020 asset directory] --> Assets[Coherent asset pipeline]
     Conventions[item_021 sizing and pivots] --> Assets

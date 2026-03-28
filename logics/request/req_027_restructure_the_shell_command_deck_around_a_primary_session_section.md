@@ -1,11 +1,12 @@
 ## req_027_restructure_the_shell_command_deck_around_a_primary_session_section - Restructure the shell command deck around a primary Session section
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 97%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Refine the shell command-deck information architecture again because `Session`, `View`, and `Tools` currently read as three peer sections even though they do not carry equal product weight.
@@ -152,10 +153,16 @@ flowchart TD
 - Request(s): `req_017_redesign_runtime_overlay_into_a_single_floating_menu`, `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b`, `req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus`
 - Task(s): `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`, `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus`, `task_034_orchestrate_session_first_shell_command_deck_hierarchy`
 
+# AI Context
+- Summary: Refine the shell command-deck information architecture again because Session, View, and Tools currently read as three peer sections...
+- Keywords: restructure, the, shell, command, deck, around, primary, session
+- Use when: Use when framing scope, context, and acceptance checks for Restructure the shell command deck around a primary Session section.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_session_as_the_single_primary_shell_menu_section`
-- `define_nested_view_controls_within_session_without_reopening_camera_ownership`
-- `define_nested_tools_controls_within_session_without_reintroducing_menu_clutter`
+- `item_106_define_session_as_the_single_primary_shell_menu_section`
+- `item_107_define_nested_view_controls_within_session_without_reopening_camera_ownership`
+- `item_108_define_nested_tools_controls_within_session_without_reintroducing_menu_clutter`
 
 # Delivery note
 - Implemented through `task_034_orchestrate_session_first_shell_command_deck_hierarchy`.

@@ -17,6 +17,7 @@
 - Out: Save schema details or migration logic.
 
 ```mermaid
+%% logics-signature: backlog|define-browser-and-pwa-storage-operation|req-009-define-local-persistence-and-sav|local-persistence-must-respect-browser-a|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

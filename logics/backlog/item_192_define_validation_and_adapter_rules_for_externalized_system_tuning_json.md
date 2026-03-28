@@ -17,7 +17,7 @@
 - Out: env overrides, platform-wide schema tooling, or generic constant registries.
 
 ```mermaid
-%% logics-signature: backlog|define-validation-and-adapter-rules-for-|req-053-define-an-externalized-json-syst|raw-technical-tuning-json|ac1-the-slice-defines
+%% logics-signature: backlog|define-validation-and-adapter-rules-for-|req-053-define-an-externalized-json-syst|raw-technical-tuning-json-would-otherwis|ac1-the-slice-defines-a-typescript
 flowchart LR
     Req[Req 053 system tuning] --> Gap[System tuning JSON needs safe adapter rules]
     Gap --> Slice[System tuning adapter rules]

@@ -17,6 +17,7 @@
 - Out: Full debug overlay implementation or profiling metrics.
 
 ```mermaid
+%% logics-signature: backlog|define-pause-step-and-simulation-speed-d|req-007-define-simulation-loop-and-deter|a-deterministic-simulation-loop-needs-ba|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

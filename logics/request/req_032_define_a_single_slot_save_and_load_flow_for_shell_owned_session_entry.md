@@ -1,11 +1,12 @@
 ## req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry - Define a single-slot save and load flow for shell-owned session entry
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Turn the current `Main menu` and `Resume` posture into a complete session-entry model by adding a real persisted `Save / Load` path.
@@ -120,10 +121,16 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_009_limit_persistence_to_local_versioned_frontend_storage`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`
 - Request(s): `req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow`, `req_031_define_character_name_validation_and_constraints_for_new_game_entry`
 
+# AI Context
+- Summary: Turn the current Main menu and Resume posture into a complete session-entry model by adding a real persisted...
+- Keywords: single-slot, save, and, load, flow, for, shell-owned, session
+- Use when: Use when framing scope, context, and acceptance checks for Define a single-slot save and load flow for shell-owned session entry.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_single_slot_saved_session_contract_for_local_first_persistence`
-- `define_save_resume_and_load_availability_across_shell_owned_surfaces`
-- `define_active_session_replacement_and_overwrite_rules_for_single_slot_save_load`
+- `item_121_define_a_single_slot_saved_session_contract_for_local_first_persistence`
+- `item_122_define_save_resume_and_load_availability_across_shell_owned_surfaces`
+- `item_123_define_active_session_replacement_and_overwrite_rules_for_single_slot_save_load`
 
 # Implementation notes
 - Delivered through `savedRuntimeSessionStorage`, `storageDomainCatalog`, `useRuntimeSession`, `AppShell`, and `AppMetaScenePanel` so the product now has one persisted saved-session slot alongside the in-memory active session.

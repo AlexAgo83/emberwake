@@ -32,6 +32,7 @@ This request must cover both mobile and desktop because the current issue is str
 Scope includes shell-level information hierarchy, persistent-versus-contextual overlay rules, menu posture, and explicit removal of unnecessary labels from the baseline runtime. Scope excludes final visual art direction, full settings architecture, and unrelated gameplay-system changes.
 
 ```mermaid
+%% logics-signature: request|redesign-runtime-overlay-into-a-single-f|rework-the-runtime-overlay-model-across|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[Runtime shows many panels and labels] --> B[World view loses clarity on mobile and desktop]
     B --> C[Replace scattered controls with one menu button]

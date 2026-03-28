@@ -1,11 +1,12 @@
 ## req_042_define_a_low_cost_first_pathfinding_slice_for_runtime_entities - Define a low-cost first pathfinding slice for runtime entities
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Introduce a simple pathfinding notion for runtime entities so pursuit does not rely only on direct-line steering.
@@ -126,7 +127,13 @@ flowchart TD
 - Architecture decision(s): `adr_032_separate_visual_terrain_blocking_obstacles_and_movement_surface_modifiers`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_035_resolve_entity_collisions_as_lightweight_deterministic_separation`
 - Request(s): `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`, `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`, `req_040_define_directionally_biased_hostile_spawns_ahead_of_player_movement`
 
+# AI Context
+- Summary: Introduce a simple pathfinding notion for runtime entities so pursuit does not rely only on direct-line steering.
+- Keywords: low-cost, first, pathfinding, slice, for, runtime, entities, introduce
+- Use when: Use when framing scope, context, and acceptance checks for Define a low-cost first pathfinding slice for runtime entities.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_bounded_obstacle_aware_route_finding_posture_for_hostile_pursuit`
-- `define_low_cost_search_and_refresh_rules_for_runtime_entity_pathfinding`
-- `define_direct_pursuit_fallback_and_waypoint_following_integration_for_hostiles`
+- `item_152_define_a_bounded_obstacle_aware_route_finding_posture_for_hostile_pursuit`
+- `item_153_define_low_cost_search_and_refresh_rules_for_runtime_entity_pathfinding`
+- `item_154_define_direct_pursuit_fallback_and_waypoint_following_integration_for_hostiles`

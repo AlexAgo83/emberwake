@@ -1,11 +1,12 @@
 ## req_010_define_game_data_and_configuration_model - Define game data and configuration model
-> From version: 0.1.1
-> Status: Ready
-> Understanding: 93%
-> Confidence: 90%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define how game data and configuration should be structured so map content, entities, balance values, and future rules do not become hard-coded across the frontend codebase.
@@ -28,6 +29,7 @@ The scope should include debug and deterministic data use cases but should avoid
 That baseline should include an official place for reproducible debug scenarios so world, entity, testing, and first-loop product workflows can share the same deterministic fixtures.
 
 ```mermaid
+%% logics-signature: request|define-game-data-and-configuration-model|define-how-game-data-and-configuration|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[World entities assets and settings need structured data] --> B[Hard coded content would create drift]
     B --> C[Define game data and configuration model]
@@ -54,6 +56,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): (none yet)
 - Architecture decision(s): (none yet)
+
+# AI Context
+- Summary: Define how game data and configuration should be structured so map content, entities, balance values, and future rules...
+- Keywords: game, data, and, configuration, model, how, structured, map
+- Use when: Use when framing scope, context, and acceptance checks for Define game data and configuration model.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_039_define_domain_owned_typed_typescript_configuration_structure`

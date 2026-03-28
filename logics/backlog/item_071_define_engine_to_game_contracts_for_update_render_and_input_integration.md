@@ -17,6 +17,7 @@
 - Out: Full gameplay implementation rewrite, plugin system design, or speculative abstraction for many unrelated genres.
 
 ```mermaid
+%% logics-signature: backlog|define-engine-to-game-contracts-for-upda|req-018-define-engine-and-gameplay-bound|the-runtime-cannot-be-cleanly-reused|ac1-the-slice-defines-a-minimum
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

@@ -17,6 +17,7 @@
 - Out: Versioning details, smoke-check mechanics, or Render platform config.
 
 ```mermaid
+%% logics-signature: backlog|define-release-readiness-gates-and-deplo|req-015-define-release-workflow-and-depl|delivery-needs-a-clear-definition-of|ac1-the-request-defines-a-release-workfl
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

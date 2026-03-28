@@ -20,6 +20,7 @@
 - Unblocks: `task_011_define_mobile_virtual_stick_steering_model_for_the_first_player_loop` and later player-facing UI or feedback tasks.
 
 ```mermaid
+%% logics-signature: task|define-single-entity-control-contract-an|item-024-define-single-entity-control-co|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

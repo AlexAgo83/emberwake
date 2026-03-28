@@ -17,6 +17,7 @@
 - Out: Debug-only panels or final menu architecture.
 
 ```mermaid
+%% logics-signature: backlog|define-contextual-inspection-panels-acro|req-011-define-ui-hud-and-overlay-system|inspection-needs-a-screen-space-presenta|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

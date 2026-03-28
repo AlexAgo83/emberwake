@@ -25,6 +25,7 @@
 - Entity selection and inspection workflows
 
 ```mermaid
+%% logics-signature: backlog|add-map-diagnostics-picking-and-camera-r|req-001-render-top-down-infinite-chunked|the-map-layer-needs-diagnostics-that|ac1-map-diagnostics-expose-at-least
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

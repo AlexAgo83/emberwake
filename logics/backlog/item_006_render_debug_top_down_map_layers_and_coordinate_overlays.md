@@ -25,6 +25,7 @@
 - Picking, reset, and diagnostic tooling beyond the visible overlays themselves
 
 ```mermaid
+%% logics-signature: backlog|render-debug-top-down-map-layers-and-coo|req-001-render-top-down-infinite-chunked|the-map-layer-needs-a-visible|ac1-the-visible-world-is-rendered
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

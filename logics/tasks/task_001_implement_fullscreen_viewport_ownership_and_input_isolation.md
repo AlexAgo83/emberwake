@@ -21,6 +21,7 @@
 - Unblocks: `task_002_add_stable_logical_viewport_and_world_space_shell_contract`, `task_003_add_render_diagnostics_fallback_handling_and_shell_preferences`.
 
 ```mermaid
+%% logics-signature: task|implement-fullscreen-viewport-ownership-|item-001-implement-fullscreen-viewport-o|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

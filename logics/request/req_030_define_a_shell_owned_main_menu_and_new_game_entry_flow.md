@@ -1,11 +1,12 @@
 ## req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow - Define a shell-owned main menu and new-game entry flow
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Introduce a real shell-owned main menu before runtime start so the product no longer boots straight into the live session without an intentional entry flow.
@@ -135,10 +136,16 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request(s): `req_027_restructure_the_shell_command_deck_around_a_primary_session_section`, `req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface`, `req_029_define_a_lightweight_settings_scene_with_desktop_control_customization`
 
+# AI Context
+- Summary: Introduce a real shell-owned main menu before runtime start so the product no longer boots straight into the...
+- Keywords: shell-owned, main, menu, and, new-game, entry, flow, introduce
+- Use when: Use when framing scope, context, and acceptance checks for Define a shell-owned main menu and new-game entry flow.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_shell_owned_main_menu_as_the_primary_product_entry_and_return_hub`
-- `define_a_new_game_flow_that_captures_character_name_before_runtime_start`
-- `define_resume_load_and_session_replacement_rules_for_main_menu_navigation`
+- `item_118_define_a_shell_owned_main_menu_as_the_primary_product_entry_and_return_hub`
+- `item_119_define_a_new_game_flow_that_captures_character_name_before_runtime_start`
+- `item_120_define_resume_load_and_session_replacement_rules_for_main_menu_navigation`
 
 # Implementation notes
 - Delivered through `AppShell`, `AppMetaScenePanel`, `useAppScene`, and runtime-session storage changes so the product now boots into `Main menu` instead of entering the live runtime immediately.

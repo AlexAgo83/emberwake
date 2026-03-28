@@ -19,6 +19,7 @@
 - Unblocks: the next gameplay and release slices with a cleaner runtime contract and more trustworthy operational tooling.
 
 ```mermaid
+%% logics-signature: task|orchestrate-runtime-hardening-for-input-|item-062-harden-touch-input-ownership-ag|1-fix-touch-input-ownership-so-player-fa|npm-run-ci
 flowchart LR
     Input[item_062 touch input hardening] --> Hardening[Runtime hardening pass]
     State[item_063 selection vs simulation state] --> Hardening

@@ -1,11 +1,12 @@
 ## req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b - Define a command-deck shell menu and button hierarchy for runtime Option B
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 97%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Redesign the current shell menu and shell button language so the runtime overlay no longer presents every action with the same visual weight and generic pill styling.
@@ -117,10 +118,16 @@ flowchart TD
 - Request(s): `req_017_redesign_runtime_overlay_into_a_single_floating_menu`, `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
 - Task(s): `task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu`, `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`
 
+# AI Context
+- Summary: Redesign the current shell menu and shell button language so the runtime overlay no longer presents every action...
+- Keywords: command-deck, shell, menu, and, button, hierarchy, for, runtime
+- Use when: Use when framing scope, context, and acceptance checks for Define a command-deck shell menu and button hierarchy for runtime Option B.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_stateful_shell_menu_trigger_and_context_header_for_runtime_status`
-- `define_command_deck_grouping_and_primary_action_hierarchy_for_shell_menu_option_b`
-- `define_mobile_sheet_presentation_and_button_treatment_for_shell_menu_option_b`
+- `item_100_define_stateful_shell_menu_trigger_and_context_header_for_runtime_status`
+- `item_101_define_command_deck_grouping_and_primary_action_hierarchy_for_shell_menu_option_b`
+- `item_102_define_mobile_sheet_presentation_and_button_treatment_for_shell_menu_option_b`
 
 # Delivery note
 - Implemented through `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls`.

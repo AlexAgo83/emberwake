@@ -19,6 +19,7 @@
 - Unblocks: richer gameplay interactions, occupancy rules, and future survivor-style density work.
 
 ```mermaid
+%% logics-signature: task|orchestrate-entity-world-integration-and|item-011-add-chunk-aware-entity-indexing|1-add-chunk-aware-entity-indexing-and|npm-run-lint
 flowchart LR
     Index[item_011 entity indexing] --> EntityWorld[Entities integrated into world]
     Render[item_012 debug entity visuals] --> EntityWorld

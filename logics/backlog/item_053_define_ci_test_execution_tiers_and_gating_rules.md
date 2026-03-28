@@ -17,6 +17,7 @@
 - Out: Authoring the tests themselves or release workflow policy.
 
 ```mermaid
+%% logics-signature: backlog|define-ci-test-execution-tiers-and-gatin|req-013-define-frontend-testing-strategy|test-coverage-will-grow-across-unit|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

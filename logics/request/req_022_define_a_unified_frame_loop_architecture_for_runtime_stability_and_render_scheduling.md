@@ -1,11 +1,12 @@
 ## req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling - Define a unified frame loop architecture for runtime stability and render scheduling
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 96%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define a single coherent frame-loop architecture for Emberwake so simulation cadence, presentation publication, and Pixi rendering are driven by one explicit scheduling model instead of two partially independent frame-driven loops.
@@ -87,10 +88,16 @@ flowchart TD
 - Request(s): `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`, `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`
 - Task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`, `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`, `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
 
+# AI Context
+- Summary: Define a single coherent frame-loop architecture for Emberwake so simulation cadence, presentation publication, and Pixi rendering are driven...
+- Keywords: unified, frame, loop, architecture, for, runtime, stability, and
+- Use when: Use when framing scope, context, and acceptance checks for Define a unified frame loop architecture for runtime stability and render scheduling.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_the_target_master_frame_loop_between_runtime_runner_presentation_and_pixi_render_submission`
-- `define_hot_path_state_publication_rules_between_runtime_shell_and_diagnostics_surfaces`
-- `define_frame_pacing_profiling_and_validation_for_unified_runtime_scheduling`
+- `item_090_define_the_target_master_frame_loop_between_runtime_runner_presentation_and_pixi_render_submission`
+- `item_091_define_hot_path_state_publication_rules_between_runtime_shell_and_diagnostics_surfaces`
+- `item_092_define_frame_pacing_profiling_and_validation_for_unified_runtime_scheduling`
 
 # Delivery note
 - Implemented through `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`.

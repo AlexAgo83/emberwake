@@ -19,6 +19,7 @@
 - Unblocks: richer traversal constraints, meaningful release candidates, and preview/release branch operations.
 
 ```mermaid
+%% logics-signature: task|orchestrate-world-occupancy-continuity-a|item-054-define-entity-occupancy-model-a|1-define-occupancy-overlap-and-early|npm-run-ci
 flowchart LR
     Occupancy[item_054 occupancy model] --> Ops[World and release operating posture]
     Traversal[item_055 overlap and constraints] --> Ops

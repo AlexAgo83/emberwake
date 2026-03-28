@@ -1,11 +1,12 @@
 ## req_047_define_a_runtime_memory_growth_investigation_and_reduction_wave - Define a runtime memory-growth investigation and reduction wave
-> From version: 0.2.4
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 100%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Investigate the apparent runtime memory growth observed during normal play sessions.
@@ -109,10 +110,16 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request(s): `req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries`, `req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants`, `req_041_define_damage_reaction_fx_and_floating_damage_numbers_for_runtime_combat.md`
 
+# AI Context
+- Summary: Investigate the apparent runtime memory growth observed during normal play sessions.
+- Keywords: runtime, memory-growth, investigation, and, reduction, wave, investigate, the
+- Use when: Use when framing scope, context, and acceptance checks for Define a runtime memory-growth investigation and reduction wave.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `profile_runtime_memory_growth_during_normal_play_sessions`
-- `reduce_world_render_preparation_churn_and_retained_chunk_data`
-- `reduce_entity_overlay_and_pixi_render_allocation_pressure`
+- `item_168_profile_runtime_memory_growth_during_normal_play_sessions`
+- `item_169_reduce_world_render_preparation_churn_and_retained_chunk_data`
+- `item_170_reduce_entity_overlay_and_pixi_render_allocation_pressure`
 
 # Outcome
 - The wave profiled runtime memory posture and treated render churn as the dominant first reduction target.

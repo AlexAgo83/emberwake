@@ -17,7 +17,7 @@
 - Out: replacing all content authoring with JSON, remote config, or in-app editing tools.
 
 ```mermaid
-%% logics-signature: backlog|define-a-json-owned-gameplay-tuning-surf|req-052-define-an-externalized-json-game|gameplay-balance-numbers-are|ac1-the-slice-defines
+%% logics-signature: backlog|define-a-json-owned-gameplay-tuning-surf|req-052-define-an-externalized-json-game|gameplay-balance-numbers-such-as-health|ac1-the-slice-defines-one-json-owned
 flowchart LR
     Req[Req 052 gameplay tuning] --> Gap[Balance values are spread across code]
     Gap --> Slice[Gameplay tuning JSON surface]

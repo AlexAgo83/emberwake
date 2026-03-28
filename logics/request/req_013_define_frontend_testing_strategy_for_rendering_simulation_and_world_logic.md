@@ -1,11 +1,12 @@
 ## req_013_define_frontend_testing_strategy_for_rendering_simulation_and_world_logic - Define frontend testing strategy for rendering simulation and world logic
-> From version: 0.1.1
-> Status: Ready
-> Understanding: 93%
-> Confidence: 90%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Quality
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the frontend testing strategy for rendering invariants, simulation behavior, world logic, and related deterministic systems.
@@ -30,6 +31,7 @@ Browser-level validation should still enter early in a lightweight form. A small
 Once the first controllable-entity loop exists, the next high-value browser scenario should validate the core player path from directional drag input to visible entity movement, but only after the world and transform math is considered trustworthy.
 
 ```mermaid
+%% logics-signature: request|define-frontend-testing-strategy-for-ren|define-the-frontend-testing-strategy-for|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[World and simulation systems become math heavy] --> B[Manual testing alone becomes insufficient]
     B --> C[Define frontend testing strategy]
@@ -58,6 +60,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): (none yet)
 - Architecture decision(s): (none yet)
+
+# AI Context
+- Summary: Define the frontend testing strategy for rendering invariants, simulation behavior, world logic, and related deterministic systems.
+- Keywords: frontend, testing, strategy, for, rendering, simulation, and, world
+- Use when: Use when framing scope, context, and acceptance checks for Define frontend testing strategy for rendering simulation and world logic.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_050_define_unit_and_integration_testing_priorities_for_transforms_world_and_simulation`

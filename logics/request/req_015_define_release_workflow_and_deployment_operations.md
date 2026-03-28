@@ -1,11 +1,12 @@
 ## req_015_define_release_workflow_and_deployment_operations - Define release workflow and deployment operations
-> From version: 0.1.3
-> Status: Ready
-> Understanding: 96%
-> Confidence: 93%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the release workflow and deployment operations needed after CI and Render static hosting basics are in place.
@@ -30,6 +31,7 @@ If preview-style environments are introduced later, they should start as technic
 The scope should stay aligned with the current scale of the project. It should not assume a complex platform team, multi-environment enterprise process, or backend operational stack. It should complement rather than duplicate the Render Blueprint and GitHub Actions requests.
 
 ```mermaid
+%% logics-signature: request|define-release-workflow-and-deployment-o|define-the-release-workflow-and-deployme|ac1-the-request-defines-a-release-workfl
 flowchart TD
     A[CI and deployment basics exist] --> B[Release operations remain undefined]
     B --> C[Define release workflow and deployment operations]
@@ -56,6 +58,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): (none yet)
 - Architecture decision(s): `adr_012_require_curated_versioned_changelogs_for_releases`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
+
+# AI Context
+- Summary: Define the release workflow and deployment operations needed after CI and Render static hosting basics are in place.
+- Keywords: release, workflow, and, deployment, operations, the, needed, render
+- Use when: Use when framing scope, context, and acceptance checks for Define release workflow and deployment operations.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_058_define_release_readiness_gates_and_deployable_artifact_identification`

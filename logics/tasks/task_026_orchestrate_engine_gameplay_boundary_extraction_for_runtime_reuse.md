@@ -19,6 +19,7 @@
 - Unblocks: future gameplay expansion on a cleaner game layer, reuse of the runtime in later game projects, and safer long-term engine-facing refactors.
 
 ```mermaid
+%% logics-signature: task|orchestrate-engine-gameplay-boundary-ext|item-070-define-target-repository-topolo|1-define-and-document-the-target|npm-run-ci
 flowchart LR
     Topology[item_070 repository topology] --> Extraction[Engine and gameplay boundary extraction]
     Contracts[item_071 engine to game contracts] --> Extraction

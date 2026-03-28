@@ -1,11 +1,12 @@
 ## req_004_prepare_github_actions_ci_pipeline - Prepare GitHub Actions CI pipeline
-> From version: 0.1.1
-> Status: Ready
-> Understanding: 94%
-> Confidence: 91%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Prepare a GitHub Actions CI pipeline for the repository.
@@ -33,6 +34,7 @@ Because the repository uses the `logics/` workflow, CI should not ignore those d
 The first goal is repeatable repository validation, not full release automation. This request is about preparing a GitHub Actions workflow foundation that later deployment and release steps can build on safely.
 
 ```mermaid
+%% logics-signature: request|prepare-github-actions-ci-pipeline|prepare-a-github-actions-ci-pipeline|ac1-the-request-defines-a-github
 flowchart TD
     A[Repository changes are pushed] --> B[GitHub Actions starts CI]
     B --> C[Validate code and Logics workflow]
@@ -61,6 +63,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): (none yet)
 - Architecture decision(s): (none yet)
+
+# AI Context
+- Summary: Prepare a GitHub Actions CI pipeline for the repository.
+- Keywords: prepare, github, actions, pipeline, for, the, repository, keep
+- Use when: Use when framing scope, context, and acceptance checks for Prepare GitHub Actions CI pipeline.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_017_define_baseline_github_actions_workflow_triggers_and_dependency_caching`

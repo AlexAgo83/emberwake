@@ -19,6 +19,7 @@
 - Unblocks: trustworthy release readiness and later automation gates.
 
 ```mermaid
+%% logics-signature: task|orchestrate-testing-browser-smoke-and-ci|item-050-define-unit-and-integration-tes|1-expand-test-priorities-around-transfor|npm-run-ci
 flowchart LR
     Priorities[item_050 test priorities] --> Quality[Layered quality strategy]
     Smoke[item_051 browser smoke] --> Quality

@@ -17,6 +17,7 @@
 - Out: Directory ownership, atlas packaging, or PWA asset caching.
 
 ```mermaid
+%% logics-signature: backlog|define-logical-sizing-pivot-and-orientat|req-005-define-asset-pipeline-for-map-an|asset-rendering-needs-stable-logical-dim|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

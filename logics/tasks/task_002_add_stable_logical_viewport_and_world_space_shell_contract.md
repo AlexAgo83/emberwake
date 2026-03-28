@@ -21,6 +21,7 @@
 - Unblocks: `task_003_add_render_diagnostics_fallback_handling_and_shell_preferences`, `task_006_define_deterministic_chunked_world_model_and_seed_contract`, `task_007_implement_camera_controls_for_pan_zoom_and_rotation`.
 
 ```mermaid
+%% logics-signature: task|add-stable-logical-viewport-and-world-sp|item-002-add-stable-logical-viewport-and|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

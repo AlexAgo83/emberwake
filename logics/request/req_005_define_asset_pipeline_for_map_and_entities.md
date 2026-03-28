@@ -1,11 +1,12 @@
 ## req_005_define_asset_pipeline_for_map_and_entities - Define asset pipeline for map and entities
-> From version: 0.1.2
-> Status: Ready
-> Understanding: 96%
-> Confidence: 93%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Rendering
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the asset pipeline and conventions needed to support map rendering and entity rendering in the static top-down 2D application.
@@ -35,6 +36,7 @@ Because the project targets a static Vite and Render deployment path, the asset 
 The request should not lock the project into a final art style, animation system, or a complex editor workflow yet. It should instead define the minimal but robust asset conventions that allow the chunked map and evolving entities to move forward without introducing avoidable rendering debt.
 
 ```mermaid
+%% logics-signature: request|define-asset-pipeline-for-map-and-entiti|define-the-asset-pipeline-and-convention|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[Fullscreen Pixi shell and world requests exist] --> B[Map and entity rendering need real asset contracts]
     B --> C[Define asset pipeline conventions and runtime loading model]
@@ -64,6 +66,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): `prod_005_visual_identity_dark_fantasy_with_synthetic_energy_accents`
 - Architecture decision(s): (none yet)
+
+# AI Context
+- Summary: Define the asset pipeline and conventions needed to support map rendering and entity rendering in the static top-down...
+- Keywords: asset, pipeline, for, map, and, entities, the, conventions
+- Use when: Use when framing scope, context, and acceptance checks for Define asset pipeline for map and entities.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_020_define_asset_directory_naming_and_ownership_model_for_map_entities_and_overlays`

@@ -1,11 +1,12 @@
 ## req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave - Define the next runtime product and gameplay system architecture wave
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
-> Understanding: 99%
-> Confidence: 96%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Architecture
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the next architecture wave after `task_028` so the project can grow from a structurally clean runtime into a scalable product runtime and gameplay stack.
@@ -83,10 +84,16 @@ flowchart TD
 - Request(s): `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries`, `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`
 - Task(s): `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening`, `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`, `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`
 
+# AI Context
+- Summary: Define the next architecture wave after task_028 so the project can grow from a structurally clean runtime into...
+- Keywords: the, next, runtime, product, and, gameplay, system, architecture
+- Use when: Use when framing scope, context, and acceptance checks for Define the next runtime product and gameplay system architecture wave.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_runtime_performance_budgets_profiling_and_mobile_limits_for_shell_and_pixi_startup`
-- `define_product_meta_flow_architecture_for_pause_settings_failure_and_runtime_reentry`
-- `define_gameplay_system_ownership_for_combat_status_effects_ai_and_progression`
+- `item_087_define_runtime_performance_budgets_profiling_and_mobile_limits_for_shell_and_pixi_startup`
+- `item_088_define_product_meta_flow_architecture_for_pause_settings_failure_and_runtime_reentry`
+- `item_089_define_gameplay_system_ownership_for_combat_status_effects_ai_and_progression`
 
 # Delivery note
 - Implemented through `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture`.

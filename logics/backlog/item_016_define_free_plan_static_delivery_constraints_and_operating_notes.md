@@ -17,6 +17,7 @@
 - Out: Paid-plan features, release process details, or CI workflow design.
 
 ```mermaid
+%% logics-signature: backlog|define-free-plan-static-delivery-constra|req-000-bootstrap-fullscreen-2d-react-pw|the-project-needs-an-explicit-operating|ac1-the-request-produces-a-render
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

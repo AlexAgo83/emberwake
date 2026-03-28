@@ -17,6 +17,7 @@
 - Out: Full pathfinding implementation or terrain generation details.
 
 ```mermaid
+%% logics-signature: backlog|define-future-facing-navigation-and-terr|req-014-define-world-occupancy-navigatio|later-movement-and-terrain-systems-need|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

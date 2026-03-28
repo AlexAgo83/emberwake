@@ -17,6 +17,7 @@
 - Out: Generation algorithm details or runtime rendering implementation.
 
 ```mermaid
+%% logics-signature: backlog|define-generation-boundaries-versus-rend|req-008-define-infinite-chunked-world-ge|world-generation-must-not-silently-absor|ac1-the-request-defines-a-dedicated
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

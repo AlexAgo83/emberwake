@@ -17,6 +17,7 @@
 - Out: Dashboard-only configuration, preview environments, backend services, or release operations.
 
 ```mermaid
+%% logics-signature: backlog|define-render-static-site-blueprint-and-|req-000-bootstrap-fullscreen-2d-react-pw|render-delivery-needs-a-concrete-static-|ac1-the-request-produces-a-render
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

@@ -1,11 +1,12 @@
 ## req_009_define_local_persistence_and_save_strategy - Define local persistence and save strategy
-> From version: 0.1.1
-> Status: Ready
-> Understanding: 93%
-> Confidence: 90%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Data
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the local persistence strategy for the static frontend application so world state, preferences, and useful debug data can survive reloads without requiring a backend.
@@ -26,6 +27,7 @@ The recommended default is to start small and predictable: persist preferences, 
 The scope should stay aligned with the static Vite and Render architecture, the PWA direction, and the earlier requests on deterministic world behavior. It should not yet introduce accounts, cloud sync, or backend save services.
 
 ```mermaid
+%% logics-signature: request|define-local-persistence-and-save-strate|define-the-local-persistence-strategy-fo|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[Static app begins to accumulate state] --> B[State must survive reload without backend]
     B --> C[Define local persistence and save strategy]
@@ -51,6 +53,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): (none yet)
 - Architecture decision(s): (none yet)
+
+# AI Context
+- Summary: Define the local persistence strategy for the static frontend application so world state, preferences, and useful debug data...
+- Keywords: local, persistence, and, save, strategy, the, for, static
+- Use when: Use when framing scope, context, and acceptance checks for Define local persistence and save strategy.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_035_define_first_local_persistence_scope_for_preferences_seed_and_camera_state`

@@ -1,11 +1,12 @@
 ## req_001_render_top_down_infinite_chunked_world_map - Render top-down infinite chunked world map
-> From version: 0.1.1
-> Status: Ready
-> Understanding: 98%
-> Confidence: 95%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: World
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Render the world in a top-down view only.
@@ -81,6 +82,7 @@ The map request should also establish a world-seed concept early, even if the fi
 As with the shell, a practical performance floor is useful. Pan, zoom, rotation, culling, and debug overlays should remain comfortably usable on a representative mobile-sized screen so the map layer does not normalize a slow debug experience.
 
 ```mermaid
+%% logics-signature: request|render-top-down-infinite-chunked-world-m|render-the-world-in-a-top-down|ac1-the-rendered-world-is-presented
 flowchart TD
     A[Fullscreen Pixi shell ready] --> B[Render top down world map]
     B --> C[Organize world as fixed chunks]
@@ -140,6 +142,12 @@ flowchart TD
 # Companion docs
 - Product brief(s): `prod_000_initial_single_entity_navigation_loop`
 - Architecture decision(s): `adr_000_adopt_feature_oriented_organic_frontend_structure`, `adr_001_enforce_bounded_file_size_and_isolate_react_side_effects`
+
+# AI Context
+- Summary: Render the world in a top-down view only.
+- Keywords: render, top-down, infinite, chunked, world, map, the, view
+- Use when: Use when framing scope, context, and acceptance checks for Render top-down infinite chunked world map.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
 - `item_004_implement_camera_controls_for_pan_zoom_and_rotation`

@@ -17,6 +17,7 @@
 - Out: Release versioning rules or preview-environment role.
 
 ```mermaid
+%% logics-signature: backlog|define-post-deployment-smoke-checks-and-|req-015-define-release-workflow-and-depl|a-deployed-static-build-still-needs|ac1-the-request-defines-a-release-workfl
 flowchart LR
     Req[Request source] --> Problem[Problem to solve]
     Problem --> Scope[Scoped delivery]

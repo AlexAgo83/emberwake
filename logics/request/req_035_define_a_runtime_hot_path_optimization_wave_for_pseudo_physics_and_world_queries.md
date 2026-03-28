@@ -1,11 +1,12 @@
 ## req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries - Define a runtime hot-path optimization wave for pseudo-physics and world queries
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Investigate and reduce the runtime cost introduced by the first pseudo-physics and world-layer waves without rolling back their gameplay value.
@@ -138,7 +139,13 @@ flowchart TD
 - Architecture decision(s): `adr_032_separate_visual_terrain_blocking_obstacles_and_movement_surface_modifiers`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_034_model_traversable_surface_effects_as_bounded_movement_modifiers`, `adr_035_resolve_entity_collisions_as_lightweight_deterministic_separation`
 - Request(s): `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`, `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay`
 
+# AI Context
+- Summary: Investigate and reduce the runtime cost introduced by the first pseudo-physics and world-layer waves without rolling back their...
+- Keywords: runtime, hot-path, optimization, wave, for, pseudo-physics, and, world
+- Use when: Use when framing scope, context, and acceptance checks for Define a runtime hot-path optimization wave for pseudo-physics and world queries.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `profile_and_confirm_runtime_hot_path_regression_sources_after_pseudo_physics_wave`
-- `cache_sampled_world_layers_for_deterministic_obstacle_and_surface_queries`
-- `remove_repeated_stable_collider_work_from_the_fixed_step_runtime_loop`
+- `item_130_profile_and_confirm_runtime_hot_path_regression_sources_after_pseudo_physics_wave`
+- `item_131_cache_sampled_world_layers_for_deterministic_obstacle_and_surface_queries`
+- `item_132_remove_repeated_stable_collider_work_from_the_fixed_step_runtime_loop`

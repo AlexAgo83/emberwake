@@ -1,11 +1,12 @@
 ## req_011_define_ui_hud_and_overlay_system - Define UI HUD and overlay system
-> From version: 0.1.2
-> Status: Ready
-> Understanding: 95%
-> Confidence: 92%
+> From version: 0.5.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Define the UI, HUD, and overlay system that will sit above or alongside the world render while remaining compatible with the fullscreen PixiJS application shell.
@@ -28,6 +29,7 @@ The scope should include product-level overlay architecture and UI ownership, bu
 At this stage, overlays should be mostly contextual rather than building a heavy always-on HUD. A minimal persistent layer may exist where needed, but the baseline should keep permanent chrome sparse.
 
 ```mermaid
+%% logics-signature: request|define-ui-hud-and-overlay-system|define-the-ui-hud-and-overlay|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[World render needs system and gameplay UI around it] --> B[Overlay ownership is still implicit]
     B --> C[Define HUD and overlay architecture]
@@ -54,6 +56,13 @@ flowchart TD
 # Companion docs
 - Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`, `prod_005_visual_identity_dark_fantasy_with_synthetic_energy_accents`
 - Architecture decision(s): (none yet)
+
+# AI Context
+- Summary: Define the UI, HUD, and overlay system that will sit above or alongside the world render while remaining...
+- Keywords: hud, and, overlay, system, the, will, sit, above
+- Use when: Use when framing scope, context, and acceptance checks for Define UI HUD and overlay system.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
 - `item_043_define_system_overlay_ownership_and_fullscreen_install_prompt_behavior`
 - `item_044_define_minimal_player_facing_runtime_feedback_and_onboarding_surfaces`

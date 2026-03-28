@@ -1,11 +1,12 @@
 ## req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave - Define a shell-surface cleanup and view-relative movement polish wave
-> From version: 0.3.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: High
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Remove leftover shell copy and status chrome that still make `Main menu`, `Changelogs`, and `New game` read like meta tooling instead of product-facing surfaces.
@@ -89,7 +90,7 @@ Scope excludes:
 - deep camera-system redesign beyond movement-direction interpretation
 
 ```mermaid
-%% logics-signature: request|define-a-shell-surface-cleanup-and-view-r|remove-leftover-shell-copy-and-status|ac1-the-request-defines-removal
+%% logics-signature: request|define-a-shell-surface-cleanup-and-view-|remove-leftover-shell-copy-and-status|ac1-the-request-defines-removal-of
 flowchart TD
     A[Shell surfaces still show meta residue] --> B[Main menu cleanup]
     A --> C[Changelog cleanup and markdown hierarchy]
@@ -149,10 +150,16 @@ flowchart TD
 - Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_007_isolate_runtime_input_from_browser_page_controls`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request(s): `req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface`, `req_029_define_a_lightweight_settings_scene_with_desktop_control_customization`, `req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow`, `req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors`, `req_045_define_a_clearer_and_more_compact_desktop_controls_settings_surface`, `req_050_define_a_main_menu_polish_and_first_crystal_xp_progression_wave`
 
+# AI Context
+- Summary: Remove leftover shell copy and status chrome that still make Main menu, Changelogs, and New game read like...
+- Keywords: shell-surface, cleanup, and, view-relative, movement, polish, wave, remove
+- Use when: Use when framing scope, context, and acceptance checks for Define a shell-surface cleanup and view-relative movement polish wave.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_cleaner_main_menu_surface_without_meta_or_session_residue`
-- `define_stateful_apply_revert_and_reset_action_rules_for_settings_controls`
-- `define_a_structured_markdown_rendering_posture_for_shell_changelogs`
-- `define_randomized_initial_character_name_suggestions_for_new_game`
-- `define_command_deck_open_behavior_as_a_runtime_pause_trigger`
-- `define_view_relative_player_movement_under_camera_rotation`
+- `item_181_define_a_cleaner_main_menu_surface_without_meta_or_session_residue`
+- `item_182_define_stateful_apply_revert_and_reset_action_rules_for_settings_controls`
+- `item_183_define_a_structured_markdown_rendering_posture_for_shell_changelogs`
+- `item_184_define_randomized_initial_character_name_suggestions_for_new_game`
+- `item_185_define_command_deck_open_behavior_as_a_runtime_pause_trigger`
+- `item_186_define_view_relative_player_movement_under_camera_rotation`

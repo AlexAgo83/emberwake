@@ -47,6 +47,7 @@ At the current codebase level, likely engine candidates include camera primitive
 The request should also define a staged extraction path. A same-repository modular structure such as `apps/`, `packages/`, or `games/` is a valid target if it keeps ownership clear and avoids breaking ongoing delivery. The request should not assume a package publish strategy, a separate npm distribution model, or a final multi-repo split unless those become justified later.
 
 ```mermaid
+%% logics-signature: request|define-engine-and-gameplay-boundary-for-|define-a-dedicated-refactor-scope-that|ac1-the-request-defines-a-dedicated
 flowchart TD
     A[Early game repo mixes runtime and gameplay] --> B[Reuse and ownership start to blur]
     B --> C[Define engine versus gameplay boundary]

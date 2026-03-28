@@ -21,6 +21,7 @@
 - Unblocks: `task_010_define_single_entity_control_contract_and_input_ownership_boundaries`, `task_011_define_mobile_virtual_stick_steering_model_for_the_first_player_loop`, and later entity simulation tasks.
 
 ```mermaid
+%% logics-signature: task|implement-fixed-step-entity-movement-and|item-010-implement-fixed-step-entity-mov|1-confirm-scope-dependencies-and-linked|python3-logics-skills-logics-doc-linter-
 flowchart LR
     Backlog[Backlog source] --> Step1[Implementation step 1]
     Step1 --> Step2[Implementation step 2]

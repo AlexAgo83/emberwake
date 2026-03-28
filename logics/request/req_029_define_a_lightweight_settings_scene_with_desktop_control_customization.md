@@ -1,11 +1,12 @@
 ## req_029_define_a_lightweight_settings_scene_with_desktop_control_customization - Define a lightweight settings scene with desktop control customization
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium
 > Theme: UX
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Schema version: 1.0
 
 # Needs
 - Reduce the current `Settings` shell scene because it still behaves like an oversized explanatory status card rather than a compact product surface.
@@ -115,10 +116,16 @@ flowchart TD
 - Architecture decision(s): `adr_002_separate_react_shell_from_pixi_runtime_ownership`, `adr_007_isolate_runtime_input_from_browser_page_controls`, `adr_016_define_shell_scene_state_and_meta_surface_ownership`, `adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path`
 - Request(s): `req_017_redesign_runtime_overlay_into_a_single_floating_menu`, `req_027_restructure_the_shell_command_deck_around_a_primary_session_section`, `req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface`
 
+# AI Context
+- Summary: Reduce the current Settings shell scene because it still behaves like an oversized explanatory status card rather than...
+- Keywords: lightweight, settings, scene, desktop, control, customization, reduce, the
+- Use when: Use when framing scope, context, and acceptance checks for Define a lightweight settings scene with desktop control customization.
+- Skip when: Skip when the work targets another feature, repository, or workflow stage.
+
 # Backlog
-- `define_a_compact_settings_meta_scene_that_prioritizes_configuration_over_context_copy`
-- `define_desktop_control_remapping_scope_and_interaction_model_for_settings`
-- `define_validation_conflict_and_persistence_rules_for_desktop_control_customization`
+- `item_112_define_a_compact_settings_meta_scene_that_prioritizes_configuration_over_context_copy`
+- `item_113_define_desktop_control_remapping_scope_and_interaction_model_for_settings`
+- `item_114_define_validation_conflict_reset_and_persistence_rules_for_desktop_control_customization`
 
 # Implementation notes
 - Delivered through a lighter `Settings` scene that now centers on desktop control configuration instead of shell-ownership prose.
