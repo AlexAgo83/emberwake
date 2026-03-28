@@ -3,6 +3,7 @@ import { vi } from "vitest";
 
 import { AppMetaScenePanel } from "./AppMetaScenePanel";
 import { createDefaultDesktopControlBindings } from "../../game/input/model/singleEntityControlContract";
+import { appConfig } from "../../shared/config/appConfig";
 
 const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScenePanel>> = {}) => ({
   canResumeSession: false,
@@ -64,7 +65,9 @@ describe("AppMetaScenePanel", () => {
     expect(screen.queryByText("Ownership")).not.toBeInTheDocument();
     expect(loadGameIndex).toBeGreaterThan(-1);
     expect(newGameIndex).toBeGreaterThan(loadGameIndex);
-    expect(screen.getByRole("link", { name: /Emberwake v0\.5\.0/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: new RegExp(`Emberwake v${appConfig.version}`, "i") })
+    ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /Settings/i }));
     expect(props.onOpenSettings).toHaveBeenCalledTimes(1);
@@ -143,7 +146,7 @@ describe("AppMetaScenePanel", () => {
     render(<AppMetaScenePanel {...props} />);
 
     expect(screen.getByLabelText("Changelogs")).toBeInTheDocument();
-    expect(await screen.findByRole("heading", { name: "0.5.0" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: appConfig.version })).toBeInTheDocument();
     expect(screen.getAllByRole("heading", { name: /Highlights/i }).length).toBeGreaterThan(0);
     expect(screen.getAllByRole("heading", { name: /Technical Notes/i }).length).toBeGreaterThan(0);
     expect(screen.queryByText(/without leaving the shell/i)).not.toBeInTheDocument();
