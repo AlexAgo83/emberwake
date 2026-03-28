@@ -96,7 +96,7 @@ describe("AppMetaScenePanel", () => {
     expect(props.onLoadGame).toHaveBeenCalledTimes(1);
   });
 
-  it("renders the growth scene with shop and talent purchases", () => {
+  it("renders the growth scene with shop and talent purchases", async () => {
     const props = createProps({
       metaProfile: {
         ...createDefaultMetaProfile(),
@@ -110,7 +110,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByLabelText("Growth")).toBeInTheDocument();
     expect(screen.getByLabelText(/Available gold/i)).toBeInTheDocument();
     expect(screen.getByText("99")).toBeInTheDocument();
-    fireEvent.click(screen.getAllByRole("button", { name: /Unlock|Buy rank/i })[0]!);
+    fireEvent.click((await screen.findAllByRole("button", { name: /Unlock|Buy rank/i }))[0]!);
 
     expect(props.onPurchaseShopUnlock).toHaveBeenCalledTimes(1);
   });
