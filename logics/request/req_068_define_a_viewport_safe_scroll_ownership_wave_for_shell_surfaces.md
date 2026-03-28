@@ -1,8 +1,8 @@
 ## req_068_define_a_viewport_safe_scroll_ownership_wave_for_shell_surfaces - Define a viewport-safe scroll ownership wave for shell surfaces
-> From version: 0.4.1
-> Status: Ready
-> Understanding: 99%
-> Confidence: 98%
+> From version: 0.4.0
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -70,6 +70,16 @@ flowchart TD
   - no new shell scene should ship without a declared scroll owner if its content can grow
   - implementation and review should use `logics-ui-steering` to keep viewport-safe behavior aligned with the techno-shinobi shell language instead of ad hoc patches
 
+# AC Traceability
+- AC1 -> Backlog coverage: `item_274`, `item_275`, `item_276`, and `item_277` split the wave into shared sizing, scroll ownership, regression correction, and validation. Task coverage: `task_056` orchestrates those slices as one delivery wave. Proof: the linked docs now close together to reflect the landed shell-scroll contract.
+- AC2 -> Problem framing: `item_274`, `item_275`, and `item_276` treat the issue as structural viewport fit plus scroll ownership, not a cosmetic shell refresh. Task coverage: `task_056` ties the contract to shared CSS/layout work instead of one-off scene polish. Proof: the task and item traceability reference shared panel sizing and named scene-body scrollers in `src/app/styles/app.css` and `src/app/components/AppMetaScenePanel.tsx`.
+- AC3 -> Scroll-owner posture: `item_275` defines the explicit scene-body scroll owner and `item_276` applies it to existing scenes. Task coverage: `task_056` closes the posture across `Settings`, `Grimoire`, `Bestiary`, and `Game over`. Proof: the implementation routes those scenes through `.app-meta-scene__scene-body--settings` or `.app-meta-scene__scene-body--scroll`.
+- AC4 -> Viewport-fit posture: `item_274` defines the shared viewport-safe sizing contract, `item_276` applies it to the named scenes, and `item_277` validates desktop/mobile/non-PWA behavior. Task coverage: `task_056` keeps these contexts in scope. Proof: `src/app/styles/app.css` bounds `.app-meta-scene` and browser-mode shell sizing with safe-area offsets and viewport units.
+- AC5 -> Bounded sizing rule: `item_274` carries the bounded-height contract and `task_056` applies it to the shell panel family and adjacent surfaces. Proof: `src/app/styles/app.css` and `src/app/components/RuntimeBuildChoicePanel.css` use bounded `max-height`/`height` rules instead of unconstrained panel growth.
+- AC6 -> Reachable actions: `item_275`, `item_276`, and `item_277` cover stable chrome, reachable bottom actions, and explicit verification of those paths. Task coverage: `task_056` keeps the actions outside the scene-body scroller. Proof: shell scenes in `src/app/components/AppMetaScenePanel.tsx` render action rows separately from the scroll body, while `src/app/styles/app.css` uses `grid-template-rows: auto minmax(0, 1fr) auto`.
+- AC7 -> Named regression review: `item_276` names the regression-prone shell scenes and `item_277` carries the validation slice for them. Task coverage: `task_056` includes `Settings`, `Changelogs`, `Grimoire`, `Bestiary`, `Game over`, and `Pause` in its closure notes. Proof: those scene branches exist in `src/app/components/AppMetaScenePanel.tsx`, and `src/app/components/AppMetaScenePanel.test.tsx` exercises the core navigation/reachability flows.
+- AC8 -> Prevention posture: `item_275` and `item_277` define the reusable scene-body pattern and the repeatable validation lane, while `task_056` preserves both as the standard for later shell work. Proof: the wave leaves named scene-body scroll classes, targeted validation commands, and historical landing commits `ea04d9d` and `8230748` as reusable guardrails.
+
 # Open questions
 - Should the shell panel remain vertically centered when content becomes tall, or should tall scenes pin closer to the top safe area?
   Recommended default: center only when content comfortably fits; otherwise prefer a viewport-safe anchored posture that preserves reachability.
@@ -85,6 +95,7 @@ flowchart TD
 - [x] Prevention posture for future scenes is explicit.
 
 # Companion docs
+- Product brief(s): `prod_005_visual_identity_dark_fantasy_with_synthetic_energy_accents`
 - Architecture decision(s): `adr_048_adopt_a_viewport_safe_scroll_owner_contract_for_shell_surfaces`
 - Request(s): `req_063_define_a_techno_shinobi_runtime_hud_relayout_and_mobile_menu_entry_wave`, `req_064_define_a_grimoire_scene_for_skill_discovery_and_future_unlock_gating`, `req_065_define_a_bestiary_scene_for_discovered_and_defeated_creatures`, `req_066_define_a_game_over_skill_ranking_view_toggle`
 - Primary task(s): `task_056_orchestrate_viewport_safe_scroll_ownership_for_shell_surfaces`

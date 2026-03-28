@@ -1,9 +1,9 @@
 ## item_276_define_regression_fixes_for_existing_shell_scenes_under_the_viewport_safe_scroll_contract - Define regression fixes for existing shell scenes under the viewport-safe scroll contract
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -39,6 +39,13 @@ flowchart LR
 - AC3 -> Scope: wave remains bounded. Proof target: file scope and exclusions.
 - AC4 -> Scope: auxiliary panels are considered. Proof target: explicit inclusion or rationale for exclusion.
 
+# Request AC Traceability
+- AC1 -> Slice coverage: `item_276` applies the request wave to the known regression-prone shell surfaces instead of leaving them as isolated follow-ups. Proof: `src/app/components/AppMetaScenePanel.tsx` now routes `Changelogs`, `Grimoire`, `Bestiary`, `Pause`, `Settings`, and `Game over` through bounded shell-scene layouts.
+- AC2 -> Failure-mode framing: the regression fixes target clipping, missing scroll ownership, and unreachable actions rather than a broad shell restyle. Proof: the implementation changes panel structure, body ownership, and action placement in `src/app/styles/app.css` and `src/app/components/AppMetaScenePanel.tsx`.
+- AC4 -> Viewport-fit posture: the targeted scenes stay inside the safe shell bounds across supported viewport contexts. Proof: `src/app/styles/app.css` assigns bounded heights to the affected scenes and shares the same shell offset contract.
+- AC6 -> Reachable actions: `Back to menu`, `Resume runtime`, and outcome actions remain outside the scrolling body. Proof: `src/app/components/AppMetaScenePanel.tsx` renders each affected scene with a dedicated `.app-meta-scene__actions` block after the scrollable content.
+- AC7 -> Named regression review: the request’s scene list is explicitly covered by this slice. Proof: the `changelogs`, `settings`, `grimoire`, `bestiary`, `pause`, and `defeat` branches all exist in `src/app/components/AppMetaScenePanel.tsx`, with `defeat` carrying the `Game over` surface.
+
 # Decision framing
 - Product framing: Required
 - Product signals: usability, trust, polish
@@ -64,3 +71,4 @@ flowchart LR
 # Notes
 - Derived from request `req_068_define_a_viewport_safe_scroll_ownership_wave_for_shell_surfaces`.
 - Shell/UI work in this slice should explicitly lean on `logics-ui-steering`.
+- Closed through `task_056_orchestrate_viewport_safe_scroll_ownership_for_shell_surfaces`, with the archive follow-up refined again in commit `8230748`.

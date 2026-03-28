@@ -1,9 +1,9 @@
 ## item_275_define_a_single_scroll_owner_scene_body_posture_for_variable_height_shell_content - Define a single scroll-owner scene-body posture for variable-height shell content
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -40,6 +40,13 @@ flowchart LR
 - AC3 -> Scope: action reachability is explicit. Proof target: manual verification and layout structure.
 - AC4 -> Scope: nested scrollers are bounded. Proof target: implementation notes and review guidance.
 
+# Request AC Traceability
+- AC1 -> Slice coverage: `item_275` owns the scroll-owner part of the cross-cutting shell correction wave. Proof: `task_056` closes this slice alongside shared shell sizing and regression cleanup.
+- AC2 -> Failure-mode framing: the fix moves overflow responsibility into one named scene body instead of scattered nested containers. Proof: `src/app/styles/app.css` defines `.app-meta-scene__scene-body--settings` and `.app-meta-scene__scene-body--scroll` as the primary overflow owners.
+- AC3 -> Scroll-owner rule: content-heavy shell scenes now declare an explicit internal scroll owner. Proof: `src/app/components/AppMetaScenePanel.tsx` wraps `Grimoire`, `Bestiary`, `Settings`, and `Game over` content in `.app-meta-scene__scene-body` containers.
+- AC6 -> Reachable actions: the header/footer chrome and bottom actions remain outside the scroll owner. Proof: `src/app/styles/app.css` uses `grid-template-rows: auto minmax(0, 1fr) auto`, and `src/app/components/AppMetaScenePanel.tsx` renders action rows separately from the scene body.
+- AC8 -> Prevention posture: the shell now has a reusable named body-scroll pattern for future scenes instead of ad hoc overflow rules. Proof: `.app-meta-scene__scene-body--scroll` and `.app-meta-scene__scene-body--settings` provide the shared default posture reused by archive, settings, and outcome scenes.
+
 # Decision framing
 - Product framing: Required
 - Product signals: usability, content readability
@@ -65,3 +72,4 @@ flowchart LR
 # Notes
 - Derived from request `req_068_define_a_viewport_safe_scroll_ownership_wave_for_shell_surfaces`.
 - Shell/UI work in this slice should explicitly lean on `logics-ui-steering`.
+- Closed through `task_056_orchestrate_viewport_safe_scroll_ownership_for_shell_surfaces` when the shared scene-body scroll owner contract landed across shell scenes.

@@ -1,9 +1,9 @@
 ## item_274_define_a_shared_viewport_safe_shell_surface_sizing_contract - Define a shared viewport-safe shell surface sizing contract
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -40,6 +40,12 @@ flowchart LR
 - AC3 -> Scope: multi-viewport fit is explicit. Proof target: responsive verification notes and CSS contract.
 - AC4 -> Scope: scroll ownership remains separate. Proof target: file scope and exclusions.
 
+# Request AC Traceability
+- AC1 -> Slice coverage: `item_274` owns the shared surface-fit slice of the cross-cutting shell correction wave. Proof: `src/app/styles/app.css` centralizes the shell panel family around one `.app-meta-scene` sizing contract.
+- AC2 -> Failure-mode framing: this slice treats clipping as a viewport-fit contract problem instead of a one-off styling issue. Proof: `src/app/styles/app.css` uses safe-area offsets, viewport units, and shared scene bounds rather than scene-specific cosmetic tweaks alone.
+- AC4 -> Viewport-fit posture: shell panels are bounded for desktop, mobile browser, and non-PWA contexts. Proof: `src/app/styles/app.css` uses `100dvh`, browser-mode `100svh`, and shared shell offsets for `.app-shell` and `.app-meta-scene`.
+- AC5 -> Bounded sizing rule: variable-height shell surfaces prefer bounded `max-height` and per-scene bounded heights over unconstrained growth. Proof: `src/app/styles/app.css` defines shared `max-height` on `.app-meta-scene` and bounded heights for `changelogs`, `settings`, `grimoire`, `bestiary`, and `defeat`.
+
 # Decision framing
 - Product framing: Required
 - Product signals: reachability, presentation quality
@@ -65,3 +71,4 @@ flowchart LR
 # Notes
 - Derived from request `req_068_define_a_viewport_safe_scroll_ownership_wave_for_shell_surfaces`.
 - Shell/UI work in this slice should explicitly lean on `logics-ui-steering`.
+- Closed through `task_056_orchestrate_viewport_safe_scroll_ownership_for_shell_surfaces` once the shared shell surface bounds landed in commit `ea04d9d`.

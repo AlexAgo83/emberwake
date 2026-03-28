@@ -1,9 +1,9 @@
 ## item_277_define_targeted_validation_for_shell_viewport_fit_scroll_ownership_and_action_reachability - Define targeted validation for shell viewport fit, scroll ownership, and action reachability
 > From version: 0.4.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: QA
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -39,6 +39,13 @@ flowchart LR
 - AC3 -> Scope: scroll ownership is explicit. Proof target: verification notes for scroll path behavior.
 - AC4 -> Scope: validation remains bounded. Proof target: limited QA scope and exclusions.
 
+# Request AC Traceability
+- AC1 -> Slice coverage: `item_277` closes the request with a dedicated validation lane instead of leaving reachability checks implicit. Proof: `task_056` retains this item as the validation slice for the viewport-safe shell wave.
+- AC4 -> Viewport-fit validation: the wave explicitly verifies desktop, mobile browser, and non-PWA shell behavior. Proof: `task_056` lists those contexts in its validation section, and `src/app/styles/app.css` contains browser-mode viewport sizing that this slice must cover.
+- AC6 -> Reachable actions: validation checks that bottom actions remain reachable on the affected shell scenes. Proof: `src/app/components/AppMetaScenePanel.test.tsx` covers back/resume flows for `Changelogs`, `Settings`, `Pause`, and `Game over`.
+- AC7 -> Regression review: the named shell scenes remain in the regression-verification set. Proof: `src/app/components/AppMetaScenePanel.test.tsx` exercises `Changelogs`, `Settings`, `Pause`, and `Game over`, while archive layout regressions were tightened again in commit `8230748`.
+- AC8 -> Prevention posture: the validation slice turns the wave into a reusable regression guardrail for future shell scenes. Proof: `task_056` keeps repeatable validation commands, and the current consolidation reruns targeted workflow and UI checks against this chain.
+
 # Decision framing
 - Product framing: Required
 - Product signals: trust, usability, regression safety
@@ -64,3 +71,4 @@ flowchart LR
 # Notes
 - Derived from request `req_068_define_a_viewport_safe_scroll_ownership_wave_for_shell_surfaces`.
 - Validation should cover shell scenes that have already regressed and new scenes that copy the same panel family.
+- Closed through `task_056_orchestrate_viewport_safe_scroll_ownership_for_shell_surfaces` once the targeted shell-scene validation matrix was captured.
