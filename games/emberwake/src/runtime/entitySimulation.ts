@@ -71,7 +71,14 @@ export const entitySimulationContract = {
 } as const;
 export { entityCombatPresentationContract };
 
-export type SimulatedPickupKind = "cache" | "crystal" | "gold" | "healing-kit";
+export type SimulatedPickupKind = "cache" | "crystal" | "gold" | "healing-kit" | "magnet";
+
+export type PickupAttractionSource = "magnet" | "proximity";
+
+export type PickupAttractionState = {
+  source: PickupAttractionSource;
+  startedAtTick: number;
+};
 
 export type SimulatedEntityRole = "hostile" | "pickup" | "player" | "support";
 
@@ -101,8 +108,16 @@ export type FocusState = {
 };
 
 export type PickupProfile = {
+  attractionState?: PickupAttractionState;
   kind: SimulatedPickupKind;
   stackCount?: number;
+};
+
+export type HostileBehaviorState = {
+  chargeDirectionRadians: number | null;
+  cooldownUntilTick: number | null;
+  phase: "charge" | "telegraph" | null;
+  phaseStartedAtTick: number | null;
 };
 
 export type RunStats = {
@@ -184,6 +199,7 @@ export type SimulatedEntity = WorldEntity & {
   contactDamageProfile?: ContactDamageProfile;
   damageReactionState?: DamageReactionState;
   focusState?: FocusState;
+  hostileBehaviorState?: HostileBehaviorState;
   hostileProfileId?: HostileProfileId;
   movementSurfaceModifier: MovementSurfaceModifierKind;
   movementSpeedWorldUnitsPerSecond?: number;
@@ -403,6 +419,15 @@ const createHostileEntity = (
       acquisitionRadiusWorldUnits: hostileCombatContract.hostile.acquisitionRadiusWorldUnits,
       targetEntityId: null
     },
+    hostileBehaviorState:
+      hostileProfile.behaviorKind === "telegraphed-charge"
+        ? {
+            chargeDirectionRadians: null,
+            cooldownUntilTick: null,
+            phase: null,
+            phaseStartedAtTick: null
+          }
+        : undefined,
     damageReactionState: createDamageReactionState(),
     hostileProfileId: hostileProfile.id,
     movementSurfaceModifier: "normal",
@@ -441,6 +466,8 @@ const createPickupEntity = (
           ? "pickup-healing-kit"
           : pickupKind === "crystal"
             ? "pickup-crystal"
+            : pickupKind === "magnet"
+              ? "pickup-magnet"
             : pickupKind === "cache"
               ? "pickup-cache"
               : "pickup-gold",
@@ -449,6 +476,8 @@ const createPickupEntity = (
           ? "#7dff9b"
           : pickupKind === "crystal"
             ? "#73f2ff"
+            : pickupKind === "magnet"
+              ? "#ffd1ff"
             : pickupKind === "cache"
               ? "#9ae5ff"
               : "#ffd76c"
@@ -851,6 +880,10 @@ const normalizeSimulatedEntity = (
   }
 
   if (role === "hostile") {
+    const resolvedHostileProfileId =
+      entity.hostileProfileId ?? getHostileSpawnProfile("sentinel-husk").id;
+    const resolvedHostileProfile = getHostileSpawnProfile(resolvedHostileProfileId);
+
     return {
       ...baseEntity,
       combat: normalizeCombatState(entity.combat, hostileCombatContract.hostile.maxHealth),
@@ -868,9 +901,18 @@ const normalizeSimulatedEntity = (
           hostileCombatContract.hostile.acquisitionRadiusWorldUnits,
         targetEntityId: entity.focusState?.targetEntityId ?? null
       },
+      hostileBehaviorState:
+        resolvedHostileProfile.behaviorKind === "telegraphed-charge"
+          ? {
+              chargeDirectionRadians:
+                entity.hostileBehaviorState?.chargeDirectionRadians ?? null,
+              cooldownUntilTick: entity.hostileBehaviorState?.cooldownUntilTick ?? null,
+              phase: entity.hostileBehaviorState?.phase ?? null,
+              phaseStartedAtTick: entity.hostileBehaviorState?.phaseStartedAtTick ?? null
+            }
+          : entity.hostileBehaviorState,
       damageReactionState: normalizeDamageReactionState(entity.damageReactionState),
-      hostileProfileId:
-        entity.hostileProfileId ?? getHostileSpawnProfile("sentinel-husk").id,
+      hostileProfileId: resolvedHostileProfileId,
       movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
       movementSpeedWorldUnitsPerSecond:
         entity.movementSpeedWorldUnitsPerSecond ??
@@ -894,6 +936,8 @@ const normalizeSimulatedEntity = (
         ? "healing-kit"
         : entity.id.includes(":crystal:")
           ? "crystal"
+          : entity.id.includes(":magnet:")
+            ? "magnet"
           : "gold");
 
     return {
@@ -905,6 +949,7 @@ const normalizeSimulatedEntity = (
       },
       movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
       pickupProfile: {
+        attractionState: entity.pickupProfile?.attractionState,
         kind: inferredPickupKind,
         stackCount: Math.max(1, entity.pickupProfile?.stackCount ?? 1)
       },
@@ -1116,13 +1161,14 @@ const resolveEntityMovement = ({
   });
   const movementSpeed = movementVectorMagnitude(resolvedMovement.velocity);
   const targetOrientation =
-    movementSpeed >= gameplayTuning.playerTurning.meaningfulVelocityWorldUnitsPerSecond
+    intent.orientationOverrideRadians ??
+    (movementSpeed >= gameplayTuning.playerTurning.meaningfulVelocityWorldUnitsPerSecond
       ? Math.atan2(resolvedMovement.velocity.y, resolvedMovement.velocity.x)
       : entity.movementHeadingMemory &&
           tick - entity.movementHeadingMemory.lastMeaningfulTick <=
             entityCombatPresentationContract.spawnHeadingMemoryTicks
         ? entity.movementHeadingMemory.headingRadians
-        : entity.orientation;
+        : entity.orientation);
   const orientation =
     entity.turnRateRadiansPerSecond && targetOrientation !== entity.orientation
       ? resolveBoundedOrientation({
@@ -1140,6 +1186,10 @@ const resolveEntityMovement = ({
           targetEntityId: intent.focusTargetEntityId ?? null
         }
       : undefined,
+    hostileBehaviorState:
+      entity.role === "hostile"
+        ? intent.hostileBehaviorState ?? entity.hostileBehaviorState
+        : undefined,
     movementHeadingMemory:
       entity.role === "player" && movementSpeed > 0
         ? {

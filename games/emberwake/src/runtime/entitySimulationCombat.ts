@@ -13,6 +13,7 @@ import { systemTuning } from "@game/config/systemTuning";
 import type {
   CombatSkillFeedbackEvent,
   FloatingDamageNumber,
+  PickupAttractionSource,
   RunStats,
   SimulatedEntity
 } from "./entitySimulation";
@@ -51,6 +52,7 @@ const normalizeAngleDelta = (angleRadians: number) => {
 };
 
 const isHostileTarget = (entity: SimulatedEntity) => entity.role === "hostile" && isAlive(entity);
+const fixedStepSeconds = 1 / 60;
 
 const applyDamage = (
   entity: SimulatedEntity,
@@ -95,6 +97,25 @@ const applyCrystalXpGain = (runStats: RunStats, stackCount = 1): RunStats => {
     crystalsCollected: runStats.crystalsCollected + resolvedStackCount,
     currentLevel: nextLevel,
     currentXp: nextXp
+  };
+};
+
+const moveWorldPointTowardTarget = (
+  sourceWorldPoint: WorldPoint,
+  targetWorldPoint: WorldPoint,
+  maxDistance: number
+) => {
+  const deltaX = targetWorldPoint.x - sourceWorldPoint.x;
+  const deltaY = targetWorldPoint.y - sourceWorldPoint.y;
+  const distance = Math.hypot(deltaX, deltaY);
+
+  if (distance === 0 || distance <= maxDistance) {
+    return { ...targetWorldPoint };
+  }
+
+  return {
+    x: sourceWorldPoint.x + (deltaX / distance) * maxDistance,
+    y: sourceWorldPoint.y + (deltaY / distance) * maxDistance
   };
 };
 
@@ -604,6 +625,17 @@ export const resolvePickupCollection = ({
   const retainedEntities: SimulatedEntity[] = [];
   const pickupRadiusWorldUnits =
     pickupContract.pickup.pickupRadiusWorldUnits * resolvePickupRadiusMultiplier(buildState);
+  const crystalAttractionRadiusWorldUnits =
+    pickupRadiusWorldUnits * pickupContract.crystalFlow.attractionRadiusMultiplier;
+  const crystalCollectDistanceWorldUnits =
+    pickupRadiusWorldUnits + nextPlayerEntity.footprint.radius;
+  const magnetPulseTriggered = entities.some(
+    (entity) =>
+      entity.role === "pickup" &&
+      entity.pickupProfile?.kind === "magnet" &&
+      distanceBetweenWorldPoints(entity.worldPosition, nextPlayerEntity.worldPosition) <=
+        crystalCollectDistanceWorldUnits
+  );
 
   for (const entity of entities) {
     if (entity.role !== "pickup" || !entity.pickupProfile) {
@@ -612,11 +644,55 @@ export const resolvePickupCollection = ({
     }
 
     const pickupStackCount = Math.max(1, entity.pickupProfile.stackCount ?? 1);
+    const distanceToPlayer = distanceBetweenWorldPoints(
+      entity.worldPosition,
+      nextPlayerEntity.worldPosition
+    );
 
-    if (
-      distanceBetweenWorldPoints(entity.worldPosition, nextPlayerEntity.worldPosition) >
-      pickupRadiusWorldUnits + nextPlayerEntity.footprint.radius
-    ) {
+    if (entity.pickupProfile.kind === "crystal") {
+      const attractionSource: PickupAttractionSource | null = magnetPulseTriggered
+        ? "magnet"
+        : entity.pickupProfile.attractionState?.source ??
+          (distanceToPlayer <= crystalAttractionRadiusWorldUnits ? "proximity" : null);
+
+      if (!attractionSource) {
+        retainedEntities.push(entity);
+        continue;
+      }
+
+      const movedWorldPosition = moveWorldPointTowardTarget(
+        entity.worldPosition,
+        nextPlayerEntity.worldPosition,
+        fixedStepSeconds *
+          (attractionSource === "magnet"
+            ? pickupContract.crystalFlow.magnetAttractionSpeedWorldUnitsPerSecond
+            : pickupContract.crystalFlow.proximityAttractionSpeedWorldUnitsPerSecond)
+      );
+      const movedDistanceToPlayer = distanceBetweenWorldPoints(
+        movedWorldPosition,
+        nextPlayerEntity.worldPosition
+      );
+
+      if (movedDistanceToPlayer <= crystalCollectDistanceWorldUnits) {
+        Object.assign(nextRunStats, applyCrystalXpGain(nextRunStats, pickupStackCount));
+        continue;
+      }
+
+      retainedEntities.push({
+        ...entity,
+        pickupProfile: {
+          ...entity.pickupProfile,
+          attractionState: {
+            source: attractionSource,
+            startedAtTick: entity.pickupProfile.attractionState?.startedAtTick ?? 0
+          }
+        },
+        worldPosition: movedWorldPosition
+      });
+      continue;
+    }
+
+    if (distanceToPlayer > crystalCollectDistanceWorldUnits) {
       retainedEntities.push(entity);
       continue;
     }
@@ -629,14 +705,13 @@ export const resolvePickupCollection = ({
         );
         nextRunStats.healingKitsCollected += 1;
         break;
-      case "crystal":
-        Object.assign(nextRunStats, applyCrystalXpGain(nextRunStats, pickupStackCount));
-        break;
       case "cache":
         nextBuildState = resolveChestReward(nextBuildState, nextRunStats.hostileDefeats);
         break;
       case "gold":
         nextRunStats.goldCollected += pickupContract.gold.value * pickupStackCount;
+        break;
+      case "magnet":
         break;
     }
   }

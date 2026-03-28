@@ -3,6 +3,8 @@ import type { RunProgressionPhaseId } from "@game/runtime/runProgressionPhases";
 
 export type HostileProfileId =
   | "ash-drifter"
+  | "needle-wisp"
+  | "shock-ram"
   | "sentinel-husk"
   | "watchglass"
   | "watchglass-prime";
@@ -12,7 +14,10 @@ type WeightedHostileProfileEntry = {
   weight: number;
 };
 
+export type HostileBehaviorKind = "pursuit" | "telegraphed-charge";
+
 export type HostileSpawnProfile = {
+  behaviorKind: HostileBehaviorKind;
   contactDamageMultiplier: number;
   footprintRadius: number;
   id: HostileProfileId;
@@ -39,6 +44,7 @@ export const hostilePressureContract = {
 
 const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
   "ash-drifter": {
+    behaviorKind: "pursuit",
     contactDamageMultiplier: 0.84,
     footprintRadius: 32,
     id: "ash-drifter",
@@ -50,7 +56,34 @@ const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
     visualKind: "debug-drifter",
     visualScaleMultiplier: 1
   },
+  "needle-wisp": {
+    behaviorKind: "pursuit",
+    contactDamageMultiplier: 0.72,
+    footprintRadius: 20,
+    id: "needle-wisp",
+    isMiniBoss: false,
+    maxHealthMultiplier: 0.52,
+    moveSpeedMultiplier: 1.5,
+    renderLayer: 98,
+    tint: "#ffbb72",
+    visualKind: "debug-needle",
+    visualScaleMultiplier: 0.5
+  },
+  "shock-ram": {
+    behaviorKind: "telegraphed-charge",
+    contactDamageMultiplier: 1.46,
+    footprintRadius: 42,
+    id: "shock-ram",
+    isMiniBoss: false,
+    maxHealthMultiplier: 1.22,
+    moveSpeedMultiplier: 0.92,
+    renderLayer: 104,
+    tint: "#ff4f63",
+    visualKind: "debug-rammer",
+    visualScaleMultiplier: 1
+  },
   "sentinel-husk": {
+    behaviorKind: "pursuit",
     contactDamageMultiplier: 1,
     footprintRadius: 40,
     id: "sentinel-husk",
@@ -63,6 +96,7 @@ const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
     visualScaleMultiplier: 1
   },
   watchglass: {
+    behaviorKind: "pursuit",
     contactDamageMultiplier: 1.28,
     footprintRadius: 46,
     id: "watchglass",
@@ -75,6 +109,7 @@ const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
     visualScaleMultiplier: 1
   },
   "watchglass-prime": {
+    behaviorKind: "pursuit",
     contactDamageMultiplier: 1.7,
     footprintRadius: 58,
     id: "watchglass-prime",
@@ -91,20 +126,25 @@ const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
 const phaseCompositionWeights: Record<RunProgressionPhaseId, WeightedHostileProfileEntry[]> = {
   "ember-watch": [
     { profileId: "ash-drifter", weight: 4 },
+    { profileId: "needle-wisp", weight: 1 },
     { profileId: "sentinel-husk", weight: 1 }
   ],
   "veil-break": [
     { profileId: "ash-drifter", weight: 2 },
+    { profileId: "needle-wisp", weight: 1 },
     { profileId: "sentinel-husk", weight: 2 },
     { profileId: "watchglass", weight: 2 }
   ],
   "black-rain": [
     { profileId: "ash-drifter", weight: 1 },
+    { profileId: "needle-wisp", weight: 2 },
+    { profileId: "shock-ram", weight: 1 },
     { profileId: "sentinel-husk", weight: 2 },
     { profileId: "watchglass", weight: 4 }
   ],
   "kill-grid": [
-    { profileId: "ash-drifter", weight: 1 },
+    { profileId: "needle-wisp", weight: 2 },
+    { profileId: "shock-ram", weight: 2 },
     { profileId: "sentinel-husk", weight: 1 },
     { profileId: "watchglass", weight: 6 }
   ]

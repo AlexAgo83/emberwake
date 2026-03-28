@@ -8,6 +8,7 @@ import {
   resolveActiveWeaponRuntimeStats,
   resolveBuildSummary,
   resolveChestReward,
+  resolvePickupRadiusMultiplier,
   resolveFusionReadyState
 } from "./buildSystem";
 
@@ -130,6 +131,19 @@ describe("buildSystem", () => {
 
     expect(stats.damage).toBeGreaterThan(20);
     expect(stats.targetCount).toBeGreaterThan(1);
+  });
+
+  it("scales vacuum tabi pickup reach more aggressively by level", () => {
+    const buildState = normalizeBuildState({
+      passiveSlots: [
+        {
+          level: 3,
+          passiveId: "vacuum-tabi"
+        }
+      ]
+    });
+
+    expect(resolvePickupRadiusMultiplier(buildState)).toBeCloseTo(1.96);
   });
 
   it("summarizes the current build state for diagnostics and HUD surfaces", () => {

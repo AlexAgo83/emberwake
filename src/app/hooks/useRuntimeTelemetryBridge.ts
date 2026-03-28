@@ -23,6 +23,8 @@ declare global {
         hostileCount: number;
         hostileProfileCounts: {
           ashDrifter: number;
+          needleWisp: number;
+          shockRam: number;
           sentinelHusk: number;
           watchglass: number;
           watchglassPrime: number;
@@ -33,6 +35,7 @@ declare global {
           crystal: number;
           gold: number;
           healingKit: number;
+          magnet: number;
         };
         pickupStackTotals: {
           crystal: number;
@@ -95,6 +98,8 @@ type RuntimeTelemetryBridgeOptions = {
     hostileCount: number;
     hostileProfileCounts: {
       ashDrifter: number;
+      needleWisp: number;
+      shockRam: number;
       sentinelHusk: number;
       watchglass: number;
       watchglassPrime: number;
@@ -105,6 +110,7 @@ type RuntimeTelemetryBridgeOptions = {
       crystal: number;
       gold: number;
       healingKit: number;
+      magnet: number;
     };
     pickupStackTotals: {
       crystal: number;

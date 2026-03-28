@@ -1,6 +1,11 @@
 import type { EntityVisualKind } from "./entityData";
 
-export type CreatureCodexId = "ash-drifter" | "sentinel-husk" | "watchglass";
+export type CreatureCodexId =
+  | "ash-drifter"
+  | "needle-wisp"
+  | "sentinel-husk"
+  | "shock-ram"
+  | "watchglass";
 
 export type CreatureCodexEntry = {
   codexId: CreatureCodexId;
@@ -26,11 +31,25 @@ export const creatureCodexEntries = [
     visualKind: "debug-watcher"
   },
   {
+    codexId: "shock-ram",
+    label: "Shock Ram",
+    roleLine: "Telegraphed charge brute",
+    shellLine: "A ram shell that brakes, shivers, then commits to a straight-line burst.",
+    visualKind: "debug-rammer"
+  },
+  {
     codexId: "ash-drifter",
     label: "Ash Drifter",
     roleLine: "Loose drift-line scavenger",
     shellLine: "A lighter drifter body used as a hidden codex stub until it fully enters the run.",
     visualKind: "debug-drifter"
+  },
+  {
+    codexId: "needle-wisp",
+    label: "Needle Wisp",
+    roleLine: "Fast skirmish shard",
+    shellLine: "A reduced silhouette built to slip through pressure gaps and collapse distance quickly.",
+    visualKind: "debug-needle"
   }
 ] as const satisfies readonly CreatureCodexEntry[];
 

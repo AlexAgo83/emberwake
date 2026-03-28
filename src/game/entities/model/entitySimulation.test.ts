@@ -9,6 +9,7 @@ import type { SimulatedEntity } from "./entitySimulation";
 import { createGenericMoverEntity, entityContract } from "./entityContract";
 import { singleEntityControlContract } from "../../input/model/singleEntityControlContract";
 import { hostileCombatContract } from "@game/runtime/hostileCombatContract";
+import { getHostileSpawnProfile } from "@game/runtime/hostilePressure";
 import { resolveRunProgressionPhase } from "@game/runtime/runProgressionPhases";
 import { sampleWorldTileLayers } from "../../world/model/worldGeneration";
 import { worldContract } from "../../world/model/worldContract";
@@ -52,15 +53,25 @@ describe("entitySimulation", () => {
   });
 
   const createPickupFixture = (
-    pickupKind: "crystal" | "gold",
+    pickupKind: "crystal" | "gold" | "magnet",
     overrides: Partial<SimulatedEntity> = {}
   ): SimulatedEntity => ({
     ...createGenericMoverEntity({
       id: `entity:pickup:${pickupKind}:fixture`,
       renderLayer: 90,
       visual: {
-        kind: pickupKind === "crystal" ? "pickup-crystal" : "pickup-gold",
-        tint: pickupKind === "crystal" ? "#73f2ff" : "#ffd76c"
+        kind:
+          pickupKind === "crystal"
+            ? "pickup-crystal"
+            : pickupKind === "magnet"
+              ? "pickup-magnet"
+              : "pickup-gold",
+        tint:
+          pickupKind === "crystal"
+            ? "#73f2ff"
+            : pickupKind === "magnet"
+              ? "#ffd1ff"
+              : "#ffd76c"
       },
       worldPosition: {
         x: 128,
@@ -109,6 +120,18 @@ describe("entitySimulation", () => {
     expect(simulationState.combatSkillFeedbackEvents).toEqual([]);
     expect(simulationState.floatingDamageNumbers).toEqual([]);
     expect(simulationState.entity.velocity).toEqual({ x: 0, y: 0 });
+  });
+
+  it("exposes the new hostile archetype contracts", () => {
+    expect(getHostileSpawnProfile("needle-wisp")).toMatchObject({
+      behaviorKind: "pursuit",
+      moveSpeedMultiplier: 1.5,
+      visualScaleMultiplier: 0.5
+    });
+    expect(getHostileSpawnProfile("shock-ram")).toMatchObject({
+      behaviorKind: "telegraphed-charge",
+      visualScaleMultiplier: 1
+    });
   });
 
   it("exposes deterministic scripted phases", () => {
@@ -245,7 +268,7 @@ describe("entitySimulation", () => {
     const latePhaseSpawnTick = 4508;
     const simulationState = advanceSimulationState({
       ...initialState,
-      nextHostileSequence: 4,
+      nextHostileSequence: 6,
       tick: latePhaseSpawnTick - 1
     });
     const spawnedHostile = simulationState.entities.find((entity) => entity.role === "hostile");
@@ -672,6 +695,81 @@ describe("entitySimulation", () => {
     expect(leveledState.runStats.crystalsCollected).toBe(4);
     expect(leveledState.runStats.currentLevel).toBe(1);
     expect(leveledState.runStats.currentXp).toBe(72);
+  });
+
+  it("pulls nearby crystals into the player before awarding xp", () => {
+    const initialState = createInitialSimulationState();
+    const crystalPickup = createPickupFixture("crystal", {
+      id: "entity:pickup:crystal:attract",
+      worldPosition: { x: 74, y: 0 }
+    });
+
+    const attractedState = advanceSimulationState(
+      {
+        ...initialState,
+        entities: [initialState.entity, crystalPickup],
+        nextPickupSequence: 1
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "no-spawn"
+        }
+      }
+    );
+    const attractedCrystal = attractedState.entities.find(
+      (entity) => entity.id === crystalPickup.id
+    );
+
+    expect(attractedState.runStats.currentXp).toBe(0);
+    expect(attractedCrystal?.pickupProfile?.attractionState?.source).toBe("proximity");
+    expect(attractedCrystal?.worldPosition.x).toBeLessThan(crystalPickup.worldPosition.x);
+
+    const collectedState = advanceSimulationState(attractedState, {
+      profiling: {
+        playerInvincible: false,
+        spawnMode: "no-spawn"
+      }
+    });
+
+    expect(collectedState.entities.some((entity) => entity.id === crystalPickup.id)).toBe(false);
+    expect(collectedState.runStats.currentXp).toBe(18);
+    expect(collectedState.runStats.crystalsCollected).toBe(1);
+  });
+
+  it("lets a magnet pickup pull remote crystals toward the player", () => {
+    const initialState = createInitialSimulationState();
+    const remoteCrystal = createPickupFixture("crystal", {
+      id: "entity:pickup:crystal:remote",
+      worldPosition: { x: 520, y: 0 }
+    });
+    const magnetPickup = createPickupFixture("magnet", {
+      id: "entity:pickup:magnet:0",
+      pickupProfile: {
+        kind: "magnet"
+      },
+      worldPosition: { ...initialState.entity.worldPosition }
+    });
+
+    const nextState = advanceSimulationState(
+      {
+        ...initialState,
+        entities: [initialState.entity, magnetPickup, remoteCrystal],
+        nextPickupSequence: 2
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "no-spawn"
+        }
+      }
+    );
+    const pulledCrystal = nextState.entities.find((entity) => entity.id === remoteCrystal.id);
+
+    expect(nextState.entities.some((entity) => entity.id === magnetPickup.id)).toBe(false);
+    expect(pulledCrystal?.pickupProfile?.attractionState?.source).toBe("magnet");
+    expect(pulledCrystal?.worldPosition.x).toBeLessThan(remoteCrystal.worldPosition.x);
+    expect(nextState.runStats.currentXp).toBe(0);
   });
 
   it("consolidates nearby hostile crystal drops into a single stacked pickup", () => {

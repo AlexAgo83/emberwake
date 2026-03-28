@@ -131,6 +131,27 @@ const drawPickupEntity =
       return;
     }
 
+    if (pickupKind === "magnet") {
+      graphics.circle(0, 0, radius);
+      graphics.fill();
+      graphics.setStrokeStyle({
+        alpha: 0.92,
+        color: 0xf6eee8,
+        width: 2
+      });
+      graphics.circle(0, 0, radius);
+      graphics.stroke();
+      graphics.moveTo(-radius * 0.55, -radius * 0.1);
+      graphics.lineTo(-radius * 0.12, -radius * 0.1);
+      graphics.lineTo(-radius * 0.12, radius * 0.52);
+      graphics.moveTo(radius * 0.55, -radius * 0.1);
+      graphics.lineTo(radius * 0.12, -radius * 0.1);
+      graphics.lineTo(radius * 0.12, radius * 0.52);
+      graphics.stroke();
+
+      return;
+    }
+
     graphics.circle(0, 0, radius);
     graphics.fill();
     graphics.setStrokeStyle({
@@ -351,6 +372,13 @@ export function EntityScene({
         const tint = hexColorToNumber(entity.visual.tint);
         const pickupKind = entity.pickupProfile?.kind ?? null;
         const renderedRadius = entity.footprint.radius * (entity.visualScale ?? 1);
+        const telegraphShakeOffset =
+          entity.role === "hostile" && entity.hostileBehaviorState?.phase === "telegraph"
+            ? {
+                x: Math.sin(currentTick * 1.9 + renderedRadius) * 3,
+                y: Math.cos(currentTick * 2.4 + renderedRadius) * 1.5
+              }
+            : { x: 0, y: 0 };
         const attackArcVisible =
           entity.role === "player" &&
           entity.automaticAttack &&
@@ -370,8 +398,8 @@ export function EntityScene({
         return (
           <pixiContainer
             key={entity.id}
-            x={entity.worldPosition.x}
-            y={entity.worldPosition.y}
+            x={entity.worldPosition.x + telegraphShakeOffset.x}
+            y={entity.worldPosition.y + telegraphShakeOffset.y}
           >
             {entity.role === "pickup" ? (
               <PickupEntityGraphic

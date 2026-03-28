@@ -377,7 +377,7 @@ const createPassiveModifierState = (buildState: BuildState): PassiveModifierStat
         modifiers.targetCountBonus += Math.max(1, passiveSlot.level - (passiveSlot.level > 3 ? 1 : 0));
         break;
       case "vacuum-tabi":
-        modifiers.pickupRadiusMultiplier *= 1 + 0.2 * passiveSlot.level;
+        modifiers.pickupRadiusMultiplier *= 1 + 0.32 * passiveSlot.level;
         modifiers.targetCountBonus += Math.max(0, Math.floor(bonusLevel / 2));
         break;
     }

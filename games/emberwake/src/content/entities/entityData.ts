@@ -13,6 +13,14 @@ export const entityVisualDefinitions = {
     assetId: "entity.debug.drifter.placeholder",
     label: "Debug drifter"
   },
+  "debug-needle": {
+    assetId: "entity.debug.drifter.placeholder",
+    label: "Debug needle"
+  },
+  "debug-rammer": {
+    assetId: "entity.debug.sentinel.placeholder",
+    label: "Debug rammer"
+  },
   "debug-sentinel": {
     assetId: "entity.debug.sentinel.placeholder",
     label: "Debug sentinel"
@@ -36,6 +44,10 @@ export const entityVisualDefinitions = {
   "pickup-healing-kit": {
     assetId: "entity.debug.anchor.placeholder",
     label: "Healing kit pickup"
+  },
+  "pickup-magnet": {
+    assetId: "entity.debug.watcher.placeholder",
+    label: "Magnet pickup"
   }
 } as const satisfies Record<
   string,

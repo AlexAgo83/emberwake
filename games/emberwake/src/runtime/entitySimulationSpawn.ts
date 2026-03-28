@@ -324,7 +324,10 @@ const samplePickupKind = ({
 
   return pickupRoll % 100 < pickupContract.healingKit.spawnChancePercent
     ? "healing-kit"
-    : "gold";
+    : pickupRoll % 100 <
+          pickupContract.healingKit.spawnChancePercent + pickupContract.magnet.spawnChancePercent
+      ? "magnet"
+      : "gold";
 };
 
 export const maintainNearbyPickupPopulation = ({

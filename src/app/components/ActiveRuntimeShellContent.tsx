@@ -233,6 +233,8 @@ export function ActiveRuntimeShellContent({
     };
     const hostileProfileCounts = {
       ashDrifter: 0,
+      needleWisp: 0,
+      shockRam: 0,
       sentinelHusk: 0,
       watchglass: 0,
       watchglassPrime: 0
@@ -241,7 +243,8 @@ export function ActiveRuntimeShellContent({
       cache: 0,
       crystal: 0,
       gold: 0,
-      healingKit: 0
+      healingKit: 0,
+      magnet: 0
     };
     const pickupStackTotals = {
       crystal: 0,
@@ -255,6 +258,10 @@ export function ActiveRuntimeShellContent({
       if (entity.role === "hostile") {
         if (entity.hostileProfileId === "ash-drifter") {
           hostileProfileCounts.ashDrifter += 1;
+        } else if (entity.hostileProfileId === "needle-wisp") {
+          hostileProfileCounts.needleWisp += 1;
+        } else if (entity.hostileProfileId === "shock-ram") {
+          hostileProfileCounts.shockRam += 1;
         } else if (entity.hostileProfileId === "sentinel-husk") {
           hostileProfileCounts.sentinelHusk += 1;
         } else if (entity.hostileProfileId === "watchglass") {
@@ -279,6 +286,8 @@ export function ActiveRuntimeShellContent({
           pickupStackTotals.total += pickupStackCount;
         } else if (entity.pickupProfile.kind === "healing-kit") {
           pickupKindCounts.healingKit += 1;
+        } else if (entity.pickupProfile.kind === "magnet") {
+          pickupKindCounts.magnet += 1;
         }
       }
     }

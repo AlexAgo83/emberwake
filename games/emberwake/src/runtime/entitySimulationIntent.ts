@@ -11,7 +11,13 @@ import { singleEntityControlContract } from "@game/input/singleEntityControlCont
 import { obstacleDefinitions, sampleWorldTileLayers } from "@game/content/world/worldGeneration";
 import { systemTuning } from "@game/config/systemTuning";
 import { hostileCombatContract } from "./hostileCombatContract";
-import type { HostilePathfindingState, ScriptedPhase, SimulatedEntity } from "./entitySimulation";
+import { getHostileSpawnProfile } from "./hostilePressure";
+import type {
+  HostileBehaviorState,
+  HostilePathfindingState,
+  ScriptedPhase,
+  SimulatedEntity
+} from "./entitySimulation";
 
 type TilePoint = {
   x: number;
@@ -20,6 +26,8 @@ type TilePoint = {
 
 type ResolvedEntityIntent = {
   focusTargetEntityId?: string | null;
+  hostileBehaviorState?: HostileBehaviorState;
+  orientationOverrideRadians?: number;
   pathfindingState?: HostilePathfindingState;
   state: SimulatedEntity["state"];
   velocity: WorldPoint;
@@ -52,6 +60,14 @@ const createVelocityTowardTarget = (
     y: (deltaY / magnitude) * speedWorldUnitsPerSecond
   };
 };
+
+const createVelocityFromOrientation = (
+  orientationRadians: number,
+  speedWorldUnitsPerSecond: number
+): WorldPoint => ({
+  x: Math.cos(orientationRadians) * speedWorldUnitsPerSecond,
+  y: Math.sin(orientationRadians) * speedWorldUnitsPerSecond
+});
 
 const createTileCenterWorldPoint = (tilePoint: TilePoint): WorldPoint => {
   const tileOrigin = tileCoordinateToWorldOrigin(tilePoint);
@@ -105,7 +121,22 @@ const createEmptyHostilePathfindingState = (): HostilePathfindingState => ({
   targetTile: null
 });
 
+const createEmptyHostileBehaviorState = (): HostileBehaviorState => ({
+  chargeDirectionRadians: null,
+  cooldownUntilTick: null,
+  phase: null,
+  phaseStartedAtTick: null
+});
+
 const pathfindingContract = systemTuning.hostilePathfinding;
+const chargeHostileContract = {
+  chargeDurationTicks: 24,
+  chargeSpeedMultiplier: 2.8,
+  maximumTriggerDistanceWorldUnits: 420,
+  minimumTriggerDistanceWorldUnits: 132,
+  rearmCooldownTicks: 54,
+  telegraphDurationTicks: 60
+} as const;
 
 const findBoundedPathTiles = ({
   startTile,
@@ -267,10 +298,154 @@ export const resolveEntityIntent = ({
   });
   const previousPathfindingState =
     entity.pathfindingState ?? createEmptyHostilePathfindingState();
+  const hostileProfile = entity.hostileProfileId
+    ? getHostileSpawnProfile(entity.hostileProfileId)
+    : null;
+  const previousBehaviorState =
+    entity.hostileBehaviorState ?? createEmptyHostileBehaviorState();
+
+  if (hostileProfile?.behaviorKind === "telegraphed-charge") {
+    let nextBehaviorState = previousBehaviorState;
+
+    if (nextBehaviorState.phase === "charge") {
+      if (
+        nextBehaviorState.phaseStartedAtTick !== null &&
+        tick - nextBehaviorState.phaseStartedAtTick < chargeHostileContract.chargeDurationTicks
+      ) {
+        const chargeDirectionRadians =
+          nextBehaviorState.chargeDirectionRadians ??
+          Math.atan2(
+            playerEntity.worldPosition.y - entity.worldPosition.y,
+            playerEntity.worldPosition.x - entity.worldPosition.x
+          );
+
+        return {
+          focusTargetEntityId: playerEntity.id,
+          hostileBehaviorState: {
+            ...nextBehaviorState,
+            chargeDirectionRadians
+          },
+          orientationOverrideRadians: chargeDirectionRadians,
+          pathfindingState: createEmptyHostilePathfindingState(),
+          state: "moving",
+          velocity: createVelocityFromOrientation(
+            chargeDirectionRadians,
+            hostileMoveSpeed * chargeHostileContract.chargeSpeedMultiplier
+          )
+        };
+      }
+
+      nextBehaviorState = {
+        chargeDirectionRadians: null,
+        cooldownUntilTick: tick + chargeHostileContract.rearmCooldownTicks,
+        phase: null,
+        phaseStartedAtTick: null
+      };
+    }
+
+    if (nextBehaviorState.phase === "telegraph") {
+      const chargeDirectionRadians =
+        nextBehaviorState.chargeDirectionRadians ??
+        Math.atan2(
+          playerEntity.worldPosition.y - entity.worldPosition.y,
+          playerEntity.worldPosition.x - entity.worldPosition.x
+        );
+
+      if (
+        nextBehaviorState.phaseStartedAtTick !== null &&
+        tick - nextBehaviorState.phaseStartedAtTick >= chargeHostileContract.telegraphDurationTicks
+      ) {
+        return {
+          focusTargetEntityId: playerEntity.id,
+          hostileBehaviorState: {
+            ...nextBehaviorState,
+            chargeDirectionRadians,
+            phase: "charge",
+            phaseStartedAtTick: tick
+          },
+          orientationOverrideRadians: chargeDirectionRadians,
+          pathfindingState: createEmptyHostilePathfindingState(),
+          state: "moving",
+          velocity: createVelocityFromOrientation(
+            chargeDirectionRadians,
+            hostileMoveSpeed * chargeHostileContract.chargeSpeedMultiplier
+          )
+        };
+      }
+
+      const telegraphElapsedTicks = Math.max(
+        0,
+        tick - (nextBehaviorState.phaseStartedAtTick ?? tick)
+      );
+
+      return {
+        focusTargetEntityId: playerEntity.id,
+        hostileBehaviorState: {
+          ...nextBehaviorState,
+          chargeDirectionRadians
+        },
+        orientationOverrideRadians:
+          chargeDirectionRadians + Math.sin(telegraphElapsedTicks * 1.15) * 0.24,
+        pathfindingState: createEmptyHostilePathfindingState(),
+        state: "idle",
+        velocity: { x: 0, y: 0 }
+      };
+    }
+
+    const canStartCharge =
+      !directPathBlocked &&
+      distanceToPlayer >= chargeHostileContract.minimumTriggerDistanceWorldUnits &&
+      distanceToPlayer <= chargeHostileContract.maximumTriggerDistanceWorldUnits &&
+      (nextBehaviorState.cooldownUntilTick === null ||
+        tick >= nextBehaviorState.cooldownUntilTick);
+
+    if (canStartCharge) {
+      const chargeDirectionRadians = Math.atan2(
+        playerEntity.worldPosition.y - entity.worldPosition.y,
+        playerEntity.worldPosition.x - entity.worldPosition.x
+      );
+
+      return {
+        focusTargetEntityId: playerEntity.id,
+        hostileBehaviorState: {
+          chargeDirectionRadians,
+          cooldownUntilTick: null,
+          phase: "telegraph",
+          phaseStartedAtTick: tick
+        },
+        orientationOverrideRadians: chargeDirectionRadians,
+        pathfindingState: createEmptyHostilePathfindingState(),
+        state: "idle",
+        velocity: { x: 0, y: 0 }
+      };
+    }
+
+    if (!directPathBlocked) {
+      return {
+        focusTargetEntityId: playerEntity.id,
+        hostileBehaviorState: nextBehaviorState,
+        pathfindingState: {
+          ...previousPathfindingState,
+          routeTiles: [],
+          targetTile
+        },
+        state: "moving",
+        velocity: createVelocityTowardTarget(
+          entity.worldPosition,
+          playerEntity.worldPosition,
+          hostileMoveSpeed
+        )
+      };
+    }
+  }
 
   if (!directPathBlocked) {
     return {
       focusTargetEntityId: playerEntity.id,
+      hostileBehaviorState:
+        hostileProfile?.behaviorKind === "telegraphed-charge"
+          ? previousBehaviorState
+          : undefined,
       pathfindingState: {
         ...previousPathfindingState,
         routeTiles: [],
@@ -314,6 +489,10 @@ export const resolveEntityIntent = ({
   if (!nextWaypointTile) {
     return {
       focusTargetEntityId: playerEntity.id,
+      hostileBehaviorState:
+        hostileProfile?.behaviorKind === "telegraphed-charge"
+          ? previousBehaviorState
+          : undefined,
       pathfindingState: nextPathfindingState,
       state: "moving",
       velocity: createVelocityTowardTarget(
@@ -335,6 +514,10 @@ export const resolveEntityIntent = ({
 
   return {
     focusTargetEntityId: playerEntity.id,
+    hostileBehaviorState:
+      hostileProfile?.behaviorKind === "telegraphed-charge"
+        ? previousBehaviorState
+        : undefined,
     pathfindingState: {
       ...nextPathfindingState,
       routeTiles: routeTilesAfterAdvance
