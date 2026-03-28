@@ -1,10 +1,10 @@
 ## item_330_define_targeted_validation_for_damage_share_fill_correctness_readability_and_low_value_row_safety - Define targeted validation for damage-share fill correctness readability and low-value row safety
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Low
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -69,7 +69,12 @@ flowchart LR
 - Product brief(s): `prod_015_post_run_outcome_analysis_direction_for_skill_performance`
 - Architecture decision(s): `adr_046_expose_post_run_skill_performance_summaries_as_shell_consumable_outcome_data`
 - Request: `req_087_define_damage_share_progress_bar_cells_for_game_over_skill_ranking_rows`
-- Primary task(s): (none yet)
+- Primary task(s): `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`
+
+# Closure
+- Proof:
+  - `npm run typecheck`
+  - `npm run test -- src/app/components/AppMetaScenePanel.test.tsx src/app/AppShell.test.tsx src/app/hooks/useAppScene.test.tsx src/shared/lib/metaProfileStorage.test.ts src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts games/emberwake/src/systems/gameplaySystems.test.ts`
 
 # AI Context
 - Summary: Define a progress-bar background treatment for game-over skill ranking rows based on damage share.

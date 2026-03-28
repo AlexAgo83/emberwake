@@ -1,9 +1,9 @@
 ## req_087_define_damage_share_progress_bar_cells_for_game_over_skill_ranking_rows - Define damage share progress bar cells for game over skill ranking rows
-> From version: 0.5.1
+> From version: 0.5.2
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 97%
-> Confidence: 95%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: Low
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -101,3 +101,9 @@ flowchart TD
 - `item_328_define_a_damage_share_percentage_contract_for_game_over_skill_ranking_rows`
 - `item_329_define_a_background_progress_bar_presentation_posture_for_game_over_skill_ranking_cells`
 - `item_330_define_targeted_validation_for_damage_share_fill_correctness_readability_and_low_value_row_safety`
+
+# Closure
+- Landed through `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`.
+- Proof:
+  - `npm run typecheck`
+  - `npm run test -- src/app/components/AppMetaScenePanel.test.tsx src/app/AppShell.test.tsx src/app/hooks/useAppScene.test.tsx src/shared/lib/metaProfileStorage.test.ts src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts games/emberwake/src/systems/gameplaySystems.test.ts`

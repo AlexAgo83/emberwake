@@ -1,5 +1,5 @@
 ## req_086_define_a_time_stop_hourglass_pickup_for_bounded_enemy_pressure_suspension - Define a time stop hourglass pickup for bounded enemy pressure suspension
-> From version: 0.5.1
+> From version: 0.5.2
 > Schema version: 1.0
 > Status: Done
 > Understanding: 100%

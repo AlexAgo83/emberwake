@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { lazy, memo, Suspense } from "react";
+import type { CSSProperties } from "react";
 
 import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
 import { loadReleaseChangelogEntries } from "../model/releaseChangelogs";
@@ -259,6 +260,10 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
 
   const skillPerformanceSummaries =
     gameOverRecap?.skillPerformanceSummaries ?? runtimeOutcome?.skillPerformanceSummaries ?? [];
+  const totalSkillDamage = skillPerformanceSummaries.reduce(
+    (currentTotal, summary) => currentTotal + summary.totalDamage,
+    0
+  );
   const playerWorldPositionLabel = playerWorldPosition
     ? `${Math.round(playerWorldPosition.x)}, ${Math.round(playerWorldPosition.y)}`
     : null;
@@ -767,18 +772,38 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                   ) : (
                     <div className="app-meta-scene__skill-ranking">
                       {skillPerformanceSummaries.length > 0 ? (
-                        skillPerformanceSummaries.map((summary, summaryIndex) => (
-                          <article className="app-meta-scene__skill-row" key={summary.weaponId}>
-                            <div className="app-meta-scene__skill-rank">{summaryIndex + 1}</div>
-                            <div className="app-meta-scene__skill-copy">
-                              <h3>{summary.label}</h3>
-                              <p>
-                                {summary.totalDamage} total damage · {summary.attacksTriggered} casts ·{" "}
-                                {summary.hostileDefeats} defeats
-                              </p>
-                            </div>
-                          </article>
-                        ))
+                        skillPerformanceSummaries.map((summary, summaryIndex) => {
+                          const rawDamageShare =
+                            totalSkillDamage > 0 ? (summary.totalDamage / totalSkillDamage) * 100 : 0;
+                          const damageShareLabel =
+                            rawDamageShare >= 10
+                              ? `${Math.round(rawDamageShare)}%`
+                              : `${rawDamageShare.toFixed(1)}%`;
+
+                          return (
+                            <article
+                              className="app-meta-scene__skill-row"
+                              key={summary.weaponId}
+                              style={
+                                {
+                                  "--damage-share": `${rawDamageShare}%`
+                                } as CSSProperties
+                              }
+                            >
+                              <div className="app-meta-scene__skill-rank">{summaryIndex + 1}</div>
+                              <div className="app-meta-scene__skill-copy">
+                                <div className="app-meta-scene__skill-copy-header">
+                                  <h3>{summary.label}</h3>
+                                  <span className="app-meta-scene__skill-share">{damageShareLabel}</span>
+                                </div>
+                                <p>
+                                  {summary.totalDamage} total damage · {summary.attacksTriggered} casts ·{" "}
+                                  {summary.hostileDefeats} defeats
+                                </p>
+                              </div>
+                            </article>
+                          );
+                        })
                       ) : (
                         <p className="app-meta-scene__lead">No reliable skill performance sample was captured for this run.</p>
                       )}

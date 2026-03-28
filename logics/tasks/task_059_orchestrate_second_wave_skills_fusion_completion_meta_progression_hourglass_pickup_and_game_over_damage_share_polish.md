@@ -1,10 +1,10 @@
 ## task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish - Orchestrate second wave skills fusion completion meta progression hourglass pickup and game over damage share polish
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: In progress
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 70%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -45,11 +45,11 @@ flowchart LR
 - [x] 4. Implement the shell-owned shop and talent surface slices from `item_314` through `item_318`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the shell meta-progression wave.
 - [x] 5. Implement the persistent meta-profile slices from `item_319` through `item_323`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the cross-run persistence wave.
 - [x] 6. Implement the hourglass utility pickup slices from `item_324` through `item_327`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the hourglass pickup wave.
-- [ ] 7. Implement the game-over damage-share polish slices from `item_328` through `item_330`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the post-run UI polish wave.
-- [ ] 8. Run targeted validation across build-system, runtime combat, shell progression, persistence, utility pickup, and game-over outcome-analysis surfaces.
-- [ ] 9. Update linked requests, backlog items, and this task as each wave lands, then close the full chain when validation is complete.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: Create dedicated git commit(s) at the end of each completed wave or step, not one giant end-of-task commit.
+- [x] 7. Implement the game-over damage-share polish slices from `item_328` through `item_330`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the post-run UI polish wave.
+- [x] 8. Run targeted validation across build-system, runtime combat, shell progression, persistence, utility pickup, and game-over outcome-analysis surfaces.
+- [x] 9. Update linked requests, backlog items, and this task as each wave lands, then close the full chain when validation is complete.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: Create dedicated git commit(s) at the end of each completed wave or step, not one giant end-of-task commit.
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -109,12 +109,12 @@ flowchart LR
   - game-over damage-share progress-bar readability
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Dedicated git commit(s) were created per completed wave or step instead of one monolithic final commit.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Dedicated git commit(s) were created per completed wave or step instead of one monolithic final commit.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
 - Wave 1 complete: shipped the second-wave skill roster across build-system, runtime combat, control effects, and shell/icon feedback seams.
@@ -125,3 +125,5 @@ flowchart LR
 - Validation checkpoint: `npm run typecheck`, `npm run test -- src/app/components/AppMetaScenePanel.test.tsx src/app/AppShell.test.tsx src/app/hooks/useAppScene.test.tsx src/shared/lib/metaProfileStorage.test.ts`.
 - Wave 5 complete: added the rare `hourglass` utility pickup, bounded enemy time stop for three seconds, and a non-stacking guard while the effect is already active.
 - Validation checkpoint: `npm run typecheck`, `npm run test -- src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts games/emberwake/src/systems/gameplaySystems.test.ts`.
+- Wave 6 complete: added damage-share percentages and progress-bar fills to the game-over skill ranking rows while preserving compact shell readability.
+- Final validation checkpoint: `npm run typecheck`, `npm run test -- src/app/components/AppMetaScenePanel.test.tsx src/app/AppShell.test.tsx src/app/hooks/useAppScene.test.tsx src/shared/lib/metaProfileStorage.test.ts src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts games/emberwake/src/systems/gameplaySystems.test.ts`, `npm run test:browser:smoke`, `npm run logics:lint`, `python3 logics/skills/logics.py audit --refs task_059 --format json`.

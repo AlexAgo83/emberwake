@@ -1,10 +1,10 @@
 ## item_329_define_a_background_progress_bar_presentation_posture_for_game_over_skill_ranking_cells - Define a background progress-bar presentation posture for game-over skill ranking cells
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Low
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -69,7 +69,10 @@ flowchart LR
 - Product brief(s): `prod_015_post_run_outcome_analysis_direction_for_skill_performance`
 - Architecture decision(s): `adr_046_expose_post_run_skill_performance_summaries_as_shell_consumable_outcome_data`
 - Request: `req_087_define_damage_share_progress_bar_cells_for_game_over_skill_ranking_rows`
-- Primary task(s): (none yet)
+- Primary task(s): `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`
+
+# Closure
+- Proof: `src/app/components/AppMetaScenePanel.tsx`, `src/app/styles/app.css`.
 
 # AI Context
 - Summary: Define a progress-bar background treatment for game-over skill ranking rows based on damage share.

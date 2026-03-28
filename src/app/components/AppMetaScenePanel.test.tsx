@@ -265,7 +265,24 @@ describe("AppMetaScenePanel", () => {
         hostileDefeats: 3,
         playerName: "Wanderer",
         runPhaseLabel: "Black Rain",
-        skillPerformanceSummaries: [],
+        skillPerformanceSummaries: [
+          {
+            attacksTriggered: 8,
+            fusionId: null,
+            hostileDefeats: 2,
+            label: "Ash Lash",
+            totalDamage: 75,
+            weaponId: "ash-lash"
+          },
+          {
+            attacksTriggered: 4,
+            fusionId: null,
+            hostileDefeats: 1,
+            label: "Orbit Sutra",
+            totalDamage: 25,
+            weaponId: "orbit-sutra"
+          }
+        ],
         ticksSurvived: 9000,
         traversalDistanceWorldUnits: 420
       },
@@ -287,6 +304,10 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByText("420 wu")).toBeInTheDocument();
     expect(screen.getByText("7")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Resume runtime/i })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("tab", { name: /Skill ranking/i }));
+    expect(screen.getByText("75%")).toBeInTheDocument();
+    expect(screen.getByText("25%")).toBeInTheDocument();
+    expect(screen.getByText("Ash Lash").closest("article")).toHaveStyle("--damage-share: 75%");
 
     fireEvent.click(screen.getByRole("button", { name: /Back to main menu/i }));
     expect(props.onReturnToMainMenu).toHaveBeenCalledTimes(1);
