@@ -350,6 +350,7 @@ export function EntityScene({
       {entities.map((entity) => {
         const tint = hexColorToNumber(entity.visual.tint);
         const pickupKind = entity.pickupProfile?.kind ?? null;
+        const renderedRadius = entity.footprint.radius * (entity.visualScale ?? 1);
         const attackArcVisible =
           entity.role === "player" &&
           entity.automaticAttack &&
@@ -375,7 +376,7 @@ export function EntityScene({
             {entity.role === "pickup" ? (
               <PickupEntityGraphic
                 pickupKind={pickupKind}
-                radius={entity.footprint.radius}
+                radius={renderedRadius}
                 tint={tint}
               />
             ) : (
@@ -388,7 +389,7 @@ export function EntityScene({
                     }
                     hitReactionProgress={hitReactionProgress}
                     isSelected={entity.isSelected}
-                    radius={entity.footprint.radius}
+                    radius={renderedRadius}
                     tint={tint}
                   />
                 </pixiContainer>
@@ -399,7 +400,7 @@ export function EntityScene({
                       ? Math.max(0, entity.combat.currentHealth / entity.combat.maxHealth)
                       : 0
                   }
-                  radius={entity.footprint.radius}
+                  radius={renderedRadius}
                   role={entity.role}
                 />
               </>
@@ -426,7 +427,7 @@ export function EntityScene({
                 }}
                 text={`${entity.id.split(":").at(-1)} · ${entity.state}${entity.isSelected ? " · selected" : ""}`}
                 x={0}
-                y={-entity.footprint.radius - 20}
+                y={-renderedRadius - 20}
               />
             ) : null}
           </pixiContainer>

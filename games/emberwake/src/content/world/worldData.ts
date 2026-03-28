@@ -63,7 +63,7 @@ export const obstacleDefinitions = {
   },
   solid: {
     blocksMovement: true,
-    debugColor: 0x0c0f16,
+    debugColor: 0xff3048,
     label: "Solid"
   }
 } as const;

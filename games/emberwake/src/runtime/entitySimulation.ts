@@ -58,6 +58,7 @@ import {
 import {
   getHostileSpawnProfile,
   isMiniBossBeatTick,
+  resolveBossDefeatEscalation,
   resolveHostileSpawnProfile,
   type HostileProfileId
 } from "@game/runtime/hostilePressure";
@@ -114,6 +115,7 @@ export type RunStats = {
     }
   >;
   creatureDefeatCounts: Partial<Record<CreatureCodexId, number>>;
+  bossDefeats: number;
   crystalsCollected: number;
   currentLevel: number;
   currentXp: number;
@@ -192,6 +194,7 @@ export type SimulatedEntity = WorldEntity & {
   spawnedAtTick: number;
   turnRateRadiansPerSecond?: number;
   velocity: WorldPoint;
+  visualScale?: number;
 };
 
 export type EntitySimulationState = {
@@ -288,6 +291,7 @@ const createInitialRunStats = (): RunStats => ({
     ])
   ) as RunStats["activeWeaponPerformance"],
   creatureDefeatCounts: {},
+  bossDefeats: 0,
   crystalsCollected: 0,
   currentLevel: 1,
   currentXp: 0,
@@ -346,7 +350,8 @@ const createHostileEntity = (
   hostileSequence: number,
   worldPosition: WorldPoint,
   spawnedAtTick: number,
-  phaseId: RunProgressionPhaseId
+  phaseId: RunProgressionPhaseId,
+  bossDefeatCount: number
 ): SimulatedEntity => {
   const runPhase = resolveRunProgressionPhase(spawnedAtTick);
   const hostileProfile = resolveHostileSpawnProfile({
@@ -354,6 +359,7 @@ const createHostileEntity = (
     phaseId,
     spawnedAtTick
   });
+  const bossDefeatEscalation = resolveBossDefeatEscalation(bossDefeatCount);
 
   return {
     ...createGenericMoverEntity({
@@ -375,6 +381,7 @@ const createHostileEntity = (
         Math.round(
           hostileCombatContract.hostile.maxHealth *
             runPhase.hostileMaxHealthMultiplier *
+            bossDefeatEscalation.hostileMaxHealthMultiplier *
             hostileProfile.maxHealthMultiplier
         )
       )
@@ -386,6 +393,7 @@ const createHostileEntity = (
         Math.round(
           hostileCombatContract.hostile.contactDamage *
             runPhase.hostileContactDamageMultiplier *
+            bossDefeatEscalation.hostileContactDamageMultiplier *
             hostileProfile.contactDamageMultiplier
         )
       ),
@@ -412,7 +420,8 @@ const createHostileEntity = (
     velocity: {
       x: 0,
       y: 0
-    }
+    },
+    visualScale: hostileProfile.visualScaleMultiplier
   } satisfies SimulatedEntity;
 };
 
@@ -836,7 +845,8 @@ const normalizeSimulatedEntity = (
       spawnedAtTick: entity.spawnedAtTick ?? 0,
       turnRateRadiansPerSecond:
         entity.turnRateRadiansPerSecond ?? gameplayTuning.playerTurning.turnRateRadiansPerSecond,
-      velocity: entity.velocity ?? { x: 0, y: 0 }
+      velocity: entity.velocity ?? { x: 0, y: 0 },
+      visualScale: entity.visualScale
     };
   }
 
@@ -872,7 +882,8 @@ const normalizeSimulatedEntity = (
       },
       role,
       spawnedAtTick: entity.spawnedAtTick ?? 0,
-      velocity: entity.velocity ?? { x: 0, y: 0 }
+      velocity: entity.velocity ?? { x: 0, y: 0 },
+      visualScale: entity.visualScale
     };
   }
 
@@ -900,7 +911,8 @@ const normalizeSimulatedEntity = (
       role,
       spawnedAtTick: entity.spawnedAtTick ?? 0,
       turnRateRadiansPerSecond: entity.turnRateRadiansPerSecond,
-      velocity: entity.velocity ?? { x: 0, y: 0 }
+      velocity: entity.velocity ?? { x: 0, y: 0 },
+      visualScale: entity.visualScale
     };
   }
 
@@ -913,7 +925,8 @@ const normalizeSimulatedEntity = (
     role,
     spawnedAtTick: entity.spawnedAtTick ?? 0,
     turnRateRadiansPerSecond: entity.turnRateRadiansPerSecond,
-    velocity: entity.velocity ?? { x: 0, y: 0 }
+    velocity: entity.velocity ?? { x: 0, y: 0 },
+    visualScale: entity.visualScale
   };
 };
 
@@ -1227,7 +1240,8 @@ export const advanceSimulationState = (
         hostileSequence,
         worldPosition,
         spawnedAtTick,
-        activeRunProgressionPhase.id
+        activeRunProgressionPhase.id,
+        simulationState.runStats.bossDefeats
       ),
     entities: pickupMaintainedState.entities,
     localPopulationCap: isMiniBossBeatTick(nextTick)
@@ -1235,7 +1249,8 @@ export const advanceSimulationState = (
           (entity) => entity.role === "hostile" && isAlive(entity)
         ).length + 1
       : hostileCombatContract.hostile.localPopulationCap +
-        activeRunProgressionPhase.localPopulationCapBonus,
+        activeRunProgressionPhase.localPopulationCapBonus +
+          resolveBossDefeatEscalation(simulationState.runStats.bossDefeats).localPopulationCapBonus,
     nextHostileSequence: simulationState.nextHostileSequence,
     spawnMode: profiling.spawnMode,
     spawnCooldownTicks: isMiniBossBeatTick(nextTick)
@@ -1244,7 +1259,9 @@ export const advanceSimulationState = (
           1,
           Math.round(
             hostileCombatContract.hostile.spawnCooldownTicks *
-              activeRunProgressionPhase.spawnCooldownMultiplier
+              activeRunProgressionPhase.spawnCooldownMultiplier *
+              resolveBossDefeatEscalation(simulationState.runStats.bossDefeats)
+                .spawnCooldownMultiplier
           )
         ),
     spawnHeadingMemoryTicks: entityCombatPresentationContract.spawnHeadingMemoryTicks,
@@ -1344,6 +1361,9 @@ export const advanceSimulationState = (
     (entity) => entity.role === "hostile" && !isAlive(entity)
   );
   const defeatedHostileCount = defeatedHostiles.length;
+  const defeatedBossCount = defeatedHostiles.filter((entity) =>
+    entity.hostileProfileId ? getHostileSpawnProfile(entity.hostileProfileId).isMiniBoss : false
+  ).length;
   const nextCreatureDefeatCounts = {
     ...pickupResolvedState.runStats.creatureDefeatCounts
   };
@@ -1426,6 +1446,7 @@ export const advanceSimulationState = (
     nextHostileSequence: spawnMaintainedState.nextHostileSequence,
     runStats: {
       ...pickupResolvedState.runStats,
+      bossDefeats: pickupResolvedState.runStats.bossDefeats + defeatedBossCount,
       creatureDefeatCounts: nextCreatureDefeatCounts,
       hostileDefeats: pickupResolvedState.runStats.hostileDefeats + defeatedHostileCount
     },

@@ -12,6 +12,10 @@ type SpawnCommand = {
   controlState?: SingleEntityControlState;
 };
 
+const secondsToTicks = (seconds: number) => Math.round(seconds * 60);
+const staleUtilityPickupLifetimeTicks = secondsToTicks(18);
+const staleUtilityPickupDistanceWorldUnits = pickupContract.pickup.safeSpawnDistanceWorldUnits * 2.7;
+
 const isAlive = (entity: SimulatedEntity) => entity.combat.currentHealth > 0;
 
 const getPlayerEntity = (entities: readonly SimulatedEntity[]) =>
@@ -261,6 +265,24 @@ const countNearbyPickups = (entities: readonly SimulatedEntity[], playerEntity: 
         pickupContract.pickup.despawnDistanceWorldUnits
   ).length;
 
+const isStaleUtilityPickup = (
+  entity: SimulatedEntity,
+  playerEntity: SimulatedEntity,
+  tick: number
+) => {
+  const pickupKind = entity.pickupProfile?.kind;
+
+  if (pickupKind !== "gold" && pickupKind !== "healing-kit") {
+    return false;
+  }
+
+  return (
+    tick - entity.spawnedAtTick >= staleUtilityPickupLifetimeTicks &&
+    distanceBetweenWorldPoints(entity.worldPosition, playerEntity.worldPosition) >=
+      staleUtilityPickupDistanceWorldUnits
+  );
+};
+
 const samplePickupSpawnPosition = ({
   playerEntity,
   sequence,
@@ -351,8 +373,9 @@ export const maintainNearbyPickupPopulation = ({
   const retainedEntities = entities.filter(
     (entity) =>
       entity.role !== "pickup" ||
-      distanceBetweenWorldPoints(entity.worldPosition, playerEntity.worldPosition) <=
-        pickupContract.pickup.despawnDistanceWorldUnits
+      (distanceBetweenWorldPoints(entity.worldPosition, playerEntity.worldPosition) <=
+        pickupContract.pickup.despawnDistanceWorldUnits &&
+        !isStaleUtilityPickup(entity, playerEntity, tick))
   );
 
   const nearbyPickupCount = countNearbyPickups(retainedEntities, playerEntity);

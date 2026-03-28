@@ -22,12 +22,19 @@ export type HostileSpawnProfile = {
   renderLayer: number;
   tint: string;
   visualKind: EntityVisualKind;
+  visualScaleMultiplier: number;
 };
 
 const secondsToTicks = (seconds: number) => Math.round(seconds * 60);
 
 export const hostilePressureContract = {
-  authoredMiniBossBeatIntervalTicks: secondsToTicks(300)
+  authoredMiniBossBeatIntervalTicks: secondsToTicks(300),
+  bossDefeatEscalation: {
+    hostileContactDamageMultiplierStep: 0.08,
+    hostileMaxHealthMultiplierStep: 0.18,
+    localPopulationCapBonusStep: 2,
+    spawnCooldownMultiplierStep: 0.92
+  }
 } as const;
 
 const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
@@ -40,7 +47,8 @@ const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
     moveSpeedMultiplier: 1.08,
     renderLayer: 100,
     tint: "#ff8d66",
-    visualKind: "debug-drifter"
+    visualKind: "debug-drifter",
+    visualScaleMultiplier: 1
   },
   "sentinel-husk": {
     contactDamageMultiplier: 1,
@@ -51,7 +59,8 @@ const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
     moveSpeedMultiplier: 1,
     renderLayer: 100,
     tint: "#ff6d78",
-    visualKind: "debug-sentinel"
+    visualKind: "debug-sentinel",
+    visualScaleMultiplier: 1
   },
   watchglass: {
     contactDamageMultiplier: 1.28,
@@ -62,7 +71,8 @@ const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
     moveSpeedMultiplier: 0.94,
     renderLayer: 102,
     tint: "#73d8ff",
-    visualKind: "debug-watcher"
+    visualKind: "debug-watcher",
+    visualScaleMultiplier: 1
   },
   "watchglass-prime": {
     contactDamageMultiplier: 1.7,
@@ -73,7 +83,8 @@ const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
     moveSpeedMultiplier: 0.92,
     renderLayer: 106,
     tint: "#ffd074",
-    visualKind: "debug-watcher"
+    visualKind: "debug-watcher",
+    visualScaleMultiplier: 1.5
   }
 };
 
@@ -104,6 +115,28 @@ export const isMiniBossBeatTick = (tick: number) =>
 
 export const getHostileSpawnProfile = (profileId: HostileProfileId) =>
   hostileSpawnProfiles[profileId];
+
+export const resolveBossDefeatEscalation = (bossDefeatCount: number) => {
+  const resolvedBossDefeatCount = Math.max(0, Math.floor(bossDefeatCount));
+
+  return {
+    hostileContactDamageMultiplier:
+      1 +
+      hostilePressureContract.bossDefeatEscalation.hostileContactDamageMultiplierStep *
+        resolvedBossDefeatCount,
+    hostileMaxHealthMultiplier:
+      1 +
+      hostilePressureContract.bossDefeatEscalation.hostileMaxHealthMultiplierStep *
+        resolvedBossDefeatCount,
+    localPopulationCapBonus:
+      hostilePressureContract.bossDefeatEscalation.localPopulationCapBonusStep *
+      resolvedBossDefeatCount,
+    spawnCooldownMultiplier: Math.pow(
+      hostilePressureContract.bossDefeatEscalation.spawnCooldownMultiplierStep,
+      resolvedBossDefeatCount
+    )
+  };
+};
 
 export const resolveHostileSpawnProfile = ({
   hostileSequence,

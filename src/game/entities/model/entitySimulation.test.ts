@@ -98,6 +98,7 @@ describe("entitySimulation", () => {
     expect(simulationState.entity.combat.currentHealth).toBe(hostileCombatContract.player.maxHealth);
     expect(simulationState.entity.movementSurfaceModifier).toBe("normal");
     expect(simulationState.runStats).toMatchObject({
+      bossDefeats: 0,
       crystalsCollected: 0,
       currentLevel: 1,
       currentXp: 0,
@@ -268,6 +269,54 @@ describe("entitySimulation", () => {
     expect(spawnedHostile).toBeDefined();
     expect(spawnedHostile?.hostileProfileId).toBe("watchglass-prime");
     expect(spawnedHostile?.footprint.radius).toBeGreaterThan(50);
+    expect(spawnedHostile?.visualScale).toBe(1.5);
+  });
+
+  it("escalates newly spawned hostile stats after a boss has been defeated", () => {
+    const initialState = createInitialSimulationState();
+    const baselineState = advanceSimulationState(
+      {
+        ...initialState,
+        nextHostileSequence: 4,
+        tick: 4500
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "fixed-spawn-pressure"
+        }
+      }
+    );
+    const escalatedState = advanceSimulationState(
+      {
+        ...initialState,
+        nextHostileSequence: 4,
+        runStats: {
+          ...initialState.runStats,
+          bossDefeats: 1
+        },
+        tick: 4500
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "fixed-spawn-pressure"
+        }
+      }
+    );
+
+    const baselineHostile = baselineState.entities.find((entity) => entity.role === "hostile");
+    const escalatedHostile = escalatedState.entities.find((entity) => entity.role === "hostile");
+
+    expect(baselineHostile).toBeDefined();
+    expect(escalatedHostile).toBeDefined();
+    expect(baselineHostile?.hostileProfileId).toBe(escalatedHostile?.hostileProfileId);
+    expect(escalatedHostile?.combat.maxHealth).toBeGreaterThan(
+      baselineHostile?.combat.maxHealth ?? 0
+    );
+    expect(escalatedHostile?.contactDamageProfile?.damage).toBeGreaterThan(
+      baselineHostile?.contactDamageProfile?.damage ?? 0
+    );
   });
 
   it("moves hostiles toward the player when the player is in focus", () => {
@@ -509,6 +558,27 @@ describe("entitySimulation", () => {
 
     expect(collectedState.entities.some((entity) => entity.id === pickupEntity!.id)).toBe(false);
     expect(collectedState.runStats.goldCollected).toBe(6);
+  });
+
+  it("expires stale distant gold pickups early enough to free nearby utility spawn budget", () => {
+    const initialState = createInitialSimulationState();
+    const staleGoldPickup = createPickupFixture("gold", {
+      id: "entity:pickup:gold:stale",
+      spawnedAtTick: 0,
+      worldPosition: {
+        x: 1500,
+        y: 0
+      }
+    });
+
+    const nextState = advanceSimulationState({
+      ...initialState,
+      entities: [initialState.entity, staleGoldPickup],
+      nextPickupSequence: 1,
+      tick: 2000
+    });
+
+    expect(nextState.entities.some((entity) => entity.id === staleGoldPickup.id)).toBe(false);
   });
 
   it("applies healing-kit pickups with a max-health clamp", () => {
