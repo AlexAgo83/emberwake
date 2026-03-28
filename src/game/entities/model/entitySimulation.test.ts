@@ -1265,4 +1265,145 @@ describe("entitySimulation", () => {
     expect(nextState.entity.combat.currentHealth).toBeGreaterThan(0);
     expect(nextState.emergencyAegisChargesSpent).toBe(1);
   });
+
+  it("turns event horizon into a vacuum fusion that freezes nearby hostiles", () => {
+    const initialState = createInitialSimulationState();
+    const horizonState = normalizeEntitySimulationState({
+      ...initialState,
+      buildState: {
+        ...initialState.buildState,
+        activeSlots: [
+          {
+            fusionId: "event-horizon",
+            lastAttackTick: null,
+            level: 8,
+            weaponId: "null-canister"
+          }
+        ],
+        passiveSlots: [
+          {
+            level: 1,
+            passiveId: "vacuum-tabi"
+          }
+        ]
+      },
+      entities: [
+        initialState.entity,
+        createHostileFixture({
+          combat: {
+            currentHealth: 220,
+            maxHealth: 220
+          },
+          id: "entity:hostile:event-horizon",
+          worldPosition: { x: 84, y: 0 }
+        }),
+        createPickupFixture("crystal", {
+          id: "entity:pickup:crystal:event-horizon",
+          worldPosition: { x: 240, y: 0 }
+        })
+      ]
+    });
+
+    const nextState = advanceSimulationState(horizonState, {
+      profiling: {
+        playerInvincible: false,
+        spawnMode: "no-spawn"
+      }
+    });
+    const hostileEntity = nextState.entities.find(
+      (entity) => entity.id === "entity:hostile:event-horizon"
+    );
+    const crystalEntity = nextState.entities.find(
+      (entity) => entity.id === "entity:pickup:crystal:event-horizon"
+    );
+
+    expect(nextState.pickupPulseUntilTick).toBeGreaterThan(nextState.tick + 10);
+    expect(hostileEntity?.hostileControlState?.frozenUntilTick ?? 0).toBeGreaterThan(
+      nextState.tick
+    );
+    expect(crystalEntity?.worldPosition.x ?? Number.POSITIVE_INFINITY).toBeLessThan(240);
+  });
+
+  it("lets afterimage pyre hit harder than baseline cinder arc on the same target", () => {
+    const initialState = createInitialSimulationState();
+    const baseCinderState = normalizeEntitySimulationState({
+      ...initialState,
+      buildState: {
+        ...initialState.buildState,
+        activeSlots: [
+          {
+            fusionId: null,
+            lastAttackTick: null,
+            level: 8,
+            weaponId: "cinder-arc"
+          }
+        ]
+      },
+      entities: [
+        initialState.entity,
+        createHostileFixture({
+          combat: {
+            currentHealth: 220,
+            maxHealth: 220
+          },
+          id: "entity:hostile:base-cinder",
+          worldPosition: { x: 120, y: 0 }
+        })
+      ]
+    });
+    const afterimageState = normalizeEntitySimulationState({
+      ...initialState,
+      buildState: {
+        ...initialState.buildState,
+        activeSlots: [
+          {
+            fusionId: "afterimage-pyre",
+            lastAttackTick: null,
+            level: 8,
+            weaponId: "cinder-arc"
+          }
+        ],
+        passiveSlots: [
+          {
+            level: 1,
+            passiveId: "echo-thread"
+          }
+        ]
+      },
+      entities: [
+        initialState.entity,
+        createHostileFixture({
+          combat: {
+            currentHealth: 220,
+            maxHealth: 220
+          },
+          id: "entity:hostile:afterimage",
+          worldPosition: { x: 120, y: 0 }
+        })
+      ]
+    });
+
+    const baseNextState = advanceSimulationState(baseCinderState, {
+      profiling: {
+        playerInvincible: false,
+        spawnMode: "no-spawn"
+      }
+    });
+    const afterimageNextState = advanceSimulationState(afterimageState, {
+      profiling: {
+        playerInvincible: false,
+        spawnMode: "no-spawn"
+      }
+    });
+    const baseTarget = baseNextState.entities.find(
+      (entity) => entity.id === "entity:hostile:base-cinder"
+    );
+    const afterimageTarget = afterimageNextState.entities.find(
+      (entity) => entity.id === "entity:hostile:afterimage"
+    );
+
+    expect(afterimageTarget?.combat.currentHealth ?? Number.POSITIVE_INFINITY).toBeLessThan(
+      baseTarget?.combat.currentHealth ?? 0
+    );
+  });
 });

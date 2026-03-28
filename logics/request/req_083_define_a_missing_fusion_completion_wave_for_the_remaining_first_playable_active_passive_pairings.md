@@ -1,12 +1,14 @@
 ## req_083_define_a_missing_fusion_completion_wave_for_the_remaining_first_playable_active_passive_pairings - Define a missing fusion completion wave for the remaining first playable active passive pairings
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 96%
-> Confidence: 93%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
 > Complexity: Medium
 > Theme: Combat
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
+> Progress: 100%
+> Related backlog: `item_310_define_the_afterimage_pyre_fusion_slice_for_cinder_arc_and_echo_thread`, `item_311_define_the_event_horizon_fusion_slice_for_null_canister_and_vacuum_tabi`, `item_312_define_first_playable_fusion_roster_completion_posture_for_remaining_passive_keys_and_chest_readiness`, `item_313_define_targeted_validation_for_missing_fusion_completion_readability_and_payoff_integration`
 
 # Needs
 - Complete the first playable fusion roster so the remaining active and passive skills that currently have no fusion payoff are no longer second-class choices.

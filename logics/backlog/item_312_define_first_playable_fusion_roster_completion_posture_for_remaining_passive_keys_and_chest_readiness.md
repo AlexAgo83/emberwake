@@ -1,13 +1,14 @@
 ## item_312_define_first_playable_fusion_roster_completion_posture_for_remaining_passive_keys_and_chest_readiness - Define first-playable fusion roster completion posture for remaining passive keys and chest readiness
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Combat
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
+> Related task: `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`
 
 # Problem
 - Complete the first playable fusion roster so the remaining active and passive skills that currently have no fusion payoff are no longer second-class choices.

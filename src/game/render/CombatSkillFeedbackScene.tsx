@@ -76,12 +76,16 @@ const resolveWeaponPalette = (weaponId: ActiveWeaponId, fusionId: FusionId | nul
   return {
     core: basePalette.core,
     glow:
-      fusionId === "redline-ribbon"
+      fusionId === "afterimage-pyre"
+        ? 0xffd1a8
+        : fusionId === "redline-ribbon"
         ? 0xffd58f
         : fusionId === "choir-of-pins"
           ? 0xd8fbff
-            : fusionId === "blackfile-volley"
-              ? 0xf2ddff
+          : fusionId === "blackfile-volley"
+            ? 0xf2ddff
+            : fusionId === "event-horizon"
+              ? 0xe7c8ff
             : 0xb9f4ff
   };
 };

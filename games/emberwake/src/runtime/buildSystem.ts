@@ -40,9 +40,11 @@ export type PassiveItemId =
   | "vacuum-tabi";
 
 export type FusionId =
+  | "afterimage-pyre"
   | "redline-ribbon"
   | "choir-of-pins"
   | "blackfile-volley"
+  | "event-horizon"
   | "temple-circuit";
 
 export type BuildChoiceSlotKind = "active" | "passive";
@@ -452,6 +454,16 @@ export const activeWeaponIds = Object.keys(activeWeaponDefinitions) as ActiveWea
 export const passiveItemIds = Object.keys(passiveItemDefinitions) as PassiveItemId[];
 
 const fusionDefinitions: Record<FusionId, FusionDefinition> = {
+  "afterimage-pyre": {
+    activeWeaponId: "cinder-arc",
+    cooldownMultiplier: 0.9,
+    damageMultiplier: 1.28,
+    fusionId: "afterimage-pyre",
+    label: "Afterimage Pyre",
+    passiveItemId: "echo-thread",
+    roleLine: "Lingering cinder collapse with echo heat",
+    targetCountBonus: 2
+  },
   "blackfile-volley": {
     activeWeaponId: "shade-kunai",
     cooldownMultiplier: 0.82,
@@ -470,6 +482,16 @@ const fusionDefinitions: Record<FusionId, FusionDefinition> = {
     label: "Choir of Pins",
     passiveItemId: "duplex-relay",
     roleLine: "Chained reacquiring pin chorus",
+    targetCountBonus: 2
+  },
+  "event-horizon": {
+    activeWeaponId: "null-canister",
+    cooldownMultiplier: 0.88,
+    damageMultiplier: 1.22,
+    fusionId: "event-horizon",
+    label: "Event Horizon",
+    passiveItemId: "vacuum-tabi",
+    roleLine: "Collapsed hush field that pulls the field inward",
     targetCountBonus: 2
   },
   "redline-ribbon": {
@@ -739,14 +761,32 @@ export const resolveActiveWeaponRuntimeStats = (
         passiveModifiers.damageMultiplier
     )
   );
+  const fusionAreaMultiplier =
+    fusionDefinition?.fusionId === "afterimage-pyre"
+      ? 1.26
+      : fusionDefinition?.fusionId === "event-horizon"
+        ? 1.22
+        : 1;
+  const fusionDurationMultiplier =
+    fusionDefinition?.fusionId === "afterimage-pyre"
+      ? 1.7
+      : fusionDefinition?.fusionId === "event-horizon"
+        ? 1.34
+        : 1;
+  const resolvedAttackKind =
+    fusionDefinition?.fusionId === "event-horizon"
+      ? "vacuum"
+      : weaponDefinition.attackKind;
 
   return {
-    areaRadiusWorldUnits: Math.round(baseAreaRadius * passiveModifiers.areaMultiplier),
+    areaRadiusWorldUnits: Math.round(
+      baseAreaRadius * passiveModifiers.areaMultiplier * fusionAreaMultiplier
+    ),
     arcRadians:
       weaponDefinition.baseArcRadians !== undefined
         ? weaponDefinition.baseArcRadians
         : null,
-    attackKind: weaponDefinition.attackKind,
+    attackKind: resolvedAttackKind,
     cooldownTicks: Math.max(
       5,
       Math.round(cooldownBeforeFusion * (fusionDefinition?.cooldownMultiplier ?? 1))
@@ -763,7 +803,10 @@ export const resolveActiveWeaponRuntimeStats = (
       1,
       baseTargetCount + passiveModifiers.targetCountBonus + (fusionDefinition?.targetCountBonus ?? 0)
     ),
-    visibleTicks: Math.max(6, Math.round(baseVisibleTicks * passiveModifiers.durationMultiplier)),
+    visibleTicks: Math.max(
+      6,
+      Math.round(baseVisibleTicks * passiveModifiers.durationMultiplier * (fusionDefinition ? fusionDurationMultiplier : 1))
+    ),
     weaponId: activeSlot.weaponId
   };
 };

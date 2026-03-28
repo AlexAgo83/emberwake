@@ -36,9 +36,11 @@ const iconStrokePaths: Record<SkillIconId, string[]> = {
   "echo-thread": ["M14 20 C22 28, 22 32, 14 40", "M30 16 C38 24, 38 36, 30 44", "M46 20 C38 28, 38 32, 46 40"],
   "duplex-relay": ["M16 18 L28 30 L16 42", "M48 18 L36 30 L48 42", "M22 30 L42 30"],
   "vacuum-tabi": ["M18 32 C22 18, 42 18, 46 32", "M24 38 C27 34, 37 34, 40 38", "M32 14 L32 24"],
+  "afterimage-pyre": ["M16 20 C24 10, 40 10, 48 20", "M20 30 C26 38, 38 38, 44 30", "M18 44 C24 36, 40 36, 46 44"],
   "redline-ribbon": ["M8 36 C16 14, 34 8, 52 12", "M10 44 C24 24, 40 18, 54 22", "M12 50 C28 36, 42 32, 52 34"],
   "choir-of-pins": ["M12 40 L30 12", "M24 44 L42 16", "M36 48 L52 22"],
   "blackfile-volley": ["M14 16 L30 30 L14 44", "M24 16 L40 30 L24 44", "M34 16 L50 30 L34 44"],
+  "event-horizon": ["M18 18 C24 26, 24 38, 18 46", "M46 18 C40 26, 40 38, 46 46", "M24 24 C30 28, 34 28, 40 24", "M24 40 C30 36, 34 36, 40 40"],
   "temple-circuit": ["M16 30 C16 18, 24 10, 36 10", "M48 30 C48 42, 40 50, 28 50", "M21 21 L43 39", "M43 21 L21 39"]
 };
 
@@ -67,9 +69,11 @@ const iconFills: Partial<Record<SkillIconId, string[]>> = {
   "echo-thread": ["M16 20 C22 27, 22 33, 16 40 L21 40 C25 34, 25 26, 21 20 Z"],
   "duplex-relay": ["M22 30 L42 30 L38 34 L26 34 Z"],
   "vacuum-tabi": ["M20 32 C24 22, 40 22, 44 32 L39 32 C36 26, 28 26, 25 32 Z"],
+  "afterimage-pyre": ["M18 24 C24 16, 40 16, 46 24 L42 34 C36 38, 28 38, 22 34 Z"],
   "redline-ribbon": ["M12 50 C24 38, 40 31, 52 34 L50 40 C40 39, 28 43, 15 54 Z"],
   "choir-of-pins": ["M36 48 L52 22 L47 32 Z"],
   "blackfile-volley": ["M36 18 L50 30 L36 42 L40 30 Z"],
+  "event-horizon": ["M22 24 C26 30, 26 34, 22 40 L42 40 C38 34, 38 30, 42 24 Z"],
   "temple-circuit": ["M22 22 L42 22 L42 42 L22 42 Z"]
 };
 

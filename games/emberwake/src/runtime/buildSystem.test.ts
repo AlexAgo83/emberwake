@@ -111,6 +111,95 @@ describe("buildSystem", () => {
     expect(nextBuildState.recentFusionId).toBe("redline-ribbon");
   });
 
+  it("completes the remaining first-wave fusion pairings", () => {
+    const cinderFusionState = normalizeBuildState({
+      activeSlots: [
+        {
+          fusionId: null,
+          lastAttackTick: null,
+          level: 8,
+          weaponId: "cinder-arc"
+        }
+      ],
+      passiveSlots: [
+        {
+          level: 1,
+          passiveId: "echo-thread"
+        }
+      ]
+    });
+    const nullFusionState = normalizeBuildState({
+      activeSlots: [
+        {
+          fusionId: null,
+          lastAttackTick: null,
+          level: 8,
+          weaponId: "null-canister"
+        }
+      ],
+      passiveSlots: [
+        {
+          level: 1,
+          passiveId: "vacuum-tabi"
+        }
+      ]
+    });
+
+    expect(resolveFusionReadyState(cinderFusionState, cinderFusionState.activeSlots[0]!)).toMatchObject({
+      fusionId: "afterimage-pyre"
+    });
+    expect(resolveChestReward(nullFusionState, 90).activeSlots[0]?.fusionId).toBe("event-horizon");
+  });
+
+  it("recasts the new fusion payoffs beyond a generic stat bump", () => {
+    const afterimageState = normalizeBuildState({
+      activeSlots: [
+        {
+          fusionId: "afterimage-pyre",
+          lastAttackTick: null,
+          level: 8,
+          weaponId: "cinder-arc"
+        }
+      ],
+      passiveSlots: [
+        {
+          level: 1,
+          passiveId: "echo-thread"
+        }
+      ]
+    });
+    const horizonState = normalizeBuildState({
+      activeSlots: [
+        {
+          fusionId: "event-horizon",
+          lastAttackTick: null,
+          level: 8,
+          weaponId: "null-canister"
+        }
+      ],
+      passiveSlots: [
+        {
+          level: 1,
+          passiveId: "vacuum-tabi"
+        }
+      ]
+    });
+
+    const afterimageStats = resolveActiveWeaponRuntimeStats(
+      afterimageState,
+      afterimageState.activeSlots[0]!
+    );
+    const horizonStats = resolveActiveWeaponRuntimeStats(
+      horizonState,
+      horizonState.activeSlots[0]!
+    );
+
+    expect(afterimageStats.visibleTicks).toBeGreaterThan(20);
+    expect(afterimageStats.areaRadiusWorldUnits).toBeGreaterThan(100);
+    expect(horizonStats.attackKind).toBe("vacuum");
+    expect(horizonStats.areaRadiusWorldUnits).toBeGreaterThan(120);
+  });
+
   it("applies passive modifiers to resolved weapon stats", () => {
     const buildState = normalizeBuildState({
       activeSlots: [

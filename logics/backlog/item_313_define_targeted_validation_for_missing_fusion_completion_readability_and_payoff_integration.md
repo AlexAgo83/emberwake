@@ -1,13 +1,14 @@
 ## item_313_define_targeted_validation_for_missing_fusion_completion_readability_and_payoff_integration - Define targeted validation for missing fusion completion readability and payoff integration
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 96%
-> Confidence: 93%
-> Progress: 0%
+> Status: Done
+> Understanding: 98%
+> Confidence: 95%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Combat
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
+> Related task: `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`
 
 # Problem
 - Complete the first playable fusion roster so the remaining active and passive skills that currently have no fusion payoff are no longer second-class choices.

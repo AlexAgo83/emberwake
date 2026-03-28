@@ -570,7 +570,9 @@ export const resolveAutomaticPlayerAttack = (
       if (runtimeStats.attackKind === "vacuum") {
         nextPickupPulseUntilTick = Math.max(
           nextPickupPulseUntilTick,
-          tick + runtimeStats.visibleTicks
+          tick +
+            runtimeStats.visibleTicks *
+              (activeSlot.fusionId === "event-horizon" ? 2 : 1)
         );
       }
 
@@ -632,12 +634,23 @@ export const resolveAutomaticPlayerAttack = (
     };
     applyDamageToTargetIds(targetIds, runtimeStats.damage, activeSlot.weaponId, {
       freezeDurationTicks:
-        activeSlot.weaponId === "frost-nova"
+        activeSlot.weaponId === "frost-nova" || activeSlot.fusionId === "event-horizon"
           ? Math.max(36, runtimeStats.visibleTicks * 2)
           : undefined,
       pickupPulseDurationTicks:
-        runtimeStats.attackKind === "vacuum" ? runtimeStats.visibleTicks : undefined
+        runtimeStats.attackKind === "vacuum"
+          ? runtimeStats.visibleTicks *
+            (activeSlot.fusionId === "event-horizon" ? 2 : 1)
+          : undefined
     });
+
+    if (activeSlot.fusionId === "afterimage-pyre") {
+      applyDamageToTargetIds(
+        targetIds,
+        Math.max(1, Math.round(runtimeStats.damage * 0.45)),
+        activeSlot.weaponId
+      );
+    }
 
     if (runtimeStats.attackKind === "lob") {
       combatSkillFeedbackEvents.push({
