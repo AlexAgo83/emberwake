@@ -1,10 +1,10 @@
 ## item_295_define_targeted_validation_for_boss_silhouette_dominance_and_combat_readability - Define targeted validation for boss silhouette dominance and combat readability
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Low
 > Theme: Combat
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -64,7 +64,6 @@ flowchart LR
 - Keywords: boss, visual, scale, posture, runtime, hostiles
 - Use when: Use when framing scope, context, and acceptance checks for Define a 1.5x boss visual scale posture for runtime hostiles.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
 # References
 - `logics/skills/logics-ui-steering/SKILL.md`
 
@@ -76,3 +75,4 @@ flowchart LR
 - Derived from request `req_079_define_a_1_5x_boss_visual_scale_posture_for_runtime_hostiles`.
 - Source file: `logics/request/req_079_define_a_1_5x_boss_visual_scale_posture_for_runtime_hostiles.md`.
 - Request context seeded into this backlog item from `logics/request/req_079_define_a_1_5x_boss_visual_scale_posture_for_runtime_hostiles.md`.
+- Task `task_058_orchestrate_post_0_5_1_follow_up_wave_for_updates_pickups_crystal_flow_and_hostile_pressure` was finished via `logics_flow.py finish task` on 2026-03-28.

@@ -1,10 +1,10 @@
 ## item_288_define_vivid_red_rendering_for_non_traversable_blocking_obstacle_tiles - Define vivid red rendering for non traversable blocking obstacle tiles
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -72,7 +72,6 @@ flowchart LR
 - Keywords: vivid, blocking-obstacle, visibility, posture, for, non-traversable, world, tiles
 - Use when: Use when framing scope, context, and acceptance checks for Define a vivid blocking-obstacle visibility posture for non-traversable world tiles.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
 # References
 - `logics/skills/logics-ui-steering/SKILL.md`
 
@@ -84,3 +83,4 @@ flowchart LR
 - Derived from request `req_077_define_a_vivid_blocking_obstacle_visibility_posture_for_non_traversable_world_tiles`.
 - Source file: `logics/request/req_077_define_a_vivid_blocking_obstacle_visibility_posture_for_non_traversable_world_tiles.md`.
 - Request context seeded into this backlog item from `logics/request/req_077_define_a_vivid_blocking_obstacle_visibility_posture_for_non_traversable_world_tiles.md`.
+- Task `task_058_orchestrate_post_0_5_1_follow_up_wave_for_updates_pickups_crystal_flow_and_hostile_pressure` was finished via `logics_flow.py finish task` on 2026-03-28.

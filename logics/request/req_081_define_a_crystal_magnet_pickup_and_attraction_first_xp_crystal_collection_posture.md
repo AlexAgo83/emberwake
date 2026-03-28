@@ -1,7 +1,7 @@
 ## req_081_define_a_crystal_magnet_pickup_and_attraction_first_xp_crystal_collection_posture - Define a crystal magnet pickup and attraction first XP crystal collection posture
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 92%
 > Complexity: Medium
@@ -89,6 +89,16 @@ flowchart TD
   - magnet pickup collection pulls distant crystals from the whole active map space
   - XP is granted on crystal arrival rather than at attraction trigger time
 
+# AC Traceability
+- AC1 -> Backlog coverage: `item_299`, `item_300`, and `item_301` define the magnet, stronger passive reach, and arrival-based crystal flow. Task coverage: `task_058` lands them as one shared runtime contract. Proof: the wave lands a magnet pickup, stronger `vacuum-tabi`, and one shared attraction-first crystal flow.
+- AC2 -> Backlog coverage: `item_299` defines the new magnet pickup. Task coverage: `task_058` adds that pickup to the nearby utility loop. Proof: a new `magnet` utility pickup now exists in the nearby pickup loop.
+- AC3 -> Backlog coverage: `item_299` and `item_301` require travel-before-award behavior for magnet pulls. Task coverage: `task_058` routes magnet collection through the shared attraction path. Proof: magnet collection marks crystals for travel toward the player instead of granting XP in place.
+- AC4 -> Backlog coverage: `item_300` defines stronger level-scaled passive reach. Task coverage: `task_058` updates the passive modifier contract. Proof: `vacuum-tabi` pickup radius scaling was strengthened and remains level-dependent.
+- AC5 -> Backlog coverage: `item_301` defines arrival-based XP consumption. Task coverage: `task_058` lands that change in crystal collection resolution. Proof: proximity collection now pulls crystals inward before XP resolves.
+- AC6 -> Backlog coverage: `item_299`, `item_300`, and `item_301` cover the shared attraction contract. Task coverage: `task_058` keeps magnet, passive reach, and standard collection on one path. Proof: standard proximity, passive-extended reach, and magnet pickup all use the same attraction-first collection contract.
+- AC7 -> Backlog coverage: `item_301` keeps the animated travel scope bounded to XP crystals. Task coverage: `task_058` preserves simpler gold and healing-kit collection. Proof: the animated travel contract remains scoped to XP crystals; `gold` and `healing-kit` keep their simpler collection path.
+- AC8 -> Backlog coverage: `item_302` owns magnet/vacuum validation. Task coverage: `task_058` executes that validation slice. Proof: `src/game/entities/model/entitySimulation.test.ts` and `games/emberwake/src/runtime/buildSystem.test.ts` validate nearby attraction, magnet pull, and stronger `vacuum-tabi` reach.
+
 # Open questions
 - Should the magnet pickup be rare compared with `gold` and `healing-kit`, or simply another common utility outcome?
   Recommended default: keep it meaningfully rarer so it reads as a special catch-up or payout moment rather than constant noise.
@@ -114,9 +124,6 @@ flowchart TD
 - Keywords: crystal, magnet, pickup, attraction, xp, collection, posture
 - Use when: Use when framing scope, context, and acceptance checks for Define a crystal magnet pickup and attraction first XP crystal collection posture.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
-
-
 # Backlog
 - `item_299_define_a_magnet_pickup_that_pulls_all_active_xp_crystals_toward_the_player`
 - `item_300_define_stronger_level_scaled_vacuum_tabi_crystal_attraction_reach`

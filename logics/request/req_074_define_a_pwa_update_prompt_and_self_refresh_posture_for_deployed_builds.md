@@ -1,7 +1,7 @@
 ## req_074_define_a_pwa_update_prompt_and_self_refresh_posture_for_deployed_builds - Define a PWA update prompt and self-refresh posture for deployed builds
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 93%
 > Confidence: 90%
 > Complexity: Medium
@@ -101,9 +101,6 @@ flowchart TD
 - Keywords: pwa, update, prompt, and, self-refresh, posture, for, deployed
 - Use when: Use when framing scope, context, and acceptance checks for Define a PWA update prompt and self-refresh posture for deployed builds.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
-
-
 # Backlog
 - `item_279_define_deployed_build_update_detection_for_browser_and_installed_pwa_sessions`
 - `item_280_define_a_shell_owned_update_modal_and_explicit_refresh_action_for_new_builds`

@@ -1,10 +1,10 @@
 ## task_058_orchestrate_post_0_5_1_follow_up_wave_for_updates_pickups_crystal_flow_and_hostile_pressure - Orchestrate post-0.5.1 follow-up wave for updates, pickups, crystal flow, and hostile pressure
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 90%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -84,9 +84,6 @@ flowchart TD
 - Keywords: orchestrate, post-0.5.1, updates, pickups, crystal-flow, hostile-pressure
 - Use when: Use when executing the current implementation wave for Orchestrate post-0.5.1 follow-up wave for updates, pickups, crystal flow, and hostile pressure.
 - Skip when: Skip when the work belongs to another backlog item or a different execution wave.
-
-
-
 # Validation
 - `npm run logics:lint`
 - `npm run test`
@@ -95,12 +92,17 @@ flowchart TD
 - Manual verification of toast stacking, bottom-left placement, and five-second fade-out behavior.
 - Manual verification of obstacle visibility, boss silhouette readability, and hostile charge avoidability in runtime play.
 - Manual verification of crystal attraction, magnet vacuum, and arrival-based XP consumption behavior.
+- Finish workflow executed on 2026-03-28.
+- Linked backlog/request close verification passed.
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Finished on 2026-03-28.
+- Linked backlog item(s): `item_279_define_deployed_build_update_detection_for_browser_and_installed_pwa_sessions`, `item_280_define_a_shell_owned_update_modal_and_explicit_refresh_action_for_new_builds`, `item_281_define_targeted_validation_for_pwa_update_prompting_and_self_refresh_behavior`, `item_282_define_stale_expiration_rules_for_offscreen_gold_and_healing_kit_pickups`, `item_283_define_nearby_pickup_cap_release_and_respawn_behavior_after_utility_pickup_expiration`, `item_284_define_targeted_validation_for_offscreen_utility_pickup_expiration_and_renewed_nearby_spawns`, `item_285_define_a_shell_owned_toast_stack_and_bottom_left_viewport_anchoring_posture`, `item_286_define_save_game_feedback_toast_lifecycle_with_stacking_and_five_second_fade_out`, `item_287_define_targeted_validation_for_shell_toast_delivery_timing_and_stacking_behavior`, `item_288_define_vivid_red_rendering_for_non_traversable_blocking_obstacle_tiles`, `item_289_define_contrast_safeguards_for_blocking_obstacle_readability_across_world_backgrounds`, `item_290_define_targeted_validation_for_blocking_obstacle_visibility_and_map_readability`, `item_291_define_cumulative_post_boss_difficulty_modifiers_on_top_of_authored_time_phases`, `item_292_define_boss_defeat_trigger_plumbing_into_permanent_run_pressure_escalation`, `item_293_define_targeted_validation_for_post_boss_escalation_and_delaying_the_inevitable_pacing`, `item_294_define_a_1_point_5x_render_scale_contract_for_boss_class_hostile_entities`, `item_295_define_targeted_validation_for_boss_silhouette_dominance_and_combat_readability`, `item_296_define_a_small_fast_skirmisher_hostile_profile_and_authored_phase_entry_posture`, `item_297_define_a_telegraphed_charger_hostile_profile_with_one_second_wind_up_and_directional_sprint`, `item_298_define_targeted_validation_for_new_hostile_archetype_readability_fairness_and_avoidance`, `item_299_define_a_magnet_pickup_that_pulls_all_active_xp_crystals_toward_the_player`, `item_300_define_stronger_level_scaled_vacuum_tabi_crystal_attraction_reach`, `item_301_define_attraction_first_crystal_travel_and_arrival_based_xp_consumption`, `item_302_define_targeted_validation_for_magnet_vacuum_and_attraction_based_crystal_collection`
+- Related request(s): `req_074_define_a_pwa_update_prompt_and_self_refresh_posture_for_deployed_builds`, `req_075_define_offscreen_stale_pickup_expiration_for_gold_and_healing_kit_spawns`, `req_076_define_a_shell_owned_toast_notification_posture_for_save_game_feedback`, `req_077_define_a_vivid_blocking_obstacle_visibility_posture_for_non_traversable_world_tiles`, `req_078_define_a_boss_defeat_driven_permanent_difficulty_escalation_layer`, `req_079_define_a_1_5x_boss_visual_scale_posture_for_runtime_hostiles`, `req_080_define_two_new_hostile_archetypes_for_fast_skirmish_and_telegraphed_charge_pressure`, `req_081_define_a_crystal_magnet_pickup_and_attraction_first_xp_crystal_collection_posture`

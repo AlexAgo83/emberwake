@@ -1,10 +1,10 @@
 ## item_298_define_targeted_validation_for_new_hostile_archetype_readability_fairness_and_avoidance - Define targeted validation for new hostile archetype readability fairness and avoidance
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 92%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Combat
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -76,9 +76,6 @@ flowchart LR
 - Keywords: hostile, archetypes, fast, skirmish, telegraphed, charge, pressure
 - Use when: Use when framing scope, context, and acceptance checks for Define two new hostile archetypes for fast skirmish and telegraphed charge pressure.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
-
-
 # Priority
 - Impact:
 - Urgency:
@@ -87,3 +84,4 @@ flowchart LR
 - Derived from request `req_080_define_two_new_hostile_archetypes_for_fast_skirmish_and_telegraphed_charge_pressure`.
 - Source file: `logics/request/req_080_define_two_new_hostile_archetypes_for_fast_skirmish_and_telegraphed_charge_pressure.md`.
 - Request context seeded into this backlog item from `logics/request/req_080_define_two_new_hostile_archetypes_for_fast_skirmish_and_telegraphed_charge_pressure.md`.
+- Task `task_058_orchestrate_post_0_5_1_follow_up_wave_for_updates_pickups_crystal_flow_and_hostile_pressure` was finished via `logics_flow.py finish task` on 2026-03-28.

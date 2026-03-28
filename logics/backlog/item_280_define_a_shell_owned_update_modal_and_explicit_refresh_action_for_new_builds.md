@@ -1,10 +1,10 @@
 ## item_280_define_a_shell_owned_update_modal_and_explicit_refresh_action_for_new_builds - Define a shell owned update modal and explicit refresh action for new builds
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 93%
 > Confidence: 90%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -72,7 +72,7 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
+- Product brief(s): `prod_013_techno_shinobi_runtime_hud_and_menu_entry_direction`
 - Architecture decision(s): `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`
 - Request: `req_074_define_a_pwa_update_prompt_and_self_refresh_posture_for_deployed_builds`
 - Primary task(s): `task_058_orchestrate_post_0_5_1_follow_up_wave_for_updates_pickups_crystal_flow_and_hostile_pressure`
@@ -82,7 +82,6 @@ flowchart LR
 - Keywords: pwa, update, prompt, and, self-refresh, posture, for, deployed
 - Use when: Use when framing scope, context, and acceptance checks for Define a PWA update prompt and self-refresh posture for deployed builds.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
 # References
 - `logics/skills/logics-ui-steering/SKILL.md`
 
@@ -94,3 +93,4 @@ flowchart LR
 - Derived from request `req_074_define_a_pwa_update_prompt_and_self_refresh_posture_for_deployed_builds`.
 - Source file: `logics/request/req_074_define_a_pwa_update_prompt_and_self_refresh_posture_for_deployed_builds.md`.
 - Request context seeded into this backlog item from `logics/request/req_074_define_a_pwa_update_prompt_and_self_refresh_posture_for_deployed_builds.md`.
+- Task `task_058_orchestrate_post_0_5_1_follow_up_wave_for_updates_pickups_crystal_flow_and_hostile_pressure` was finished via `logics_flow.py finish task` on 2026-03-28.

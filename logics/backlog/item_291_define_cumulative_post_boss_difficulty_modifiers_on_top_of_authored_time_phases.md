@@ -1,10 +1,10 @@
 ## item_291_define_cumulative_post_boss_difficulty_modifiers_on_top_of_authored_time_phases - Define cumulative post boss difficulty modifiers on top of authored time phases
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Combat
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -74,7 +74,6 @@ flowchart LR
 - Keywords: boss-defeat-driven, permanent, difficulty, escalation, layer
 - Use when: Use when framing scope, context, and acceptance checks for Define a boss-defeat-driven permanent difficulty escalation layer.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
 # References
 - `logics/skills/logics-ui-steering/SKILL.md`
 
@@ -86,3 +85,4 @@ flowchart LR
 - Derived from request `req_078_define_a_boss_defeat_driven_permanent_difficulty_escalation_layer`.
 - Source file: `logics/request/req_078_define_a_boss_defeat_driven_permanent_difficulty_escalation_layer.md`.
 - Request context seeded into this backlog item from `logics/request/req_078_define_a_boss_defeat_driven_permanent_difficulty_escalation_layer.md`.
+- Task `task_058_orchestrate_post_0_5_1_follow_up_wave_for_updates_pickups_crystal_flow_and_hostile_pressure` was finished via `logics_flow.py finish task` on 2026-03-28.

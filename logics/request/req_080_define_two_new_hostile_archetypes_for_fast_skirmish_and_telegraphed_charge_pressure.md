@@ -1,7 +1,7 @@
 ## req_080_define_two_new_hostile_archetypes_for_fast_skirmish_and_telegraphed_charge_pressure - Define two new hostile archetypes for fast skirmish and telegraphed charge pressure
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 92%
 > Complexity: Medium
@@ -79,6 +79,15 @@ flowchart TD
   - the charge behaves like a committed sprint in one direction
   - the player can avoid the charge through timing and movement
 
+# AC Traceability
+- AC1 -> Backlog coverage: `item_296` and `item_297` define the two new archetypes. Task coverage: `task_058` lands both inside the existing hostile runtime systems. Proof: the wave adds two bounded hostile profiles through the existing hostile-pressure and intent systems.
+- AC2 -> Backlog coverage: `item_296` defines the smaller faster skirmisher contract. Task coverage: `task_058` lands that scale and speed in the hostile profile table. Proof: `needle-wisp` resolves at `0.5x` visual scale and `1.5x` movement speed multiplier.
+- AC3 -> Backlog coverage: `item_296` covers authored phase entry and distinct mobility pressure. Task coverage: `task_058` adds the skirmisher to later hostile composition weights. Proof: the skirmisher now enters authored phase composition as a distinct mobility-pressure hostile.
+- AC4 -> Backlog coverage: `item_297` defines the telegraphed charger contract. Task coverage: `task_058` lands the pause, shake, and burst behavior in hostile intent resolution. Proof: `shock-ram` telegraphs for about `1s`, shakes, then commits to a directional sprint.
+- AC5 -> Backlog coverage: `item_297` requires a committed avoidable charge. Task coverage: `task_058` locks direction before burst instead of homing during the dash. Proof: the charger locks direction before burst and does not home during the dash.
+- AC6 -> Backlog coverage: `item_296` and `item_297` keep the new enemies inside the authored hostile-pressure model. Task coverage: `task_058` preserves the deterministic hostile profile and phase composition structure. Proof: both archetypes are integrated inside the existing deterministic hostile profile and authored phase model.
+- AC7 -> Backlog coverage: `item_298` owns archetype readability and fairness validation. Task coverage: `task_058` executes that runtime validation slice. Proof: `games/emberwake/src/runtime/entitySimulationIntent.test.ts` and `src/game/entities/model/entitySimulation.test.ts` validate the new hostile profile and charge behavior contracts.
+
 # Open questions
 - Should the small fast archetype also be more fragile, or only smaller and faster?
   Recommended default: keep the first contract centered on size and speed first; fragility can be tuned later if playtests show it survives too long for its threat profile.
@@ -104,9 +113,6 @@ flowchart TD
 - Keywords: hostile, archetypes, fast, skirmish, telegraphed, charge, pressure
 - Use when: Use when framing scope, context, and acceptance checks for Define two new hostile archetypes for fast skirmish and telegraphed charge pressure.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
-
-
 # Backlog
 - `item_296_define_a_small_fast_skirmisher_hostile_profile_and_authored_phase_entry_posture`
 - `item_297_define_a_telegraphed_charger_hostile_profile_with_one_second_wind_up_and_directional_sprint`

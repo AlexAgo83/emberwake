@@ -1,7 +1,7 @@
 ## req_077_define_a_vivid_blocking_obstacle_visibility_posture_for_non_traversable_world_tiles - Define a vivid blocking-obstacle visibility posture for non-traversable world tiles
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
 > Complexity: Medium
@@ -65,6 +65,14 @@ flowchart TD
   - they no longer read as empty cells
   - the red treatment remains legible against the world background
 
+# AC Traceability
+- AC1 -> Backlog coverage: `item_288` defines the vivid blocker rendering posture. Task coverage: `task_058` applies that posture in the world render data. Proof: blocking obstacle tiles now render with a vivid red debug color in `games/emberwake/src/content/world/worldData.ts`.
+- AC2 -> Backlog coverage: `item_288` and `item_289` cover visibility recovery and contrast safeguards. Task coverage: `task_058` updates the active obstacle palette accordingly. Proof: the obstacle contrast posture was updated specifically to avoid black or empty-looking blockers.
+- AC3 -> Backlog coverage: `item_288` carries the vivid-red direction. Task coverage: `task_058` lands that exact color shift. Proof: non-traversable tiles now read as bright red instead of dark fill.
+- AC4 -> Backlog coverage: `item_289` covers readability against the existing world backdrop. Task coverage: `task_058` keeps the change bounded to contrast/readability. Proof: the new blocker color stays visually distinct against the current world palette.
+- AC5 -> Backlog coverage: `item_288` and `item_289` keep scope on rendering and readability. Task coverage: `task_058` preserves collision and world-generation behavior. Proof: no collision or generation rules were changed in this slice.
+- AC6 -> Backlog coverage: `item_290` owns blocker-visibility validation. Task coverage: `task_058` executes that validation slice. Proof: runtime validation was included in the wave and browser smoke passed on the updated render posture.
+
 # Open questions
 - Should every solid obstacle use one vivid red, or should variants stay slightly different within the same red family?
   Recommended default: keep the first slice simple with one strong red direction, allowing subtle variation only if readability stays high.
@@ -88,9 +96,6 @@ flowchart TD
 - Keywords: vivid, blocking-obstacle, visibility, posture, for, non-traversable, world, tiles
 - Use when: Use when framing scope, context, and acceptance checks for Define a vivid blocking-obstacle visibility posture for non-traversable world tiles.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
-
-
 # Backlog
 - `item_288_define_vivid_red_rendering_for_non_traversable_blocking_obstacle_tiles`
 - `item_289_define_contrast_safeguards_for_blocking_obstacle_readability_across_world_backgrounds`

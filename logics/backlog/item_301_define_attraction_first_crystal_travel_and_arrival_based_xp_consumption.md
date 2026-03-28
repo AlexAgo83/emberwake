@@ -1,10 +1,10 @@
 ## item_301_define_attraction_first_crystal_travel_and_arrival_based_xp_consumption - Define attraction first crystal travel and arrival based XP consumption
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 92%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -78,9 +78,6 @@ flowchart LR
 - Keywords: crystal, magnet, pickup, attraction, xp, collection, posture
 - Use when: Use when framing scope, context, and acceptance checks for Define a crystal magnet pickup and attraction first XP crystal collection posture.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
-
-
 # Priority
 - Impact:
 - Urgency:
@@ -89,3 +86,4 @@ flowchart LR
 - Derived from request `req_081_define_a_crystal_magnet_pickup_and_attraction_first_xp_crystal_collection_posture`.
 - Source file: `logics/request/req_081_define_a_crystal_magnet_pickup_and_attraction_first_xp_crystal_collection_posture.md`.
 - Request context seeded into this backlog item from `logics/request/req_081_define_a_crystal_magnet_pickup_and_attraction_first_xp_crystal_collection_posture.md`.
+- Task `task_058_orchestrate_post_0_5_1_follow_up_wave_for_updates_pickups_crystal_flow_and_hostile_pressure` was finished via `logics_flow.py finish task` on 2026-03-28.

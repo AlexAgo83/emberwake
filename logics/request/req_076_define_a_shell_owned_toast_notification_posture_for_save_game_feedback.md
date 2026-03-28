@@ -1,7 +1,7 @@
 ## req_076_define_a_shell_owned_toast_notification_posture_for_save_game_feedback - Define a shell-owned toast notification posture for save game feedback
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 95%
 > Confidence: 92%
 > Complexity: Medium
@@ -76,6 +76,16 @@ flowchart TD
   - multiple stacked toast rendering
   - timed disappearance after the 5-second lifetime
 
+# AC Traceability
+- AC1 -> Backlog coverage: `item_285` and `item_286` define the shared toast stack and save-feedback slice. Task coverage: `task_058` delivers both inside the shell. Proof: the wave introduced a first shell-owned toast stack plus save feedback integration in `src/app/AppShell.tsx`.
+- AC2 -> Backlog coverage: `item_285` keeps toast ownership in the shell layer. Task coverage: `task_058` lands the feature in shell hooks and DOM components. Proof: the toast system lives in DOM-owned shell components and hooks, not Pixi runtime rendering.
+- AC3 -> Backlog coverage: `item_285` defines bottom-left anchoring. Task coverage: `task_058` renders the shared stack in shell chrome. Proof: `src/app/components/ShellToastStack.tsx` anchors toast delivery to the bottom-left shell surface.
+- AC4 -> Backlog coverage: `item_285` and `item_286` cover stack behavior and lifecycle. Task coverage: `task_058` uses one shared ordered stack. Proof: toast entries stack in insertion order inside the shared shell stack.
+- AC5 -> Backlog coverage: `item_286` defines the five-second fade contract. Task coverage: `task_058` implements timeout plus fade styling. Proof: `src/app/hooks/useToastStack.ts` dismisses entries after `5` seconds and CSS fade timing is defined in `src/app/styles/app.css`.
+- AC6 -> Backlog coverage: `item_286` covers save-success feedback. Task coverage: `task_058` wires that feedback into the save action. Proof: `handleSaveGame()` now emits an explicit `Game saved.` toast on successful save.
+- AC7 -> Backlog coverage: `item_285` and `item_286` keep the slice bounded to first shell feedback. Task coverage: `task_058` closes the work without widening into a notification center. Proof: the implementation remains a bounded shell-feedback slice while leaving the stack reusable.
+- AC8 -> Backlog coverage: `item_287` owns toast validation. Task coverage: `task_058` executes the shell validation slice. Proof: `src/app/AppShell.test.tsx` covers save-triggered toast delivery and the shell stack contract.
+
 # Open questions
 - Should the first slice include error toasts for save failure, or only success feedback?
   Recommended default: success feedback first, with room to add error states if the implementation naturally exposes them.
@@ -101,9 +111,6 @@ flowchart TD
 - Keywords: shell-owned, toast, notification, posture, for, save, game, feedback
 - Use when: Use when framing scope, context, and acceptance checks for Define a shell-owned toast notification posture for save game feedback.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
-
-
 # Backlog
 - `item_285_define_a_shell_owned_toast_stack_and_bottom_left_viewport_anchoring_posture`
 - `item_286_define_save_game_feedback_toast_lifecycle_with_stacking_and_five_second_fade_out`

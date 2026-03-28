@@ -1,7 +1,7 @@
 ## req_075_define_offscreen_stale_pickup_expiration_for_gold_and_healing_kit_spawns - Define offscreen stale pickup expiration for gold and healing kit spawns
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 91%
 > Complexity: Medium
@@ -64,6 +64,15 @@ flowchart TD
   - evidence that renewed nearby spawns become possible after expiration
 - AC7: The request remains compatible with externalized gameplay tuning so thresholds can later move into JSON without redesigning the behavior.
 
+# AC Traceability
+- AC1 -> Backlog coverage: `item_282` scopes the stale-expiration rule to utility pickups. Task coverage: `task_058` lands that rule in the runtime pickup maintenance path. Proof: `games/emberwake/src/runtime/entitySimulationSpawn.ts` expires only `gold` and `healing-kit` pickups.
+- AC2 -> Backlog coverage: `item_282` defines a deterministic stale heuristic. Task coverage: `task_058` implements that heuristic directly in the simulation. Proof: `games/emberwake/src/runtime/entitySimulationSpawn.ts` uses an `18s` age plus a bounded distance threshold.
+- AC3 -> Backlog coverage: `item_282` covers early expiration before the broad despawn rule. Task coverage: `task_058` places stale cleanup ahead of the generic pickup-distance filter. Proof: the stale utility branch runs before the broader retained-entity distance test.
+- AC4 -> Backlog coverage: `item_283` covers cap release and renewed nearby spawns. Task coverage: `task_058` keeps the pickup-loop budget coherent after stale cleanup. Proof: expired utility pickups free the maintained nearby pickup budget so new closer spawns can re-enter the loop.
+- AC5 -> Backlog coverage: `item_282` explicitly excludes progression-critical pickups from the stale rule. Task coverage: `task_058` preserves that exclusion in code. Proof: crystals remain outside the stale-expiration branch in `games/emberwake/src/runtime/entitySimulationSpawn.ts`.
+- AC6 -> Backlog coverage: `item_284` owns validation for stale utility expiration and renewed nearby spawns. Task coverage: `task_058` executes that validation slice. Proof: `src/game/entities/model/entitySimulation.test.ts` covers stale distant utility expiration and spawn-budget recovery.
+- AC7 -> Backlog coverage: `item_282` and `item_284` keep the behavior compatible with later externalization. Task coverage: `task_058` lands a bounded runtime contract instead of a hard-wired redesign. Proof: thresholds live behind a small runtime contract that stays compatible with later tuning externalization.
+
 # Open questions
 - Should the rule key off strict camera visibility or a looser proximity-to-visible-zone heuristic?
   Recommended default: use a deterministic visibility-aware heuristic that is cheaper and more stable than per-frame exact camera intersection when possible.
@@ -90,9 +99,6 @@ flowchart TD
 - Keywords: offscreen, stale, pickup, expiration, for, gold, and, healing
 - Use when: Use when framing scope, context, and acceptance checks for Define offscreen stale pickup expiration for gold and healing kit spawns.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
-
-
 # Backlog
 - `item_282_define_stale_expiration_rules_for_offscreen_gold_and_healing_kit_pickups`
 - `item_283_define_nearby_pickup_cap_release_and_respawn_behavior_after_utility_pickup_expiration`

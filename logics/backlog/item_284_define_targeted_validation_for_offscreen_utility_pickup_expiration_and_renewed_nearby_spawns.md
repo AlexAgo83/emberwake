@@ -1,10 +1,10 @@
 ## item_284_define_targeted_validation_for_offscreen_utility_pickup_expiration_and_renewed_nearby_spawns - Define targeted validation for offscreen utility pickup expiration and renewed nearby spawns
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 94%
 > Confidence: 91%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -74,9 +74,6 @@ flowchart LR
 - Keywords: offscreen, stale, pickup, expiration, for, gold, and, healing
 - Use when: Use when framing scope, context, and acceptance checks for Define offscreen stale pickup expiration for gold and healing kit spawns.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
-
-
-
 # Priority
 - Impact:
 - Urgency:
@@ -85,3 +82,4 @@ flowchart LR
 - Derived from request `req_075_define_offscreen_stale_pickup_expiration_for_gold_and_healing_kit_spawns`.
 - Source file: `logics/request/req_075_define_offscreen_stale_pickup_expiration_for_gold_and_healing_kit_spawns.md`.
 - Request context seeded into this backlog item from `logics/request/req_075_define_offscreen_stale_pickup_expiration_for_gold_and_healing_kit_spawns.md`.
+- Task `task_058_orchestrate_post_0_5_1_follow_up_wave_for_updates_pickups_crystal_flow_and_hostile_pressure` was finished via `logics_flow.py finish task` on 2026-03-28.
