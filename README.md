@@ -4,7 +4,7 @@
 
 # Emberwake
 
-Emberwake is a TypeScript + React top-down survival action prototype built around a shell-owned game flow, a PixiJS runtime, and a deterministic chunked world.
+Emberwake is a techno-shinobi survival action game where every run turns into a faster, louder, more dangerous fight for control. Cut through escalating hostile waves, assemble impossible builds, cash out gold into permanent growth, and push deeper each time before the world finally overwhelms you.
 
 [![CI](https://github.com/AlexAgo83/emberwake/actions/workflows/ci.yml/badge.svg)](https://github.com/AlexAgo83/emberwake/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/AlexAgo83/emberwake)](LICENSE)
@@ -17,16 +17,13 @@ Emberwake is a TypeScript + React top-down survival action prototype built aroun
 
 Emberwake currently includes:
 
-- A shell-owned `Main menu`, `New game`, `Load game`, `Settings`, and `Game over` flow.
-- A player-facing `Grimoire` and `Bestiary` archive in the shell.
-- A deterministic infinite world rendered in PixiJS with chunk-based generation.
-- Pseudo-physics foundations with blocking obstacles, slow surfaces, slippery surfaces, movement drift, and bounded turning.
-- A survivor-like combat loop with automatic weapons, passive modifiers, curated fusions, level-up choices, and chests.
-- Time-owned run phases, stronger enemy composition over time, and authored mini-boss beats.
-- Nearby pickups with healing kits, crystals, gold, and runtime pickup compaction to keep long sessions bounded.
-- Desktop movement remapping, mobile virtual-stick control, and techno-shinobi HUD/runtime feedback surfaces.
-- Local-first single-slot save/load and shell preference persistence.
-- A planning and delivery workflow tracked in `logics/`.
+- Fast top-down survival combat with auto-firing weapons, passive augments, curated fusions, and run-defining build pivots.
+- A persistent `Growth` layer where gold earned in runs becomes permanent talents, shop unlocks, and longer-term progression.
+- Discoverable `Grimoire` and `Bestiary` archives that persist across runs and turn play into collectible knowledge.
+- Escalating authored pressure through time phases, boss beats, post-boss difficulty spikes, and expanding enemy variety.
+- Utility pickups such as magnets, healing kits, gold, and hourglass time-stop drops to create recovery swings in otherwise chaotic fights.
+- A shell-owned game flow with `Main menu`, `New game`, `Load game`, `Growth`, `Settings`, `Game over`, `Grimoire`, and `Bestiary`.
+- A deterministic chunked world, PixiJS runtime, and local-first persistence model built for repeatable runs and rapid iteration.
 
 ```mermaid
 flowchart TD
@@ -46,33 +43,34 @@ Current release target:
 
 What `main` reflects today:
 
-- The project has moved beyond a navigation-only slice into a first playable survival/combat loop with build growth.
-- Runtime ownership is split between a React shell, reusable engine packages, a Pixi adapter, and Emberwake-specific gameplay modules.
-- The shell-owned menus, HUD, codex/archive scenes, and runtime overlays now follow a stronger `Techno-shinobi` direction.
-- The runtime now includes a first authored build system with active weapons, passive seals, curated fusions, level-up choice panels, and outcome ranking data.
-- The repo includes a scripted long-session profiling harness with mobile/headed replay options, heap snapshots, and repeatable stress scenarios under `output/playwright/long-session/`.
-- Difficulty, progression, and hostile durability have all received a first tuning pass, but balancing is still in active iteration.
+- Emberwake is already playable as a full run-based survival experience rather than a bare prototype shell.
+- The current build includes meta progression, a broadened combat roster, curated fusion payoffs, codex progression, and a strong shell-driven game flow.
+- The game is deep enough to support tuning, pacing, and content iteration as the primary focus of the next waves.
+- The project remains in active balancing and content expansion, but the core loop is now strong, legible, and shipping-oriented.
 
 ```mermaid
 flowchart LR
     Release[v0.6.0 target] --> Main[main branch]
     Main --> Playable[Playable survival loop]
     Main --> Modular[Modular runtime ownership]
-    Main --> Next[Balance, profiling, codex, progression]
+    Main --> Next[Balance, profiling, meta progression, content expansion]
 ```
 
 ## Current Gameplay Slice
 
-- Start or load a run from a shell-owned main menu.
-- Name the player character before entering runtime.
-- Open the pause/menu shell during live runtime without dropping the current run.
-- Traverse an infinite world with deterministic terrain, obstacles, and movement modifiers.
-- Fight hostile entities that spawn around the player, pursue, deal contact damage, and escalate through authored run phases.
-- Auto-fire a first playable roster of active weapons, then expand the build through passive seals and curated fusions.
-- Resolve level-up choices and chest rewards during the run.
-- Collect healing kits, crystals, and gold.
-- Review discovered skills in the `Grimoire` and encountered creatures in the `Bestiary`.
-- Lose the run into a `Game over` recap or skill-ranking view, then return to the main menu.
+- Drop into a run from the shell, name the character, and survive as long as possible.
+- Move through a deterministic hostile world with obstacles, friction surfaces, and readable combat space.
+- Let the build evolve through auto-firing weapons, passive items, second-wave skills, and fusion outcomes.
+- Use pickups, chest rewards, and level-up offers to stabilize the run or snowball it.
+- End each run with recap data, damage-share ranking, earned gold, and cross-run progression.
+- Reinvest that gold in permanent growth, then come back stronger for the next attempt.
+
+## Why It Hooks
+
+- Runs are designed to feel doomed in the best way: the better your build gets, the longer you delay the inevitable.
+- Progress happens on two levels at once: immediate power inside the run, and permanent growth outside it.
+- The shell is part of the product, not just scaffolding. Growth, codex, save/load, updates, and post-run analysis all reinforce the loop.
+- The current direction mixes survivor-like escalation with a sharper techno-shinobi presentation instead of generic fantasy horde combat.
 
 ## Tuning Contracts
 
@@ -238,6 +236,7 @@ flowchart LR
 Current persistence is intentionally local-first:
 
 - Single-slot save/load for the active runtime session
+- Persistent meta profile for banked gold, purchased unlocks, talent ranks, bestiary discovery, and grimoire discovery
 - Shell preferences persisted locally
 - Desktop control bindings persisted locally
 - Runtime world reconstructed from deterministic seed and state rather than large opaque world snapshots
