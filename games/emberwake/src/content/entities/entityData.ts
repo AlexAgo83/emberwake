@@ -48,6 +48,10 @@ export const entityVisualDefinitions = {
   "pickup-magnet": {
     assetId: "entity.debug.watcher.placeholder",
     label: "Magnet pickup"
+  },
+  "pickup-hourglass": {
+    assetId: "entity.debug.anchor.placeholder",
+    label: "Hourglass pickup"
   }
 } as const satisfies Record<
   string,

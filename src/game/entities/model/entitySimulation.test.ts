@@ -53,7 +53,7 @@ describe("entitySimulation", () => {
   });
 
   const createPickupFixture = (
-    pickupKind: "crystal" | "gold" | "magnet",
+    pickupKind: "crystal" | "gold" | "hourglass" | "magnet",
     overrides: Partial<SimulatedEntity> = {}
   ): SimulatedEntity => ({
     ...createGenericMoverEntity({
@@ -63,12 +63,16 @@ describe("entitySimulation", () => {
         kind:
           pickupKind === "crystal"
             ? "pickup-crystal"
+            : pickupKind === "hourglass"
+              ? "pickup-hourglass"
             : pickupKind === "magnet"
               ? "pickup-magnet"
               : "pickup-gold",
         tint:
           pickupKind === "crystal"
             ? "#73f2ff"
+            : pickupKind === "hourglass"
+              ? "#8ed9ff"
             : pickupKind === "magnet"
               ? "#ffd1ff"
               : "#ffd76c"
@@ -814,6 +818,69 @@ describe("entitySimulation", () => {
     expect(pulledCrystal?.pickupProfile?.attractionState?.source).toBe("magnet");
     expect(pulledCrystal?.worldPosition.x).toBeLessThan(remoteCrystal.worldPosition.x);
     expect(nextState.runStats.currentXp).toBe(0);
+  });
+
+  it("activates hourglass time stop without extending an already active stop", () => {
+    const initialState = createInitialSimulationState();
+    const overlappingHostile = createHostileFixture({
+      id: "entity:hostile:hourglass",
+      worldPosition: { x: 0, y: 0 }
+    });
+    const hourglassPickup = createPickupFixture("hourglass", {
+      id: "entity:pickup:hourglass:0",
+      pickupProfile: {
+        kind: "hourglass"
+      },
+      worldPosition: { ...initialState.entity.worldPosition }
+    });
+
+    const firstState = advanceSimulationState(
+      {
+        ...initialState,
+        entities: [initialState.entity, overlappingHostile, hourglassPickup]
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "no-spawn"
+        }
+      }
+    );
+    const frozenHostile = firstState.entities.find((entity) => entity.id === overlappingHostile.id);
+    const activeDuration = firstState.enemyTimeStopUntilTick - firstState.tick;
+
+    expect(firstState.enemyTimeStopUntilTick).toBeGreaterThan(firstState.tick);
+    expect(firstState.entities.some((entity) => entity.id === hourglassPickup.id)).toBe(false);
+    expect(firstState.entity.combat.currentHealth).toBe(
+      initialState.entity.combat.currentHealth - overlappingHostile.contactDamageProfile!.damage
+    );
+    expect(frozenHostile?.hostileControlState?.frozenUntilTick ?? 0).toBeGreaterThan(firstState.tick);
+
+    const secondHourglassPickup = createPickupFixture("hourglass", {
+      id: "entity:pickup:hourglass:1",
+      pickupProfile: {
+        kind: "hourglass"
+      },
+      worldPosition: { ...firstState.entity.worldPosition }
+    });
+    const secondState = advanceSimulationState(
+      {
+        ...firstState,
+        entities: [...firstState.entities, secondHourglassPickup]
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "no-spawn"
+        }
+      }
+    );
+    const heldHostile = secondState.entities.find((entity) => entity.id === overlappingHostile.id);
+
+    expect(secondState.enemyTimeStopUntilTick).toBe(firstState.enemyTimeStopUntilTick);
+    expect(secondState.entity.combat.currentHealth).toBe(firstState.entity.combat.currentHealth);
+    expect(heldHostile?.velocity).toEqual({ x: 0, y: 0 });
+    expect(activeDuration).toBeGreaterThanOrEqual(178);
   });
 
   it("removes legacy cache pickups from the active simulation", () => {

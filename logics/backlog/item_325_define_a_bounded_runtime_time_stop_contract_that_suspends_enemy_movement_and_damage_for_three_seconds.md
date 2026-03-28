@@ -1,10 +1,10 @@
 ## item_325_define_a_bounded_runtime_time_stop_contract_that_suspends_enemy_movement_and_damage_for_three_seconds - Define a bounded runtime time-stop contract that suspends enemy movement and damage for three seconds
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -69,7 +69,10 @@ flowchart LR
 - Product brief(s): `prod_016_time_owned_run_arc_and_authored_difficulty_phases`
 - Architecture decision(s): `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request: `req_086_define_a_time_stop_hourglass_pickup_for_bounded_enemy_pressure_suspension`
-- Primary task(s): (none yet)
+- Primary task(s): `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`
+
+# Closure
+- Proof: `games/emberwake/src/runtime/entitySimulationCombat.ts`, `games/emberwake/src/runtime/entitySimulation.ts`, `games/emberwake/src/runtime/entitySimulationIntent.ts`.
 
 # AI Context
 - Summary: Define a time stop hourglass pickup for bounded enemy pressure suspension.

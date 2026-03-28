@@ -152,6 +152,29 @@ const drawPickupEntity =
       return;
     }
 
+    if (pickupKind === "hourglass") {
+      graphics.circle(0, 0, radius);
+      graphics.fill();
+      graphics.setStrokeStyle({
+        alpha: 0.92,
+        color: 0xf6eee8,
+        width: 2
+      });
+      graphics.circle(0, 0, radius);
+      graphics.stroke();
+      graphics.moveTo(-radius * 0.34, -radius * 0.52);
+      graphics.lineTo(radius * 0.34, -radius * 0.52);
+      graphics.moveTo(-radius * 0.34, radius * 0.52);
+      graphics.lineTo(radius * 0.34, radius * 0.52);
+      graphics.moveTo(-radius * 0.34, -radius * 0.52);
+      graphics.lineTo(radius * 0.22, -radius * 0.08);
+      graphics.lineTo(-radius * 0.22, radius * 0.08);
+      graphics.lineTo(radius * 0.34, radius * 0.52);
+      graphics.stroke();
+
+      return;
+    }
+
     graphics.circle(0, 0, radius);
     graphics.fill();
     graphics.setStrokeStyle({

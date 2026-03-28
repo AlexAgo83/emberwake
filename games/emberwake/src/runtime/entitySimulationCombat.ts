@@ -896,12 +896,14 @@ export const resolveHostileContactDamage = (
 
 export const resolvePickupCollection = ({
   buildState,
+  enemyTimeStopUntilTick,
   entities,
   pickupPulseUntilTick,
   tick,
   runStats
 }: {
   buildState: BuildState;
+  enemyTimeStopUntilTick: number;
   entities: readonly SimulatedEntity[];
   pickupPulseUntilTick: number;
   tick: number;
@@ -912,6 +914,7 @@ export const resolvePickupCollection = ({
   if (!playerEntity || !isAlive(playerEntity)) {
     return {
       buildState,
+      enemyTimeStopUntilTick,
       entities: [...entities],
       pickupPulseUntilTick,
       runStats
@@ -919,6 +922,7 @@ export const resolvePickupCollection = ({
   }
 
   let nextPlayerEntity = playerEntity;
+  let nextEnemyTimeStopUntilTick = enemyTimeStopUntilTick;
   const nextRunStats = { ...runStats };
   const retainedEntities: SimulatedEntity[] = [];
   const goldGainMultiplier = resolveGoldGainMultiplier(buildState);
@@ -1014,6 +1018,12 @@ export const resolvePickupCollection = ({
           Math.round(pickupContract.gold.value * pickupStackCount * goldGainMultiplier)
         );
         break;
+      case "hourglass":
+        nextEnemyTimeStopUntilTick =
+          nextEnemyTimeStopUntilTick >= tick
+            ? nextEnemyTimeStopUntilTick
+            : tick + pickupContract.hourglass.durationTicks;
+        break;
       case "magnet":
         break;
     }
@@ -1021,9 +1031,26 @@ export const resolvePickupCollection = ({
 
   return {
     buildState,
-    entities: retainedEntities.map((entity) =>
-      entity.id === nextPlayerEntity.id ? nextPlayerEntity : entity
-    ),
+    enemyTimeStopUntilTick: nextEnemyTimeStopUntilTick,
+    entities: retainedEntities.map((entity) => {
+      if (entity.id === nextPlayerEntity.id) {
+        return nextPlayerEntity;
+      }
+
+      if (entity.role !== "hostile" || nextEnemyTimeStopUntilTick <= tick) {
+        return entity;
+      }
+
+      return {
+        ...entity,
+        hostileControlState: {
+          frozenUntilTick: Math.max(
+            entity.hostileControlState?.frozenUntilTick ?? 0,
+            nextEnemyTimeStopUntilTick
+          )
+        }
+      };
+    }),
     pickupPulseUntilTick,
     runStats: nextRunStats
   };

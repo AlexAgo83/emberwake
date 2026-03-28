@@ -1,9 +1,9 @@
 ## req_086_define_a_time_stop_hourglass_pickup_for_bounded_enemy_pressure_suspension - Define a time stop hourglass pickup for bounded enemy pressure suspension
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 96%
-> Confidence: 93%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -83,6 +83,12 @@ flowchart TD
 - AC4: The request defines the effect as bounded to hostile pressure and explicitly avoids turning it into a full global pause of player control, pickups, or the entire simulation.
 - AC5: The request defines the `hourglass` as part of the utility-pickup family alongside `gold`, `healing-kit`, and `magnet`.
 - AC6: The request defines the pickup as a high-impact but bounded utility reward, compatible with future tuning around rarity and spawn behavior.
+
+# Closure
+- Landed through `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`.
+- Proof:
+  - `npm run typecheck`
+  - `npm run test -- src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts games/emberwake/src/systems/gameplaySystems.test.ts`
 - AC7: The request defines validation expectations strong enough to later prove that:
   - hostile movement is halted during the effect window
   - hostile contact damage or equivalent threat is disabled during the effect window

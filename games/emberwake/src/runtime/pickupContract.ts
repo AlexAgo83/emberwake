@@ -9,6 +9,10 @@ export const pickupContract = {
   },
   gold: gameplayTuning.pickup.gold,
   healingKit: gameplayTuning.pickup.healingKit,
+  hourglass: {
+    durationTicks: 60 * 3,
+    spawnChancePercent: 3
+  },
   magnet: {
     spawnChancePercent: 9
   },

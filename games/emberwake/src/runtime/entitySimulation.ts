@@ -495,6 +495,8 @@ const createPickupEntity = (
           ? "pickup-healing-kit"
           : pickupKind === "crystal"
             ? "pickup-crystal"
+            : pickupKind === "hourglass"
+              ? "pickup-hourglass"
             : pickupKind === "magnet"
               ? "pickup-magnet"
             : pickupKind === "cache"
@@ -505,6 +507,8 @@ const createPickupEntity = (
           ? "#7dff9b"
           : pickupKind === "crystal"
             ? resolveCrystalPickupTint(stackCount)
+            : pickupKind === "hourglass"
+              ? "#8ed9ff"
             : pickupKind === "magnet"
               ? "#ffd1ff"
             : pickupKind === "cache"
@@ -1014,6 +1018,8 @@ const normalizeSimulatedEntity = (
         ? "healing-kit"
         : entity.id.includes(":crystal:")
           ? "crystal"
+          : entity.id.includes(":hourglass:")
+            ? "hourglass"
           : entity.id.includes(":magnet:")
             ? "magnet"
           : "gold");
@@ -1368,10 +1374,12 @@ export const advanceSimulationState = (
       : maintainNearbyPickupPopulation({
           canSpawnEntityAtPosition,
           createPickupEntity,
+          enemyTimeStopUntilTick: simulationState.enemyTimeStopUntilTick,
           entities: simulationState.entities,
           nextPickupSequence: simulationState.nextPickupSequence,
           spawnMode: profiling.spawnMode,
           tick: nextTick,
+          unlockedPickupKinds: choiceAppliedBuildState.metaProgression.unlockedPickupKinds,
           worldSeed
         });
   const spawnMaintainedState = maintainLocalHostilePopulation({
@@ -1410,10 +1418,26 @@ export const advanceSimulationState = (
     tick: nextTick,
     worldSeed
   });
-  const playerEntity = getPlayerEntity(spawnMaintainedState.entities);
-  const movedEntities = spawnMaintainedState.entities.map((entity) =>
+  const timeStopAppliedEntities =
+    simulationState.enemyTimeStopUntilTick >= nextTick
+      ? spawnMaintainedState.entities.map((entity) =>
+          entity.role !== "hostile"
+            ? entity
+            : {
+                ...entity,
+                hostileControlState: {
+                  frozenUntilTick: Math.max(
+                    entity.hostileControlState?.frozenUntilTick ?? 0,
+                    simulationState.enemyTimeStopUntilTick
+                  )
+                }
+              }
+        )
+      : spawnMaintainedState.entities;
+  const playerEntity = getPlayerEntity(timeStopAppliedEntities);
+  const movedEntities = timeStopAppliedEntities.map((entity) =>
     resolveEntityMovement({
-      dynamicColliders: spawnMaintainedState.entities.filter(
+      dynamicColliders: timeStopAppliedEntities.filter(
         (colliderEntity) => colliderEntity.id !== entity.id && isDynamicCollider(colliderEntity)
       ),
       entity,
@@ -1475,6 +1499,7 @@ export const advanceSimulationState = (
   );
   const pickupResolvedState = resolvePickupCollection({
     buildState: attackResolvedState.buildState,
+    enemyTimeStopUntilTick: simulationState.enemyTimeStopUntilTick,
     entities: compactedEntities,
     pickupPulseUntilTick: attackResolvedState.pickupPulseUntilTick,
     tick: nextTick,
@@ -1546,7 +1571,7 @@ export const advanceSimulationState = (
       nextTick
     ),
     emergencyAegisChargesSpent: combatResolvedState.emergencyAegisChargesSpent,
-    enemyTimeStopUntilTick: simulationState.enemyTimeStopUntilTick,
+    enemyTimeStopUntilTick: pickupResolvedState.enemyTimeStopUntilTick,
     nextPickupSequence:
       pickupMaintainedState.nextPickupSequence +
       defeatedHostileCount * pickupContract.crystal.enemyDropCount,

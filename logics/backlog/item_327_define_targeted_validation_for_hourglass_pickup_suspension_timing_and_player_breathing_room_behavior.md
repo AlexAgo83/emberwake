@@ -1,10 +1,10 @@
 ## item_327_define_targeted_validation_for_hourglass_pickup_suspension_timing_and_player_breathing_room_behavior - Define targeted validation for hourglass pickup suspension timing and player breathing-room behavior
 > From version: 0.5.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -69,7 +69,12 @@ flowchart LR
 - Product brief(s): `prod_016_time_owned_run_arc_and_authored_difficulty_phases`
 - Architecture decision(s): `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`
 - Request: `req_086_define_a_time_stop_hourglass_pickup_for_bounded_enemy_pressure_suspension`
-- Primary task(s): (none yet)
+- Primary task(s): `task_059_orchestrate_second_wave_skills_fusion_completion_meta_progression_hourglass_pickup_and_game_over_damage_share_polish`
+
+# Closure
+- Proof:
+  - `npm run typecheck`
+  - `npm run test -- src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts games/emberwake/src/systems/gameplaySystems.test.ts`
 
 # AI Context
 - Summary: Define a time stop hourglass pickup for bounded enemy pressure suspension.

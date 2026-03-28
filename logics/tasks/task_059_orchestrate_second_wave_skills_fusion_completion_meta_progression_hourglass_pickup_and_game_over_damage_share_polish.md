@@ -4,7 +4,7 @@
 > Status: In progress
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 55%
+> Progress: 70%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -44,7 +44,7 @@ flowchart LR
 - [x] 3. Implement the missing fusion completion slices from `item_310` through `item_313`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the fusion-completion wave.
 - [x] 4. Implement the shell-owned shop and talent surface slices from `item_314` through `item_318`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the shell meta-progression wave.
 - [x] 5. Implement the persistent meta-profile slices from `item_319` through `item_323`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the cross-run persistence wave.
-- [ ] 6. Implement the hourglass utility pickup slices from `item_324` through `item_327`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the hourglass pickup wave.
+- [x] 6. Implement the hourglass utility pickup slices from `item_324` through `item_327`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the hourglass pickup wave.
 - [ ] 7. Implement the game-over damage-share polish slices from `item_328` through `item_330`, then leave the repo commit-ready, update linked Logics docs, and create a dedicated commit for the post-run UI polish wave.
 - [ ] 8. Run targeted validation across build-system, runtime combat, shell progression, persistence, utility pickup, and game-over outcome-analysis surfaces.
 - [ ] 9. Update linked requests, backlog items, and this task as each wave lands, then close the full chain when validation is complete.
@@ -123,3 +123,5 @@ flowchart LR
 - Wave 3 complete: added the shell-owned `Growth` scene, first `Shop` and `Talents` catalogs, escalating rank costs, and purchase wiring into the next-run meta progression contract.
 - Wave 4 complete: introduced a dedicated persisted meta-profile boundary for gold, grimoire discovery, and bestiary discovery/defeat progression, kept separate from the run save slot.
 - Validation checkpoint: `npm run typecheck`, `npm run test -- src/app/components/AppMetaScenePanel.test.tsx src/app/AppShell.test.tsx src/app/hooks/useAppScene.test.tsx src/shared/lib/metaProfileStorage.test.ts`.
+- Wave 5 complete: added the rare `hourglass` utility pickup, bounded enemy time stop for three seconds, and a non-stacking guard while the effect is already active.
+- Validation checkpoint: `npm run typecheck`, `npm run test -- src/game/entities/model/entitySimulation.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts games/emberwake/src/systems/gameplaySystems.test.ts`.

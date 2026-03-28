@@ -25,7 +25,10 @@ const distanceBetweenWorldPoints = (left: WorldPoint, right: WorldPoint) =>
   Math.hypot(right.x - left.x, right.y - left.y);
 
 const isUtilityPickupKind = (pickupKind: SimulatedPickupKind | undefined) =>
-  pickupKind === "gold" || pickupKind === "healing-kit" || pickupKind === "magnet";
+  pickupKind === "gold" ||
+  pickupKind === "healing-kit" ||
+  pickupKind === "hourglass" ||
+  pickupKind === "magnet";
 
 const countLocalHostiles = (entities: readonly SimulatedEntity[], playerEntity: SimulatedEntity) =>
   entities.filter(
@@ -314,33 +317,60 @@ const samplePickupSpawnPosition = ({
 };
 
 const samplePickupKind = ({
+  enemyTimeStopActive,
   playerEntity,
   sequence,
+  unlockedPickupKinds,
   worldSeed
 }: {
+  enemyTimeStopActive: boolean;
   playerEntity: SimulatedEntity;
   sequence: number;
+  unlockedPickupKinds: Array<"gold" | "healing-kit" | "hourglass" | "magnet">;
   worldSeed: string;
 }): SimulatedPickupKind => {
   const pickupRoll = sampleDeterministicSignature(
     `${worldSeed}:pickup-kind:${sequence}:${playerEntity.worldPosition.x}:${playerEntity.worldPosition.y}`
   );
+  const normalizedRoll = pickupRoll % 100;
+  let threshold = 0;
 
-  return pickupRoll % 100 < pickupContract.healingKit.spawnChancePercent
-    ? "healing-kit"
-    : pickupRoll % 100 <
-          pickupContract.healingKit.spawnChancePercent + pickupContract.magnet.spawnChancePercent
-      ? "magnet"
-      : "gold";
+  if (unlockedPickupKinds.includes("healing-kit")) {
+    threshold += pickupContract.healingKit.spawnChancePercent;
+
+    if (normalizedRoll < threshold) {
+      return "healing-kit";
+    }
+  }
+
+  if (unlockedPickupKinds.includes("magnet")) {
+    threshold += pickupContract.magnet.spawnChancePercent;
+
+    if (normalizedRoll < threshold) {
+      return "magnet";
+    }
+  }
+
+  if (unlockedPickupKinds.includes("hourglass") && !enemyTimeStopActive) {
+    threshold += pickupContract.hourglass.spawnChancePercent;
+
+    if (normalizedRoll < threshold) {
+      return "hourglass";
+    }
+  }
+
+  return "gold";
 };
 
 export const maintainNearbyPickupPopulation = ({
   canSpawnEntityAtPosition,
   createPickupEntity,
+  enemyTimeStopUntilTick = 0,
   entities,
   nextPickupSequence,
   spawnMode = "normal",
   tick,
+  unlockedPickupKinds = ["gold", "healing-kit", "magnet", "hourglass"],
   worldSeed
 }: {
   canSpawnEntityAtPosition: (args: {
@@ -355,10 +385,12 @@ export const maintainNearbyPickupPopulation = ({
     worldPosition: WorldPoint,
     spawnedAtTick: number
   ) => SimulatedEntity;
+  enemyTimeStopUntilTick?: number;
   entities: readonly SimulatedEntity[];
   nextPickupSequence: number;
   spawnMode?: ProfilingSpawnMode;
   tick: number;
+  unlockedPickupKinds?: Array<"gold" | "healing-kit" | "hourglass" | "magnet">;
   worldSeed: string;
 }) => {
   if (spawnMode === "no-spawn") {
@@ -415,8 +447,10 @@ export const maintainNearbyPickupPopulation = ({
     const pickupEntity = createPickupEntity(
       pickupSequence,
       samplePickupKind({
+        enemyTimeStopActive: enemyTimeStopUntilTick >= tick,
         playerEntity,
         sequence: pickupSequence,
+        unlockedPickupKinds,
         worldSeed
       }),
       candidatePosition,
