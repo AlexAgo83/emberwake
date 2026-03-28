@@ -293,6 +293,13 @@ describe("entitySimulation", () => {
     expect(spawnedHostile?.hostileProfileId).toBe("watchglass-prime");
     expect(spawnedHostile?.footprint.radius).toBeGreaterThan(50);
     expect(spawnedHostile?.visualScale).toBe(1.5);
+    expect(spawnedHostile?.combat.maxHealth).toBe(
+      Math.round(
+        hostileCombatContract.hostile.maxHealth *
+          resolveRunProgressionPhase(miniBossBeatTick).hostileMaxHealthMultiplier *
+          getHostileSpawnProfile("watchglass-prime").maxHealthMultiplier
+      )
+    );
   });
 
   it("escalates newly spawned hostile stats after a boss has been defeated", () => {
@@ -772,6 +779,55 @@ describe("entitySimulation", () => {
     expect(nextState.runStats.currentXp).toBe(0);
   });
 
+  it("removes legacy cache pickups from the active simulation", () => {
+    const initialState = createInitialSimulationState();
+    const legacyCachePickup: SimulatedEntity = {
+      ...createGenericMoverEntity({
+        id: "entity:pickup:cache:0",
+        renderLayer: 90,
+        visual: {
+          kind: "pickup-cache",
+          tint: "#9ae5ff"
+        },
+        worldPosition: { x: 96, y: 0 }
+      }),
+      combat: {
+        currentHealth: 1,
+        maxHealth: 1
+      },
+      footprint: {
+        radius: 22
+      },
+      movementSurfaceModifier: "normal",
+      pickupProfile: {
+        kind: "cache"
+      },
+      role: "pickup",
+      spawnedAtTick: 0,
+      state: "idle",
+      velocity: {
+        x: 0,
+        y: 0
+      }
+    };
+
+    const nextState = advanceSimulationState(
+      {
+        ...initialState,
+        entities: [initialState.entity, legacyCachePickup],
+        nextPickupSequence: 1
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "no-spawn"
+        }
+      }
+    );
+
+    expect(nextState.entities.some((entity) => entity.pickupProfile?.kind === "cache")).toBe(false);
+  });
+
   it("consolidates nearby hostile crystal drops into a single stacked pickup", () => {
     const initialState = createInitialSimulationState();
     const stackedCrystalPickup = {
@@ -879,6 +935,7 @@ describe("entitySimulation", () => {
 
     expect(crystalPickups).toHaveLength(1);
     expect(crystalPickups[0]?.pickupProfile?.stackCount).toBe(6);
+    expect(crystalPickups[0]?.visual.tint).toBe("#73f2ff");
   });
 
   it("creates a distant super crystal by compacting off-player pickup clusters", () => {
@@ -926,5 +983,88 @@ describe("entitySimulation", () => {
     expect(crystalPickups[0]?.pickupProfile?.stackCount).toBe(7);
     expect(crystalPickups[0]?.worldPosition.x).toBeGreaterThan(2100);
     expect(crystalPickups[0]?.worldPosition.x).toBeLessThan(2260);
+    expect(crystalPickups[0]?.visual.tint).toBe("#73f2ff");
+  });
+
+  it("turns merged crystals green once they exceed ten times a base crystal value", () => {
+    const initialState = createInitialSimulationState();
+    const nextState = advanceSimulationState(
+      {
+        ...initialState,
+        entities: [
+          initialState.entity,
+          createPickupFixture("crystal", {
+            id: "entity:pickup:crystal:green-a",
+            pickupProfile: {
+              kind: "crystal",
+              stackCount: 6
+            },
+            worldPosition: { x: 128, y: 0 }
+          }),
+          createPickupFixture("crystal", {
+            id: "entity:pickup:crystal:green-b",
+            pickupProfile: {
+              kind: "crystal",
+              stackCount: 5
+            },
+            worldPosition: { x: 142, y: 0 }
+          })
+        ],
+        tick: 29
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "no-spawn"
+        }
+      }
+    );
+    const mergedCrystal = nextState.entities.find(
+      (entity) => entity.role === "pickup" && entity.pickupProfile?.kind === "crystal"
+    );
+
+    expect(mergedCrystal?.pickupProfile?.stackCount).toBe(11);
+    expect(mergedCrystal?.visual.tint).toBe("#7dff9b");
+  });
+
+  it("turns merged crystals red once they exceed fifty times a base crystal value", () => {
+    const initialState = createInitialSimulationState();
+    const nextState = advanceSimulationState(
+      {
+        ...initialState,
+        entities: [
+          initialState.entity,
+          createPickupFixture("crystal", {
+            id: "entity:pickup:crystal:red-a",
+            pickupProfile: {
+              kind: "crystal",
+              stackCount: 26
+            },
+            worldPosition: { x: 128, y: 0 }
+          }),
+          createPickupFixture("crystal", {
+            id: "entity:pickup:crystal:red-b",
+            pickupProfile: {
+              kind: "crystal",
+              stackCount: 25
+            },
+            worldPosition: { x: 146, y: 0 }
+          })
+        ],
+        tick: 29
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "no-spawn"
+        }
+      }
+    );
+    const mergedCrystal = nextState.entities.find(
+      (entity) => entity.role === "pickup" && entity.pickupProfile?.kind === "crystal"
+    );
+
+    expect(mergedCrystal?.pickupProfile?.stackCount).toBe(51);
+    expect(mergedCrystal?.visual.tint).toBe("#ff5a5a");
   });
 });

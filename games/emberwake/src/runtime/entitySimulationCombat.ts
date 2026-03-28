@@ -5,7 +5,6 @@ import { pickupContract, resolveXpRequiredForLevel } from "./pickupContract";
 import {
   recordActiveWeaponAttack,
   resolveActiveWeaponRuntimeStats,
-  resolveChestReward,
   resolvePickupRadiusMultiplier,
   type BuildState
 } from "./buildSystem";
@@ -620,7 +619,6 @@ export const resolvePickupCollection = ({
   }
 
   let nextPlayerEntity = playerEntity;
-  let nextBuildState = buildState;
   const nextRunStats = { ...runStats };
   const retainedEntities: SimulatedEntity[] = [];
   const pickupRadiusWorldUnits =
@@ -705,9 +703,6 @@ export const resolvePickupCollection = ({
         );
         nextRunStats.healingKitsCollected += 1;
         break;
-      case "cache":
-        nextBuildState = resolveChestReward(nextBuildState, nextRunStats.hostileDefeats);
-        break;
       case "gold":
         nextRunStats.goldCollected += pickupContract.gold.value * pickupStackCount;
         break;
@@ -717,7 +712,7 @@ export const resolvePickupCollection = ({
   }
 
   return {
-    buildState: nextBuildState,
+    buildState,
     entities: retainedEntities.map((entity) =>
       entity.id === nextPlayerEntity.id ? nextPlayerEntity : entity
     ),

@@ -33,13 +33,11 @@ import {
   activeWeaponIds,
   type ActiveWeaponId,
   type FusionId,
-  advanceChestMilestone,
   buildSystemContract,
   createInitialBuildState,
   normalizeBuildState,
   applyLevelUpChoice,
   resolveActiveWeaponRuntimeStats,
-  resolveChestDropCount,
   type BuildState
 } from "@game/runtime/buildSystem";
 import {
@@ -475,7 +473,7 @@ const createPickupEntity = (
         pickupKind === "healing-kit"
           ? "#7dff9b"
           : pickupKind === "crystal"
-            ? "#73f2ff"
+            ? resolveCrystalPickupTint(stackCount)
             : pickupKind === "magnet"
               ? "#ffd1ff"
             : pickupKind === "cache"
@@ -503,6 +501,8 @@ const createPickupEntity = (
 });
 
 const isAlive = (entity: SimulatedEntity) => entity.combat.currentHealth > 0;
+const isDisabledPickupEntity = (entity: SimulatedEntity) =>
+  entity.role === "pickup" && entity.pickupProfile?.kind === "cache";
 
 const pickupStackMergeRadiusWorldUnits = pickupContract.pickup.pickupRadiusWorldUnits * 3;
 const pickupCompactionIntervalTicks = 30;
@@ -514,6 +514,20 @@ const isStackablePickupKind = (pickupKind: SimulatedPickupKind) =>
 
 const resolvePickupStackCount = (entity: SimulatedEntity) =>
   Math.max(1, entity.pickupProfile?.stackCount ?? 1);
+
+const resolveCrystalPickupTint = (stackCount: number) => {
+  const resolvedStackCount = Math.max(1, Math.floor(stackCount));
+
+  if (resolvedStackCount > 50) {
+    return "#ff5a5a";
+  }
+
+  if (resolvedStackCount > 10) {
+    return "#7dff9b";
+  }
+
+  return "#73f2ff";
+};
 
 const mergeNewPickupEntities = (
   entities: readonly SimulatedEntity[],
@@ -565,14 +579,22 @@ const mergeNewPickupEntities = (
     }
 
     const mergeTarget = nextEntities[mergeTargetIndex]!;
+    const nextStackCount =
+      resolvePickupStackCount(mergeTarget) + resolvePickupStackCount(pickupEntity);
 
     nextEntities[mergeTargetIndex] = {
       ...mergeTarget,
       pickupProfile: {
         ...mergeTarget.pickupProfile!,
-        stackCount:
-          resolvePickupStackCount(mergeTarget) + resolvePickupStackCount(pickupEntity)
-      }
+        stackCount: nextStackCount
+      },
+      visual:
+        pickupKind === "crystal"
+          ? {
+              ...mergeTarget.visual,
+              tint: resolveCrystalPickupTint(nextStackCount)
+            }
+          : mergeTarget.visual
     };
   }
 
@@ -619,7 +641,14 @@ const createMergedPickupEntity = (cluster: readonly SimulatedEntity[], preferCen
       pickupProfile: {
         ...anchorEntity.pickupProfile!,
         stackCount: totalStackCount
-      }
+      },
+      visual:
+        anchorEntity.pickupProfile?.kind === "crystal"
+          ? {
+              ...anchorEntity.visual,
+              tint: resolveCrystalPickupTint(totalStackCount)
+            }
+          : anchorEntity.visual
     };
   }
 
@@ -646,6 +675,13 @@ const createMergedPickupEntity = (cluster: readonly SimulatedEntity[], preferCen
       ...anchorEntity.pickupProfile!,
       stackCount: totalStackCount
     },
+    visual:
+      anchorEntity.pickupProfile?.kind === "crystal"
+        ? {
+            ...anchorEntity.visual,
+            tint: resolveCrystalPickupTint(totalStackCount)
+          }
+        : anchorEntity.visual,
     worldPosition: {
       x: weightedWorldPosition.x / weightedWorldPosition.totalStackCount,
       y: weightedWorldPosition.y / weightedWorldPosition.totalStackCount
@@ -948,6 +984,15 @@ const normalizeSimulatedEntity = (
         radius: entity.footprint?.radius ?? pickupContract.pickup.pickupRadiusWorldUnits
       },
       movementSurfaceModifier: entity.movementSurfaceModifier ?? "normal",
+      visual:
+        inferredPickupKind === "crystal"
+          ? {
+              ...baseEntity.visual,
+              tint: resolveCrystalPickupTint(
+                Math.max(1, entity.pickupProfile?.stackCount ?? 1)
+              )
+            }
+          : baseEntity.visual,
       pickupProfile: {
         attractionState: entity.pickupProfile?.attractionState,
         kind: inferredPickupKind,
@@ -986,7 +1031,9 @@ export const normalizeEntitySimulationState = (
       : simulationState.entity
         ? [simulationState.entity]
         : initialState.entities;
-  const normalizedEntities = sourceEntities.map((entity) => normalizeSimulatedEntity(entity));
+  const normalizedEntities = sourceEntities
+    .map((entity) => normalizeSimulatedEntity(entity))
+    .filter((entity) => !isDisabledPickupEntity(entity));
   const playerEntity =
     normalizedEntities.find(
       (entity) => entity.role === "player" || entity.id === emberwakeRuntimeBootstrap.playerEntity.id
@@ -1337,8 +1384,9 @@ export const advanceSimulationState = (
       worldSeed
     })
   );
+  const supportedMovedEntities = movedEntities.filter((entity) => !isDisabledPickupEntity(entity));
   const attackResolvedState = resolveAutomaticPlayerAttack(
-    movedEntities,
+    supportedMovedEntities,
     nextTick,
     choiceAppliedBuildState,
     simulationState.runStats
@@ -1354,17 +1402,8 @@ export const advanceSimulationState = (
       const defeatedHostiles = combatResolvedState.entities.filter(
         (entity) => entity.role === "hostile" && !isAlive(entity)
       );
-      const hostileDefeatCountAfterUpdate =
-        simulationState.runStats.hostileDefeats + defeatedHostiles.length;
-      const chestDropCount = resolveChestDropCount(
-        attackResolvedState.buildState,
-        hostileDefeatCountAfterUpdate
-      );
-      const miniBossCacheDropCount = defeatedHostiles.filter(
-        (entity) => entity.hostileProfileId === "watchglass-prime"
-      ).length;
 
-      if (defeatedHostiles.length === 0 && chestDropCount === 0 && miniBossCacheDropCount === 0) {
+      if (defeatedHostiles.length === 0) {
         return combatResolvedState.entities;
       }
 
@@ -1380,24 +1419,7 @@ export const advanceSimulationState = (
           )
         )
       );
-      const droppedCacheEntities =
-        chestDropCount === 0 && miniBossCacheDropCount === 0
-          ? []
-          : Array.from({ length: chestDropCount + miniBossCacheDropCount }, (_, cacheIndex) =>
-              createPickupEntity(
-                pickupMaintainedState.nextPickupSequence +
-                  defeatedHostiles.length * pickupContract.crystal.enemyDropCount +
-                  cacheIndex,
-                "cache",
-                defeatedHostiles[cacheIndex]?.worldPosition ?? playerEntity.worldPosition,
-                nextTick
-              )
-            );
-
-      return mergeNewPickupEntities(combatResolvedState.entities, [
-        ...droppedCrystalEntities,
-        ...droppedCacheEntities
-      ]);
+      return mergeNewPickupEntities(combatResolvedState.entities, droppedCrystalEntities);
     })(),
     playerEntity,
     nextTick
@@ -1442,20 +1464,7 @@ export const advanceSimulationState = (
       }
     : nextPlayerEntity;
   const nextBuildStateWithRewards = addPendingLevelUps(
-    defeatedHostileCount > -1
-      ? (() => {
-          const hostileDefeatCountAfterUpdate =
-            simulationState.runStats.hostileDefeats + defeatedHostileCount;
-          const chestDropCount = resolveChestDropCount(
-            pickupResolvedState.buildState,
-            hostileDefeatCountAfterUpdate
-          );
-
-          return chestDropCount > 0
-            ? advanceChestMilestone(pickupResolvedState.buildState)
-            : pickupResolvedState.buildState;
-        })()
-      : pickupResolvedState.buildState,
+    pickupResolvedState.buildState,
     Math.max(0, pickupResolvedState.runStats.currentLevel - simulationState.runStats.currentLevel),
     nextTick
   );
@@ -1487,12 +1496,7 @@ export const advanceSimulationState = (
     ),
     nextPickupSequence:
       pickupMaintainedState.nextPickupSequence +
-      defeatedHostileCount * pickupContract.crystal.enemyDropCount +
-      defeatedHostiles.filter((entity) => entity.hostileProfileId === "watchglass-prime").length +
-      resolveChestDropCount(
-        choiceAppliedBuildState,
-        simulationState.runStats.hostileDefeats + defeatedHostileCount
-      ),
+      defeatedHostileCount * pickupContract.crystal.enemyDropCount,
     nextHostileSequence: spawnMaintainedState.nextHostileSequence,
     runStats: {
       ...pickupResolvedState.runStats,

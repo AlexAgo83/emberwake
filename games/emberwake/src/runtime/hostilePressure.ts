@@ -114,7 +114,7 @@ const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
     footprintRadius: 58,
     id: "watchglass-prime",
     isMiniBoss: true,
-    maxHealthMultiplier: 3.25,
+    maxHealthMultiplier: 10,
     moveSpeedMultiplier: 0.92,
     renderLayer: 106,
     tint: "#ffd074",
