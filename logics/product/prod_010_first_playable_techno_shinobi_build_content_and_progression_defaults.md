@@ -1,5 +1,5 @@
 ## prod_010_first_playable_techno_shinobi_build_content_and_progression_defaults - First playable techno-shinobi build content and progression defaults
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Draft
 > Related request: `req_059_define_a_first_playable_techno_shinobi_build_content_wave`
 > Related backlog: `item_218_define_the_first_exact_techno_shinobi_active_roster_and_starter_weapon_delivery`, `item_219_define_the_first_exact_techno_shinobi_passive_roster_and_fusion_key_delivery`, `item_220_define_first_pass_level_up_pool_and_chest_rules_for_the_techno_shinobi_build_loop`, `item_221_define_the_first_curated_techno_shinobi_fusion_delivery_and_readiness_rules`, `item_222_define_player_facing_level_up_and_build_tracking_ui_for_the_first_techno_shinobi_loop`, `item_223_define_first_playable_tuning_and_validation_for_the_techno_shinobi_build_wave`
@@ -18,6 +18,15 @@ This brief locks the first playable package to a small techno-shinobi roster:
 - `1` first-pass level-up and chest grammar
 
 The goal is not perfect balance. The goal is one legible, theme-coherent, first fun loop that proves the whole build system.
+
+```mermaid
+flowchart LR
+    Problem[Product problem] --> Goals[Goals]
+    Goals --> Decisions[Key product decisions]
+    Decisions --> Guardrails[Scope and guardrails]
+    Guardrails --> Signals[Success signals]
+```
+
 
 # Product problem
 The current product corpus now explains:

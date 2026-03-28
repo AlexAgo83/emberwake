@@ -1,5 +1,5 @@
 ## task_024_orchestrate_runtime_hardening_for_input_state_release_and_bundle_risk - Orchestrate runtime hardening for input state release and bundle risk
-> From version: 0.1.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 96%
@@ -40,6 +40,10 @@ flowchart LR
 - `item_063` -> Selection presentation is separated from simulation state. Proof: `src/game/entities/model/entityContract.ts`, `src/game/entities/hooks/useEntityWorld.ts`, `src/game/entities/hooks/useEntityWorld.test.tsx`, `src/game/entities/render/EntityScene.tsx`, `src/app/components/EntityInspectionPanel.tsx`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
 - `item_064` -> Release-readiness behavior matches documented branch and gate semantics. Proof: `package.json`, `scripts/release/verifyReleaseReadiness.mjs`, `README.md`.
 - `item_065` -> Pixi bundle warning risk is captured with a defined mitigation direction. Proof: `vite.config.ts`, `README.md`.
+
+# Request AC Traceability
+- req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `task_024_orchestrate_runtime_hardening_for_input_state_release_and_bundle_risk` closes the linked request chain for `req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk` and carries the delivery evidence for `item_065_capture_and_reduce_pixi_bundle_warning_risk`.
+
 
 # Decision framing
 - Product framing: Required

@@ -1,5 +1,5 @@
 ## task_047_orchestrate_techno_shinobi_shell_menu_rewamp_wave - Orchestrate techno shinobi shell menu rewamp wave
-> From version: 0.3.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 99%
 > Confidence: 100%
@@ -53,6 +53,10 @@ flowchart TD
 - AC4 -> Action hierarchy: primary progression, navigation, utility, and runtime-control affordances are visually distinct. Proof target: shell scene actions and command-deck hierarchy.
 - AC5 -> Runtime chrome alignment: HUD and selected overlays align with the shell family without harming clarity. Proof target: runtime HUD/overlay components and manual runtime review.
 - AC6 -> Responsive behavior: desktop and mobile preserve hierarchy across the rewamp. Proof target: responsive CSS and manual viewport verification.
+
+# Request AC Traceability
+- req_055_rework_all_shell_menus_with_a_techno_shinobi_visual_direction coverage: AC7, AC8, AC9. Proof: `task_047_orchestrate_techno_shinobi_shell_menu_rewamp_wave` closes the linked request chain for `req_055_rework_all_shell_menus_with_a_techno_shinobi_visual_direction` and carries the delivery evidence for `item_204_define_player_hud_and_shell_overlay_alignment_within_the_techno_shinobi_menu_family`.
+
 
 # Decision framing
 - Product framing: Required

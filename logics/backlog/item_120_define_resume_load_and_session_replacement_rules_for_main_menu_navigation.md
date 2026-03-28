@@ -1,5 +1,5 @@
 ## item_120_define_resume_load_and_session_replacement_rules_for_main_menu_navigation - Define resume, load, and session-replacement rules for main-menu navigation
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 96%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Empty save posture is explicit. Proof target: IA note, disabled-state rule, or implementation report.
 - AC3 -> Scope: Replacement confirmation behavior is explicit. Proof target: confirmation rule or scene-transition summary.
 - AC4 -> Scope: Safe shell/runtime transition posture is explicit. Proof target: ownership note or behavior report.
+
+# Request AC Traceability
+- req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8. Proof: `item_120_define_resume_load_and_session_replacement_rules_for_main_menu_navigation` remains the request-closing backlog slice for `req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow` and stays linked to `task_036_orchestrate_main_menu_new_game_and_character_name_entry_wave` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Primary

@@ -1,5 +1,5 @@
 ## adr_035_resolve_entity_collisions_as_lightweight_deterministic_separation - Resolve entity collisions as lightweight deterministic separation
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Prevent obviously broken entity overlap; keep entity/entity interaction stable without introducing rigid-body response; preserve deterministic gameplay simulation.
 > Related request: `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`
@@ -9,6 +9,15 @@
 
 # Overview
 Entity/entity collision should be implemented as lightweight deterministic separation and overlap prevention, not as a full physical response system.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 As soon as blocked world space appears, entity overlap becomes more visible and more damaging to readability. Players expect entities to stop collapsing into the same space, but that expectation still does not require:

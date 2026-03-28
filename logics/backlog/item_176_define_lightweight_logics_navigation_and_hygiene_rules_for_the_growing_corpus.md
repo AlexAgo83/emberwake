@@ -1,5 +1,5 @@
 ## item_176_define_lightweight_logics_navigation_and_hygiene_rules_for_the_growing_corpus - Define lightweight logics navigation and hygiene rules for the growing corpus
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice improves navigability without forcing a large archive/restructure move.
 - AC3: The slice stays narrow and repo-operations focused.
 - AC4: The slice avoids widening into unrelated product work.
+
+# Request AC Traceability
+- req_049_define_a_documentation_release_and_logics_hygiene_wave_for_repository_coherence coverage: AC1, AC2, AC3, AC4, AC5. Proof: `item_176_define_lightweight_logics_navigation_and_hygiene_rules_for_the_growing_corpus` remains the request-closing backlog slice for `req_049_define_a_documentation_release_and_logics_hygiene_wave_for_repository_coherence` and stays linked to `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_049_define_a_documentation_release_and_logics_hygiene_wave_for_repository_coherence`

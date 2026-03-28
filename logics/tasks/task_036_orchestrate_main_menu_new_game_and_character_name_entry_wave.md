@@ -1,5 +1,5 @@
 ## task_036_orchestrate_main_menu_new_game_and_character_name_entry_wave - Orchestrate main menu, new-game, and character-name entry wave
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 97%
@@ -47,6 +47,10 @@ flowchart TD
 - `item_118` -> Main menu is the primary entry and return hub. Proof target: scene routing or implementation report.
 - `item_119` -> `New game` flow is explicit and captures character name before runtime start. Proof target: flow implementation or UX summary.
 - `item_120` -> `Resume`, `Load`, and replacement rules are explicit. Proof target: transition rules or behavior summary.
+
+# Request AC Traceability
+- req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8. Proof: `task_036_orchestrate_main_menu_new_game_and_character_name_entry_wave` closes the linked request chain for `req_030_define_a_shell_owned_main_menu_and_new_game_entry_flow` and carries the delivery evidence for `item_120_define_resume_load_and_session_replacement_rules_for_main_menu_navigation`.
+
 
 # Decision framing
 - Product framing: Required

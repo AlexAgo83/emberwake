@@ -1,5 +1,5 @@
 ## adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer - Keep engine Pixi as adapter and game as runtime scene composer
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Prevent render-layer ownership drift; keep Pixi adapters reusable; let Emberwake own scene meaning and layer order without pushing game meaning into engine modules.
 > Related request: `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`
@@ -9,6 +9,15 @@
 
 # Overview
 Engine Pixi modules should stay adapter-oriented. The game should own runtime scene composition, layer order, and visual meaning. The engine renders what the game asks for through reusable adapters, but it does not decide Emberwake’s scene structure.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 Runtime convergence clarified the update boundary, but visual composition still had room to drift:

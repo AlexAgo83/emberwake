@@ -1,5 +1,5 @@
 ## item_089_define_gameplay_system_ownership_for_combat_status_effects_ai_and_progression - Define gameplay system ownership for combat status effects AI and progression
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 95%
@@ -37,6 +37,10 @@ flowchart LR
 - AC3 -> Scope: The strategy fits the current runtime architecture. Proof target: compatibility notes with runner, contracts, and content posture.
 - AC4 -> Scope: The work remains pragmatic. Proof target: bounded scope, absence of speculative generic framework abstractions.
 - AC5 -> Scope: The slice remains architecture-first. Proof target: implementation sequencing guidance, follow-up splits, bounded deliverables.
+
+# Request AC Traceability
+- req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `item_089_define_gameplay_system_ownership_for_combat_status_effects_ai_and_progression` remains the request-closing backlog slice for `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave` and stays linked to `task_029_orchestrate_runtime_performance_product_meta_flow_and_gameplay_system_architecture` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Required

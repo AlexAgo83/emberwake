@@ -1,5 +1,5 @@
 ## adr_016_define_shell_scene_state_and_meta_surface_ownership - Define shell scene state and meta surface ownership
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Prevent `AppShell` from becoming an unstructured controller; keep runtime state ownership separate from shell state; make boot, runtime, failure, pause, and settings states explicit before more player-facing surfaces appear.
 > Related request: `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`
@@ -9,6 +9,15 @@
 
 # Overview
 The web shell should own high-level application scene state and shell-only meta-surfaces. Gameplay runtime state must remain game-owned. The shell scene model should explicitly cover `boot`, `runtime`, `pause`, `failure`, and `settings`, even if not every surface is fully implemented yet.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 Runtime convergence removed the biggest ambiguity from the simulation loop, but it did not solve the broader shell question. Without a shell-level scene model, every new surface risks being bolted directly into `AppShell` through local booleans and effect chains.

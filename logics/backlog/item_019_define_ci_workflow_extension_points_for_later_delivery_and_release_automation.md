@@ -1,5 +1,5 @@
 ## item_019_define_ci_workflow_extension_points_for_later_delivery_and_release_automation - Define CI workflow extension points for later delivery and release automation
-> From version: 0.1.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 94%
 > Confidence: 93%
@@ -57,7 +57,7 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_012_require_curated_versioned_changelogs_for_releases`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Request: `req_004_prepare_github_actions_ci_pipeline`
 - Primary task(s): `task_015_orchestrate_static_delivery_and_ci_hardening`
 

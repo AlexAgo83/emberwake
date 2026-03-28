@@ -1,5 +1,5 @@
 ## item_255_define_targeted_validation_for_time_owned_run_pacing_and_difficulty_escalation - Define targeted validation for time-owned run pacing and difficulty escalation
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC1: The slice defines validation for phase readability and escalation feel.
 - AC2: The slice keeps validation bounded to the first-pass time-owned run arc.
 - AC3: The slice supports later tuning without overexpanding this wave.
+
+# Request AC Traceability
+- req_067_define_a_time_driven_run_progression_and_difficulty_escalation_wave coverage: AC1, AC2, AC3, AC4, AC5. Proof: `item_255_define_targeted_validation_for_time_owned_run_pacing_and_difficulty_escalation` remains the request-closing backlog slice for `req_067_define_a_time_driven_run_progression_and_difficulty_escalation_wave` and stays linked to `task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves` for delivered implementation evidence.
+
 
 # Links
 - Product brief(s): `prod_016_time_owned_run_arc_and_authored_difficulty_phases`

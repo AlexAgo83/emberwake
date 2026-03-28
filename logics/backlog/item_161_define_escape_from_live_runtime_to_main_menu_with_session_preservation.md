@@ -1,5 +1,5 @@
 ## item_161_define_escape_from_live_runtime_to_main_menu_with_session_preservation - Define escape from live runtime to main menu with session preservation
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines that the active session is preserved, so runtime effectively pauses through shell ownership.
 - AC3: The slice preserves existing priority rules for open command-deck navigation and local capture/input handling.
 - AC4: The slice stays narrow and does not widen into broader scene-navigation redesign.
+
+# Request AC Traceability
+- req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8. Proof: `item_161_define_escape_from_live_runtime_to_main_menu_with_session_preservation` remains the request-closing backlog slice for `req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors` and stays linked to `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors`

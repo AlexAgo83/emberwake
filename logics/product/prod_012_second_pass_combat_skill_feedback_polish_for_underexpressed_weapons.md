@@ -1,5 +1,5 @@
 ## prod_012_second_pass_combat_skill_feedback_polish_for_underexpressed_weapons - Second-pass combat skill feedback polish for underexpressed weapons
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Validated
 > Related request: `req_062_define_a_second_combat_skill_feedback_polish_wave_for_underexpressed_weapons`
 > Related backlog: `item_233_define_a_non_hit_readability_posture_for_polished_weapon_feedback`, `item_234_define_a_stronger_cinder_arc_anticipation_and_travel_signature_without_full_projectiles`, `item_235_define_a_more_present_orbit_sutra_and_null_canister_spatial_ownership_signature`, `item_236_define_clearer_visual_role_separation_between_guided_senbon_and_shade_kunai`, `item_237_define_targeted_validation_for_second_pass_weapon_feedback_polish`
@@ -13,6 +13,15 @@ The first combat-skill feedback wave made the first playable weapon roster visib
 This brief defines the next product layer:
 
 `make the first-wave arsenal consistently readable, not just nominally visible`
+
+```mermaid
+flowchart LR
+    Problem[Product problem] --> Goals[Goals]
+    Goals --> Decisions[Key product decisions]
+    Decisions --> Guardrails[Scope and guardrails]
+    Guardrails --> Signals[Success signals]
+```
+
 
 # Product problem
 The current first-pass feedback solved the biggest gap, but left four weaker areas:

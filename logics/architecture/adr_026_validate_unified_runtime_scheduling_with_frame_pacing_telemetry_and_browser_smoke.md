@@ -1,5 +1,5 @@
 ## adr_026_validate_unified_runtime_scheduling_with_frame_pacing_telemetry_and_browser_smoke - Validate unified runtime scheduling with frame pacing telemetry and browser smoke
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Give loop unification a measurable definition of success; prove scheduler mode and frame-pacing behavior through repeatable repository validation; keep runtime smoothness evidence close to delivery tooling.
 > Related request: `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
@@ -9,6 +9,15 @@
 
 # Overview
 Unified runtime scheduling should be validated through runtime telemetry captured in the browser smoke path, not only through subjective feel or startup-only budgets.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The repository already validated startup size and renderer readiness, but loop-unification work needed different evidence:

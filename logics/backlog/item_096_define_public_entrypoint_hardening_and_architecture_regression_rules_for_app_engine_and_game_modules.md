@@ -1,5 +1,5 @@
 ## item_096_define_public_entrypoint_hardening_and_architecture_regression_rules_for_app_engine_and_game_modules - Define public-entrypoint hardening and architecture-regression rules for app, engine, and game modules
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 95%
@@ -37,6 +37,10 @@ flowchart LR
 - AC3 -> Scope: Delivery practicality is explicit. Proof target: compatibility notes and bounded enforcement approach.
 - AC4 -> Scope: Existing repo workflow remains compatible. Proof target: fit with aliases, lint, and current package structure.
 - AC5 -> Scope: Slice remains bounded. Proof target: absence of broad packaging churn.
+
+# Request AC Traceability
+- req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_096_define_public_entrypoint_hardening_and_architecture_regression_rules_for_app_engine_and_game_modules` remains the request-closing backlog slice for `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave` and stays linked to `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Supporting

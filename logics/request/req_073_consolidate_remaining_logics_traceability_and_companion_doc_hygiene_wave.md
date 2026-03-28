@@ -1,9 +1,9 @@
 ## req_073_consolidate_remaining_logics_traceability_and_companion_doc_hygiene_wave - Consolidate remaining Logics traceability and companion-doc hygiene wave
 > From version: 0.5.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 99%
 > Complexity: High
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -23,7 +23,7 @@ The first consolidation pass already corrected two large classes of drift:
 
 That means the remaining debt is no longer product ambiguity. It is now clearly a bounded Logics-hygiene wave.
 
-Current workflow-audit baseline after that consolidation:
+Initial workflow-audit baseline after that consolidation:
 - `485` `ac_missing_task_traceability`
 - `471` `ac_missing_item_traceability`
 - `42` `companion_doc_missing_mermaid`
@@ -41,6 +41,11 @@ This request is intentionally bounded:
 - in scope: `logics/request`, `logics/backlog`, `logics/tasks`, `logics/product`, and `logics/architecture`
 - out of scope: gameplay changes, runtime behavior, UI redesign, or performance/code optimization
 - success must be proven through workflow audit and Logics lint, not through feature delivery
+
+Closure outcome:
+- `python3 logics/skills/logics.py audit` now returns `Workflow audit: OK`
+- `npm run logics:lint` now returns `Logics lint: OK (warnings)`
+- the remaining warnings are non-blocking generic Mermaid scaffold warnings on older backlog/task docs and do not fail the workflow gates
 
 ```mermaid
 %% logics-kind: request

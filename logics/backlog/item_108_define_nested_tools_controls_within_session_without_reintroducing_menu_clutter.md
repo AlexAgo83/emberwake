@@ -1,5 +1,5 @@
 ## item_108_define_nested_tools_controls_within_session_without_reintroducing_menu_clutter - Define nested Tools controls within Session without reintroducing menu clutter
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 99%
 > Confidence: 96%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Existing utility actions are preserved. Proof target: action mapping or rendered structure.
 - AC3 -> Scope: Lower-priority treatment is explicit. Proof target: priority note or implementation report.
 - AC4 -> Scope: Current shell model remains intact. Proof target: compatibility note with current deck.
+
+# Request AC Traceability
+- req_027_restructure_the_shell_command_deck_around_a_primary_session_section coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_108_define_nested_tools_controls_within_session_without_reintroducing_menu_clutter` remains the request-closing backlog slice for `req_027_restructure_the_shell_command_deck_around_a_primary_session_section` and stays linked to `task_034_orchestrate_session_first_shell_command_deck_hierarchy` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Primary

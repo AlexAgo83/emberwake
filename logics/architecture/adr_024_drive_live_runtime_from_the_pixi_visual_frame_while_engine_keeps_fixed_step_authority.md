@@ -1,5 +1,5 @@
 ## adr_024_drive_live_runtime_from_the_pixi_visual_frame_while_engine_keeps_fixed_step_authority - Drive live runtime from the Pixi visual frame while engine keeps fixed step authority
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Remove the live dual-loop posture; keep one visual-frame scheduler on the main thread; preserve engine ownership of fixed-step simulation and `GameModule` update semantics.
 > Related request: `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
@@ -9,6 +9,15 @@
 
 # Overview
 The live runtime should be advanced from the Pixi application visual frame, while the engine runtime runner remains the owner of fixed-step simulation accumulation, catch-up control, and `GameModule` progression.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The repository previously had two active frame-driven schedulers in the live runtime:

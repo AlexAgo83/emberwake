@@ -1,9 +1,9 @@
 ## prod_009_level_up_slots_and_run_progression_model_for_emberwake - Level-up slots and run progression model for Emberwake
 > Date: 2026-03-23
 > Status: Draft
-> Related request: (none yet)
-> Related backlog: (none yet)
-> Related task: (none yet)
+> Related request: `req_058_define_a_foundational_survivor_build_system_for_weapons_passives_fusions_and_run_progression`, `req_059_define_a_first_playable_techno_shinobi_build_content_wave`
+> Related backlog: `item_214_define_a_slot_limited_level_up_and_run_reward_model_for_build_growth`, `item_216_define_player_facing_build_choice_and_fusion_payoff_presentation_for_the_first_survivor_loop`, `item_217_define_targeted_validation_for_the_foundational_survivor_build_system`, `item_220_define_first_pass_level_up_pool_and_chest_rules_for_the_techno_shinobi_build_loop`, `item_223_define_first_playable_tuning_and_validation_for_the_techno_shinobi_build_wave`
+> Related task: `task_050_orchestrate_the_foundational_survivor_build_system_wave`, `task_051_orchestrate_the_first_playable_techno_shinobi_build_content_wave`
 > Related architecture: `adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_038_split_entity_player_rendering_into_stable_geometry_and_transient_combat_overlays`
 > Reminder: Update status, linked refs, scope, decisions, success signals, and open questions when you edit this doc.
 

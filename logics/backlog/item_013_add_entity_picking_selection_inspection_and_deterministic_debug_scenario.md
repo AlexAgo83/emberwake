@@ -1,5 +1,5 @@
 ## item_013_add_entity_picking_selection_inspection_and_deterministic_debug_scenario - Add entity picking selection inspection and deterministic debug scenario
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 93%
 > Confidence: 90%
@@ -48,6 +48,10 @@ flowchart LR
 - AC4 -> Scope: Useful entity debug fields are surfaced in inspection. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`.
 - AC5 -> Scope: Inspection stays tied to the shared debug workflow. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`.
 - AC6 -> Scope: Debug scenario and selection flow remain reusable later. Proof: `src/game/entities/model/entityDebugScenario.ts`, `src/game/entities/hooks/useEntityWorld.ts`.
+
+# Request AC Traceability
+- req_002_render_evolving_world_entities_on_the_map coverage: AC10, AC11, AC12, AC13, AC14, AC15, AC16, AC17, AC18, AC19, AC20, AC21, AC22, AC23, AC24, AC25, AC26, AC27, AC28, AC29, AC30, AC31, AC32, AC33, AC34, AC7, AC8, AC9. Proof: `item_013_add_entity_picking_selection_inspection_and_deterministic_debug_scenario` remains the request-closing backlog slice for `req_002_render_evolving_world_entities_on_the_map` and stays linked to `task_014_orchestrate_entity_world_integration_and_debug_presentation` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Not needed

@@ -1,5 +1,5 @@
 ## item_145_define_world_space_layout_rules_for_stacked_combat_bars_above_entities - Define world-space layout rules for stacked combat bars above entities
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines bounded spacing and placement relative to the entity footprint.
 - AC3: The slice keeps the layout world-space and lightweight.
 - AC4: The slice stays narrow and does not drift into richer nameplate systems.
+
+# Request AC Traceability
+- req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_145_define_world_space_layout_rules_for_stacked_combat_bars_above_entities` remains the request-closing backlog slice for `req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants` and stays linked to `task_041_orchestrate_combat_readability_spawn_direction_pathfinding_and_map_generation_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants`

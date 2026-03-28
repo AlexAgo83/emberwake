@@ -1,5 +1,5 @@
 ## task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls - Orchestrate command-deck shell menu Option B for runtime controls
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 97%
@@ -40,6 +40,10 @@ flowchart LR
 - `item_100` -> Stateful trigger and entry context are explicit. Proof target: trigger state mapping, first-entry structure, status copy.
 - `item_101` -> Command grouping and primary-action hierarchy are explicit. Proof target: menu IA, CTA treatment, priority differentiation across commands.
 - `item_102` -> Mobile sheet posture and button treatment are explicit. Proof target: responsive panel behavior, touch sizing, mobile-specific control treatment.
+
+# Request AC Traceability
+- req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls` closes the linked request chain for `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b` and carries the delivery evidence for `item_102_define_mobile_sheet_presentation_and_button_treatment_for_shell_menu_option_b`.
+
 
 # Decision framing
 - Product framing: Required

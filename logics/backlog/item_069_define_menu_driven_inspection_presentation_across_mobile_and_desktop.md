@@ -1,5 +1,5 @@
 ## item_069_define_menu_driven_inspection_presentation_across_mobile_and_desktop - Define menu driven inspection presentation across mobile and desktop
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 95%
@@ -38,6 +38,10 @@ flowchart LR
 - AC3 -> Scope: Mobile uses a bottom-sheet inspection posture. Proof: `src/app/components/EntityInspectionPanel.tsx`, `src/app/styles/app.css`.
 - AC4 -> Scope: Inspection remains contextual and restrained. Proof: `src/app/AppShell.tsx`, `src/app/styles/app.css`.
 - AC5 -> Scope: Inspection stays wired to the existing selected-entity state without moving into the world renderer. Proof: `src/game/entities/hooks/useEntityWorld.ts`, `src/app/components/EntityInspectionPanel.tsx`, `src/app/AppShell.tsx`.
+
+# Request AC Traceability
+- req_017_redesign_runtime_overlay_into_a_single_floating_menu coverage: AC10, AC11, AC6, AC7, AC8, AC9. Proof: `item_069_define_menu_driven_inspection_presentation_across_mobile_and_desktop` remains the request-closing backlog slice for `req_017_redesign_runtime_overlay_into_a_single_floating_menu` and stays linked to `task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Required

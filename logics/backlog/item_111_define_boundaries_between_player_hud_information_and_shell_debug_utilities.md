@@ -1,5 +1,5 @@
 ## item_111_define_boundaries_between_player_hud_information_and_shell_debug_utilities - Define boundaries between player HUD information and shell debug utilities
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 97%
 > Confidence: 95%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Diagnostics and inspecteur remain gated. Proof target: signal classification or rendered UI structure.
 - AC3 -> Scope: Responsive implications are explicit. Proof target: desktop/mobile notes or layout treatment summary.
 - AC4 -> Scope: Current shell model remains intact. Proof target: compatibility note or behavior summary.
+
+# Request AC Traceability
+- req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_111_define_boundaries_between_player_hud_information_and_shell_debug_utilities` remains the request-closing backlog slice for `req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface` and stays linked to `task_035_orchestrate_shell_meta_feedback_and_settings_configuration_wave` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Primary

@@ -1,5 +1,5 @@
 ## adr_050_use_a_shared_vector_first_techno_shinobi_icon_family_for_build_facing_skill_representation - Use a shared vector-first techno-shinobi icon family for build-facing skill representation
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: The playable build loop now needs real iconography across HUD, codex, and future build-choice surfaces, but those icons must stay coherent, small-size readable, and visually native to Emberwake.
 > Related request: `req_070_define_a_techno_shinobi_iconography_wave_for_active_passive_and_fusion_skills`
@@ -10,6 +10,15 @@
 
 # Overview
 Skill icons should be delivered as one shared, vector-first techno-shinobi icon family that can scale cleanly across build-facing surfaces.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Decision
 - Use one coherent icon family across actives, passives, and fusions.

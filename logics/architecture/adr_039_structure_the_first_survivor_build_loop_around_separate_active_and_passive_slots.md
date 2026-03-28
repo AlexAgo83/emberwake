@@ -1,5 +1,5 @@
 ## adr_039_structure_the_first_survivor_build_loop_around_separate_active_and_passive_slots - Structure the first survivor build loop around separate active and passive slots
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Proposed
 > Drivers: Keep the first build system readable; preserve strong role separation between attacks and support items; adopt a genre-proven run-growth model instead of inventing an early acquisition grammar from scratch.
 > Related request: `req_058_define_a_foundational_survivor_build_system_for_weapons_passives_fusions_and_run_progression`
@@ -9,6 +9,15 @@
 
 # Overview
 The first Emberwake survivor build loop should use separate active and passive slots, with run growth driven primarily through level-up choices rather than through a free-form inventory or ad hoc reward grammar.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The project now wants to add:

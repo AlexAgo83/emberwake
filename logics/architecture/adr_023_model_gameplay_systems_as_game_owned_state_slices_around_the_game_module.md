@@ -1,5 +1,5 @@
 ## adr_023_model_gameplay_systems_as_game_owned_state_slices_around_the_game_module - Model gameplay systems as game owned state slices around the game module
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Prepare combat, AI, status effects, and progression without reopening runtime ambiguity; keep gameplay growth Emberwake-specific; clarify what belongs to simulation state, gameplay systems, presentation diagnostics, and future persistence.
 > Related request: `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`
@@ -9,6 +9,15 @@
 
 # Overview
 Gameplay systems should live as game-owned state slices adjacent to, but distinct from, the raw runtime simulation slice inside `GameModule` state. They observe simulation changes during update, own cross-cutting gameplay meaning, and expose derived diagnostics or presentation-ready data without owning render adapters.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The converged runtime already had a clean engine-to-game contract, but future gameplay growth still lacked a placement rule:

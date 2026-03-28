@@ -1,5 +1,5 @@
 ## item_198_define_deterministic_runtime_profiling_artifacts_and_comparison_posture - Define deterministic runtime profiling artifacts and comparison posture
-> From version: 0.3.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines deterministic replay posture through fixed seed, fixed scenario, or equivalent controls.
 - AC3: The slice defines that sampled metrics artifacts are mandatory, while heavier snapshots or traces remain optional.
 - AC4: The slice defines a comparison-friendly posture so repeated runs can be evaluated against one another after fixes.
+
+# Request AC Traceability
+- req_054_define_a_scripted_long_session_runtime_profiling_and_player_simulation_harness coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `item_198_define_deterministic_runtime_profiling_artifacts_and_comparison_posture` remains the request-closing backlog slice for `req_054_define_a_scripted_long_session_runtime_profiling_and_player_simulation_harness` and stays linked to `task_046_orchestrate_scripted_long_session_runtime_profiling_harness_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_054_define_a_scripted_long_session_runtime_profiling_and_player_simulation_harness`

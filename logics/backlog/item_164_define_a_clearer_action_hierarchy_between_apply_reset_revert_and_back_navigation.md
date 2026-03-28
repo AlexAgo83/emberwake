@@ -1,5 +1,5 @@
 ## item_164_define_a_clearer_action_hierarchy_between_apply_reset_revert_and_back_navigation - Define a clearer action hierarchy between apply, reset, revert, and back navigation
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines `Reset defaults` and `Revert` as secondary actions.
 - AC3: The slice defines `Back to menu` as clearly navigational rather than as a competing primary CTA.
 - AC4: The slice stays narrow and presentation-focused.
+
+# Request AC Traceability
+- req_045_define_a_clearer_and_more_compact_desktop_controls_settings_surface coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_164_define_a_clearer_action_hierarchy_between_apply_reset_revert_and_back_navigation` remains the request-closing backlog slice for `req_045_define_a_clearer_and_more_compact_desktop_controls_settings_surface` and stays linked to `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_045_define_a_clearer_and_more_compact_desktop_controls_settings_surface`

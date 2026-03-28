@@ -1,5 +1,5 @@
 ## item_081_add_engine_to_game_integration_tests_for_runtime_contract_flow - Add engine to game integration tests for runtime contract flow
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 95%
@@ -37,6 +37,10 @@ flowchart LR
 - AC3 -> Scope: Test coverage remains layered instead of duplicated blindly. Proof target: `package.json`, test organization, validation notes.
 - AC4 -> Scope: The tests support current staged convergence. Proof target: deterministic fixtures, runtime module tests, preserved smoke coverage.
 - AC5 -> Scope: The suite stays valuable and maintainable. Proof target: targeted integration cases, execution time, task validation notes.
+
+# Request AC Traceability
+- req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries coverage: AC1, AC10, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `item_081_add_engine_to_game_integration_tests_for_runtime_contract_flow` remains the request-closing backlog slice for `req_019_complete_runtime_convergence_and_harden_modular_architecture_boundaries` and stays linked to `task_027_orchestrate_runtime_convergence_and_modular_boundary_hardening` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Consider

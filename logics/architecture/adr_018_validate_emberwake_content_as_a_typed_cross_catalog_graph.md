@@ -1,5 +1,5 @@
 ## adr_018_validate_emberwake_content_as_a_typed_cross_catalog_graph - Validate Emberwake content as a typed cross catalog graph
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Keep content growth safe without building a heavyweight content platform; make ids and references explicit across gameplay, entities, world data, scenarios, and assets; centralize content validation posture.
 > Related request: `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`
@@ -9,6 +9,15 @@
 
 # Overview
 Emberwake content should remain authored through typed TypeScript catalogs owned by the game, but validation should happen across catalogs instead of staying isolated inside individual modules. Content correctness is a graph problem, not only a per-file typing problem.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The project already had typed entity, terrain, and scenario modules, but correctness still depended too heavily on local conventions:

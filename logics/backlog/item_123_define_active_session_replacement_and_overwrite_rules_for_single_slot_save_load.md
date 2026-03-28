@@ -1,5 +1,5 @@
 ## item_123_define_active_session_replacement_and_overwrite_rules_for_single_slot_save_load - Define active-session replacement and overwrite rules for single-slot save/load
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 97%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Save overwrite posture is explicit. Proof target: save interaction note or implementation report.
 - AC3 -> Scope: New-game replacement posture is explicit. Proof target: transition rule or UI flow summary.
 - AC4 -> Scope: Single-slot simplicity remains intact. Proof target: bounded-flow note or implementation summary.
+
+# Request AC Traceability
+- req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_123_define_active_session_replacement_and_overwrite_rules_for_single_slot_save_load` remains the request-closing backlog slice for `req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry` and stays linked to `task_037_orchestrate_single_slot_persistence_and_pseudo_physics_foundations` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Primary

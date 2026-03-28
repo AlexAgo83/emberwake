@@ -1,5 +1,5 @@
 ## task_015_orchestrate_static_delivery_and_ci_hardening - Orchestrate static delivery and CI hardening
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 95%
 > Confidence: 93%
@@ -40,6 +40,10 @@ flowchart LR
 - `item_016` -> Render free-plan operational constraints are documented and reflected in delivery choices. Proof: `render.yaml`, `README.md`.
 - `item_017` -> CI triggers and dependency caching are explicit and stable. Proof: `.github/workflows/ci.yml`.
 - `item_019` -> CI remains extendable toward later deployment and release automation without redesign. Proof: `.github/workflows/ci.yml`.
+
+# Request AC Traceability
+- req_003_create_render_static_free_plan_blueprint coverage: AC1, AC10, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_015_orchestrate_static_delivery_and_ci_hardening` closes the linked request chain for `req_003_create_render_static_free_plan_blueprint` and carries the delivery evidence for `item_016_define_free_plan_static_delivery_constraints_and_operating_notes`.
+
 
 # Decision framing
 - Product framing: Not needed

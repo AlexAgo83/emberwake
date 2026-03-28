@@ -1,5 +1,5 @@
 ## item_136_define_an_automatic_forward_player_cone_attack_for_first_hostile_combat - Define an automatic forward player cone attack for first hostile combat
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines enough specificity for arc, reach, and cooldown to keep the first attack readable.
 - AC3: The slice defines whether the first attack can hit multiple hostile targets.
 - AC4: The slice preserves the requested no-input posture for the first player attack.
+
+# Request AC Traceability
+- req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `item_136_define_an_automatic_forward_player_cone_attack_for_first_hostile_combat` remains the request-closing backlog slice for `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack` and stays linked to `task_039_orchestrate_the_first_hostile_combat_loop_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack`

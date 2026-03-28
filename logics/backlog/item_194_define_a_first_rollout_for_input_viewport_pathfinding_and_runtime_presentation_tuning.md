@@ -1,5 +1,5 @@
 ## item_194_define_a_first_rollout_for_input_viewport_pathfinding_and_runtime_presentation_tuning - Define a first rollout for input, viewport, pathfinding, and runtime-presentation tuning
-> From version: 0.3.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines `runtimePresentation` and `hostilePathfinding` as subsequent domains once the first wave lands.
 - AC3: The slice defines `movementSurfaceModifiers` as optional follow-up rather than mandatory first-wave scope.
 - AC4: The slice keeps camera/view tuning outside the first migration.
+
+# Request AC Traceability
+- req_053_define_an_externalized_json_system_tuning_contract coverage: AC1, AC10, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `item_194_define_a_first_rollout_for_input_viewport_pathfinding_and_runtime_presentation_tuning` remains the request-closing backlog slice for `req_053_define_an_externalized_json_system_tuning_contract` and stays linked to `task_045_orchestrate_shell_cleanup_and_externalized_tuning_contracts_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_053_define_an_externalized_json_system_tuning_contract`

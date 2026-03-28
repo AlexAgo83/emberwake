@@ -1,5 +1,5 @@
 ## item_129_define_optional_slippery_surface_behavior_without_reopening_full_physics_scope - Define optional slippery-surface behavior without reopening full physics scope
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 96%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Deterministic compatibility is explicit. Proof target: simulation note or test summary.
 - AC3 -> Scope: Physics scope remains bounded. Proof target: architectural compatibility note.
 - AC4 -> Scope: Readability-first posture is explicit. Proof target: UX note or effect rationale.
+
+# Request AC Traceability
+- req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_129_define_optional_slippery_surface_behavior_without_reopening_full_physics_scope` remains the request-closing backlog slice for `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay` and stays linked to `task_037_orchestrate_single_slot_persistence_and_pseudo_physics_foundations` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Primary

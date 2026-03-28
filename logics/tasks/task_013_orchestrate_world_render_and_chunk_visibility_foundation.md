@@ -1,5 +1,5 @@
 ## task_013_orchestrate_world_render_and_chunk_visibility_foundation - Orchestrate world render and chunk visibility foundation
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 95%
 > Confidence: 91%
@@ -38,6 +38,10 @@ flowchart LR
 - `item_006` -> Visible top-down map layers, chunk boundaries, and coordinate overlays are rendered in world space. Proof: `src/game/world/render/WorldScene.tsx`, `.playwright-cli/page-2026-03-17T07-29-32-017Z.png`.
 - `item_007` -> Visible chunk set, preload margin, cache posture, and rotated-camera culling are explicit. Proof: `src/game/world/hooks/useVisibleChunkSet.ts`, `src/game/world/model/worldViewMath.ts`, `src/game/world/model/worldViewMath.test.ts`.
 - `item_008` -> Map diagnostics, world picking, and reset workflow are integrated with the visible world render. Proof: `src/game/world/hooks/useWorldInteractionDiagnostics.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`.
+
+# Request AC Traceability
+- req_001_render_top_down_infinite_chunked_world_map coverage: AC1, AC10, AC11, AC12, AC13, AC14, AC15, AC16, AC17, AC18, AC19, AC2, AC20, AC21, AC22, AC23, AC24, AC25, AC26, AC27, AC28, AC29, AC3, AC30, AC31, AC32, AC33, AC34, AC35, AC36, AC37, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_013_orchestrate_world_render_and_chunk_visibility_foundation` closes the linked request chain for `req_001_render_top_down_infinite_chunked_world_map` and carries the delivery evidence for `item_008_add_map_diagnostics_picking_and_camera_reset_workflow`.
+
 
 # Decision framing
 - Product framing: Required

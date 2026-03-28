@@ -1,5 +1,5 @@
 ## item_232_define_targeted_validation_for_first_wave_weapon_feedback_readability_and_runtime_cost - Define targeted validation for first-wave weapon feedback readability and runtime cost
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -38,6 +38,10 @@ flowchart LR
 - AC2 -> Scope: fusion payoff is explicitly reviewed. Proof target: fused-state verification steps.
 - AC3 -> Scope: runtime-cost guardrails are included. Proof target: profiling/smoke commands and notes.
 - AC4 -> Scope: validation remains lightweight. Proof target: bounded command list.
+
+# Request AC Traceability
+- req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons coverage: AC1, AC2, AC3, AC4, AC5. Proof: `item_232_define_targeted_validation_for_first_wave_weapon_feedback_readability_and_runtime_cost` remains the request-closing backlog slice for `req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons` and stays linked to `task_053_orchestrate_the_first_playable_combat_skill_feedback_wave` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Required

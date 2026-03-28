@@ -1,5 +1,5 @@
 ## task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse - Orchestrate engine gameplay boundary extraction for runtime reuse
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 99%
 > Confidence: 96%
@@ -43,6 +43,10 @@ flowchart LR
 - `item_072` -> Stable runtime primitives move behind engine-owned boundaries. Proof target: extracted camera, transform, input-math, runtime-surface, and related technical modules with updated tests.
 - `item_073` -> Emberwake-specific gameplay, content, and scenario logic move behind game-owned boundaries. Proof target: Emberwake gameplay modules, content folders, scenario ownership, updated runtime wiring.
 - `item_074` -> Migration phases, temporary dependency rules, and validation gates are explicit and enforced. Proof target: task plan, migration notes, CI results, smoke results, release-readiness validation.
+
+# Request AC Traceability
+- req_018_define_engine_and_gameplay_boundary_for_runtime_reuse coverage: AC1, AC10, AC11, AC12, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse` closes the linked request chain for `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse` and carries the delivery evidence for `item_074_define_incremental_migration_and_validation_strategy_for_engine_gameplay_extraction`.
+
 
 # Decision framing
 - Product framing: Required

@@ -1,5 +1,5 @@
 ## item_092_define_frame_pacing_profiling_and_validation_for_unified_runtime_scheduling - Define frame pacing profiling and validation for unified runtime scheduling
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 95%
@@ -37,6 +37,10 @@ flowchart LR
 - AC3 -> Scope: Validation is repeatable. Proof target: repo validation path, smoke or profiling protocol, compatibility notes.
 - AC4 -> Scope: The posture fits the current repo. Proof target: compatibility with static frontend, smoke, and budget workflow.
 - AC5 -> Scope: The slice stays bounded. Proof target: scope statement, absence of broad observability churn.
+
+# Request AC Traceability
+- req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_092_define_frame_pacing_profiling_and_validation_for_unified_runtime_scheduling` remains the request-closing backlog slice for `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling` and stays linked to `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Required

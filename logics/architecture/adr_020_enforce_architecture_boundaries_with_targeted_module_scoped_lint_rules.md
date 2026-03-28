@@ -1,5 +1,5 @@
 ## adr_020_enforce_architecture_boundaries_with_targeted_module_scoped_lint_rules - Enforce architecture boundaries with targeted module scoped lint rules
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Keep the modular topology durable under ongoing delivery; reduce reliance on reviewer memory; catch architecture drift near the import site instead of after broad refactors land.
 > Related request: `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`
@@ -9,6 +9,15 @@
 
 # Overview
 Architecture boundary enforcement should stay lightweight and local to the repo. Targeted lint rules are the primary enforcement mechanism, complemented by CI and focused tests where the signal is strong.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The repository already had healthier boundaries after runtime convergence, but that posture still depended too much on convention:

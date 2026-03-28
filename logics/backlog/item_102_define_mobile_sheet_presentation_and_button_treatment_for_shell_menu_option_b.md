@@ -1,5 +1,5 @@
 ## item_102_define_mobile_sheet_presentation_and_button_treatment_for_shell_menu_option_b - Define mobile sheet presentation and button treatment for shell menu Option B
-> From version: 0.2.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 95%
@@ -37,6 +37,10 @@ flowchart LR
 - AC3 -> Scope: Mobile multi-choice handling is explicit. Proof target: segmented-control or equivalent adaptation notes.
 - AC4 -> Scope: Trigger posture stays stable. Proof target: viewport-specific behavior statement.
 - AC5 -> Scope: Existing shell model remains valid. Proof target: compatibility notes with shell-owned overlays.
+
+# Request AC Traceability
+- req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `item_102_define_mobile_sheet_presentation_and_button_treatment_for_shell_menu_option_b` remains the request-closing backlog slice for `req_025_define_a_command_deck_shell_menu_and_button_hierarchy_for_runtime_option_b` and stays linked to `task_032_orchestrate_command_deck_shell_menu_option_b_for_runtime_controls` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Primary

@@ -1,5 +1,5 @@
 ## task_046_orchestrate_scripted_long_session_runtime_profiling_harness_wave - Orchestrate scripted long-session runtime profiling harness wave
-> From version: 0.3.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 99%
@@ -34,6 +34,10 @@ flowchart TD
 - [x] 5. Update repository-facing docs, including `README.md`, so the long-session profiling harness and its usage are discoverable.
 - [x] 6. Validate long-session runtime behavior, profiling outputs, and docs traceability end to end.
 - [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
+
+# Request AC Traceability
+- req_054_define_a_scripted_long_session_runtime_profiling_and_player_simulation_harness coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_046_orchestrate_scripted_long_session_runtime_profiling_harness_wave` closes the linked request chain for `req_054_define_a_scripted_long_session_runtime_profiling_and_player_simulation_harness` and carries the delivery evidence for `item_198_define_deterministic_runtime_profiling_artifacts_and_comparison_posture`.
+
 
 # Links
 - Backlog item(s): `item_195_define_a_scripted_runtime_player_input_timeline_for_long_session_automation`, `item_196_define_a_profiling_safe_invincibility_and_survival_posture_for_automated_runtime_runs`, `item_197_define_a_long_session_browser_profiling_runner_for_memory_and_runtime_metrics`, `item_198_define_deterministic_runtime_profiling_artifacts_and_comparison_posture`

@@ -1,5 +1,5 @@
 ## item_008_add_map_diagnostics_picking_and_camera_reset_workflow - Add map diagnostics picking and camera reset workflow
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 95%
 > Confidence: 91%
@@ -48,6 +48,10 @@ flowchart LR
 - AC4 -> Scope: Map diagnostics use the shared shell debug workflow. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`.
 - AC5 -> Scope: Slice is limited to inspectability, not rendering or generation behavior. Proof: `src/game/world/hooks/useWorldInteractionDiagnostics.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
 - AC6 -> Scope: Tooling remains reusable for later entity debugging. Proof: `src/game/world/hooks/useWorldInteractionDiagnostics.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
+
+# Request AC Traceability
+- req_001_render_top_down_infinite_chunked_world_map coverage: AC10, AC11, AC12, AC13, AC14, AC15, AC16, AC17, AC18, AC19, AC20, AC21, AC22, AC23, AC24, AC25, AC26, AC27, AC28, AC29, AC30, AC31, AC32, AC33, AC34, AC35, AC36, AC37, AC7, AC8, AC9. Proof: `item_008_add_map_diagnostics_picking_and_camera_reset_workflow` remains the request-closing backlog slice for `req_001_render_top_down_infinite_chunked_world_map` and stays linked to `task_013_orchestrate_world_render_and_chunk_visibility_foundation` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Required

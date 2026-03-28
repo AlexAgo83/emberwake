@@ -1,5 +1,5 @@
 ## item_167_define_runtime_safe_deterministic_sampling_that_reduces_visible_column_artifacts - Define runtime-safe deterministic sampling that reduces visible column artifacts
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice preserves runtime-safe cost characteristics.
 - AC3: The slice avoids reopening unrelated world-generation systems.
 - AC4: The slice stays focused on visible artifact reduction.
+
+# Request AC Traceability
+- req_046_define_a_non_linear_tile_generation_posture_that_avoids_stripes_and_columns coverage: AC1, AC2, AC3, AC4, AC5. Proof: `item_167_define_runtime_safe_deterministic_sampling_that_reduces_visible_column_artifacts` remains the request-closing backlog slice for `req_046_define_a_non_linear_tile_generation_posture_that_avoids_stripes_and_columns` and stays linked to `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_046_define_a_non_linear_tile_generation_posture_that_avoids_stripes_and_columns`

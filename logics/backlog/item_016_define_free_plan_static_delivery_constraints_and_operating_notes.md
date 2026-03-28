@@ -1,5 +1,5 @@
 ## item_016_define_free_plan_static_delivery_constraints_and_operating_notes - Define free-plan static delivery constraints and operating notes
-> From version: 0.1.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 94%
 > Confidence: 93%
@@ -58,7 +58,7 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
+- Product brief(s): `prod_003_high_density_top_down_survival_action_direction`, `prod_004_emberwake_name_and_brand_direction`
 - Architecture decision(s): `adr_010_treat_render_build_variables_as_public_frontend_configuration`
 - Request: `req_003_create_render_static_free_plan_blueprint`
 - Primary task(s): `task_015_orchestrate_static_delivery_and_ci_hardening`

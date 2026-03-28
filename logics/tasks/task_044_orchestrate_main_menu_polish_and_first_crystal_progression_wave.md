@@ -1,5 +1,5 @@
 ## task_044_orchestrate_main_menu_polish_and_first_crystal_progression_wave - Orchestrate main-menu polish and first crystal progression wave
-> From version: 0.3.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -33,6 +33,10 @@ flowchart TD
 - [x] 4. Define and implement player overhead identity, settings compaction, and mobile joystick fade-out polish.
 - [x] 5. Validate shell UX, runtime progression readability, and docs traceability end to end.
 - [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
+
+# Request AC Traceability
+- req_050_define_a_main_menu_polish_and_first_crystal_xp_progression_wave coverage: AC1, AC10, AC11, AC12, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_044_orchestrate_main_menu_polish_and_first_crystal_progression_wave` closes the linked request chain for `req_050_define_a_main_menu_polish_and_first_crystal_xp_progression_wave` and carries the delivery evidence for `item_180_define_player_overhead_identity_and_compact_settings_mobile_control_polish`.
+
 
 # Links
 - Backlog item(s): `item_177_define_a_main_menu_changelog_surface_and_release_history_entry`, `item_178_define_a_more_atmospheric_main_menu_presentation_with_footer_version_linking`, `item_179_define_first_crystal_xp_level_and_runtime_progression_feedback`, `item_180_define_player_overhead_identity_and_compact_settings_mobile_control_polish`

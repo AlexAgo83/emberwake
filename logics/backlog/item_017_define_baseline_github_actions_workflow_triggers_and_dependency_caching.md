@@ -1,5 +1,5 @@
 ## item_017_define_baseline_github_actions_workflow_triggers_and_dependency_caching - Define baseline GitHub Actions workflow triggers and dependency caching
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 95%
 > Confidence: 93%
@@ -59,7 +59,7 @@ flowchart LR
 
 # Links
 - Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_012_require_curated_versioned_changelogs_for_releases`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Request: `req_004_prepare_github_actions_ci_pipeline`
 - Primary task(s): `task_015_orchestrate_static_delivery_and_ci_hardening`
 

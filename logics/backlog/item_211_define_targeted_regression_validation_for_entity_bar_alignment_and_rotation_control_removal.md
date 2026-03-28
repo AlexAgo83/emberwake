@@ -1,5 +1,5 @@
 ## item_211_define_targeted_regression_validation_for_entity_bar_alignment_and_rotation_control_removal - Define targeted regression validation for entity-bar alignment and rotation-control removal
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 99%
 > Confidence: 98%
@@ -37,6 +37,10 @@ flowchart LR
 - AC2 -> Scope: settings/control-surface removal is covered. Proof target: component tests and binding-model tests.
 - AC3 -> Scope: runtime input path no longer rotates through removed player controls. Proof target: camera/input tests.
 - AC4 -> Scope: validation stays lightweight. Proof target: repository test commands and manual runtime notes.
+
+# Request AC Traceability
+- req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `item_211_define_targeted_regression_validation_for_entity_bar_alignment_and_rotation_control_removal` remains the request-closing backlog slice for `req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities` and stays linked to `task_049_orchestrate_screen_aligned_entity_feedback_and_scene_rotation_control_removal` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Optional

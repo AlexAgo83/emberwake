@@ -1,18 +1,19 @@
 ## item_278_consolidate_remaining_logics_traceability_and_companion_doc_hygiene_wave - Consolidate remaining Logics traceability and companion-doc hygiene wave
 > From version: 0.5.0
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 99%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: High
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
 - The repository still carries concentrated Logics audit debt even after the legacy request-closure cleanup and backlog-ref consolidation passes.
-- The remaining issues are workflow-owned, not product-owned: `485` missing task traceability proofs, `471` missing item traceability proofs, `42` missing companion mermaids, `14` missing product refs, `3` missing ADR refs, `3` unchecked task DoD blocks, and `2` companion docs without a primary link.
+- The remaining issues were workflow-owned, not product-owned: `485` missing task traceability proofs, `471` missing item traceability proofs, `42` missing companion mermaids, `14` missing product refs, `3` missing ADR refs, `3` unchecked task DoD blocks, and `2` companion docs without a primary link.
 - Without one explicit hygiene slice, the corpus will continue to misreport completed work as incomplete and future waves will inherit noisy workflow signals.
+- This slice is now closed after companion-doc structure, required refs, DoD hygiene, and request-level AC traceability were backfilled across the affected request chains.
 
 # Scope
 - In: backfilling request-to-backlog and request-to-task AC traceability with explicit `Proof:` lines where the workflow audit requires them.
@@ -73,3 +74,4 @@ flowchart LR
 - Derived from request `req_073_consolidate_remaining_logics_traceability_and_companion_doc_hygiene_wave`.
 - Source file: `logics/request/req_073_consolidate_remaining_logics_traceability_and_companion_doc_hygiene_wave.md`.
 - Request context seeded into this backlog item from `logics/request/req_073_consolidate_remaining_logics_traceability_and_companion_doc_hygiene_wave.md`.
+- Closed once `python3 logics/skills/logics.py audit` returned `Workflow audit: OK` and `npm run logics:lint` returned `Logics lint: OK (warnings)`.

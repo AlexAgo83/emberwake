@@ -1,5 +1,5 @@
 ## item_114_define_validation_conflict_reset_and_persistence_rules_for_desktop_control_customization - Define validation, conflict, reset, and persistence rules for desktop control customization
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 96%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Persistence expectations are explicit. Proof target: storage contract, settings model, or behavior summary.
 - AC3 -> Scope: Reset vs revert behavior is explicit. Proof target: action taxonomy or settings interaction note.
 - AC4 -> Scope: Existing local-first shell posture remains intact. Proof target: compatibility note or persistence summary.
+
+# Request AC Traceability
+- req_029_define_a_lightweight_settings_scene_with_desktop_control_customization coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `item_114_define_validation_conflict_reset_and_persistence_rules_for_desktop_control_customization` remains the request-closing backlog slice for `req_029_define_a_lightweight_settings_scene_with_desktop_control_customization` and stays linked to `task_035_orchestrate_shell_meta_feedback_and_settings_configuration_wave` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Primary

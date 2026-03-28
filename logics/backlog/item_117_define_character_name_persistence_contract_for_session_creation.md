@@ -1,5 +1,5 @@
 ## item_117_define_character_name_persistence_contract_for_session_creation - Define character-name persistence contract for session creation
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 96%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Session-creation attachment is explicit. Proof target: session model, save payload, or behavior summary.
 - AC3 -> Scope: Mutability after start is explicit. Proof target: product rule or persistence note.
 - AC4 -> Scope: Existing shell-owned local-first posture remains intact. Proof target: compatibility note or behavior summary.
+
+# Request AC Traceability
+- req_031_define_character_name_validation_and_constraints_for_new_game_entry coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `item_117_define_character_name_persistence_contract_for_session_creation` remains the request-closing backlog slice for `req_031_define_character_name_validation_and_constraints_for_new_game_entry` and stays linked to `task_036_orchestrate_main_menu_new_game_and_character_name_entry_wave` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Primary

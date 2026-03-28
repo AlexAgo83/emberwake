@@ -1,5 +1,5 @@
 ## item_273_define_a_repeatable_balance_validation_matrix_for_the_first_playable_loop - Define a repeatable balance validation matrix for the first playable loop
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 95%
 > Confidence: 95%
@@ -28,6 +28,10 @@ flowchart LR
 - AC1: The slice defines a repeatable balance validation matrix.
 - AC2: The slice combines scripted and manual play-feel validation.
 - AC3: The slice stays bounded to the first playable loop.
+
+# Request AC Traceability
+- req_072_define_a_first_playable_balance_wave_for_build_power_run_economy_and_difficulty_pacing coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `item_273_define_a_repeatable_balance_validation_matrix_for_the_first_playable_loop` remains the request-closing backlog slice for `req_072_define_a_first_playable_balance_wave_for_build_power_run_economy_and_difficulty_pacing` and stays linked to `task_055_orchestrate_difficulty_iconography_rotation_and_balance_foundations` for delivered implementation evidence.
+
 
 # Links
 - Architecture decision(s): `adr_036_externalize_retunable_gameplay_and_system_tuning_as_validated_json_contracts`

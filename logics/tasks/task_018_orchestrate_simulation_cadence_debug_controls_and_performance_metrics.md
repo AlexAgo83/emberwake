@@ -1,5 +1,5 @@
 ## task_018_orchestrate_simulation_cadence_debug_controls_and_performance_metrics - Orchestrate simulation cadence, debug controls, and performance metrics
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 95%
 > Confidence: 93%
@@ -43,6 +43,12 @@ flowchart LR
 - `item_047` -> Performance budgets and reference targets are explicit. Proof: `src/shared/constants/performanceBudget.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`.
 - `item_048` -> Standard in-app metrics are visible and consistent. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`.
 - `item_049` -> Profiling and regression review workflow is documented and usable. Proof: `README.md`, `logics/tasks/task_018_orchestrate_simulation_cadence_debug_controls_and_performance_metrics.md`.
+
+# Request AC Traceability
+- req_007_define_simulation_loop_and_deterministic_update_model coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `task_018_orchestrate_simulation_cadence_debug_controls_and_performance_metrics` closes the linked request chain for `req_007_define_simulation_loop_and_deterministic_update_model` and carries the delivery evidence for `item_030_define_pause_step_and_simulation_speed_debug_controls`.
+- req_012_define_performance_budgets_profiling_and_diagnostics coverage: AC8, AC9. Proof: `task_018_orchestrate_simulation_cadence_debug_controls_and_performance_metrics` closes the linked request chain for `req_012_define_performance_budgets_profiling_and_diagnostics` and carries the delivery evidence for `item_049_define_profiling_workflow_and_regression_review_expectations`.
+
+
 
 # Decision framing
 - Product framing: Consider

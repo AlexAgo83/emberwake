@@ -1,5 +1,5 @@
 ## task_039_orchestrate_the_first_hostile_combat_loop_wave - Orchestrate the first hostile combat loop wave
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -34,6 +34,10 @@ flowchart TD
 - [x] 5. Wire first defeat/removal handling and validate the resulting combat loop end to end.
 - [x] 6. Update linked request, backlog, task, and supporting notes so the combat wave remains traceable.
 - [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
+
+# Request AC Traceability
+- req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `task_039_orchestrate_the_first_hostile_combat_loop_wave` closes the linked request chain for `req_036_define_a_first_hostile_combat_loop_with_spawns_contact_damage_and_player_cone_attack` and carries the delivery evidence for `item_136_define_an_automatic_forward_player_cone_attack_for_first_hostile_combat`.
+
 
 # Links
 - Backlog item(s): `item_133_define_hostile_spawning_near_the_player_chunk_with_a_local_population_cap`, `item_134_define_shared_entity_health_and_damage_resolution_for_first_combatants`, `item_135_define_hostile_focus_pursuit_and_contact_damage_for_the_first_combat_loop`, `item_136_define_an_automatic_forward_player_cone_attack_for_first_hostile_combat`

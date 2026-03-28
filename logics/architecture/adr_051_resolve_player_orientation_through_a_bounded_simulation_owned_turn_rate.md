@@ -1,5 +1,5 @@
 ## adr_051_resolve_player_orientation_through_a_bounded_simulation_owned_turn_rate - Resolve player orientation through a bounded simulation-owned turn rate
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Movement already gained bounded reversal inertia, but facing still snaps directly to resolved velocity, creating a feel mismatch and leaving no clean surface for future turn-speed modifiers.
 > Related request: `req_071_define_a_bounded_entity_rotation_inertia_and_turn_rate_wave`
@@ -10,6 +10,15 @@
 
 # Overview
 Player orientation should be resolved through a bounded, simulation-owned turn-rate model rather than snapping immediately to the latest movement heading.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Decision
 - Keep turning deterministic and simulation-owned.

@@ -1,9 +1,9 @@
 ## prod_008_active_passive_fusion_direction_for_emberwake - Active passive fusion direction for Emberwake
 > Date: 2026-03-23
 > Status: Draft
-> Related request: (none yet)
-> Related backlog: (none yet)
-> Related task: (none yet)
+> Related request: `req_058_define_a_foundational_survivor_build_system_for_weapons_passives_fusions_and_run_progression`, `req_059_define_a_first_playable_techno_shinobi_build_content_wave`
+> Related backlog: `item_215_define_a_curated_first_wave_of_active_passive_fusions_and_readiness_rules`, `item_216_define_player_facing_build_choice_and_fusion_payoff_presentation_for_the_first_survivor_loop`, `item_217_define_targeted_validation_for_the_foundational_survivor_build_system`, `item_221_define_the_first_curated_techno_shinobi_fusion_delivery_and_readiness_rules`
+> Related task: `task_050_orchestrate_the_foundational_survivor_build_system_wave`, `task_051_orchestrate_the_first_playable_techno_shinobi_build_content_wave`
 > Related architecture: `adr_019_keep_engine_pixi_as_adapter_and_game_as_runtime_scene_composer`, `adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine`, `adr_038_split_entity_player_rendering_into_stable_geometry_and_transient_combat_overlays`
 > Reminder: Update status, linked refs, scope, decisions, success signals, and open questions when you edit this doc.
 

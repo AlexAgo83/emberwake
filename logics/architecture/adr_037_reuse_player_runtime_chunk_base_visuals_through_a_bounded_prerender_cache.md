@@ -1,5 +1,5 @@
 ## adr_037_reuse_player_runtime_chunk_base_visuals_through_a_bounded_prerender_cache - Reuse player-runtime chunk base visuals through a bounded prerender cache
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Remove tile-by-tile chunk base redraw from the steady-state player frame loop; keep world identity deterministic; avoid turning performance fixes into unbounded render-resource retention; preserve the current game-to-Pixi ownership split.
 > Related request: `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`
@@ -9,6 +9,15 @@
 
 # Overview
 Player-runtime chunk base visuals should be prerendered and reused through a bounded cache rather than rebuilt tile by tile every visual frame.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The current world render posture rebuilds chunk base visuals inside `WorldScene` draw callbacks:

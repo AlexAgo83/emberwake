@@ -1,5 +1,5 @@
 ## item_204_define_player_hud_and_shell_overlay_alignment_within_the_techno_shinobi_menu_family - Define player HUD and shell overlay alignment within the techno shinobi menu family
-> From version: 0.3.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 100%
@@ -42,6 +42,10 @@ flowchart LR
 - AC4 -> Scope: runtime chrome remains readable on mobile and desktop. Proof target: responsive overlay CSS and manual viewport verification.
 - AC5 -> Scope: hot-path clarity stays primary. Proof target: compact HUD/overlay treatment and manual runtime review.
 - AC6 -> Scope: command deck and menu scenes remain outside this slice. Proof target: backlog boundaries and orchestration task references.
+
+# Request AC Traceability
+- req_055_rework_all_shell_menus_with_a_techno_shinobi_visual_direction coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `item_204_define_player_hud_and_shell_overlay_alignment_within_the_techno_shinobi_menu_family` remains the request-closing backlog slice for `req_055_rework_all_shell_menus_with_a_techno_shinobi_visual_direction` and stays linked to `task_047_orchestrate_techno_shinobi_shell_menu_rewamp_wave` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Required

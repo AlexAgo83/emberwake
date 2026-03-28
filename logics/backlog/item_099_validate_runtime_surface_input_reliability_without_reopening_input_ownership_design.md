@@ -1,5 +1,5 @@
 ## item_099_validate_runtime_surface_input_reliability_without_reopening_input_ownership_design - Validate runtime surface input reliability without reopening input ownership design
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 99%
 > Confidence: 97%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Existing ownership model stays intact. Proof target: compatibility statement and absence of redesign churn.
 - AC3 -> Scope: Done condition is explicit. Proof target: named validation path.
 - AC4 -> Scope: Slice remains bounded. Proof target: no broader input-wave expansion.
+
+# Request AC Traceability
+- req_024_restore_runtime_surface_input_binding_reliability_after_lazy_mount coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_099_validate_runtime_surface_input_reliability_without_reopening_input_ownership_design` remains the request-closing backlog slice for `req_024_restore_runtime_surface_input_binding_reliability_after_lazy_mount` and stays linked to `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Supporting

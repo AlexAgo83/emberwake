@@ -1,5 +1,5 @@
 ## item_186_define_view_relative_player_movement_under_camera_rotation - Define view-relative player movement under camera rotation
-> From version: 0.3.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines that pressing right moves screen-right from the player perspective regardless of scene rotation.
 - AC3: The slice keeps this first change scoped to desktop keyboard movement.
 - AC4: The slice avoids reopening mobile steering or broader camera architecture.
+
+# Request AC Traceability
+- req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave coverage: AC1, AC10, AC11, AC12, AC13, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `item_186_define_view_relative_player_movement_under_camera_rotation` remains the request-closing backlog slice for `req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave` and stays linked to `task_045_orchestrate_shell_cleanup_and_externalized_tuning_contracts_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave`

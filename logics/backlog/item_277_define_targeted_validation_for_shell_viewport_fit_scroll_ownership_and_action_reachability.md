@@ -1,5 +1,5 @@
 ## item_277_define_targeted_validation_for_shell_viewport_fit_scroll_ownership_and_action_reachability - Define targeted validation for shell viewport fit, scroll ownership, and action reachability
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -45,6 +45,8 @@ flowchart LR
 - AC6 -> Reachable actions: validation checks that bottom actions remain reachable on the affected shell scenes. Proof: `src/app/components/AppMetaScenePanel.test.tsx` covers back/resume flows for `Changelogs`, `Settings`, `Pause`, and `Game over`.
 - AC7 -> Regression review: the named shell scenes remain in the regression-verification set. Proof: `src/app/components/AppMetaScenePanel.test.tsx` exercises `Changelogs`, `Settings`, `Pause`, and `Game over`, while archive layout regressions were tightened again in commit `8230748`.
 - AC8 -> Prevention posture: the validation slice turns the wave into a reusable regression guardrail for future shell scenes. Proof: `task_056` keeps repeatable validation commands, and the current consolidation reruns targeted workflow and UI checks against this chain.
+- req_068_define_a_viewport_safe_scroll_ownership_wave_for_shell_surfaces coverage: AC5. Proof: `item_277_define_targeted_validation_for_shell_viewport_fit_scroll_ownership_and_action_reachability` remains the request-closing backlog slice for `req_068_define_a_viewport_safe_scroll_ownership_wave_for_shell_surfaces` and stays linked to `task_056_orchestrate_viewport_safe_scroll_ownership_for_shell_surfaces` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Required

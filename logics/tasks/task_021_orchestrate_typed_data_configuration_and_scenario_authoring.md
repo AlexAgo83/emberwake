@@ -1,5 +1,5 @@
 ## task_021_orchestrate_typed_data_configuration_and_scenario_authoring - Orchestrate typed data, configuration, and scenario authoring
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 94%
 > Confidence: 90%
@@ -40,6 +40,10 @@ flowchart LR
 - `item_041` -> Validation, typing, and runtime boundaries are explicit. Proof: `src/shared/config/dataAuthoringContract.ts`, `src/game/debug/data/officialDebugScenario.ts`.
 - `item_042` -> Data references across world, entities, and assets are explicit. Proof: `src/assets/assetCatalog.ts`, `src/game/entities/data/entityData.ts`, `src/game/world/data/worldData.ts`, `src/game/debug/data/officialDebugScenario.ts`.
 
+# Request AC Traceability
+- req_010_define_game_data_and_configuration_model coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8. Proof: `task_021_orchestrate_typed_data_configuration_and_scenario_authoring` closes the linked request chain for `req_010_define_game_data_and_configuration_model` and carries the delivery evidence for `item_042_define_data_reference_contracts_across_world_entities_and_assets`.
+
+
 # Decision framing
 - Product framing: Consider
 - Product signals: engagement loop
@@ -64,7 +68,7 @@ flowchart LR
 - [x] Covered backlog items are implemented or explicitly split further with updated traceability.
 - [x] Typed configuration and debug-scenario authoring are coherent across domains.
 - [x] Linked backlog/task docs are updated with proofs and status.
-- [ ] A dedicated git commit has been created for the completed orchestration scope.
+- [x] A dedicated git commit has been created for the completed orchestration scope.
 - [x] Status is `Done` and progress is `100%`.
 
 # Report

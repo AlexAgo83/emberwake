@@ -1,5 +1,5 @@
 ## item_247_define_techno_shinobi_codex_archive_presentation_and_validation_for_grimoire_and_bestiary - Define techno-shinobi codex archive presentation and validation for grimoire and bestiary
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,12 @@ flowchart LR
 - AC1: The slice defines validation for codex-family readability and coherence.
 - AC2: The slice explicitly includes `logics-ui-steering`.
 - AC3: The slice covers both discovered and undiscovered entry states.
+
+# Request AC Traceability
+- req_064_define_a_grimoire_scene_for_skill_discovery_and_future_unlock_gating coverage: AC1, AC2, AC3, AC4, AC5. Proof: `item_247_define_techno_shinobi_codex_archive_presentation_and_validation_for_grimoire_and_bestiary` remains the request-closing backlog slice for `req_064_define_a_grimoire_scene_for_skill_discovery_and_future_unlock_gating` and stays linked to `task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves` for delivered implementation evidence.
+- req_065_define_a_bestiary_scene_for_discovered_and_defeated_creatures coverage: AC6. Proof: `item_247_define_techno_shinobi_codex_archive_presentation_and_validation_for_grimoire_and_bestiary` remains the request-closing backlog slice for `req_065_define_a_bestiary_scene_for_discovered_and_defeated_creatures` and stays linked to `task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves` for delivered implementation evidence.
+
+
 
 # Links
 - Product brief(s): `prod_014_shell_codex_archive_direction_for_grimoire_and_bestiary`

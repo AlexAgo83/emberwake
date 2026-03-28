@@ -1,5 +1,5 @@
 ## adr_025_keep_shell_chrome_event_driven_and_sample_diagnostics_off_the_runtime_hot_path - Keep shell chrome event driven and sample diagnostics off the runtime hot path
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Prevent shell-facing React work from undermining loop unification; keep menu and meta surfaces event-driven; retain diagnostics value without publishing every frame into shell chrome.
 > Related request: `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling`
@@ -9,6 +9,15 @@
 
 # Overview
 Shell chrome should stay event-driven. Runtime diagnostics may observe live runtime data, but they should not require fully unsampled shell publication on every visual frame.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 Loop unification only solves part of runtime smoothness. The shell still sits around the runtime:

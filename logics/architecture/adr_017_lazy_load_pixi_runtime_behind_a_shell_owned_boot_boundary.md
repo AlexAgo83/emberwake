@@ -1,5 +1,5 @@
 ## adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary - Lazy load Pixi runtime behind a shell owned boot boundary
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Reduce startup coupling between the shell and Pixi runtime; turn the large Pixi entry cost into an explicit loading boundary; protect mobile startup posture without redesigning the renderer stack.
 > Related request: `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement`
@@ -9,6 +9,15 @@
 
 # Overview
 The shell should boot independently from the Pixi runtime and lazy load the interactive runtime surface behind an explicit boot boundary. This does not solve every performance problem, but it turns Pixi startup into a deliberate architectural edge instead of a static upfront assumption.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The project already isolated `vendor-pixi`, but bundle warnings showed that the runtime was still treated as an immediate startup dependency. That keeps shell startup and Pixi startup coupled even though they have different responsibilities.

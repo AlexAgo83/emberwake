@@ -1,5 +1,5 @@
 ## task_035_orchestrate_shell_meta_feedback_and_settings_configuration_wave - Orchestrate shell meta feedback and settings configuration wave
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 97%
@@ -47,6 +47,12 @@ flowchart TD
 - `item_112` -> Settings scene is materially lighter and more configuration-led. Proof target: scene IA update or implementation report.
 - `item_113` -> Desktop-control remapping model is explicit. Proof target: settings interaction model or implementation.
 - `item_114` -> Conflict/reset/persistence rules are explicit. Proof target: validation behavior and persistence implementation/report.
+
+# Request AC Traceability
+- req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `task_035_orchestrate_shell_meta_feedback_and_settings_configuration_wave` closes the linked request chain for `req_028_define_a_cohesive_shell_meta_and_runtime_feedback_surface` and carries the delivery evidence for `item_111_define_boundaries_between_player_hud_information_and_shell_debug_utilities`.
+- req_029_define_a_lightweight_settings_scene_with_desktop_control_customization coverage: AC7. Proof: `task_035_orchestrate_shell_meta_feedback_and_settings_configuration_wave` closes the linked request chain for `req_029_define_a_lightweight_settings_scene_with_desktop_control_customization` and carries the delivery evidence for `item_114_define_validation_conflict_reset_and_persistence_rules_for_desktop_control_customization`.
+
+
 
 # Decision framing
 - Product framing: Required

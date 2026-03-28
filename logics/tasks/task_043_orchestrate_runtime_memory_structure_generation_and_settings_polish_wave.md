@@ -1,5 +1,5 @@
 ## task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave - Orchestrate runtime memory, structure, generation, and settings polish wave
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 99%
 > Confidence: 95%
@@ -39,6 +39,10 @@ flowchart TD
 - [x] 7. Synchronize README/release-facing docs and clean recent request/task/logics hygiene drift.
 - [x] 8. Validate runtime behavior, browser memory posture, shell UX, and docs traceability end to end.
 - [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
+
+# Request AC Traceability
+- req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8. Proof: `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave` closes the linked request chain for `req_044_refine_spawn_bootstrap_pause_surface_and_escape_navigation_behaviors` and carries the delivery evidence for `item_161_define_escape_from_live_runtime_to_main_menu_with_session_preservation`.
+
 
 # Links
 - Backlog item(s): `item_161_define_escape_from_live_runtime_to_main_menu_with_session_preservation`, `item_162_define_clearer_movement_and_camera_grouping_inside_desktop_controls_settings`, `item_163_define_a_denser_binding_row_posture_for_desktop_controls_settings`, `item_164_define_a_clearer_action_hierarchy_between_apply_reset_revert_and_back_navigation`, `item_165_define_an_anti_stripe_generation_posture_for_special_tiles`, `item_166_define_blob_first_sampling_rules_for_non_base_tile_clusters`, `item_167_define_runtime_safe_deterministic_sampling_that_reduces_visible_column_artifacts`, `item_168_profile_runtime_memory_growth_during_normal_play_sessions`, `item_169_reduce_world_render_preparation_churn_and_retained_chunk_data`, `item_170_reduce_entity_overlay_and_pixi_render_allocation_pressure`, `item_171_extract_runtime_spawn_logic_out_of_entity_simulation`, `item_172_extract_runtime_combat_and_damage_resolution_out_of_entity_simulation`, `item_173_extract_runtime_pathfinding_pickups_and_presentation_state_out_of_entity_simulation`, `item_174_synchronize_readme_and_release_facing_repository_status`, `item_175_clean_up_request_and_task_status_drift_in_recent_waves`, `item_176_define_lightweight_logics_navigation_and_hygiene_rules_for_the_growing_corpus`

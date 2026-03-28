@@ -1,5 +1,5 @@
 ## task_038_orchestrate_runtime_hot_path_optimization_for_pseudo_physics_and_world_queries - Orchestrate runtime hot-path optimization for pseudo-physics and world queries
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -39,6 +39,10 @@ flowchart TD
 - `item_130` -> Runtime hot-path regression sources are confirmed. Proof target: profiling summary, runtime metrics report, or implementation note.
 - `item_131` -> World-layer query reuse is explicit. Proof target: cache contract, implementation report, or test summary.
 - `item_132` -> Stable collider reuse is explicit. Proof target: implementation note or collision-loop summary.
+
+# Request AC Traceability
+- req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `task_038_orchestrate_runtime_hot_path_optimization_for_pseudo_physics_and_world_queries` closes the linked request chain for `req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries` and carries the delivery evidence for `item_132_remove_repeated_stable_collider_work_from_the_fixed_step_runtime_loop`.
+
 
 # Decision framing
 - Product framing: Required

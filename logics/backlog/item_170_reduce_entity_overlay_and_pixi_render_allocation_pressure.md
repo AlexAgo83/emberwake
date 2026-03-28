@@ -1,5 +1,5 @@
 ## item_170_reduce_entity_overlay_and_pixi_render_allocation_pressure - Reduce entity-overlay and Pixi-render allocation pressure
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 97%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines reduction of repeated render allocation pressure.
 - AC3: The slice keeps player-facing combat readability intact unless profiling proves a simplification is necessary.
 - AC4: The slice stays tightly scoped to render pressure.
+
+# Request AC Traceability
+- req_047_define_a_runtime_memory_growth_investigation_and_reduction_wave coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_170_reduce_entity_overlay_and_pixi_render_allocation_pressure` remains the request-closing backlog slice for `req_047_define_a_runtime_memory_growth_investigation_and_reduction_wave` and stays linked to `task_043_orchestrate_runtime_memory_structure_generation_and_settings_polish_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_047_define_a_runtime_memory_growth_investigation_and_reduction_wave`

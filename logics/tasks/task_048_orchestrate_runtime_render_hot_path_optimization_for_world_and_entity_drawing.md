@@ -1,5 +1,5 @@
 ## task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing - Orchestrate runtime render hot-path optimization for world and entity drawing
-> From version: 0.3.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 97%
 > Confidence: 95%
@@ -50,6 +50,10 @@ flowchart TD
 - AC3 -> Entity hot path: stable entity visuals and transient combat overlays are no longer coupled into one dense redraw posture. Proof target: `src/game/entities/render/EntityScene.tsx`, related runtime presentation structure, profiling comparison.
 - AC4 -> Diagnostics gating: debug overlays and overlap-heavy work remain off the default player path unless diagnostics are explicitly enabled. Proof target: runtime gating conditions, diagnostics panel behavior, profiling notes.
 - AC5 -> Validation posture: before/after evidence compares the existing long-session scenarios and interprets FPS, frame pacing, and memory together. Proof target: profiling artifacts under `output/playwright/long-session/` and task validation notes.
+
+# Request AC Traceability
+- req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing coverage: AC6, AC7, AC8. Proof: `task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing` closes the linked request chain for `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing` and carries the delivery evidence for `item_208_define_a_before_after_runtime_profiling_matrix_for_render_hot_path_changes`.
+
 
 # Decision framing
 - Product framing: Required

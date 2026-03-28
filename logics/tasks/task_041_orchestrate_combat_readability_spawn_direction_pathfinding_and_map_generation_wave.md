@@ -1,5 +1,5 @@
 ## task_041_orchestrate_combat_readability_spawn_direction_pathfinding_and_map_generation_wave - Orchestrate combat readability, spawn direction, pathfinding, and map-generation wave
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -36,6 +36,10 @@ flowchart TD
 - [x] 6. Validate the resulting runtime end to end so readability, navigation, and traversal remain coherent and performant.
 - [x] 7. Update linked requests, backlog, task, and supporting notes so the wave remains traceable.
 - [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
+
+# Request AC Traceability
+- req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `task_041_orchestrate_combat_readability_spawn_direction_pathfinding_and_map_generation_wave` closes the linked request chain for `req_039_define_overhead_health_and_attack_charge_bars_for_runtime_combatants` and carries the delivery evidence for `item_145_define_world_space_layout_rules_for_stacked_combat_bars_above_entities`.
+
 
 # Links
 - Backlog item(s): `item_143_define_overhead_health_bars_for_runtime_combatants`, `item_144_define_overhead_attack_charge_bars_for_runtime_combatants`, `item_145_define_world_space_layout_rules_for_stacked_combat_bars_above_entities`, `item_146_define_forward_biased_spawn_sampling_for_moving_player_states`, `item_147_define_fallback_spawn_sector_rules_when_preferred_forward_positions_fail`, `item_148_define_neutral_spawn_behavior_when_player_motion_is_not_meaningful`, `item_149_define_a_first_hit_reaction_fx_posture_for_damaged_runtime_combatants`, `item_150_define_floating_damage_numbers_above_damaged_entities`, `item_151_define_upward_fade_and_cleanup_rules_for_damage_number_lifetimes`, `item_152_define_a_bounded_obstacle_aware_route_finding_posture_for_hostile_pursuit`, `item_153_define_low_cost_search_and_refresh_rules_for_runtime_entity_pathfinding`, `item_154_define_direct_pursuit_fallback_and_waypoint_following_integration_for_hostiles`, `item_155_define_a_reduced_wall_generation_density_for_runtime_world_chunks`, `item_156_define_a_reduced_surface_modifier_generation_density_for_runtime_world_chunks`, `item_157_define_blob_like_clustering_rules_for_obstacles_and_surface_modifier_patches`

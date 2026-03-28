@@ -1,5 +1,5 @@
 ## prod_015_post_run_outcome_analysis_direction_for_skill_performance - Post-run outcome analysis direction for skill performance
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Validated
 > Related request: `req_066_define_a_game_over_skill_ranking_view_toggle`
 > Related backlog: `item_248_define_a_game_over_view_toggle_between_recap_and_skill_ranking_analysis`, `item_249_define_a_first_pass_skill_performance_summary_contract_for_post_run_ranking`, `item_250_define_a_compact_skill_ranking_presentation_for_game_over_analysis`, `item_251_define_targeted_validation_for_game_over_skill_analysis_readability_and_metric_credibility`
@@ -9,6 +9,15 @@
 
 # Overview
 The current game-over screen tells the player what happened to the run, but not how the build performed. The next product step is not a huge analytics dashboard. It is a compact post-run analysis view that helps players learn from their skill usage.
+
+```mermaid
+flowchart LR
+    Problem[Product problem] --> Goals[Goals]
+    Goals --> Decisions[Key product decisions]
+    Decisions --> Guardrails[Scope and guardrails]
+    Guardrails --> Signals[Success signals]
+```
+
 
 # Product problem
 The current defeat recap is good for:

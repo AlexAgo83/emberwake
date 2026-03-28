@@ -1,5 +1,5 @@
 ## adr_033_adopt_deterministic_movement_oriented_pseudo_physics_instead_of_a_full_physics_engine - Adopt deterministic movement-oriented pseudo-physics instead of a full physics engine
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Preserve the current fixed-step simulation posture; add collision and movement feel without importing rigid-body complexity; keep runtime behavior easy to test, debug, and reason about.
 > Related request: `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`, `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay`
@@ -9,6 +9,15 @@
 
 # Overview
 The runtime should implement a deterministic pseudo-physics layer oriented around movement, blocking, and separation rather than adopting a full rigid-body physics engine.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The game now needs:

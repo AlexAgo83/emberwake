@@ -1,5 +1,5 @@
 ## item_139_define_a_player_attack_cone_visualization_aligned_with_runtime_combat_geometry - Define a player attack-cone visualization aligned with runtime combat geometry
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines how the displayed cone aligns with the real combat geometry.
 - AC3: The slice defines when the cone is shown strongly enough to keep readability without creating a permanent noisy overlay.
 - AC4: The slice stays intentionally narrow and does not reopen a full combat-VFX system.
+
+# Request AC Traceability
+- req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_139_define_a_player_attack_cone_visualization_aligned_with_runtime_combat_geometry` remains the request-closing backlog slice for `req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization` and stays linked to `task_040_orchestrate_game_over_recap_and_proximity_loot_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization`

@@ -1,10 +1,10 @@
 ## task_057_orchestrate_remaining_logics_traceability_and_companion_doc_hygiene_wave - Orchestrate remaining Logics traceability and companion-doc hygiene wave
 > From version: 0.5.0
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 99%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: High
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -37,13 +37,13 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Freeze the audit baseline and group the affected docs by issue class so the wave stays bounded and measurable.
-- [ ] 2. Backfill the remaining request-to-item and request-to-task AC traceability with explicit `Proof:` lines on the affected chains.
-- [ ] 3. Restore missing overview mermaids, primary links, and required companion references on the affected product and architecture docs.
-- [ ] 4. Repair the remaining required product/ADR refs and unchecked task DoD blocks that still fail the workflow audit.
-- [ ] 5. Re-run the workflow audit and Logics lint, then update this request/backlog/task chain with the resulting residuals or closure evidence.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
+- [x] 1. Freeze the audit baseline and group the affected docs by issue class so the wave stays bounded and measurable.
+- [x] 2. Backfill the remaining request-to-item and request-to-task AC traceability with explicit `Proof:` lines on the affected chains.
+- [x] 3. Restore missing overview mermaids, primary links, and required companion references on the affected product and architecture docs.
+- [x] 4. Repair the remaining required product/ADR refs and unchecked task DoD blocks that still fail the workflow audit.
+- [x] 5. Re-run the workflow audit and Logics lint, then update this request/backlog/task chain with the resulting residuals or closure evidence.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: Create dedicated git commit(s) for the completed orchestration scope.
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -85,11 +85,18 @@ flowchart LR
 - Targeted spot-checks on edited request/backlog/task chains to confirm `Proof:` traceability lines and companion-doc links are coherent.
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] The remaining Logics audit issue classes targeted by this wave are either cleared or explicitly split into follow-up slices with updated counts.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] The remaining Logics audit issue classes targeted by this wave are either cleared or explicitly split into follow-up slices with updated counts.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Restored missing overview Mermaid blocks across the affected `architecture` and `product` companion docs, then refreshed their indicators so the corpus passes Logics lint again.
+- Reconnected missing primary links on `prod_008` and `prod_009`, repaired the remaining required product/ADR references on the flagged backlog/tasks, and closed the three lingering unchecked task DoD blocks.
+- Backfilled request-level AC traceability across delivered request chains with compact `Request AC Traceability` coverage lines on the request-closing backlog/task docs so the workflow audit now recognizes explicit proof-bearing coverage.
+- Validation results:
+  - `python3 logics/skills/logics.py audit` -> `Workflow audit: OK`
+  - `python3 logics/skills/logics.py audit --group-by-doc` -> `Workflow audit: OK`
+  - `npm run logics:lint` -> `Logics lint: OK (warnings)`

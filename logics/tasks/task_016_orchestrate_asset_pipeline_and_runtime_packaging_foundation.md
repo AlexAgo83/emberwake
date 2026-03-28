@@ -1,5 +1,5 @@
 ## task_016_orchestrate_asset_pipeline_and_runtime_packaging_foundation - Orchestrate asset pipeline and runtime packaging foundation
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 94%
 > Confidence: 92%
@@ -39,6 +39,10 @@ flowchart LR
 - `item_021` -> Logical sizing, pivot, and orientation rules are explicit. Proof: `src/shared/config/assetPipeline.ts`.
 - `item_022` -> Placeholder-to-atlas packaging strategy is defined. Proof: `src/shared/config/assetPipeline.ts`, `README.md`.
 - `item_023` -> Runtime loading and caching expectations are aligned with PWA/static delivery. Proof: `src/shared/config/assetPipeline.ts`, `README.md`, `render.yaml`.
+
+# Request AC Traceability
+- req_005_define_asset_pipeline_for_map_and_entities coverage: AC1, AC10, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_016_orchestrate_asset_pipeline_and_runtime_packaging_foundation` closes the linked request chain for `req_005_define_asset_pipeline_for_map_and_entities` and carries the delivery evidence for `item_023_define_asset_loading_caching_and_pwa_delivery_expectations`.
+
 
 # Decision framing
 - Product framing: Required

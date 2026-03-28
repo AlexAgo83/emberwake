@@ -1,5 +1,5 @@
 ## item_190_define_a_single_source_of_truth_rule_for_future_gameplay_balance_numbers - Define a single-source-of-truth rule for future gameplay balance numbers
-> From version: 0.3.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines exceptions for structural or behavior-defining constants that should remain in code.
 - AC3: The slice defines the rule narrowly enough to be actionable in future implementation reviews.
 - AC4: The slice avoids expanding into a universal constant-management policy.
+
+# Request AC Traceability
+- req_052_define_an_externalized_json_gameplay_tuning_contract coverage: AC1, AC10, AC11, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `item_190_define_a_single_source_of_truth_rule_for_future_gameplay_balance_numbers` remains the request-closing backlog slice for `req_052_define_an_externalized_json_gameplay_tuning_contract` and stays linked to `task_045_orchestrate_shell_cleanup_and_externalized_tuning_contracts_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_052_define_an_externalized_json_gameplay_tuning_contract`

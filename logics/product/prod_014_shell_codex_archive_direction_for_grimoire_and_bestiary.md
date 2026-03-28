@@ -1,5 +1,5 @@
 ## prod_014_shell_codex_archive_direction_for_grimoire_and_bestiary - Shell codex archive direction for grimoire and bestiary
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Validated
 > Related request: `req_064_define_a_grimoire_scene_for_skill_discovery_and_future_unlock_gating`, `req_065_define_a_bestiary_scene_for_discovered_and_defeated_creatures`
 > Related backlog: `item_243_define_main_menu_codex_archive_entry_posture_for_grimoire_and_bestiary_access`, `item_244_define_a_player_facing_grimoire_scene_for_skill_discovery_and_future_unlock_gating`, `item_245_define_a_player_facing_bestiary_scene_for_discovered_creatures_and_defeat_tracking`, `item_246_define_a_shared_discovery_gating_and_unknown_entry_posture_for_codex_archive_scenes`, `item_247_define_techno_shinobi_codex_archive_presentation_and_validation_for_grimoire_and_bestiary`
@@ -13,6 +13,15 @@ The shell now needs durable knowledge surfaces for both build content and creatu
 This brief defines the next product layer:
 
 `give discovered game knowledge a home`
+
+```mermaid
+flowchart LR
+    Problem[Product problem] --> Goals[Goals]
+    Goals --> Decisions[Key product decisions]
+    Decisions --> Guardrails[Scope and guardrails]
+    Guardrails --> Signals[Success signals]
+```
+
 
 # Product problem
 The project now has meaningful content in two different families:

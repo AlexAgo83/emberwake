@@ -1,5 +1,5 @@
 ## prod_013_techno_shinobi_runtime_hud_and_menu_entry_direction - Techno-shinobi runtime HUD and menu entry direction
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Validated
 > Related request: `req_063_define_a_techno_shinobi_runtime_hud_relayout_and_mobile_menu_entry_wave`
 > Related backlog: `item_238_define_a_compact_top_left_player_progression_hud_block`, `item_239_define_a_quiet_top_right_fps_text_and_compact_runtime_menu_trigger`, `item_240_define_a_bottom_right_reserved_build_slot_hud_for_active_and_passive_capacity`, `item_241_route_the_mobile_runtime_menu_trigger_to_the_full_screen_shell_surface`, `item_242_define_ui_steering_validation_for_the_runtime_hud_relayout_wave`
@@ -13,6 +13,15 @@ The current runtime feedback surface exposes useful information, but it still re
 This brief defines the next product layer:
 
 `turn runtime feedback into anchored techno-shinobi HUD chrome`
+
+```mermaid
+flowchart LR
+    Problem[Product problem] --> Goals[Goals]
+    Goals --> Decisions[Key product decisions]
+    Decisions --> Guardrails[Scope and guardrails]
+    Guardrails --> Signals[Success signals]
+```
+
 
 # Product problem
 The current HUD mixes:

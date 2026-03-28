@@ -1,5 +1,5 @@
 ## item_148_define_neutral_spawn_behavior_when_player_motion_is_not_meaningful - Define neutral spawn behavior when player motion is not meaningful
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines when directional bias should be disabled or relaxed.
 - AC3: The slice stays compatible with the deterministic current spawn system.
 - AC4: The slice stays narrow and avoids broader prediction logic.
+
+# Request AC Traceability
+- req_040_define_directionally_biased_hostile_spawns_ahead_of_player_movement coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_148_define_neutral_spawn_behavior_when_player_motion_is_not_meaningful` remains the request-closing backlog slice for `req_040_define_directionally_biased_hostile_spawns_ahead_of_player_movement` and stays linked to `task_041_orchestrate_combat_readability_spawn_direction_pathfinding_and_map_generation_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_040_define_directionally_biased_hostile_spawns_ahead_of_player_movement`

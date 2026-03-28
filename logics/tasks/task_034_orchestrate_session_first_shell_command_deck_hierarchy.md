@@ -1,5 +1,5 @@
 ## task_034_orchestrate_session_first_shell_command_deck_hierarchy - Orchestrate session-first shell command-deck hierarchy
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 97%
@@ -38,6 +38,10 @@ flowchart LR
 - `item_106` -> Session-first top-level hierarchy is explicit. Proof target: menu IA update or implementation report.
 - `item_107` -> Nested View screen is explicit. Proof target: nested structure or interaction notes for camera controls.
 - `item_108` -> Nested Tools screen is explicit. Proof target: nested structure or interaction notes for utility controls.
+
+# Request AC Traceability
+- req_027_restructure_the_shell_command_deck_around_a_primary_session_section coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `task_034_orchestrate_session_first_shell_command_deck_hierarchy` closes the linked request chain for `req_027_restructure_the_shell_command_deck_around_a_primary_session_section` and carries the delivery evidence for `item_108_define_nested_tools_controls_within_session_without_reintroducing_menu_clutter`.
+
 
 # Decision framing
 - Product framing: Required

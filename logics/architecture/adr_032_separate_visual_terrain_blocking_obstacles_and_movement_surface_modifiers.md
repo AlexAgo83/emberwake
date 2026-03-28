@@ -1,5 +1,5 @@
 ## adr_032_separate_visual_terrain_blocking_obstacles_and_movement_surface_modifiers - Separate visual terrain, blocking obstacles, and movement surface modifiers
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Prevent world rendering and gameplay traversal rules from collapsing into one contract; keep collision, terrain readability, and movement feel independently evolvable; support deterministic generation of both blocking and non-blocking world features.
 > Related request: `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay`, `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay`
@@ -12,6 +12,15 @@ The runtime world model should separate three concerns:
 - visual terrain identity
 - blocking obstacle collision
 - traversable movement-surface modifiers
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The current generated world is still terrain-first. That is useful for visual identity, but it is the wrong long-term place to encode every gameplay rule. If terrain also becomes the direct source of collision and movement behavior, the contract quickly becomes overloaded:

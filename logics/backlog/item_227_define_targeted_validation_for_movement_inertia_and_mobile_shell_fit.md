@@ -1,5 +1,5 @@
 ## item_227_define_targeted_validation_for_movement_inertia_and_mobile_shell_fit - Define targeted validation for movement inertia and mobile shell fit
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -39,6 +39,10 @@ flowchart LR
 - AC3 -> Scope: settings cleanup is checked across mobile and desktop. Proof target: UI verification and tests where practical.
 - AC4 -> Scope: validation remains bounded. Proof target: command list and explicit exclusions.
 - AC5 -> Scope: UI coherence is checked after `logics-ui-steering` guided changes. Proof target: manual shell/settings review notes.
+
+# Request AC Traceability
+- req_060_define_a_smoother_movement_inertia_and_mobile_shell_fit_wave coverage: AC1, AC2, AC3, AC4, AC5. Proof: `item_227_define_targeted_validation_for_movement_inertia_and_mobile_shell_fit` remains the request-closing backlog slice for `req_060_define_a_smoother_movement_inertia_and_mobile_shell_fit_wave` and stays linked to `task_052_orchestrate_movement_inertia_and_mobile_shell_fit_cleanup` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Required

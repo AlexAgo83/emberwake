@@ -1,5 +1,5 @@
 ## adr_029_model_phase_two_gameplay_systems_with_ordered_phases_and_narrow_signals - Model phase-two gameplay systems with ordered phases and narrow signals
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Keep gameplay-system growth compatible with `GameModule`; avoid a new monolith around combat, progression, and future systems; establish a narrow signal posture before any larger event substrate.
 > Related request: `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
@@ -9,6 +9,15 @@
 
 # Overview
 Gameplay systems should advance through explicit ordered phases and emit narrow signals, rather than relying on one opaque update block or jumping straight to a generic event bus.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The repo already had game-owned system slices for autonomy, combat, progression, and status effects, but lacked a stronger phase-order and coordination model.

@@ -1,5 +1,5 @@
 ## task_003_add_render_diagnostics_fallback_handling_and_shell_preferences - Add render diagnostics fallback handling and shell preferences
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 97%
 > Confidence: 94%
@@ -44,6 +44,10 @@ flowchart LR
 - AC4 -> Scope: Local shell preferences such as fullscreen preference and debug visibility can be persisted without expanding into gameplay-state persistence.. Proof: `src/app/hooks/useShellPreferences.ts`, `src/shared/lib/shellPreferencesStorage.ts`.
 - AC5 -> Scope: This slice keeps later map and entity diagnostics compatible with one shared debug workflow instead of fragmenting tooling.. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/shared/constants/runtimeContract.ts`.
 - AC6 -> Scope: Fallback and preference behavior remain limited to shell concerns and do not pull in gameplay features.. Proof: `src/app/AppShell.tsx`.
+
+# Request AC Traceability
+- req_000_bootstrap_fullscreen_2d_react_pwa_shell coverage: AC10, AC11, AC12, AC13, AC14, AC15, AC16, AC17, AC18, AC19, AC20, AC21, AC22, AC23, AC24, AC25, AC26, AC27, AC7, AC8, AC9. Proof: `task_003_add_render_diagnostics_fallback_handling_and_shell_preferences` closes the linked request chain for `req_000_bootstrap_fullscreen_2d_react_pwa_shell` and carries the delivery evidence for `item_003_add_render_diagnostics_fallback_handling_and_shell_preferences`.
+
 
 # Decision framing
 - Product framing: Consider

@@ -1,5 +1,5 @@
 ## adr_034_model_traversable_surface_effects_as_bounded_movement_modifiers - Model traversable surface effects as bounded movement modifiers
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Add traversal variety without conflating movement feel with blocking collision; make slow and slippery space readable to players; keep movement-affecting surfaces bounded and deterministic.
 > Related request: `req_034_define_a_first_movement_surface_modifiers_wave_for_runtime_gameplay`
@@ -9,6 +9,15 @@
 
 # Overview
 Traversable world effects should be modeled as bounded movement modifiers such as `normal`, `slow`, and later `slippery`, rather than as obstacle collision or raw terrain semantics.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 Not all meaningful world differentiation should be binary. Some areas should remain walkable while still changing how movement feels. That requires a first-class concept for traversal effects that is neither:

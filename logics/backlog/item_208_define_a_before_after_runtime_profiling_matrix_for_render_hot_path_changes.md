@@ -1,5 +1,5 @@
 ## item_208_define_a_before_after_runtime_profiling_matrix_for_render_hot_path_changes - Define a before/after runtime profiling matrix for render hot-path changes
-> From version: 0.3.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 97%
 > Confidence: 97%
@@ -39,6 +39,10 @@ flowchart LR
 - AC3 -> Scope: interpretation rules are clarified. Proof target: comparison notes for FPS, frame pacing, and memory.
 - AC4 -> Scope: tooling stays repo-native. Proof target: existing profiling harness reuse.
 - AC5 -> Scope: hard gating remains optional. Proof target: validation posture notes.
+
+# Request AC Traceability
+- req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8. Proof: `item_208_define_a_before_after_runtime_profiling_matrix_for_render_hot_path_changes` remains the request-closing backlog slice for `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing` and stays linked to `task_048_orchestrate_runtime_render_hot_path_optimization_for_world_and_entity_drawing` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Optional

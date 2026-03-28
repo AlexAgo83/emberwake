@@ -1,5 +1,5 @@
 ## item_065_capture_and_reduce_pixi_bundle_warning_risk - Capture and reduce Pixi bundle warning risk
-> From version: 0.1.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 97%
 > Confidence: 94%
@@ -39,6 +39,10 @@ flowchart LR
 - AC4 -> Scope: The warning is framed accurately rather than overstated. Proof: `README.md`.
 - AC5 -> Scope: The work stays limited to risk capture and first mitigation direction. Proof: `vite.config.ts`, `README.md`.
 
+# Request AC Traceability
+- req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk coverage: AC6, AC7. Proof: `item_065_capture_and_reduce_pixi_bundle_warning_risk` remains the request-closing backlog slice for `req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk` and stays linked to `task_024_orchestrate_runtime_hardening_for_input_state_release_and_bundle_risk` for delivered implementation evidence.
+
+
 # Decision framing
 - Product framing: Consider
 - Product signals: engagement loop
@@ -49,7 +53,7 @@ flowchart LR
 
 # Links
 - Product brief(s): `prod_003_high_density_top_down_survival_action_direction`
-- Architecture decision(s): (none yet)
+- Architecture decision(s): `adr_017_lazy_load_pixi_runtime_behind_a_shell_owned_boot_boundary`, `adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary`
 - Request: `req_016_harden_runtime_interaction_state_release_readiness_and_bundle_risk`
 - Primary task(s): `task_024_orchestrate_runtime_hardening_for_input_state_release_and_bundle_risk`
 

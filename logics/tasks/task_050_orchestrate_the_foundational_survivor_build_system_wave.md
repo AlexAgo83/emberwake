@@ -1,5 +1,5 @@
 ## task_050_orchestrate_the_foundational_survivor_build_system_wave - Orchestrate the foundational survivor build system wave
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -55,6 +55,10 @@ flowchart TD
 - AC4 -> Payoff posture: curated active + passive fusions exist with explicit readiness logic. Proof target: fusion rules, payoff triggers, and runtime behavior.
 - AC5 -> Presentation posture: player-facing build choices and payoff moments are readable. Proof target: UI/runtime presentation and manual verification.
 - AC6 -> Validation posture: targeted automated and manual checks cover the first build loop end to end. Proof target: test commands, smoke flow, and runtime notes.
+
+# Request AC Traceability
+- req_058_define_a_foundational_survivor_build_system_for_weapons_passives_fusions_and_run_progression coverage: AC7, AC8. Proof: `task_050_orchestrate_the_foundational_survivor_build_system_wave` closes the linked request chain for `req_058_define_a_foundational_survivor_build_system_for_weapons_passives_fusions_and_run_progression` and carries the delivery evidence for `item_217_define_targeted_validation_for_the_foundational_survivor_build_system`.
+
 
 # Decision framing
 - Product framing: Required

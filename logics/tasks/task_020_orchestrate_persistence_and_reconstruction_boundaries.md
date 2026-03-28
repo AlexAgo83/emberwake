@@ -1,5 +1,5 @@
 ## task_020_orchestrate_persistence_and_reconstruction_boundaries - Orchestrate persistence and reconstruction boundaries
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 94%
 > Confidence: 92%
@@ -39,6 +39,10 @@ flowchart LR
 - `item_036` -> Save versioning and invalidation posture are explicit. Proof: `src/shared/lib/shellPreferencesStorage.ts`, `src/shared/lib/runtimeSessionStorage.ts`, `src/shared/lib/runtimeSessionStorage.test.ts`.
 - `item_037` -> Reconstruction boundaries between deterministic world and persisted state are explicit. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `src/game/world/model/worldGeneration.ts`, `README.md`.
 - `item_038` -> Browser and PWA storage constraints are accounted for. Proof: `src/shared/lib/runtimeSessionStorage.ts`, `README.md`.
+
+# Request AC Traceability
+- req_009_define_local_persistence_and_save_strategy coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `task_020_orchestrate_persistence_and_reconstruction_boundaries` closes the linked request chain for `req_009_define_local_persistence_and_save_strategy` and carries the delivery evidence for `item_038_define_browser_and_pwa_storage_operational_constraints`.
+
 
 # Decision framing
 - Product framing: Consider

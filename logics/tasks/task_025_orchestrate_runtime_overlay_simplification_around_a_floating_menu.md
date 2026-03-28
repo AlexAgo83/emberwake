@@ -1,5 +1,5 @@
 ## task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu - Orchestrate runtime overlay simplification around a floating menu
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 95%
@@ -35,6 +35,10 @@ flowchart LR
 - `item_066` -> Fullscreen and reset-camera actions move into the floating shell menu. Proof: `src/app/components/ShellMenu.tsx`, `src/app/hooks/useFullscreenController.ts`, `src/game/camera/hooks/useCameraController.ts`, `src/app/AppShell.tsx`.
 - `item_067` -> Diagnostics become menu-driven and remain debug-gated rather than player-facing by default. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/hooks/useShellPreferences.ts`, `src/app/AppShell.tsx`.
 - `item_069` -> Inspection opens from the menu and adapts between desktop floating panel and mobile bottom sheet. Proof: `src/app/components/EntityInspectionPanel.tsx`, `src/app/styles/app.css`, `src/app/AppShell.tsx`.
+
+# Request AC Traceability
+- req_017_redesign_runtime_overlay_into_a_single_floating_menu coverage: AC1, AC10, AC11, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_025_orchestrate_runtime_overlay_simplification_around_a_floating_menu` closes the linked request chain for `req_017_redesign_runtime_overlay_into_a_single_floating_menu` and carries the delivery evidence for `item_069_define_menu_driven_inspection_presentation_across_mobile_and_desktop`.
+
 
 # Decision framing
 - Product framing: Required

@@ -1,5 +1,5 @@
 ## adr_028_budget_player_runtime_and_debug_visuals_as_separate_render_modes - Budget player runtime and debug visuals as separate render modes
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Reduce sustained runtime cost without a rendering rewrite; stop making player runtime pay for debug grids and labels; keep render posture compatible with unified frame scheduling and existing Pixi adapters.
 > Related request: `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
@@ -9,6 +9,15 @@
 
 # Overview
 Player runtime and diagnostics visuals should be treated as separate render modes so debug labels and grids can be degraded or removed without changing the player-facing world layer.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The runtime already had startup and frame-pacing budgets, but the world and entity scenes still rendered debug-heavy visuals all the time:

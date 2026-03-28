@@ -1,5 +1,5 @@
 ## item_157_define_blob_like_clustering_rules_for_obstacles_and_surface_modifier_patches - Define blob-like clustering rules for obstacles and surface-modifier patches
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines that obstacles and modifier zones cluster independently.
 - AC3: The slice defines a preference for blobs over isolated points or thin line artifacts.
 - AC4: The slice stays narrow and does not widen into a full generator rewrite.
+
+# Request AC Traceability
+- req_043_define_a_softer_and_more_clustered_blocking_and_surface_generation_posture coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_157_define_blob_like_clustering_rules_for_obstacles_and_surface_modifier_patches` remains the request-closing backlog slice for `req_043_define_a_softer_and_more_clustered_blocking_and_surface_generation_posture` and stays linked to `task_041_orchestrate_combat_readability_spawn_direction_pathfinding_and_map_generation_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_043_define_a_softer_and_more_clustered_blocking_and_surface_generation_posture`

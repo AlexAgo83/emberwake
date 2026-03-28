@@ -1,5 +1,5 @@
 ## task_045_orchestrate_shell_cleanup_and_externalized_tuning_contracts_wave - Orchestrate shell cleanup and externalized tuning contracts wave
-> From version: 0.3.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -40,6 +40,10 @@ flowchart TD
 - [x] 9. Validate constant-ownership boundaries end to end so gameplay tuning, system tuning, structural constants, and env config remain clearly separated, and synchronize any related docs needed for traceability.
 - [x] 10. Validate shell UX, runtime behavior, tuning-contract loading, README coherence, and docs traceability end to end.
 - [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
+
+# Request AC Traceability
+- req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave coverage: AC1, AC10, AC11, AC12, AC13, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_045_orchestrate_shell_cleanup_and_externalized_tuning_contracts_wave` closes the linked request chain for `req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave` and carries the delivery evidence for `item_186_define_view_relative_player_movement_under_camera_rotation`.
+
 
 # Links
 - Backlog item(s): `item_181_define_a_cleaner_main_menu_surface_without_meta_or_session_residue`, `item_182_define_stateful_apply_revert_and_reset_action_rules_for_settings_controls`, `item_183_define_a_structured_markdown_rendering_posture_for_shell_changelogs`, `item_184_define_randomized_initial_character_name_suggestions_for_new_game`, `item_185_define_command_deck_open_behavior_as_a_runtime_pause_trigger`, `item_186_define_view_relative_player_movement_under_camera_rotation`, `item_187_define_a_json_owned_gameplay_tuning_surface_for_first_wave_balance_values`, `item_188_define_validation_and_adapter_rules_for_externalized_gameplay_tuning_json`, `item_189_define_a_migration_boundary_between_runtime_contract_constants_and_authored_tuning_data`, `item_190_define_a_single_source_of_truth_rule_for_future_gameplay_balance_numbers`, `item_191_define_a_json_owned_system_tuning_surface_for_externalizable_technical_constants`, `item_192_define_validation_and_adapter_rules_for_externalized_system_tuning_json`, `item_193_define_clear_boundaries_between_system_tuning_gameplay_tuning_structural_constants_and_env_config`, `item_194_define_a_first_rollout_for_input_viewport_pathfinding_and_runtime_presentation_tuning`

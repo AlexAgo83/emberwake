@@ -1,5 +1,5 @@
 ## item_002_add_stable_logical_viewport_and_world_space_shell_contract - Add stable logical viewport and world-space shell contract
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 97%
 > Confidence: 94%
@@ -60,7 +60,7 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
+- Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_002_readable_world_traversal_and_presence`
 - Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`
 - Request: `req_000_bootstrap_fullscreen_2d_react_pwa_shell`
 - Primary task(s): `task_002_add_stable_logical_viewport_and_world_space_shell_contract`

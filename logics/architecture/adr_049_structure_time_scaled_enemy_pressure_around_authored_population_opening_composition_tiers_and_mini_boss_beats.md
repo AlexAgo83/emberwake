@@ -1,5 +1,5 @@
 ## adr_049_structure_time_scaled_enemy_pressure_around_authored_population_opening_composition_tiers_and_mini_boss_beats - Structure time-scaled enemy pressure around authored population opening, composition tiers, and mini-boss beats
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: The run already has authored time phases, but the next pressure step needs calmer openings, denser late runs, stronger enemy composition, and periodic mini-boss spikes without becoming a full adaptive director.
 > Related request: `req_069_define_a_smoother_early_game_and_stronger_time_scaled_enemy_pressure_wave`
@@ -14,6 +14,15 @@ The next pressure wave should remain authored and phase-driven, but expand from 
 - wider late density envelope
 - stronger enemy composition tiers
 - periodic mini-boss beats
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Decision
 - Keep difficulty authored by run phase.

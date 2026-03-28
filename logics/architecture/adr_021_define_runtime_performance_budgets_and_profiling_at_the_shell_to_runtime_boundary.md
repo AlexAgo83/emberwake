@@ -1,5 +1,5 @@
 ## adr_021_define_runtime_performance_budgets_and_profiling_at_the_shell_to_runtime_boundary - Define runtime performance budgets and profiling at the shell to runtime boundary
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Turn startup cost into an explicit contract; keep Pixi activation measurable after lazy loading; protect a mobile-sensitive product posture with repeatable repository checks instead of reactive local profiling.
 > Related request: `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`
@@ -9,6 +9,15 @@
 
 # Overview
 Shell startup and runtime activation should be controlled by explicit repository-owned budgets. The primary architecture boundary is not raw bundle size alone. It is the path from shell boot to lazy runtime load to confirmed renderer readiness.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 `task_028` introduced a shell-owned lazy-loading boundary for the Pixi runtime, but the project still lacked a durable way to answer basic product questions:

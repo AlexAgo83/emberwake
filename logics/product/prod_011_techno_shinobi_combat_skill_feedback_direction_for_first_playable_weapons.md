@@ -1,5 +1,5 @@
 ## prod_011_techno_shinobi_combat_skill_feedback_direction_for_first_playable_weapons - Techno-shinobi combat skill feedback direction for first playable weapons
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Draft
 > Related request: `req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons`
 > Related backlog: `TBD after request approval`
@@ -19,6 +19,15 @@ The goal is not full projectile realism. The goal is immediate combat legibility
 - where it fired
 - what kind of space it controlled
 - whether the payoff was starter, upgraded, or fused
+
+```mermaid
+flowchart LR
+    Problem[Product problem] --> Goals[Goals]
+    Goals --> Decisions[Key product decisions]
+    Decisions --> Guardrails[Scope and guardrails]
+    Guardrails --> Signals[Success signals]
+```
+
 
 # Product problem
 The current survivor-like build loop is structurally present, but visually under-expressed:

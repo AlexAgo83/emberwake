@@ -1,5 +1,5 @@
 ## adr_042_separate_weapon_simulation_from_transient_combat_skill_feedback_presentation - Separate weapon simulation from transient combat skill feedback presentation
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Proposed
 > Drivers: The first playable weapon roster now exists in simulation, but combat signatures are not legible enough on screen; the project needs visible skill feedback without prematurely converting every weapon into a heavy persistent projectile system.
 > Related request: `req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons`
@@ -10,6 +10,15 @@
 
 # Overview
 The first wave of weapon visuals in `Emberwake` should be built around transient combat feedback events emitted by weapon resolution, not around an immediate rewrite toward fully simulated projectile entities for every skill.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The current runtime already supports:

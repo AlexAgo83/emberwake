@@ -1,5 +1,5 @@
 ## task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement - Orchestrate the next architecture wave for app state loading content rendering and boundary enforcement
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 95%
@@ -44,6 +44,10 @@ flowchart LR
 - `item_084` -> Content-authoring and validation posture are explicit. Proof target: content contracts, id/reference guidance, validation direction.
 - `item_085` -> Render-layer ownership between engine and game is explicit. Proof target: render-pipeline notes, scene-composition model, visual-layer guidance.
 - `item_086` -> Boundary-enforcement strategy is explicit and durable. Proof target: import-rule strategy, regression-check guidance, architecture-enforcement notes.
+
+# Request AC Traceability
+- req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_028_orchestrate_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement` closes the linked request chain for `req_020_define_the_next_architecture_wave_for_app_state_loading_content_rendering_and_boundary_enforcement` and carries the delivery evidence for `item_086_define_boundary_enforcement_strategy_for_public_modules_import_rules_and_architecture_regression_checks`.
+
 
 # Decision framing
 - Product framing: Required

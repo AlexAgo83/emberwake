@@ -1,5 +1,5 @@
 ## item_105_define_responsive_tactical_console_treatment_for_mobile_sheet_and_desktop_command_deck - Define responsive tactical-console treatment for mobile sheet and desktop command deck
-> From version: 0.2.1
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 95%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Adaptation rules are explicit. Proof target: spacing or density treatment notes.
 - AC3 -> Scope: Mobile touch treatment is explicit. Proof target: mobile-specific control treatment notes.
 - AC4 -> Scope: Existing shell model remains intact. Proof target: compatibility notes.
+
+# Request AC Traceability
+- req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_105_define_responsive_tactical_console_treatment_for_mobile_sheet_and_desktop_command_deck` remains the request-closing backlog slice for `req_026_define_a_tactical_console_visual_direction_for_shell_controls_and_menus` and stays linked to `task_033_orchestrate_tactical_console_visual_direction_for_shell_controls_and_menus` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Primary

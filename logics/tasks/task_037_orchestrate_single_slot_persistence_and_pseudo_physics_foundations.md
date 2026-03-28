@@ -1,5 +1,5 @@
 ## task_037_orchestrate_single_slot_persistence_and_pseudo_physics_foundations - Orchestrate single-slot persistence and pseudo-physics foundations
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 98%
 > Confidence: 96%
@@ -58,6 +58,10 @@ flowchart TD
 - `item_127` -> Movement-surface modifier contract is explicit. Proof target: world-layer contract or implementation report.
 - `item_128` -> `slow` surface behavior is explicit. Proof target: movement modifier note or runtime behavior summary.
 - `item_129` -> `slippery` posture is explicit if shipped, or explicitly deferred if it would violate the bounded pseudo-physics posture. Proof target: effect note or implementation summary.
+
+# Request AC Traceability
+- req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `task_037_orchestrate_single_slot_persistence_and_pseudo_physics_foundations` closes the linked request chain for `req_032_define_a_single_slot_save_and_load_flow_for_shell_owned_session_entry` and carries the delivery evidence for `item_123_define_active_session_replacement_and_overwrite_rules_for_single_slot_save_load`.
+
 
 # Decision framing
 - Product framing: Required

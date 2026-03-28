@@ -1,5 +1,5 @@
 ## adr_027_expose_gameplay_outcomes_as_a_game_owned_shell_consumable_contract - Expose gameplay outcomes as a game-owned shell-consumable contract
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Let gameplay signal defeat, victory, restart-needed, and recovery without leaking shell scene logic into runtime internals; keep shell-owned meta scenes compatible with the `GameModule` presentation seam.
 > Related request: `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
@@ -9,6 +9,15 @@
 
 # Overview
 Gameplay outcomes should remain game-owned but be published through a shell-consumable presentation contract so the app layer can react with shell-owned scenes without reading arbitrary gameplay internals.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The shell already owns pause, settings, boot, and failure surfaces. What was missing was a clean seam for gameplay meaning:

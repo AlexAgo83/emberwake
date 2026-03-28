@@ -1,5 +1,5 @@
 ## item_154_define_direct_pursuit_fallback_and_waypoint_following_integration_for_hostiles - Define direct-pursuit fallback and waypoint-following integration for hostiles
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines how waypoint-following or routed pursuit activates when needed.
 - AC3: The slice defines safe fallback when routing fails.
 - AC4: The slice stays narrow and does not widen into a complex AI-state redesign.
+
+# Request AC Traceability
+- req_042_define_a_low_cost_first_pathfinding_slice_for_runtime_entities coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_154_define_direct_pursuit_fallback_and_waypoint_following_integration_for_hostiles` remains the request-closing backlog slice for `req_042_define_a_low_cost_first_pathfinding_slice_for_runtime_entities` and stays linked to `task_041_orchestrate_combat_readability_spawn_direction_pathfinding_and_map_generation_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_042_define_a_low_cost_first_pathfinding_slice_for_runtime_entities`

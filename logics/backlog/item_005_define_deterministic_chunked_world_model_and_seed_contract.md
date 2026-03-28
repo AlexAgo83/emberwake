@@ -1,5 +1,5 @@
 ## item_005_define_deterministic_chunked_world_model_and_seed_contract - Define deterministic chunked world model and seed contract
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 96%
 > Confidence: 92%
@@ -58,7 +58,7 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
+- Product brief(s): `prod_000_initial_single_entity_navigation_loop`, `prod_002_readable_world_traversal_and_presence`
 - Architecture decision(s): `adr_003_define_coordinate_spaces_and_camera_contract`, `adr_005_make_world_identity_deterministic_from_seed_and_coordinates`
 - Request: `req_001_render_top_down_infinite_chunked_world_map`
 - Primary task(s): `task_006_define_deterministic_chunked_world_model_and_seed_contract`

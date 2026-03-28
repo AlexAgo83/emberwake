@@ -1,5 +1,5 @@
 ## adr_046_expose_post_run_skill_performance_summaries_as_shell_consumable_outcome_data - Expose post-run skill performance summaries as shell-consumable outcome data
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: The defeat screen needs a skill-ranking analysis view, which requires outcome-time performance summaries without turning the shell into a combat-log reader.
 > Related request: `req_066_define_a_game_over_skill_ranking_view_toggle`
@@ -10,6 +10,15 @@
 
 # Overview
 Post-run skill ranking should be delivered as compact outcome summaries owned by gameplay and consumed by the shell, not as raw combat-log playback.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Decision
 - Extend outcome-facing data with bounded skill performance summaries.

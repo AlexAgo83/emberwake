@@ -1,5 +1,5 @@
 ## item_132_remove_repeated_stable_collider_work_from_the_fixed_step_runtime_loop - Remove repeated stable collider work from the fixed-step runtime loop
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Collision semantics remain intact. Proof target: behavior summary or regression test note.
 - AC3 -> Scope: Deterministic compatibility is explicit. Proof target: simulation note or runtime summary.
 - AC4 -> Scope: Optimization remains bounded. Proof target: scope note or implementation report.
+
+# Request AC Traceability
+- req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7. Proof: `item_132_remove_repeated_stable_collider_work_from_the_fixed_step_runtime_loop` remains the request-closing backlog slice for `req_035_define_a_runtime_hot_path_optimization_wave_for_pseudo_physics_and_world_queries` and stays linked to `task_038_orchestrate_runtime_hot_path_optimization_for_pseudo_physics_and_world_queries` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Supporting

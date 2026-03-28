@@ -1,5 +1,5 @@
 ## task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling - Orchestrate unified frame loop architecture for runtime stability and render scheduling
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 99%
 > Confidence: 96%
@@ -38,6 +38,10 @@ flowchart LR
 - `item_090` -> The target master frame loop is explicit. Proof target: frame-phase model, ownership notes, scheduling decision.
 - `item_091` -> Hot-path state-publication rules are explicit. Proof target: shell-versus-runtime consumer matrix, publication guidance, diagnostics posture.
 - `item_092` -> Frame-pacing profiling and validation posture is explicit. Proof target: profiling strategy, evidence targets, repeatable validation path.
+
+# Request AC Traceability
+- req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `task_030_orchestrate_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling` closes the linked request chain for `req_022_define_a_unified_frame_loop_architecture_for_runtime_stability_and_render_scheduling` and carries the delivery evidence for `item_092_define_frame_pacing_profiling_and_validation_for_unified_runtime_scheduling`.
+
 
 # Decision framing
 - Product framing: Required

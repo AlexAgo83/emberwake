@@ -1,5 +1,5 @@
 ## task_017_orchestrate_player_facing_interaction_feedback_and_overlay_surfaces - Orchestrate player-facing interaction feedback and overlay surfaces
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 95%
 > Confidence: 92%
@@ -43,6 +43,10 @@ flowchart LR
 - `item_044` -> Minimal onboarding and runtime feedback persist until first successful movement, then dismiss locally. Proof: `src/app/components/PlayerHudCard.tsx`, `src/app/hooks/useShellPreferences.ts`, `src/shared/lib/shellPreferencesStorage.ts`, `src/app/AppShell.tsx`.
 - `item_045` -> Inspection surfaces adapt between desktop card posture and mobile bottom-sheet posture. Proof: `src/app/components/EntityInspectionPanel.tsx`, `src/app/styles/app.css`, `src/app/AppShell.tsx`.
 - `item_046` -> Debug diagnostics remain toggleable and separate from the default player-facing HUD. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`, `src/app/styles/app.css`.
+
+# Request AC Traceability
+- req_006_define_player_interactions_for_world_and_entities coverage: AC1, AC10, AC11, AC12, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_017_orchestrate_player_facing_interaction_feedback_and_overlay_surfaces` closes the linked request chain for `req_006_define_player_interactions_for_world_and_entities` and carries the delivery evidence for `item_027_define_selection_inspection_and_contextual_interaction_flow`.
+
 
 # Decision framing
 - Product framing: Required

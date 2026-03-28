@@ -1,5 +1,5 @@
 ## item_251_define_targeted_validation_for_game_over_skill_analysis_readability_and_metric_credibility - Define targeted validation for game over skill analysis readability and metric credibility
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC1: The slice defines validation for ranking readability.
 - AC2: The slice defines validation for metric credibility.
 - AC3: The slice keeps validation bounded to the game-over analysis wave.
+
+# Request AC Traceability
+- req_066_define_a_game_over_skill_ranking_view_toggle coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_251_define_targeted_validation_for_game_over_skill_analysis_readability_and_metric_credibility` remains the request-closing backlog slice for `req_066_define_a_game_over_skill_ranking_view_toggle` and stays linked to `task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves` for delivered implementation evidence.
+
 
 # Links
 - Product brief(s): `prod_015_post_run_outcome_analysis_direction_for_skill_performance`

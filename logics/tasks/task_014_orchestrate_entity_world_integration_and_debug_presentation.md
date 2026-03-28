@@ -1,5 +1,5 @@
 ## task_014_orchestrate_entity_world_integration_and_debug_presentation - Orchestrate entity world integration and debug presentation
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 95%
 > Confidence: 91%
@@ -38,6 +38,10 @@ flowchart LR
 - `item_011` -> Entities are tracked in world space with chunk-aware indexing and continuity across chunk crossing. Proof: `src/game/entities/model/entitySpatialIndex.ts`, `src/game/entities/model/entitySpatialIndex.test.ts`, `src/game/entities/hooks/useEntityWorld.ts`.
 - `item_012` -> Debug entity visuals render consistently in world space with ordering, footprint, and facing signals. Proof: `src/game/entities/render/EntityScene.tsx`, `src/game/render/RuntimeSurface.tsx`.
 - `item_013` -> Picking, inspection, and deterministic entity scenarios are available for runtime debugging. Proof: `src/game/entities/model/entityDebugScenario.ts`, `src/game/entities/hooks/useEntityWorld.ts`, `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/app/AppShell.tsx`.
+
+# Request AC Traceability
+- req_002_render_evolving_world_entities_on_the_map coverage: AC1, AC10, AC11, AC12, AC13, AC14, AC15, AC16, AC17, AC18, AC19, AC2, AC20, AC21, AC22, AC23, AC24, AC25, AC26, AC27, AC28, AC29, AC3, AC30, AC31, AC32, AC33, AC34, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `task_014_orchestrate_entity_world_integration_and_debug_presentation` closes the linked request chain for `req_002_render_evolving_world_entities_on_the_map` and carries the delivery evidence for `item_013_add_entity_picking_selection_inspection_and_deterministic_debug_scenario`.
+
 
 # Decision framing
 - Product framing: Required

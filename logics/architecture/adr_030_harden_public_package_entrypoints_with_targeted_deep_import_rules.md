@@ -1,5 +1,5 @@
 ## adr_030_harden_public_package_entrypoints_with_targeted_deep_import_rules - Harden public package entrypoints with targeted deep-import rules
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Make package boundaries more durable without a monorepo overhaul; provide real public entrypoints for `@engine`, `@engine-pixi`, and `@game`; keep lint enforcement practical for delivery work.
 > Related request: `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave`
@@ -9,6 +9,15 @@
 
 # Overview
 The repository should expose public package entrypoints and enforce a few targeted deep-import restrictions where boundary regressions are most likely, rather than trying to ban deep imports everywhere at once.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The codebase already had alias-based package boundaries, but cross-package consumers still depended mostly on deep paths. That made intended public APIs harder to recognize and regression rules harder to apply.

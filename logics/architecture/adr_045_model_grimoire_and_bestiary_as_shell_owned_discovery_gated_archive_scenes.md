@@ -1,5 +1,5 @@
 ## adr_045_model_grimoire_and_bestiary_as_shell_owned_discovery_gated_archive_scenes - Model grimoire and bestiary as shell-owned discovery-gated archive scenes
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Skills and creatures now need player-facing archive surfaces, and future discovery gating requires clear shell ownership instead of ad hoc overlays.
 > Related request: `req_064_define_a_grimoire_scene_for_skill_discovery_and_future_unlock_gating`, `req_065_define_a_bestiary_scene_for_discovered_and_defeated_creatures`
@@ -10,6 +10,15 @@
 
 # Overview
 `Grimoire` and `Bestiary` should be modeled as shell-owned archive scenes with shared discovery-gating posture, not as runtime overlays or settings-like utilities.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Decision
 - Add both as shell-owned archive scenes.

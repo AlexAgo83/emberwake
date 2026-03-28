@@ -1,5 +1,5 @@
 ## task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves - Orchestrate post-0.4.0 runtime expression and progression waves
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -55,6 +55,10 @@ flowchart TD
 - AC5 -> Outcome-analysis posture: the defeat screen can switch between recap and a credible skill-ranking view built from bounded outcome summaries. Proof target: outcome UI and data-contract verification.
 - AC6 -> Time-owned run posture: the run gains authored time phases, bounded pressure escalation, and readable phase signaling. Proof target: gameplay tuning/model updates and runtime verification.
 - AC7 -> Validation posture: grouped validation covers readability, UI coherence, shell navigation, outcome credibility, and pacing. Proof target: command list, smoke checks, and runtime review notes.
+
+# Request AC Traceability
+- req_063_define_a_techno_shinobi_runtime_hud_relayout_and_mobile_menu_entry_wave coverage: AC8, AC9. Proof: `task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves` closes the linked request chain for `req_063_define_a_techno_shinobi_runtime_hud_relayout_and_mobile_menu_entry_wave` and carries the delivery evidence for `item_242_define_ui_steering_validation_for_the_runtime_hud_relayout_wave`.
+
 
 # Decision framing
 - Product framing: Required

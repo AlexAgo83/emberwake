@@ -1,5 +1,5 @@
 ## item_151_define_upward_fade_and_cleanup_rules_for_damage_number_lifetimes - Define upward fade and cleanup rules for damage-number lifetimes
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -29,6 +29,10 @@ flowchart LR
 - AC2: The slice defines automatic fade/disappearance behavior after a short lifetime.
 - AC3: The slice defines cleanup behavior so expired numbers do not persist.
 - AC4: The slice stays narrow and avoids reopening broader text-animation systems.
+
+# Request AC Traceability
+- req_041_define_damage_reaction_fx_and_floating_damage_numbers_for_runtime_combat coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_151_define_upward_fade_and_cleanup_rules_for_damage_number_lifetimes` remains the request-closing backlog slice for `req_041_define_damage_reaction_fx_and_floating_damage_numbers_for_runtime_combat` and stays linked to `task_041_orchestrate_combat_readability_spawn_direction_pathfinding_and_map_generation_wave` for delivered implementation evidence.
+
 
 # Links
 - Request: `req_041_define_damage_reaction_fx_and_floating_damage_numbers_for_runtime_combat`

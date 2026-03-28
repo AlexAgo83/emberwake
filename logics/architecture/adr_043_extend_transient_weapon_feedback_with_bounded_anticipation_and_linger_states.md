@@ -1,5 +1,5 @@
 ## adr_043_extend_transient_weapon_feedback_with_bounded_anticipation_and_linger_states - Extend transient weapon feedback with bounded anticipation and linger states
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: The first weapon-feedback wave proved the transient seam, but some roles still require non-hit and linger cues to remain readable; the project needs those cues without falling into a projectile rewrite.
 > Related request: `req_062_define_a_second_combat_skill_feedback_polish_wave_for_underexpressed_weapons`
@@ -10,6 +10,15 @@
 
 # Overview
 The transient weapon-feedback seam should be extended with bounded anticipation and linger states for the roles that need them, rather than replaced with a general projectile simulation system.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The current seam already supports:

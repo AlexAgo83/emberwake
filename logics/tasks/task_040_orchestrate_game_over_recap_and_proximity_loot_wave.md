@@ -1,5 +1,5 @@
 ## task_040_orchestrate_game_over_recap_and_proximity_loot_wave - Orchestrate game-over recap and proximity-loot wave
-> From version: 0.2.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 100%
@@ -39,6 +39,10 @@ flowchart TD
 - [x] 7. Validate the resulting loop end to end so defeat, re-entry, and nearby pickups all behave coherently.
 - [x] 8. Update linked requests, backlog, task, and supporting notes so the wave remains traceable.
 - [x] FINAL: Create dedicated git commit(s) for this orchestration scope.
+
+# Request AC Traceability
+- req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `task_040_orchestrate_game_over_recap_and_proximity_loot_wave` closes the linked request chain for `req_037_define_a_game_over_recap_flow_and_player_attack_cone_visualization` and carries the delivery evidence for `item_139_define_a_player_attack_cone_visualization_aligned_with_runtime_combat_geometry`.
+
 
 # Links
 - Backlog item(s): `item_137_define_a_game_over_recap_surface_for_defeated_runs`, `item_138_define_post_recap_return_to_main_menu_and_reentry_options`, `item_139_define_a_player_attack_cone_visualization_aligned_with_runtime_combat_geometry`, `item_140_define_nearby_pickup_spawn_rules_around_the_player`, `item_141_define_a_first_healing_kit_pickup_that_restores_25_percent_health`, `item_142_define_gold_as_the_default_fallback_pickup_and_first_runtime_currency_counter`

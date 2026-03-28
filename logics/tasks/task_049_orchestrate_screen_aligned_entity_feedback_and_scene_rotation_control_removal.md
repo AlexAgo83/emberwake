@@ -1,5 +1,5 @@
 ## task_049_orchestrate_screen_aligned_entity_feedback_and_scene_rotation_control_removal - Orchestrate screen-aligned entity feedback and scene-rotation control removal
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -48,6 +48,10 @@ flowchart TD
 - AC2 -> Entity readability: overhead bars remain horizontally readable while combat entities rotate. Proof target: `src/game/entities/render/EntityScene.tsx`, runtime verification.
 - AC3 -> Control cleanup: scene-rotation bindings are removed from `Settings` and no longer supported as player-facing runtime controls. Proof target: settings/input files and tests.
 - AC4 -> Validation posture: targeted automated and manual checks cover both visual bar alignment and removed controls. Proof target: tests plus runtime notes.
+
+# Request AC Traceability
+- req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities coverage: AC5, AC6, AC7. Proof: `task_049_orchestrate_screen_aligned_entity_feedback_and_scene_rotation_control_removal` closes the linked request chain for `req_057_define_a_screen_aligned_progress_bar_posture_for_runtime_entities` and carries the delivery evidence for `item_211_define_targeted_regression_validation_for_entity_bar_alignment_and_rotation_control_removal`.
+
 
 # Decision framing
 - Product framing: Required

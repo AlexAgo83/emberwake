@@ -1,5 +1,5 @@
 ## adr_047_structure_first_pass_run_difficulty_escalation_as_authored_time_phases - Structure first-pass run difficulty escalation as authored time phases
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Runs need a stronger time-owned arc, but the first pass should remain readable and authored instead of becoming a general dynamic-director system.
 > Related request: `req_067_define_a_time_driven_run_progression_and_difficulty_escalation_wave`
@@ -10,6 +10,15 @@
 
 # Overview
 First-pass run escalation should be modeled as authored time phases with bounded pressure levers, not as a fully adaptive encounter director.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Decision
 - Define authored survival thresholds or phases.

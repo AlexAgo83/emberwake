@@ -1,5 +1,5 @@
 ## item_217_define_targeted_validation_for_the_foundational_survivor_build_system - Define targeted validation for the foundational survivor build system
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -37,6 +37,10 @@ flowchart LR
 - AC2 -> Scope: fusion readiness/payoff is covered. Proof target: logic tests and runtime verification.
 - AC3 -> Scope: build readability is manually checked. Proof target: validation notes and screenshots where helpful.
 - AC4 -> Scope: validation stays lightweight. Proof target: test-command list and linked artifacts.
+
+# Request AC Traceability
+- req_058_define_a_foundational_survivor_build_system_for_weapons_passives_fusions_and_run_progression coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8. Proof: `item_217_define_targeted_validation_for_the_foundational_survivor_build_system` remains the request-closing backlog slice for `req_058_define_a_foundational_survivor_build_system_for_weapons_passives_fusions_and_run_progression` and stays linked to `task_050_orchestrate_the_foundational_survivor_build_system_wave` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Optional

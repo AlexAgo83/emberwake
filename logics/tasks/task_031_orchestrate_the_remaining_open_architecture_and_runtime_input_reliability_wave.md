@@ -1,5 +1,5 @@
 ## task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave - Orchestrate the remaining open architecture and runtime input reliability wave
-> From version: 0.1.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 99%
 > Confidence: 96%
@@ -51,6 +51,10 @@ flowchart LR
 - `item_097` -> Surface-bound hooks reliably attach after lazy runtime mount. Proof target: corrected surface-subscription behavior across affected hooks.
 - `item_098` -> Regression coverage exists for delayed surface availability. Proof target: focused automated tests covering joystick and adjacent surface interactions.
 - `item_099` -> Validation remains bounded and aligned with the current input model. Proof target: targeted repo validation path and correction closure criteria.
+
+# Request AC Traceability
+- req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `task_031_orchestrate_the_remaining_open_architecture_and_runtime_input_reliability_wave` closes the linked request chain for `req_023_define_the_next_runtime_shell_render_and_system_boundary_architecture_wave` and carries the delivery evidence for `item_096_define_public_entrypoint_hardening_and_architecture_regression_rules_for_app_engine_and_game_modules`.
+
 
 # Decision framing
 - Product framing: Required

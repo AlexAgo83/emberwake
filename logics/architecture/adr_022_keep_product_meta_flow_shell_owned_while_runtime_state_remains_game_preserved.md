@@ -1,5 +1,5 @@
 ## adr_022_keep_product_meta_flow_shell_owned_while_runtime_state_remains_game_preserved - Keep product meta flow shell owned while runtime state remains game preserved
-> Date: 2026-03-21
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Make pause, settings, failure, and runtime re-entry explicit before more product surfaces arrive; avoid mixing shell scenes with gameplay state; preserve live session continuity when the player leaves the runtime temporarily.
 > Related request: `req_021_define_the_next_runtime_product_and_gameplay_system_architecture_wave`
@@ -9,6 +9,15 @@
 
 # Overview
 The shell owns product meta-flow scenes such as `pause`, `settings`, and renderer-facing `failure`. The gameplay runtime remains game-owned and should be preserved across temporary exits from the live loop unless a later gameplay rule explicitly requests a reset.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 `adr_016` established shell-scene ownership, but the reserved scene vocabulary still needed concrete re-entry semantics. Without that layer, future product surfaces would drift into ad hoc behavior:

@@ -1,5 +1,5 @@
 ## item_003_add_render_diagnostics_fallback_handling_and_shell_preferences - Add render diagnostics fallback handling and shell preferences
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 97%
 > Confidence: 94%
@@ -49,6 +49,10 @@ flowchart LR
 - AC5 -> Scope: Debug workflow remains shared for later map and entity slices. Proof: `src/game/debug/ShellDiagnosticsPanel.tsx`, `src/shared/constants/runtimeContract.ts`.
 - AC6 -> Scope: Slice is limited to shell-level diagnostics, fallbacks, and preferences. Proof: `src/app/AppShell.tsx`.
 
+# Request AC Traceability
+- req_000_bootstrap_fullscreen_2d_react_pwa_shell coverage: AC10, AC11, AC12, AC13, AC14, AC15, AC16, AC17, AC18, AC19, AC20, AC21, AC22, AC23, AC24, AC25, AC26, AC27, AC7, AC8, AC9. Proof: `item_003_add_render_diagnostics_fallback_handling_and_shell_preferences` remains the request-closing backlog slice for `req_000_bootstrap_fullscreen_2d_react_pwa_shell` and stays linked to `task_003_add_render_diagnostics_fallback_handling_and_shell_preferences` for delivered implementation evidence.
+
+
 # Decision framing
 - Product framing: Required
 - Product signals: pricing and packaging, experience scope
@@ -58,7 +62,7 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
+- Product brief(s): `prod_001_minimal_overlay_and_feedback_for_early_runtime`, `prod_003_high_density_top_down_survival_action_direction`
 - Architecture decision(s): `adr_006_standardize_debug_first_runtime_instrumentation`, `adr_009_limit_persistence_to_local_versioned_frontend_storage`
 - Request: `req_000_bootstrap_fullscreen_2d_react_pwa_shell`
 - Primary task(s): `task_003_add_render_diagnostics_fallback_handling_and_shell_preferences`

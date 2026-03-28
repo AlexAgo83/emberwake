@@ -1,5 +1,5 @@
 ## item_074_define_incremental_migration_and_validation_strategy_for_engine_gameplay_extraction - Define incremental migration and validation strategy for engine gameplay extraction
-> From version: 0.1.3
+> From version: 0.5.0
 > Status: Done
 > Understanding: 99%
 > Confidence: 97%
@@ -38,6 +38,10 @@ flowchart LR
 - AC3 -> Scope: Validation gates stay active during extraction. Proof target: `package.json`, CI runs, task validation report.
 - AC4 -> Scope: Temporary adapters are bounded and intentional. Proof target: migration notes, TODO boundaries, cleanup follow-ups.
 - AC5 -> Scope: Delivery posture remains intact. Proof target: `scripts/release`, `README.md`, release-readiness checks, changelog flow.
+
+# Request AC Traceability
+- req_018_define_engine_and_gameplay_boundary_for_runtime_reuse coverage: AC1, AC10, AC11, AC12, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `item_074_define_incremental_migration_and_validation_strategy_for_engine_gameplay_extraction` remains the request-closing backlog slice for `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse` and stays linked to `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Consider

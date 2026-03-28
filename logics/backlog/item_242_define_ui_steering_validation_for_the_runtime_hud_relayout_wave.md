@@ -1,5 +1,5 @@
 ## item_242_define_ui_steering_validation_for_the_runtime_hud_relayout_wave - Define UI steering validation for the runtime HUD relayout wave
-> From version: 0.4.0
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 98%
@@ -29,6 +29,10 @@ flowchart LR
 - AC1: The slice defines targeted desktop/mobile validation for the HUD relayout.
 - AC2: The slice explicitly includes `logics-ui-steering` review posture.
 - AC3: The slice includes checks for reserved slots, compact menu trigger, and mobile menu routing.
+
+# Request AC Traceability
+- req_063_define_a_techno_shinobi_runtime_hud_relayout_and_mobile_menu_entry_wave coverage: AC1, AC2, AC3, AC4, AC5, AC6, AC7, AC8, AC9. Proof: `item_242_define_ui_steering_validation_for_the_runtime_hud_relayout_wave` remains the request-closing backlog slice for `req_063_define_a_techno_shinobi_runtime_hud_relayout_and_mobile_menu_entry_wave` and stays linked to `task_054_orchestrate_post_0_4_0_runtime_expression_and_progression_waves` for delivered implementation evidence.
+
 
 # Links
 - Product brief(s): `prod_013_techno_shinobi_runtime_hud_and_menu_entry_direction`

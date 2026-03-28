@@ -1,5 +1,5 @@
 ## adr_044_split_runtime_hud_into_anchored_blocks_and_route_mobile_menu_entry_to_the_full_screen_shell_surface - Split runtime HUD into anchored blocks and route mobile menu entry to the full-screen shell surface
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: The current runtime feedback reads as one compact panel instead of an anchored HUD, and the mobile runtime menu trigger currently opens the wrong interaction model.
 > Related request: `req_063_define_a_techno_shinobi_runtime_hud_relayout_and_mobile_menu_entry_wave`
@@ -10,6 +10,15 @@
 
 # Overview
 The runtime HUD should be modeled as multiple anchored chrome blocks, while the mobile menu trigger should route into the shell’s full-screen ownership model instead of opening a floating runtime deck.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Decision
 - Split runtime feedback into anchored blocks by role.

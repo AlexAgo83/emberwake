@@ -1,5 +1,5 @@
 ## item_126_define_a_lightweight_entity_separation_posture_for_runtime_collisions - Define a lightweight entity separation posture for runtime collisions
-> From version: 0.2.2
+> From version: 0.5.0
 > Status: Done
 > Understanding: 100%
 > Confidence: 97%
@@ -35,6 +35,10 @@ flowchart LR
 - AC2 -> Scope: Lightweight response is explicit. Proof target: response semantics note.
 - AC3 -> Scope: First collidable set is explicit. Proof target: scope note or runtime contract summary.
 - AC4 -> Scope: Deterministic runtime compatibility is explicit. Proof target: simulation note or test summary.
+
+# Request AC Traceability
+- req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay coverage: AC1, AC2, AC3, AC4, AC5, AC6. Proof: `item_126_define_a_lightweight_entity_separation_posture_for_runtime_collisions` remains the request-closing backlog slice for `req_033_define_a_first_collision_and_blocking_world_wave_for_runtime_gameplay` and stays linked to `task_037_orchestrate_single_slot_persistence_and_pseudo_physics_foundations` for delivered implementation evidence.
+
 
 # Decision framing
 - Product framing: Primary

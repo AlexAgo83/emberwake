@@ -1,5 +1,5 @@
 ## task_004_define_render_static_site_blueprint_and_build_contract - Define Render static site blueprint and build contract
-> From version: 0.1.4
+> From version: 0.5.0
 > Status: Done
 > Understanding: 97%
 > Confidence: 94%
@@ -57,7 +57,7 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
+- Product brief(s): `prod_003_high_density_top_down_survival_action_direction`, `prod_004_emberwake_name_and_brand_direction`
 - Architecture decision(s): `adr_010_treat_render_build_variables_as_public_frontend_configuration`, `adr_013_use_a_dedicated_release_branch_for_deployable_static_releases`
 - Backlog item: `item_014_define_render_static_site_blueprint_and_build_contract`
 - Request(s): `req_000_bootstrap_fullscreen_2d_react_pwa_shell`, `req_003_create_render_static_free_plan_blueprint`

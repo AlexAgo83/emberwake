@@ -1,5 +1,5 @@
 ## adr_038_split_entity_player_rendering_into_stable_geometry_and_transient_combat_overlays - Split entity player rendering into stable geometry and transient combat overlays
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Accepted
 > Drivers: Reduce per-entity redraw density in the player runtime; preserve combat readability; stop mixing stable body shapes with short-lived combat feedback in one dense draw posture; keep the current Pixi/runtime ownership model intact.
 > Related request: `req_056_define_a_runtime_render_hot_path_optimization_wave_for_world_and_entity_drawing`
@@ -9,6 +9,15 @@
 
 # Overview
 Entity player rendering should be split into stable geometry and transient combat overlays so the default player path redraws less dense work while preserving essential readability.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 `EntityScene` currently redraws a dense mix of entity visuals:

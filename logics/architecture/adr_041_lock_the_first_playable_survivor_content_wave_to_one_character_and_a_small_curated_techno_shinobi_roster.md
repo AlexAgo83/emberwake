@@ -1,5 +1,5 @@
 ## adr_041_lock_the_first_playable_survivor_content_wave_to_one_character_and_a_small_curated_techno_shinobi_roster - Lock the first playable survivor content wave to one character and a small curated techno-shinobi roster
-> Date: 2026-03-23
+> Date: 2026-03-28
 > Status: Proposed
 > Drivers: Convert the build-system direction into one concrete and testable first loop; stop content sprawl before tuning and UI are proven; keep the first release legible and theme-coherent.
 > Related request: `req_059_define_a_first_playable_techno_shinobi_build_content_wave`
@@ -9,6 +9,15 @@
 
 # Overview
 The first playable survivor-like content wave in `Emberwake` should be locked to one starter character, one small curated techno-shinobi roster, and one intentionally bounded progression grammar before the project expands into multiple characters, broader unlock structures, or a larger content matrix.
+
+```mermaid
+flowchart LR
+    Drivers[Drivers] --> Decision[Decision]
+    Decision --> Consequences[Consequences]
+    Decision --> Rollout[Migration and rollout]
+    Rollout --> FollowUp[Follow-up work]
+```
+
 
 # Context
 The project already decided that:
