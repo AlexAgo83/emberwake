@@ -1,6 +1,8 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { AppUpdatePrompt } from "./components/AppUpdatePrompt";
 import { AppMetaScenePanel } from "./components/AppMetaScenePanel";
+import { ShellToastStack } from "./components/ShellToastStack";
 import type { GameOverRecap } from "./components/AppMetaScenePanel";
 import { useAppScene } from "./hooks/useAppScene";
 import { useDesktopControlBindings } from "./hooks/useDesktopControlBindings";
@@ -8,8 +10,10 @@ import { useDocumentViewportLock } from "./hooks/useDocumentViewportLock";
 import { useFullscreenController } from "./hooks/useFullscreenController";
 import { useInstallPrompt } from "./hooks/useInstallPrompt";
 import { useLogicalViewportModel } from "./hooks/useLogicalViewportModel";
+import { usePwaUpdatePrompt } from "./hooks/usePwaUpdatePrompt";
 import { useRendererHealth } from "./hooks/useRendererHealth";
 import { useRuntimeSession } from "./hooks/useRuntimeSession";
+import { useToastStack } from "./hooks/useToastStack";
 import { useShellPreferences } from "./hooks/useShellPreferences";
 import { deriveAppSceneId } from "./model/appScene";
 import type { AppSceneId, RuntimeShellOutcome } from "./model/appScene";
@@ -55,6 +59,15 @@ export function AppShell() {
   useDocumentViewportLock();
   const { applyDesktopControlBindings, desktopControlBindings } = useDesktopControlBindings();
   const { canInstall, promptInstall } = useInstallPrompt();
+  const {
+    applyUpdate,
+    dismissPrompt,
+    isApplyingUpdate,
+    isPromptOpen,
+    isUpdateReady,
+    reopenPrompt
+  } = usePwaUpdatePrompt();
+  const { dismissToast, pushToast, toasts } = useToastStack();
   const { enterFullscreen, isFullscreen, isSupported, lastError } =
     useFullscreenController(shellRef);
   const viewport = useLogicalViewportModel(shellRef);
@@ -253,12 +266,21 @@ export function AppShell() {
     resumeRuntime();
   }, [loadSavedSession, resetRenderer, resumeRuntime, runtimeSession.hasActiveSession, savedSessionSlot]);
   const handleSaveGame = useCallback(() => {
-    if (!runtimeSession.hasActiveSession || !latestGameStateRef.current) {
+    const gameStateToSave = latestGameStateRef.current ?? sessionInitState;
+
+    if (!runtimeSession.hasActiveSession || !gameStateToSave) {
       return;
     }
 
-    saveActiveSession(latestGameStateRef.current);
-  }, [runtimeSession.hasActiveSession, saveActiveSession]);
+    if (!saveActiveSession(gameStateToSave)) {
+      return;
+    }
+
+    pushToast({
+      message: "Game saved.",
+      tone: "success"
+    });
+  }, [pushToast, runtimeSession.hasActiveSession, saveActiveSession, sessionInitState]);
   const handleApplyDesktopControlBindings = useCallback(
     (nextBindings: DesktopControlBindings) => {
       applyDesktopControlBindings(nextBindings);
@@ -355,6 +377,22 @@ export function AppShell() {
       scene={activeScene}
     />
   );
+  const shellOverlay = (
+    <>
+      {metaScenePanel}
+      <AppUpdatePrompt
+        isApplyingUpdate={isApplyingUpdate}
+        isOpen={isPromptOpen}
+        isUpdateReady={isUpdateReady}
+        onApplyUpdate={() => {
+          void applyUpdate();
+        }}
+        onDismiss={dismissPrompt}
+        onReopen={reopenPrompt}
+      />
+      <ShellToastStack onDismiss={dismissToast} toasts={toasts} />
+    </>
+  );
 
   return (
     <main
@@ -372,7 +410,7 @@ export function AppShell() {
             <>
               <section className="app-shell__runtime" aria-label="Interactive runtime shell" />
               <section className="app-shell__overlay" aria-label="Shell status overlay">
-                {metaScenePanel}
+                {shellOverlay}
               </section>
             </>
           }
@@ -388,7 +426,7 @@ export function AppShell() {
             isFullscreenSupported={isSupported}
             isMenuOpen={isMenuOpen}
             lastFullscreenError={lastError}
-            metaOverlay={metaScenePanel}
+            metaOverlay={shellOverlay}
             onEnterFullscreen={handleRequestFullscreen}
             onInstall={handleInstall}
             onMenuOpenChange={(nextIsOpen) => {
@@ -428,7 +466,7 @@ export function AppShell() {
         <>
           <section className="app-shell__runtime" aria-label="Interactive runtime shell" />
           <section className="app-shell__overlay" aria-label="Shell status overlay">
-            {metaScenePanel}
+            {shellOverlay}
           </section>
         </>
       )}
