@@ -104,11 +104,13 @@ const createFloatingDamageNumber = (
   tick: number
 ): FloatingDamageNumber => {
   const driftSeed = sampleDeterministicSignature(`${entity.id}:damage:${tick}:${damage}`);
+  const worldPositionX = Math.round(entity.worldPosition.x);
+  const worldPositionY = Math.round(entity.worldPosition.y);
 
   return {
     amount: Math.max(0, Math.round(damage)),
     driftX: ((driftSeed % 13) - 6) * 1.75,
-    id: `floating-damage:${entity.id}:${tick}:${damage}:${driftSeed % 17}`,
+    id: `floating-damage:${entity.id}:${tick}:${damage}:${entity.combat.currentHealth}:${worldPositionX}:${worldPositionY}:${driftSeed}`,
     sourceEntityId: entity.id,
     spawnedAtTick: tick,
     worldPosition: {

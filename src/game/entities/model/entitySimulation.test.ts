@@ -420,6 +420,42 @@ describe("entitySimulation", () => {
     expect(secondState.entity.combat.currentHealth).toBe(firstState.entity.combat.currentHealth);
   });
 
+  it("assigns unique floating damage ids when repeated same-tick hits target the player", () => {
+    const initialState = createInitialSimulationState();
+    const firstHostile = createHostileFixture({
+      id: "entity:hostile:test:0",
+      worldPosition: { x: 0, y: 0 }
+    });
+    const secondHostile = createHostileFixture({
+      id: "entity:hostile:test:1",
+      worldPosition: { x: 0, y: 0 }
+    });
+
+    const simulationState = advanceSimulationState({
+      ...initialState,
+      entities: [
+        {
+          ...initialState.entity,
+          automaticAttack: {
+            ...initialState.entity.automaticAttack!,
+            lastAttackTick: 0
+          }
+        },
+        firstHostile,
+        secondHostile
+      ],
+      nextHostileSequence: 2,
+      tick: 1
+    });
+
+    const playerDamageNumbers = simulationState.floatingDamageNumbers.filter(
+      (damageNumber) => damageNumber.sourceEntityId === initialState.entity.id
+    );
+
+    expect(playerDamageNumbers).toHaveLength(2);
+    expect(new Set(playerDamageNumbers.map((damageNumber) => damageNumber.id)).size).toBe(2);
+  });
+
   it("drops floating damage numbers with a spawned tick ahead of the current simulation tick", () => {
     const initialState = createInitialSimulationState();
 
