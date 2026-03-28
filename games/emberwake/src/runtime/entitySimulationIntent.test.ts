@@ -79,8 +79,8 @@ describe("entitySimulationIntent", () => {
 
     expect(chargeIntent.state).toBe("moving");
     expect(chargeIntent.hostileBehaviorState?.phase).toBe("charge");
-    expect(Math.hypot(chargeIntent.velocity.x, chargeIntent.velocity.y)).toBeGreaterThan(
-      hostileEntity.movementSpeedWorldUnitsPerSecond ?? 0
+    expect(Math.hypot(chargeIntent.velocity.x, chargeIntent.velocity.y)).toBeCloseTo(
+      (hostileEntity.movementSpeedWorldUnitsPerSecond ?? 0) * 2
     );
   });
 });

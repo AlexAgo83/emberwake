@@ -281,6 +281,11 @@ export function AppShell() {
       tone: "success"
     });
   }, [pushToast, runtimeSession.hasActiveSession, saveActiveSession, sessionInitState]);
+  const handleBossSpawnToast = useCallback(() => {
+    pushToast({
+      message: "Boss incoming."
+    });
+  }, [pushToast]);
   const handleApplyDesktopControlBindings = useCallback(
     (nextBindings: DesktopControlBindings) => {
       applyDesktopControlBindings(nextBindings);
@@ -437,6 +442,7 @@ export function AppShell() {
 
               closeShellSurface();
             }}
+            onBossSpawnToast={handleBossSpawnToast}
             onRendererError={markFailed}
             onRendererReady={markReady}
             onRetryRuntime={handleRetryRuntime}

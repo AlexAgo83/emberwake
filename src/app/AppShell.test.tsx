@@ -16,13 +16,23 @@ vi.mock("./components/AppMetaScenePanel", () => ({
 vi.mock("./components/ActiveRuntimeShellContent", () => ({
   ActiveRuntimeShellContent: ({
     metaOverlay,
+    onBossSpawnToast,
     onRuntimeStateChange
   }: {
     metaOverlay: React.ReactNode;
+    onBossSpawnToast: () => void;
     onRuntimeStateChange: (gameState: unknown) => void;
   }) => {
     useEffect(() => {
       onRuntimeStateChange({
+        simulation: {
+          entity: {
+            worldPosition: {
+              x: 0,
+              y: 0
+            }
+          }
+        },
         systems: {
           outcome: {
             detail: "",
@@ -40,7 +50,14 @@ vi.mock("./components/ActiveRuntimeShellContent", () => ({
       });
     }, [onRuntimeStateChange]);
 
-    return <>{metaOverlay}</>;
+    return (
+      <>
+        <button onClick={onBossSpawnToast} type="button">
+          Spawn boss
+        </button>
+        {metaOverlay}
+      </>
+    );
   }
 }));
 
@@ -205,5 +222,14 @@ describe("AppShell", () => {
 
     expect(screen.getByRole("dialog", { name: /application update available/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /update now/i })).toBeInTheDocument();
+  });
+
+  it("shows a toast when the runtime announces a boss spawn", async () => {
+    const { AppShell } = await import("./AppShell");
+
+    render(<AppShell />);
+    fireEvent.click(screen.getByRole("button", { name: /spawn boss/i }));
+
+    expect(await screen.findByText("Boss incoming.")).toBeInTheDocument();
   });
 });

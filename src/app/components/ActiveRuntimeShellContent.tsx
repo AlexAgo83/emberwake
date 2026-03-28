@@ -58,6 +58,7 @@ type ActiveRuntimeShellContentProps = {
   onEnterFullscreen: () => void;
   onInstall: () => void;
   onMenuOpenChange: (isOpen: boolean) => void;
+  onBossSpawnToast: () => void;
   onRendererError: (message: string) => void;
   onRendererReady: () => void;
   onRetryRuntime: () => void;
@@ -98,6 +99,7 @@ export function ActiveRuntimeShellContent({
   onEnterFullscreen,
   onInstall,
   onMenuOpenChange,
+  onBossSpawnToast,
   onRendererError,
   onRendererReady,
   onRetryRuntime,
@@ -124,6 +126,8 @@ export function ActiveRuntimeShellContent({
 }: ActiveRuntimeShellContentProps) {
   const runtimeSurfaceRef = useRef<HTMLDivElement | null>(null);
   const autoSelectedLevelUpSignatureRef = useRef<string | null>(null);
+  const announcedBossIdsRef = useRef<Set<string>>(new Set());
+  const bossTrackingInitializedRef = useRef(false);
   const pendingButtonStepRef = useRef<number | null>(null);
   const [runtimeSurfaceElement, setRuntimeSurfaceElement] = useState<HTMLDivElement | null>(null);
   const [runtimeButtonPresses, setRuntimeButtonPresses] = useState<Record<string, boolean>>({});
@@ -434,6 +438,37 @@ export function ActiveRuntimeShellContent({
   useEffect(() => {
     onRuntimeOutcomeChange(runtimeOutcome);
   }, [onRuntimeOutcomeChange, runtimeOutcome]);
+
+  useEffect(() => {
+    announcedBossIdsRef.current = new Set();
+    bossTrackingInitializedRef.current = false;
+  }, [runtimeSession.sessionRevision]);
+
+  useEffect(() => {
+    const currentBossIds = new Set(
+      simulationState.entities
+        .filter(
+          (entity) => entity.role === "hostile" && entity.hostileProfileId === "watchglass-prime"
+        )
+        .map((entity) => entity.id)
+    );
+
+    if (!bossTrackingInitializedRef.current) {
+      announcedBossIdsRef.current = currentBossIds;
+      bossTrackingInitializedRef.current = true;
+      return;
+    }
+
+    currentBossIds.forEach((bossId) => {
+      if (announcedBossIdsRef.current.has(bossId)) {
+        return;
+      }
+
+      onBossSpawnToast();
+    });
+
+    announcedBossIdsRef.current = currentBossIds;
+  }, [onBossSpawnToast, simulationState.entities]);
 
   useRuntimeTelemetryBridge({
     activeScene,

@@ -131,7 +131,7 @@ const createEmptyHostileBehaviorState = (): HostileBehaviorState => ({
 const pathfindingContract = systemTuning.hostilePathfinding;
 const chargeHostileContract = {
   chargeDurationTicks: 24,
-  chargeSpeedMultiplier: 2.8,
+  chargeSpeedMultiplier: 2,
   maximumTriggerDistanceWorldUnits: 420,
   minimumTriggerDistanceWorldUnits: 132,
   rearmCooldownTicks: 54,
