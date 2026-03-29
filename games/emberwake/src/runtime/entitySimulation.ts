@@ -11,7 +11,6 @@ import type { SingleEntityControlState } from "@game/input/singleEntityControlCo
 import { singleEntityControlContract } from "@game/input/singleEntityControlContract";
 import type { EntityState, WorldEntity } from "@game/content/entities/entityContract";
 import {
-  deterministicRuntimeSupportEntities,
   emberwakeRuntimeBootstrap
 } from "@game/runtime/emberwakeRuntimeBootstrap";
 import { hostileCombatContract } from "@game/runtime/hostileCombatContract";
@@ -1253,7 +1252,7 @@ const resolveEntityMovement = ({
     footprintRadius: entity.footprint.radius,
     isBlockedAtPosition: (worldPosition, footprintRadius) =>
       isWorldPositionBlockedByObstacle(worldPosition, footprintRadius, worldSeed),
-    staticColliders: [...deterministicRuntimeSupportEntities, ...dynamicColliders],
+    staticColliders: dynamicColliders,
     stepSeconds,
     surfaceModifierKind: surfaceSample.modifierKind
   });
@@ -1323,7 +1322,7 @@ const canSpawnEntityAtPosition = ({
     return false;
   }
 
-  return ![...entities, ...deterministicRuntimeSupportEntities].some((entity) => {
+  return !entities.some((entity) => {
     const requiredDistance = footprintRadius + entity.footprint.radius;
 
     return distanceBetweenWorldPoints(worldPosition, entity.worldPosition) < requiredDistance;

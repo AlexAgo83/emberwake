@@ -1,9 +1,9 @@
 ## req_091_define_a_fix_for_intermittent_invisible_wall_blocking_during_player_traversal - Define a fix for intermittent invisible wall blocking during player traversal
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 92%
-> Confidence: 88%
+> Status: Done
+> Understanding: 100%
+> Confidence: 96%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -107,3 +107,13 @@ flowchart TD
 # Backlog
 - `item_331_define_deterministic_reproduction_and_collision_alignment_for_intermittent_invisible_wall_blocking_during_player_traversal`
 - `item_332_define_targeted_validation_for_intermittent_invisible_wall_blocking_fixes`
+
+# Closure
+- Landed through `task_060_orchestrate_intermittent_invisible_wall_blocking_traversal_fix`.
+- Root cause: hidden bootstrap support entities were still injected as static colliders and spawn blockers even though they were not part of the rendered simulation state.
+- Proof:
+  - `games/emberwake/src/runtime/entitySimulation.ts`
+  - `src/game/entities/model/entitySimulation.test.ts`
+  - `npm run test -- src/game/entities/model/entitySimulation.test.ts`
+  - `npm run test -- games/emberwake/src/runtime/pseudoPhysics.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts src/game/world/model/worldGeneration.test.ts`
+  - `npm run typecheck`

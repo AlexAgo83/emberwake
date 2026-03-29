@@ -1,10 +1,10 @@
 ## item_332_define_targeted_validation_for_intermittent_invisible_wall_blocking_fixes - Define targeted validation for intermittent invisible wall blocking fixes
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 92%
-> Confidence: 88%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -36,11 +36,11 @@ flowchart LR
 - AC5: The slice stays focused on regression coverage for this traversal bug rather than widening into a broad generic movement-QA expansion.
 
 # AC Traceability
-- AC1 -> Captured symptom coverage: the validation slice explicitly names the intermittent false-blocking scenario. Proof target: test plan or task validation notes.
-- AC2 -> Open-space regression coverage: visually normal non-blocking terrain is part of the validation matrix. Proof target: targeted test cases or manual route evidence.
-- AC3 -> Edge and diagonal coverage: the validation slice explicitly exercises the likely regression-prone movement patterns. Proof target: targeted tests or scripted traversal scenario.
-- AC4 -> Blocking safety coverage: validation still proves that legitimate blockers stop movement. Proof target: targeted tests or manual verification notes.
-- AC5 -> Scope guard: validation remains bug-focused instead of widening into a generic QA campaign. Proof target: task report and command list.
+- AC1 -> Captured symptom coverage: the validation set now includes a regression test where the player traverses through the world position of a hidden bootstrap support entity and must not be blocked. Proof: `src/game/entities/model/entitySimulation.test.ts`.
+- AC2 -> Open-space regression coverage: the new regression test explicitly covers movement through terrain that appears normal and non-blocking because the hidden collider is no longer visible in the runtime. Proof: `src/game/entities/model/entitySimulation.test.ts`.
+- AC3 -> Edge and diagonal coverage: the targeted validation command list still includes the runtime movement and world-generation tests most likely to catch traversal regressions. Proof: `games/emberwake/src/runtime/pseudoPhysics.test.ts`, `games/emberwake/src/runtime/entitySimulationIntent.test.ts`, `src/game/world/model/worldGeneration.test.ts`.
+- AC4 -> Blocking safety coverage: obstacle-blocking behavior remains validated by the existing pseudo-physics and world-generation tests after the hidden-collider fix. Proof: `games/emberwake/src/runtime/pseudoPhysics.test.ts`, `src/game/world/model/worldGeneration.test.ts`.
+- AC5 -> Scope guard: the validation remains tightly focused on this traversal bug and the immediate collision seams around it. Proof: executed commands were limited to targeted runtime traversal tests plus `npm run typecheck`.
 
 # Decision framing
 - Product framing: Not needed
@@ -72,3 +72,4 @@ flowchart LR
 - Derived from request `req_091_define_a_fix_for_intermittent_invisible_wall_blocking_during_player_traversal`.
 - Source file: `logics/request/req_091_define_a_fix_for_intermittent_invisible_wall_blocking_during_player_traversal.md`.
 - Request context seeded into this backlog item from `logics/request/req_091_define_a_fix_for_intermittent_invisible_wall_blocking_during_player_traversal.md`.
+- Validation evidence was captured with targeted runtime traversal tests and `npm run typecheck`.

@@ -1,10 +1,10 @@
 ## item_331_define_deterministic_reproduction_and_collision_alignment_for_intermittent_invisible_wall_blocking_during_player_traversal - Define deterministic reproduction and collision alignment for intermittent invisible wall blocking during player traversal
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 92%
-> Confidence: 88%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -36,10 +36,10 @@ flowchart LR
 - AC4: The slice stays bounded to player-traversal correctness and does not widen into a full physics, pathfinding, or world-generation redesign.
 
 # AC Traceability
-- AC1 -> Reproduction: a bounded traversal path or automated scenario exists for investigating the false-blocking symptom. Proof target: test case, profiling scenario, or task report.
-- AC2 -> Alignment fix: traversal and collision semantics are brought back in line with visibly open space. Proof target: implementation note plus targeted regression evidence.
-- AC3 -> Blocking safety: intended non-traversable obstacles still stop movement after the fix. Proof target: targeted tests or manual traversal evidence.
-- AC4 -> Scope guard: the slice remains narrowly focused on player-traversal correctness. Proof target: task report and changed-file scope.
+- AC1 -> Reproduction: a deterministic scenario now exists in test form by moving the player across the position of a hidden bootstrap support entity that previously acted as an invisible collider. Proof: `src/game/entities/model/entitySimulation.test.ts`.
+- AC2 -> Alignment fix: hidden bootstrap support entities are no longer injected into movement collision or spawn-blocking checks when they are not part of the active simulation state. Proof: `games/emberwake/src/runtime/entitySimulation.ts`.
+- AC3 -> Blocking safety: the obstacle-blocking contract remains unchanged and targeted traversal tests still pass after the fix. Proof: `games/emberwake/src/runtime/pseudoPhysics.test.ts`, `src/game/world/model/worldGeneration.test.ts`.
+- AC4 -> Scope guard: the slice only removes hidden bootstrap support colliders from runtime traversal and spawn checks; it does not change world-generation, blocker rendering, or broad movement semantics. Proof: changed-file scope is limited to `games/emberwake/src/runtime/entitySimulation.ts` and `src/game/entities/model/entitySimulation.test.ts`.
 
 # Decision framing
 - Product framing: Not needed
@@ -71,3 +71,4 @@ flowchart LR
 - Derived from request `req_091_define_a_fix_for_intermittent_invisible_wall_blocking_during_player_traversal`.
 - Source file: `logics/request/req_091_define_a_fix_for_intermittent_invisible_wall_blocking_during_player_traversal.md`.
 - Request context seeded into this backlog item from `logics/request/req_091_define_a_fix_for_intermittent_invisible_wall_blocking_during_player_traversal.md`.
+- Delivered through `games/emberwake/src/runtime/entitySimulation.ts` by removing hidden deterministic runtime support entities from player-collision and spawn-blocking checks.

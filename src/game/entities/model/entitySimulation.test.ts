@@ -3,6 +3,7 @@ import {
   createInitialSimulationState,
   entitySimulationContract,
   getScriptedEntityPhase,
+  type EntitySimulationState,
   normalizeEntitySimulationState
 } from "./entitySimulation";
 import type { SimulatedEntity } from "./entitySimulation";
@@ -11,6 +12,7 @@ import { singleEntityControlContract } from "../../input/model/singleEntityContr
 import { hostileCombatContract } from "@game/runtime/hostileCombatContract";
 import { getHostileSpawnProfile } from "@game/runtime/hostilePressure";
 import { resolveRunProgressionPhase } from "@game/runtime/runProgressionPhases";
+import { emberwakeRuntimeBootstrap } from "@game/runtime/emberwakeRuntimeBootstrap";
 import { sampleWorldTileLayers } from "../../world/model/worldGeneration";
 import { worldContract } from "../../world/model/worldContract";
 
@@ -413,6 +415,46 @@ describe("entitySimulation", () => {
 
     expect(routedHostile.pathfindingState?.routeTiles.length ?? 0).toBeGreaterThan(0);
     expect(routedHostile.focusState?.targetEntityId).toBe(entityContract.primaryEntityId);
+  });
+
+  it("does not block the player against hidden runtime support entities that are not in the simulation state", () => {
+    const initialState = createInitialSimulationState();
+    const hiddenSupport = emberwakeRuntimeBootstrap.supportEntities[1]!;
+    let simulationState: EntitySimulationState = {
+      ...initialState,
+      entities: [
+        {
+          ...initialState.entity,
+          state: "idle" as const,
+          worldPosition: {
+            x: hiddenSupport.worldPosition.x - 120,
+            y: hiddenSupport.worldPosition.y
+          }
+        }
+      ]
+    };
+    simulationState.entity = simulationState.entities[0]!;
+
+    for (let step = 0; step < 80; step += 1) {
+      simulationState = advanceSimulationState(simulationState, {
+        controlState: {
+          controlledEntityId: entityContract.primaryEntityId,
+          debugCameraModifierActive: false,
+          inputOwner: singleEntityControlContract.ownership.controlledEntity,
+          movementIntent: {
+            isActive: true,
+            magnitude: 1,
+            source: "keyboard",
+            vector: {
+              x: 1,
+              y: 0
+            }
+          }
+        }
+      });
+    }
+
+    expect(simulationState.entity.worldPosition.x).toBeGreaterThan(hiddenSupport.worldPosition.x);
   });
 
   it("automatically damages hostiles inside the player's forward cone", () => {

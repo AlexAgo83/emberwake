@@ -1,10 +1,10 @@
 ## task_060_orchestrate_intermittent_invisible_wall_blocking_traversal_fix - Orchestrate intermittent invisible wall blocking traversal fix
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 92%
-> Confidence: 88%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 96%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -28,13 +28,13 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Capture a bounded reproduction path for the intermittent invisible-wall symptom and confirm which traversal patterns or map seams trigger it.
-- [ ] 2. Inspect obstacle sampling, pseudo-physical movement resolution, and player-footprint behavior to isolate the smallest credible cause.
-- [ ] 3. Implement the minimal collision or traversal alignment fix so visually open non-blocking terrain no longer stops the player unexpectedly.
-- [ ] 4. Run targeted validation for the captured false-blocking route, diagonal and edge-adjacent traversal, and legitimate blocker behavior.
-- [ ] 5. Update `req_091`, `item_331`, `item_332`, and this task with implementation evidence and validation results.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: Create a dedicated git commit for the completed orchestration scope.
+- [x] 1. Capture a bounded reproduction path for the intermittent invisible-wall symptom and confirm which traversal patterns or map seams trigger it.
+- [x] 2. Inspect obstacle sampling, pseudo-physical movement resolution, and player-footprint behavior to isolate the smallest credible cause.
+- [x] 3. Implement the minimal collision or traversal alignment fix so visually open non-blocking terrain no longer stops the player unexpectedly.
+- [x] 4. Run targeted validation for the captured false-blocking route, diagonal and edge-adjacent traversal, and legitimate blocker behavior.
+- [x] 5. Update `req_091`, `item_331`, `item_332`, and this task with implementation evidence and validation results.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: Create a dedicated git commit for the completed orchestration scope.
 
 # Delivery checkpoints
 - Keep the wave focused on player-traversal correctness, not cosmetic world changes.
@@ -44,9 +44,9 @@ flowchart LR
 - Leave the repo in a coherent, commit-ready state once the captured symptom and validation are both covered.
 
 # AC Traceability
-- AC1 -> Reproduction and fix scope: `item_331` captures the deterministic reproduction path and collision-alignment implementation. Proof: implementation notes and targeted traversal evidence should be recorded there.
-- AC2 -> Validation scope: `item_332` covers the regression scenarios needed to prove the invisible-wall symptom no longer reproduces. Proof: targeted tests and manual route verification should be recorded there.
-- AC3 -> Delivery posture: this task keeps the wave bounded to the proven traversal bug and requires one dedicated commit-ready checkpoint at completion. Proof: the plan, validation, and final report anchor that delivery posture.
+- AC1 -> Reproduction and fix scope: the wave identified hidden bootstrap support entities as invisible colliders and removed them from movement collision and spawn-blocking checks when they are not part of the active simulation state. Proof: `games/emberwake/src/runtime/entitySimulation.ts`, `src/game/entities/model/entitySimulation.test.ts`.
+- AC2 -> Validation scope: the wave added a targeted regression test for traversal through the hidden support-entity position and kept the surrounding runtime traversal suite green. Proof: `npm run test -- src/game/entities/model/entitySimulation.test.ts`, `npm run test -- games/emberwake/src/runtime/pseudoPhysics.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts src/game/world/model/worldGeneration.test.ts`.
+- AC3 -> Delivery posture: the work stayed bounded to the invisible-wall traversal bug and its immediate regression coverage. Proof: only `games/emberwake/src/runtime/entitySimulation.ts`, `src/game/entities/model/entitySimulation.test.ts`, and the linked Logics docs changed.
 
 # Decision framing
 - Product framing: Not needed
@@ -77,11 +77,19 @@ flowchart LR
 - Manual verification that visible red blockers or equivalent legitimate obstacles still stop movement correctly.
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Dedicated git commit created for the completed orchestration scope.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Dedicated git commit created for the completed orchestration scope.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Root cause identified: deterministic bootstrap support entities were still participating in runtime collision and spawn-blocking checks even though they were not present in `simulationState.entities` and therefore were not rendered.
+- Implementation landed by removing those hidden bootstrap colliders from `resolveEntityMovement()` and `canSpawnEntityAtPosition()` in `games/emberwake/src/runtime/entitySimulation.ts`.
+- Added a regression test that walks the player through the world position of a hidden bootstrap support entity and proves movement is no longer blocked by an unseen collider.
+- Validation:
+  - `npm run test -- src/game/entities/model/entitySimulation.test.ts`
+  - `npm run test -- games/emberwake/src/runtime/pseudoPhysics.test.ts games/emberwake/src/runtime/entitySimulationIntent.test.ts src/game/world/model/worldGeneration.test.ts`
+  - `npm run typecheck`
+- The completed scope is intended to ship as one dedicated bugfix commit for the invisible-wall traversal wave.
