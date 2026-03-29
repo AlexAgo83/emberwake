@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   resolveEntitySpriteSeparationCategory,
+  resolvePickupSpriteAccent,
   resolvePickupSpriteSizeWorldUnits,
   shouldRenderSpriteBackedEntityRing
 } from "./entityPresentation";
@@ -32,6 +33,39 @@ describe("entityPresentation", () => {
         visualScale: 1
       })
     ).toBe(76);
+  });
+
+  it("exposes three crystal pickup accent tiers", () => {
+    expect(
+      resolvePickupSpriteAccent({
+        pickupKind: "crystal",
+        stackCount: 1
+      })
+    ).toEqual({
+      colorWashAlpha: 0.22,
+      colorWashTint: 0x73f2ff,
+      scaleMultiplier: 1
+    });
+    expect(
+      resolvePickupSpriteAccent({
+        pickupKind: "crystal",
+        stackCount: 12
+      })
+    ).toEqual({
+      colorWashAlpha: 0.28,
+      colorWashTint: 0x7dff9b,
+      scaleMultiplier: 1.06
+    });
+    expect(
+      resolvePickupSpriteAccent({
+        pickupKind: "crystal",
+        stackCount: 55
+      })
+    ).toEqual({
+      colorWashAlpha: 0.32,
+      colorWashTint: 0xff6a78,
+      scaleMultiplier: 1.12
+    });
   });
 
   it("disables sprite separation when entity rings are hidden", () => {

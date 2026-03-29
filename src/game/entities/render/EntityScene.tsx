@@ -15,6 +15,7 @@ import {
 } from "../model/entitySimulation";
 import {
   resolveEntitySpriteSeparationCategory,
+  resolvePickupSpriteAccent,
   resolvePickupSpriteSizeWorldUnits,
   shouldRenderSpriteBackedEntityRing
 } from "./entityPresentation";
@@ -456,6 +457,8 @@ const CombatEntityBars = memo(function CombatEntityBars({
 const EntitySprite = memo(function EntitySprite({
   alpha = 1,
   assetId,
+  colorWashAlpha = 0,
+  colorWashTint,
   mirrorX = false,
   rotation = 0,
   separationCategory = null,
@@ -464,6 +467,8 @@ const EntitySprite = memo(function EntitySprite({
 }: {
   alpha?: number;
   assetId: string;
+  colorWashAlpha?: number;
+  colorWashTint?: number;
   mirrorX?: boolean;
   rotation?: number;
   separationCategory?: SpriteSeparationCategory | null;
@@ -529,6 +534,20 @@ const EntitySprite = memo(function EntitySprite({
         x={0}
         y={0}
       />
+      {colorWashTint !== undefined && colorWashAlpha > 0 ? (
+        <pixiSprite
+          alpha={colorWashAlpha}
+          anchor={0.5}
+          blendMode="add"
+          eventMode="none"
+          height={sizeWorldUnits}
+          texture={texture}
+          tint={colorWashTint}
+          width={sizeWorldUnits}
+          x={0}
+          y={0}
+        />
+      ) : null}
     </pixiContainer>
   );
 });
@@ -586,6 +605,10 @@ export function EntityScene({
           renderedRadius,
           visualScale: entity.visualScale ?? 1
         });
+        const pickupSpriteAccent = resolvePickupSpriteAccent({
+          pickupKind,
+          stackCount: entity.pickupProfile?.stackCount
+        });
         const telegraphShakeOffset =
           entity.role === "hostile" && entity.hostileBehaviorState?.phase === "telegraph"
             ? {
@@ -628,7 +651,11 @@ export function EntityScene({
                       spriteSeparationCategory:
                         entityVisualDefinition.runtimePresentation.spriteSeparationCategory
                     })}
-                    sizeWorldUnits={pickupSpriteSize}
+                    colorWashAlpha={pickupSpriteAccent?.colorWashAlpha ?? 0}
+                    colorWashTint={pickupSpriteAccent?.colorWashTint}
+                    sizeWorldUnits={
+                      pickupSpriteSize * (pickupSpriteAccent?.scaleMultiplier ?? 1)
+                    }
                     tint={tint}
                   />
                   {entityRingsVisible ? (
