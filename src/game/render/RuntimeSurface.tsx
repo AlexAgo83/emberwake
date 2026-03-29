@@ -9,7 +9,6 @@ import {
 import type { EmberwakeRenderSurfaceMode } from "@game";
 import { CombatSkillFeedbackScene } from "./CombatSkillFeedbackScene";
 import { EntityScene } from "../entities/render/EntityScene";
-import type { PresentedEntity } from "../entities/model/entityContract";
 import type {
   CombatSkillFeedbackEvent,
   FloatingDamageNumber,
@@ -28,7 +27,8 @@ type RuntimeSurfaceProps = {
   onVisualFrame?: (timestampMs: number) => void;
   combatSkillFeedbackEvents: CombatSkillFeedbackEvent[];
   floatingDamageNumbers: FloatingDamageNumber[];
-  visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
+  selectedEntityId: string | null;
+  visibleEntities: SimulatedEntity[];
   visibleChunks: ChunkCoordinate[];
   viewport: {
     fitScale: number;
@@ -50,6 +50,7 @@ export function RuntimeSurface({
   onVisualFrame,
   combatSkillFeedbackEvents,
   floatingDamageNumbers,
+  selectedEntityId,
   visibleEntities,
   visibleChunks,
   viewport,
@@ -63,6 +64,7 @@ export function RuntimeSurface({
         entities={visibleEntities}
         floatingDamageNumbers={floatingDamageNumbers}
         renderSurfaceMode={renderSurfaceMode}
+        selectedEntityId={selectedEntityId}
         viewport={viewport}
       />
     ),

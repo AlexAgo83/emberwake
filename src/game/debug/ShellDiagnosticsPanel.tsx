@@ -10,7 +10,6 @@ import {
 import type { ShellPreferences } from "../../shared/lib/shellPreferencesStorage";
 import type { ReturnTypeUseLogicalViewportModel } from "./types";
 import type { CameraState } from "../camera/model/cameraMath";
-import type { PresentedEntity } from "../entities/model/entityContract";
 import type { SimulatedEntity } from "../entities/model/entitySimulation";
 import type { SimulationSpeedOption } from "../entities/model/entitySimulation";
 import type { SingleEntityControlState } from "../input/model/singleEntityControlContract";
@@ -19,7 +18,8 @@ import type { ChunkCoordinate, WorldPoint } from "../world/types";
 type ShellDiagnosticsPanelProps = {
   camera: CameraState;
   control: SingleEntityControlState;
-  entity: PresentedEntity<SimulatedEntity>;
+  entity: SimulatedEntity;
+  entitySelected: boolean;
   fullscreen: {
     isFullscreen: boolean;
     isSupported: boolean;
@@ -92,6 +92,7 @@ function ShellDiagnosticsPanelComponent({
   camera,
   control,
   entity,
+  entitySelected,
   fullscreen,
   preferences,
   publication,
@@ -317,7 +318,7 @@ function ShellDiagnosticsPanelComponent({
         </div>
         <div>
           <dt>Entity selected</dt>
-          <dd>{entity.isSelected ? "yes" : "no"}</dd>
+          <dd>{entitySelected ? "yes" : "no"}</dd>
         </div>
         <div>
           <dt>Entity radius</dt>

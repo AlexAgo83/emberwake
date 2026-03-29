@@ -23,7 +23,7 @@ describe("useEntityWorld", () => {
 
     expect(result.current.selectedEntity.id).toBe(primaryEntity.id);
     expect(result.current.selectedEntity.state).toBe("moving");
-    expect(result.current.selectedEntity.isSelected).toBe(true);
+    expect(result.current.selectedEntityId).toBe(primaryEntity.id);
   });
 
   it("keeps support entities out of player-facing selection and rendering by default", () => {
@@ -44,7 +44,7 @@ describe("useEntityWorld", () => {
 
     expect(result.current.selectedEntity.id).toBe(primaryEntity.id);
     expect(result.current.selectedEntity.state).toBe(primaryEntity.state);
-    expect(result.current.selectedEntity.isSelected).toBe(true);
+    expect(result.current.selectedEntityId).toBe(primaryEntity.id);
     expect(
       result.current.visibleEntities.find((entity) => entity.id === supportEntity.id)
     ).toBeUndefined();
@@ -68,9 +68,9 @@ describe("useEntityWorld", () => {
     );
 
     expect(result.current.selectedEntity.id).toBe(supportEntity.id);
+    expect(result.current.selectedEntityId).toBe(supportEntity.id);
     expect(result.current.visibleEntities.find((entity) => entity.id === supportEntity.id)).toMatchObject({
       id: supportEntity.id,
-      isSelected: true,
       state: "moving"
     });
   });

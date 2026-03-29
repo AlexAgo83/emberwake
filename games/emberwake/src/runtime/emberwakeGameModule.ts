@@ -22,7 +22,6 @@ import {
   normalizeGameplaySystemsState
 } from "@game/systems/gameplaySystems";
 import type { BuildMetaProgression } from "@game/runtime/buildSystem";
-import { createIdleGameplayOutcome } from "@game/systems/gameplayOutcome";
 import type { EmberwakeGameplaySystemsState } from "@game/systems/gameplaySystems";
 import {
   resolveRuntimeProfilingConfig,
@@ -133,35 +132,47 @@ export const emberwakeGameModule: GameModule<
     controlState: createControlStateFromInput(input)
   }),
   present: ({ state }): EnginePresentationModel => {
-    const normalizedSimulation = normalizeEntitySimulationState(state.simulation);
-    const normalizedSystems = normalizeGameplaySystemsState(state.systems);
+    const simulationState = state.simulation;
+    const systemsState = state.systems;
     const profiling = resolveRuntimeProfilingConfig(state.profiling);
+    let hostileCount = 0;
+    const presentedEntities = new Array(simulationState.entities.length);
+
+    for (let index = 0; index < simulationState.entities.length; index += 1) {
+      const entity = simulationState.entities[index]!;
+
+      if (entity.role === "hostile") {
+        hostileCount += 1;
+      }
+
+      presentedEntities[index] = {
+        id: entity.id,
+        kind: entity.visual.kind,
+        orientation: entity.orientation,
+        tint: parseTint(entity.visual.tint),
+        worldPosition: entity.worldPosition
+      };
+    }
 
     return ({
     cameraTarget: {
       mode: "follow",
-      worldPosition: normalizedSimulation.entity.worldPosition
+      worldPosition: simulationState.entity.worldPosition
     },
     diagnostics: {
-      entityState: normalizedSimulation.entity.state,
-      hostileCount: normalizedSimulation.entities.filter((entity) => entity.role === "hostile").length,
-      movementSurfaceModifier: normalizedSimulation.entity.movementSurfaceModifier,
-      playerHealth: normalizedSimulation.entity.combat.currentHealth,
+      entityState: simulationState.entity.state,
+      hostileCount,
+      movementSurfaceModifier: simulationState.entity.movementSurfaceModifier,
+      playerHealth: simulationState.entity.combat.currentHealth,
       profilingInvincible: profiling.playerInvincible,
       profilingSpawnMode: profiling.spawnMode,
-      tick: normalizedSimulation.tick,
-      ...createGameplaySystemDiagnostics(normalizedSystems)
+      tick: simulationState.tick,
+      ...createGameplaySystemDiagnostics(systemsState)
     },
-    entities: normalizedSimulation.entities.map((entity) => ({
-      id: entity.id,
-      kind: entity.visual.kind,
-      orientation: entity.orientation,
-      tint: parseTint(entity.visual.tint),
-      worldPosition: entity.worldPosition
-    })),
+    entities: presentedEntities,
     overlays: {
-      buildState: normalizedSimulation.buildState,
-      runtimeOutcome: normalizedSystems.outcome ?? createIdleGameplayOutcome()
+      buildState: simulationState.buildState,
+      runtimeOutcome: systemsState.outcome
     },
     world: {
       visibleChunks: []

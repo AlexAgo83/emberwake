@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, URL } from "node:url";
 
 const rootDir = fileURLToPath(new URL("../../", import.meta.url));
 const defaultArtifactPath = path.join(rootDir, "output/playwright/long-session/latest.json");

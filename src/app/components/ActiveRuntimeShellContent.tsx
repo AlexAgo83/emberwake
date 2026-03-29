@@ -377,6 +377,7 @@ export function ActiveRuntimeShellContent({
       camera: cameraState,
       control: runtimeControlState,
       entity: entityWorld.selectedEntity ?? simulationState.entity,
+      entitySelected: entityWorld.selectedEntityId === entityWorld.selectedEntity.id,
       fullscreen: {
         isFullscreen,
         isSupported: isFullscreenSupported,
@@ -414,6 +415,7 @@ export function ActiveRuntimeShellContent({
       cycleWorldSeed,
       entityWorld.overlappingPairs.length,
       entityWorld.selectedEntity,
+      entityWorld.selectedEntityId,
       entityWorld.trackedEntities.length,
       entityWorld.visibleEntities.length,
       handleCloseDiagnostics,
@@ -608,6 +610,7 @@ export function ActiveRuntimeShellContent({
           renderSurfaceMode={diagnosticsVisible ? "diagnostics" : "player"}
           rendererMessage={rendererState.message}
           scene={activeScene}
+          selectedEntityId={entityWorld.selectedEntityId}
           visibleEntities={entityWorld.visibleEntities}
           visibleChunks={chunkVisibility.visibleChunks}
           viewport={viewport}
@@ -652,7 +655,7 @@ export function ActiveRuntimeShellContent({
             entityId={entityWorld.selectedEntity.id}
             entityLabel={entityWorld.selectedEntity.id.split(":").at(-1) ?? entityWorld.selectedEntity.id}
             entityPosition={`${Math.round(entityWorld.selectedEntity.worldPosition.x)}, ${Math.round(entityWorld.selectedEntity.worldPosition.y)}`}
-            entitySelectionState={entityWorld.selectedEntity.isSelected ? "selected" : "not selected"}
+            entitySelectionState={entityWorld.selectedEntityId === entityWorld.selectedEntity.id ? "selected" : "not selected"}
             entityState={entityWorld.selectedEntity.state}
             isMobile={isMobileLayout}
             onClose={handleCloseInspectionPanel}

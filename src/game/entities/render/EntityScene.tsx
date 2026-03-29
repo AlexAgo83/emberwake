@@ -4,7 +4,6 @@ import { memo, useMemo } from "react";
 
 import { WorldViewportContainer, type CameraState } from "@engine-pixi";
 import type { EmberwakeRenderSurfaceMode } from "@game";
-import type { PresentedEntity } from "../model/entityContract";
 import {
   entityCombatPresentationContract,
   type FloatingDamageNumber,
@@ -19,9 +18,10 @@ extend({
 type EntitySceneProps = {
   camera: CameraState;
   currentTick: number;
-  entities: Array<PresentedEntity<SimulatedEntity>>;
+  entities: SimulatedEntity[];
   floatingDamageNumbers: FloatingDamageNumber[];
   renderSurfaceMode: EmberwakeRenderSurfaceMode;
+  selectedEntityId: string | null;
   viewport: {
     fitScale: number;
     screenSize: {
@@ -31,7 +31,7 @@ type EntitySceneProps = {
   };
 };
 
-type PickupKind = PresentedEntity<SimulatedEntity>["pickupProfile"] extends infer PickupProfile
+type PickupKind = SimulatedEntity["pickupProfile"] extends infer PickupProfile
   ? PickupProfile extends { kind: infer Kind }
     ? Kind
     : never
@@ -55,7 +55,7 @@ const floatingDamageTextStyle = {
 };
 
 const getAttackChargeProgress = (
-  entity: PresentedEntity<SimulatedEntity>,
+  entity: SimulatedEntity,
   currentTick: number
 ) => {
   if (entity.role === "player" && entity.automaticAttack) {
@@ -271,7 +271,7 @@ const drawCombatEntityBars =
     attackChargeProgress: number;
     healthRatio: number;
     radius: number;
-    role: PresentedEntity<SimulatedEntity>["role"];
+    role: SimulatedEntity["role"];
   }) =>
   (graphics: Graphics) => {
     const barWidth = Math.max(36, radius * 2.35);
@@ -368,7 +368,7 @@ const CombatEntityBars = memo(function CombatEntityBars({
   attackChargeProgress: number;
   healthRatio: number;
   radius: number;
-  role: PresentedEntity<SimulatedEntity>["role"];
+  role: SimulatedEntity["role"];
 }) {
   const draw = useMemo(
     () => drawCombatEntityBars({ attackChargeProgress, healthRatio, radius, role }),
@@ -384,6 +384,7 @@ export function EntityScene({
   entities,
   floatingDamageNumbers,
   renderSurfaceMode,
+  selectedEntityId,
   viewport
 }: EntitySceneProps) {
   const scale = viewport.fitScale * camera.zoom;
@@ -392,6 +393,7 @@ export function EntityScene({
   return (
     <WorldViewportContainer camera={camera} viewport={viewport}>
       {entities.map((entity) => {
+        const isSelected = entity.id === selectedEntityId;
         const tint = hexColorToNumber(entity.visual.tint);
         const pickupKind = entity.pickupProfile?.kind ?? null;
         const renderedRadius = entity.footprint.radius * (entity.visualScale ?? 1);
@@ -439,7 +441,7 @@ export function EntityScene({
                       attackArcVisible ? entity.automaticAttack?.rangeWorldUnits ?? null : null
                     }
                     hitReactionProgress={hitReactionProgress}
-                    isSelected={entity.isSelected}
+                    isSelected={isSelected}
                     radius={renderedRadius}
                     tint={tint}
                   />
@@ -470,13 +472,13 @@ export function EntityScene({
                     color: "#09070f",
                     distance: 1
                   },
-                  fill: entity.isSelected ? "#f6eee8" : entity.visual.tint,
+                  fill: isSelected ? "#f6eee8" : entity.visual.tint,
                   fontFamily: "monospace",
                   fontSize: 15,
                   fontWeight: "700",
                   letterSpacing: 1
                 }}
-                text={`${entity.id.split(":").at(-1)} · ${entity.state}${entity.isSelected ? " · selected" : ""}`}
+                text={`${entity.id.split(":").at(-1)} · ${entity.state}${isSelected ? " · selected" : ""}`}
                 x={0}
                 y={-renderedRadius - 20}
               />

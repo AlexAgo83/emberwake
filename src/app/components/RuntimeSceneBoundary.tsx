@@ -1,7 +1,6 @@
 import { Suspense, lazy } from "react";
 
 import type { CameraState } from "@engine";
-import type { PresentedEntity } from "../../game/entities/model/entityContract";
 import type {
   CombatSkillFeedbackEvent,
   FloatingDamageNumber,
@@ -32,7 +31,8 @@ type RuntimeSceneBoundaryProps = {
   scene: AppSceneId;
   combatSkillFeedbackEvents: CombatSkillFeedbackEvent[];
   floatingDamageNumbers: FloatingDamageNumber[];
-  visibleEntities: Array<PresentedEntity<SimulatedEntity>>;
+  selectedEntityId: string | null;
+  visibleEntities: SimulatedEntity[];
   visibleChunks: ChunkCoordinate[];
   viewport: {
     fitScale: number;
@@ -93,6 +93,7 @@ export function RuntimeSceneBoundary({
   scene,
   combatSkillFeedbackEvents,
   floatingDamageNumbers,
+  selectedEntityId,
   visibleEntities,
   visibleChunks,
   viewport,
@@ -145,6 +146,7 @@ export function RuntimeSceneBoundary({
           onVisualFrame={onVisualFrame}
           combatSkillFeedbackEvents={combatSkillFeedbackEvents}
           floatingDamageNumbers={floatingDamageNumbers}
+          selectedEntityId={selectedEntityId}
           visibleEntities={visibleEntities}
           visibleChunks={visibleChunks}
           viewport={viewport}

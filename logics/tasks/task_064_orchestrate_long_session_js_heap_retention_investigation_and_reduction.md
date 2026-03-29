@@ -4,7 +4,7 @@
 > Status: In progress
 > Understanding: 100%
 > Confidence: 96%
-> Progress: 15%
+> Progress: 50%
 > Complexity: High
 > Theme: Runtime
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -37,7 +37,7 @@ flowchart LR
 # Plan
 - [x] 1. Confirm the current baseline, linked acceptance criteria, and profiling artifacts that anchor the wave.
 - [ ] 2. Implement the profiling isolation and retained-owner attribution slice from `item_339`.
-- [ ] 3. Implement the targeted runtime view and overlay churn-reduction slice from `item_340`.
+- [x] 3. Implement the targeted runtime view and overlay churn-reduction slice from `item_340`.
 - [ ] 4. Implement the instrumentation and validation slice from `item_341`, rerun the long-session profiler, and compare artifacts.
 - [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
 - [ ] FINAL: Update related Logics docs
@@ -94,3 +94,6 @@ flowchart LR
 - 2026-03-29: Added a bounded attribution toolchain for the next slice:
 - `npm run build:profile` now emits a readable, sourcemapped profiling bundle when `VITE_PROFILE_READABLE_BUNDLE=1`.
 - `npm run test:browser:profile:analyze` now summarizes long-session artifacts and compares `start/mid/end` heap snapshots by constructor-family growth so the next reduction wave can target proven JS churn instead of widening blindly.
+- 2026-03-29: Reduced two proven hot-path churn points from the runtime view layer:
+- `games/emberwake/src/runtime/emberwakeGameModule.ts` no longer renormalizes gameplay and simulation state inside `present()` before every frame presentation pass, and it now builds hostile diagnostics plus render entities in a single loop.
+- `src/game/entities/hooks/useEntityWorld.ts`, `src/game/entities/render/EntityScene.tsx`, and the runtime-shell boundary now pass raw simulated entities plus a selected-entity id instead of cloning each visible entity just to carry `isSelected`.
