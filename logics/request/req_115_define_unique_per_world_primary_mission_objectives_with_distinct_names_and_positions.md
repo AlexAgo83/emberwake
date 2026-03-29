@@ -1,7 +1,7 @@
 ## req_115_define_unique_per_world_primary_mission_objectives_with_distinct_names_and_positions - Define unique per-world primary mission objectives with distinct names and positions
 > From version: 0.6.1+c2d57bc
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
 > Complexity: Medium

@@ -359,6 +359,10 @@ export function ActiveRuntimeShellContent({
     [levelUpChoices, levelUpPassCount, levelUpRerollCount]
   );
   const guidanceTarget = useMemo((): GuidanceTarget | null => {
+    const currentMissionStage = getMissionStage(
+      missionState.activeStageIndex,
+      runtimeSession.worldSeed
+    );
     const droppedMissionItem =
       missionState.currentDroppedItemEntityId === null
         ? null
@@ -368,7 +372,7 @@ export function ActiveRuntimeShellContent({
 
     if (droppedMissionItem) {
       return {
-        label: "Mission item",
+        label: currentMissionStage?.rewardLabel ?? "Mission item",
         tone: "mission",
         worldPosition: droppedMissionItem.worldPosition
       };
@@ -381,7 +385,7 @@ export function ActiveRuntimeShellContent({
 
     if (activeMissionBoss) {
       return {
-        label: "Mission boss",
+        label: currentMissionStage?.label ?? "Mission boss",
         tone: "mission",
         worldPosition: activeMissionBoss.worldPosition
       };
@@ -395,7 +399,7 @@ export function ActiveRuntimeShellContent({
       };
     }
 
-    const activeMissionStage = getMissionStage(missionState.itemCount);
+    const activeMissionStage = getMissionStage(missionState.itemCount, runtimeSession.worldSeed);
 
     if (activeMissionStage && !missionState.completed) {
       return {
@@ -421,7 +425,7 @@ export function ActiveRuntimeShellContent({
     }
 
     return null;
-  }, [missionState, simulationState.entities]);
+  }, [missionState, runtimeSession.worldSeed, simulationState.entities]);
   const guidanceArrowPresentation = useMemo(() => {
     if (activeScene !== "runtime" || guidanceTarget === null) {
       return null;

@@ -134,7 +134,7 @@ try {
     timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
   });
   await page.getByRole("button", {
-    name: /Start new game/i
+    name: /Descend into the Abyss/i
   }).click();
   await page.getByLabel(/Character name/i).waitFor({
     timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs

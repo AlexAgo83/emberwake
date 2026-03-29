@@ -1,10 +1,10 @@
 ## item_395_define_far_dense_crystal_compaction_tuning_and_runtime_validation - Define far/dense crystal compaction tuning and runtime validation
 > From version: 0.6.1+c2d57bc
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

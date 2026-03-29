@@ -1,10 +1,10 @@
 ## item_392_define_per_world_primary_mission_objective_roster_and_naming - Define per-world primary mission objective roster and naming
 > From version: 0.6.1+c2d57bc
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Small
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

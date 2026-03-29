@@ -1,7 +1,7 @@
 ## req_116_define_a_crystal_persistence_and_compaction_posture_for_far_and_dense_runtime_pickups - Define a crystal persistence and compaction posture for far and dense runtime pickups
 > From version: 0.6.1+c2d57bc
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
 > Complexity: Medium

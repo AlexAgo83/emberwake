@@ -1,10 +1,10 @@
 ## task_073_orchestrate_boss_cleanup_seed_archive_and_crystal_persistence_wave - Orchestrate boss, cleanup, seed, archive, and crystal persistence wave
 > From version: 0.6.1+b927df6
 > Schema version: 1.0
-> Status: In Progress
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 70%
+> Progress: 100%
 > Complexity: High
 > Theme: Systems
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -45,10 +45,10 @@ flowchart LR
 - [x] 3. Implement derived map seed contract and runtime-session bootstrap from `item_386` and `item_387`.
 - [x] 4. Implement the three-crystal asset wave from `item_388` and `item_389`.
 - [x] 5. Implement the loot archive data/discovery seam plus shell surface from `item_390` and `item_391`.
-- [ ] 6. Implement per-world primary mission objective naming and placement integration from `item_392` and `item_393`.
-- [ ] 7. Implement crystal persistence, compaction, and validation from `item_394` and `item_395`.
-- [ ] CHECKPOINT: keep boss-asset delivery, runtime/session changes, shell/archive changes, and crystal persistence changes as separate commit-ready waves.
-- [ ] FINAL: Update linked Logics docs.
+- [x] 6. Implement per-world primary mission objective naming and placement integration from `item_392` and `item_393`.
+- [x] 7. Implement crystal persistence, compaction, and validation from `item_394` and `item_395`.
+- [x] CHECKPOINT: keep boss-asset delivery, runtime/session changes, shell/archive changes, and crystal persistence changes as separate commit-ready waves.
+- [x] FINAL: Update linked Logics docs.
 
 # Delivery checkpoints
 - Checkpoint A: boss asset wave (`item_381` to `item_383`)
@@ -96,13 +96,14 @@ flowchart LR
 - Manual runtime review of boss encounters, loot archive unlocks, world-specific mission objectives, and long-session crystal persistence behavior
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
 - Checkpoint A completed: unique boss assets were generated, promoted, and integrated into runtime plus shell surfaces.
 - Checkpoint B completed: terminal exits now clear run-owned session memory, and run seeds are now derived deterministically from normalized player name plus selected world.
 - Checkpoint C completed: the crystal trio now resolves to distinct generated runtime assets, and the shell now exposes a loot archive unlocked by actual loot collection.
+- Checkpoint D completed: every world now owns its own mission-objective trio and crystal fields compact aggressively under far/dense pressure without losing stack value.

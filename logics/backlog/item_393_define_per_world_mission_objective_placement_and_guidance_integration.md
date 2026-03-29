@@ -1,10 +1,10 @@
 ## item_393_define_per_world_mission_objective_placement_and_guidance_integration - Define per-world mission objective placement and guidance integration
 > From version: 0.6.1+c2d57bc
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

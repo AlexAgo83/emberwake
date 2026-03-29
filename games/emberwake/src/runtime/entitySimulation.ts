@@ -703,6 +703,8 @@ const pickupStackMergeRadiusWorldUnits = pickupContract.pickup.pickupRadiusWorld
 const pickupCompactionIntervalTicks = 30;
 const distantPickupMergeChunkDistance = 2;
 const distantPickupMergeRadiusWorldUnits = pickupStackMergeRadiusWorldUnits * 6;
+const denseCrystalCompactionThreshold = 18;
+const denseCrystalMergeRadiusWorldUnits = pickupStackMergeRadiusWorldUnits * 3.5;
 
 const isStackablePickupKind = (pickupKind: SimulatedPickupKind) =>
   pickupKind === "crystal" || pickupKind === "gold";
@@ -905,6 +907,9 @@ const compactStackablePickupEntities = (
     const remainingKindPickups = stackablePickups.filter(
       (entity) => entity.pickupProfile?.kind === pickupKind
     );
+    const denseCrystalPressure =
+      pickupKind === "crystal" &&
+      remainingKindPickups.length >= denseCrystalCompactionThreshold;
     const visitedPickupIds = new Set<string>();
 
     for (const pickupEntity of remainingKindPickups) {
@@ -922,6 +927,8 @@ const compactStackablePickupEntities = (
         const mergeRadiusWorldUnits =
           currentEntityIsDistant || clusterHasDistantCandidate.current
             ? distantPickupMergeRadiusWorldUnits
+            : denseCrystalPressure
+              ? denseCrystalMergeRadiusWorldUnits
             : pickupStackMergeRadiusWorldUnits;
 
         for (const candidateEntity of remainingKindPickups) {
@@ -947,7 +954,10 @@ const compactStackablePickupEntities = (
       }
 
       compactedPickups.push(
-        createMergedPickupEntity(cluster, clusterHasDistantCandidate.current)
+        createMergedPickupEntity(
+          cluster,
+          clusterHasDistantCandidate.current || denseCrystalPressure
+        )
       );
     }
   }
@@ -1336,7 +1346,7 @@ const activateMissionBossIfReached = ({
     };
   }
 
-  const activeStage = getMissionStage(missionState.itemCount);
+  const activeStage = getMissionStage(missionState.itemCount, worldSeed);
 
   if (!activeStage) {
     return {

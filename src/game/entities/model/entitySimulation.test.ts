@@ -1515,4 +1515,47 @@ describe("entitySimulation", () => {
       baseTarget?.combat.currentHealth ?? 0
     );
   });
+
+  it("compacts dense far crystal fields without losing collectible value", () => {
+    const initialState = createInitialSimulationState();
+    const crystalEntities = Array.from({ length: 24 }, (_, index) =>
+      createPickupFixture("crystal", {
+        id: `entity:pickup:crystal:dense:${index}`,
+        worldPosition: {
+          x: 6_000 + (index % 6) * 42,
+          y: 6_000 + Math.floor(index / 6) * 42
+        }
+      })
+    );
+    const compactedState = advanceSimulationState(
+      {
+        ...initialState,
+        entities: [initialState.entity, ...crystalEntities],
+        tick: 29
+      },
+      {
+        profiling: {
+          playerInvincible: false,
+          spawnMode: "no-spawn"
+        }
+      }
+    );
+    const compactedCrystalEntities = compactedState.entities.filter(
+      (entity) => entity.role === "pickup" && entity.pickupProfile?.kind === "crystal"
+    );
+    const totalCrystalStackCount = compactedCrystalEntities.reduce(
+      (currentTotal, entity) => currentTotal + Math.max(1, entity.pickupProfile?.stackCount ?? 1),
+      0
+    );
+
+    expect(compactedCrystalEntities.length).toBeLessThan(crystalEntities.length);
+    expect(totalCrystalStackCount).toBe(crystalEntities.length);
+    expect(
+      compactedCrystalEntities.every((entity) =>
+        ["pickup-crystal-high", "pickup-crystal-low", "pickup-crystal-mid"].includes(
+          entity.visual.kind
+        )
+      )
+    ).toBe(true);
+  });
 });
