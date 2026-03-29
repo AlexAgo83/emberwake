@@ -130,7 +130,7 @@ try {
     waitUntil: "networkidle"
   });
 
-  await page.getByLabel("Main menu").waitFor({
+  await page.getByLabel(/Main menu|Emberwake/i).waitFor({
     timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
   });
   await page.getByRole("button", {
