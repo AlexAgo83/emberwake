@@ -1,6 +1,6 @@
 import type { SimulatedEntity } from "../model/entitySimulation";
 
-export const defaultEntityRingsVisible = true;
+export const defaultEntityRingsVisible = false;
 
 export type PickupSpriteAccent = {
   colorWashAlpha: number;

@@ -59,6 +59,7 @@ const LazyGrowthScene = lazy(async () => {
 const runtimeFixedStepMs = 1000 / 60;
 
 type AppMetaScenePanelProps = {
+  biomeSeamsVisible: boolean;
   canResumeSession: boolean;
   canSaveSession: boolean;
   characterNameError: string | null;
@@ -85,6 +86,7 @@ type AppMetaScenePanelProps = {
   onReturnToMainMenu: () => void;
   onResumeRuntime: () => void;
   onSaveGame: () => void;
+  onSetBiomeSeamsVisible: (visible: boolean) => void;
   onSetEntityRingsVisible: (visible: boolean) => void;
   pendingCharacterName: string;
   playerName: string;
@@ -95,6 +97,7 @@ type AppMetaScenePanelProps = {
 };
 
 export const AppMetaScenePanel = memo(function AppMetaScenePanel({
+  biomeSeamsVisible,
   canResumeSession,
   canSaveSession,
   characterNameError,
@@ -121,6 +124,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   onReturnToMainMenu,
   onResumeRuntime,
   onSaveGame,
+  onSetBiomeSeamsVisible,
   onSetEntityRingsVisible,
   pendingCharacterName,
   playerName,
@@ -193,10 +197,10 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 ? ""
         : scene === "settings"
           ? settingsView === "menu"
-            ? "Choose what to tune without leaving the shell."
+            ? "Choose a settings category without leaving the shell."
             : settingsView === "desktop-controls"
-              ? "Calibrate desktop movement bindings for large-screen shell layouts."
-              : "Adjust runtime presentation helpers exposed to the player."
+              ? "Adjust input options exposed on large-screen shell layouts."
+              : "Adjust optional display helpers and runtime visibility overlays."
           : scene === "defeat" && gameOverRecap
             ? gameOverRecap.defeatDetail
             : runtimeOutcome?.detail ??
@@ -246,16 +250,16 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           ? "Archive"
           : scene === "growth"
           ? "Meta progression"
-          : scene === "grimoire" || scene === "bestiary"
+        : scene === "grimoire" || scene === "bestiary"
             ? "Codex archive"
             : scene === "pause"
               ? "Pause"
           : scene === "settings"
             ? settingsView === "graphics"
-              ? "Graphics"
+              ? "Display"
               : settingsView === "desktop-controls"
-                ? "Input calibration"
-                : "Control bench"
+                ? "Controls"
+                : "Settings"
             : scene === "defeat"
               ? "Recovery"
               : "Outcome";
@@ -626,10 +630,12 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               <>
                 <Suspense fallback={null}>
                   <LazySettingsSceneContent
+                    biomeSeamsVisible={biomeSeamsVisible}
                     desktopControlBindings={desktopControlBindings}
                     entityRingsVisible={entityRingsVisible}
                     isMobileLayout={isMobileLayout}
                     onApplyDesktopControlBindings={onApplyDesktopControlBindings}
+                    onSetBiomeSeamsVisible={onSetBiomeSeamsVisible}
                     onSetEntityRingsVisible={onSetEntityRingsVisible}
                     onSetSettingsView={setSettingsView}
                     settingsView={settingsView}

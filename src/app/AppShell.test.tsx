@@ -162,14 +162,16 @@ vi.mock("./hooks/useRuntimeSession", () => ({
 vi.mock("./hooks/useShellPreferences", () => ({
   useShellPreferences: () => ({
     preferences: {
+      biomeSeamsVisible: false,
       debugPanelVisible: false,
-      entityRingsVisible: true,
+      entityRingsVisible: false,
       inspectionPanelVisible: false,
       lastMetaScene: "none",
       movementOnboardingDismissed: true,
       prefersFullscreen: false,
       runtimeFeedbackVisible: true
     },
+    setBiomeSeamsVisible: vi.fn(),
     setDebugPanelVisible: vi.fn(),
     setEntityRingsVisible: vi.fn(),
     setInspectionPanelVisible: vi.fn(),

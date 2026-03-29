@@ -18,6 +18,7 @@ import { WorldScene } from "../world/render/WorldScene";
 import type { ChunkCoordinate } from "../world/types";
 
 type RuntimeSurfaceProps = {
+  biomeSeamsVisible: boolean;
   camera: CameraState;
   currentTick: number;
   entityRingsVisible: boolean;
@@ -42,6 +43,7 @@ type RuntimeSurfaceProps = {
 };
 
 export function RuntimeSurface({
+  biomeSeamsVisible,
   camera,
   currentTick,
   entityRingsVisible,
@@ -81,6 +83,7 @@ export function RuntimeSurface({
     ),
     world: (
       <WorldScene
+        biomeSeamsVisible={biomeSeamsVisible}
         camera={camera}
         renderSurfaceMode={renderSurfaceMode}
         viewport={viewport}

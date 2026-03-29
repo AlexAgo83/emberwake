@@ -13,6 +13,7 @@ describe("shellPreferencesStorage", () => {
 
   it("round-trips shell preferences through local storage", () => {
     const preferences = {
+      biomeSeamsVisible: true,
       debugPanelVisible: true,
       entityRingsVisible: false,
       inspectionPanelVisible: false,
@@ -26,8 +27,9 @@ describe("shellPreferencesStorage", () => {
 
     expect(
       readShellPreferences({
+        biomeSeamsVisible: false,
         debugPanelVisible: false,
-        entityRingsVisible: true,
+        entityRingsVisible: false,
         inspectionPanelVisible: false,
         lastMetaScene: "none",
         movementOnboardingDismissed: false,
@@ -39,8 +41,9 @@ describe("shellPreferencesStorage", () => {
 
   it("invalidates stored shell preferences on version mismatch", () => {
     const fallbackPreferences = {
+      biomeSeamsVisible: false,
       debugPanelVisible: false,
-      entityRingsVisible: true,
+      entityRingsVisible: false,
       inspectionPanelVisible: false,
       lastMetaScene: "none" as const,
       movementOnboardingDismissed: false,

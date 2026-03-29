@@ -375,6 +375,45 @@ const drawCombatEntityBars =
     graphics.stroke();
   };
 
+const drawPlayerFootCover =
+  ({
+    currentTick,
+    motionIntensity,
+    radius
+  }: {
+    currentTick: number;
+    motionIntensity: number;
+    radius: number;
+  }) =>
+  (graphics: Graphics) => {
+    const clampedMotionIntensity = Math.min(1, Math.max(0, motionIntensity));
+    const cloudY = radius * 0.72;
+    const pulse = Math.sin(currentTick * 0.22) * (2 + clampedMotionIntensity * 1.8);
+    const drift = Math.cos(currentTick * 0.18) * (1 + clampedMotionIntensity * 1.5);
+    const fillAlpha = 0.08 + clampedMotionIntensity * 0.14;
+    const ringAlpha = 0.06 + clampedMotionIntensity * 0.1;
+
+    graphics.clear();
+    graphics.setFillStyle({
+      alpha: fillAlpha,
+      color: 0xf3dcc4
+    });
+    graphics.ellipse(0, cloudY + 2, radius * 0.66, radius * 0.24);
+    graphics.fill();
+    graphics.circle(-radius * 0.28 + drift, cloudY - 1, radius * 0.2 + clampedMotionIntensity * 1.8);
+    graphics.circle(radius * 0.24 - drift, cloudY + pulse * 0.15, radius * 0.17 + clampedMotionIntensity * 1.2);
+    graphics.fill();
+
+    graphics.setStrokeStyle({
+      alpha: ringAlpha,
+      color: 0xf6eee8,
+      width: 1.3
+    });
+    graphics.circle(-radius * 0.18 + drift * 0.8, cloudY + 1, radius * 0.18 + clampedMotionIntensity);
+    graphics.circle(radius * 0.2 - drift * 0.7, cloudY - 2, radius * 0.14 + clampedMotionIntensity * 0.8);
+    graphics.stroke();
+  };
+
 const PickupEntityGraphic = memo(function PickupEntityGraphic({
   pickupKind,
   radius,
@@ -449,6 +488,23 @@ const CombatEntityBars = memo(function CombatEntityBars({
   const draw = useMemo(
     () => drawCombatEntityBars({ attackChargeProgress, healthRatio, radius, role }),
     [attackChargeProgress, healthRatio, radius, role]
+  );
+
+  return <pixiGraphics draw={draw} />;
+});
+
+const PlayerFootCover = memo(function PlayerFootCover({
+  currentTick,
+  motionIntensity,
+  radius
+}: {
+  currentTick: number;
+  motionIntensity: number;
+  radius: number;
+}) {
+  const draw = useMemo(
+    () => drawPlayerFootCover({ currentTick, motionIntensity, radius }),
+    [currentTick, motionIntensity, radius]
   );
 
   return <pixiGraphics draw={draw} />;
@@ -631,6 +687,10 @@ export function EntityScene({
                   (currentTick - entity.damageReactionState.lastDamageTick) /
                     entityCombatPresentationContract.hitReactionVisibleTicks
               );
+        const playerFootCoverMotionIntensity =
+          entity.role === "player"
+            ? Math.min(1, Math.hypot(entity.velocity.x, entity.velocity.y) / 180)
+            : 0;
 
         return (
           <pixiContainer
@@ -641,6 +701,20 @@ export function EntityScene({
             {entity.role === "pickup" ? (
               entityAssetUrl ? (
                 <>
+                  {entityRingsVisible ? (
+                    <pixiGraphics
+                      draw={(graphics) => {
+                        graphics.clear();
+                        graphics.setStrokeStyle({
+                          alpha: 0.18,
+                          color: 0xf6eee8,
+                          width: 1.5
+                        });
+                        graphics.circle(0, 0, renderedRadius + 4);
+                        graphics.stroke();
+                      }}
+                    />
+                  ) : null}
                   <EntitySprite
                     alpha={0.98}
                     assetId={entityAssetId}
@@ -658,20 +732,6 @@ export function EntityScene({
                     }
                     tint={tint}
                   />
-                  {entityRingsVisible ? (
-                    <pixiGraphics
-                      draw={(graphics) => {
-                        graphics.clear();
-                        graphics.setStrokeStyle({
-                          alpha: 0.18,
-                          color: 0xf6eee8,
-                          width: 1.5
-                        });
-                        graphics.circle(0, 0, renderedRadius + 4);
-                        graphics.stroke();
-                      }}
-                    />
-                  ) : null}
                 </>
               ) : (
                 <PickupEntityGraphic
@@ -682,18 +742,6 @@ export function EntityScene({
               )
             ) : (
               <>
-                <EntitySprite
-                  assetId={entityAssetId}
-                  mirrorX={entitySpritePresentation.mirrorX}
-                  rotation={entitySpritePresentation.rotation}
-                  separationCategory={resolveEntitySpriteSeparationCategory({
-                    entityRingsVisible,
-                    spriteSeparationCategory:
-                      entityVisualDefinition.runtimePresentation.spriteSeparationCategory
-                  })}
-                  sizeWorldUnits={entitySpriteSize}
-                  tint={tint}
-                />
                 <pixiContainer rotation={entity.orientation}>
                   <CombatEntityGraphic
                     attackArcRadians={attackArcVisible ? entity.automaticAttack?.arcRadians ?? null : null}
@@ -711,6 +759,25 @@ export function EntityScene({
                     tint={tint}
                   />
                 </pixiContainer>
+                {entity.role === "player" && entityAssetUrl ? (
+                  <PlayerFootCover
+                    currentTick={currentTick}
+                    motionIntensity={playerFootCoverMotionIntensity}
+                    radius={renderedRadius}
+                  />
+                ) : null}
+                <EntitySprite
+                  assetId={entityAssetId}
+                  mirrorX={entitySpritePresentation.mirrorX}
+                  rotation={entitySpritePresentation.rotation}
+                  separationCategory={resolveEntitySpriteSeparationCategory({
+                    entityRingsVisible,
+                    spriteSeparationCategory:
+                      entityVisualDefinition.runtimePresentation.spriteSeparationCategory
+                  })}
+                  sizeWorldUnits={entitySpriteSize}
+                  tint={tint}
+                />
                 <CombatEntityBars
                   attackChargeProgress={getAttackChargeProgress(entity, currentTick)}
                   healthRatio={

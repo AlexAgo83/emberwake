@@ -192,6 +192,7 @@ export function AppShell() {
   }, [activeScene, isMenuOpen, requestedScene, runtimeProfilingConfig, runtimeSession.hasActiveSession]);
   const {
     preferences,
+    setBiomeSeamsVisible,
     setDebugPanelVisible,
     setEntityRingsVisible,
     setInspectionPanelVisible,
@@ -428,6 +429,7 @@ export function AppShell() {
   };
   const metaScenePanel = (
     <AppMetaScenePanel
+      biomeSeamsVisible={preferences.biomeSeamsVisible}
       canResumeSession={runtimeSession.hasActiveSession}
       canSaveSession={runtimeSession.hasActiveSession}
       characterNameError={characterNameValidation.error}
@@ -454,6 +456,7 @@ export function AppShell() {
       onReturnToMainMenu={handleReturnToMainMenu}
       onResumeRuntime={resumeRuntime}
       onSaveGame={handleSaveGame}
+      onSetBiomeSeamsVisible={setBiomeSeamsVisible}
       onSetEntityRingsVisible={setEntityRingsVisible}
       pendingCharacterName={pendingCharacterName}
       playerName={runtimeSession.playerName}

@@ -611,6 +611,7 @@ export function ActiveRuntimeShellContent({
     <>
       <section className="app-shell__runtime" aria-label="Interactive runtime shell">
         <RuntimeSceneBoundary
+          biomeSeamsVisible={preferences.biomeSeamsVisible}
           camera={cameraState}
           combatSkillFeedbackEvents={simulationState.combatSkillFeedbackEvents}
           currentTick={simulationState.tick}

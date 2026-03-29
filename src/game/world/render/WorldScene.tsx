@@ -31,6 +31,7 @@ type ViewportForWorldScene = {
 };
 
 type WorldSceneProps = {
+  biomeSeamsVisible: boolean;
   camera: CameraState;
   renderSurfaceMode: EmberwakeRenderSurfaceMode;
   visibleChunks: ChunkCoordinate[];
@@ -136,6 +137,7 @@ const RetainedChunkBase = memo(function RetainedChunkBase({
 });
 
 export function WorldScene({
+  biomeSeamsVisible,
   camera,
   renderSurfaceMode,
   visibleChunks,
@@ -182,9 +184,11 @@ export function WorldScene({
           />
         );
       })}
-      {biomeSeamSegments.map((segment) => (
-        <pixiGraphics key={segment.key} draw={drawBiomeSeamSegment(segment)} />
-      ))}
+      {biomeSeamsVisible
+        ? biomeSeamSegments.map((segment) => (
+            <pixiGraphics key={segment.key} draw={drawBiomeSeamSegment(segment)} />
+          ))
+        : null}
       {debugVisualsEnabled
         ? chunkDebugData.map(({ chunkCoordinate, debugData, origin }) => {
             const chunkId = chunkCoordinateToId(chunkCoordinate, worldSeed);

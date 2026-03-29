@@ -5,6 +5,7 @@ import {
 } from "./persistence/storageDomain";
 
 export type ShellPreferences = {
+  biomeSeamsVisible: boolean;
   debugPanelVisible: boolean;
   entityRingsVisible: boolean;
   inspectionPanelVisible: boolean;

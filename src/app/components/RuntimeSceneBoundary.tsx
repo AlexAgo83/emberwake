@@ -18,6 +18,7 @@ const LazyRuntimeSurface = lazy(async () => {
 });
 
 type RuntimeSceneBoundaryProps = {
+  biomeSeamsVisible: boolean;
   camera: CameraState;
   currentTick: number;
   entityRingsVisible: boolean;
@@ -81,6 +82,7 @@ function RuntimeStatusCard({
 }
 
 export function RuntimeSceneBoundary({
+  biomeSeamsVisible,
   camera,
   currentTick,
   entityRingsVisible,
@@ -139,6 +141,7 @@ export function RuntimeSceneBoundary({
         }
       >
         <LazyRuntimeSurface
+          biomeSeamsVisible={biomeSeamsVisible}
           camera={camera}
           currentTick={currentTick}
           entityRingsVisible={entityRingsVisible}

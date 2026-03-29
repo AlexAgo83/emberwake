@@ -6,10 +6,12 @@ import "./SettingsSceneContent.css";
 export type SettingsView = "desktop-controls" | "graphics" | "menu";
 
 type SettingsSceneContentProps = {
+  biomeSeamsVisible: boolean;
   desktopControlBindings: DesktopControlBindings;
   entityRingsVisible: boolean;
   isMobileLayout: boolean;
   onApplyDesktopControlBindings: (bindings: DesktopControlBindings) => void;
+  onSetBiomeSeamsVisible: (visible: boolean) => void;
   onSetEntityRingsVisible: (visible: boolean) => void;
   onSetSettingsView: (view: SettingsView) => void;
   settingsView: SettingsView;
@@ -24,10 +26,12 @@ const LazyDesktopControlSettingsSection = lazy(async () => {
 });
 
 export default function SettingsSceneContent({
+  biomeSeamsVisible,
   desktopControlBindings,
   entityRingsVisible,
   isMobileLayout,
   onApplyDesktopControlBindings,
+  onSetBiomeSeamsVisible,
   onSetEntityRingsVisible,
   onSetSettingsView,
   settingsView
@@ -39,13 +43,13 @@ export default function SettingsSceneContent({
           <article className="app-meta-scene__settings-card">
             <div className="app-meta-scene__settings-card-copy">
               <div className="app-meta-scene__settings-card-header">
-                <h3 className="app-meta-scene__settings-card-title">Desktop controls</h3>
+                <h3 className="app-meta-scene__settings-card-title">Controls</h3>
                 <span className="app-meta-scene__settings-card-tag">
                   {isMobileLayout ? "Desktop only" : "Keyboard"}
                 </span>
               </div>
               <p className="app-meta-scene__settings-card-detail">
-                Remap the large-screen movement bindings used by the player entity.
+                Manage input-related shell options and large-screen calibration.
               </p>
             </div>
             <button
@@ -56,7 +60,7 @@ export default function SettingsSceneContent({
               }}
               type="button"
             >
-              Desktop controls
+              Controls
             </button>
             {isMobileLayout ? (
               <p className="app-meta-scene__settings-card-note">
@@ -68,13 +72,13 @@ export default function SettingsSceneContent({
           <article className="app-meta-scene__settings-card">
             <div className="app-meta-scene__settings-card-copy">
               <div className="app-meta-scene__settings-card-header">
-                <h3 className="app-meta-scene__settings-card-title">Graphics</h3>
+                <h3 className="app-meta-scene__settings-card-title">Display</h3>
                 <span className="app-meta-scene__settings-card-tag">
-                  {entityRingsVisible ? "Entity rings on" : "Entity rings off"}
+                  {entityRingsVisible || biomeSeamsVisible ? "Helpers on" : "Helpers off"}
                 </span>
               </div>
               <p className="app-meta-scene__settings-card-detail">
-                Tune player-facing runtime presentation helpers such as entity rings and pickup outlines.
+                Manage optional runtime presentation helpers and visibility overlays.
               </p>
             </div>
             <button
@@ -84,7 +88,7 @@ export default function SettingsSceneContent({
               }}
               type="button"
             >
-              Graphics
+              Display
             </button>
           </article>
         </div>
@@ -111,15 +115,15 @@ export default function SettingsSceneContent({
         <div className="app-meta-scene__subsurface app-meta-scene__subsurface--settings app-meta-scene__settings-panel">
           <div className="app-meta-scene__settings-panel-copy">
             <p className="app-meta-scene__lead">
-              Control whether sprite-backed entities and pickups keep their runtime rings and readability halos.
+              Control optional display helpers exposed by the runtime without changing gameplay.
             </p>
             <p className="app-meta-scene__settings-card-note">
-              Applies to sprite-backed player, hostile, and pickup ring treatment. It does not change combat arcs,
-              bars, or pickup gameplay.
+              These toggles affect only player-facing presentation helpers. They do not change combat arcs,
+              collision footprints, pickup behavior, or terrain generation.
             </p>
           </div>
           <div className="app-meta-scene__settings-toggle-row">
-            <span className="app-meta-scene__settings-toggle-label">Entity rings</span>
+            <span className="app-meta-scene__settings-toggle-label">Debug circles</span>
             <button
               aria-pressed={entityRingsVisible}
               className="shell-control shell-control--button"
@@ -128,7 +132,20 @@ export default function SettingsSceneContent({
               }}
               type="button"
             >
-              {entityRingsVisible ? "Disable entity rings" : "Enable entity rings"}
+              {entityRingsVisible ? "Disable debug circles" : "Enable debug circles"}
+            </button>
+          </div>
+          <div className="app-meta-scene__settings-toggle-row">
+            <span className="app-meta-scene__settings-toggle-label">Biome transitions</span>
+            <button
+              aria-pressed={biomeSeamsVisible}
+              className="shell-control shell-control--button"
+              onClick={() => {
+                onSetBiomeSeamsVisible(!biomeSeamsVisible);
+              }}
+              type="button"
+            >
+              {biomeSeamsVisible ? "Disable biome transitions" : "Enable biome transitions"}
             </button>
           </div>
         </div>

@@ -15,8 +15,9 @@ export function useShellPreferences({
 }: UseShellPreferencesOptions) {
   const [preferences, setPreferences] = useState<ShellPreferences>(() =>
     readShellPreferences({
+      biomeSeamsVisible: false,
       debugPanelVisible: defaultDebugPanelVisible,
-      entityRingsVisible: true,
+      entityRingsVisible: false,
       inspectionPanelVisible: false,
       lastMetaScene: "none",
       movementOnboardingDismissed: false,
@@ -29,6 +30,12 @@ export function useShellPreferences({
     writeShellPreferences(preferences);
   }, [preferences]);
 
+  const setBiomeSeamsVisible = useCallback((biomeSeamsVisible: boolean) => {
+    setPreferences((currentPreferences) => ({
+      ...currentPreferences,
+      biomeSeamsVisible
+    }));
+  }, []);
   const setDebugPanelVisible = useCallback((debugPanelVisible: boolean) => {
     setPreferences((currentPreferences) => ({
       ...currentPreferences,
@@ -74,6 +81,7 @@ export function useShellPreferences({
 
   return {
     preferences,
+    setBiomeSeamsVisible,
     setDebugPanelVisible,
     setEntityRingsVisible,
     setInspectionPanelVisible,
