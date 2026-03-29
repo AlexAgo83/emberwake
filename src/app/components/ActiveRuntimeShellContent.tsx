@@ -174,6 +174,7 @@ export function ActiveRuntimeShellContent({
   const autoSelectedLevelUpSignatureRef = useRef<string | null>(null);
   const announcedBossIdsRef = useRef<Set<string>>(new Set());
   const bossTrackingInitializedRef = useRef(false);
+  const queuedRuntimeButtonIdRef = useRef<string | null>(null);
   const pendingButtonStepRef = useRef<number | null>(null);
   const [runtimeSurfaceElement, setRuntimeSurfaceElement] = useState<HTMLDivElement | null>(null);
   const [runtimeButtonPresses, setRuntimeButtonPresses] = useState<Record<string, boolean>>({});
@@ -470,13 +471,12 @@ export function ActiveRuntimeShellContent({
   }, [onSetDebugPanelVisible]);
   const triggerBuildAction = useCallback(
     (buttonId: string) => {
-      pendingButtonStepRef.current = simulationState.runtime.simulationStepsTotal;
+      queuedRuntimeButtonIdRef.current = buttonId;
       setRuntimeButtonPresses({
         [buttonId]: true
       });
-      simulationState.controls.stepOnce();
     },
-    [simulationState.controls, simulationState.runtime.simulationStepsTotal]
+    []
   );
   const handleSelectBuildChoice = useCallback(
     (choiceIndex: number) => {
@@ -490,6 +490,20 @@ export function ActiveRuntimeShellContent({
   const handlePassBuildChoice = useCallback(() => {
     triggerBuildAction("build.pass");
   }, [triggerBuildAction]);
+
+  useEffect(() => {
+    if (queuedRuntimeButtonIdRef.current === null || Object.keys(runtimeButtonPresses).length === 0) {
+      return;
+    }
+
+    pendingButtonStepRef.current = simulationState.runtime.simulationStepsTotal;
+    queuedRuntimeButtonIdRef.current = null;
+    simulationState.controls.stepOnce();
+  }, [
+    runtimeButtonPresses,
+    simulationState.controls,
+    simulationState.runtime.simulationStepsTotal
+  ]);
 
   useEffect(() => {
     if (

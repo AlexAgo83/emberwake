@@ -378,13 +378,13 @@ html[data-app-display-mode="browser"] .app-shell {
 
 .app-meta-scene__main-menu-character--enemy {
   left: 0;
-  transform: translateX(-8%) scale(var(--main-menu-character-scale, 1));
+  transform: translateX(-14%) scale(var(--main-menu-character-scale, 1));
   transform-origin: left bottom;
 }
 
 .app-meta-scene__main-menu-character--hero {
   right: 0;
-  transform: translateX(-100%) scaleX(-1);
+  transform: translateX(14%) scaleX(-1);
   transform-origin: right bottom;
 }
 
@@ -1312,7 +1312,7 @@ html[data-app-display-mode="browser"] .app-shell {
   }
 
   .app-meta-scene[data-scene="main-menu"] {
-    overflow: visible;
+    overflow: hidden;
   }
 
   .app-meta-scene__main-menu-backdrop-shell {
@@ -1321,19 +1321,23 @@ html[data-app-display-mode="browser"] .app-shell {
       minmax(0, 1fr);
     padding:
       calc(var(--shell-offset-top) + 0.75rem)
-      calc(var(--shell-offset-right) + 0.5rem)
-      calc(var(--shell-offset-bottom) + 1.5rem)
-      calc(var(--shell-offset-left) + 0.5rem);
+      var(--shell-offset-right)
+      calc(var(--shell-offset-bottom) + 1rem)
+      var(--shell-offset-left);
   }
 
   .app-meta-scene__main-menu-character {
-    --main-menu-character-size: min(12rem, 28vw);
+    --main-menu-character-size: clamp(5.8rem, 24vw, 8.4rem);
     width: var(--main-menu-character-size);
-    max-height: 20vh;
+    max-height: 17vh;
   }
 
   .app-meta-scene__main-menu-character--enemy {
-    transform: translateX(-4%) scale(var(--main-menu-character-scale, 1));
+    transform: translateX(-18%) scale(var(--main-menu-character-scale, 1));
+  }
+
+  .app-meta-scene__main-menu-character--hero {
+    transform: translateX(-100%) scaleX(-1);
   }
 
   .app-meta-scene__header,
