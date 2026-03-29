@@ -33,7 +33,8 @@ describe("metaProfileStorage", () => {
         "pickup-radius": 1,
         shield: 0,
         "xp-gain": 3
-      }
+      },
+      worldProgress: createDefaultMetaProfile().worldProgress
     };
 
     writeMetaProfile(metaProfile);

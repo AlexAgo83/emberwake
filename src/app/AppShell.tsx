@@ -37,7 +37,8 @@ import {
   mergeArchiveProgress,
   overlayArchiveProgress,
   purchaseShopUnlock,
-  purchaseTalentRank
+  purchaseTalentRank,
+  recordWorldAttempt
 } from "./model/metaProgression";
 import type {
   DesktopControlBindings
@@ -89,13 +90,11 @@ export function AppShell() {
     createNewSession,
     cycleWorldSeed,
     endActiveSession,
-    loadSavedSession,
     runtimeSession,
-    saveActiveSession,
-    savedSessionSlot,
     sessionInitState,
     setCameraMode,
-    setCameraState
+    setCameraState,
+    setWorldProfileId
   } = useRuntimeSession();
   const {
     markFailed,
@@ -230,12 +229,12 @@ export function AppShell() {
 
     if (
       runtimeSession.hasActiveSession &&
-      !window.confirm("Starting a new game will replace the current unsaved session. Continue?")
+      !window.confirm("Starting a new run will replace the current active run. Continue?")
     ) {
       return;
     }
 
-    createNewSession(characterNameValidation.normalizedValue);
+    createNewSession(characterNameValidation.normalizedValue, runtimeSession.worldProfileId);
     setGameOverRecap(null);
     setRuntimeOutcome(null);
     resetRenderer();
@@ -245,7 +244,8 @@ export function AppShell() {
     createNewSession,
     resetRenderer,
     resumeRuntime,
-    runtimeSession.hasActiveSession
+    runtimeSession.hasActiveSession,
+    runtimeSession.worldProfileId
   ]);
   const handleOpenNewGame = useCallback(() => {
     showNewGameScene();
@@ -274,43 +274,6 @@ export function AppShell() {
   const handlePurchaseShopUnlock = useCallback((unlockId: Parameters<typeof purchaseShopUnlock>[1]) => {
     setMetaProfile((currentProfile) => purchaseShopUnlock(currentProfile, unlockId));
   }, []);
-  const handleLoadGame = useCallback(() => {
-    if (!savedSessionSlot) {
-      return;
-    }
-
-    if (
-      runtimeSession.hasActiveSession &&
-      !window.confirm("Loading a saved game will replace the current active session. Continue?")
-    ) {
-      return;
-    }
-
-    if (!loadSavedSession()) {
-      return;
-    }
-
-    setGameOverRecap(null);
-    setRuntimeOutcome(null);
-    resetRenderer();
-    resumeRuntime();
-  }, [loadSavedSession, resetRenderer, resumeRuntime, runtimeSession.hasActiveSession, savedSessionSlot]);
-  const handleSaveGame = useCallback(() => {
-    const gameStateToSave = latestGameStateRef.current ?? sessionInitState;
-
-    if (!runtimeSession.hasActiveSession || !gameStateToSave) {
-      return;
-    }
-
-    if (!saveActiveSession(gameStateToSave)) {
-      return;
-    }
-
-    pushToast({
-      message: "Game saved.",
-      tone: "success"
-    });
-  }, [pushToast, runtimeSession.hasActiveSession, saveActiveSession, sessionInitState]);
   const handleBossSpawnToast = useCallback(() => {
     pushToast({
       message: "Boss incoming."
@@ -356,11 +319,43 @@ export function AppShell() {
       window.removeEventListener("keydown", handleWindowKeyDown);
     };
   }, [activeScene, isMenuOpen, showMainMenuScene]);
-  const isLoadAvailable = savedSessionSlot !== null;
   const hasRuntimeLayer = runtimeSession.hasActiveSession;
   useEffect(() => {
     settledRunRewardKeyRef.current = null;
   }, [runtimeSession.sessionRevision]);
+  const settleConcludedRun = useCallback(
+    (
+      gameState: EmberwakeGameState | null | undefined,
+      options?: {
+        missionCompleted?: boolean;
+        missionItemCount?: number;
+      }
+    ) => {
+      setMetaProfile((currentProfile) => {
+        const missionCompleted = options?.missionCompleted ?? false;
+        const missionItemCount = options?.missionItemCount ?? 0;
+        const archivedProfile = gameState
+          ? mergeArchiveProgress(
+              bankGoldIntoMetaProfile(currentProfile, gameState.systems.progression.goldCollected),
+              {
+                creatureDefeatCounts: gameState.systems.progression.creatureDefeatCounts,
+                discoveredActiveWeaponIds: gameState.systems.progression.discoveredActiveWeaponIds,
+                discoveredCreatureIds: gameState.systems.progression.discoveredCreatureIds,
+                discoveredFusionIds: gameState.systems.progression.discoveredFusionIds,
+                discoveredPassiveItemIds: gameState.systems.progression.discoveredPassiveItemIds
+              }
+            )
+          : currentProfile;
+
+        return recordWorldAttempt(archivedProfile, {
+          missionCompleted,
+          missionItemCount,
+          worldProfileId: runtimeSession.worldProfileId
+        });
+      });
+    },
+    [runtimeSession.worldProfileId]
+  );
   const updateGameOverRecap = useCallback((gameState: EmberwakeGameState | null) => {
     if (!gameState) {
       return;
@@ -392,25 +387,40 @@ export function AppShell() {
 
       if (settledRunRewardKeyRef.current !== rewardKey) {
         settledRunRewardKeyRef.current = rewardKey;
-        setMetaProfile((currentProfile) =>
-          mergeArchiveProgress(
-            bankGoldIntoMetaProfile(currentProfile, gameState.systems.progression.goldCollected),
-            {
-              creatureDefeatCounts: gameState.systems.progression.creatureDefeatCounts,
-              discoveredActiveWeaponIds: gameState.systems.progression.discoveredActiveWeaponIds,
-              discoveredCreatureIds: gameState.systems.progression.discoveredCreatureIds,
-              discoveredFusionIds: gameState.systems.progression.discoveredFusionIds,
-              discoveredPassiveItemIds: gameState.systems.progression.discoveredPassiveItemIds
-            }
-          )
-        );
+        settleConcludedRun(gameState);
       }
     }
 
     if (gameState.systems.outcome.kind === "defeat") {
       updateGameOverRecap(gameState);
     }
-  }, [runtimeSession.sessionRevision, updateGameOverRecap]);
+  }, [runtimeSession.sessionRevision, settleConcludedRun, updateGameOverRecap]);
+  const handleAbandonRun = useCallback(() => {
+    if (!runtimeSession.hasActiveSession) {
+      return;
+    }
+
+    if (!window.confirm("Abandon the current run? This will count as a failed attempt.")) {
+      return;
+    }
+
+    settleConcludedRun(latestGameStateRef.current ?? sessionInitState ?? null);
+    endActiveSession();
+    setGameOverRecap(null);
+    setRuntimeOutcome(null);
+    showMainMenuScene();
+    pushToast({
+      message: "Run abandoned.",
+      tone: "success"
+    });
+  }, [
+    endActiveSession,
+    pushToast,
+    runtimeSession.hasActiveSession,
+    sessionInitState,
+    settleConcludedRun,
+    showMainMenuScene
+  ]);
   const latestProgression = (latestGameStateRef.current ?? sessionInitState)?.systems.progression;
   const progressionSnapshot = {
     ...overlayArchiveProgress(
@@ -431,7 +441,6 @@ export function AppShell() {
     <AppMetaScenePanel
       biomeSeamsVisible={preferences.biomeSeamsVisible}
       canResumeSession={runtimeSession.hasActiveSession}
-      canSaveSession={runtimeSession.hasActiveSession}
       characterNameError={characterNameValidation.error}
       desktopControlBindings={desktopControlBindings}
       entityRingsVisible={preferences.entityRingsVisible}
@@ -439,12 +448,11 @@ export function AppShell() {
       gameOverRecap={gameOverRecap}
       isMobileLayout={viewport.layoutMode === "mobile"}
       isShellMenuOpen={isMenuOpen}
-      isLoadAvailable={isLoadAvailable}
       metaProfile={metaProfile}
+      onAbandonRun={handleAbandonRun}
       onApplyDesktopControlBindings={handleApplyDesktopControlBindings}
       onBeginNewGame={handleBeginNewGame}
       onCharacterNameChange={handleCharacterNameChange}
-      onLoadGame={handleLoadGame}
       onOpenBestiary={showBestiaryScene}
       onOpenChangelogs={showChangelogsScene}
       onOpenGrowth={handleOpenGrowth}
@@ -455,7 +463,7 @@ export function AppShell() {
       onOpenSettings={handleOpenSettings}
       onReturnToMainMenu={handleReturnToMainMenu}
       onResumeRuntime={resumeRuntime}
-      onSaveGame={handleSaveGame}
+      onSelectWorldProfile={setWorldProfileId}
       onSetBiomeSeamsVisible={setBiomeSeamsVisible}
       onSetEntityRingsVisible={setEntityRingsVisible}
       pendingCharacterName={pendingCharacterName}
@@ -464,6 +472,7 @@ export function AppShell() {
       progressionSnapshot={progressionSnapshot}
       runtimeOutcome={runtimeOutcome}
       scene={activeScene}
+      selectedWorldProfileId={runtimeSession.worldProfileId}
     />
   );
   const shellOverlay = (

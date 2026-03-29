@@ -4,6 +4,7 @@ import {
   createDefaultEmberwakeRuntimeSessionState,
   emberwakeRuntimeSessionSeedOptions
 } from "@game/runtime/emberwakeSession";
+import type { WorldProfileId } from "../model/worldProfiles";
 import { persistenceDomainCatalog } from "./persistence/storageDomainCatalog";
 import {
   readVersionedStorageDomain,
@@ -16,6 +17,7 @@ export type RuntimeSessionState = {
   cameraState: CameraState;
   cameraMode: CameraMode;
   sessionRevision: number;
+  worldProfileId: WorldProfileId;
   worldSeed: string;
 };
 

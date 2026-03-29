@@ -9,7 +9,6 @@ import { appConfig } from "../../shared/config/appConfig";
 const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScenePanel>> = {}) => ({
   biomeSeamsVisible: false,
   canResumeSession: false,
-  canSaveSession: false,
   characterNameError: null,
   desktopControlBindings: createDefaultDesktopControlBindings(),
   entityRingsVisible: false,
@@ -17,13 +16,12 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   gameOverRecap: null,
   isMobileLayout: false,
   isShellMenuOpen: false,
-  isLoadAvailable: false,
   metaProfile: createDefaultMetaProfile(),
+  onAbandonRun: vi.fn(),
   onApplyDesktopControlBindings: vi.fn(),
   onBeginNewGame: vi.fn(),
   onOpenBestiary: vi.fn(),
   onCharacterNameChange: vi.fn(),
-  onLoadGame: vi.fn(),
   onOpenChangelogs: vi.fn(),
   onOpenGrowth: vi.fn(),
   onOpenGrimoire: vi.fn(),
@@ -33,7 +31,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   onOpenSettings: vi.fn(),
   onReturnToMainMenu: vi.fn(),
   onResumeRuntime: vi.fn(),
-  onSaveGame: vi.fn(),
+  onSelectWorldProfile: vi.fn(),
   onSetBiomeSeamsVisible: vi.fn(),
   onSetEntityRingsVisible: vi.fn(),
   pendingCharacterName: "Wanderer",
@@ -41,6 +39,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   progressionSnapshot: null,
   runtimeOutcome: null,
   scene: "runtime" as const,
+  selectedWorldProfileId: "ashwake-verge" as const,
   ...overrides
 });
 
@@ -60,10 +59,8 @@ describe("AppMetaScenePanel", () => {
 
     expect(screen.getByLabelText("Emberwake")).toBeInTheDocument();
     const actionButtons = screen.getAllByRole("button");
-    const loadGameIndex = actionButtons.findIndex((button) => button.textContent?.match(/Load game/i));
     const newGameIndex = actionButtons.findIndex((button) => button.textContent?.match(/Start new game/i));
     expect(screen.getByRole("button", { name: /Start new game/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Load game/i })).toBeDisabled();
     expect(screen.getByRole("button", { name: /Skills/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Bestiary/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Changelogs/i })).toBeInTheDocument();
@@ -73,8 +70,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.queryByText(/Resume the run, start a new one/i)).not.toBeInTheDocument();
     expect(screen.queryByText("No save available")).not.toBeInTheDocument();
     expect(screen.queryByText("Ownership")).not.toBeInTheDocument();
-    expect(loadGameIndex).toBeGreaterThan(-1);
-    expect(newGameIndex).toBeGreaterThan(loadGameIndex);
+    expect(newGameIndex).toBeGreaterThan(-1);
     const settingsIndex = actionButtons.findIndex((button) => button.textContent?.match(/^Settings$/i));
     const talentsIndex = actionButtons.findIndex((button) => button.textContent?.match(/^Talents$/i));
     expect(settingsIndex).toBeGreaterThan(-1);
@@ -87,21 +83,17 @@ describe("AppMetaScenePanel", () => {
     expect(props.onOpenSettings).toHaveBeenCalledTimes(1);
   });
 
-  it("surfaces save and load actions when the menu has an active or persisted session", () => {
+  it("surfaces resume without exposing the removed save-load actions", () => {
     const props = createProps({
       canResumeSession: true,
-      canSaveSession: true,
-      isLoadAvailable: true,
       scene: "main-menu"
     });
 
     render(<AppMetaScenePanel {...props} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /Save game/i }));
-    fireEvent.click(screen.getByRole("button", { name: /Load game/i }));
-
-    expect(props.onSaveGame).toHaveBeenCalledTimes(1);
-    expect(props.onLoadGame).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("button", { name: /Resume runtime/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Save game/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Load game/i })).not.toBeInTheDocument();
   });
 
   it("renders the growth scene with shop and talent purchases", async () => {
@@ -124,7 +116,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByRole("heading", { name: "Talents" })).toBeInTheDocument();
     expect(screen.getByLabelText(/Available gold/i)).toBeInTheDocument();
     expect(screen.getByText("99")).toBeInTheDocument();
-    expect(await screen.findByText("1/3 owned • 33% complete")).toBeInTheDocument();
+    expect(await screen.findByText("1/5 owned • 20% complete")).toBeInTheDocument();
     expect(screen.getByText("Owned effect: +12%")).toBeInTheDocument();
     expect(screen.getByText("Next rank adds: +12% (to +24% total)")).toBeInTheDocument();
     expect(screen.getByText("Owned effect: +12 HP")).toBeInTheDocument();
@@ -169,7 +161,7 @@ describe("AppMetaScenePanel", () => {
     expect(props.onResumeRuntime).toHaveBeenCalledTimes(1);
   });
 
-  it("renders the new-game naming step and gates Begin on invalid input", () => {
+  it("renders the new-game naming step, world cards, and gates Begin on invalid input", () => {
     const props = createProps({
       characterNameError: "Enter a character name.",
       pendingCharacterName: " ",
@@ -185,11 +177,36 @@ describe("AppMetaScenePanel", () => {
     const backIndex = actionButtons.findIndex((button) => button.textContent?.match(/Back to menu/i));
     expect(beginIndex).toBeGreaterThan(-1);
     expect(backIndex).toBeGreaterThan(beginIndex);
+    expect(screen.getByRole("button", { name: /Ashwake Verge/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/Progress 0\/3/i).length).toBeGreaterThan(0);
     fireEvent.change(screen.getByLabelText(/Character name/i), {
       target: { value: "Ash" }
     });
 
     expect(props.onCharacterNameChange).toHaveBeenCalledWith("Ash");
+  });
+
+  it("selects unlocked worlds and keeps locked worlds unavailable", () => {
+    const props = createProps({
+      metaProfile: {
+        ...createDefaultMetaProfile(),
+        worldProgress: {
+          ...createDefaultMetaProfile().worldProgress,
+          "emberplain-reach": {
+            ...createDefaultMetaProfile().worldProgress["emberplain-reach"],
+            isUnlocked: false
+          }
+        }
+      },
+      scene: "new-game"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Ashwake Verge/i }));
+
+    expect(props.onSelectWorldProfile).toHaveBeenCalledWith("ashwake-verge");
+    expect(screen.getByRole("button", { name: /Emberplain Reach/i })).toBeDisabled();
   });
 
   it("routes Escape through Back actions for settings when the shell menu is closed", () => {
@@ -244,6 +261,8 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByLabelText("Paused")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /Resume runtime/i }));
     expect(props.onResumeRuntime).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: /Abandon run/i }));
+    expect(props.onAbandonRun).toHaveBeenCalledTimes(1);
   });
 
   it("renders settings as a category menu before opening sub-surfaces", async () => {

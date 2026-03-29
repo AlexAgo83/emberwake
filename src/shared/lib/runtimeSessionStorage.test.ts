@@ -23,7 +23,8 @@ describe("runtimeSessionStorage", () => {
         zoom: 1.25
       },
       sessionRevision: 3,
-      worldSeed: "emberwake-glow-seed"
+      worldProfileId: "glowfen-basin" as const,
+      worldSeed: "emberwake-world-glowfen-basin"
     };
 
     writeRuntimeSessionState(runtimeSession);

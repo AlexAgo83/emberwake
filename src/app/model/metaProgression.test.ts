@@ -85,8 +85,8 @@ describe("metaProgression talent costs", () => {
 
     expect(resolveShopOwnershipProgress(profile)).toEqual({
       ownedCount: 1,
-      ownedPercentage: 33,
-      totalCount: 3
+      ownedPercentage: 20,
+      totalCount: 5
     });
   });
 });

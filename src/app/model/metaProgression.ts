@@ -1,4 +1,10 @@
 import type { ActiveWeaponId, BuildMetaProgression, FusionId, PassiveItemId } from "@game";
+import {
+  createDefaultWorldProgressRecord,
+  getNextWorldProfileId,
+  type WorldProfileId,
+  type WorldProgress
+} from "../../shared/model/worldProfiles";
 
 export type MetaTalentId =
   | "gold-gain"
@@ -11,7 +17,9 @@ export type MetaTalentId =
 export type ShopUnlockId =
   | "second-wave-fusions"
   | "second-wave-skills"
-  | "utility-drops";
+  | "utility-drops"
+  | "level-up-reroll"
+  | "level-up-pass";
 
 export type MetaArchiveProgress = {
   creatureDefeatCounts: Partial<Record<string, number>>;
@@ -26,6 +34,7 @@ export type MetaProfile = {
   goldBalance: number;
   purchasedShopUnlockIds: ShopUnlockId[];
   talentRanks: Record<MetaTalentId, number>;
+  worldProgress: Record<WorldProfileId, WorldProgress>;
 };
 
 export type ShopUnlockDefinition = {
@@ -117,6 +126,18 @@ export const shopUnlockCatalog: ShopUnlockDefinition[] = [
     description: "Opens magnet-grade utility drops now, with hourglass-compatible posture later.",
     id: "utility-drops",
     label: "Utility Drops"
+  },
+  {
+    cost: 36,
+    description: "Adds one extra reroll charge to each run's level-up choices.",
+    id: "level-up-reroll",
+    label: "Reroll Cache"
+  },
+  {
+    cost: 32,
+    description: "Adds one extra pass charge to each run's level-up choices.",
+    id: "level-up-pass",
+    label: "Pass Permit"
   }
 ];
 
@@ -176,7 +197,8 @@ export const createDefaultMetaProfile = (): MetaProfile => ({
     "pickup-radius": 0,
     shield: 0,
     "xp-gain": 0
-  }
+  },
+  worldProgress: createDefaultWorldProgressRecord()
 });
 
 export const getTalentDefinition = (talentId: MetaTalentId) =>
@@ -397,6 +419,53 @@ export const mergeArchiveProgress = (
   };
 };
 
+export const recordWorldAttempt = (
+  profile: MetaProfile,
+  {
+    missionCompleted = false,
+    missionItemCount = 0,
+    worldProfileId
+  }: {
+    missionCompleted?: boolean;
+    missionItemCount?: number;
+    worldProfileId: WorldProfileId;
+  }
+): MetaProfile => {
+  const currentWorldProgress = profile.worldProgress[worldProfileId];
+
+  if (!currentWorldProgress) {
+    return profile;
+  }
+
+  const nextWorldProfileId = missionCompleted ? getNextWorldProfileId(worldProfileId) : null;
+
+  return {
+    ...profile,
+    worldProgress: {
+      ...profile.worldProgress,
+      [worldProfileId]: {
+        ...currentWorldProgress,
+        attemptCount: currentWorldProgress.attemptCount + 1,
+        bestMissionItemCount: Math.max(
+          currentWorldProgress.bestMissionItemCount,
+          Math.max(0, missionItemCount)
+        ),
+        completionCount:
+          currentWorldProgress.completionCount + (missionCompleted ? 1 : 0),
+        isCompleted: currentWorldProgress.isCompleted || missionCompleted
+      },
+      ...(nextWorldProfileId
+        ? {
+            [nextWorldProfileId]: {
+              ...profile.worldProgress[nextWorldProfileId],
+              isUnlocked: true
+            }
+          }
+        : {})
+    }
+  };
+};
+
 export const overlayArchiveProgress = (
   profile: MetaProfile,
   archive: Partial<MetaArchiveProgress> | null | undefined
@@ -440,6 +509,8 @@ export const deriveBuildMetaProgression = (profile: MetaProfile): BuildMetaProgr
   const hasSecondWaveSkills = profile.purchasedShopUnlockIds.includes("second-wave-skills");
   const hasSecondWaveFusions = profile.purchasedShopUnlockIds.includes("second-wave-fusions");
   const hasUtilityDrops = profile.purchasedShopUnlockIds.includes("utility-drops");
+  const hasLevelUpRerollUnlock = profile.purchasedShopUnlockIds.includes("level-up-reroll");
+  const hasLevelUpPassUnlock = profile.purchasedShopUnlockIds.includes("level-up-pass");
 
   return {
     availableActiveWeaponIds: hasSecondWaveSkills
@@ -459,6 +530,8 @@ export const deriveBuildMetaProgression = (profile: MetaProfile): BuildMetaProgr
       pickupRadiusMultiplier: 1 + profile.talentRanks["pickup-radius"] * 0.08,
       xpGainMultiplier: 1 + profile.talentRanks["xp-gain"] * 0.1
     },
+    levelUpPassCharges: 1 + (hasLevelUpPassUnlock ? 1 : 0),
+    levelUpRerollCharges: 1 + (hasLevelUpRerollUnlock ? 1 : 0),
     unlockedPickupKinds: hasUtilityDrops
       ? ["gold", "healing-kit", "magnet", "hourglass"]
       : ["gold", "healing-kit"]

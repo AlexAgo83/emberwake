@@ -90,6 +90,8 @@ export type BuildMetaProgression = {
   availableActiveWeaponIds: ActiveWeaponId[];
   availableFusionIds: FusionId[];
   availablePassiveItemIds: PassiveItemId[];
+  levelUpPassCharges: number;
+  levelUpRerollCharges: number;
   talentModifiers: {
     emergencyShieldCharges: number;
     goldGainMultiplier: number;
@@ -163,6 +165,8 @@ const createDefaultBuildMetaProgression = (): BuildMetaProgression => ({
   availableActiveWeaponIds: [...activeWeaponIds],
   availableFusionIds: [...fusionIds],
   availablePassiveItemIds: [...passiveItemIds],
+  levelUpPassCharges: 1,
+  levelUpRerollCharges: 1,
   talentModifiers: {
     emergencyShieldCharges: 0,
     goldGainMultiplier: 1,
@@ -715,6 +719,12 @@ export const normalizeBuildState = (buildState: Partial<BuildState> | undefined)
     availablePassiveItemIds:
       buildState?.metaProgression?.availablePassiveItemIds ??
       initialBuildState.metaProgression.availablePassiveItemIds,
+    levelUpPassCharges:
+      buildState?.metaProgression?.levelUpPassCharges ??
+      initialBuildState.metaProgression.levelUpPassCharges,
+    levelUpRerollCharges:
+      buildState?.metaProgression?.levelUpRerollCharges ??
+      initialBuildState.metaProgression.levelUpRerollCharges,
     talentModifiers: {
       ...initialBuildState.metaProgression.talentModifiers,
       ...buildState?.metaProgression?.talentModifiers

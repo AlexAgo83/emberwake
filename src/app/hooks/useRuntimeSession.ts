@@ -11,28 +11,40 @@ import type { RuntimeSessionState } from "../../shared/lib/runtimeSessionStorage
 import type { CameraMode } from "../../game/camera/model/cameraMode";
 import type { CameraState } from "../../game/camera/model/cameraMath";
 import {
-  readSavedRuntimeSessionSlot,
-  writeSavedRuntimeSessionSlot
+  clearSavedRuntimeSessionSlot
 } from "../../shared/lib/savedRuntimeSessionStorage";
 import { normalizeCharacterName } from "../model/characterName";
+import { getWorldProfile, getWorldProfileBySeed, type WorldProfileId } from "../../shared/model/worldProfiles";
 
 export function useRuntimeSession() {
-  const [savedSessionSlot, setSavedSessionSlot] = useState(() => readSavedRuntimeSessionSlot());
   const [runtimeSession, setRuntimeSession] = useState<RuntimeSessionState>(() => {
     const persistedSession = readRuntimeSessionState(createDefaultRuntimeSessionState());
+    const resolvedWorldProfile =
+      getWorldProfileBySeed(persistedSession.worldSeed) ??
+      getWorldProfile(persistedSession.worldProfileId);
 
     return persistedSession.hasActiveSession
       ? {
           ...persistedSession,
-          hasActiveSession: false
+          hasActiveSession: false,
+          worldProfileId: resolvedWorldProfile.id,
+          worldSeed: resolvedWorldProfile.worldSeed
         }
-      : persistedSession;
+      : {
+          ...persistedSession,
+          worldProfileId: resolvedWorldProfile.id,
+          worldSeed: resolvedWorldProfile.worldSeed
+        };
   });
   const [sessionInitState, setSessionInitState] = useState<EmberwakeGameState | undefined>();
 
   useEffect(() => {
     writeRuntimeSessionState(runtimeSession);
   }, [runtimeSession]);
+
+  useEffect(() => {
+    clearSavedRuntimeSessionSlot();
+  }, []);
 
   const cycleWorldSeed = useCallback(() => {
     setRuntimeSession((currentSession) => {
@@ -41,10 +53,14 @@ export function useRuntimeSession() {
         currentSeedIndex === -1
           ? 0
           : (currentSeedIndex + 1) % runtimeSessionContract.seedOptions.length;
+      const nextWorldProfile =
+        getWorldProfileBySeed(runtimeSessionContract.seedOptions[nextSeedIndex]) ??
+        getWorldProfile(createDefaultRuntimeSessionState().worldProfileId);
 
       return {
         ...currentSession,
-        worldSeed: runtimeSessionContract.seedOptions[nextSeedIndex]
+        worldProfileId: nextWorldProfile.id,
+        worldSeed: nextWorldProfile.worldSeed
       };
     });
   }, []);
@@ -63,65 +79,36 @@ export function useRuntimeSession() {
     }));
   }, []);
 
-  const createNewSession = useCallback((playerName: string) => {
+  const setWorldProfileId = useCallback((worldProfileId: WorldProfileId) => {
+    const worldProfile = getWorldProfile(worldProfileId);
+
+    setRuntimeSession((currentSession) => ({
+      ...currentSession,
+      worldProfileId,
+      worldSeed: worldProfile.worldSeed
+    }));
+  }, []);
+
+  const createNewSession = useCallback((playerName: string, worldProfileId?: WorldProfileId) => {
     const normalizedPlayerName = normalizeCharacterName(playerName);
     setSessionInitState(undefined);
 
     setRuntimeSession((currentSession) => {
       const defaultSession = createDefaultRuntimeSessionState();
+      const selectedWorldProfile = getWorldProfile(
+        worldProfileId ?? currentSession.worldProfileId ?? defaultSession.worldProfileId
+      );
 
       return {
         ...defaultSession,
         hasActiveSession: true,
         playerName: normalizedPlayerName,
         sessionRevision: currentSession.sessionRevision + 1,
-        worldSeed: currentSession.worldSeed
+        worldProfileId: selectedWorldProfile.id,
+        worldSeed: selectedWorldProfile.worldSeed
       };
     });
   }, []);
-
-  const loadSavedSession = useCallback(() => {
-    if (!savedSessionSlot) {
-      return false;
-    }
-
-    setSessionInitState(savedSessionSlot.gameState);
-    setRuntimeSession((currentSession) => ({
-      ...savedSessionSlot.runtimeSession,
-      hasActiveSession: true,
-      sessionRevision: currentSession.sessionRevision + 1
-    }));
-
-    return true;
-  }, [savedSessionSlot]);
-
-  const saveActiveSession = useCallback(
-    (gameState: EmberwakeGameState) => {
-      if (!runtimeSession.hasActiveSession) {
-        return false;
-      }
-
-      const savedSlot = {
-        gameState,
-        metadata: {
-          playerName: runtimeSession.playerName,
-          savedAtIso: new Date().toISOString(),
-          sessionRevision: runtimeSession.sessionRevision,
-          worldSeed: runtimeSession.worldSeed
-        },
-        runtimeSession: {
-          ...runtimeSession,
-          hasActiveSession: true
-        }
-      };
-
-      writeSavedRuntimeSessionSlot(savedSlot);
-      setSavedSessionSlot(savedSlot);
-
-      return true;
-    },
-    [runtimeSession]
-  );
 
   const endActiveSession = useCallback(() => {
     setSessionInitState(undefined);
@@ -135,12 +122,10 @@ export function useRuntimeSession() {
     createNewSession,
     cycleWorldSeed,
     endActiveSession,
-    loadSavedSession,
     runtimeSession,
-    saveActiveSession,
-    savedSessionSlot,
     sessionInitState,
     setCameraMode,
-    setCameraState
+    setCameraState,
+    setWorldProfileId
   };
 }

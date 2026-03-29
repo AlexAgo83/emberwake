@@ -2,13 +2,12 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { useEffect } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const saveActiveSession = vi.fn();
 const usePwaUpdatePromptMock = vi.fn();
 
 vi.mock("./components/AppMetaScenePanel", () => ({
-  AppMetaScenePanel: ({ onSaveGame }: { onSaveGame: () => void }) => (
-    <button onClick={onSaveGame} type="button">
-      Save game
+  AppMetaScenePanel: ({ onAbandonRun }: { onAbandonRun: () => void }) => (
+    <button onClick={onAbandonRun} type="button">
+      Abandon run
     </button>
   )
 }));
@@ -114,17 +113,15 @@ vi.mock("./hooks/useRuntimeSession", () => ({
     createNewSession: vi.fn(),
     cycleWorldSeed: vi.fn(),
     endActiveSession: vi.fn(),
-    loadSavedSession: vi.fn(),
     runtimeSession: {
       cameraMode: "follow",
       cameraState: { rotation: 0, x: 0, y: 0, zoom: 1 },
       hasActiveSession: true,
       playerName: "Wanderer",
       sessionRevision: 1,
+      worldProfileId: "ashwake-verge",
       worldSeed: "seed-alpha"
     },
-    saveActiveSession,
-    savedSessionSlot: null,
     sessionInitState: {
       simulation: {
         entity: {
@@ -155,7 +152,8 @@ vi.mock("./hooks/useRuntimeSession", () => ({
       }
     },
     setCameraMode: vi.fn(),
-    setCameraState: vi.fn()
+    setCameraState: vi.fn(),
+    setWorldProfileId: vi.fn()
   })
 }));
 
@@ -188,7 +186,6 @@ vi.mock("./hooks/usePwaUpdatePrompt", () => ({
 
 describe("AppShell", () => {
   beforeEach(() => {
-    saveActiveSession.mockReset();
     usePwaUpdatePromptMock.mockReset();
     usePwaUpdatePromptMock.mockReturnValue({
       applyUpdate: vi.fn(),
@@ -200,15 +197,14 @@ describe("AppShell", () => {
     });
   });
 
-  it("shows a toast after saving the active session", async () => {
-    saveActiveSession.mockReturnValue(true);
+  it("shows a toast after abandoning the active session", async () => {
+    vi.spyOn(window, "confirm").mockReturnValue(true);
     const { AppShell } = await import("./AppShell");
 
     render(<AppShell />);
-    fireEvent.click(screen.getByRole("button", { name: /save game/i }));
+    fireEvent.click(screen.getByRole("button", { name: /abandon run/i }));
 
-    expect(saveActiveSession).toHaveBeenCalledTimes(1);
-    expect(await screen.findByText("Game saved.")).toBeInTheDocument();
+    expect(await screen.findByText("Run abandoned.")).toBeInTheDocument();
   });
 
   it("renders the update prompt when a new build is ready", async () => {

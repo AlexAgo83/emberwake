@@ -12,6 +12,11 @@ import type { DesktopControlBindings } from "../../game/input/model/singleEntity
 import { appConfig } from "../../shared/config/appConfig";
 import type { SkillPerformanceSummary } from "@game";
 import type { SettingsView } from "./SettingsSceneContent";
+import { resolveAssetUrl } from "../../assets/assetResolver";
+import {
+  worldProfiles,
+  type WorldProfileId
+} from "../../shared/model/worldProfiles";
 
 export type GameOverRecap = {
   defeatDetail: string;
@@ -61,7 +66,6 @@ const runtimeFixedStepMs = 1000 / 60;
 type AppMetaScenePanelProps = {
   biomeSeamsVisible: boolean;
   canResumeSession: boolean;
-  canSaveSession: boolean;
   characterNameError: string | null;
   desktopControlBindings: DesktopControlBindings;
   entityRingsVisible: boolean;
@@ -69,13 +73,12 @@ type AppMetaScenePanelProps = {
   gameOverRecap?: GameOverRecap | null;
   isMobileLayout: boolean;
   isShellMenuOpen: boolean;
-  isLoadAvailable: boolean;
   metaProfile: MetaProfile;
+  onAbandonRun: () => void;
   onApplyDesktopControlBindings: (bindings: DesktopControlBindings) => void;
   onBeginNewGame: () => void;
   onOpenBestiary: () => void;
   onCharacterNameChange: (value: string) => void;
-  onLoadGame: () => void;
   onOpenChangelogs: () => void;
   onOpenGrowth: () => void;
   onOpenGrimoire: () => void;
@@ -85,7 +88,7 @@ type AppMetaScenePanelProps = {
   onOpenSettings: () => void;
   onReturnToMainMenu: () => void;
   onResumeRuntime: () => void;
-  onSaveGame: () => void;
+  onSelectWorldProfile: (worldProfileId: WorldProfileId) => void;
   onSetBiomeSeamsVisible: (visible: boolean) => void;
   onSetEntityRingsVisible: (visible: boolean) => void;
   pendingCharacterName: string;
@@ -94,12 +97,12 @@ type AppMetaScenePanelProps = {
   progressionSnapshot: CodexProgressionSnapshot | null;
   runtimeOutcome?: RuntimeShellOutcome | null;
   scene: AppSceneId;
+  selectedWorldProfileId: WorldProfileId;
 };
 
 export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   biomeSeamsVisible,
   canResumeSession,
-  canSaveSession,
   characterNameError,
   desktopControlBindings,
   entityRingsVisible,
@@ -107,13 +110,12 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   gameOverRecap,
   isMobileLayout,
   isShellMenuOpen,
-  isLoadAvailable,
   metaProfile,
+  onAbandonRun,
   onApplyDesktopControlBindings,
   onBeginNewGame,
   onOpenBestiary,
   onCharacterNameChange,
-  onLoadGame,
   onOpenChangelogs,
   onOpenGrowth,
   onOpenGrimoire,
@@ -123,7 +125,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   onOpenSettings,
   onReturnToMainMenu,
   onResumeRuntime,
-  onSaveGame,
+  onSelectWorldProfile,
   onSetBiomeSeamsVisible,
   onSetEntityRingsVisible,
   pendingCharacterName,
@@ -131,7 +133,8 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   playerWorldPosition,
   progressionSnapshot,
   runtimeOutcome,
-  scene
+  scene,
+  selectedWorldProfileId
 }: AppMetaScenePanelProps) {
   const [defeatView, setDefeatView] = useState<"recap" | "skills">("recap");
   const [settingsView, setSettingsView] = useState<SettingsView>("menu");
@@ -278,6 +281,26 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   const playerWorldPositionLabel = playerWorldPosition
     ? `${Math.round(playerWorldPosition.x)}, ${Math.round(playerWorldPosition.y)}`
     : null;
+  const worldCardViewModels = worldProfiles.map((worldProfile) => {
+    const worldProgress = metaProfile.worldProgress[worldProfile.id];
+    const representativeAssetUrl = resolveAssetUrl(worldProfile.representativeAssetId);
+    const missionProgressRatio = Math.min(1, (worldProgress?.bestMissionItemCount ?? 0) / 3);
+
+    return {
+      attemptCount: worldProgress?.attemptCount ?? 0,
+      completionCount: worldProgress?.completionCount ?? 0,
+      id: worldProfile.id,
+      isCompleted: worldProgress?.isCompleted ?? false,
+      isSelected: selectedWorldProfileId === worldProfile.id,
+      isUnlocked: worldProgress?.isUnlocked ?? false,
+      label: worldProfile.label,
+      missionItemCount: worldProgress?.bestMissionItemCount ?? 0,
+      missionProgressRatio,
+      representativeAssetUrl,
+      tier: worldProfile.tier,
+      worldDescription: worldProfile.description
+    };
+  });
 
   useEffect(() => {
     setDefeatView("recap");
@@ -387,23 +410,6 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                   {resumeLabel}
                 </button>
               ) : null}
-              {canSaveSession ? (
-                <button
-                  className="shell-control shell-control--button shell-control--button-quiet"
-                  onClick={onSaveGame}
-                  type="button"
-                >
-                  Save game
-                </button>
-              ) : null}
-              <button
-                className="shell-control shell-control--button shell-control--button-quiet"
-                disabled={!isLoadAvailable}
-                onClick={onLoadGame}
-                type="button"
-              >
-                Load game
-              </button>
               <button
                 className="shell-control shell-control--button shell-control--button-primary"
                 onClick={onOpenNewGame}
@@ -474,6 +480,65 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                   </p>
                 ) : null}
               </div>
+            </div>
+            <div className="app-meta-scene__world-grid" aria-label="World selection">
+              {worldCardViewModels.map((worldCard) => (
+                <button
+                  aria-pressed={worldCard.isSelected}
+                  className="app-meta-scene__world-card"
+                  data-locked={!worldCard.isUnlocked}
+                  data-selected={worldCard.isSelected}
+                  disabled={!worldCard.isUnlocked}
+                  key={worldCard.id}
+                  onClick={() => {
+                    onSelectWorldProfile(worldCard.id);
+                  }}
+                  type="button"
+                >
+                  <div
+                    className="app-meta-scene__world-card-art"
+                    style={
+                      worldCard.representativeAssetUrl
+                        ? { backgroundImage: `url(${worldCard.representativeAssetUrl})` }
+                        : undefined
+                    }
+                  />
+                  <div className="app-meta-scene__world-card-overlay" />
+                  <div className="app-meta-scene__world-card-copy">
+                    <div className="app-meta-scene__world-card-header">
+                      <span className="app-meta-scene__world-card-tier">World {worldCard.tier}</span>
+                      <span className="app-meta-scene__world-card-tag">
+                        {!worldCard.isUnlocked
+                          ? "Locked"
+                          : worldCard.isCompleted
+                            ? "Completed"
+                            : "Available"}
+                      </span>
+                    </div>
+                    <strong className="app-meta-scene__world-card-title">{worldCard.label}</strong>
+                    <p className="app-meta-scene__world-card-detail">{worldCard.worldDescription}</p>
+                    <div className="app-meta-scene__world-card-progress">
+                      <div className="app-meta-scene__world-card-progress-bar">
+                        <span
+                          className="app-meta-scene__world-card-progress-fill"
+                          style={{ width: `${worldCard.missionProgressRatio * 100}%` }}
+                        />
+                      </div>
+                      <div className="app-meta-scene__world-card-facts">
+                        <span>
+                          Progress {worldCard.missionItemCount}/3
+                        </span>
+                        <span>
+                          Attempts {worldCard.attemptCount}
+                        </span>
+                        <span>
+                          Clears {worldCard.completionCount}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
             </div>
             <div className="app-meta-scene__actions app-meta-scene__actions--new-game">
               <button
@@ -608,6 +673,13 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                     type="button"
                   >
                     Settings
+                  </button>
+                  <button
+                    className="shell-control shell-control--button shell-control--button-alert"
+                    onClick={onAbandonRun}
+                    type="button"
+                  >
+                    Abandon run
                   </button>
                   <button
                     className="shell-control shell-control--button"

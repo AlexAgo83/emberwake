@@ -568,6 +568,130 @@ html[data-app-display-mode="browser"] .app-shell {
   grid-column: span 2;
 }
 
+.app-meta-scene__world-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.app-meta-scene__world-card {
+  position: relative;
+  display: grid;
+  min-height: 9.6rem;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  background: rgba(10, 14, 18, 0.92);
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.app-meta-scene__world-card[data-selected="true"] {
+  border-color: rgba(115, 216, 255, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(115, 216, 255, 0.24);
+}
+
+.app-meta-scene__world-card[data-locked="true"] {
+  filter: saturate(0.72);
+}
+
+.app-meta-scene__world-card-art,
+.app-meta-scene__world-card-overlay,
+.app-meta-scene__world-card-copy {
+  grid-area: 1 / 1;
+}
+
+.app-meta-scene__world-card-art {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.76;
+  transform: scale(1.04);
+}
+
+.app-meta-scene__world-card-overlay {
+  background:
+    linear-gradient(90deg, rgba(6, 9, 13, 0.92), rgba(6, 9, 13, 0.38) 48%, rgba(6, 9, 13, 0.88)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 28%);
+}
+
+.app-meta-scene__world-card-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.55rem;
+  align-content: space-between;
+  padding: 0.95rem 1rem;
+}
+
+.app-meta-scene__world-card-header,
+.app-meta-scene__world-card-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem 0.7rem;
+}
+
+.app-meta-scene__world-card-tier,
+.app-meta-scene__world-card-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.app-meta-scene__world-card-tier {
+  color: var(--emberwake-copy-muted);
+}
+
+.app-meta-scene__world-card-tag {
+  color: var(--emberwake-accent-warm);
+}
+
+.app-meta-scene__world-card-title {
+  color: var(--emberwake-copy);
+  font-family: var(--emberwake-title-font);
+  font-size: 1.08rem;
+  letter-spacing: 0.04em;
+}
+
+.app-meta-scene__world-card-detail {
+  margin: 0;
+  max-width: 32ch;
+  color: var(--emberwake-copy-dim);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.app-meta-scene__world-card-progress {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.app-meta-scene__world-card-progress-bar {
+  overflow: hidden;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.app-meta-scene__world-card-progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(255, 183, 104, 0.9), rgba(115, 216, 255, 0.88));
+}
+
+.app-meta-scene__world-card-facts {
+  color: var(--emberwake-copy-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .app-meta-scene__field {
   display: grid;
   gap: 0.35rem;
@@ -1072,6 +1196,22 @@ html[data-app-display-mode="browser"] .app-shell {
 
 .shell-control--button-primary:disabled {
   opacity: 0.82;
+}
+
+.shell-control--button-alert {
+  border-color: rgba(255, 122, 99, 0.48);
+  background:
+    linear-gradient(180deg, rgba(255, 122, 99, 0.12), transparent),
+    rgba(38, 18, 16, 0.98);
+  box-shadow: inset 0.22rem 0 0 rgba(255, 122, 99, 0.5);
+  color: #ffeae4;
+}
+
+.shell-control--button-alert:hover {
+  border-color: rgba(255, 140, 119, 0.62);
+  background:
+    linear-gradient(180deg, rgba(255, 140, 119, 0.14), transparent),
+    rgba(44, 20, 18, 0.99);
 }
 
 .shell-control--button-quiet {

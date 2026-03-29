@@ -7,6 +7,7 @@ export type SavedRuntimeSessionMetadata = {
   playerName: string;
   savedAtIso: string;
   sessionRevision: number;
+  worldProfileId: RuntimeSessionState["worldProfileId"];
   worldSeed: string;
 };
 
@@ -54,4 +55,12 @@ export const writeSavedRuntimeSessionSlot = (savedSlot: SavedRuntimeSessionSlot)
     payload: savedSlot,
     payloadKey: "savedRuntimeSessionSlot"
   });
+};
+
+export const clearSavedRuntimeSessionSlot = () => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.removeItem(persistenceDomainCatalog.savedRuntimeSessionSlot.storageKey);
 };

@@ -18,7 +18,8 @@ describe("savedRuntimeSessionStorage", () => {
       hasActiveSession: true,
       playerName: "Ash",
       sessionRevision: 4,
-      worldSeed: "emberwake-glow-seed"
+      worldProfileId: "glowfen-basin" as const,
+      worldSeed: "emberwake-world-glowfen-basin"
     };
     const gameState = createInitialEmberwakeGameState();
     gameState.simulation.entity.worldPosition = { x: 256, y: -128 };
@@ -30,6 +31,7 @@ describe("savedRuntimeSessionStorage", () => {
         playerName: runtimeSession.playerName,
         savedAtIso: "2026-03-21T12:00:00.000Z",
         sessionRevision: runtimeSession.sessionRevision,
+        worldProfileId: runtimeSession.worldProfileId,
         worldSeed: runtimeSession.worldSeed
       },
       runtimeSession

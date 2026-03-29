@@ -41,6 +41,10 @@ export const readMetaProfile = (fallbackProfile: MetaProfile): MetaProfile =>
       talentRanks: {
         ...currentFallbackProfile.talentRanks,
         ...persistedProfile.talentRanks
+      },
+      worldProgress: {
+        ...currentFallbackProfile.worldProgress,
+        ...persistedProfile.worldProgress
       }
     }),
     payloadKey: "metaProfile"
