@@ -1,7 +1,7 @@
 ## req_094_define_asset_production_specifications_and_prompt_packs_for_the_first_graphical_wave - Define asset production specifications and prompt packs for the first graphical wave
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
 > Complexity: Medium

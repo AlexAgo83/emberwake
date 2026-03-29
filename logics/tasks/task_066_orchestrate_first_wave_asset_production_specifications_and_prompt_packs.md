@@ -1,10 +1,10 @@
 ## task_066_orchestrate_first_wave_asset_production_specifications_and_prompt_packs - Orchestrate first-wave asset production specifications and prompt packs
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -37,8 +37,8 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm the first-wave asset list, linked acceptance criteria, and the target surfaces already implied by `item_342`, `prod_017`, and `adr_052`.
-- [ ] 2. Define the reusable production-sheet format, including mandatory fields for:
+- [x] 1. Confirm the first-wave asset list, linked acceptance criteria, and the target surfaces already implied by `item_342`, `prod_017`, and `adr_052`.
+- [x] 2. Define the reusable production-sheet format, including mandatory fields for:
 - asset id
 - target surface
 - role
@@ -48,11 +48,11 @@ flowchart LR
 - composition guidance
 - file destination
 - prompt fields
-- [ ] 3. Generate the first-wave asset production entries for the chosen runtime readability pack.
-- [ ] 4. Generate the shared style guide plus copy-paste prompt packs for the first-wave assets, including avoid-lists or negative guidance where useful.
-- [ ] 5. Validate the resulting docs, checkpoint the wave in a commit-ready state, and update linked Logics docs with the outcome and any follow-up needs.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: Update related Logics docs
+- [x] 3. Generate the first-wave asset production entries for the chosen runtime readability pack.
+- [x] 4. Generate the shared style guide plus copy-paste prompt packs for the first-wave assets, including avoid-lists or negative guidance where useful.
+- [x] 5. Validate the resulting docs, checkpoint the wave in a commit-ready state, and update linked Logics docs with the outcome and any follow-up needs.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: Update related Logics docs
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -80,6 +80,7 @@ flowchart LR
 - Architecture decision(s): `adr_052_adopt_a_content_driven_graphical_asset_pipeline_for_runtime_and_shell_surfaces`
 - Backlog item: `item_343_define_asset_production_specifications_and_prompt_packs_for_the_first_graphical_wave`
 - Request(s): `req_094_define_asset_production_specifications_and_prompt_packs_for_the_first_graphical_wave`
+- Spec(s): `spec_001_define_first_wave_asset_production_pack`
 
 # AI Context
 - Summary: Orchestrate the first-wave production-specification pack so Emberwake operators know exactly what to generate and how to generate it.
@@ -93,10 +94,17 @@ flowchart LR
 - `npm run logics:lint`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- `logics/specs/spec_001_define_first_wave_asset_production_pack.md` now acts as the operator-facing production pack for the first graphical wave.
+- The spec defines a reusable production-sheet template with the required fields for `assetId`, surface, role, format, transparency, source canvas, destination path, composition, style, avoid-list, sidecar guidance, and prompt text.
+- The filled roster covers the first bounded wave only: player runtime silhouette, six hostile runtime silhouettes, six pickups, four terrain surfaces, and one codex archive banner.
+- The prompt posture stays aligned with the drop-in pipeline contract by mapping each entry to its exact destination path and by calling out when transparent `png` delivery is required versus opaque terrain or shell art.
+- The shared style guide keeps the runtime posture readability-first and techno-shinobi without locking the pack to one external generation model.
+- Validation passed with:
+- `npm run logics:lint`

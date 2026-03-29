@@ -1,10 +1,10 @@
 ## item_343_define_asset_production_specifications_and_prompt_packs_for_the_first_graphical_wave - Define asset production specifications and prompt packs for the first graphical wave
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -85,6 +85,7 @@ flowchart LR
 - `logics/request/req_093_define_a_first_graphical_asset_integration_strategy_for_runtime_and_shell_surfaces.md`
 - `logics/backlog/item_342_define_a_first_graphical_asset_integration_strategy_for_runtime_and_shell_surfaces.md`
 - `logics/tasks/task_065_orchestrate_the_first_graphical_asset_integration_strategy_and_delivery_plan.md`
+- `logics/specs/spec_001_define_first_wave_asset_production_pack.md`
 - `logics/product/prod_017_graphical_asset_direction_for_runtime_readability_and_shell_identity.md`
 - `logics/architecture/adr_052_adopt_a_content_driven_graphical_asset_pipeline_for_runtime_and_shell_surfaces.md`
 - `src/assets/README.md`
@@ -98,3 +99,5 @@ flowchart LR
 - Derived from request `req_094_define_asset_production_specifications_and_prompt_packs_for_the_first_graphical_wave`.
 - Source file: `logics/request/req_094_define_asset_production_specifications_and_prompt_packs_for_the_first_graphical_wave.md`.
 - Request context seeded into this backlog item from `logics/request/req_094_define_asset_production_specifications_and_prompt_packs_for_the_first_graphical_wave.md`.
+- Completed by `task_066_orchestrate_first_wave_asset_production_specifications_and_prompt_packs`.
+- Delivery evidence is captured in `logics/specs/spec_001_define_first_wave_asset_production_pack.md`.
