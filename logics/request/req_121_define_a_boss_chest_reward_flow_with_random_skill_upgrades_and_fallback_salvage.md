@@ -1,9 +1,9 @@
 ## req_121_define_a_boss_chest_reward_flow_with_random_skill_upgrades_and_fallback_salvage - Define a boss chest reward flow with random skill upgrades and fallback salvage
-> From version: 0.7.0
+> From version: 0.7.0+1b1dda6
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 99%
-> Confidence: 97%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -115,4 +115,5 @@ flowchart TD
 - `games/emberwake/src/content/entities/entityData.ts`
 
 # Backlog
-- None yet. Promote this request when the boss-reward and fallback posture are accepted.
+- `item_402_define_miniboss_chest_reward_resolution_and_owned_skill_upgrade_rules`
+- `item_403_define_miniboss_reward_toast_feedback_and_maxed_build_fallback_salvage`

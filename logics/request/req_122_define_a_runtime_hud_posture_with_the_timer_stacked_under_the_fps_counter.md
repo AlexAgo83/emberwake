@@ -1,9 +1,9 @@
 ## req_122_define_a_runtime_hud_posture_with_the_timer_stacked_under_the_fps_counter - Define a runtime HUD posture with the timer stacked under the FPS counter
-> From version: 0.7.0
+> From version: 0.7.0+1b1dda6
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 99%
-> Confidence: 98%
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Low
 > Theme: HUD
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -91,4 +91,4 @@ flowchart TD
 - `src/game/debug/ShellDiagnosticsPanel.tsx`
 
 # Backlog
-- None yet. Promote this request when the HUD regrouping is accepted.
+- `item_404_define_a_grouped_runtime_hud_cluster_for_fps_and_timer`

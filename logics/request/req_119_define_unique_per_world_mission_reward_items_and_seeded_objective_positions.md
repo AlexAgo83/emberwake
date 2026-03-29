@@ -1,9 +1,9 @@
 ## req_119_define_unique_per_world_mission_reward_items_and_seeded_objective_positions - Define unique per-world mission reward items and seeded objective positions
-> From version: 0.7.0
+> From version: 0.7.0+1b1dda6
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 99%
-> Confidence: 97%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -120,4 +120,5 @@ flowchart TD
 - `games/emberwake/src/content/entities/entityData.ts`
 
 # Backlog
-- None yet. Promote this request when the seeded-placement and unique-item posture are accepted.
+- `item_398_define_unique_primary_mission_reward_item_roster_and_asset_coverage`
+- `item_399_define_seeded_world_specific_primary_mission_objective_placement`

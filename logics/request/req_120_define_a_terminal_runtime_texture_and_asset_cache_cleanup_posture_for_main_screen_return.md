@@ -1,9 +1,9 @@
 ## req_120_define_a_terminal_runtime_texture_and_asset_cache_cleanup_posture_for_main_screen_return - Define a terminal runtime texture and asset cache cleanup posture for main screen return
-> From version: 0.7.0
+> From version: 0.7.0+1b1dda6
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 99%
-> Confidence: 98%
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -106,4 +106,5 @@ flowchart TD
 - `logics/request/req_111_define_a_terminal_run_memory_cleanup_posture_when_returning_to_main_screen.md`
 
 # Backlog
-- None yet. Promote this request when the cleanup posture and retention strategy are accepted.
+- `item_400_define_terminal_runtime_texture_cache_release_and_asset_ownership_boundaries`
+- `item_401_define_terminal_memory_cleanup_validation_and_runtime_main_screen_allowlist_tuning`

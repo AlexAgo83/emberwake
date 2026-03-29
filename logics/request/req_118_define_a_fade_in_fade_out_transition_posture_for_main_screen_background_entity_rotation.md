@@ -1,9 +1,9 @@
 ## req_118_define_a_fade_in_fade_out_transition_posture_for_main_screen_background_entity_rotation - Define a fade in/fade out transition posture for main screen background entity rotation
-> From version: 0.7.0
+> From version: 0.7.0+1b1dda6
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Understanding: 99%
+> Confidence: 97%
 > Complexity: Low
 > Theme: Shell
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -98,4 +98,4 @@ flowchart TD
 - `logics/request/req_107_define_a_main_screen_background_presentation_using_runtime_character_and_enemy_assets.md`
 
 # Backlog
-- None yet. Promote this request when the transition posture is accepted.
+- `item_397_define_a_fade_transition_contract_for_rotating_main_screen_enemy_backdrops`

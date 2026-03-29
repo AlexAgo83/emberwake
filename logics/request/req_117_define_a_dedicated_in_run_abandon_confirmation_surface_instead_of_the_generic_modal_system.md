@@ -1,9 +1,9 @@
 ## req_117_define_a_dedicated_in_run_abandon_confirmation_surface_instead_of_the_generic_modal_system - Define a dedicated in-run abandon confirmation surface instead of the generic modal system
-> From version: 0.7.0
+> From version: 0.7.0+1b1dda6
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Understanding: 99%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: Shell
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -105,4 +105,4 @@ flowchart TD
 - `logics/request/req_111_define_a_terminal_run_memory_cleanup_posture_when_returning_to_main_screen.md`
 
 # Backlog
-- None yet. Promote this request when scope and confirmation posture are accepted.
+- `item_396_define_a_dedicated_runtime_shell_abandon_confirmation_surface`
