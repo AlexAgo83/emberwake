@@ -1,16 +1,16 @@
 ## item_347_define_directional_entity_production_pack_and_generation_workflow - Define directional entity production pack and generation workflow
-> From version: 0.6.1
+> From version: 0.6.1+lateral
 > Schema version: 1.0
 > Status: Done
-> Understanding: 96%
-> Confidence: 93%
+> Understanding: 100%
+> Confidence: 99%
 > Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
 
 # Problem
-- Even with a directional contract, the project still needs an operator-ready way to produce, name, generate, and review four-facing entity sets without guesswork.
+- Even with a directional contract, the project still needs an operator-ready way to produce, name, and review the accepted lateral-facing entity posture without guesswork.
 - Without a bounded production slice, the asset workflow could multiply into inconsistent prompts, missing facings, or untraceable per-facing candidates.
 - This slice exists to define how the production pack, prompt posture, and generation workflow should evolve from one entity sprite to a directional set while still supporting reviewed exceptions such as `needle`.
 
@@ -40,7 +40,7 @@ flowchart LR
 - AC1: The slice defines how directional entity entries are represented in the production pack, including per-facing generation expectations.
 - AC2: The slice defines how prompts, candidate files, and promoted outputs stay traceable per facing.
 - AC3: The slice defines how operators review a directional set as one bounded unit rather than as unrelated single images.
-- AC4: The slice defines how reviewed exceptions such as `needle` remain expressible without forcing a fake four-facing set.
+- AC4: The slice defines how reviewed exceptions such as `needle` remain expressible without forcing fake top/bottom authored variants.
 - AC5: The slice stays bounded to production-pack and generation workflow changes rather than widening into runtime integration logic.
 
 # AC Traceability
@@ -66,7 +66,7 @@ flowchart LR
 
 # AI Context
 - Summary: Define directional entity production pack and generation workflow
-- Keywords: directional prompt pack, four-facing entity generation, candidate review, needle exception
+- Keywords: directional prompt pack, lateral-facing entity generation, candidate review, needle exception
 - Use when: Use when implementing or reviewing the production and generation slice for directional living entities.
 - Skip when: Skip when the work is about runtime facing resolution or contrast-aid rendering.
 
@@ -84,4 +84,4 @@ flowchart LR
 # Notes
 - Split from `req_096_define_cardinal_directional_runtime_assets_for_player_and_hostile_entities`.
 - This slice intentionally stops before runtime-facing resolution and before dark-on-dark sprite separation work.
-- Delivered in `task_068` with `logics/specs/spec_002_define_directional_entity_asset_production_pack.md`, the directional workflow scripts under `scripts/assets/`, the curated candidate outputs under `output/imagegen/directional-entities/`, and the directional gallery/review posture.
+- Delivered in `task_068` with `logics/specs/spec_002_define_directional_entity_asset_production_pack.md`, the directional workflow scripts under `scripts/assets/`, and the lateral-only review posture centered on approved `right` assets plus runtime left mirroring.

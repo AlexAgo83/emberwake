@@ -1,11 +1,12 @@
 import { resolveAssetUrl } from "./assetResolver";
 
-export const entityDirectionalFacings = ["right", "up", "left", "down"] as const;
+export const entityDirectionalFacings = ["right", "left"] as const;
 
 export type EntityDirectionalFacing = (typeof entityDirectionalFacings)[number];
-export type EntityFacingMode = "cardinal-mirror-left" | "single-rotating" | "static";
+export type EntityFacingMode = "lateral-mirror-left" | "single-rotating" | "static";
 
 const fullTurnRadians = Math.PI * 2;
+const strictVerticalOrientationEpsilon = 1e-6;
 
 const normalizeAngle = (orientation: number) => {
   let normalized = orientation % fullTurnRadians;
@@ -21,19 +22,21 @@ const normalizeAngle = (orientation: number) => {
   return normalized;
 };
 
-export const resolveFacingFromOrientation = (orientation: number): EntityDirectionalFacing => {
+export const resolveFacingFromOrientation = (
+  orientation: number,
+  previousFacing: EntityDirectionalFacing = "right"
+): EntityDirectionalFacing => {
   const normalized = normalizeAngle(orientation);
 
-  if (normalized >= -Math.PI / 4 && normalized < Math.PI / 4) {
+  if (
+    Math.abs(normalized - Math.PI / 2) <= strictVerticalOrientationEpsilon ||
+    Math.abs(normalized + Math.PI / 2) <= strictVerticalOrientationEpsilon
+  ) {
+    return previousFacing;
+  }
+
+  if (normalized > -Math.PI / 2 && normalized < Math.PI / 2) {
     return "right";
-  }
-
-  if (normalized >= Math.PI / 4 && normalized < (3 * Math.PI) / 4) {
-    return "up";
-  }
-
-  if (normalized >= (-3 * Math.PI) / 4 && normalized < -Math.PI / 4) {
-    return "down";
   }
 
   return "left";
@@ -48,6 +51,7 @@ type ResolveEntitySpritePresentationArgs = {
   assetId: string;
   facingMode: EntityFacingMode;
   orientation: number;
+  previousFacing?: EntityDirectionalFacing;
   resolveAsset?: (candidateAssetId: string) => string | null;
 };
 
@@ -57,9 +61,10 @@ export type ResolvedEntitySpritePresentation = {
   resolvedAssetId: string;
   rotation: number;
   strategy:
-    | "cardinal-directional"
-    | "cardinal-mirrored-right"
-    | "cardinal-base-right"
+    | "lateral-directional"
+    | "lateral-mirrored-right"
+    | "lateral-mirrored-base-right"
+    | "lateral-base-right"
     | "fallback-rotating-base"
     | "single-rotating"
     | "static";
@@ -69,6 +74,7 @@ export const resolveEntitySpritePresentation = ({
   assetId,
   facingMode,
   orientation,
+  previousFacing,
   resolveAsset = resolveAssetUrl
 }: ResolveEntitySpritePresentationArgs): ResolvedEntitySpritePresentation => {
   if (facingMode === "static") {
@@ -91,7 +97,7 @@ export const resolveEntitySpritePresentation = ({
     };
   }
 
-  const facing = resolveFacingFromOrientation(orientation);
+  const facing = resolveFacingFromOrientation(orientation, previousFacing);
   const directionalAssetId = deriveDirectionalAssetId(assetId, facing);
 
   if (resolveAsset(directionalAssetId)) {
@@ -100,7 +106,7 @@ export const resolveEntitySpritePresentation = ({
       mirrorX: false,
       resolvedAssetId: directionalAssetId,
       rotation: 0,
-      strategy: "cardinal-directional"
+      strategy: "lateral-directional"
     };
   }
 
@@ -113,7 +119,17 @@ export const resolveEntitySpritePresentation = ({
         mirrorX: true,
         resolvedAssetId: rightDirectionalAssetId,
         rotation: 0,
-        strategy: "cardinal-mirrored-right"
+        strategy: "lateral-mirrored-right"
+      };
+    }
+
+    if (resolveAsset(assetId)) {
+      return {
+        facing,
+        mirrorX: true,
+        resolvedAssetId: assetId,
+        rotation: 0,
+        strategy: "lateral-mirrored-base-right"
       };
     }
   }
@@ -124,7 +140,7 @@ export const resolveEntitySpritePresentation = ({
       mirrorX: false,
       resolvedAssetId: assetId,
       rotation: 0,
-      strategy: "cardinal-base-right"
+      strategy: "lateral-base-right"
     };
   }
 

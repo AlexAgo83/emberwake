@@ -9,98 +9,62 @@ export const directionalEntityPlan = [
   {
     assetId: "entity.player.primary.runtime",
     familyLabel: "Player core avatar",
-    generatedFacings: ["up", "down"],
+    generatedFacings: [],
     rightSourcePath: "src/assets/entities/runtime/entity.player.primary.runtime.png",
     finalPaths: {
-      right: "src/assets/entities/runtime/entity.player.primary.runtime.right.png",
-      up: "src/assets/entities/runtime/entity.player.primary.runtime.up.png",
-      down: "src/assets/entities/runtime/entity.player.primary.runtime.down.png"
+      right: "src/assets/entities/runtime/entity.player.primary.runtime.right.png"
     },
-    prompts: {
-      up: "Create a single-subject runtime game asset for a techno-shinobi action game: the player core avatar, centered on a transparent background, up-facing, same compact ember-reactor body language as the approved right-facing version, readable at small scale, clear top/back silhouette, controlled luminous accents, graphic and stylized rather than photoreal, medium detail, no text, no frame, no environment, no floor, no cast shadow, no perspective distortion.",
-      down:
-        "Create a single-subject runtime game asset for a techno-shinobi action game: the player core avatar, centered on a transparent background, down-facing, same compact ember-reactor body language as the approved right-facing version, readable at small scale, clear front-facing combat silhouette, controlled luminous accents, graphic and stylized rather than photoreal, medium detail, no text, no frame, no environment, no floor, no cast shadow, no perspective distortion."
-    }
+    prompts: {}
   },
   {
     assetId: "entity.hostile.anchor.runtime",
     familyLabel: "Anchor hostile",
-    generatedFacings: ["up", "down"],
+    generatedFacings: [],
     rightSourcePath: "src/assets/entities/runtime/entity.hostile.anchor.runtime.png",
     finalPaths: {
-      right: "src/assets/entities/runtime/entity.hostile.anchor.runtime.right.png",
-      up: "src/assets/entities/runtime/entity.hostile.anchor.runtime.up.png",
-      down: "src/assets/entities/runtime/entity.hostile.anchor.runtime.down.png"
+      right: "src/assets/entities/runtime/entity.hostile.anchor.runtime.right.png"
     },
-    prompts: {
-      up: "Create a transparent-background runtime enemy asset for a techno-shinobi survival game: the anchor hostile, centered, up-facing, same heavy armored shrine-tech brute family as the approved right-facing anchor, broad readable silhouette, medium detail, stylized and graphic, no text, no background, no ground plane, no cinematic perspective, no clutter.",
-      down:
-        "Create a transparent-background runtime enemy asset for a techno-shinobi survival game: the anchor hostile, centered, down-facing, same heavy armored shrine-tech brute family as the approved right-facing anchor, broad readable silhouette, medium detail, stylized and graphic, no text, no background, no ground plane, no cinematic perspective, no clutter."
-    }
+    prompts: {}
   },
   {
     assetId: "entity.hostile.drifter.runtime",
     familyLabel: "Drifter hostile",
-    generatedFacings: ["up", "down"],
+    generatedFacings: [],
     rightSourcePath: "src/assets/entities/runtime/entity.hostile.drifter.runtime.png",
     finalPaths: {
-      right: "src/assets/entities/runtime/entity.hostile.drifter.runtime.right.png",
-      up: "src/assets/entities/runtime/entity.hostile.drifter.runtime.up.png",
-      down: "src/assets/entities/runtime/entity.hostile.drifter.runtime.down.png"
+      right: "src/assets/entities/runtime/entity.hostile.drifter.runtime.right.png"
     },
-    prompts: {
-      up: "Create a transparent-background runtime enemy asset for a techno-shinobi survival game: the drifter hostile, centered, up-facing, same agile asymmetrical scavenger-tech family as the approved right-facing drifter, readable at small scale, medium detail, graphic stylization, no environment, no text, no cinematic blur, no perspective distortion.",
-      down:
-        "Create a transparent-background runtime enemy asset for a techno-shinobi survival game: the drifter hostile, centered, down-facing, same agile asymmetrical scavenger-tech family as the approved right-facing drifter, readable at small scale, medium detail, graphic stylization, no environment, no text, no cinematic blur, no perspective distortion."
-    }
+    prompts: {}
   },
   {
     assetId: "entity.hostile.rammer.runtime",
     familyLabel: "Rammer hostile",
-    generatedFacings: ["up", "down"],
+    generatedFacings: [],
     rightSourcePath: "src/assets/entities/runtime/entity.hostile.rammer.runtime.png",
     finalPaths: {
-      right: "src/assets/entities/runtime/entity.hostile.rammer.runtime.right.png",
-      up: "src/assets/entities/runtime/entity.hostile.rammer.runtime.up.png",
-      down: "src/assets/entities/runtime/entity.hostile.rammer.runtime.down.png"
+      right: "src/assets/entities/runtime/entity.hostile.rammer.runtime.right.png"
     },
-    prompts: {
-      up: "Create a transparent-background runtime enemy asset for a techno-shinobi survival game: the rammer hostile, centered, up-facing, same wedge-armored charge-brute family as the approved right-facing rammer, strong front-loaded impact read, stylized, readable at small scale, medium detail, no environment, no text, no cinematic effects.",
-      down:
-        "Create a transparent-background runtime enemy asset for a techno-shinobi survival game: the rammer hostile, centered, down-facing, same wedge-armored charge-brute family as the approved right-facing rammer, strong front-loaded impact read, stylized, readable at small scale, medium detail, no environment, no text, no cinematic effects."
-    }
+    prompts: {}
   },
   {
     assetId: "entity.hostile.sentinel.runtime",
     familyLabel: "Sentinel hostile",
-    generatedFacings: ["up", "down"],
+    generatedFacings: [],
     rightSourcePath: "src/assets/entities/runtime/entity.hostile.sentinel.runtime.png",
     finalPaths: {
-      right: "src/assets/entities/runtime/entity.hostile.sentinel.runtime.right.png",
-      up: "src/assets/entities/runtime/entity.hostile.sentinel.runtime.up.png",
-      down: "src/assets/entities/runtime/entity.hostile.sentinel.runtime.down.png"
+      right: "src/assets/entities/runtime/entity.hostile.sentinel.runtime.right.png"
     },
-    prompts: {
-      up: "Create a transparent-background runtime enemy asset for a techno-shinobi survival game: the sentinel hostile, centered, up-facing, same shield-like husk-armored pursuit family as the approved right-facing sentinel, stylized and clean, medium detail, readable at small scale, no text, no background, no cinematic camera.",
-      down:
-        "Create a transparent-background runtime enemy asset for a techno-shinobi survival game: the sentinel hostile, centered, down-facing, same shield-like husk-armored pursuit family as the approved right-facing sentinel, stylized and clean, medium detail, readable at small scale, no text, no background, no cinematic camera."
-    }
+    prompts: {}
   },
   {
     assetId: "entity.hostile.watcher.runtime",
     familyLabel: "Watcher hostile",
-    generatedFacings: ["up", "down"],
+    generatedFacings: [],
     rightSourcePath: "src/assets/entities/runtime/entity.hostile.watcher.runtime.png",
     finalPaths: {
-      right: "src/assets/entities/runtime/entity.hostile.watcher.runtime.right.png",
-      up: "src/assets/entities/runtime/entity.hostile.watcher.runtime.up.png",
-      down: "src/assets/entities/runtime/entity.hostile.watcher.runtime.down.png"
+      right: "src/assets/entities/runtime/entity.hostile.watcher.runtime.right.png"
     },
-    prompts: {
-      up: "Create a transparent-background runtime enemy asset for a techno-shinobi survival game: the watcher hostile, centered, up-facing, same eye-like shrine-tech survey family as the approved right-facing watcher, readable at small scale, medium detail, stylized not realistic, no text, no background, no lens flare, no horror gore.",
-      down:
-        "Create a transparent-background runtime enemy asset for a techno-shinobi survival game: the watcher hostile, centered, down-facing, same eye-like shrine-tech survey family as the approved right-facing watcher, readable at small scale, medium detail, stylized not realistic, no text, no background, no lens flare, no horror gore."
-    }
+    prompts: {}
   }
 ];
 

@@ -1,6 +1,6 @@
 import { extend } from "@pixi/react";
 import { Graphics, Sprite, Text } from "pixi.js";
-import { memo, useMemo } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 
 import { WorldViewportContainer, type CameraState } from "@engine-pixi";
 import { entityVisualDefinitions, type EmberwakeRenderSurfaceMode } from "@game";
@@ -83,25 +83,25 @@ const spriteSeparationStyles: Record<
   }
 > = {
   hostile: {
-    haloAlpha: 0.12,
-    haloScale: 1.05,
-    offsetWorldUnits: 3.8,
+    haloAlpha: 0.2,
+    haloScale: 1.1,
+    offsetWorldUnits: 5.4,
     tint: 0xffc3a5,
-    tintAlpha: 0.15
+    tintAlpha: 0.28
   },
   pickup: {
-    haloAlpha: 0.16,
-    haloScale: 1.08,
-    offsetWorldUnits: 2.8,
+    haloAlpha: 0.24,
+    haloScale: 1.14,
+    offsetWorldUnits: 4.2,
     tint: 0xf7f2dc,
-    tintAlpha: 0.18
+    tintAlpha: 0.34
   },
   player: {
-    haloAlpha: 0.18,
-    haloScale: 1.07,
-    offsetWorldUnits: 4.4,
+    haloAlpha: 0.24,
+    haloScale: 1.12,
+    offsetWorldUnits: 6.2,
     tint: 0xe8f3ff,
-    tintAlpha: 0.16
+    tintAlpha: 0.32
   }
 };
 
@@ -479,6 +479,7 @@ const EntitySprite = memo(function EntitySprite({
               key={`${assetId}-outline-${index}`}
               alpha={separationStyle.tintAlpha}
               anchor={0.5}
+              blendMode="add"
               eventMode="none"
               height={sizeWorldUnits}
               texture={texture}
@@ -493,6 +494,7 @@ const EntitySprite = memo(function EntitySprite({
         <pixiSprite
           alpha={separationStyle.haloAlpha}
           anchor={0.5}
+          blendMode="add"
           eventMode="none"
           height={sizeWorldUnits * separationStyle.haloScale}
           texture={texture}
@@ -528,6 +530,17 @@ export function EntityScene({
 }: EntitySceneProps) {
   const scale = viewport.fitScale * camera.zoom;
   const debugLabelsVisible = renderSurfaceMode === "diagnostics";
+  const lastLateralFacingByEntityRef = useRef<Map<string, "left" | "right">>(new Map());
+
+  useEffect(() => {
+    const activeEntityIds = new Set(entities.map((entity) => entity.id));
+
+    for (const entityId of Array.from(lastLateralFacingByEntityRef.current.keys())) {
+      if (!activeEntityIds.has(entityId)) {
+        lastLateralFacingByEntityRef.current.delete(entityId);
+      }
+    }
+  }, [entities]);
 
   return (
     <WorldViewportContainer camera={camera} viewport={viewport}>
@@ -537,11 +550,18 @@ export function EntityScene({
         const pickupKind = entity.pickupProfile?.kind ?? null;
         const renderedRadius = entity.footprint.radius * (entity.visualScale ?? 1);
         const entityVisualDefinition = entityVisualDefinitions[entity.visual.kind];
+        const previousFacing = lastLateralFacingByEntityRef.current.get(entity.id);
         const entitySpritePresentation = resolveEntitySpritePresentation({
           assetId: entityVisualDefinition.assetId,
           facingMode: entityVisualDefinition.runtimePresentation.facingMode,
-          orientation: entity.orientation
+          orientation: entity.orientation,
+          previousFacing
         });
+
+        if (entitySpritePresentation.facing !== null) {
+          lastLateralFacingByEntityRef.current.set(entity.id, entitySpritePresentation.facing);
+        }
+
         const entityAssetId = entitySpritePresentation.resolvedAssetId;
         const entityAssetUrl = resolveAssetUrl(entityAssetId);
         const entitySpriteSize =

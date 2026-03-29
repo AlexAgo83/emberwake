@@ -1,19 +1,19 @@
-## req_096_define_cardinal_directional_runtime_assets_for_player_and_hostile_entities - Define cardinal directional runtime assets for player and hostile entities
-> From version: 0.6.1+task068
+## req_096_define_cardinal_directional_runtime_assets_for_player_and_hostile_entities - Define lateral runtime assets for player and hostile entities
+> From version: 0.6.1+task068+lateral
 > Schema version: 1.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 99%
+> Confidence: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
 
 # Needs
-- Replace the current "single sprite plus runtime rotation" posture for the player and hostile entities with explicit cardinal-direction assets so the rendered facing makes visual sense.
-- Preserve the recent first-wave asset gains while making living entities look authored from the front, back, left, and right instead of like one frozen illustration being spun around the map.
+- Replace the current "single sprite plus runtime rotation" posture for the player and hostile entities with explicit lateral-facing assets so the rendered facing makes visual sense.
+- Preserve the recent first-wave asset gains while making living entities look authored for `right` and `left` instead of like one frozen illustration being spun around the map.
 - Extend the graphical asset pipeline, production specs, and runtime resolution rules so directional variants remain drop-in, traceable, and compatible with the existing `assetId` workflow.
 - Keep gameplay readability first: directional assets should improve facing clarity without regressing silhouette recognition, fallback behavior, startup posture, or runtime budgets.
-- Keep the wave deliberately bounded: solve four-direction presentation for living entities first, without silently widening into a full animation or eight-direction sprite system.
+- Keep the wave deliberately bounded: solve lateral presentation for living entities first, without silently widening into a full animation or top/bottom authored variants.
 - Keep room for reviewed exceptions when a family is visually rotation-safe, for example the current `needle` hostile whose single authored face still reads correctly under runtime rotation.
 
 # Context
@@ -23,15 +23,15 @@
 - it becomes visually wrong for asymmetrical illustrated characters and monsters because the art is no longer authored for the facing being displayed
 
 This request exists to frame the next quality step for living entities:
-1. define how player and hostile runtime assets can exist in four cardinal facings
+1. define how player and hostile runtime assets can exist in a bounded lateral-facing posture
 2. define how those variants are named and resolved inside the existing drop-in asset contract
 3. define that `right` is the default authored facing for living entities, then define how runtime entity rendering chooses the correct facing from simulation orientation
 4. define how prompt packs and production specs must evolve so image generation produces directional sets rather than one isolated sprite
 5. define how readability and fallback acceptance are reviewed once directional variants replace pure rotation
-6. define when a hostile family can intentionally remain on a single rotation-safe asset instead of receiving the full four-facing set
+6. define when a hostile family can intentionally remain on a single rotation-safe asset instead of receiving the lateral-only set
 
 Scope includes:
-- defining a cardinal-direction contract for player and hostile runtime assets
+- defining a lateral-facing contract for player and hostile runtime assets
 - defining the asset-id or file-layout convention for `right`, `left`, `up`, and `down` variants, with at least one concrete example such as `entity.player.primary.runtime.right` or an equivalent deterministic stem rule
 - defining the runtime selection rule that maps entity orientation into the correct facing asset
 - defining how first-wave production specs and prompt generation should evolve for directional entity sets
@@ -48,7 +48,7 @@ Scope excludes:
 
 ```mermaid
 %% logics-kind: request
-%% logics-signature: request|define-cardinal-directional-runtime-asse|replace-the-current-single-sprite-plus|ac1-the-request-defines-a-cardinal-direc
+%% logics-signature: request|define-lateral-runtime-assets-for-player|replace-the-current-single-sprite-plus|ac1-the-request-defines-a-lateral
 flowchart TD
     Current[Single rotated player and hostile sprites] --> Problem[Authored art no longer matches facing]
     Problem --> Contract[Define 4-direction runtime asset contract]
@@ -58,10 +58,10 @@ flowchart TD
 ```
 
 # Acceptance criteria
-- AC1: The request defines a cardinal-direction runtime-asset contract for the player and the hostile families that benefit from authored facings, explicitly covering `right`, `left`, `up`, and `down`.
+- AC1: The request defines a lateral runtime-asset contract for the player and the hostile families that benefit from authored facings, explicitly covering `right` and `left`.
 - AC2: The request defines how directional variants fit into the existing drop-in asset workflow, including naming, folder rules, and traceability back to the base entity asset identity, for example a base runtime identity extended with explicit facing variants.
 - AC3: The request defines `right` as the default authored facing for living entities and defines how runtime entity rendering should choose a facing asset from simulation orientation instead of rotating a single illustrated sprite arbitrarily, including a bounded quadrant rule or equivalent deterministic mapping.
-- AC4: The request defines how existing prompt packs and production specifications should expand from one living-entity image to a four-facing set without breaking the current generation and promotion workflow.
+- AC4: The request defines how existing prompt packs and production specifications should expand from one living-entity image to the accepted lateral-facing set without breaking the current generation and promotion workflow.
 - AC5: The request defines readability validation expectations for directional entities, including whether the chosen facing reads correctly in combat and whether the player and major hostile families remain easy to distinguish.
 - AC6: The request preserves bounded scope by targeting the player and hostile entities first, without widening into a full animation system or non-living asset families.
 - AC7: The request preserves the current fallback and performance posture, including what should happen when one or more directional variants are missing or not yet good enough.
@@ -74,7 +74,7 @@ flowchart TD
 - Dependency: `adr_052_adopt_a_content_driven_graphical_asset_pipeline_for_runtime_and_shell_surfaces` remains the pipeline and fallback contract unless this request later introduces a bounded extension.
 - Dependency: player orientation continues to be simulation-owned through the posture defined in `adr_051_resolve_player_orientation_through_a_bounded_simulation_owned_turn_rate`.
 - Dependency: the prompt/spec workflow from `req_094`, `task_066`, and `spec_001` remains the upstream source for generation constraints until a directional supplement is defined.
-- Risk: a four-facing set multiplies generation, review, and curation cost for every living entity family.
+- Risk: even a bounded left/right posture still multiplies review decisions if exceptions and mirroring rules are not kept explicit.
 - Risk: inconsistent art between `up`, `down`, `left`, and `right` variants could make entities flicker stylistically even if the runtime contract works.
 - Risk: quadrant snapping could read poorly near angle thresholds if the runtime selection rule is not defined carefully.
 - Risk: partial directional coverage could create mixed-quality states if fallback behavior for missing facings is not explicit.
@@ -83,7 +83,7 @@ flowchart TD
 - Risk: if the orientation-to-facing rule is left underspecified, entities could snap to the wrong facing near diagonals and make the new art look less credible than the current rotation model.
 
 # AC Traceability
-- AC1 -> directional asset contract. Proof: explicit four-facing coverage for the player and the hostile families that need it.
+- AC1 -> directional asset contract. Proof: explicit lateral-facing coverage for the player and the hostile families that need it.
 - AC2 -> drop-in pipeline compatibility. Proof: naming and folder rules remain aligned with the existing asset workflow.
 - AC3 -> runtime facing resolution. Proof: orientation-to-facing selection replaces arbitrary full-sprite rotation.
 - AC4 -> prompt/spec evolution. Proof: production docs expand to directional sets.
@@ -92,7 +92,7 @@ flowchart TD
 - AC7 -> fallback and performance posture. Proof: request explicitly keeps missing-variant handling and runtime guardrails in scope.
 - AC8 -> bounded reuse rule. Proof: request explicitly states when mirroring or similar controlled reuse is acceptable.
 - AC9 -> reviewed single-face exception. Proof: request explicitly allows bounded rotation-safe exceptions such as `needle`.
-- AC10 -> provisional roster. Proof: request explicitly distinguishes four-facing targets from reviewed exceptions.
+- AC10 -> provisional roster. Proof: request explicitly distinguishes lateral-facing targets from reviewed exceptions.
 
 # Definition of Ready (DoR)
 - [x] Problem statement is explicit and user impact is clear.
@@ -109,12 +109,12 @@ flowchart TD
   - then fall back to the current single-face rotation model when the family is explicitly marked as rotation-safe
   - never silently treat missing `up` and `down` as acceptable for families that were supposed to ship with four true facings
 - Provisional first directional roster should be explicit in the next slice. A reasonable starting roster would be:
-  - four-facing target: `entity.player.primary.runtime`
-  - four-facing target: `entity.hostile.anchor.runtime`
-  - four-facing target: `entity.hostile.drifter.runtime`
-  - four-facing target: `entity.hostile.rammer.runtime`
-  - four-facing target: `entity.hostile.sentinel.runtime`
-  - likely four-facing target: `entity.hostile.watcher.runtime`
+  - lateral-facing target: `entity.player.primary.runtime`
+  - lateral-facing target: `entity.hostile.anchor.runtime`
+  - lateral-facing target: `entity.hostile.drifter.runtime`
+  - lateral-facing target: `entity.hostile.rammer.runtime`
+  - lateral-facing target: `entity.hostile.sentinel.runtime`
+  - likely lateral-facing target: `entity.hostile.watcher.runtime`
   - reviewed single-face exception candidate: `entity.hostile.needle.runtime`
 
 # Companion docs
@@ -149,4 +149,4 @@ flowchart TD
 
 # Outcome
 - Fulfilled in `task_068_orchestrate_directional_entity_presentation_and_runtime_sprite_separation`.
-- Landed the cardinal runtime contract with `right` as the authored default, explicit `.right/.up/.down` variants, runtime mirroring for reviewed `left` reuse, and a reviewed single-face exception path for `entity.hostile.needle.runtime`.
+- Pivoted to the accepted lateral runtime contract with `right` as the authored default, runtime mirroring for `left`, no authored `up/down` variants, and a reviewed single-face exception path for `entity.hostile.needle.runtime`.

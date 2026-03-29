@@ -11,6 +11,10 @@ import {
 
 loadLocalEnv();
 
+if (directionalEntityPlan.every((entry) => entry.generatedFacings.length === 0)) {
+  console.log("Directional generation skipped: the current posture is lateral-only with runtime mirroring.");
+}
+
 for (const entry of directionalEntityPlan) {
   for (const facing of entry.generatedFacings) {
     const outputPath = toCandidateAbsolutePath(entry.assetId, facing, 1);

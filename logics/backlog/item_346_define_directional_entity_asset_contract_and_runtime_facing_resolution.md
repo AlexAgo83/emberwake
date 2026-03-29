@@ -1,9 +1,9 @@
 ## item_346_define_directional_entity_asset_contract_and_runtime_facing_resolution - Define directional entity asset contract and runtime facing resolution
-> From version: 0.6.1
+> From version: 0.6.1+lateral
 > Schema version: 1.0
 > Status: Done
-> Understanding: 97%
-> Confidence: 94%
+> Understanding: 100%
+> Confidence: 99%
 > Progress: 100%
 > Complexity: High
 > Theme: UI
@@ -17,10 +17,10 @@
 # Scope
 - In:
 - define `right` as the default authored facing for living entities
-- define the directional naming and file-contract shape for `right`, `left`, `up`, and `down`
+- define the directional naming and file-contract shape for the lateral posture `right` and `left`
 - define the runtime orientation-to-facing resolution posture
 - define fallback ordering when directional assets are missing
-- define the first reviewed four-facing roster versus reviewed single-face exceptions
+- define the first reviewed lateral-facing roster versus reviewed single-face exceptions
 - Out:
 - prompt-writing details for generating directional image sets
 - batch image-generation workflow or candidate curation
@@ -37,11 +37,11 @@ flowchart LR
 ```
 
 # Acceptance criteria
-- AC1: The slice defines the directional asset contract for living entities, with `right` as the default authored facing and explicit directional variants for `left`, `up`, and `down`.
+- AC1: The slice defines the directional asset contract for living entities, with `right` as the default authored facing and a bounded lateral posture for `left`.
 - AC2: The slice defines a deterministic naming or file-layout rule that keeps directional variants traceable to the base entity asset identity.
 - AC3: The slice defines a bounded runtime orientation-to-facing mapping that avoids arbitrary rotation of asymmetric illustrated entities.
 - AC4: The slice defines explicit fallback ordering for missing directional variants, including reviewed reuse cases and reviewed rotation-safe exceptions.
-- AC5: The slice defines a provisional first-wave living-entity roster that distinguishes four-facing targets from reviewed single-face exceptions such as `entity.hostile.needle.runtime`.
+- AC5: The slice defines a provisional first-wave living-entity roster that distinguishes lateral-facing targets from reviewed single-face exceptions such as `entity.hostile.needle.runtime`.
 
 # AC Traceability
 - AC1 -> Scope: directional contract. Proof: explicit default facing and directional variant rules.
@@ -84,4 +84,4 @@ flowchart LR
 # Notes
 - Split from `req_096_define_cardinal_directional_runtime_assets_for_player_and_hostile_entities`.
 - This slice intentionally stops before generating directional image sets or implementing contrast-aid treatments.
-- Delivered in `task_068` with `src/assets/entityDirectionalRuntime.ts`, `src/assets/entityDirectionalRuntime.test.ts`, the updated `entityVisualDefinitions` runtime-presentation contract, and the directional runtime file naming convention used by promoted assets such as `entity.player.primary.runtime.right.png`.
+- Delivered in `task_068` with `src/assets/entityDirectionalRuntime.ts`, `src/assets/entityDirectionalRuntime.test.ts`, the updated `entityVisualDefinitions` runtime-presentation contract, and the lateral runtime file naming convention centered on `entity.player.primary.runtime.right.png` plus runtime left mirroring.

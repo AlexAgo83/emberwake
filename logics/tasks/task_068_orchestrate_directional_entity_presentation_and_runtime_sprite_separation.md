@@ -1,9 +1,9 @@
 ## task_068_orchestrate_directional_entity_presentation_and_runtime_sprite_separation - Orchestrate directional entity presentation and runtime sprite separation
-> From version: 0.6.1
+> From version: 0.6.1+lateral
 > Schema version: 1.0
 > Status: Done
 > Understanding: 97%
-> Confidence: 94%
+> Confidence: 99%
 > Progress: 100%
 > Complexity: High
 > Theme: UI
@@ -93,8 +93,8 @@ flowchart LR
 - [x] Status is `Done` and progress is `100%`.
 
 # Report
-- Wave 1 checkpoint: directional entity contract, directional production pack, generation scripts, candidate gallery, curated directional outputs, and promoted `right/up/down` runtime assets landed as a coherent checkpoint before runtime rendering changes.
-- Wave 2 implementation: `src/game/entities/render/EntityScene.tsx` now resolves entity facings through `src/assets/entityDirectionalRuntime.ts`, keeps `needle` on the single-face rotating posture, and applies category-specific alpha-aware separation to `player`, `hostile`, and `pickup` sprites.
-- Manual runtime review: local dev review on `2026-03-29` confirmed the live scene loads directional assets such as `entity.player.primary.runtime.down.png`, `entity.hostile.drifter.runtime.up.png`, and `entity.hostile.sentinel.runtime.up.png`, while darker pickups and entities remain readable with bounded contour treatment.
+- Wave 1 checkpoint was later narrowed to a lateral-only posture: `right` remains authored, `left` is mirrored in runtime when needed, and top/bottom assets are no longer part of the accepted wave.
+- Wave 2 implementation: `src/game/entities/render/EntityScene.tsx` resolves entity facings through `src/assets/entityDirectionalRuntime.ts`, keeps `needle` on the single-face rotating posture, and applies category-specific alpha-aware separation to `player`, `hostile`, and `pickup` sprites.
+- The accepted runtime contract is now `left/right only` for living entities; `up/down` authored assets are no longer used.
 - Validation: `npx vitest run src/assets/entityDirectionalRuntime.test.ts`, `npm run logics:lint`, `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build && npm run performance:validate`, and `npm run test:browser:smoke` all passed during execution.
 - Commit checkpoints: `95a5494` captured the directional contract and generation workflow; the final runtime/readability wave is ready for its own follow-up commit.

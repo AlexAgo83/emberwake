@@ -16,25 +16,36 @@ const candidateFiles = new Set(listCandidateFiles().map((path) => toRelativeFrom
 
 const cards = directionalEntityPlan
   .map((entry) => {
-    const facingCards = entry.generatedFacings
-      .map((facing) => {
-        const selectedPath = selectionMap[`${entry.assetId}.${facing}`] ?? "";
-        const candidatePath = `output/imagegen/directional-entities/${selectedPath}`;
-        const imageMarkup = candidateFiles.has(candidatePath)
-          ? `<img src="${escapeHtml(selectedPath)}" alt="${escapeHtml(`${entry.assetId}.${facing}`)}" />`
-          : `<div class="placeholder">No candidate yet</div>`;
+    const facingCards =
+      entry.generatedFacings.length > 0
+        ? entry.generatedFacings
+            .map((facing) => {
+              const selectedPath = selectionMap[`${entry.assetId}.${facing}`] ?? "";
+              const candidatePath = `output/imagegen/directional-entities/${selectedPath}`;
+              const imageMarkup = candidateFiles.has(candidatePath)
+                ? `<img src="${escapeHtml(selectedPath)}" alt="${escapeHtml(`${entry.assetId}.${facing}`)}" />`
+                : `<div class="placeholder">No candidate yet</div>`;
 
-        return `
+              return `
+                <article class="facing-card">
+                  <header>
+                    <strong>${escapeHtml(facing)}</strong>
+                  </header>
+                  <div class="thumb">${imageMarkup}</div>
+                  <p>${escapeHtml(entry.prompts[facing])}</p>
+                </article>
+              `;
+            })
+            .join("\n")
+        : `
           <article class="facing-card">
             <header>
-              <strong>${escapeHtml(facing)}</strong>
+              <strong>lateral-only</strong>
             </header>
-            <div class="thumb">${imageMarkup}</div>
-            <p>${escapeHtml(entry.prompts[facing])}</p>
+            <div class="thumb"><div class="placeholder">No generated top/bottom variants. Left is mirrored at runtime from the approved right-facing base asset.</div></div>
+            <p>This family currently ships with a right-facing authored asset and runtime left mirroring only.</p>
           </article>
         `;
-      })
-      .join("\n");
 
     return `
       <section class="family">
@@ -68,7 +79,7 @@ const html = `<!doctype html>
     </style>
   </head>
   <body>
-    <h1>Directional entity generated asset review</h1>
+    <h1>Directional entity review</h1>
     ${cards}
   </body>
 </html>`;

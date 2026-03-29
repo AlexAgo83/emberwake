@@ -10,7 +10,7 @@ export const entityVisualDefinitions = {
     assetId: "entity.player.primary.runtime",
     label: "Primary ember core",
     runtimePresentation: {
-      facingMode: "cardinal-mirror-left",
+      facingMode: "lateral-mirror-left",
       spriteSeparationCategory: "player"
     }
   },
@@ -18,7 +18,7 @@ export const entityVisualDefinitions = {
     assetId: "entity.hostile.anchor.runtime",
     label: "Debug anchor",
     runtimePresentation: {
-      facingMode: "cardinal-mirror-left",
+      facingMode: "lateral-mirror-left",
       spriteSeparationCategory: "hostile"
     }
   },
@@ -26,7 +26,7 @@ export const entityVisualDefinitions = {
     assetId: "entity.hostile.drifter.runtime",
     label: "Debug drifter",
     runtimePresentation: {
-      facingMode: "cardinal-mirror-left",
+      facingMode: "lateral-mirror-left",
       spriteSeparationCategory: "hostile"
     }
   },
@@ -42,7 +42,7 @@ export const entityVisualDefinitions = {
     assetId: "entity.hostile.rammer.runtime",
     label: "Debug rammer",
     runtimePresentation: {
-      facingMode: "cardinal-mirror-left",
+      facingMode: "lateral-mirror-left",
       spriteSeparationCategory: "hostile"
     }
   },
@@ -50,7 +50,7 @@ export const entityVisualDefinitions = {
     assetId: "entity.hostile.sentinel.runtime",
     label: "Debug sentinel",
     runtimePresentation: {
-      facingMode: "cardinal-mirror-left",
+      facingMode: "lateral-mirror-left",
       spriteSeparationCategory: "hostile"
     }
   },
@@ -58,7 +58,7 @@ export const entityVisualDefinitions = {
     assetId: "entity.hostile.watcher.runtime",
     label: "Debug watcher",
     runtimePresentation: {
-      facingMode: "cardinal-mirror-left",
+      facingMode: "lateral-mirror-left",
       spriteSeparationCategory: "hostile"
     }
   },
