@@ -7,6 +7,7 @@ coverage/
 playwright-report/
 test-results/
 .playwright-cli/
+output/imagegen/
 output/playwright/
 logics/.cache/
 logics/hybrid_assist_audit.jsonl
