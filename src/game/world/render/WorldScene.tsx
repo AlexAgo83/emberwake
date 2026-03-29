@@ -13,6 +13,7 @@ import { createChunkDebugData } from "@game/content/world/chunkDebugData";
 import type { EmberwakeRenderSurfaceMode } from "@game";
 import { useResolvedAssetTexture } from "@src/assets/useResolvedAssetTexture";
 import type { ChunkCoordinate } from "../types";
+import { deriveBiomeSeamSegments, drawBiomeSeamSegment } from "./biomeSeamPresentation";
 
 extend({
   Container,
@@ -158,6 +159,10 @@ export function WorldScene({
       })),
     [visibleChunks, worldSeed]
   );
+  const biomeSeamSegments = useMemo(
+    () => deriveBiomeSeamSegments(chunkDebugData),
+    [chunkDebugData]
+  );
   const debugVisualsEnabled = renderSurfaceMode === "diagnostics";
 
   return (
@@ -169,10 +174,28 @@ export function WorldScene({
         const isVisible = visibleChunkIdSet.has(chunkId);
 
         return (
-          <pixiContainer key={chunkCoordinateToId(chunkCoordinate, worldSeed)}>
-            <RetainedChunkBase debugData={debugData} isVisible={isVisible} origin={origin} />
-            {debugVisualsEnabled && isVisible ? (
-              <>
+          <RetainedChunkBase
+            debugData={debugData}
+            isVisible={isVisible}
+            key={chunkCoordinateToId(chunkCoordinate, worldSeed)}
+            origin={origin}
+          />
+        );
+      })}
+      {biomeSeamSegments.map((segment) => (
+        <pixiGraphics key={segment.key} draw={drawBiomeSeamSegment(segment)} />
+      ))}
+      {debugVisualsEnabled
+        ? chunkDebugData.map(({ chunkCoordinate, debugData, origin }) => {
+            const chunkId = chunkCoordinateToId(chunkCoordinate, worldSeed);
+            const isVisible = visibleChunkIdSet.has(chunkId);
+
+            if (!isVisible) {
+              return null;
+            }
+
+            return (
+              <pixiContainer key={`${chunkCoordinateToId(chunkCoordinate, worldSeed)}:debug`}>
                 <pixiGraphics draw={drawChunkOverlay(origin, debugData)} />
                 <pixiText
                   anchor={0.5}
@@ -197,11 +220,10 @@ export function WorldScene({
                   x={origin.x + chunkWorldSize / 2}
                   y={origin.y + 34}
                 />
-              </>
-            ) : null}
-          </pixiContainer>
-        );
-      })}
+              </pixiContainer>
+            );
+          })
+        : null}
     </WorldViewportContainer>
   );
 }
