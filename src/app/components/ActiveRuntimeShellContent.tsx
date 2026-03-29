@@ -52,7 +52,9 @@ import {
 
 type ActiveRuntimeShellContentProps = {
   activeScene: AppSceneId;
+  isAbandonConfirmOpen: boolean;
   onAbandonRun: () => void;
+  onCancelAbandonRun: () => void;
   canInstall: boolean;
   cycleWorldSeed: () => void;
   desktopControlBindings: DesktopControlBindings;
@@ -68,6 +70,7 @@ type ActiveRuntimeShellContentProps = {
   onInstall: () => void;
   onMenuOpenChange: (isOpen: boolean) => void;
   onBossSpawnToast: () => void;
+  onConfirmAbandonRun: () => void;
   onRendererError: (message: string) => void;
   onRendererReady: () => void;
   onRetryRuntime: () => void;
@@ -130,7 +133,9 @@ const projectWorldPointToScreen = ({
 
 export function ActiveRuntimeShellContent({
   activeScene,
+  isAbandonConfirmOpen,
   onAbandonRun,
+  onCancelAbandonRun,
   canInstall,
   cycleWorldSeed,
   desktopControlBindings,
@@ -146,6 +151,7 @@ export function ActiveRuntimeShellContent({
   onInstall,
   onMenuOpenChange,
   onBossSpawnToast,
+  onConfirmAbandonRun,
   onRendererError,
   onRendererReady,
   onRetryRuntime,
@@ -726,6 +732,27 @@ export function ActiveRuntimeShellContent({
   });
 
   useEffect(() => {
+    if (!isAbandonConfirmOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented) {
+        return;
+      }
+
+      event.preventDefault();
+      onCancelAbandonRun();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isAbandonConfirmOpen, onCancelAbandonRun]);
+
+  useEffect(() => {
     if (!preferences.movementOnboardingDismissed && controlState.movementIntent.isActive) {
       onSetMovementOnboardingDismissed(true);
     }
@@ -907,6 +934,41 @@ export function ActiveRuntimeShellContent({
             passCount={levelUpPassCount}
             rerollCount={levelUpRerollCount}
           />
+        ) : null}
+
+        {isAbandonConfirmOpen ? (
+          <div className="runtime-confirmation-overlay" role="presentation">
+            <div
+              aria-labelledby="runtime-abandon-confirm-title"
+              aria-modal="true"
+              className="runtime-confirmation-card"
+              role="dialog"
+            >
+              <p className="runtime-confirmation-card__eyebrow">Run commit</p>
+              <h2 className="runtime-confirmation-card__title" id="runtime-abandon-confirm-title">
+                Abandon the current run?
+              </h2>
+              <p className="runtime-confirmation-card__detail">
+                This counts as a failed attempt and returns the shell to the main screen.
+              </p>
+              <div className="runtime-confirmation-card__actions">
+                <button
+                  className="shell-control shell-control--button"
+                  onClick={onCancelAbandonRun}
+                  type="button"
+                >
+                  Keep the run
+                </button>
+                <button
+                  className="shell-control shell-control--button shell-control--button-alert"
+                  onClick={onConfirmAbandonRun}
+                  type="button"
+                >
+                  Abandon run
+                </button>
+              </div>
+            </div>
+          </div>
         ) : null}
 
         {metaOverlay}

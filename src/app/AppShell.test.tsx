@@ -33,15 +33,21 @@ vi.mock("./components/AppMetaScenePanel", () => ({
 
 vi.mock("./components/ActiveRuntimeShellContent", () => ({
   ActiveRuntimeShellContent: ({
+    isAbandonConfirmOpen,
     isMenuOpen,
     metaOverlay,
+    onCancelAbandonRun,
     onBossSpawnToast,
+    onConfirmAbandonRun,
     onRuntimeOutcomeChange,
     onRuntimeStateChange
   }: {
+    isAbandonConfirmOpen: boolean;
     isMenuOpen: boolean;
     metaOverlay: React.ReactNode;
+    onCancelAbandonRun: () => void;
     onBossSpawnToast: () => void;
+    onConfirmAbandonRun: () => void;
     onRuntimeOutcomeChange: (runtimeOutcome: unknown) => void;
     onRuntimeStateChange: (gameState: unknown) => void;
   }) => {
@@ -93,6 +99,17 @@ vi.mock("./components/ActiveRuntimeShellContent", () => ({
           Emit victory
         </button>
         <p>{isMenuOpen ? "Shell menu open" : "Shell menu closed"}</p>
+        {isAbandonConfirmOpen ? (
+          <div>
+            <p>Abandon confirmation open</p>
+            <button onClick={onCancelAbandonRun} type="button">
+              Keep the run
+            </button>
+            <button onClick={onConfirmAbandonRun} type="button">
+              Confirm abandon
+            </button>
+          </div>
+        ) : null}
         {metaOverlay}
       </>
     );
@@ -238,11 +255,12 @@ describe("AppShell", () => {
   });
 
   it("shows a toast after abandoning the active session", async () => {
-    vi.spyOn(window, "confirm").mockReturnValue(true);
     const { AppShell } = await import("./AppShell");
 
     render(<AppShell />);
     fireEvent.click(screen.getByRole("button", { name: /abandon run/i }));
+    expect(await screen.findByText("Abandon confirmation open")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /confirm abandon/i }));
 
     expect(await screen.findByText("Run abandoned.")).toBeInTheDocument();
   });

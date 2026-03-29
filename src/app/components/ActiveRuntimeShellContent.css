@@ -45,6 +45,68 @@
   white-space: nowrap;
 }
 
+.runtime-confirmation-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  display: grid;
+  place-items: center;
+  padding:
+    calc(var(--shell-offset-top) + 1rem)
+    calc(var(--shell-offset-right) + 1rem)
+    calc(var(--shell-offset-bottom) + 1rem)
+    calc(var(--shell-offset-left) + 1rem);
+  background: rgba(4, 6, 10, 0.46);
+  pointer-events: auto;
+}
+
+.runtime-confirmation-card {
+  display: grid;
+  gap: 0.8rem;
+  width: min(26rem, 100%);
+  padding: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgba(18, 22, 28, 0.98), rgba(10, 14, 18, 0.98)),
+    rgba(10, 14, 18, 0.96);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
+}
+
+.runtime-confirmation-card__eyebrow,
+.runtime-confirmation-card__title,
+.runtime-confirmation-card__detail {
+  margin: 0;
+}
+
+.runtime-confirmation-card__eyebrow {
+  color: var(--emberwake-copy-muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.runtime-confirmation-card__title {
+  color: var(--emberwake-copy);
+  font-family: var(--emberwake-title-font);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  line-height: 1;
+}
+
+.runtime-confirmation-card__detail {
+  color: var(--emberwake-copy-dim);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.runtime-confirmation-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 0.7rem;
+}
+
 .shell-menu {
   position: absolute;
   top: var(--shell-offset-top);

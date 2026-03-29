@@ -444,7 +444,8 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           <div className="app-meta-scene__main-menu-lane app-meta-scene__main-menu-lane--left">
             {mainMenuEnemyAssetUrl ? (
               <img
-                className="app-meta-scene__main-menu-character app-meta-scene__main-menu-character--enemy"
+                className="app-meta-scene__main-menu-character app-meta-scene__main-menu-character--enemy app-meta-scene__main-menu-character--enemy-rotating"
+                key={mainMenuEnemyAsset.assetId}
                 src={mainMenuEnemyAssetUrl}
                 style={
                   {

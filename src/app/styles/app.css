@@ -384,6 +384,10 @@ html[data-app-display-mode="browser"] .app-shell {
   transform-origin: left bottom;
 }
 
+.app-meta-scene__main-menu-character--enemy-rotating {
+  animation: app-shell-main-menu-enemy-fade 10s linear both;
+}
+
 .app-meta-scene__main-menu-character--hero {
   right: 0;
   transform: translateX(-100%) scaleX(-1);
@@ -1213,6 +1217,24 @@ html[data-app-display-mode="browser"] .app-shell {
   100% {
     opacity: 0.5;
     transform: scale(1);
+  }
+}
+
+@keyframes app-shell-main-menu-enemy-fade {
+  0% {
+    opacity: 0;
+    filter: saturate(0.9) brightness(0.82);
+  }
+
+  10%,
+  82% {
+    opacity: 0.94;
+    filter: saturate(1.04) brightness(0.94);
+  }
+
+  100% {
+    opacity: 0;
+    filter: saturate(0.86) brightness(0.78);
   }
 }
 

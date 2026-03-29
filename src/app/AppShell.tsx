@@ -66,6 +66,7 @@ export function AppShell() {
   const [pendingCharacterName, setPendingCharacterName] = useState(() =>
     pickRandomCharacterName()
   );
+  const [isAbandonConfirmOpen, setIsAbandonConfirmOpen] = useState(false);
   const [gameOverRecap, setGameOverRecap] = useState<GameOverRecap | null>(null);
   const [runtimeOutcome, setRuntimeOutcome] = useState<RuntimeShellOutcome | null>(null);
   const [runtimeProfilingConfig, setRuntimeProfilingConfig] = useState(
@@ -152,6 +153,11 @@ export function AppShell() {
 
     previousActiveSceneRef.current = activeScene;
   }, [activeScene]);
+  useEffect(() => {
+    if (!runtimeSession.hasActiveSession) {
+      setIsAbandonConfirmOpen(false);
+    }
+  }, [runtimeSession.hasActiveSession]);
   useEffect(() => {
     writeMetaProfile(metaProfile);
   }, [metaProfile]);
@@ -265,6 +271,7 @@ export function AppShell() {
     resetRenderer();
   }, [resetRenderer]);
   const handleReturnToMainMenu = useCallback(() => {
+    setIsAbandonConfirmOpen(false);
     if (activeScene === "defeat" || activeScene === "victory") {
       endActiveSession();
       clearTerminalRunMemory();
@@ -413,13 +420,10 @@ export function AppShell() {
       return;
     }
 
-    if (!window.confirm("Abandon the current run? This will count as a failed attempt.")) {
-      return;
-    }
-
     settleConcludedRun(latestGameStateRef.current ?? sessionInitState ?? null);
     endActiveSession();
     clearTerminalRunMemory();
+    setIsAbandonConfirmOpen(false);
     showMainMenuScene();
     pushToast({
       message: "Run abandoned.",
@@ -434,6 +438,16 @@ export function AppShell() {
     settleConcludedRun,
     showMainMenuScene
   ]);
+  const handleRequestAbandonRun = useCallback(() => {
+    if (!runtimeSession.hasActiveSession) {
+      return;
+    }
+
+    setIsAbandonConfirmOpen(true);
+  }, [runtimeSession.hasActiveSession]);
+  const handleCancelAbandonRun = useCallback(() => {
+    setIsAbandonConfirmOpen(false);
+  }, []);
   const latestProgression = (latestGameStateRef.current ?? sessionInitState)?.systems.progression;
   const progressionSnapshot = {
     ...overlayArchiveProgress(
@@ -463,7 +477,7 @@ export function AppShell() {
       isMobileLayout={viewport.layoutMode === "mobile"}
       isShellMenuOpen={isMenuOpen}
       metaProfile={metaProfile}
-      onAbandonRun={handleAbandonRun}
+      onAbandonRun={handleRequestAbandonRun}
       onApplyDesktopControlBindings={handleApplyDesktopControlBindings}
       onBeginNewGame={handleBeginNewGame}
       onCharacterNameChange={handleCharacterNameChange}
@@ -530,7 +544,9 @@ export function AppShell() {
         >
           <LazyActiveRuntimeShellContent
             activeScene={activeScene}
-            onAbandonRun={handleAbandonRun}
+            isAbandonConfirmOpen={isAbandonConfirmOpen}
+            onAbandonRun={handleRequestAbandonRun}
+            onCancelAbandonRun={handleCancelAbandonRun}
             canInstall={canInstall}
             cycleWorldSeed={cycleWorldSeed}
             desktopControlBindings={desktopControlBindings}
@@ -553,6 +569,7 @@ export function AppShell() {
               closeShellSurface();
             }}
             onBossSpawnToast={handleBossSpawnToast}
+            onConfirmAbandonRun={handleAbandonRun}
             onRendererError={markFailed}
             onRendererReady={markReady}
             onRetryRuntime={handleRetryRuntime}
