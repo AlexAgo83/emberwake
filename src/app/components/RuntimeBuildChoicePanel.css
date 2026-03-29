@@ -4,8 +4,8 @@
   left: 50%;
   z-index: 5;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  width: min(54rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  gap: 1rem;
+  width: min(74rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
   max-height: calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom));
   padding: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -59,15 +59,97 @@
   line-height: 1.45;
 }
 
+.runtime-build-choice__controls {
+  display: flex;
+  gap: 0.6rem;
+  align-items: start;
+  flex-wrap: wrap;
+}
+
+.runtime-build-choice__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.2rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(115, 216, 255, 0.24);
+  border-radius: 999px;
+  background: rgba(115, 216, 255, 0.08);
+  color: var(--emberwake-accent-cold);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.runtime-build-choice__action span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4rem;
+  min-height: 1.4rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--emberwake-copy);
+}
+
+.runtime-build-choice__action--muted {
+  border-color: rgba(255, 183, 104, 0.24);
+  background: rgba(255, 183, 104, 0.08);
+  color: var(--emberwake-accent-warm);
+}
+
+.runtime-build-choice__action:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.runtime-build-choice__tracks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 0.2rem;
+  align-content: start;
+  scrollbar-gutter: stable;
+}
+
+.runtime-build-choice__track {
+  display: grid;
+  gap: 0.8rem;
+  min-height: 0;
+  padding: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.92rem;
+  background: rgba(8, 12, 16, 0.42);
+}
+
+.runtime-build-choice__track--combat {
+  border-color: rgba(115, 216, 255, 0.14);
+}
+
+.runtime-build-choice__track--passive {
+  border-color: rgba(255, 183, 104, 0.14);
+}
+
+.runtime-build-choice__track-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .runtime-build-choice__status {
   display: inline-flex;
   align-items: center;
   min-height: 2.1rem;
   padding: 0.45rem 0.75rem;
-  border: 1px solid rgba(255, 183, 104, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
-  background: rgba(255, 183, 104, 0.08);
-  color: var(--emberwake-accent-warm);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--emberwake-copy-muted);
   font-size: 0.66rem;
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -79,12 +161,6 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.8rem;
-  min-height: 0;
-  overflow: auto;
-  padding-top: 0.95rem;
-  padding-right: 0.2rem;
-  align-content: start;
-  scrollbar-gutter: stable;
 }
 
 .runtime-build-choice__card {
@@ -153,10 +229,6 @@
   text-transform: uppercase;
 }
 
-.runtime-build-choice__tag--state {
-  color: var(--emberwake-accent-cold);
-}
-
 .runtime-build-choice__copy {
   display: grid;
   gap: 0.28rem;
@@ -198,7 +270,8 @@
   padding: 0.82rem;
 }
 
-.runtime-build-choice--mobile .runtime-build-choice__header {
+.runtime-build-choice--mobile .runtime-build-choice__header,
+.runtime-build-choice--mobile .runtime-build-choice__tracks {
   display: grid;
 }
 

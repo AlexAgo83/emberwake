@@ -7,6 +7,8 @@ import {
   listActiveWeaponDefinitions,
   listPassiveItemDefinitions,
   normalizeBuildState,
+  passLevelUpChoices,
+  rerollLevelUpChoices,
   resolveActiveWeaponRuntimeStats,
   resolveBossDamageMultiplier,
   resolveBuildSummary,
@@ -38,13 +40,14 @@ describe("buildSystem", () => {
     const buildState = addPendingLevelUps(createInitialBuildState(), 1, 24);
 
     expect(buildState.pendingLevelUps).toBe(1);
-    expect(buildState.levelUpChoices).toHaveLength(3);
-    expect(buildState.levelUpChoices.some((choice) => choice.slotKind === "active")).toBe(true);
+    expect(buildState.levelUpChoices).toHaveLength(6);
+    expect(buildState.levelUpChoices.filter((choice) => choice.track === "combat")).toHaveLength(3);
+    expect(buildState.levelUpChoices.filter((choice) => choice.track === "passive")).toHaveLength(3);
   });
 
   it("applies a level-up choice and clears the pending choice set", () => {
     const initialBuildState = addPendingLevelUps(createInitialBuildState(), 1, 24);
-    const [firstChoice] = initialBuildState.levelUpChoices;
+    const [firstChoice] = initialBuildState.levelUpChoices.filter((choice) => choice.track === "combat");
     const nextBuildState = applyLevelUpChoice(initialBuildState, 0, 24);
 
     expect(nextBuildState.pendingLevelUps).toBe(0);
@@ -63,6 +66,61 @@ describe("buildSystem", () => {
     expect(nextBuildState.activeSlots[0]?.level).toBeGreaterThan(
       initialBuildState.activeSlots[0]?.level ?? 0
     );
+  });
+
+  it("rerolls the whole offer set and consumes one reroll charge", () => {
+    const initialBuildState = addPendingLevelUps(createInitialBuildState(), 1, 24);
+    const initialSignature = initialBuildState.levelUpChoices.map((choice) => choice.id).join("|");
+
+    const rerolledBuildState = rerollLevelUpChoices(initialBuildState, 24);
+
+    expect(rerolledBuildState.levelUpRerollsRemaining).toBe(
+      initialBuildState.levelUpRerollsRemaining - 1
+    );
+    expect(rerolledBuildState.levelUpChoices.map((choice) => choice.id).join("|")).not.toBe(
+      initialSignature
+    );
+  });
+
+  it("passes a level-up moment and consumes one pass charge", () => {
+    const initialBuildState = addPendingLevelUps(createInitialBuildState(), 1, 24);
+
+    const passedBuildState = passLevelUpChoices(initialBuildState, 24);
+
+    expect(passedBuildState.pendingLevelUps).toBe(0);
+    expect(passedBuildState.levelUpPassesRemaining).toBe(
+      initialBuildState.levelUpPassesRemaining - 1
+    );
+    expect(passedBuildState.levelUpChoices).toEqual([]);
+  });
+
+  it("surfaces a fusion choice in the combat track when a fusion is ready", () => {
+    const buildState = addPendingLevelUps(
+      normalizeBuildState({
+        activeSlots: [
+          {
+            fusionId: null,
+            lastAttackTick: null,
+            level: 8,
+            weaponId: "ash-lash"
+          }
+        ],
+        passiveSlots: [
+          {
+            level: 1,
+            passiveId: "overclock-seal"
+          }
+        ]
+      }),
+      1,
+      24
+    );
+
+    expect(
+      buildState.levelUpChoices.some(
+        (choice) => choice.track === "combat" && choice.selectionKind === "fusion"
+      )
+    ).toBe(true);
   });
 
   it("recognizes fusion readiness once the required passive and active cap are present", () => {

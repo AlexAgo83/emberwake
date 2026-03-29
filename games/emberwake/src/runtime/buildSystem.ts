@@ -48,7 +48,8 @@ export type FusionId =
   | "temple-circuit";
 
 export type BuildChoiceSlotKind = "active" | "passive";
-export type BuildChoiceSelectionKind = "new" | "upgrade";
+export type BuildChoiceSelectionKind = "fusion" | "new" | "upgrade";
+export type BuildChoiceTrack = "combat" | "passive";
 
 export type ActiveWeaponSlot = {
   fusionId: FusionId | null;
@@ -64,9 +65,11 @@ export type PassiveItemSlot = {
 
 export type BuildChoice = {
   currentLevel: number;
+  displayCategory: "active" | "fusion" | "passive";
   effectLine: string;
   fusionPathReady: boolean;
   id: string;
+  iconId: ActiveWeaponId | FusionId | PassiveItemId;
   itemId: ActiveWeaponId | PassiveItemId;
   label: string;
   maxLevel: number;
@@ -74,11 +77,15 @@ export type BuildChoice = {
   roleLine: string;
   selectionKind: BuildChoiceSelectionKind;
   slotKind: BuildChoiceSlotKind;
+  track: BuildChoiceTrack;
 };
 
 export type BuildState = {
   activeSlots: ActiveWeaponSlot[];
   levelUpChoices: BuildChoice[];
+  levelUpOfferSequence: number;
+  levelUpPassesRemaining: number;
+  levelUpRerollsRemaining: number;
   metaProgression: BuildMetaProgression;
   nextChestDefeatMilestone: number;
   passiveSlots: PassiveItemSlot[];
@@ -698,6 +705,9 @@ export const createInitialBuildState = (): BuildState => ({
     }
   ],
   levelUpChoices: [],
+  levelUpOfferSequence: 0,
+  levelUpPassesRemaining: createDefaultBuildMetaProgression().levelUpPassCharges,
+  levelUpRerollsRemaining: createDefaultBuildMetaProgression().levelUpRerollCharges,
   metaProgression: createDefaultBuildMetaProgression(),
   nextChestDefeatMilestone: buildSystemContract.initialChestDefeatMilestone,
   passiveSlots: [],
@@ -743,6 +753,22 @@ export const normalizeBuildState = (buildState: Partial<BuildState> | undefined)
         weaponId: activeSlot.weaponId
     })) ?? initialBuildState.activeSlots,
     levelUpChoices: buildState?.levelUpChoices ?? [],
+    levelUpOfferSequence: Math.max(
+      0,
+      buildState?.levelUpOfferSequence ?? initialBuildState.levelUpOfferSequence
+    ),
+    levelUpPassesRemaining: Math.max(
+      0,
+      buildState?.levelUpPassesRemaining ??
+        buildState?.metaProgression?.levelUpPassCharges ??
+        initialBuildState.levelUpPassesRemaining
+    ),
+    levelUpRerollsRemaining: Math.max(
+      0,
+      buildState?.levelUpRerollsRemaining ??
+        buildState?.metaProgression?.levelUpRerollCharges ??
+        initialBuildState.levelUpRerollsRemaining
+    ),
     metaProgression: normalizedMetaProgression,
     nextChestDefeatMilestone:
       buildState?.nextChestDefeatMilestone ?? initialBuildState.nextChestDefeatMilestone,
@@ -922,16 +948,19 @@ const createActiveUnlockChoice = (
 
   return {
     currentLevel: 0,
+    displayCategory: "active",
     effectLine: `Unlock ${weaponDefinition.roleLine.toLowerCase()}.`,
     fusionPathReady: readyFusion !== null,
     id: `choice:active:new:${weaponId}`,
+    iconId: weaponId,
     itemId: weaponId,
     label: weaponDefinition.label,
     maxLevel: weaponDefinition.maxLevel,
     nextLevel: 1,
     roleLine: weaponDefinition.roleLine,
     selectionKind: "new",
-    slotKind: "active"
+    slotKind: "active",
+    track: "combat"
   };
 };
 
@@ -947,16 +976,19 @@ const createPassiveUnlockChoice = (
 
   return {
     currentLevel: 0,
+    displayCategory: "passive",
     effectLine: `Unlock ${passiveDefinition.roleLine.toLowerCase()}.`,
     fusionPathReady: opensFusionPath,
     id: `choice:passive:new:${passiveItemId}`,
+    iconId: passiveItemId,
     itemId: passiveItemId,
     label: passiveDefinition.label,
     maxLevel: passiveDefinition.maxLevel,
     nextLevel: 1,
     roleLine: passiveDefinition.roleLine,
     selectionKind: "new",
-    slotKind: "passive"
+    slotKind: "passive",
+    track: "passive"
   };
 };
 
@@ -972,16 +1004,19 @@ const createActiveUpgradeChoice = (
 
   return {
     currentLevel: activeSlot.level,
+    displayCategory: activeSlot.fusionId ? "fusion" : "active",
     effectLine: `Lv ${activeSlot.level} -> ${nextLevel}: faster cadence and stronger pressure.`,
     fusionPathReady: fusionReady,
     id: `choice:active:upgrade:${activeSlot.weaponId}`,
+    iconId: activeSlot.fusionId ?? activeSlot.weaponId,
     itemId: activeSlot.weaponId,
     label: resolveBuildDisplayLabel(buildState, activeSlot),
     maxLevel: weaponDefinition.maxLevel,
     nextLevel,
     roleLine: weaponDefinition.roleLine,
     selectionKind: "upgrade",
-    slotKind: "active"
+    slotKind: "active",
+    track: "combat"
   };
 };
 
@@ -991,18 +1026,41 @@ const createPassiveUpgradeChoice = (passiveSlot: PassiveItemSlot): BuildChoice =
 
   return {
     currentLevel: passiveSlot.level,
+    displayCategory: "passive",
     effectLine: `Lv ${passiveSlot.level} -> ${nextLevel}: deepen ${passiveDefinition.statFamily.replace("-", " ")} support.`,
     fusionPathReady: false,
     id: `choice:passive:upgrade:${passiveSlot.passiveId}`,
+    iconId: passiveSlot.passiveId,
     itemId: passiveSlot.passiveId,
     label: passiveDefinition.label,
     maxLevel: passiveDefinition.maxLevel,
     nextLevel,
     roleLine: passiveDefinition.roleLine,
     selectionKind: "upgrade",
-    slotKind: "passive"
+    slotKind: "passive",
+    track: "passive"
   };
 };
+
+const createFusionChoice = (
+  activeSlot: ActiveWeaponSlot,
+  fusionDefinition: FusionDefinition
+): BuildChoice => ({
+  currentLevel: activeSlot.level,
+  displayCategory: "fusion",
+  effectLine: `Fuse ${getActiveWeaponDefinition(activeSlot.weaponId).label} with ${getPassiveItemDefinition(fusionDefinition.passiveItemId).label}.`,
+  fusionPathReady: true,
+  iconId: fusionDefinition.fusionId,
+  id: `choice:active:fusion:${fusionDefinition.fusionId}`,
+  itemId: activeSlot.weaponId,
+  label: fusionDefinition.label,
+  maxLevel: getActiveWeaponDefinition(activeSlot.weaponId).maxLevel,
+  nextLevel: activeSlot.level,
+  roleLine: fusionDefinition.roleLine,
+  selectionKind: "fusion",
+  slotKind: "active",
+  track: "combat"
+});
 
 const takeDeterministicSlice = <T extends { id: string }>(
   items: readonly T[],
@@ -1010,23 +1068,92 @@ const takeDeterministicSlice = <T extends { id: string }>(
   salt: string
 ) => sortDeterministically(items, salt).slice(0, count);
 
-export const resolveLevelUpChoices = (
+const resolveCombatTrackChoices = (
   buildState: BuildState,
   tick: number
 ): BuildChoice[] => {
   const ownedActiveIds = new Set(buildState.activeSlots.map((activeSlot) => activeSlot.weaponId));
-  const ownedPassiveIds = new Set(buildState.passiveSlots.map((passiveSlot) => passiveSlot.passiveId));
   const unownedActives = buildState.metaProgression.availableActiveWeaponIds
     .filter((weaponId) => !ownedActiveIds.has(weaponId))
     .map((weaponId) => createActiveUnlockChoice(buildState, weaponId));
-  const unownedPassives = buildState.metaProgression.availablePassiveItemIds
-    .filter((passiveItemId) => !ownedPassiveIds.has(passiveItemId))
-    .map((passiveItemId) => createPassiveUnlockChoice(buildState, passiveItemId));
+  const fusionChoices = buildState.activeSlots
+    .map((activeSlot) => {
+      const fusionDefinition = resolveFusionReadyState(buildState, activeSlot);
+      return fusionDefinition ? createFusionChoice(activeSlot, fusionDefinition) : null;
+    })
+    .filter((choice): choice is BuildChoice => choice !== null);
   const activeUpgrades = buildState.activeSlots
     .filter(
       (activeSlot) => activeSlot.level < getActiveWeaponDefinition(activeSlot.weaponId).maxLevel
     )
     .map((activeSlot) => createActiveUpgradeChoice(buildState, activeSlot));
+  const totalOwned = buildState.activeSlots.length + buildState.passiveSlots.length;
+  const preferredNewChoices =
+    totalOwned < 4
+      ? 2
+      : totalOwned < 7
+        ? 1
+        : 0;
+  const choices: BuildChoice[] = [];
+  const pushUniqueChoice = (choice: BuildChoice) => {
+    if (choices.some((existingChoice) => existingChoice.id === choice.id)) {
+      return;
+    }
+
+    choices.push(choice);
+  };
+
+  for (const choice of takeDeterministicSlice(fusionChoices, 3, `fusion:${tick}`)) {
+    pushUniqueChoice(choice);
+  }
+
+  if (buildState.activeSlots.length < buildSystemContract.activeSlotLimit) {
+    for (const choice of takeDeterministicSlice(
+      unownedActives,
+      Math.max(0, preferredNewChoices - choices.length),
+      `active:${tick}`
+    )) {
+      pushUniqueChoice(choice);
+    }
+  }
+
+  for (const choice of takeDeterministicSlice(activeUpgrades, 3, `combat-upgrade:${tick}:${totalOwned}`)) {
+    if (choices.length >= 3) {
+      break;
+    }
+
+    pushUniqueChoice(choice);
+  }
+
+  if (choices.length < 3 && buildState.activeSlots.length < buildSystemContract.activeSlotLimit) {
+    for (const choice of takeDeterministicSlice(unownedActives, 3, `combat-fallback-active:${tick}`)) {
+      if (choices.length >= 3) {
+        break;
+      }
+      pushUniqueChoice(choice);
+    }
+  }
+
+  if (choices.length < 3) {
+    for (const choice of takeDeterministicSlice(fusionChoices, 3, `combat-fallback-fusion:${tick}`)) {
+      if (choices.length >= 3) {
+        break;
+      }
+      pushUniqueChoice(choice);
+    }
+  }
+
+  return choices.slice(0, 3);
+};
+
+const resolvePassiveTrackChoices = (
+  buildState: BuildState,
+  tick: number
+): BuildChoice[] => {
+  const ownedPassiveIds = new Set(buildState.passiveSlots.map((passiveSlot) => passiveSlot.passiveId));
+  const unownedPassives = buildState.metaProgression.availablePassiveItemIds
+    .filter((passiveItemId) => !ownedPassiveIds.has(passiveItemId))
+    .map((passiveItemId) => createPassiveUnlockChoice(buildState, passiveItemId));
   const passiveUpgrades = buildState.passiveSlots
     .filter(
       (passiveSlot) => passiveSlot.level < getPassiveItemDefinition(passiveSlot.passiveId).maxLevel
@@ -1048,28 +1175,13 @@ export const resolveLevelUpChoices = (
     choices.push(choice);
   };
 
-  if (buildState.activeSlots.length < buildSystemContract.activeSlotLimit) {
-    for (const choice of takeDeterministicSlice(unownedActives, preferredNewChoices, `active:${tick}`)) {
-      pushUniqueChoice(choice);
-    }
-  }
-
-  if (
-    choices.length < preferredNewChoices &&
-    buildState.passiveSlots.length < buildSystemContract.passiveSlotLimit
-  ) {
+  if (buildState.passiveSlots.length < buildSystemContract.passiveSlotLimit) {
     for (const choice of takeDeterministicSlice(unownedPassives, preferredNewChoices, `passive:${tick}`)) {
       pushUniqueChoice(choice);
     }
   }
 
-  const upgradeCandidates = takeDeterministicSlice(
-    [...activeUpgrades, ...passiveUpgrades],
-    3,
-    `upgrade:${tick}:${totalOwned}`
-  );
-
-  for (const choice of upgradeCandidates) {
+  for (const choice of takeDeterministicSlice(passiveUpgrades, 3, `passive-upgrade:${tick}:${totalOwned}`)) {
     if (choices.length >= 3) {
       break;
     }
@@ -1077,17 +1189,8 @@ export const resolveLevelUpChoices = (
     pushUniqueChoice(choice);
   }
 
-  if (choices.length < 3 && buildState.activeSlots.length < buildSystemContract.activeSlotLimit) {
-    for (const choice of takeDeterministicSlice(unownedActives, 3, `fallback-active:${tick}`)) {
-      if (choices.length >= 3) {
-        break;
-      }
-      pushUniqueChoice(choice);
-    }
-  }
-
   if (choices.length < 3 && buildState.passiveSlots.length < buildSystemContract.passiveSlotLimit) {
-    for (const choice of takeDeterministicSlice(unownedPassives, 3, `fallback-passive:${tick}`)) {
+    for (const choice of takeDeterministicSlice(unownedPassives, 3, `passive-fallback:${tick}`)) {
       if (choices.length >= 3) {
         break;
       }
@@ -1098,14 +1201,48 @@ export const resolveLevelUpChoices = (
   return choices.slice(0, 3);
 };
 
+export const resolveLevelUpChoices = (
+  buildState: BuildState,
+  tick: number
+): BuildChoice[] => [...resolveCombatTrackChoices(buildState, tick), ...resolvePassiveTrackChoices(buildState, tick)];
+
+const getChoiceSignature = (choices: readonly BuildChoice[]) => choices.map((choice) => choice.id).join("|");
+
+const refreshLevelUpChoices = (
+  buildState: BuildState,
+  tick: number,
+  previousChoices: readonly BuildChoice[] = []
+): Pick<BuildState, "levelUpChoices" | "levelUpOfferSequence"> => {
+  const previousSignature = getChoiceSignature(previousChoices);
+
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const levelUpOfferSequence = buildState.levelUpOfferSequence + attempt + 1;
+    const levelUpChoices = resolveLevelUpChoices(buildState, tick + levelUpOfferSequence * 17);
+
+    if (previousSignature.length === 0 || getChoiceSignature(levelUpChoices) !== previousSignature) {
+      return {
+        levelUpChoices,
+        levelUpOfferSequence
+      };
+    }
+  }
+
+  return {
+    levelUpChoices: resolveLevelUpChoices(buildState, tick + (buildState.levelUpOfferSequence + 1) * 17),
+    levelUpOfferSequence: buildState.levelUpOfferSequence + 1
+  };
+};
+
 const syncChoicesIfNeeded = (buildState: BuildState, tick: number): BuildState => {
   if (buildState.pendingLevelUps <= 0 || buildState.levelUpChoices.length > 0) {
     return buildState;
   }
 
+  const refreshed = refreshLevelUpChoices(buildState, tick);
+
   return {
     ...buildState,
-    levelUpChoices: resolveLevelUpChoices(buildState, tick)
+    ...refreshed
   };
 };
 
@@ -1146,7 +1283,18 @@ export const applyLevelUpChoice = (
   if (choice.slotKind === "active") {
     const weaponId = choice.itemId as ActiveWeaponId;
 
-    if (choice.selectionKind === "new") {
+    if (choice.selectionKind === "fusion") {
+      nextBuildState.activeSlots = nextBuildState.activeSlots.map((activeSlot) =>
+        activeSlot.weaponId === weaponId
+          ? {
+              ...activeSlot,
+              fusionId: choice.iconId as FusionId,
+              lastAttackTick: null
+            }
+          : activeSlot
+      );
+      nextBuildState.recentFusionId = choice.iconId as FusionId;
+    } else if (choice.selectionKind === "new") {
       nextBuildState.activeSlots.push({
         fusionId: null,
         lastAttackTick: null,
@@ -1190,6 +1338,44 @@ export const applyLevelUpChoice = (
   }
 
   return syncChoicesIfNeeded(nextBuildState, tick);
+};
+
+export const rerollLevelUpChoices = (buildState: BuildState, tick: number): BuildState => {
+  if (buildState.levelUpChoices.length === 0 || buildState.levelUpRerollsRemaining <= 0) {
+    return buildState;
+  }
+
+  const refreshed = refreshLevelUpChoices(
+    {
+      ...buildState,
+      levelUpRerollsRemaining: buildState.levelUpRerollsRemaining - 1
+    },
+    tick,
+    buildState.levelUpChoices
+  );
+
+  return {
+    ...buildState,
+    ...refreshed,
+    levelUpRerollsRemaining: buildState.levelUpRerollsRemaining - 1
+  };
+};
+
+export const passLevelUpChoices = (buildState: BuildState, tick: number): BuildState => {
+  if (buildState.levelUpChoices.length === 0 || buildState.levelUpPassesRemaining <= 0) {
+    return buildState;
+  }
+
+  return syncChoicesIfNeeded(
+    {
+      ...buildState,
+      levelUpChoices: [],
+      levelUpPassesRemaining: buildState.levelUpPassesRemaining - 1,
+      pendingLevelUps: Math.max(0, buildState.pendingLevelUps - 1),
+      recentFusionId: null
+    },
+    tick
+  );
 };
 
 const upgradeChestCandidate = (

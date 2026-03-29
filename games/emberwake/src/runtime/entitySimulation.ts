@@ -31,15 +31,17 @@ import {
 import {
   addPendingLevelUps,
   activeWeaponIds,
+  applyLevelUpChoice,
   type ActiveWeaponId,
-  type FusionId,
   buildSystemContract,
   createInitialBuildState,
   normalizeBuildState,
-  applyLevelUpChoice,
+  passLevelUpChoices,
   resolveMaxHealthBonus,
   resolveMoveSpeedMultiplier,
   resolveActiveWeaponRuntimeStats,
+  rerollLevelUpChoices,
+  type FusionId,
   type BuildState
 } from "@game/runtime/buildSystem";
 import {
@@ -147,6 +149,10 @@ export type RunStats = {
   goldCollected: number;
   healingKitsCollected: number;
   hostileDefeats: number;
+  missionBossDefeats: number;
+  missionCompleted: boolean;
+  missionItemsCollected: number;
+  worldProfileId: string | null;
 };
 
 export type DamageReactionState = {
@@ -256,6 +262,8 @@ export type SimulationSpeedOption = (typeof entitySimulationContract.speedOption
 
 export type SimulationCommand = {
   buildChoiceIndex?: number | null;
+  buildPassRequested?: boolean;
+  buildRerollRequested?: boolean;
   controlState?: SingleEntityControlState;
   profiling?: RuntimeProfilingConfig;
   worldSeed?: string;
@@ -337,7 +345,11 @@ const createInitialRunStats = (): RunStats => ({
   currentXp: 0,
   goldCollected: 0,
   healingKitsCollected: 0,
-  hostileDefeats: 0
+  hostileDefeats: 0,
+  missionBossDefeats: 0,
+  missionCompleted: false,
+  missionItemsCollected: 0,
+  worldProfileId: null
 });
 
 const createPlayerAutomaticAttackProfile = (buildState = createInitialBuildState()): AutomaticAttackProfile => {
@@ -1339,7 +1351,11 @@ export const advanceSimulationState = (
   const choiceAppliedBuildState =
     command.buildChoiceIndex !== null && command.buildChoiceIndex !== undefined
       ? applyLevelUpChoice(normalizedBuildState, command.buildChoiceIndex, simulationState.tick)
-      : normalizedBuildState;
+      : command.buildRerollRequested
+        ? rerollLevelUpChoices(normalizedBuildState, simulationState.tick)
+        : command.buildPassRequested
+          ? passLevelUpChoices(normalizedBuildState, simulationState.tick)
+          : normalizedBuildState;
 
   if (choiceAppliedBuildState.levelUpChoices.length > 0) {
     const lockedPlayerEntity = syncPlayerAutomaticAttackToBuildState(

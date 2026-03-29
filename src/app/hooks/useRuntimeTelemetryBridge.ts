@@ -43,6 +43,8 @@ declare global {
           total: number;
         };
         levelUpChoiceCount: number;
+        levelUpPassCount: number;
+        levelUpRerollCount: number;
         playerHealth: number;
         trackedEntityCount: number;
         tick: number;
@@ -121,6 +123,8 @@ type RuntimeTelemetryBridgeOptions = {
       total: number;
     };
     levelUpChoiceCount: number;
+    levelUpPassCount: number;
+    levelUpRerollCount: number;
     playerHealth: number;
     trackedEntityCount: number;
     tick: number;

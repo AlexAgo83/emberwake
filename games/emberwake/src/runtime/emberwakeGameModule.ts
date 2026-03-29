@@ -37,6 +37,8 @@ export type EmberwakeGameState = {
 
 export type EmberwakeGameAction = {
   buildChoiceIndex?: number | null;
+  buildPassRequested?: boolean;
+  buildRerollRequested?: boolean;
   controlState: SingleEntityControlState;
 };
 
@@ -88,6 +90,12 @@ const resolveBuildChoiceIndexFromInput = (input: EngineInputFrame) => {
   return null;
 };
 
+const resolveBuildRerollRequestedFromInput = (input: EngineInputFrame) =>
+  input.buttons["build.reroll"] === true;
+
+const resolveBuildPassRequestedFromInput = (input: EngineInputFrame) =>
+  input.buttons["build.pass"] === true;
+
 const createTimingSnapshot = (tick: number): EngineTiming => ({
   deltaMs: entitySimulationContract.fixedStepMs,
   fixedStepMs: entitySimulationContract.fixedStepMs,
@@ -129,6 +137,8 @@ export const emberwakeGameModule: GameModule<
   },
   mapInput: ({ input }) => ({
     buildChoiceIndex: resolveBuildChoiceIndexFromInput(input),
+    buildPassRequested: resolveBuildPassRequestedFromInput(input),
+    buildRerollRequested: resolveBuildRerollRequestedFromInput(input),
     controlState: createControlStateFromInput(input)
   }),
   present: ({ state }): EnginePresentationModel => {
@@ -183,6 +193,8 @@ export const emberwakeGameModule: GameModule<
     const normalizedSystems = normalizeGameplaySystemsState(state.systems);
     const nextSimulation = advanceSimulationState(normalizedSimulation, {
       buildChoiceIndex: action.buildChoiceIndex,
+      buildPassRequested: action.buildPassRequested,
+      buildRerollRequested: action.buildRerollRequested,
       controlState: action.controlState,
       profiling: state.profiling,
       worldSeed: state.worldSeed

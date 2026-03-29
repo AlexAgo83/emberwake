@@ -234,6 +234,8 @@ export function ActiveRuntimeShellContent({
   const buildState = simulationState.gameState.simulation.buildState;
   const levelUpChoices = buildState.levelUpChoices;
   const levelUpVisible = activeScene === "runtime" && levelUpChoices.length > 0;
+  const levelUpPassCount = buildState.levelUpPassesRemaining;
+  const levelUpRerollCount = buildState.levelUpRerollsRemaining;
   const runtimeEntityBreakdown = useMemo(() => {
     const entityRoleCounts = {
       hostile: 0,
@@ -310,8 +312,9 @@ export function ActiveRuntimeShellContent({
     };
   }, [simulationState.entities]);
   const levelUpChoiceSignature = useMemo(
-    () => levelUpChoices.map((choice) => choice.id).join("|"),
-    [levelUpChoices]
+    () =>
+      `${levelUpRerollCount}:${levelUpPassCount}:${levelUpChoices.map((choice) => choice.id).join("|")}`,
+    [levelUpChoices, levelUpPassCount, levelUpRerollCount]
   );
 
   const handleToggleDiagnostics = useCallback(() => {
@@ -326,16 +329,28 @@ export function ActiveRuntimeShellContent({
   const handleCloseDiagnostics = useCallback(() => {
     onSetDebugPanelVisible(false);
   }, [onSetDebugPanelVisible]);
-  const handleSelectBuildChoice = useCallback(
-    (choiceIndex: number) => {
+  const triggerBuildAction = useCallback(
+    (buttonId: string) => {
       pendingButtonStepRef.current = simulationState.runtime.simulationStepsTotal;
       setRuntimeButtonPresses({
-        [`build.choice.${choiceIndex}`]: true
+        [buttonId]: true
       });
       simulationState.controls.stepOnce();
     },
     [simulationState.controls, simulationState.runtime.simulationStepsTotal]
   );
+  const handleSelectBuildChoice = useCallback(
+    (choiceIndex: number) => {
+      triggerBuildAction(`build.choice.${choiceIndex}`);
+    },
+    [triggerBuildAction]
+  );
+  const handleRerollBuildChoice = useCallback(() => {
+    triggerBuildAction("build.reroll");
+  }, [triggerBuildAction]);
+  const handlePassBuildChoice = useCallback(() => {
+    triggerBuildAction("build.pass");
+  }, [triggerBuildAction]);
 
   useEffect(() => {
     if (
@@ -492,6 +507,8 @@ export function ActiveRuntimeShellContent({
       hostileCount: runtimeEntityBreakdown.entityRoleCounts.hostile,
       hostileProfileCounts: runtimeEntityBreakdown.hostileProfileCounts,
       levelUpChoiceCount: levelUpChoices.length,
+      levelUpPassCount,
+      levelUpRerollCount,
       pickupCount: runtimeEntityBreakdown.entityRoleCounts.pickup,
       pickupKindCounts: runtimeEntityBreakdown.pickupKindCounts,
       pickupStackTotals: runtimeEntityBreakdown.pickupStackTotals,
@@ -538,6 +555,8 @@ export function ActiveRuntimeShellContent({
   }, [
     handleSelectBuildChoice,
     isMenuOpen,
+    levelUpPassCount,
+    levelUpRerollCount,
     levelUpVisible,
     simulationState.controls,
     simulationState.runtime.isPaused,
@@ -700,7 +719,11 @@ export function ActiveRuntimeShellContent({
           <RuntimeBuildChoicePanel
             choices={levelUpChoices}
             isMobile={isMobileLayout}
+            onPass={handlePassBuildChoice}
+            onReroll={handleRerollBuildChoice}
             onSelectChoice={handleSelectBuildChoice}
+            passCount={levelUpPassCount}
+            rerollCount={levelUpRerollCount}
           />
         ) : null}
 

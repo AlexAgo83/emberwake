@@ -332,11 +332,13 @@ const drawCombatEntity =
 const drawCombatEntityBars =
   ({
     attackChargeProgress,
+    barVisibility,
     healthRatio,
     radius,
     role
   }: {
     attackChargeProgress: number;
+    barVisibility: number;
     healthRatio: number;
     radius: number;
     role: SimulatedEntity["role"];
@@ -352,21 +354,21 @@ const drawCombatEntityBars =
     const baseX = -barWidth / 2;
 
     graphics.clear();
-    graphics.setFillStyle({ alpha: 0.82, color: 0x05070c });
+    graphics.setFillStyle({ alpha: 0.18 + barVisibility * 0.64, color: 0x05070c });
     graphics.roundRect(baseX, healthBarY, barWidth, barHeight, barRadius);
     graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
     graphics.fill();
 
-    graphics.setFillStyle({ alpha: 0.94, color: healthColor });
+    graphics.setFillStyle({ alpha: 0.18 + barVisibility * 0.76, color: healthColor });
     graphics.roundRect(baseX, healthBarY, barWidth * healthRatio, barHeight, barRadius);
     graphics.fill();
 
-    graphics.setFillStyle({ alpha: 0.9, color: chargeColor });
+    graphics.setFillStyle({ alpha: 0.16 + barVisibility * 0.74, color: chargeColor });
     graphics.roundRect(baseX, chargeBarY, barWidth * attackChargeProgress, barHeight, barRadius);
     graphics.fill();
 
     graphics.setStrokeStyle({
-      alpha: 0.55,
+      alpha: 0.12 + barVisibility * 0.44,
       color: 0xf6eee8,
       width: 1
     });
@@ -374,6 +376,27 @@ const drawCombatEntityBars =
     graphics.roundRect(baseX, chargeBarY, barWidth, barHeight, barRadius);
     graphics.stroke();
   };
+
+const resolveCombatBarVisibility = (
+  currentTick: number,
+  lastHealthChangeTick: number | null,
+  role: SimulatedEntity["role"]
+) => {
+  const baseline = role === "player" ? 0.24 : 0.14;
+
+  if (lastHealthChangeTick === null) {
+    return baseline;
+  }
+
+  const fadeTicks = 120;
+  const elapsedTicks = Math.max(0, currentTick - lastHealthChangeTick);
+
+  if (elapsedTicks >= fadeTicks) {
+    return baseline;
+  }
+
+  return baseline + (1 - elapsedTicks / fadeTicks) * (1 - baseline);
+};
 
 const drawPlayerFootCover =
   ({
@@ -476,18 +499,23 @@ function CombatEntityGraphic({
 
 const CombatEntityBars = memo(function CombatEntityBars({
   attackChargeProgress,
+  currentTick,
   healthRatio,
+  lastHealthChangeTick,
   radius,
   role
 }: {
   attackChargeProgress: number;
+  currentTick: number;
   healthRatio: number;
+  lastHealthChangeTick: number | null;
   radius: number;
   role: SimulatedEntity["role"];
 }) {
+  const barVisibility = resolveCombatBarVisibility(currentTick, lastHealthChangeTick, role);
   const draw = useMemo(
-    () => drawCombatEntityBars({ attackChargeProgress, healthRatio, radius, role }),
-    [attackChargeProgress, healthRatio, radius, role]
+    () => drawCombatEntityBars({ attackChargeProgress, barVisibility, healthRatio, radius, role }),
+    [attackChargeProgress, barVisibility, healthRatio, radius, role]
   );
 
   return <pixiGraphics draw={draw} />;
@@ -780,11 +808,13 @@ export function EntityScene({
                 />
                 <CombatEntityBars
                   attackChargeProgress={getAttackChargeProgress(entity, currentTick)}
+                  currentTick={currentTick}
                   healthRatio={
                     entity.combat.maxHealth > 0
                       ? Math.max(0, entity.combat.currentHealth / entity.combat.maxHealth)
                       : 0
                   }
+                  lastHealthChangeTick={entity.damageReactionState?.lastDamageTick ?? null}
                   radius={renderedRadius}
                   role={entity.role}
                 />
