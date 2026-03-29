@@ -1,10 +1,10 @@
 ## item_346_define_directional_entity_asset_contract_and_runtime_facing_resolution - Define directional entity asset contract and runtime facing resolution
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -84,3 +84,4 @@ flowchart LR
 # Notes
 - Split from `req_096_define_cardinal_directional_runtime_assets_for_player_and_hostile_entities`.
 - This slice intentionally stops before generating directional image sets or implementing contrast-aid treatments.
+- Delivered in `task_068` with `src/assets/entityDirectionalRuntime.ts`, `src/assets/entityDirectionalRuntime.test.ts`, the updated `entityVisualDefinitions` runtime-presentation contract, and the directional runtime file naming convention used by promoted assets such as `entity.player.primary.runtime.right.png`.

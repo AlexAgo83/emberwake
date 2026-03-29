@@ -1,10 +1,10 @@
 ## task_068_orchestrate_directional_entity_presentation_and_runtime_sprite_separation - Orchestrate directional entity presentation and runtime sprite separation
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: In Progress
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 0%
+> Progress: 45%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -35,8 +35,8 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm the directional entity contract, exception posture, sprite-separation scope, and linked acceptance criteria from `req_096`, `req_097`, `item_346`, `item_347`, `item_348`, `item_349`, `spec_001`, `adr_051`, and `adr_052`.
-- [ ] 2. Update the directional production pack and generation workflow so living entities can be authored and reviewed as directional sets while keeping reviewed single-face exceptions explicit.
+- [x] 1. Confirm the directional entity contract, exception posture, sprite-separation scope, and linked acceptance criteria from `req_096`, `req_097`, `item_346`, `item_347`, `item_348`, `item_349`, `spec_001`, `adr_051`, and `adr_052`.
+- [x] 2. Update the directional production pack and generation workflow so living entities can be authored and reviewed as directional sets while keeping reviewed single-face exceptions explicit.
 - [ ] 3. Implement the runtime-facing resolution posture and the bounded sprite-separation treatment for the covered entity and pickup surfaces.
 - [ ] 4. Validate the wave in actual runtime scenes, including directional credibility, `needle` exception posture, and dark-on-dark readability for player, hostiles, crystals, gold, and the remaining first-wave pickups.
 - [ ] 5. Checkpoint the wave in commit-ready states, validate project guardrails, and update linked Logics docs with actual accepted, deferred, and exception outcomes.
@@ -93,3 +93,4 @@ flowchart LR
 - [ ] Status is `Done` and progress is `100%`.
 
 # Report
+- Wave 1 checkpoint: directional entity contract, directional production pack, generation scripts, candidate gallery, curated directional outputs, and promoted `right/up/down` runtime assets landed as a coherent checkpoint before runtime rendering changes.

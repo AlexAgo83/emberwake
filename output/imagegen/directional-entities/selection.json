@@ -1,0 +1,14 @@
+{
+  "entity.player.primary.runtime.up": "candidates/entity.player.primary.runtime/up/variant-01.png",
+  "entity.player.primary.runtime.down": "candidates/entity.player.primary.runtime/down/variant-01.png",
+  "entity.hostile.anchor.runtime.up": "candidates/entity.hostile.anchor.runtime/up/variant-01.png",
+  "entity.hostile.anchor.runtime.down": "candidates/entity.hostile.anchor.runtime/down/variant-01.png",
+  "entity.hostile.drifter.runtime.up": "candidates/entity.hostile.drifter.runtime/up/variant-01.png",
+  "entity.hostile.drifter.runtime.down": "candidates/entity.hostile.drifter.runtime/down/variant-01.png",
+  "entity.hostile.rammer.runtime.up": "candidates/entity.hostile.rammer.runtime/up/variant-01.png",
+  "entity.hostile.rammer.runtime.down": "candidates/entity.hostile.rammer.runtime/down/variant-01.png",
+  "entity.hostile.sentinel.runtime.up": "candidates/entity.hostile.sentinel.runtime/up/variant-01.png",
+  "entity.hostile.sentinel.runtime.down": "candidates/entity.hostile.sentinel.runtime/down/variant-01.png",
+  "entity.hostile.watcher.runtime.up": "candidates/entity.hostile.watcher.runtime/up/variant-01.png",
+  "entity.hostile.watcher.runtime.down": "candidates/entity.hostile.watcher.runtime/down/variant-01.png"
+}

@@ -1,10 +1,10 @@
 ## item_347_define_directional_entity_production_pack_and_generation_workflow - Define directional entity production pack and generation workflow
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -84,3 +84,4 @@ flowchart LR
 # Notes
 - Split from `req_096_define_cardinal_directional_runtime_assets_for_player_and_hostile_entities`.
 - This slice intentionally stops before runtime-facing resolution and before dark-on-dark sprite separation work.
+- Delivered in `task_068` with `logics/specs/spec_002_define_directional_entity_asset_production_pack.md`, the directional workflow scripts under `scripts/assets/`, the curated candidate outputs under `output/imagegen/directional-entities/`, and the directional gallery/review posture.
