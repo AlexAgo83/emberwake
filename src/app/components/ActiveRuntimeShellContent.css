@@ -766,34 +766,53 @@
     position: fixed;
     left: var(--shell-offset-left);
     right: var(--shell-offset-right);
-    bottom: 0;
+    top: 50%;
     width: auto;
-    max-height: min(30rem, 64dvh);
-    overflow: auto;
-    overscroll-behavior: contain;
-    padding: 0.75rem 0.75rem calc(env(safe-area-inset-bottom, 0px) + 0.8rem);
+    max-height: none;
+    overflow: visible;
+    transform: translateY(-50%);
+    padding: 0.62rem 0.62rem calc(env(safe-area-inset-bottom, 0px) + 0.62rem);
     background:
       linear-gradient(180deg, rgba(12, 16, 21, 0.985), rgba(8, 11, 15, 0.97)),
       rgba(10, 12, 19, 0.9);
-    border-radius: 1rem 1rem 0 0;
-    box-shadow: 0 -18px 48px rgba(4, 8, 12, 0.5);
+    border-radius: 1rem;
+    box-shadow: 0 18px 48px rgba(4, 8, 12, 0.5);
   }
 
   .shell-menu__panel-header {
     align-items: start;
+    gap: 0.55rem;
+    padding: 0.1rem 0.05rem 0;
+  }
+
+  .shell-menu__panel-title {
+    font-size: 1rem;
+  }
+
+  .shell-menu__panel-detail {
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+
+  .shell-menu__panel-state {
+    min-height: 1.72rem;
+    padding: 0.3rem 0.55rem;
+    font-size: 0.58rem;
   }
 
   .shell-menu__hero-action {
-    padding: 0.85rem 0.88rem;
-    min-height: 4rem;
+    gap: 0.18rem;
+    padding: 0.72rem 0.76rem;
+    min-height: 3.3rem;
   }
 
   .shell-menu__hero-label {
-    font-size: 0.84rem;
+    font-size: 0.8rem;
   }
 
   .shell-menu__hero-detail {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
+    line-height: 1.28;
   }
 
   .shell-menu__section-title {
@@ -801,23 +820,28 @@
     font-size: 0.6rem;
   }
 
+  .shell-menu__section-body {
+    gap: 0.28rem;
+    padding: 0.28rem;
+  }
+
   .shell-menu__item {
-    min-height: 3.25rem;
-    padding: 0.92rem 0.88rem;
+    min-height: 2.9rem;
+    padding: 0.76rem 0.78rem;
   }
 
   .shell-menu__item-label {
-    font-size: 0.78rem;
+    font-size: 0.74rem;
   }
 
   .shell-menu__item-value {
-    font-size: 0.66rem;
+    font-size: 0.62rem;
   }
 
   .shell-menu__choice {
-    min-height: 2.8rem;
-    padding: 0.62rem 0.55rem;
-    font-size: 0.66rem;
+    min-height: 2.5rem;
+    padding: 0.54rem 0.5rem;
+    font-size: 0.62rem;
   }
 }
 

@@ -262,17 +262,11 @@ export const ShellMenu = memo(function ShellMenu({
     >
       <button
         aria-controls={menuId}
-        aria-expanded={layoutMode === "mobile" ? false : isOpen}
-        aria-haspopup={layoutMode === "mobile" ? undefined : "dialog"}
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
         aria-label={layoutMode === "mobile" ? "Menu" : undefined}
         className="shell-menu__trigger shell-control shell-control--button"
         onClick={() => {
-          if (layoutMode === "mobile") {
-            onOpenChange(false);
-            onShowPauseScene();
-            return;
-          }
-
           onOpenChange(!isOpen);
         }}
         type="button"

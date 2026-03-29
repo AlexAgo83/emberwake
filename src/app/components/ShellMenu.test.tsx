@@ -261,4 +261,18 @@ describe("ShellMenu", () => {
       "mobile"
     );
   });
+
+  it("opens the live shell menu on mobile instead of routing to the pause scene", () => {
+    const props = createProps({
+      isOpen: false,
+      layoutMode: "mobile"
+    });
+
+    render(<ShellMenu {...props} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Menu/i }));
+
+    expect(props.onOpenChange).toHaveBeenCalledWith(true);
+    expect(props.onShowPauseScene).not.toHaveBeenCalled();
+  });
 });

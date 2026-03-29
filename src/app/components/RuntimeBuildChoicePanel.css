@@ -1,6 +1,6 @@
 .runtime-build-choice {
   position: absolute;
-  top: var(--shell-offset-top);
+  top: 50%;
   left: 50%;
   z-index: 5;
   display: grid;
@@ -14,7 +14,7 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent),
     rgba(8, 12, 16, 0.96);
   box-shadow: var(--emberwake-shadow);
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   pointer-events: auto;
   overflow: hidden;
 }
@@ -107,7 +107,7 @@
 
 .runtime-build-choice__tracks {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
   min-height: 0;
   overflow: auto;
@@ -266,13 +266,23 @@
 }
 
 .runtime-build-choice--mobile {
+  top: var(--shell-offset-top);
   width: min(30rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  max-height: calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom));
   padding: 0.82rem;
+  transform: translateX(-50%);
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .runtime-build-choice--mobile .runtime-build-choice__header,
 .runtime-build-choice--mobile .runtime-build-choice__tracks {
   display: grid;
+}
+
+.runtime-build-choice--mobile .runtime-build-choice__tracks {
+  overflow: visible;
+  padding-right: 0;
 }
 
 .runtime-build-choice--mobile .runtime-build-choice__grid {
