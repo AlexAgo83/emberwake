@@ -1,10 +1,10 @@
 ## task_070_orchestrate_follow_up_graphics_settings_runtime_presentation_and_skill_icon_wave - Orchestrate follow-up graphics settings, runtime presentation, and skill icon wave
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 98%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -35,13 +35,13 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm the split acceptance criteria, current code paths, and execution order across items `356` through `362`.
-- [ ] 2. Deliver the crystal-variant completeness wave and the `output/imagegen` repo-hygiene wave in commit-ready states.
-- [ ] 3. Deliver the settings graphics expansion, safer defaults, parent-menu wording, player-foot effect, and debug-circle layering wave in commit-ready states.
-- [ ] 4. Deliver the boss cadence tuning plus the skill-icon generation, promotion, and integration wave in commit-ready states.
-- [ ] 5. Validate the combined wave in runtime and shell scenes, including settings discoverability, default toggle posture, crystal readability, boss cadence, player-foot polish, and icon-family consistency.
-- [ ] CHECKPOINT: leave each completed wave commit-ready and update linked Logics docs during the wave.
-- [ ] FINAL: Update related Logics docs.
+- [x] 1. Confirm the split acceptance criteria, current code paths, and execution order across items `356` through `362`.
+- [x] 2. Deliver the crystal-variant completeness wave and the `output/imagegen` repo-hygiene wave in commit-ready states.
+- [x] 3. Deliver the settings graphics expansion, safer defaults, parent-menu wording, player-foot effect, and debug-circle layering wave in commit-ready states.
+- [x] 4. Deliver the boss cadence tuning plus the skill-icon generation, promotion, and integration wave in commit-ready states.
+- [x] 5. Validate the combined wave in runtime and shell scenes, including settings discoverability, default toggle posture, crystal readability, boss cadence, player-foot polish, and icon-family consistency.
+- [x] CHECKPOINT: leave each completed wave commit-ready and update linked Logics docs during the wave.
+- [x] FINAL: Update related Logics docs.
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -88,10 +88,15 @@ flowchart LR
 - Manual runtime and shell review of crystal differentiation, settings defaults, seam-toggle behavior, player-foot polish, boss cadence, and skill icon coverage
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Crystal readability wave: kept one crystal asset family but made the three XP tiers visibly distinct in runtime through explicit accent tiers, color washes, and scale offsets that still preserve pickup gameplay.
+- Generated-output hygiene wave: `output/imagegen/**` remained ignored and the previously tracked imagegen working files were removed from git without deleting local operator files.
+- Settings/runtime wave: parent settings entries became `Controls` and `Display`, `debug circles` and `biome transitions` are both persisted but default to `off`, the seam effect is player-toggleable, the player now gets a subtle ash-cloud foot cover, and sprite-backed debug circles render behind assets.
+- Boss/icon wave: authored boss beats now fire every `120s`, and the full visible skill roster was generated, promoted, and wired through shell assets with fallback-safe resolution. The promoted roster covers `30` skill and fusion icons under `src/assets/shell/runtime`.
+- Validation: `npm run logics:lint`, `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build && npm run performance:validate`, and `npm run test:browser:smoke`.

@@ -1,10 +1,10 @@
 ## item_356_define_crystal_variant_completeness_and_reward_pickup_differentiation - Define crystal variant completeness and reward pickup differentiation
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 98%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

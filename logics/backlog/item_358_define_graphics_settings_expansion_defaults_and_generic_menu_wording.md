@@ -1,10 +1,10 @@
 ## item_358_define_graphics_settings_expansion_defaults_and_generic_menu_wording - Define graphics settings expansion defaults and generic menu wording
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 98%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
