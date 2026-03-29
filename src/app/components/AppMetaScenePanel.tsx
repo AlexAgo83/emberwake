@@ -420,14 +420,9 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
 
   return (
     <>
-      <aside
-        className="app-meta-scene"
-        aria-label={title}
-        data-scene={scene}
-        data-tone={sceneTone}
-      >
-        {scene === "main-menu" ? (
-          <div className="app-meta-scene__main-menu-backdrop" aria-hidden="true">
+      {scene === "main-menu" ? (
+        <div className="app-meta-scene__main-menu-backdrop-shell" aria-hidden="true">
+          <div className="app-meta-scene__main-menu-lane app-meta-scene__main-menu-lane--left">
             {mainMenuEnemyAssetUrl ? (
               <img
                 className="app-meta-scene__main-menu-character app-meta-scene__main-menu-character--enemy"
@@ -439,15 +434,23 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 }
               />
             ) : null}
+          </div>
+          <div className="app-meta-scene__main-menu-lane app-meta-scene__main-menu-lane--right">
             {mainMenuHeroAssetUrl ? (
               <img
                 className="app-meta-scene__main-menu-character app-meta-scene__main-menu-character--hero"
                 src={mainMenuHeroAssetUrl}
               />
             ) : null}
-            <div className="app-meta-scene__main-menu-veil" />
           </div>
-        ) : null}
+        </div>
+      ) : null}
+      <aside
+        className="app-meta-scene"
+        aria-label={title}
+        data-scene={scene}
+        data-tone={sceneTone}
+      >
         <div className="app-meta-scene__frame">
           <header className="app-meta-scene__header">
             <div className="app-meta-scene__header-copy">
@@ -479,7 +482,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 onClick={onOpenNewGame}
                 type="button"
               >
-                Start new game
+                Descend into the Abyss
               </button>
               <button
                 className="shell-control shell-control--button shell-control--button-quiet"
@@ -520,89 +523,91 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           </>
         ) : scene === "new-game" ? (
           <>
-            <div className="app-meta-scene__subsurface app-meta-scene__subsurface--ritual">
-              <p className="app-meta-scene__lead">Prime the next run before the ash moves.</p>
-              <div className="app-meta-scene__form">
-                <label className="app-meta-scene__field">
-                  <span className="app-meta-scene__field-label">Character name</span>
-                  <input
-                    className="app-meta-scene__field-input"
-                    maxLength={characterNameMaxLength}
-                    onChange={(event) => {
-                      onCharacterNameChange(event.target.value);
-                    }}
-                    type="text"
-                    value={pendingCharacterName}
-                  />
-                </label>
-                <p className="app-meta-scene__field-help">
-                  3-20 chars. Letters, numbers, spaces, apostrophes, and hyphens only.
-                </p>
-                {characterNameError ? (
-                  <p className="app-meta-scene__field-error" role="alert">
-                    {characterNameError}
+            <div className="app-meta-scene__scene-body app-meta-scene__scene-body--scroll">
+              <div className="app-meta-scene__subsurface app-meta-scene__subsurface--ritual">
+                <p className="app-meta-scene__lead">Prime the next run before the ash moves.</p>
+                <div className="app-meta-scene__form">
+                  <label className="app-meta-scene__field">
+                    <span className="app-meta-scene__field-label">Character name</span>
+                    <input
+                      className="app-meta-scene__field-input"
+                      maxLength={characterNameMaxLength}
+                      onChange={(event) => {
+                        onCharacterNameChange(event.target.value);
+                      }}
+                      type="text"
+                      value={pendingCharacterName}
+                    />
+                  </label>
+                  <p className="app-meta-scene__field-help">
+                    3-20 chars. Letters, numbers, spaces, apostrophes, and hyphens only.
                   </p>
-                ) : null}
+                  {characterNameError ? (
+                    <p className="app-meta-scene__field-error" role="alert">
+                      {characterNameError}
+                    </p>
+                  ) : null}
+                </div>
               </div>
-            </div>
-            <div className="app-meta-scene__world-grid" aria-label="World selection">
-              {worldCardViewModels.map((worldCard) => (
-                <button
-                  aria-pressed={worldCard.isSelected}
-                  className="app-meta-scene__world-card"
-                  data-locked={!worldCard.isUnlocked}
-                  data-selected={worldCard.isSelected}
-                  disabled={!worldCard.isUnlocked}
-                  key={worldCard.id}
-                  onClick={() => {
-                    onSelectWorldProfile(worldCard.id);
-                  }}
-                  type="button"
-                >
-                  <div
-                    className="app-meta-scene__world-card-art"
-                    style={
-                      worldCard.representativeAssetUrl
-                        ? { backgroundImage: `url(${worldCard.representativeAssetUrl})` }
-                        : undefined
-                    }
-                  />
-                  <div className="app-meta-scene__world-card-overlay" />
-                  <div className="app-meta-scene__world-card-copy">
-                    <div className="app-meta-scene__world-card-header">
-                      <span className="app-meta-scene__world-card-tier">World {worldCard.tier}</span>
-                      <span className="app-meta-scene__world-card-tag">
-                        {!worldCard.isUnlocked
-                          ? "Locked"
-                          : worldCard.isCompleted
-                            ? "Completed"
-                            : "Available"}
-                      </span>
-                    </div>
-                    <strong className="app-meta-scene__world-card-title">{worldCard.label}</strong>
-                    <p className="app-meta-scene__world-card-detail">{worldCard.worldDescription}</p>
-                    <div className="app-meta-scene__world-card-progress">
-                      <div className="app-meta-scene__world-card-progress-bar">
-                        <span
-                          className="app-meta-scene__world-card-progress-fill"
-                          style={{ width: `${worldCard.missionProgressRatio * 100}%` }}
-                        />
-                      </div>
-                      <div className="app-meta-scene__world-card-facts">
-                        <span>
-                          Progress {worldCard.missionItemCount}/3
-                        </span>
-                        <span>
-                          Attempts {worldCard.attemptCount}
-                        </span>
-                        <span>
-                          Clears {worldCard.completionCount}
+              <div className="app-meta-scene__world-grid" aria-label="World selection">
+                {worldCardViewModels.map((worldCard) => (
+                  <button
+                    aria-pressed={worldCard.isSelected}
+                    className="app-meta-scene__world-card"
+                    data-locked={!worldCard.isUnlocked}
+                    data-selected={worldCard.isSelected}
+                    disabled={!worldCard.isUnlocked}
+                    key={worldCard.id}
+                    onClick={() => {
+                      onSelectWorldProfile(worldCard.id);
+                    }}
+                    type="button"
+                  >
+                    <div
+                      className="app-meta-scene__world-card-art"
+                      style={
+                        worldCard.representativeAssetUrl
+                          ? { backgroundImage: `url(${worldCard.representativeAssetUrl})` }
+                          : undefined
+                      }
+                    />
+                    <div className="app-meta-scene__world-card-overlay" />
+                    <div className="app-meta-scene__world-card-copy">
+                      <div className="app-meta-scene__world-card-header">
+                        <span className="app-meta-scene__world-card-tier">World {worldCard.tier}</span>
+                        <span className="app-meta-scene__world-card-tag">
+                          {!worldCard.isUnlocked
+                            ? "Locked"
+                            : worldCard.isCompleted
+                              ? "Completed"
+                              : "Available"}
                         </span>
                       </div>
+                      <strong className="app-meta-scene__world-card-title">{worldCard.label}</strong>
+                      <p className="app-meta-scene__world-card-detail">{worldCard.worldDescription}</p>
+                      <div className="app-meta-scene__world-card-progress">
+                        <div className="app-meta-scene__world-card-progress-bar">
+                          <span
+                            className="app-meta-scene__world-card-progress-fill"
+                            style={{ width: `${worldCard.missionProgressRatio * 100}%` }}
+                          />
+                        </div>
+                        <div className="app-meta-scene__world-card-facts">
+                          <span>
+                            Progress {worldCard.missionItemCount}/3
+                          </span>
+                          <span>
+                            Attempts {worldCard.attemptCount}
+                          </span>
+                          <span>
+                            Clears {worldCard.completionCount}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                ))}
+              </div>
             </div>
             <div className="app-meta-scene__actions app-meta-scene__actions--new-game">
               <button
@@ -796,6 +801,114 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                   <p className="app-meta-scene__lead">Record the fall, then decide the next move.</p>
                 </div>
                 <div className="app-meta-scene__toggle-row" role="tablist" aria-label="Game over views">
+                  <button
+                    aria-selected={defeatView === "recap"}
+                    className="app-meta-scene__toggle"
+                    onClick={() => {
+                      setDefeatView("recap");
+                    }}
+                    role="tab"
+                    type="button"
+                  >
+                    Recap
+                  </button>
+                  <button
+                    aria-selected={defeatView === "skills"}
+                    className="app-meta-scene__toggle"
+                    onClick={() => {
+                      setDefeatView("skills");
+                    }}
+                    role="tab"
+                    type="button"
+                  >
+                    Skill ranking
+                  </button>
+                </div>
+                <div className="app-meta-scene__scene-body app-meta-scene__scene-body--scroll">
+                  {defeatView === "recap" ? (
+                    <dl className="app-meta-scene__facts">
+                      <div>
+                        <dt>Session</dt>
+                        <dd>{gameOverRecap?.playerName || playerName || defaultCharacterName}</dd>
+                      </div>
+                      <div>
+                        <dt>Survived</dt>
+                        <dd>{formatRunDuration(gameOverRecap?.ticksSurvived ?? 0)}</dd>
+                      </div>
+                      <div>
+                        <dt>Traversal</dt>
+                        <dd>{Math.round(gameOverRecap?.traversalDistanceWorldUnits ?? 0)} wu</dd>
+                      </div>
+                      <div>
+                        <dt>Hostile defeats</dt>
+                        <dd>{gameOverRecap?.hostileDefeats ?? 0}</dd>
+                      </div>
+                      <div>
+                        <dt>Gold</dt>
+                        <dd>{gameOverRecap?.goldCollected ?? 0}</dd>
+                      </div>
+                      <div>
+                        <dt>Final phase</dt>
+                        <dd>{gameOverRecap?.runPhaseLabel ?? progressionSnapshot?.phaseLabel ?? "Ember Watch"}</dd>
+                      </div>
+                    </dl>
+                  ) : (
+                    <div className="app-meta-scene__skill-ranking">
+                      {skillPerformanceSummaries.length > 0 ? (
+                        skillPerformanceSummaries.map((summary, summaryIndex) => {
+                          const rawDamageShare =
+                            totalSkillDamage > 0 ? (summary.totalDamage / totalSkillDamage) * 100 : 0;
+                          const damageShareLabel =
+                            rawDamageShare >= 10
+                              ? `${Math.round(rawDamageShare)}%`
+                              : `${rawDamageShare.toFixed(1)}%`;
+
+                          return (
+                            <article
+                              className="app-meta-scene__skill-row"
+                              key={summary.weaponId}
+                              style={
+                                {
+                                  "--damage-share": `${rawDamageShare}%`
+                                } as CSSProperties
+                              }
+                            >
+                              <div className="app-meta-scene__skill-rank">{summaryIndex + 1}</div>
+                              <div className="app-meta-scene__skill-copy">
+                                <div className="app-meta-scene__skill-copy-header">
+                                  <h3>{summary.label}</h3>
+                                  <span className="app-meta-scene__skill-share">{damageShareLabel}</span>
+                                </div>
+                                <p>
+                                  {summary.totalDamage} total damage · {summary.attacksTriggered} casts ·{" "}
+                                  {summary.hostileDefeats} defeats
+                                </p>
+                              </div>
+                            </article>
+                          );
+                        })
+                      ) : (
+                        <p className="app-meta-scene__lead">No reliable skill performance sample was captured for this run.</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div className="app-meta-scene__actions">
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onReturnToMainMenu}
+                    type="button"
+                  >
+                    Back to main menu
+                  </button>
+                </div>
+              </>
+            ) : scene === "victory" ? (
+              <>
+                <div className="app-meta-scene__subsurface app-meta-scene__subsurface--outcome">
+                  <p className="app-meta-scene__lead">The mission clear has been recorded. Review the run before returning to the shell.</p>
+                </div>
+                <div className="app-meta-scene__toggle-row" role="tablist" aria-label="Victory views">
                   <button
                     aria-selected={defeatView === "recap"}
                     className="app-meta-scene__toggle"

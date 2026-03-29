@@ -15,6 +15,7 @@ type ShellMenuProps = {
   isFullscreen: boolean;
   isFullscreenSupported: boolean;
   layoutMode: LayoutMode;
+  onAbandonRun: () => void;
   onEnterFullscreen: () => void;
   onInstall: () => void;
   onOpenChange: (isOpen: boolean) => void;
@@ -139,6 +140,7 @@ export const ShellMenu = memo(function ShellMenu({
   isFullscreen,
   isFullscreenSupported,
   layoutMode,
+  onAbandonRun,
   onEnterFullscreen,
   onInstall,
   onOpenChange,
@@ -340,6 +342,18 @@ export const ShellMenu = memo(function ShellMenu({
                     <span className="shell-menu__item-label">Main menu</span>
                     <span className="shell-menu__item-value">Session hub</span>
                   </button>
+                  {activeScene === "runtime" || activeScene === "pause" || activeScene === "settings" ? (
+                    <button
+                      className="shell-menu__item shell-menu__item--action shell-menu__item--alert"
+                      onClick={() => {
+                        runAction(onAbandonRun);
+                      }}
+                      type="button"
+                    >
+                      <span className="shell-menu__item-label">Abandon run</span>
+                      <span className="shell-menu__item-value">Count this attempt</span>
+                    </button>
+                  ) : null}
                   <button
                     className="shell-menu__item shell-menu__item--action shell-menu__item--secondary"
                     disabled={!isFullscreenSupported || isFullscreen}

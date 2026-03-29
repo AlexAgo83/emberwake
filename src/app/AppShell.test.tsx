@@ -5,21 +5,44 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const usePwaUpdatePromptMock = vi.fn();
 
 vi.mock("./components/AppMetaScenePanel", () => ({
-  AppMetaScenePanel: ({ onAbandonRun }: { onAbandonRun: () => void }) => (
-    <button onClick={onAbandonRun} type="button">
-      Abandon run
-    </button>
+  AppMetaScenePanel: ({
+    scene,
+    onReturnToMainMenu,
+    onAbandonRun,
+    onResumeRuntime
+  }: {
+    scene: string;
+    onReturnToMainMenu: () => void;
+    onAbandonRun: () => void;
+    onResumeRuntime: () => void;
+  }) => (
+    <>
+      <p>Scene: {scene}</p>
+      <button onClick={onReturnToMainMenu} type="button">
+        Back to main menu
+      </button>
+      <button onClick={onAbandonRun} type="button">
+        Abandon run
+      </button>
+      <button onClick={onResumeRuntime} type="button">
+        Resume runtime
+      </button>
+    </>
   )
 }));
 
 vi.mock("./components/ActiveRuntimeShellContent", () => ({
   ActiveRuntimeShellContent: ({
+    isMenuOpen,
     metaOverlay,
     onBossSpawnToast,
+    onRuntimeOutcomeChange,
     onRuntimeStateChange
   }: {
+    isMenuOpen: boolean;
     metaOverlay: React.ReactNode;
     onBossSpawnToast: () => void;
+    onRuntimeOutcomeChange: (runtimeOutcome: unknown) => void;
     onRuntimeStateChange: (gameState: unknown) => void;
   }) => {
     useEffect(() => {
@@ -54,6 +77,22 @@ vi.mock("./components/ActiveRuntimeShellContent", () => ({
         <button onClick={onBossSpawnToast} type="button">
           Spawn boss
         </button>
+        <button
+          onClick={() => {
+            onRuntimeOutcomeChange({
+              detail: "Victory outcome",
+              emittedAtTick: 42,
+              kind: "victory",
+              phaseId: null,
+              shellScene: "victory",
+              skillPerformanceSummaries: []
+            });
+          }}
+          type="button"
+        >
+          Emit victory
+        </button>
+        <p>{isMenuOpen ? "Shell menu open" : "Shell menu closed"}</p>
         {metaOverlay}
       </>
     );
@@ -231,5 +270,31 @@ describe("AppShell", () => {
     fireEvent.click(screen.getByRole("button", { name: /spawn boss/i }));
 
     expect(await screen.findByText("Boss incoming.")).toBeInTheDocument();
+  });
+
+  it("opens the shell menu on Escape while the runtime is live", async () => {
+    const { AppShell } = await import("./AppShell");
+
+    render(<AppShell />);
+    fireEvent.click(screen.getByRole("button", { name: /resume runtime/i }));
+
+    expect(screen.getByText("Shell menu closed")).toBeInTheDocument();
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(await screen.findByText("Shell menu open")).toBeInTheDocument();
+  });
+
+  it("returns from victory to the main menu instead of staying pinned to the outcome scene", async () => {
+    const { AppShell } = await import("./AppShell");
+
+    render(<AppShell />);
+
+    fireEvent.click(screen.getByRole("button", { name: /emit victory/i }));
+    expect(await screen.findByText("Scene: victory")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: /back to main menu/i }));
+
+    expect(await screen.findByText("Scene: main-menu")).toBeInTheDocument();
   });
 });

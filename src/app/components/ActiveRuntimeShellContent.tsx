@@ -52,6 +52,7 @@ import {
 
 type ActiveRuntimeShellContentProps = {
   activeScene: AppSceneId;
+  onAbandonRun: () => void;
   canInstall: boolean;
   cycleWorldSeed: () => void;
   desktopControlBindings: DesktopControlBindings;
@@ -129,6 +130,7 @@ const projectWorldPointToScreen = ({
 
 export function ActiveRuntimeShellContent({
   activeScene,
+  onAbandonRun,
   canInstall,
   cycleWorldSeed,
   desktopControlBindings,
@@ -803,6 +805,7 @@ export function ActiveRuntimeShellContent({
             isFullscreen={isFullscreen}
             isFullscreenSupported={isFullscreenSupported}
             layoutMode={viewport.layoutMode}
+            onAbandonRun={onAbandonRun}
             onEnterFullscreen={onEnterFullscreen}
             onInstall={onInstall}
             onOpenChange={onMenuOpenChange}
@@ -859,10 +862,17 @@ export function ActiveRuntimeShellContent({
             style={{
               left: guidanceArrowPresentation.left,
               top: guidanceArrowPresentation.top,
-              transform: `translate(-50%, -50%) rotate(${guidanceArrowPresentation.angle}rad)`
+              transform: "translate(-50%, -50%)"
             }}
           >
-            <span className="runtime-guidance-arrow__glyph">➜</span>
+            <span
+              className="runtime-guidance-arrow__glyph"
+              style={{
+                transform: `rotate(${guidanceArrowPresentation.angle}rad)`
+              }}
+            >
+              ➜
+            </span>
             <span className="runtime-guidance-arrow__label">
               {guidanceArrowPresentation.label}
             </span>

@@ -26,6 +26,7 @@
   font-size: 1.2rem;
   line-height: 1;
   box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.24);
+  transform-origin: center;
 }
 
 .runtime-guidance-arrow[data-tone="miniboss"] .runtime-guidance-arrow__glyph {

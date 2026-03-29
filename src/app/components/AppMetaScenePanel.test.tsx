@@ -59,8 +59,10 @@ describe("AppMetaScenePanel", () => {
 
     expect(screen.getByLabelText("Emberwake")).toBeInTheDocument();
     const actionButtons = screen.getAllByRole("button");
-    const newGameIndex = actionButtons.findIndex((button) => button.textContent?.match(/Start new game/i));
-    expect(screen.getByRole("button", { name: /Start new game/i })).toBeInTheDocument();
+    const newGameIndex = actionButtons.findIndex((button) =>
+      button.textContent?.match(/Descend into the Abyss/i)
+    );
+    expect(screen.getByRole("button", { name: /Descend into the Abyss/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Skills/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Bestiary/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Changelogs/i })).toBeInTheDocument();
@@ -346,13 +348,41 @@ describe("AppMetaScenePanel", () => {
     render(
       <AppMetaScenePanel
         {...createProps({
+          gameOverRecap: {
+            defeatDetail: "Traversal goal reached without shell-owned defeat handling leaking into gameplay internals.",
+            goldCollected: 12,
+            hostileDefeats: 19,
+            playerName: "Wanderer",
+            runPhaseLabel: "Kill Grid",
+            skillPerformanceSummaries: [
+              {
+                attacksTriggered: 14,
+                fusionId: null,
+                hostileDefeats: 6,
+                label: "Ash Lash",
+                totalDamage: 420,
+                weaponId: "ash-lash"
+              }
+            ],
+            ticksSurvived: 3600,
+            traversalDistanceWorldUnits: 12800
+          },
           runtimeOutcome: {
             detail: "Traversal goal reached without shell-owned defeat handling leaking into gameplay internals.",
             emittedAtTick: 42,
             kind: "victory",
             phaseId: null,
             shellScene: "victory",
-            skillPerformanceSummaries: []
+            skillPerformanceSummaries: [
+              {
+                attacksTriggered: 14,
+                fusionId: null,
+                hostileDefeats: 6,
+                label: "Ash Lash",
+                totalDamage: 420,
+                weaponId: "ash-lash"
+              }
+            ]
           },
           scene: "victory"
         })}
@@ -361,7 +391,12 @@ describe("AppMetaScenePanel", () => {
 
     expect(screen.getByLabelText("Victory")).toBeInTheDocument();
     expect(screen.getByText(/Traversal goal reached/i)).toBeInTheDocument();
-    expect(screen.getByText(/gameplay outcome victory/i)).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /Recap/i })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /Skill ranking/i })).toBeInTheDocument();
+    expect(screen.getByText("Wanderer")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Back to main menu/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Continue runtime/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Settings/i })).not.toBeInTheDocument();
   });
 
   it("renders a game-over recap and routes back to the main menu", () => {

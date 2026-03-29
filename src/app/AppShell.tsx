@@ -257,7 +257,7 @@ export function AppShell() {
     setPendingCharacterName(value);
   }, []);
   const handleReturnToMainMenu = useCallback(() => {
-    if (activeScene === "defeat") {
+    if (activeScene === "defeat" || activeScene === "victory") {
       endActiveSession();
       setGameOverRecap(null);
       setRuntimeOutcome(null);
@@ -310,7 +310,7 @@ export function AppShell() {
       }
 
       event.preventDefault();
-      showMainMenuScene();
+      openMenu();
     };
 
     window.addEventListener("keydown", handleWindowKeyDown);
@@ -318,7 +318,7 @@ export function AppShell() {
     return () => {
       window.removeEventListener("keydown", handleWindowKeyDown);
     };
-  }, [activeScene, isMenuOpen, showMainMenuScene]);
+  }, [activeScene, isMenuOpen, openMenu]);
   const hasRuntimeLayer = runtimeSession.hasActiveSession;
   useEffect(() => {
     settledRunRewardKeyRef.current = null;
@@ -393,7 +393,10 @@ export function AppShell() {
       }
     }
 
-    if (gameState.systems.outcome.kind === "defeat") {
+    if (
+      gameState.systems.outcome.kind === "defeat" ||
+      gameState.systems.outcome.kind === "victory"
+    ) {
       updateGameOverRecap(gameState);
     }
   }, [runtimeSession.sessionRevision, settleConcludedRun, updateGameOverRecap]);
@@ -517,6 +520,7 @@ export function AppShell() {
         >
           <LazyActiveRuntimeShellContent
             activeScene={activeScene}
+            onAbandonRun={handleAbandonRun}
             canInstall={canInstall}
             cycleWorldSeed={cycleWorldSeed}
             desktopControlBindings={desktopControlBindings}

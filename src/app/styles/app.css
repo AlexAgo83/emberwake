@@ -281,6 +281,18 @@ html[data-app-display-mode="browser"] .app-shell {
   min-height: 0;
 }
 
+.app-meta-scene[data-scene="new-game"] {
+  width: min(44rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  height: min(44rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 2rem));
+  overflow: hidden;
+}
+
+.app-meta-scene[data-scene="new-game"] .app-meta-scene__frame {
+  height: 100%;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+}
+
 .app-meta-scene[data-scene="settings"] {
   width: min(42rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
   height: min(43rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 2rem));
@@ -308,55 +320,72 @@ html[data-app-display-mode="browser"] .app-shell {
   grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
-.app-meta-scene[data-scene="defeat"] {
+.app-meta-scene[data-scene="defeat"],
+.app-meta-scene[data-scene="victory"] {
   height: min(42rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 2rem));
   overflow: hidden;
 }
 
-.app-meta-scene[data-scene="defeat"] .app-meta-scene__frame {
+.app-meta-scene[data-scene="defeat"] .app-meta-scene__frame,
+.app-meta-scene[data-scene="victory"] .app-meta-scene__frame {
   height: 100%;
   grid-template-rows: auto auto auto minmax(0, 1fr) auto;
 }
 
 .app-meta-scene[data-scene="main-menu"] {
   width: min(48rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  overflow: hidden;
 }
 
-.app-meta-scene__main-menu-backdrop {
-  position: absolute;
+.app-meta-scene__main-menu-backdrop-shell {
+  position: fixed;
   inset: 0;
-  overflow: hidden;
+  z-index: 3;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+  align-items: end;
+  padding:
+    calc(var(--shell-offset-top) + 1rem)
+    calc(var(--shell-offset-right) + 1rem)
+    calc(var(--shell-offset-bottom) + 2.5rem)
+    calc(var(--shell-offset-left) + 1rem);
   pointer-events: none;
 }
 
+.app-meta-scene__main-menu-lane {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.app-meta-scene__main-menu-lane {
+  display: block;
+}
+
 .app-meta-scene__main-menu-character {
+  --main-menu-character-size: min(17rem, 16vw);
   position: absolute;
-  bottom: -1.2rem;
-  width: min(28rem, 54%);
-  max-height: 90%;
+  bottom: 0;
+  width: var(--main-menu-character-size);
+  max-height: 34vh;
   object-fit: contain;
-  opacity: 0.88;
-  filter: saturate(1.02) brightness(0.92);
+  opacity: 0.94;
+  filter: saturate(1.04) brightness(0.94);
 }
 
 .app-meta-scene__main-menu-character--enemy {
-  left: -2.4rem;
-  transform: scale(var(--main-menu-character-scale, 1));
+  left: 0;
+  transform: translateX(-8%) scale(var(--main-menu-character-scale, 1));
   transform-origin: left bottom;
 }
 
 .app-meta-scene__main-menu-character--hero {
-  right: -2rem;
-  transform: scaleX(-1);
+  right: 0;
+  transform: translateX(-100%) scaleX(-1);
   transform-origin: right bottom;
-}
-
-.app-meta-scene__main-menu-veil {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at center, rgba(6, 9, 12, 0.22), rgba(6, 9, 12, 0.62) 48%, rgba(6, 9, 12, 0.82) 100%),
-    linear-gradient(90deg, rgba(6, 9, 12, 0.62), transparent 24%, transparent 76%, rgba(6, 9, 12, 0.62));
 }
 
 .app-meta-scene__header {
@@ -608,6 +637,11 @@ html[data-app-display-mode="browser"] .app-shell {
 .app-meta-scene__world-grid {
   display: grid;
   gap: 0.8rem;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 0.2rem;
+  align-content: start;
 }
 
 .app-meta-scene__world-card {
@@ -1275,6 +1309,31 @@ html[data-app-display-mode="browser"] .app-shell {
 @media (max-width: 900px) {
   .app-meta-scene {
     width: min(100%, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
+  }
+
+  .app-meta-scene[data-scene="main-menu"] {
+    overflow: visible;
+  }
+
+  .app-meta-scene__main-menu-backdrop-shell {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+    padding:
+      calc(var(--shell-offset-top) + 0.75rem)
+      calc(var(--shell-offset-right) + 0.5rem)
+      calc(var(--shell-offset-bottom) + 1.5rem)
+      calc(var(--shell-offset-left) + 0.5rem);
+  }
+
+  .app-meta-scene__main-menu-character {
+    --main-menu-character-size: min(12rem, 28vw);
+    width: var(--main-menu-character-size);
+    max-height: 20vh;
+  }
+
+  .app-meta-scene__main-menu-character--enemy {
+    transform: translateX(-4%) scale(var(--main-menu-character-scale, 1));
   }
 
   .app-meta-scene__header,

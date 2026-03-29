@@ -10,6 +10,53 @@ import { resolveAssetUrl } from "@src/assets/assetResolver";
 import type { CodexProgressionSnapshot } from "./AppMetaScenePanel";
 import { SkillIcon } from "./SkillIcon";
 
+const bossCodexEntries = [
+  {
+    assetId: "entity.hostile.watcher.runtime",
+    codexId: "watchglass-prime",
+    fallbackKnownIds: ["watchglass"],
+    label: "Watchglass Prime",
+    roleLine: "Timed mini-boss execution shell",
+    shellLine: "A scheduled pressure spike that opens with heavier armor and a harsher firing lane."
+  },
+  {
+    assetId: "entity.hostile.sentinel.runtime",
+    codexId: "mission-boss-sentinel",
+    fallbackKnownIds: ["sentinel-husk"],
+    label: "Sentinel Tyrant",
+    roleLine: "Mission boss frontline breaker",
+    shellLine: "The first mission shell escalates the husk line into a plated pursuit anchor."
+  },
+  {
+    assetId: "entity.hostile.watcher.runtime",
+    codexId: "mission-boss-watchglass",
+    fallbackKnownIds: ["watchglass", "watchglass-prime"],
+    label: "Abyss Watchglass",
+    roleLine: "Mission boss beam director",
+    shellLine: "A mission-grade watcher that keeps pressure by pinning approach lines with red signal fire."
+  },
+  {
+    assetId: "entity.hostile.rammer.runtime",
+    codexId: "mission-boss-rammer",
+    fallbackKnownIds: ["shock-ram"],
+    label: "Ruin Ram",
+    roleLine: "Mission boss charge brute",
+    shellLine: "The final mission brute widens its telegraph and hits harder than standard charge frames."
+  }
+] as const;
+
+const bestiaryEntries = [
+  ...creatureCodexEntries.map((creatureEntry) => ({
+    assetId: entityVisualDefinitions[creatureEntry.visualKind].assetId,
+    codexId: creatureEntry.codexId,
+    fallbackKnownIds: [] as string[],
+    label: creatureEntry.label,
+    roleLine: creatureEntry.roleLine,
+    shellLine: creatureEntry.shellLine
+  })),
+  ...bossCodexEntries
+];
+
 type CodexArchiveSceneProps = {
   progressionSnapshot: CodexProgressionSnapshot | null;
   scene: "bestiary" | "grimoire";
@@ -175,12 +222,18 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
   return (
     <>
       <div className="app-meta-scene__codex-cards app-meta-scene__codex-cards--bestiary">
-        {creatureCodexEntries.map((creatureEntry) => {
-          const isKnown = discoveredCreatureIds.has(creatureEntry.codexId);
-          const defeatCount = progressionSnapshot?.creatureDefeatCounts?.[creatureEntry.codexId] ?? 0;
-          const creatureAssetUrl = resolveAssetUrl(
-            entityVisualDefinitions[creatureEntry.visualKind].assetId
-          );
+        {bestiaryEntries.map((creatureEntry) => {
+          const isKnown =
+            discoveredCreatureIds.has(creatureEntry.codexId) ||
+            creatureEntry.fallbackKnownIds.some((fallbackKnownId) =>
+              discoveredCreatureIds.has(fallbackKnownId)
+            );
+          const defeatCount =
+            progressionSnapshot?.creatureDefeatCounts?.[creatureEntry.codexId] ??
+            creatureEntry.fallbackKnownIds.reduce((currentCount, fallbackKnownId) => {
+              return currentCount + (progressionSnapshot?.creatureDefeatCounts?.[fallbackKnownId] ?? 0);
+            }, 0);
+          const creatureAssetUrl = resolveAssetUrl(creatureEntry.assetId);
 
           return (
             <article

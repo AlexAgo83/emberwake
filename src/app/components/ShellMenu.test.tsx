@@ -14,6 +14,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof ShellMenu>> 
   isFullscreen: false,
   isFullscreenSupported: true,
   layoutMode: "large-screen" as const,
+  onAbandonRun: vi.fn(),
   onEnterFullscreen: vi.fn(),
   onInstall: vi.fn(),
   onOpenChange: vi.fn(),
@@ -202,6 +203,17 @@ describe("ShellMenu", () => {
     fireEvent.click(screen.getByRole("button", { name: /Main menu/i }));
 
     expect(props.onShowMainMenuScene).toHaveBeenCalledTimes(1);
+    expect(props.onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("surfaces abandon run directly from the session menu while live", () => {
+    const props = createProps();
+
+    render(<ShellMenu {...props} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /Abandon run/i }));
+
+    expect(props.onAbandonRun).toHaveBeenCalledTimes(1);
     expect(props.onOpenChange).toHaveBeenCalledWith(false);
   });
 
