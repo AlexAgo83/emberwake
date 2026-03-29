@@ -345,7 +345,7 @@ const drawCombatEntityBars =
     const barWidth = Math.max(36, radius * 2.35);
     const barHeight = 5;
     const barRadius = 2;
-    const healthBarY = -radius - 18;
+    const healthBarY = -radius - 32;
     const chargeBarY = healthBarY + 7;
     const healthColor = role === "player" ? 0x7dff9b : 0xff7a88;
     const chargeColor = role === "player" ? 0x5ce5ff : 0xffd76c;
@@ -387,7 +387,7 @@ const drawPlayerFootCover =
   }) =>
   (graphics: Graphics) => {
     const clampedMotionIntensity = Math.min(1, Math.max(0, motionIntensity));
-    const cloudY = radius * 0.72;
+    const cloudY = radius * 1.05;
     const pulse = Math.sin(currentTick * 0.22) * (2 + clampedMotionIntensity * 1.8);
     const drift = Math.cos(currentTick * 0.18) * (1 + clampedMotionIntensity * 1.5);
     const fillAlpha = 0.08 + clampedMotionIntensity * 0.14;
