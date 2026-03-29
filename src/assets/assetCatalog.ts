@@ -59,13 +59,18 @@ export const assetCatalog = {
       label: "Virtual stick overlay",
       stage: "runtime"
     }
-  }
+  },
+  shell: {}
 } as const;
 
 export type EntityAssetId = keyof typeof assetCatalog.entities;
 export type MapAssetId = keyof typeof assetCatalog.map;
 export type OverlayAssetId = keyof typeof assetCatalog.overlays;
-export type AssetId = EntityAssetId | MapAssetId | OverlayAssetId;
+export type ShellAssetId = keyof typeof assetCatalog.shell;
+export type AssetId = EntityAssetId | MapAssetId | OverlayAssetId | ShellAssetId;
 
 export const isAssetId = (assetId: string): assetId is AssetId =>
-  assetId in assetCatalog.entities || assetId in assetCatalog.map || assetId in assetCatalog.overlays;
+  assetId in assetCatalog.entities ||
+  assetId in assetCatalog.map ||
+  assetId in assetCatalog.overlays ||
+  assetId in assetCatalog.shell;
