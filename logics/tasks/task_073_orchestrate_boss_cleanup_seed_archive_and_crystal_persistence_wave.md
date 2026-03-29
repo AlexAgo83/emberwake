@@ -1,10 +1,10 @@
 ## task_073_orchestrate_boss_cleanup_seed_archive_and_crystal_persistence_wave - Orchestrate boss, cleanup, seed, archive, and crystal persistence wave
-> From version: 0.6.1+c2d57bc
+> From version: 0.6.1+b927df6
 > Schema version: 1.0
-> Status: Draft
+> Status: In Progress
 > Understanding: 99%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 20%
 > Complexity: High
 > Theme: Systems
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -40,7 +40,7 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Complete the unique boss asset roster, generation, promotion, and runtime/shell integration wave from `item_381` to `item_383`.
+- [x] 1. Complete the unique boss asset roster, generation, promotion, and runtime/shell integration wave from `item_381` to `item_383`.
 - [ ] 2. Implement terminal-run cleanup ownership and teardown validation from `item_384` and `item_385`.
 - [ ] 3. Implement derived map seed contract and runtime-session bootstrap from `item_386` and `item_387`.
 - [ ] 4. Implement the three-crystal asset wave from `item_388` and `item_389`.
@@ -103,4 +103,4 @@ flowchart LR
 - [ ] Status is `Done` and progress is `100%`.
 
 # Report
-- Pending implementation.
+- Checkpoint A completed: unique boss assets were generated, promoted, and integrated into runtime plus shell surfaces.

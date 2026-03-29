@@ -118,7 +118,7 @@ const hostileSpawnProfiles: Record<HostileProfileId, HostileSpawnProfile> = {
     moveSpeedMultiplier: 0.92,
     renderLayer: 106,
     tint: "#ffd074",
-    visualKind: "debug-watcher",
+    visualKind: "boss-watchglass-prime",
     visualScaleMultiplier: 1.5
   }
 };

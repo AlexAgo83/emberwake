@@ -62,6 +62,38 @@ export const entityVisualDefinitions = {
       spriteSeparationCategory: "hostile"
     }
   },
+  "boss-abyss-watchglass": {
+    assetId: "entity.boss.abyss-watchglass.runtime",
+    label: "Abyss Watchglass",
+    runtimePresentation: {
+      facingMode: "lateral-mirror-left",
+      spriteSeparationCategory: "hostile"
+    }
+  },
+  "boss-ruin-ram": {
+    assetId: "entity.boss.ruin-ram.runtime",
+    label: "Ruin Ram",
+    runtimePresentation: {
+      facingMode: "lateral-mirror-left",
+      spriteSeparationCategory: "hostile"
+    }
+  },
+  "boss-sentinel-tyrant": {
+    assetId: "entity.boss.sentinel-tyrant.runtime",
+    label: "Sentinel Tyrant",
+    runtimePresentation: {
+      facingMode: "lateral-mirror-left",
+      spriteSeparationCategory: "hostile"
+    }
+  },
+  "boss-watchglass-prime": {
+    assetId: "entity.boss.watchglass-prime.runtime",
+    label: "Watchglass Prime",
+    runtimePresentation: {
+      facingMode: "lateral-mirror-left",
+      spriteSeparationCategory: "hostile"
+    }
+  },
   "pickup-gold": {
     assetId: "entity.pickup.gold.runtime",
     label: "Gold pickup",
@@ -73,6 +105,30 @@ export const entityVisualDefinitions = {
   "pickup-crystal": {
     assetId: "entity.pickup.crystal.runtime",
     label: "Crystal pickup",
+    runtimePresentation: {
+      facingMode: "static",
+      spriteSeparationCategory: "pickup"
+    }
+  },
+  "pickup-crystal-high": {
+    assetId: "entity.pickup.crystal.high.runtime",
+    label: "High crystal pickup",
+    runtimePresentation: {
+      facingMode: "static",
+      spriteSeparationCategory: "pickup"
+    }
+  },
+  "pickup-crystal-low": {
+    assetId: "entity.pickup.crystal.low.runtime",
+    label: "Low crystal pickup",
+    runtimePresentation: {
+      facingMode: "static",
+      spriteSeparationCategory: "pickup"
+    }
+  },
+  "pickup-crystal-mid": {
+    assetId: "entity.pickup.crystal.mid.runtime",
+    label: "Mid crystal pickup",
     runtimePresentation: {
       facingMode: "static",
       spriteSeparationCategory: "pickup"

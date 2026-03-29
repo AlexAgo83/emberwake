@@ -514,22 +514,29 @@ const missionBossPresentationMap: Record<
   {
     baseProfileId: HostileProfileId;
     tint: string;
+    visualKind:
+      | "boss-abyss-watchglass"
+      | "boss-ruin-ram"
+      | "boss-sentinel-tyrant";
     visualScaleMultiplier: number;
   }
 > = {
   "mission-boss-rammer": {
     baseProfileId: "shock-ram",
     tint: "#ff6f61",
+    visualKind: "boss-ruin-ram",
     visualScaleMultiplier: 1.7
   },
   "mission-boss-sentinel": {
     baseProfileId: "sentinel-husk",
     tint: "#ff9f7c",
+    visualKind: "boss-sentinel-tyrant",
     visualScaleMultiplier: 1.72
   },
   "mission-boss-watchglass": {
     baseProfileId: "watchglass-prime",
     tint: "#ff8a72",
+    visualKind: "boss-abyss-watchglass",
     visualScaleMultiplier: 1.74
   }
 };
@@ -566,7 +573,7 @@ const createMissionBossEntity = (
       id: `entity:mission-boss:${stageIndex}`,
       renderLayer: baseProfile.renderLayer + 4,
       visual: {
-        kind: baseProfile.visualKind,
+        kind: presentation.visualKind,
         tint: presentation.tint
       },
       worldPosition

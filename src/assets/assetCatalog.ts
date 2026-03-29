@@ -38,6 +38,30 @@ export const assetCatalog = {
       label: "Anchor hostile runtime",
       stage: "runtime"
     },
+    "entity.boss.abyss-watchglass.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.hostile.watcher.runtime",
+      label: "Abyss Watchglass boss runtime",
+      stage: "runtime"
+    },
+    "entity.boss.ruin-ram.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.hostile.rammer.runtime",
+      label: "Ruin Ram boss runtime",
+      stage: "runtime"
+    },
+    "entity.boss.sentinel-tyrant.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.hostile.sentinel.runtime",
+      label: "Sentinel Tyrant boss runtime",
+      stage: "runtime"
+    },
+    "entity.boss.watchglass-prime.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.hostile.watcher.runtime",
+      label: "Watchglass Prime boss runtime",
+      stage: "runtime"
+    },
     "entity.hostile.drifter.runtime": {
       domain: "entities",
       fallbackAssetId: "entity.debug.drifter.placeholder",
@@ -72,6 +96,24 @@ export const assetCatalog = {
       domain: "entities",
       fallbackAssetId: "entity.debug.anchor.placeholder",
       label: "Cache pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.crystal.high.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.crystal.runtime",
+      label: "High crystal pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.crystal.low.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.crystal.runtime",
+      label: "Low crystal pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.crystal.mid.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.crystal.runtime",
+      label: "Mid crystal pickup runtime",
       stage: "runtime"
     },
     "entity.pickup.crystal.runtime": {

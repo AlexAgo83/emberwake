@@ -1,10 +1,10 @@
 ## task_072_orchestrate_unique_boss_asset_generation_and_integration_wave - Orchestrate unique boss asset generation and integration wave
-> From version: 0.6.1+cad3c04
+> From version: 0.6.1+b927df6
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 99%
-> Confidence: 97%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Graphics
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -34,13 +34,13 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm the exact boss roster and the unique identity posture expected for each boss.
-- [ ] 2. Define or refine the boss-specific prompt pack and generate candidate assets for all boss types in scope.
-- [ ] 3. Curate and promote the selected boss assets into runtime asset paths.
-- [ ] 4. Integrate the promoted boss assets into runtime boss presentation and shell surfaces such as the bestiary and boss-inclusive menu rosters.
-- [ ] 5. Validate runtime and shell coverage, then update linked Logics docs.
-- [ ] CHECKPOINT: leave generation/promotion and integration as separate commit-ready checkpoints.
-- [ ] FINAL: Update related Logics docs.
+- [x] 1. Confirm the exact boss roster and the unique identity posture expected for each boss.
+- [x] 2. Define or refine the boss-specific prompt pack and generate candidate assets for all boss types in scope.
+- [x] 3. Curate and promote the selected boss assets into runtime asset paths.
+- [x] 4. Integrate the promoted boss assets into runtime boss presentation and shell surfaces such as the bestiary and boss-inclusive menu rosters.
+- [x] 5. Validate runtime and shell coverage, then update linked Logics docs.
+- [x] CHECKPOINT: leave generation/promotion and integration as separate commit-ready checkpoints.
+- [x] FINAL: Update related Logics docs.
 
 # Delivery checkpoints
 - Prefer one checkpoint for boss roster plus generation/promotion, then one checkpoint for runtime/shell integration.
@@ -80,11 +80,13 @@ flowchart LR
 - Manual runtime and shell review of boss encounters, bestiary entries, and boss-inclusive main-menu rotation
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-- Pending implementation.
+- Unique boss runtime assets were generated and promoted for `watchglass-prime`, `mission-boss-sentinel`, `mission-boss-watchglass`, and `mission-boss-rammer`.
+- Runtime boss presentation now resolves boss-specific visual kinds, and shell surfaces now use the boss assets in the bestiary and main-menu enemy rotation.
+- Validation executed for this wave: `npm run typecheck`.

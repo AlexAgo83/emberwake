@@ -1,10 +1,10 @@
 ## item_381_define_exact_boss_asset_roster_and_unique_visual_identity_posture - Define exact boss asset roster and unique visual identity posture
-> From version: 0.6.1+c2d57bc
+> From version: 0.6.1+b927df6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 100%
-> Confidence: 98%
-> Progress: 5%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Small
 > Theme: Graphics
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -68,3 +68,7 @@ flowchart LR
 - `games/emberwake/src/runtime/hostilePressure.ts`
 - `games/emberwake/src/runtime/entitySimulation.ts`
 - `games/emberwake/src/runtime/missionLoop.ts`
+
+# Outcome
+- The delivered roster is explicitly bounded to `watchglass-prime`, `mission-boss-sentinel`, `mission-boss-watchglass`, and `mission-boss-rammer`.
+- The shipped identity posture is unique per boss: a premium survey-hunter for Watchglass Prime, a plated pursuit tyrant for Sentinel Tyrant, a ritual beam director for Abyss Watchglass, and a siege brute for Ruin Ram.

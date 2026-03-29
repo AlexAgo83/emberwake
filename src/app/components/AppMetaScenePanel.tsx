@@ -67,7 +67,15 @@ const mainMenuEnemyRoster = [
     scale: 1
   },
   {
+    assetId: "entity.boss.ruin-ram.runtime.right",
+    scale: 1.1
+  },
+  {
     assetId: "entity.hostile.rammer.runtime.right",
+    scale: 1.08
+  },
+  {
+    assetId: "entity.boss.sentinel-tyrant.runtime.right",
     scale: 1.08
   },
   {
@@ -75,12 +83,12 @@ const mainMenuEnemyRoster = [
     scale: 1.04
   },
   {
-    assetId: "entity.hostile.watcher.runtime.right",
-    scale: 1.02
+    assetId: "entity.boss.abyss-watchglass.runtime.right",
+    scale: 1.14
   },
   {
-    assetId: "entity.hostile.watcher.runtime.right",
-    scale: 1.16
+    assetId: "entity.boss.watchglass-prime.runtime.right",
+    scale: 1.12
   }
 ] as const;
 

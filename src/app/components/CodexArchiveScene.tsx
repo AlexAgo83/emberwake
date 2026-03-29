@@ -12,7 +12,7 @@ import { SkillIcon } from "./SkillIcon";
 
 const bossCodexEntries = [
   {
-    assetId: "entity.hostile.watcher.runtime",
+    assetId: "entity.boss.watchglass-prime.runtime",
     codexId: "watchglass-prime",
     fallbackKnownIds: ["watchglass"],
     label: "Watchglass Prime",
@@ -20,7 +20,7 @@ const bossCodexEntries = [
     shellLine: "A scheduled pressure spike that opens with heavier armor and a harsher firing lane."
   },
   {
-    assetId: "entity.hostile.sentinel.runtime",
+    assetId: "entity.boss.sentinel-tyrant.runtime",
     codexId: "mission-boss-sentinel",
     fallbackKnownIds: ["sentinel-husk"],
     label: "Sentinel Tyrant",
@@ -28,7 +28,7 @@ const bossCodexEntries = [
     shellLine: "The first mission shell escalates the husk line into a plated pursuit anchor."
   },
   {
-    assetId: "entity.hostile.watcher.runtime",
+    assetId: "entity.boss.abyss-watchglass.runtime",
     codexId: "mission-boss-watchglass",
     fallbackKnownIds: ["watchglass", "watchglass-prime"],
     label: "Abyss Watchglass",
@@ -36,7 +36,7 @@ const bossCodexEntries = [
     shellLine: "A mission-grade watcher that keeps pressure by pinning approach lines with red signal fire."
   },
   {
-    assetId: "entity.hostile.rammer.runtime",
+    assetId: "entity.boss.ruin-ram.runtime",
     codexId: "mission-boss-rammer",
     fallbackKnownIds: ["shock-ram"],
     label: "Ruin Ram",
@@ -59,7 +59,7 @@ const bestiaryEntries = [
 
 type CodexArchiveSceneProps = {
   progressionSnapshot: CodexProgressionSnapshot | null;
-  scene: "bestiary" | "grimoire";
+  scene: "bestiary" | "grimoire" | "loot-archive";
 };
 
 export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSceneProps) {

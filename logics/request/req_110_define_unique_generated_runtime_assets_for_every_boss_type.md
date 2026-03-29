@@ -1,9 +1,9 @@
 ## req_110_define_unique_generated_runtime_assets_for_every_boss_type - Define unique generated runtime assets for every boss type
-> From version: 0.6.1+cad3c04
+> From version: 0.6.1+b927df6
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 99%
-> Confidence: 97%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: Graphics
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -129,3 +129,8 @@ flowchart TD
 - `item_381_define_exact_boss_asset_roster_and_unique_visual_identity_posture`
 - `item_382_define_unique_boss_asset_generation_and_promotion_workflow`
 - `item_383_define_unique_boss_asset_runtime_shell_integration_and_validation`
+
+# Outcome
+- Unique boss runtime assets now exist for `watchglass-prime`, `mission-boss-sentinel`, `mission-boss-watchglass`, and `mission-boss-rammer`.
+- Runtime boss entities consume boss-specific visual kinds instead of reading only as tinted or scaled base-hostile variants.
+- Shell surfaces now reference the boss-specific assets in the bestiary and in the boss-inclusive main-menu enemy roster.

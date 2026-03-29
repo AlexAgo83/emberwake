@@ -1,10 +1,10 @@
 ## item_383_define_unique_boss_asset_runtime_shell_integration_and_validation - Define unique boss asset runtime, shell integration, and validation
-> From version: 0.6.1+c2d57bc
+> From version: 0.6.1+b927df6
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 99%
-> Confidence: 97%
-> Progress: 5%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Graphics
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -68,3 +68,7 @@ flowchart LR
 - `games/emberwake/src/runtime/hostilePressure.ts`
 - `src/app/components/CodexArchiveScene.tsx`
 - `src/app/components/AppMetaScenePanel.tsx`
+
+# Outcome
+- Boss runtime entities now resolve boss-specific visual kinds and assets.
+- The bestiary and boss-inclusive main-menu enemy roster now consume the boss-specific assets rather than base hostile families.

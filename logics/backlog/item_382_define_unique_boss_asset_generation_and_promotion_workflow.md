@@ -1,10 +1,10 @@
 ## item_382_define_unique_boss_asset_generation_and_promotion_workflow - Define unique boss asset generation and promotion workflow
-> From version: 0.6.1+c2d57bc
+> From version: 0.6.1+b927df6
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 99%
-> Confidence: 97%
-> Progress: 5%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Graphics
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -70,3 +70,7 @@ flowchart LR
 - `scripts/assets/generateFirstWaveAssets.mjs`
 - `scripts/assets/promoteFirstWaveAssets.mjs`
 - `src/assets/README.md`
+
+# Outcome
+- A boss-specific generation and promotion workflow now exists in `scripts/assets/bossAssetWorkflow.mjs`, `scripts/assets/generateBossAssets.mjs`, and `scripts/assets/promoteBossAssets.mjs`.
+- The selected boss variants were promoted into runtime-owned asset paths under `src/assets/entities/runtime/`.
