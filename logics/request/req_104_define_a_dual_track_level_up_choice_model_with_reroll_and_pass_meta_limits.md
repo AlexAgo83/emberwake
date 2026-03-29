@@ -1,7 +1,7 @@
 ## req_104_define_a_dual_track_level_up_choice_model_with_reroll_and_pass_meta_limits - Define a dual-track level-up choice model with reroll and pass meta limits
 > From version: 0.6.1+task071
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: High

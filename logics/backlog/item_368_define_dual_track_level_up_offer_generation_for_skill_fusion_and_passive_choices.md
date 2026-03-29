@@ -1,10 +1,10 @@
 ## item_368_define_dual_track_level_up_offer_generation_for_skill_fusion_and_passive_choices - Define dual-track level-up offer generation for skill, fusion, and passive choices
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Progression
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

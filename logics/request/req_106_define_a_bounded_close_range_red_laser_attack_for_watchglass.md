@@ -1,7 +1,7 @@
 ## req_106_define_a_bounded_close_range_red_laser_attack_for_watchglass - Define a bounded close-range red laser attack for watchglass
 > From version: 0.6.1+task071
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium

@@ -1,7 +1,7 @@
 ## req_109_define_a_run_commit_posture_with_in_run_abandon_and_no_mid_run_save_load - Define a run-commit posture with in-run abandon and no mid-run save/load
 > From version: 0.6.1+task071
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: Medium

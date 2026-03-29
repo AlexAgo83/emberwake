@@ -1,10 +1,10 @@
 ## item_375_define_main_menu_background_layering_motion_and_readability_treatment - Define main menu background layering, motion, and readability treatment
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

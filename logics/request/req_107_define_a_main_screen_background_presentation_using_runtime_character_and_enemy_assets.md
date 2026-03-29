@@ -1,7 +1,7 @@
 ## req_107_define_a_main_screen_background_presentation_using_runtime_character_and_enemy_assets - Define a main screen background presentation using runtime character and enemy assets
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
 > Complexity: Medium

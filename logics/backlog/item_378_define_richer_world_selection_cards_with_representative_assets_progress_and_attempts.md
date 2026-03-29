@@ -1,10 +1,10 @@
 ## item_378_define_richer_world_selection_cards_with_representative_assets_progress_and_attempts - Define richer world selection cards with representative assets, progress, and attempts
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

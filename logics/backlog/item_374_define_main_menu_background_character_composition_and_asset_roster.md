@@ -1,10 +1,10 @@
 ## item_374_define_main_menu_background_character_composition_and_asset_roster - Define main menu background character composition and asset roster
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

@@ -1,10 +1,10 @@
 ## item_379_define_in_run_abandon_surface_confirmation_and_terminal_outcome - Define in-run abandon surface, confirmation, and terminal outcome
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

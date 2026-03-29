@@ -1,10 +1,10 @@
 ## task_071_orchestrate_mission_progression_world_ladder_and_main_screen_background_wave - Orchestrate mission, progression, world ladder, main screen background, and run-commit wave
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -37,15 +37,15 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm the split acceptance criteria, current code paths, and execution order across items `363` through `380`.
-- [ ] 2. Deliver the primary map mission loop foundation, map unlock contract, and off-screen guidance wave in coherent commit-ready checkpoints.
-- [ ] 3. Deliver the dual-track level-up model plus reroll/pass ownership and the reactive entity-bar visibility wave in coherent commit-ready checkpoints.
-- [ ] 4. Deliver the watchglass close-range laser wave and validate its gameplay and feedback posture.
-- [ ] 5. Deliver the main-menu background character presentation plus the five-world ladder, progress tracking, and richer world-selection cards.
-- [ ] 6. Deliver the run-commit posture with in-run abandon and no mid-run save/load.
-- [ ] 7. Validate the combined wave across runtime, new-game flow, main-menu shell, run-state posture, and Logics docs.
-- [ ] CHECKPOINT: leave each completed wave commit-ready and update linked Logics docs during the wave.
-- [ ] FINAL: Update related Logics docs.
+- [x] 1. Confirm the split acceptance criteria, current code paths, and execution order across items `363` through `380`.
+- [x] 2. Deliver the primary map mission loop foundation, map unlock contract, and off-screen guidance wave in coherent commit-ready checkpoints.
+- [x] 3. Deliver the dual-track level-up model plus reroll/pass ownership and the reactive entity-bar visibility wave in coherent commit-ready checkpoints.
+- [x] 4. Deliver the watchglass close-range laser wave and validate its gameplay and feedback posture.
+- [x] 5. Deliver the main-menu background character presentation plus the five-world ladder, progress tracking, and richer world-selection cards.
+- [x] 6. Deliver the run-commit posture with in-run abandon and no mid-run save/load.
+- [x] 7. Validate the combined wave across runtime, new-game flow, main-menu shell, run-state posture, and Logics docs.
+- [x] CHECKPOINT: leave each completed wave commit-ready and update linked Logics docs during the wave.
+- [x] FINAL: Update related Logics docs.
 
 # Delivery checkpoints
 - Prefer one commit-ready checkpoint per major sub-wave rather than one giant late-stage integration dump.
@@ -92,11 +92,24 @@ flowchart LR
 - Manual runtime and shell review of mission guidance, map selection, world cards, main-menu background readability, level-up choice UX, reactive entity bars, watchglass beam readability, and in-run abandon/no-save-load posture
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
-- Pending.
+- Delivered in three implementation checkpoints plus this closure pass:
+  - `2deaaa3` `Add world ladder shell and run commit foundation`
+  - `2bcc089` `Add dual-track level ups and reactive entity bars`
+  - `3bf8167` `Add mission runtime loop and main menu backdrop`
+- Mission/runtime outcomes: three spaced mission zones, mission boss spawns, mission item drops and collection, exit unlock after three mission items, and an off-screen guidance arrow with mission-first priority and miniboss fallback.
+- Progression/front-door outcomes: five authored world profiles, cumulative world scaling from world two onward, richer new-game world cards with assets/progress/attempts, explicit in-run abandon, and no player-facing mid-run save/load continuation.
+- Combat/shell outcomes: dual-track level-up offers with reroll/pass charges, state-reactive entity bars with fade, watchglass close-range red laser feedback, and a main-menu background built from large runtime hero/enemy assets.
+- Validation executed:
+  - `npm run logics:lint`
+  - `npm run lint`
+  - `npm run typecheck`
+  - `npm run test`
+  - `npm run build && npm run performance:validate`
+  - `npm run test:browser:smoke`

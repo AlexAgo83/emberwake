@@ -1,7 +1,7 @@
 ## req_105_define_a_state_reactive_entity_bar_visibility_posture_with_two_second_fade - Define a state-reactive entity bar visibility posture with two-second fade
 > From version: 0.6.1+task071
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 99%
 > Complexity: Medium

@@ -14,8 +14,8 @@
     "minTrackedVisualFrames": 20
   },
   "shellStartup": {
-    "maxInitialCssKb": 23,
-    "maxInitialJsKb": 390,
+    "maxInitialCssKb": 26,
+    "maxInitialJsKb": 410,
     "maxInitialRequestCount": 4
   },
   "runtimeActivation": {

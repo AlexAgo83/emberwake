@@ -14,7 +14,7 @@ export const runtimeFixtureCatalog = {
   deterministicRuntime: {
     scenarioId: officialDebugScenario.id,
     supportEntityCount: officialDebugScenario.supportEntities.length,
-    worldSeed: officialDebugScenario.worldSeed
+    worldSeed: createDefaultRuntimeSessionState().worldSeed
   }
 } as const;
 

@@ -1,10 +1,10 @@
 ## item_367_define_new_game_map_selection_shell_surface_and_locked_state_presentation - Define new game map selection shell surface and locked state presentation
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

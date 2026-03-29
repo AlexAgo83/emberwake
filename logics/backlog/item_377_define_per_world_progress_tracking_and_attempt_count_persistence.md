@@ -1,10 +1,10 @@
 ## item_377_define_per_world_progress_tracking_and_attempt_count_persistence - Define per-world progress tracking and attempt count persistence
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Progression
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

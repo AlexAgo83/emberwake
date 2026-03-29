@@ -1,10 +1,10 @@
 ## item_371_define_state_reactive_runtime_entity_bar_visibility_and_fade_behavior - Define state-reactive runtime entity bar visibility and fade behavior
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Runtime
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

@@ -1,10 +1,10 @@
 ## item_366_define_authored_map_profile_and_unlock_state_contract_for_new_game_selection - Define authored map profile and unlock state contract for new game selection
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Progression
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

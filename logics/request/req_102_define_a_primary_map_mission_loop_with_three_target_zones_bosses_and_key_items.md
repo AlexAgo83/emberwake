@@ -1,7 +1,7 @@
 ## req_102_define_a_primary_map_mission_loop_with_three_target_zones_bosses_and_key_items - Define a primary map mission loop with three target zones, bosses, and key items
 > From version: 0.6.1+task071
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: High

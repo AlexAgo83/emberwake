@@ -1,7 +1,7 @@
 ## req_103_define_new_game_map_selection_and_mission_gated_map_unlock_progression - Define new-game map selection and mission-gated map unlock progression
 > From version: 0.6.1+task071
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: High

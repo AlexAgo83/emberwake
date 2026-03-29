@@ -1,10 +1,10 @@
 ## item_364_define_primary_map_mission_item_collection_and_map_exit_unlock - Define primary map mission item collection and map exit unlock
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

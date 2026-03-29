@@ -1,10 +1,10 @@
 ## item_369_define_reroll_and_pass_charge_ownership_for_level_up_choices - Define reroll and pass charge ownership for level-up choices
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Progression
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

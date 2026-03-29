@@ -1,7 +1,7 @@
 ## req_108_define_a_five_world_unlock_ladder_with_world_scaling_and_richer_world_selection_cards - Define a five-world unlock ladder with world scaling and richer world-selection cards
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
 > Complexity: High
