@@ -1,9 +1,9 @@
 ## req_098_define_a_bounded_biome_transition_visual_treatment_to_reduce_hard_map_seams - Define a bounded biome-transition visual treatment to reduce hard map seams
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
-> Confidence: 95%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -120,6 +120,7 @@ flowchart TD
 - `games/emberwake/src/content/world/worldGeneration.ts`
 - `games/emberwake/src/content/world/worldData.ts`
 - `src/game/world/render/WorldScene.tsx`
+- `src/game/world/render/biomeSeamPresentation.ts`
 
 # Backlog
 - `item_350_define_biome_transition_seam_rendering_posture_and_asset_coverage`

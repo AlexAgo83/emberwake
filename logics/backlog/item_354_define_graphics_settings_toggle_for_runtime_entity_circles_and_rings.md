@@ -1,10 +1,10 @@
 ## item_354_define_graphics_settings_toggle_for_runtime_entity_circles_and_rings - Define graphics settings toggle for runtime entity circles and rings
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
-> Confidence: 95%
-> Progress: 0%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -59,8 +59,8 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Product brief(s): `prod_017_graphical_asset_direction_for_runtime_readability_and_shell_identity`
+- Architecture decision(s): `adr_052_adopt_a_content_driven_graphical_asset_pipeline_for_runtime_and_shell_surfaces`
 - Request: `req_099_define_a_settings_menu_with_desktop_controls_and_graphics_subscreens`
 - Primary task(s): `task_069_orchestrate_biome_seam_settings_shell_and_pickup_sizing_polish`
 
@@ -74,6 +74,7 @@ flowchart LR
 - `src/app/components/AppMetaScenePanel.tsx`
 - `src/app/components/AppMetaScenePanel.test.tsx`
 - `src/app/components/DesktopControlSettingsSection.tsx`
+- `src/app/hooks/useShellPreferences.ts`
 - `src/app/components/ShellMenu.tsx`
 - `src/app/hooks/useAppScene.ts`
 - `src/app/model/appScene.ts`

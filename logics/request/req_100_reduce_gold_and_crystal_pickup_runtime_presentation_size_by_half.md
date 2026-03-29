@@ -1,9 +1,9 @@
 ## req_100_reduce_gold_and_crystal_pickup_runtime_presentation_size_by_half - Reduce gold and crystal pickup runtime presentation size by half
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
-> Confidence: 97%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -92,8 +92,8 @@ flowchart TD
 - Review should happen in live runtime scenes with hostiles, terrain, and the current pickup-outline treatment visible.
 
 # Companion docs
-- Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Product brief(s): `prod_017_graphical_asset_direction_for_runtime_readability_and_shell_identity`
+- Architecture decision(s): `adr_052_adopt_a_content_driven_graphical_asset_pipeline_for_runtime_and_shell_surfaces`
 
 # AI Context
 - Summary: Reduce the runtime visual size of gold and crystal pickups by half without changing pickup gameplay behavior.
@@ -108,3 +108,4 @@ flowchart TD
 - `games/emberwake/src/content/entities/entityData.ts`
 - `src/assets/assetCatalog.ts`
 - `src/game/entities/render/EntityScene.tsx`
+- `src/game/entities/render/entityPresentation.ts`

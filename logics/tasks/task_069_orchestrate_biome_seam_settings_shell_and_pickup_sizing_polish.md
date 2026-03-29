@@ -1,10 +1,10 @@
 ## task_069_orchestrate_biome_seam_settings_shell_and_pickup_sizing_polish - Orchestrate biome seam settings shell and pickup sizing polish
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
-> Confidence: 94%
-> Progress: 0%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -41,14 +41,14 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm the linked acceptance criteria, current code paths, and execution order across `item_350`, `item_352`, `item_353`, `item_354`, and `item_355`, including where settings-shell, entity-ring, terrain seam, and pickup sizing behaviors currently live.
-- [ ] 2. Implement the settings-shell wave: turn `Settings` into a category surface, route `Desktop controls` and `Graphics` as child surfaces, and define desktop/mobile and back-navigation behavior coherently.
-- [ ] 3. Implement the graphics-option wave: add the bounded player-facing toggle for runtime entity circles/rings, define persistence posture, and keep the option aligned with the actual runtime entity-presentation path.
-- [ ] 4. Implement the biome-seam wave: land the first bounded seam-rendering treatment, initial seam coverage, fallback posture, and phased rollout behavior in the world rendering path.
-- [ ] 5. Implement the pickup-presentation tuning wave: reduce `gold` and `crystal` runtime presentation size by half while keeping gameplay pickup behavior untouched.
-- [ ] 6. Validate the combined wave in runtime and shell scenes, tune readability or proportionality regressions, checkpoint each meaningful wave in commit-ready states, and update the linked Logics docs with accepted outcomes and any deferred follow-up.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: Update related Logics docs
+- [x] 1. Confirm the linked acceptance criteria, current code paths, and execution order across `item_350`, `item_352`, `item_353`, `item_354`, and `item_355`, including where settings-shell, entity-ring, terrain seam, and pickup sizing behaviors currently live.
+- [x] 2. Implement the settings-shell wave: turn `Settings` into a category surface, route `Desktop controls` and `Graphics` as child surfaces, and define desktop/mobile and back-navigation behavior coherently.
+- [x] 3. Implement the graphics-option wave: add the bounded player-facing toggle for runtime entity circles/rings, define persistence posture, and keep the option aligned with the actual runtime entity-presentation path.
+- [x] 4. Implement the biome-seam wave: land the first bounded seam-rendering treatment, initial seam coverage, fallback posture, and phased rollout behavior in the world rendering path.
+- [x] 5. Implement the pickup-presentation tuning wave: reduce `gold` and `crystal` runtime presentation size by half while keeping gameplay pickup behavior untouched.
+- [x] 6. Validate the combined wave in runtime and shell scenes, tune readability or proportionality regressions, checkpoint each meaningful wave in commit-ready states, and update the linked Logics docs with accepted outcomes and any deferred follow-up.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: Update related Logics docs
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -95,10 +95,17 @@ flowchart LR
 - Manual runtime review of settings navigation, graphics toggle behavior, biome seam readability, and gold/crystal pickup proportions in live scenes
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Wave 1 restructured `Settings` into a category menu and moved `Desktop controls` into a child surface, while adding a sibling `Graphics` child surface with coherent back and escape behavior across desktop and mobile shell layouts.
+- Wave 1 also introduced a persistent graphics preference for runtime entity rings: `entityRingsVisible` defaults to enabled, persists through shell preferences, and governs sprite-backed player, hostile, and pickup rings plus their bounded readability halos.
+- Wave 2 landed a bounded biome seam treatment in `src/game/world/render/biomeSeamPresentation.ts` and `src/game/world/render/WorldScene.tsx`, deriving seam strips from adjacent terrain chunks with restrained width, irregularity, tint mixing, and no terrain-engine rewrite.
+- Wave 2 also applied the pickup-size tuning through `src/game/entities/render/entityPresentation.ts`, reducing `gold` and `crystal` sprite presentation to half-size while leaving pickup gameplay radius, value, and spawn behavior untouched.
+- Validation passed with `npm run logics:lint`, `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build && npm run performance:validate`, and `npm run test:browser:smoke`.
+- Manual runtime review on a live preview confirmed that the settings menu hierarchy is coherent, the `Graphics` screen exposes the ring toggle cleanly, biome transitions now render with a bounded seam treatment instead of hard terrain cuts, and gold/crystal pickups read smaller in-scene without disappearing.
+- Commit checkpoints: `7eb58e8` captured the settings and graphics-toggle wave, and `496b898` captured the biome seam treatment wave before final task closure.

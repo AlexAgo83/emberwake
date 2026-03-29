@@ -244,7 +244,7 @@ describe("AppMetaScenePanel", () => {
     expect(props.onResumeRuntime).toHaveBeenCalledTimes(1);
   });
 
-  it("renders settings as a category menu before opening sub-surfaces", () => {
+  it("renders settings as a category menu before opening sub-surfaces", async () => {
     const props = createProps({
       canResumeSession: true,
       scene: "settings"
@@ -256,7 +256,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.queryByText("Session")).not.toBeInTheDocument();
     expect(screen.queryByText("Fullscreen")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Resume runtime/i })).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Desktop controls" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "Desktop controls" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Graphics" })).toBeInTheDocument();
     expect(screen.queryByLabelText(/Desktop controls/i)).not.toBeInTheDocument();
   });
@@ -274,36 +274,36 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByRole("button", { name: /Back to settings/i })).toBeInTheDocument();
   });
 
-  it("returns from a settings child surface to the settings menu on Escape", () => {
+  it("returns from a settings child surface to the settings menu on Escape", async () => {
     const props = createProps({
       scene: "settings"
     });
 
     render(<AppMetaScenePanel {...props} />);
-    fireEvent.click(screen.getByRole("button", { name: "Graphics" }));
+    fireEvent.click(await screen.findByRole("button", { name: "Graphics" }));
 
-    expect(screen.getByRole("button", { name: /Disable entity rings/i })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: /Disable entity rings/i })).toBeInTheDocument();
 
     fireEvent.keyDown(window, { key: "Escape" });
 
-    expect(screen.getByRole("button", { name: "Desktop controls" })).toBeInTheDocument();
+    expect(await screen.findByRole("button", { name: "Desktop controls" })).toBeInTheDocument();
     expect(props.onReturnToMainMenu).not.toHaveBeenCalled();
   });
 
-  it("toggles entity rings from the graphics settings surface", () => {
+  it("toggles entity rings from the graphics settings surface", async () => {
     const props = createProps({
       entityRingsVisible: true,
       scene: "settings"
     });
 
     render(<AppMetaScenePanel {...props} />);
-    fireEvent.click(screen.getByRole("button", { name: "Graphics" }));
-    fireEvent.click(screen.getByRole("button", { name: /Disable entity rings/i }));
+    fireEvent.click(await screen.findByRole("button", { name: "Graphics" }));
+    fireEvent.click(await screen.findByRole("button", { name: /Disable entity rings/i }));
 
     expect(props.onSetEntityRingsVisible).toHaveBeenCalledWith(false);
   });
 
-  it("keeps desktop controls unavailable but exposes graphics on the mobile settings surface", () => {
+  it("keeps desktop controls unavailable but exposes graphics on the mobile settings surface", async () => {
     const props = createProps({
       isMobileLayout: true,
       scene: "settings"
@@ -311,7 +311,7 @@ describe("AppMetaScenePanel", () => {
 
     render(<AppMetaScenePanel {...props} />);
 
-    expect(screen.getByRole("button", { name: "Desktop controls" })).toBeDisabled();
+    expect((await screen.findByRole("button", { name: "Desktop controls" }))).toBeDisabled();
     expect(screen.getByRole("button", { name: "Graphics" })).toBeEnabled();
     expect(screen.getByText(/Desktop control calibration is only exposed on large-screen shell layouts/i)).toBeInTheDocument();
     expect(screen.queryByText(/Loading desktop control bindings/i)).not.toBeInTheDocument();

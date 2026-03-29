@@ -1,10 +1,10 @@
 ## item_355_reduce_gold_and_crystal_pickup_runtime_presentation_size_by_half - Reduce gold and crystal pickup runtime presentation size by half
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
-> Confidence: 97%
-> Progress: 0%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -61,8 +61,8 @@ flowchart LR
 - Architecture follow-up: Create or link an architecture decision before irreversible implementation work starts.
 
 # Links
-- Product brief(s): (none yet)
-- Architecture decision(s): (none yet)
+- Product brief(s): `prod_017_graphical_asset_direction_for_runtime_readability_and_shell_identity`
+- Architecture decision(s): `adr_052_adopt_a_content_driven_graphical_asset_pipeline_for_runtime_and_shell_surfaces`
 - Request: `req_100_reduce_gold_and_crystal_pickup_runtime_presentation_size_by_half`
 - Primary task(s): `task_069_orchestrate_biome_seam_settings_shell_and_pickup_sizing_polish`
 
@@ -76,6 +76,7 @@ flowchart LR
 - `games/emberwake/src/content/entities/entityData.ts`
 - `src/assets/assetCatalog.ts`
 - `src/game/entities/render/EntityScene.tsx`
+- `src/game/entities/render/entityPresentation.ts`
 - `logics/skills/logics-ui-steering/SKILL.md`
 
 # Priority

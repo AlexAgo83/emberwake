@@ -1,10 +1,10 @@
 ## item_352_define_biome_transition_validation_and_phased_runtime_rollout - Define biome transition validation and phased runtime rollout
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 98%
-> Confidence: 95%
-> Progress: 0%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
