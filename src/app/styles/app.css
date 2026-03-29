@@ -1042,6 +1042,18 @@ html[data-app-display-mode="browser"] .app-shell {
   outline-offset: 2px;
 }
 
+.shell-control--button:disabled {
+  cursor: default;
+  pointer-events: none;
+  border-color: rgba(255, 255, 255, 0.05);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent),
+    rgba(11, 16, 21, 0.62);
+  box-shadow: none;
+  color: rgba(214, 225, 235, 0.44);
+  opacity: 0.58;
+}
+
 .shell-control--button-primary {
   justify-content: space-between;
   border-color: rgba(255, 183, 104, 0.58);

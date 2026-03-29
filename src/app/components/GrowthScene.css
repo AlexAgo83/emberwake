@@ -13,13 +13,18 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.9rem;
-  align-items: center;
+  align-items: start;
   padding: 0.92rem 0.98rem;
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 0.95rem;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent),
     rgba(9, 13, 17, 0.74);
+}
+
+.app-meta-scene__growth-card > .shell-control--button {
+  align-self: start;
+  justify-self: end;
 }
 
 .app-meta-scene__growth-card[data-state="owned"],

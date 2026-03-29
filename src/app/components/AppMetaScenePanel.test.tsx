@@ -71,6 +71,10 @@ describe("AppMetaScenePanel", () => {
     expect(screen.queryByText("Ownership")).not.toBeInTheDocument();
     expect(loadGameIndex).toBeGreaterThan(-1);
     expect(newGameIndex).toBeGreaterThan(loadGameIndex);
+    const settingsIndex = actionButtons.findIndex((button) => button.textContent?.match(/^Settings$/i));
+    const talentsIndex = actionButtons.findIndex((button) => button.textContent?.match(/^Talents$/i));
+    expect(settingsIndex).toBeGreaterThan(-1);
+    expect(talentsIndex).toBeGreaterThan(settingsIndex);
     expect(
       screen.getByRole("link", { name: new RegExp(`Emberwake v${appConfig.version}`, "i") })
     ).toBeInTheDocument();
@@ -113,7 +117,7 @@ describe("AppMetaScenePanel", () => {
 
     render(<AppMetaScenePanel {...props} />);
 
-    expect(screen.getByLabelText("Talents")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Talents" })).toBeInTheDocument();
     expect(screen.getByLabelText(/Available gold/i)).toBeInTheDocument();
     expect(screen.getByText("99")).toBeInTheDocument();
     expect(await screen.findByText("1/3 owned • 33% complete")).toBeInTheDocument();
@@ -124,6 +128,28 @@ describe("AppMetaScenePanel", () => {
     fireEvent.click((await screen.findAllByRole("button", { name: /Unlock|Buy rank/i }))[0]!);
 
     expect(props.onPurchaseShopUnlock).toHaveBeenCalledTimes(1);
+  });
+
+  it("disables talent purchases when the player does not have enough gold", async () => {
+    const props = createProps({
+      metaProfile: {
+        ...createDefaultMetaProfile(),
+        goldBalance: 0
+      },
+      scene: "growth"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    expect(screen.getByRole("heading", { name: "Talents" })).toBeInTheDocument();
+    const buyRankButtons = await screen.findAllByRole("button", { name: /Buy rank/i });
+
+    expect(buyRankButtons.length).toBeGreaterThan(0);
+    for (const button of buyRankButtons) {
+      expect(button).toBeDisabled();
+      fireEvent.click(button);
+    }
+    expect(props.onPurchaseTalentRank).not.toHaveBeenCalled();
   });
 
   it("maps Escape to Resume runtime from the main menu when that action is available", () => {

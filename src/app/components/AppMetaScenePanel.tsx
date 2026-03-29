@@ -392,17 +392,17 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               </button>
               <button
                 className="shell-control shell-control--button shell-control--button-quiet"
-                onClick={onOpenGrowth}
-                type="button"
-              >
-                Talents
-              </button>
-              <button
-                className="shell-control shell-control--button shell-control--button-quiet"
                 onClick={onOpenSettings}
                 type="button"
               >
                 Settings
+              </button>
+              <button
+                className="shell-control shell-control--button shell-control--button-quiet"
+                onClick={onOpenGrowth}
+                type="button"
+              >
+                Talents
               </button>
               <button
                 className="shell-control shell-control--button shell-control--button-quiet"
