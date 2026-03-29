@@ -1,10 +1,10 @@
 ## item_349_define_validation_and_tuning_for_directional_entities_and_dark_on_dark_readability - Define validation and tuning for directional entities and dark-on-dark readability
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 96%
 > Confidence: 93%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -82,3 +82,4 @@ flowchart LR
 # Notes
 - Split jointly from `req_096_define_cardinal_directional_runtime_assets_for_player_and_hostile_entities` and `req_097_define_a_runtime_sprite_separation_posture_for_dark_on_dark_asset_readability`.
 - This slice exists to keep the later orchestration task honest about what “good enough” means in-game.
+- Delivered in `task_068` through runtime browser review on the live scene, targeted helper tests, full project validation, and explicit acceptance of `needle` as the reviewed single-face rotating exception.

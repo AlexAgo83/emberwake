@@ -1,9 +1,9 @@
 ## req_097_define_a_runtime_sprite_separation_posture_for_dark_on_dark_asset_readability - Define a runtime sprite-separation posture for dark-on-dark asset readability
-> From version: 0.6.1
+> From version: 0.6.1+task068
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 98%
-> Confidence: 95%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -147,3 +147,7 @@ flowchart TD
 # Backlog
 - `item_348_define_runtime_sprite_separation_rules_for_entities_and_pickups_on_dark_biomes`
 - `item_349_define_validation_and_tuning_for_directional_entities_and_dark_on_dark_readability`
+
+# Outcome
+- Fulfilled in `task_068_orchestrate_directional_entity_presentation_and_runtime_sprite_separation`.
+- Landed a runtime-first, alpha-aware sprite separation treatment for `player`, `hostile`, and `pickup` categories so darker generated assets remain readable on dark biome backgrounds without rectangle backplates.

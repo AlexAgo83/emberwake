@@ -1,4 +1,4 @@
-/* global console */
+/* global URL, console */
 
 import { copyFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";

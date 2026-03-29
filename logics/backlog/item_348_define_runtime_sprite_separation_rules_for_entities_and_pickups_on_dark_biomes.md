@@ -1,10 +1,10 @@
 ## item_348_define_runtime_sprite_separation_rules_for_entities_and_pickups_on_dark_biomes - Define runtime sprite separation rules for entities and pickups on dark biomes
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -82,3 +82,4 @@ flowchart LR
 # Notes
 - Split from `req_097_define_a_runtime_sprite_separation_posture_for_dark_on_dark_asset_readability`.
 - This slice intentionally stops before the broader validation and tuning pass across darker biomes and dense runtime scenes.
+- Delivered in `task_068` with category-specific alpha-aware sprite separation inside `src/game/entities/render/EntityScene.tsx`, covering `player`, `hostile`, and `pickup` silhouettes without rectangle backplates.

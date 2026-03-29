@@ -1,10 +1,10 @@
 ## task_068_orchestrate_directional_entity_presentation_and_runtime_sprite_separation - Orchestrate directional entity presentation and runtime sprite separation
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: In Progress
+> Status: Done
 > Understanding: 97%
 > Confidence: 94%
-> Progress: 45%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -37,11 +37,11 @@ flowchart LR
 # Plan
 - [x] 1. Confirm the directional entity contract, exception posture, sprite-separation scope, and linked acceptance criteria from `req_096`, `req_097`, `item_346`, `item_347`, `item_348`, `item_349`, `spec_001`, `adr_051`, and `adr_052`.
 - [x] 2. Update the directional production pack and generation workflow so living entities can be authored and reviewed as directional sets while keeping reviewed single-face exceptions explicit.
-- [ ] 3. Implement the runtime-facing resolution posture and the bounded sprite-separation treatment for the covered entity and pickup surfaces.
-- [ ] 4. Validate the wave in actual runtime scenes, including directional credibility, `needle` exception posture, and dark-on-dark readability for player, hostiles, crystals, gold, and the remaining first-wave pickups.
-- [ ] 5. Checkpoint the wave in commit-ready states, validate project guardrails, and update linked Logics docs with actual accepted, deferred, and exception outcomes.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: Update related Logics docs
+- [x] 3. Implement the runtime-facing resolution posture and the bounded sprite-separation treatment for the covered entity and pickup surfaces.
+- [x] 4. Validate the wave in actual runtime scenes, including directional credibility, `needle` exception posture, and dark-on-dark readability for player, hostiles, crystals, gold, and the remaining first-wave pickups.
+- [x] 5. Checkpoint the wave in commit-ready states, validate project guardrails, and update linked Logics docs with actual accepted, deferred, and exception outcomes.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: Update related Logics docs
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -86,11 +86,15 @@ flowchart LR
 - Manual runtime review of directional entity facing, `needle` exception behavior, and dark-on-dark readability for player, hostiles, and pickups
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
 - Wave 1 checkpoint: directional entity contract, directional production pack, generation scripts, candidate gallery, curated directional outputs, and promoted `right/up/down` runtime assets landed as a coherent checkpoint before runtime rendering changes.
+- Wave 2 implementation: `src/game/entities/render/EntityScene.tsx` now resolves entity facings through `src/assets/entityDirectionalRuntime.ts`, keeps `needle` on the single-face rotating posture, and applies category-specific alpha-aware separation to `player`, `hostile`, and `pickup` sprites.
+- Manual runtime review: local dev review on `2026-03-29` confirmed the live scene loads directional assets such as `entity.player.primary.runtime.down.png`, `entity.hostile.drifter.runtime.up.png`, and `entity.hostile.sentinel.runtime.up.png`, while darker pickups and entities remain readable with bounded contour treatment.
+- Validation: `npx vitest run src/assets/entityDirectionalRuntime.test.ts`, `npm run logics:lint`, `npm run lint`, `npm run typecheck`, `npm run test`, `npm run build && npm run performance:validate`, and `npm run test:browser:smoke` all passed during execution.
+- Commit checkpoints: `95a5494` captured the directional contract and generation workflow; the final runtime/readability wave is ready for its own follow-up commit.

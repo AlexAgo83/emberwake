@@ -5,6 +5,7 @@ import { memo, useMemo } from "react";
 import { WorldViewportContainer, type CameraState } from "@engine-pixi";
 import { entityVisualDefinitions, type EmberwakeRenderSurfaceMode } from "@game";
 import { resolveAssetUrl } from "@src/assets/assetResolver";
+import { resolveEntitySpritePresentation } from "@src/assets/entityDirectionalRuntime";
 import { useResolvedAssetTexture } from "@src/assets/useResolvedAssetTexture";
 import { assetPipeline } from "@src/shared/config/assetPipeline";
 import {
@@ -41,6 +42,8 @@ type PickupKind = SimulatedEntity["pickupProfile"] extends infer PickupProfile
     : never
   : never;
 
+type SpriteSeparationCategory = "hostile" | "pickup" | "player";
+
 const hexColorToNumber = (color: string) => Number.parseInt(color.replace("#", ""), 16);
 
 const floatingDamageTextStyle = {
@@ -56,6 +59,50 @@ const floatingDamageTextStyle = {
   fontSize: 18,
   fontWeight: "700" as const,
   letterSpacing: 1
+};
+
+const spriteSeparationOffsets = [
+  [-1, 0],
+  [1, 0],
+  [0, -1],
+  [0, 1],
+  [-0.78, -0.78],
+  [0.78, -0.78],
+  [-0.78, 0.78],
+  [0.78, 0.78]
+] as const;
+
+const spriteSeparationStyles: Record<
+  SpriteSeparationCategory,
+  {
+    haloAlpha: number;
+    haloScale: number;
+    offsetWorldUnits: number;
+    tint: number;
+    tintAlpha: number;
+  }
+> = {
+  hostile: {
+    haloAlpha: 0.12,
+    haloScale: 1.05,
+    offsetWorldUnits: 3.8,
+    tint: 0xffc3a5,
+    tintAlpha: 0.15
+  },
+  pickup: {
+    haloAlpha: 0.16,
+    haloScale: 1.08,
+    offsetWorldUnits: 2.8,
+    tint: 0xf7f2dc,
+    tintAlpha: 0.18
+  },
+  player: {
+    haloAlpha: 0.18,
+    haloScale: 1.07,
+    offsetWorldUnits: 4.4,
+    tint: 0xe8f3ff,
+    tintAlpha: 0.16
+  }
 };
 
 const getAttackChargeProgress = (
@@ -395,34 +442,78 @@ const CombatEntityBars = memo(function CombatEntityBars({
 const EntitySprite = memo(function EntitySprite({
   alpha = 1,
   assetId,
+  mirrorX = false,
+  rotation = 0,
+  separationCategory = null,
   sizeWorldUnits,
   tint
 }: {
   alpha?: number;
   assetId: string;
+  mirrorX?: boolean;
+  rotation?: number;
+  separationCategory?: SpriteSeparationCategory | null;
   sizeWorldUnits: number;
   tint?: number;
 }) {
-  const assetUrl = resolveAssetUrl(assetId);
+  const { assetUrl, texture } = useResolvedAssetTexture(assetId);
+  const separationStyle =
+    separationCategory === null ? null : spriteSeparationStyles[separationCategory];
   const tintValue = assetUrl?.endsWith(".svg") ? tint : undefined;
-  const { texture } = useResolvedAssetTexture(assetId);
 
   if (!texture) {
     return null;
   }
 
   return (
-    <pixiSprite
-      alpha={alpha}
-      anchor={0.5}
-      eventMode="none"
-      height={sizeWorldUnits}
-      texture={texture}
-      tint={tintValue}
-      width={sizeWorldUnits}
-      x={0}
-      y={0}
-    />
+    <pixiContainer
+      rotation={rotation}
+      scale={{
+        x: mirrorX ? -1 : 1,
+        y: 1
+      }}
+    >
+      {separationStyle
+        ? spriteSeparationOffsets.map(([offsetX, offsetY], index) => (
+            <pixiSprite
+              key={`${assetId}-outline-${index}`}
+              alpha={separationStyle.tintAlpha}
+              anchor={0.5}
+              eventMode="none"
+              height={sizeWorldUnits}
+              texture={texture}
+              tint={separationStyle.tint}
+              width={sizeWorldUnits}
+              x={offsetX * separationStyle.offsetWorldUnits}
+              y={offsetY * separationStyle.offsetWorldUnits}
+            />
+          ))
+        : null}
+      {separationStyle ? (
+        <pixiSprite
+          alpha={separationStyle.haloAlpha}
+          anchor={0.5}
+          eventMode="none"
+          height={sizeWorldUnits * separationStyle.haloScale}
+          texture={texture}
+          tint={separationStyle.tint}
+          width={sizeWorldUnits * separationStyle.haloScale}
+          x={0}
+          y={0}
+        />
+      ) : null}
+      <pixiSprite
+        alpha={alpha}
+        anchor={0.5}
+        eventMode="none"
+        height={sizeWorldUnits}
+        texture={texture}
+        tint={tintValue}
+        width={sizeWorldUnits}
+        x={0}
+        y={0}
+      />
+    </pixiContainer>
   );
 });
 
@@ -445,7 +536,13 @@ export function EntityScene({
         const tint = hexColorToNumber(entity.visual.tint);
         const pickupKind = entity.pickupProfile?.kind ?? null;
         const renderedRadius = entity.footprint.radius * (entity.visualScale ?? 1);
-        const entityAssetId = entityVisualDefinitions[entity.visual.kind].assetId;
+        const entityVisualDefinition = entityVisualDefinitions[entity.visual.kind];
+        const entitySpritePresentation = resolveEntitySpritePresentation({
+          assetId: entityVisualDefinition.assetId,
+          facingMode: entityVisualDefinition.runtimePresentation.facingMode,
+          orientation: entity.orientation
+        });
+        const entityAssetId = entitySpritePresentation.resolvedAssetId;
         const entityAssetUrl = resolveAssetUrl(entityAssetId);
         const entitySpriteSize =
           assetPipeline.logicalSizing.entity.spriteLogicalSizeWorldUnits * (entity.visualScale ?? 1);
@@ -485,6 +582,9 @@ export function EntityScene({
                   <EntitySprite
                     alpha={0.98}
                     assetId={entityAssetId}
+                    mirrorX={entitySpritePresentation.mirrorX}
+                    rotation={entitySpritePresentation.rotation}
+                    separationCategory={entityVisualDefinition.runtimePresentation.spriteSeparationCategory}
                     sizeWorldUnits={pickupSpriteSize}
                     tint={tint}
                   />
@@ -510,13 +610,14 @@ export function EntityScene({
               )
             ) : (
               <>
-                <pixiContainer rotation={entity.orientation}>
-                  <EntitySprite
-                    assetId={entityAssetId}
-                    sizeWorldUnits={entitySpriteSize}
-                    tint={tint}
-                  />
-                </pixiContainer>
+                <EntitySprite
+                  assetId={entityAssetId}
+                  mirrorX={entitySpritePresentation.mirrorX}
+                  rotation={entitySpritePresentation.rotation}
+                  separationCategory={entityVisualDefinition.runtimePresentation.spriteSeparationCategory}
+                  sizeWorldUnits={entitySpriteSize}
+                  tint={tint}
+                />
                 <pixiContainer rotation={entity.orientation}>
                   <CombatEntityGraphic
                     attackArcRadians={attackArcVisible ? entity.automaticAttack?.arcRadians ?? null : null}

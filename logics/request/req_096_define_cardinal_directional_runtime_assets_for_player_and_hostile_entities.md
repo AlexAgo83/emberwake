@@ -1,9 +1,9 @@
 ## req_096_define_cardinal_directional_runtime_assets_for_player_and_hostile_entities - Define cardinal directional runtime assets for player and hostile entities
-> From version: 0.6.1
+> From version: 0.6.1+task068
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 98%
-> Confidence: 94%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -146,3 +146,7 @@ flowchart TD
 - `item_346_define_directional_entity_asset_contract_and_runtime_facing_resolution`
 - `item_347_define_directional_entity_production_pack_and_generation_workflow`
 - `item_349_define_validation_and_tuning_for_directional_entities_and_dark_on_dark_readability`
+
+# Outcome
+- Fulfilled in `task_068_orchestrate_directional_entity_presentation_and_runtime_sprite_separation`.
+- Landed the cardinal runtime contract with `right` as the authored default, explicit `.right/.up/.down` variants, runtime mirroring for reviewed `left` reuse, and a reviewed single-face exception path for `entity.hostile.needle.runtime`.
