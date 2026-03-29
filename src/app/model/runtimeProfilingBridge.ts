@@ -16,15 +16,25 @@ export type RuntimeAutomationStatus = {
 export type RuntimeShellProfilingStatus = {
   activeScene: string;
   hasActiveSession: boolean;
+  isMenuOpen: boolean;
   requestedScene: string;
+};
+
+export type RuntimeSimulationProfilingStatus = {
+  isMenuOpen: boolean;
+  levelUpVisible: boolean;
+  simulationPaused: boolean;
+  simulationTick: number;
 };
 
 export type RuntimeProfilingBridge = {
   getConfig?: () => RuntimeProfilingConfigDraft;
   getRuntimeStatus?: () => RuntimeAutomationStatus | null;
   getShellStatus?: () => RuntimeShellProfilingStatus;
+  getSimulationStatus?: () => RuntimeSimulationProfilingStatus | null;
   listScenarios?: () => RuntimeProfilingScenarioSummary[];
   resetConfig?: () => RuntimeProfilingConfigDraft;
+  resumeSimulation?: () => RuntimeSimulationProfilingStatus | null;
   setConfig?: (partial: Partial<RuntimeProfilingConfigDraft>) => RuntimeProfilingConfigDraft;
   startScenario?: (request: {
     loop?: boolean;

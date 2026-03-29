@@ -166,6 +166,7 @@ const readProfilingSnapshot = async (page) =>
     const profilingBridge = globalThis.window.__EMBERWAKE_PROFILING__;
     const shellStatus = profilingBridge?.getShellStatus?.() ?? null;
     const runtimeStatus = profilingBridge?.getRuntimeStatus?.() ?? null;
+    const simulationStatus = profilingBridge?.getSimulationStatus?.() ?? null;
     const memory = globalThis.performance?.memory
       ? {
           jsHeapSizeLimit: globalThis.performance.memory.jsHeapSizeLimit,
@@ -178,10 +179,52 @@ const readProfilingSnapshot = async (page) =>
       memory,
       runtimeMetrics,
       runtimeStatus,
+      simulationStatus,
       shellStatus,
       timestampMs: globalThis.performance.now()
     };
   });
+
+const recoverSimulationAfterSnapshot = async ({ page, previousTick }) => {
+  if (typeof previousTick !== "number") {
+    return null;
+  }
+
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < 3_000) {
+    const status = await page.evaluate(() => {
+      const runtimeMetrics = globalThis.window.__EMBERWAKE_RUNTIME_METRICS__ ?? null;
+      const profilingBridge = globalThis.window.__EMBERWAKE_PROFILING__;
+      const shellStatus = profilingBridge?.getShellStatus?.() ?? null;
+      const simulationStatus = profilingBridge?.getSimulationStatus?.() ?? null;
+      const runtimeTick = runtimeMetrics?.runtimeState?.tick ?? simulationStatus?.simulationTick ?? null;
+
+      return {
+        runtimeTick,
+        shellStatus,
+        simulationStatus
+      };
+    });
+
+    if (typeof status.runtimeTick === "number" && status.runtimeTick > previousTick) {
+      return status;
+    }
+
+    if (
+      status.shellStatus?.activeScene === "runtime" &&
+      status.shellStatus?.isMenuOpen === false &&
+      status.simulationStatus?.levelUpVisible === false &&
+      status.simulationStatus?.simulationPaused === true
+    ) {
+      await page.evaluate(() => globalThis.window.__EMBERWAKE_PROFILING__?.resumeSimulation?.());
+    }
+
+    await page.waitForTimeout(100);
+  }
+
+  return null;
+};
 
 const captureHeapSnapshot = async ({ cdpSession, fileUrl, label, page }) => {
   await cdpSession.send("HeapProfiler.enable");
@@ -269,6 +312,27 @@ const summarizeSamples = (samples) => {
   const watchglassPrimeSamples = samples
     .map((sample) => sample.runtimeMetrics?.runtimeState?.hostileProfileCounts?.watchglassPrime ?? null)
     .filter((count) => typeof count === "number");
+  let stalledSampleCount = 0;
+  let longestStallSamples = 0;
+  let currentStallSamples = 0;
+
+  for (let sampleIndex = 1; sampleIndex < samples.length; sampleIndex += 1) {
+    const previousTick = samples[sampleIndex - 1]?.runtimeMetrics?.runtimeState?.tick;
+    const currentTick = samples[sampleIndex]?.runtimeMetrics?.runtimeState?.tick;
+
+    if (
+      typeof previousTick === "number" &&
+      typeof currentTick === "number" &&
+      currentTick === previousTick
+    ) {
+      stalledSampleCount += 1;
+      currentStallSamples += 1;
+      longestStallSamples = Math.max(longestStallSamples, currentStallSamples);
+      continue;
+    }
+
+    currentStallSamples = 0;
+  }
 
   return {
     combatSkillFeedbackEventCount: {
@@ -315,6 +379,11 @@ const summarizeSamples = (samples) => {
       goldEntityMax: safeMax(goldPickupSamples),
       goldStackMax: safeMax(goldPickupStackSamples),
       healingKitMax: safeMax(healingPickupSamples)
+    },
+    runtimeTick: {
+      final: samples.at(-1)?.runtimeMetrics?.runtimeState?.tick ?? null,
+      longestStallSamples,
+      stalledSampleCount
     }
   };
 };
@@ -405,7 +474,7 @@ try {
     globalThis.window.__EMBERWAKE_PROFILING__?.setConfig?.(nextConfig);
   }, effectiveConfig);
 
-  await page.getByLabel("Main menu").waitFor({
+  await page.getByLabel(/Main menu|Emberwake/i).waitFor({
     timeout: runtimePerformanceBudget.runtimeActivation.maxMenuInteractiveMs
   });
   await page.getByRole("button", {
@@ -474,6 +543,7 @@ try {
 
     if (!midpointSnapshotCaptured && Date.now() - startedAt >= cliOptions.durationMs / 2) {
       midpointSnapshotCaptured = true;
+      const tickBeforeMidpointSnapshot = samples.at(-1)?.runtimeMetrics?.runtimeState?.tick ?? null;
       heapSnapshots.push(
         await captureHeapSnapshot({
           cdpSession,
@@ -482,6 +552,10 @@ try {
           page
         })
       );
+      await recoverSimulationAfterSnapshot({
+        page,
+        previousTick: tickBeforeMidpointSnapshot
+      });
     }
 
     await page.waitForTimeout(cliOptions.sampleIntervalMs);

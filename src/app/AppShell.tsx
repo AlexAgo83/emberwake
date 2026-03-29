@@ -161,6 +161,7 @@ export function AppShell() {
       getShellStatus: () => ({
         activeScene,
         hasActiveSession: runtimeSession.hasActiveSession,
+        isMenuOpen,
         requestedScene
       }),
       listScenarios: () => listRuntimeProfilingScenarios(),
@@ -188,7 +189,7 @@ export function AppShell() {
         "setConfig"
       ]);
     };
-  }, [activeScene, requestedScene, runtimeProfilingConfig, runtimeSession.hasActiveSession]);
+  }, [activeScene, isMenuOpen, requestedScene, runtimeProfilingConfig, runtimeSession.hasActiveSession]);
   const {
     preferences,
     setDebugPanelVisible,

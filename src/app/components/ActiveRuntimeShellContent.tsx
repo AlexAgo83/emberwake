@@ -7,6 +7,10 @@ import { PlayerHudCard } from "./PlayerHudCard";
 import { RuntimeBuildChoicePanel } from "./RuntimeBuildChoicePanel";
 import { RuntimeSceneBoundary } from "./RuntimeSceneBoundary";
 import { ShellMenu } from "./ShellMenu";
+import {
+  clearRuntimeProfilingBridge,
+  patchRuntimeProfilingBridge
+} from "../model/runtimeProfilingBridge";
 import { runtimePublicationContract } from "../model/runtimePublicationContract";
 import type { AppSceneId, RuntimeShellOutcome } from "../model/appScene";
 import { worldPointToChunkCoordinate } from "@engine";
@@ -492,6 +496,37 @@ export function ActiveRuntimeShellContent({
       tick: simulationState.tick
     }
   });
+
+  useEffect(() => {
+    patchRuntimeProfilingBridge({
+      getSimulationStatus: () => ({
+        isMenuOpen,
+        levelUpVisible,
+        simulationPaused: simulationState.runtime.isPaused,
+        simulationTick: simulationState.tick
+      }),
+      resumeSimulation: () => {
+        simulationState.controls.resume();
+
+        return {
+          isMenuOpen,
+          levelUpVisible,
+          simulationPaused: false,
+          simulationTick: simulationState.tick
+        };
+      }
+    });
+
+    return () => {
+      clearRuntimeProfilingBridge(["getSimulationStatus", "resumeSimulation"]);
+    };
+  }, [
+    isMenuOpen,
+    levelUpVisible,
+    simulationState.controls,
+    simulationState.runtime.isPaused,
+    simulationState.tick
+  ]);
 
   useDebugPanelHotkey({
     enabled: appConfig.diagnosticsEnabled && showShellTools,
