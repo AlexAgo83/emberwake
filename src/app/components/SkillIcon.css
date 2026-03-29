@@ -25,6 +25,13 @@
   block-size: 100%;
 }
 
+.skill-icon__img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+
 .skill-icon__plate,
 .skill-icon__grid,
 .skill-icon__fill,

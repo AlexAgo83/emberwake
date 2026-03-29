@@ -286,9 +286,9 @@ describe("entitySimulation", () => {
     );
   });
 
-  it("spawns an authored mini-boss beat every five minutes of survival", () => {
+  it("spawns an authored mini-boss beat every two minutes of survival", () => {
     const initialState = createInitialSimulationState();
-    const miniBossBeatTick = 300 * 60;
+    const miniBossBeatTick = 120 * 60;
     const simulationState = advanceSimulationState({
       ...initialState,
       tick: miniBossBeatTick - 1

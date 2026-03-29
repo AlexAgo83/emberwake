@@ -196,11 +196,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               : scene === "pause"
                 ? ""
         : scene === "settings"
-          ? settingsView === "menu"
-            ? "Choose a settings category without leaving the shell."
-            : settingsView === "desktop-controls"
-              ? "Adjust input options exposed on large-screen shell layouts."
-              : "Adjust optional display helpers and runtime visibility overlays."
+          ? ""
           : scene === "defeat" && gameOverRecap
             ? gameOverRecap.defeatDetail
             : runtimeOutcome?.detail ??
@@ -255,11 +251,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             : scene === "pause"
               ? "Pause"
           : scene === "settings"
-            ? settingsView === "graphics"
-              ? "Display"
-              : settingsView === "desktop-controls"
-                ? "Controls"
-                : "Settings"
+            ? "Settings"
             : scene === "defeat"
               ? "Recovery"
               : "Outcome";

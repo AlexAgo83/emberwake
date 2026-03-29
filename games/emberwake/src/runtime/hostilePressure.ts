@@ -33,7 +33,7 @@ export type HostileSpawnProfile = {
 const secondsToTicks = (seconds: number) => Math.round(seconds * 60);
 
 export const hostilePressureContract = {
-  authoredMiniBossBeatIntervalTicks: secondsToTicks(300),
+  authoredMiniBossBeatIntervalTicks: secondsToTicks(120),
   bossDefeatEscalation: {
     hostileContactDamageMultiplierStep: 0.08,
     hostileMaxHealthMultiplierStep: 0.18,

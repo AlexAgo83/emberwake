@@ -49,7 +49,7 @@ export default function SettingsSceneContent({
                 </span>
               </div>
               <p className="app-meta-scene__settings-card-detail">
-                Manage input-related shell options and large-screen calibration.
+                Input options and desktop calibration.
               </p>
             </div>
             <button
@@ -78,7 +78,7 @@ export default function SettingsSceneContent({
                 </span>
               </div>
               <p className="app-meta-scene__settings-card-detail">
-                Manage optional runtime presentation helpers and visibility overlays.
+                Optional runtime display helpers.
               </p>
             </div>
             <button
@@ -115,11 +115,10 @@ export default function SettingsSceneContent({
         <div className="app-meta-scene__subsurface app-meta-scene__subsurface--settings app-meta-scene__settings-panel">
           <div className="app-meta-scene__settings-panel-copy">
             <p className="app-meta-scene__lead">
-              Control optional display helpers exposed by the runtime without changing gameplay.
+              Optional display helpers only.
             </p>
             <p className="app-meta-scene__settings-card-note">
-              These toggles affect only player-facing presentation helpers. They do not change combat arcs,
-              collision footprints, pickup behavior, or terrain generation.
+              No gameplay changes.
             </p>
           </div>
           <div className="app-meta-scene__settings-toggle-row">

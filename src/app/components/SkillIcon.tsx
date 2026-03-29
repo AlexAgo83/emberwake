@@ -1,8 +1,7 @@
 import "./SkillIcon.css";
 
-import type { ActiveWeaponId, FusionId, PassiveItemId } from "@game";
-
-type SkillIconId = ActiveWeaponId | PassiveItemId | FusionId;
+import { resolveAssetUrl } from "@src/assets/assetResolver";
+import { resolveSkillIconAssetId, type SkillIconId } from "../model/skillIconAssets";
 
 type SkillIconProps = {
   category: "active" | "fusion" | "passive";
@@ -80,6 +79,7 @@ const iconFills: Partial<Record<SkillIconId, string[]>> = {
 export function SkillIcon({ category, id, label, size = "md" }: SkillIconProps) {
   const strokePaths = iconStrokePaths[id] ?? [];
   const fillPaths = iconFills[id] ?? [];
+  const iconAssetUrl = resolveAssetUrl(resolveSkillIconAssetId(id));
 
   return (
     <span
@@ -89,16 +89,20 @@ export function SkillIcon({ category, id, label, size = "md" }: SkillIconProps) 
       data-size={size}
       title={label}
     >
-      <svg className="skill-icon__svg" viewBox="0 0 64 64">
-        <rect className="skill-icon__plate" x="7" y="7" width="50" height="50" rx="14" />
-        <path className="skill-icon__grid" d="M18 14 L18 50 M32 10 L32 54 M46 14 L46 50 M14 18 L50 18 M10 32 L54 32 M14 46 L50 46" />
-        {fillPaths.map((pathData) => (
-          <path className="skill-icon__fill" d={pathData} key={pathData} />
-        ))}
-        {strokePaths.map((pathData) => (
-          <path className="skill-icon__stroke" d={pathData} key={pathData} />
-        ))}
-      </svg>
+      {iconAssetUrl ? (
+        <img alt="" className="skill-icon__img" src={iconAssetUrl} />
+      ) : (
+        <svg className="skill-icon__svg" viewBox="0 0 64 64">
+          <rect className="skill-icon__plate" x="7" y="7" width="50" height="50" rx="14" />
+          <path className="skill-icon__grid" d="M18 14 L18 50 M32 10 L32 54 M46 14 L46 50 M14 18 L50 18 M10 32 L54 32 M14 46 L50 46" />
+          {fillPaths.map((pathData) => (
+            <path className="skill-icon__fill" d={pathData} key={pathData} />
+          ))}
+          {strokePaths.map((pathData) => (
+            <path className="skill-icon__stroke" d={pathData} key={pathData} />
+          ))}
+        </svg>
+      )}
     </span>
   );
 }
