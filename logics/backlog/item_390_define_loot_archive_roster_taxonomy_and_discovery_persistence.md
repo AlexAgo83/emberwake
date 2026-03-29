@@ -1,10 +1,10 @@
 ## item_390_define_loot_archive_roster_taxonomy_and_discovery_persistence - Define loot archive roster, taxonomy, and discovery persistence
 > From version: 0.6.1+c2d57bc
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

@@ -74,6 +74,11 @@ import {
   type HostileProfileId
 } from "@game/runtime/hostilePressure";
 import { gameplayTuning } from "@game/config/gameplayTuning";
+import {
+  resolveCrystalPickupTint,
+  resolveCrystalPickupVisualKind
+} from "@shared/model/crystalPickups";
+import type { LootArchiveId } from "@shared/model/lootArchive";
 import { getWorldProfileBySeed } from "@shared/model/worldProfiles";
 
 export const entitySimulationContract = {
@@ -157,6 +162,7 @@ export type RunStats = {
   crystalsCollected: number;
   currentLevel: number;
   currentXp: number;
+  discoveredLootIds: LootArchiveId[];
   goldCollected: number;
   healingKitsCollected: number;
   hostileDefeats: number;
@@ -357,6 +363,7 @@ const createInitialRunStats = (): RunStats => ({
   crystalsCollected: 0,
   currentLevel: 1,
   currentXp: 0,
+  discoveredLootIds: [],
   goldCollected: 0,
   healingKitsCollected: 0,
   hostileDefeats: 0,
@@ -644,7 +651,7 @@ const createPickupEntity = (
         pickupKind === "healing-kit"
           ? "pickup-healing-kit"
           : pickupKind === "crystal"
-            ? "pickup-crystal"
+            ? resolveCrystalPickupVisualKind(stackCount)
             : pickupKind === "hourglass"
               ? "pickup-hourglass"
             : pickupKind === "magnet"
@@ -702,20 +709,6 @@ const isStackablePickupKind = (pickupKind: SimulatedPickupKind) =>
 
 const resolvePickupStackCount = (entity: SimulatedEntity) =>
   Math.max(1, entity.pickupProfile?.stackCount ?? 1);
-
-const resolveCrystalPickupTint = (stackCount: number) => {
-  const resolvedStackCount = Math.max(1, Math.floor(stackCount));
-
-  if (resolvedStackCount > 50) {
-    return "#ff5a5a";
-  }
-
-  if (resolvedStackCount > 10) {
-    return "#7dff9b";
-  }
-
-  return "#73f2ff";
-};
 
 const mergeNewPickupEntities = (
   entities: readonly SimulatedEntity[],
@@ -780,6 +773,7 @@ const mergeNewPickupEntities = (
         pickupKind === "crystal"
           ? {
               ...mergeTarget.visual,
+              kind: resolveCrystalPickupVisualKind(nextStackCount),
               tint: resolveCrystalPickupTint(nextStackCount)
             }
           : mergeTarget.visual
@@ -834,6 +828,7 @@ const createMergedPickupEntity = (cluster: readonly SimulatedEntity[], preferCen
         anchorEntity.pickupProfile?.kind === "crystal"
           ? {
               ...anchorEntity.visual,
+              kind: resolveCrystalPickupVisualKind(totalStackCount),
               tint: resolveCrystalPickupTint(totalStackCount)
             }
           : anchorEntity.visual
@@ -867,6 +862,7 @@ const createMergedPickupEntity = (cluster: readonly SimulatedEntity[], preferCen
       anchorEntity.pickupProfile?.kind === "crystal"
         ? {
             ...anchorEntity.visual,
+            kind: resolveCrystalPickupVisualKind(totalStackCount),
             tint: resolveCrystalPickupTint(totalStackCount)
           }
         : anchorEntity.visual,
@@ -1190,6 +1186,9 @@ const normalizeSimulatedEntity = (
         inferredPickupKind === "crystal"
           ? {
               ...baseEntity.visual,
+              kind: resolveCrystalPickupVisualKind(
+                Math.max(1, entity.pickupProfile?.stackCount ?? 1)
+              ),
               tint: resolveCrystalPickupTint(
                 Math.max(1, entity.pickupProfile?.stackCount ?? 1)
               )

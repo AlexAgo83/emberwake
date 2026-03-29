@@ -6,6 +6,7 @@ import {
   listPassiveItemDefinitions
 } from "@game";
 import { resolveAssetUrl } from "@src/assets/assetResolver";
+import { lootArchiveEntries } from "@shared/model/lootArchive";
 
 import type { CodexProgressionSnapshot } from "./AppMetaScenePanel";
 import { SkillIcon } from "./SkillIcon";
@@ -67,6 +68,7 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
   const discoveredPassiveItemIds = new Set(progressionSnapshot?.discoveredPassiveItemIds ?? []);
   const discoveredFusionIds = new Set(progressionSnapshot?.discoveredFusionIds ?? []);
   const discoveredCreatureIds = new Set(progressionSnapshot?.discoveredCreatureIds ?? []);
+  const discoveredLootIds = new Set(progressionSnapshot?.discoveredLootIds ?? []);
   const codexUnknownCount = Math.max(
     0,
     listActiveWeaponDefinitions().length +
@@ -215,6 +217,79 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
             </p>
           </div>
         ) : null}
+      </div>
+    );
+  }
+
+  if (scene === "loot-archive") {
+    const groupedLootEntries = [
+      {
+        entries: lootArchiveEntries.filter((entry) => entry.category === "rewards"),
+        id: "loot-rewards",
+        label: "Rewards"
+      },
+      {
+        entries: lootArchiveEntries.filter((entry) => entry.category === "mission"),
+        id: "loot-mission",
+        label: "Mission items"
+      },
+      {
+        entries: lootArchiveEntries.filter((entry) => entry.category === "utilities"),
+        id: "loot-utilities",
+        label: "Utility drops"
+      }
+    ];
+
+    return (
+      <div className="app-meta-scene__codex-grid">
+        {groupedLootEntries.map((group) => (
+          <section className="app-meta-scene__codex-section" aria-labelledby={group.id} key={group.id}>
+            <div className="app-meta-scene__codex-section-header">
+              <p className="app-meta-scene__eyebrow" id={group.id}>
+                {group.label}
+              </p>
+              <span className="app-meta-scene__codex-count">
+                {group.entries.filter((entry) => discoveredLootIds.has(entry.id)).length}/{group.entries.length}
+              </span>
+            </div>
+            <div className="app-meta-scene__codex-cards">
+              {group.entries.map((lootEntry) => {
+                const isKnown = discoveredLootIds.has(lootEntry.id);
+                const lootAssetUrl = resolveAssetUrl(lootEntry.assetId);
+
+                return (
+                  <article
+                    className="app-meta-scene__codex-card"
+                    data-state={isKnown ? "known" : "unknown"}
+                    key={lootEntry.id}
+                  >
+                    <div className="app-meta-scene__codex-icon" aria-hidden="true">
+                      {isKnown && lootAssetUrl ? (
+                        <img
+                          alt=""
+                          className="app-meta-scene__codex-creature-asset"
+                          src={lootAssetUrl}
+                        />
+                      ) : isKnown ? (
+                        lootEntry.label.slice(0, 2).toUpperCase()
+                      ) : (
+                        "??"
+                      )}
+                    </div>
+                    <div className="app-meta-scene__codex-copy">
+                      <h3>{isKnown ? lootEntry.label : "Undiscovered drop"}</h3>
+                      <p>
+                        {isKnown
+                          ? lootEntry.description
+                          : "Loot the item in a run to archive its field record here."}
+                      </p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        ))}
       </div>
     );
   }

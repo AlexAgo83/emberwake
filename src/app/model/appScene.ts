@@ -8,6 +8,7 @@ export type AppSceneId =
   | "failure"
   | "growth"
   | "grimoire"
+  | "loot-archive"
   | "main-menu"
   | "new-game"
   | "pause"
@@ -42,6 +43,7 @@ export const appSceneContract = {
     "growth",
     "grimoire",
     "bestiary",
+    "loot-archive",
     "pause",
     "settings",
     "defeat",

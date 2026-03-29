@@ -25,6 +25,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   onOpenChangelogs: vi.fn(),
   onOpenGrowth: vi.fn(),
   onOpenGrimoire: vi.fn(),
+  onOpenLootArchive: vi.fn(),
   onOpenNewGame: vi.fn(),
   onPurchaseShopUnlock: vi.fn(),
   onPurchaseTalentRank: vi.fn(),
@@ -65,6 +66,7 @@ describe("AppMetaScenePanel", () => {
     expect(screen.getByRole("button", { name: /Descend into the Abyss/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Skills/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Bestiary/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Loot Archive/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Changelogs/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Talents/i })).toBeInTheDocument();
     expect(screen.queryByText(/Meta flow/i)).not.toBeInTheDocument();

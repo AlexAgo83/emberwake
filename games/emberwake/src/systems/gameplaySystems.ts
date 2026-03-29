@@ -13,6 +13,7 @@ import {
   resolveCreatureCodexIdFromVisualKind,
   type CreatureCodexId
 } from "@game/content/entities/creatureCodex";
+import type { LootArchiveId } from "@shared/model/lootArchive";
 import {
   resolveNextRunProgressionPhase,
   resolveRunProgressionPhase,
@@ -47,6 +48,7 @@ export type ProgressionSystemState = {
   discoveredActiveWeaponIds: ActiveWeaponId[];
   discoveredCreatureIds: CreatureCodexId[];
   discoveredFusionIds: FusionId[];
+  discoveredLootIds: LootArchiveId[];
   discoveredPassiveItemIds: PassiveItemId[];
   discoveredSkillIds: string[];
   phaseLabel: string;
@@ -196,6 +198,7 @@ export const createInitialGameplaySystemsState = (): EmberwakeGameplaySystemsSta
     discoveredActiveWeaponIds: ["ash-lash"],
     discoveredCreatureIds: [],
     discoveredFusionIds: [],
+    discoveredLootIds: [],
     discoveredPassiveItemIds: [],
     discoveredSkillIds: ["active:ash-lash"],
     phaseLabel: resolveRunProgressionPhase(0).label,
@@ -263,6 +266,8 @@ export const normalizeGameplaySystemsState = (
         progression?.discoveredCreatureIds ?? initialState.progression.discoveredCreatureIds,
       discoveredFusionIds:
         progression?.discoveredFusionIds ?? initialState.progression.discoveredFusionIds,
+      discoveredLootIds:
+        progression?.discoveredLootIds ?? initialState.progression.discoveredLootIds,
       discoveredPassiveItemIds:
         progression?.discoveredPassiveItemIds ?? initialState.progression.discoveredPassiveItemIds,
       discoveredSkillIds:
@@ -344,6 +349,12 @@ export const advanceGameplaySystemsState = ({
     discoveredActiveWeaponIds,
     discoveredCreatureIds,
     discoveredFusionIds,
+    discoveredLootIds: Array.from(
+      new Set([
+        ...previousState.progression.discoveredLootIds,
+        ...simulationAfterUpdate.runStats.discoveredLootIds
+      ])
+    ),
     discoveredPassiveItemIds,
     discoveredSkillIds: buildDiscoveredSkillIds({
       activeWeaponIds: discoveredActiveWeaponIds,

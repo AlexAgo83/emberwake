@@ -62,6 +62,10 @@ export function useAppScene({ rendererStatus, runtimeOutcome }: UseAppSceneOptio
     setRequestedScene("bestiary");
     setShellSurface("none");
   }, []);
+  const showLootArchiveScene = useCallback(() => {
+    setRequestedScene("loot-archive");
+    setShellSurface("none");
+  }, []);
   const showSettingsScene = useCallback(() => {
     setRequestedScene("settings");
     setShellSurface("none");
@@ -77,6 +81,7 @@ export function useAppScene({ rendererStatus, runtimeOutcome }: UseAppSceneOptio
     resumeRuntime,
     runtimeOutcome,
     showBestiaryScene,
+    showLootArchiveScene,
     shellSurface,
     showChangelogsScene,
     showGrowthScene,

@@ -34,6 +34,7 @@ export type CodexProgressionSnapshot = {
   discoveredActiveWeaponIds: string[];
   discoveredCreatureIds: string[];
   discoveredFusionIds: string[];
+  discoveredLootIds: string[];
   discoveredPassiveItemIds: string[];
   phaseLabel: string;
 };
@@ -113,6 +114,7 @@ type AppMetaScenePanelProps = {
   onOpenChangelogs: () => void;
   onOpenGrowth: () => void;
   onOpenGrimoire: () => void;
+  onOpenLootArchive: () => void;
   onOpenNewGame: () => void;
   onPurchaseShopUnlock: (unlockId: ShopUnlockId) => void;
   onPurchaseTalentRank: (talentId: MetaTalentId) => void;
@@ -150,6 +152,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   onOpenChangelogs,
   onOpenGrowth,
   onOpenGrimoire,
+  onOpenLootArchive,
   onOpenNewGame,
   onPurchaseShopUnlock,
   onPurchaseTalentRank,
@@ -178,6 +181,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
     scene === "growth" ||
     scene === "grimoire" ||
     scene === "bestiary" ||
+    scene === "loot-archive" ||
     scene === "pause" ||
     scene === "settings" ||
     scene === "defeat" ||
@@ -208,6 +212,8 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             ? "Skills"
             : scene === "bestiary"
               ? "Bestiary"
+              : scene === "loot-archive"
+                ? "Loot Archive"
               : scene === "pause"
                 ? "Paused"
         : scene === "settings"
@@ -228,6 +234,8 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             ? "Review discovered active, passive, and fusion techniques."
             : scene === "bestiary"
               ? "Inspect the field archive of encountered hostile forms."
+              : scene === "loot-archive"
+                ? "Review the shell archive of field drops collected across runs."
               : scene === "pause"
                 ? ""
         : scene === "settings"
@@ -260,6 +268,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
     scene === "growth" ||
     scene === "grimoire" ||
     scene === "bestiary" ||
+    scene === "loot-archive" ||
     scene === "pause" ||
     scene === "settings" ||
     scene === "defeat"
@@ -282,6 +291,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           : scene === "growth"
           ? "Meta progression"
         : scene === "grimoire" || scene === "bestiary"
+          || scene === "loot-archive"
             ? "Codex archive"
             : scene === "pause"
               ? "Pause"
@@ -298,6 +308,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
           scene === "settings" ||
           scene === "grimoire" ||
           scene === "bestiary" ||
+          scene === "loot-archive" ||
           scene === "pause"
         ? "steel"
         : scene === "defeat"
@@ -522,6 +533,13 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               </button>
               <button
                 className="shell-control shell-control--button shell-control--button-quiet"
+                onClick={onOpenLootArchive}
+                type="button"
+              >
+                Loot Archive
+              </button>
+              <button
+                className="shell-control shell-control--button shell-control--button-quiet"
                 onClick={onOpenChangelogs}
                 type="button"
               >
@@ -709,6 +727,26 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                     <LazyCodexArchiveScene
                       progressionSnapshot={progressionSnapshot}
                       scene="bestiary"
+                    />
+                  </Suspense>
+                </div>
+                <div className="app-meta-scene__actions">
+                  <button
+                    className="shell-control shell-control--button"
+                    onClick={onReturnToMainMenu}
+                    type="button"
+                  >
+                    Back to menu
+                  </button>
+                </div>
+              </>
+            ) : scene === "loot-archive" ? (
+              <>
+                <div className="app-meta-scene__scene-body app-meta-scene__scene-body--scroll">
+                  <Suspense fallback={<p className="settings-controls__status">Loading codex archive…</p>}>
+                    <LazyCodexArchiveScene
+                      progressionSnapshot={progressionSnapshot}
+                      scene="loot-archive"
                     />
                   </Suspense>
                 </div>

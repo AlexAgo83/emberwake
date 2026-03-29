@@ -22,6 +22,7 @@ describe("metaProfileStorage", () => {
         discoveredActiveWeaponIds: ["ash-lash", "chain-lightning"],
         discoveredCreatureIds: ["watchglass-prime"],
         discoveredFusionIds: ["redline-ribbon"],
+        discoveredLootIds: ["crystal-high", "gold"],
         discoveredPassiveItemIds: ["overclock-seal"]
       },
       goldBalance: 88,

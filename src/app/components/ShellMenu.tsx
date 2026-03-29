@@ -85,6 +85,12 @@ const sceneStatusMap: Record<
     title: "Skills archive",
     tone: "neutral"
   },
+  "loot-archive": {
+    detail: "The shell is presenting the drop archive.",
+    stateLabel: "Loot",
+    title: "Loot archive",
+    tone: "neutral"
+  },
   growth: {
     detail: "Persistent talents and unlock purchases live in the shell.",
     stateLabel: "Talents",

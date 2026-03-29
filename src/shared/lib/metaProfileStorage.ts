@@ -32,6 +32,9 @@ export const readMetaProfile = (fallbackProfile: MetaProfile): MetaProfile =>
         discoveredFusionIds:
           persistedProfile.archive?.discoveredFusionIds ??
           currentFallbackProfile.archive.discoveredFusionIds,
+        discoveredLootIds:
+          persistedProfile.archive?.discoveredLootIds ??
+          currentFallbackProfile.archive.discoveredLootIds,
         discoveredPassiveItemIds:
           persistedProfile.archive?.discoveredPassiveItemIds ??
           currentFallbackProfile.archive.discoveredPassiveItemIds

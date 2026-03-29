@@ -181,6 +181,7 @@ vi.mock("./hooks/useRuntimeSession", () => ({
           discoveredActiveWeaponIds: [],
           discoveredCreatureIds: [],
           discoveredFusionIds: [],
+          discoveredLootIds: [],
           discoveredPassiveItemIds: [],
           goldCollected: 0,
           hostileDefeats: 0,

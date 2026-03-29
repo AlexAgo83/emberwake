@@ -118,6 +118,7 @@ export function AppShell() {
     showChangelogsScene,
     showGrowthScene,
     showGrimoireScene,
+    showLootArchiveScene,
     showMainMenuScene,
     showNewGameScene,
     showPauseScene,
@@ -350,6 +351,7 @@ export function AppShell() {
                 discoveredActiveWeaponIds: gameState.systems.progression.discoveredActiveWeaponIds,
                 discoveredCreatureIds: gameState.systems.progression.discoveredCreatureIds,
                 discoveredFusionIds: gameState.systems.progression.discoveredFusionIds,
+                discoveredLootIds: gameState.systems.progression.discoveredLootIds,
                 discoveredPassiveItemIds: gameState.systems.progression.discoveredPassiveItemIds
               }
             )
@@ -442,6 +444,7 @@ export function AppShell() {
             discoveredActiveWeaponIds: latestProgression.discoveredActiveWeaponIds,
             discoveredCreatureIds: latestProgression.discoveredCreatureIds,
             discoveredFusionIds: latestProgression.discoveredFusionIds,
+            discoveredLootIds: latestProgression.discoveredLootIds,
             discoveredPassiveItemIds: latestProgression.discoveredPassiveItemIds
           }
         : null
@@ -468,6 +471,7 @@ export function AppShell() {
       onOpenChangelogs={showChangelogsScene}
       onOpenGrowth={handleOpenGrowth}
       onOpenGrimoire={showGrimoireScene}
+      onOpenLootArchive={showLootArchiveScene}
       onOpenNewGame={handleOpenNewGame}
       onPurchaseShopUnlock={handlePurchaseShopUnlock}
       onPurchaseTalentRank={handlePurchaseTalentRank}

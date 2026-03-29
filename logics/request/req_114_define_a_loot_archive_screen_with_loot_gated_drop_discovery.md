@@ -1,7 +1,7 @@
 ## req_114_define_a_loot_archive_screen_with_loot_gated_drop_discovery - Define a loot archive screen with loot-gated drop discovery
 > From version: 0.6.1+c2d57bc
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
 > Complexity: Medium

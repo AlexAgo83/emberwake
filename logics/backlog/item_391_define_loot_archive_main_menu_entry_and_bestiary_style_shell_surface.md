@@ -1,10 +1,10 @@
 ## item_391_define_loot_archive_main_menu_entry_and_bestiary_style_shell_surface - Define loot archive main menu entry and bestiary-style shell surface
 > From version: 0.6.1+c2d57bc
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

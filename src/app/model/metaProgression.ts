@@ -5,6 +5,7 @@ import {
   type WorldProfileId,
   type WorldProgress
 } from "../../shared/model/worldProfiles";
+import type { LootArchiveId } from "../../shared/model/lootArchive";
 
 export type MetaTalentId =
   | "gold-gain"
@@ -26,6 +27,7 @@ export type MetaArchiveProgress = {
   discoveredActiveWeaponIds: ActiveWeaponId[];
   discoveredCreatureIds: string[];
   discoveredFusionIds: FusionId[];
+  discoveredLootIds: LootArchiveId[];
   discoveredPassiveItemIds: PassiveItemId[];
 };
 
@@ -186,6 +188,7 @@ export const createDefaultMetaProfile = (): MetaProfile => ({
     discoveredActiveWeaponIds: ["ash-lash"],
     discoveredCreatureIds: [],
     discoveredFusionIds: [],
+    discoveredLootIds: [],
     discoveredPassiveItemIds: []
   },
   goldBalance: 0,
@@ -409,6 +412,9 @@ export const mergeArchiveProgress = (
       discoveredFusionIds: Array.from(
         new Set([...profile.archive.discoveredFusionIds, ...(archive.discoveredFusionIds ?? [])])
       ) as FusionId[],
+      discoveredLootIds: Array.from(
+        new Set([...profile.archive.discoveredLootIds, ...(archive.discoveredLootIds ?? [])])
+      ) as LootArchiveId[],
       discoveredPassiveItemIds: Array.from(
         new Set([
           ...profile.archive.discoveredPassiveItemIds,
@@ -496,6 +502,9 @@ export const overlayArchiveProgress = (
     discoveredFusionIds: Array.from(
       new Set([...profile.archive.discoveredFusionIds, ...(archive?.discoveredFusionIds ?? [])])
     ) as FusionId[],
+    discoveredLootIds: Array.from(
+      new Set([...profile.archive.discoveredLootIds, ...(archive?.discoveredLootIds ?? [])])
+    ) as LootArchiveId[],
     discoveredPassiveItemIds: Array.from(
       new Set([
         ...profile.archive.discoveredPassiveItemIds,

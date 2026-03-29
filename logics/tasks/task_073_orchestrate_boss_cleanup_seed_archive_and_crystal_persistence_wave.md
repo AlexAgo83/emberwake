@@ -4,7 +4,7 @@
 > Status: In Progress
 > Understanding: 100%
 > Confidence: 98%
-> Progress: 45%
+> Progress: 70%
 > Complexity: High
 > Theme: Systems
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -43,8 +43,8 @@ flowchart LR
 - [x] 1. Complete the unique boss asset roster, generation, promotion, and runtime/shell integration wave from `item_381` to `item_383`.
 - [x] 2. Implement terminal-run cleanup ownership and teardown validation from `item_384` and `item_385`.
 - [x] 3. Implement derived map seed contract and runtime-session bootstrap from `item_386` and `item_387`.
-- [ ] 4. Implement the three-crystal asset wave from `item_388` and `item_389`.
-- [ ] 5. Implement the loot archive data/discovery seam plus shell surface from `item_390` and `item_391`.
+- [x] 4. Implement the three-crystal asset wave from `item_388` and `item_389`.
+- [x] 5. Implement the loot archive data/discovery seam plus shell surface from `item_390` and `item_391`.
 - [ ] 6. Implement per-world primary mission objective naming and placement integration from `item_392` and `item_393`.
 - [ ] 7. Implement crystal persistence, compaction, and validation from `item_394` and `item_395`.
 - [ ] CHECKPOINT: keep boss-asset delivery, runtime/session changes, shell/archive changes, and crystal persistence changes as separate commit-ready waves.
@@ -105,3 +105,4 @@ flowchart LR
 # Report
 - Checkpoint A completed: unique boss assets were generated, promoted, and integrated into runtime plus shell surfaces.
 - Checkpoint B completed: terminal exits now clear run-owned session memory, and run seeds are now derived deterministically from normalized player name plus selected world.
+- Checkpoint C completed: the crystal trio now resolves to distinct generated runtime assets, and the shell now exposes a loot archive unlocked by actual loot collection.

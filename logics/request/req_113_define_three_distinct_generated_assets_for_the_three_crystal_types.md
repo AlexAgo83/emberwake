@@ -1,7 +1,7 @@
 ## req_113_define_three_distinct_generated_assets_for_the_three_crystal_types - Define three distinct generated assets for the three crystal types
 > From version: 0.6.1+c2d57bc
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
 > Complexity: Medium

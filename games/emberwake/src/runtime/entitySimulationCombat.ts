@@ -16,6 +16,8 @@ import {
 } from "./buildSystem";
 import { systemTuning } from "@game/config/systemTuning";
 import { getHostileSpawnProfile } from "./hostilePressure";
+import { resolveCrystalLootArchiveId } from "@shared/model/crystalPickups";
+import type { LootArchiveId } from "@shared/model/lootArchive";
 import type {
   CombatSkillFeedbackEvent,
   FloatingDamageNumber,
@@ -59,6 +61,17 @@ const normalizeAngleDelta = (angleRadians: number) => {
 
 const isHostileTarget = (entity: SimulatedEntity) => entity.role === "hostile" && isAlive(entity);
 const fixedStepSeconds = 1 / 60;
+
+const appendDiscoveredLootId = (runStats: RunStats, lootArchiveId: LootArchiveId) => {
+  if (runStats.discoveredLootIds.includes(lootArchiveId)) {
+    return runStats;
+  }
+
+  return {
+    ...runStats,
+    discoveredLootIds: [...runStats.discoveredLootIds, lootArchiveId]
+  };
+};
 
 const applyDamage = (
   entity: SimulatedEntity,
@@ -1025,6 +1038,10 @@ export const resolvePickupCollection = ({
           nextRunStats,
           applyCrystalXpGain(nextRunStats, pickupStackCount, xpGainMultiplier)
         );
+        Object.assign(
+          nextRunStats,
+          appendDiscoveredLootId(nextRunStats, resolveCrystalLootArchiveId(pickupStackCount))
+        );
         continue;
       }
 
@@ -1054,23 +1071,34 @@ export const resolvePickupCollection = ({
           Math.ceil(nextPlayerEntity.combat.maxHealth * pickupContract.healingKit.healRatio)
         );
         nextRunStats.healingKitsCollected += 1;
+        Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "healing-kit"));
         break;
       case "gold":
         nextRunStats.goldCollected += Math.max(
           1,
           Math.round(pickupContract.gold.value * pickupStackCount * goldGainMultiplier)
         );
+        Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "gold"));
         break;
       case "hourglass":
         nextEnemyTimeStopUntilTick =
           nextEnemyTimeStopUntilTick >= tick
             ? nextEnemyTimeStopUntilTick
             : tick + pickupContract.hourglass.durationTicks;
+        Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "hourglass"));
         break;
       case "cache":
         nextRunStats.missionItemsCollected += 1;
+        Object.assign(
+          nextRunStats,
+          appendDiscoveredLootId(
+            nextRunStats,
+            entity.pickupProfile.missionItemStageIndex === undefined ? "cache-gift" : "cache-mission"
+          )
+        );
         break;
       case "magnet":
+        Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "magnet"));
         break;
     }
   }
