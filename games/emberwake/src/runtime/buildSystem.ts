@@ -206,7 +206,7 @@ const activeWeaponDefinitions: Record<ActiveWeaponId, ActiveWeaponDefinition> = 
   },
   "guided-senbon": {
     attackKind: "auto-target",
-    baseCooldownTicks: 18,
+    baseCooldownTicks: 36,
     baseDamage: 11,
     baseRangeWorldUnits: 330,
     baseTargetCount: 2,

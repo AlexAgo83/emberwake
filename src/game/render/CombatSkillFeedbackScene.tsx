@@ -246,7 +246,7 @@ const drawCombatSkillFeedback =
         graphics.setStrokeStyle({
           alpha: 0.26 * alpha,
           color: 0xff5a55,
-          width: 10
+          width: 20
         });
         graphics.moveTo(
           combatSkillFeedbackEvent.originWorldPoint.x,
@@ -258,7 +258,7 @@ const drawCombatSkillFeedback =
         graphics.setStrokeStyle({
           alpha: 0.92 * alpha,
           color: 0xffd2c8,
-          width: 3
+          width: 6
         });
         graphics.moveTo(
           combatSkillFeedbackEvent.originWorldPoint.x,

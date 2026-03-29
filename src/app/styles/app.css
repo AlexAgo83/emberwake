@@ -307,6 +307,7 @@ html[data-app-display-mode="browser"] .app-shell {
 
 .app-meta-scene[data-scene="grimoire"],
 .app-meta-scene[data-scene="bestiary"],
+.app-meta-scene[data-scene="loot-archive"],
 .app-meta-scene[data-scene="growth"] {
   width: min(46rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
   height: min(44rem, calc(100dvh - var(--shell-offset-top) - var(--shell-offset-bottom) - 2rem));
@@ -315,6 +316,7 @@ html[data-app-display-mode="browser"] .app-shell {
 
 .app-meta-scene[data-scene="grimoire"] .app-meta-scene__frame,
 .app-meta-scene[data-scene="bestiary"] .app-meta-scene__frame,
+.app-meta-scene[data-scene="loot-archive"] .app-meta-scene__frame,
 .app-meta-scene[data-scene="growth"] .app-meta-scene__frame {
   height: 100%;
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -384,7 +386,7 @@ html[data-app-display-mode="browser"] .app-shell {
 
 .app-meta-scene__main-menu-character--hero {
   right: 0;
-  transform: translateX(14%) scaleX(-1);
+  transform: translateX(-100%) scaleX(-1);
   transform-origin: right bottom;
 }
 

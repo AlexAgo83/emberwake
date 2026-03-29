@@ -4,7 +4,7 @@
 
 # Emberwake
 
-Emberwake is a techno-shinobi survival action game where every run turns into a faster, louder, more dangerous fight for control. Cut through escalating hostile waves, assemble impossible builds, cash out gold into permanent growth, and push deeper each time before the world finally overwhelms you.
+Emberwake is a techno-shinobi survival action game where each run starts from an authored world choice, pushes you across a hostile map-wide mission, and asks you to extract before the pressure wins. Cut through escalating waves, assemble impossible builds, hunt mission bosses, secure mission items, and cash out gold into permanent growth before descending again.
 
 [![CI](https://github.com/AlexAgo83/emberwake/actions/workflows/ci.yml/badge.svg)](https://github.com/AlexAgo83/emberwake/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/AlexAgo83/emberwake)](LICENSE)
@@ -18,20 +18,24 @@ Emberwake is a techno-shinobi survival action game where every run turns into a 
 Emberwake currently includes:
 
 - Fast top-down survival combat with auto-firing weapons, passive augments, curated fusions, and run-defining build pivots.
-- A persistent `Growth` layer where gold earned in runs becomes permanent talents, shop unlocks, and longer-term progression.
-- Discoverable `Grimoire` and `Bestiary` archives that persist across runs and turn play into collectible knowledge.
-- Escalating authored pressure through time phases, boss beats, post-boss difficulty spikes, and expanding enemy variety.
+- A persistent `Growth` layer where gold earned in runs becomes permanent talents, shop unlocks, reroll/pass capacity, and longer-term progression.
+- A five-world unlock ladder with authored world cards, mission-gated progression, visible attempts/clears/progress, and per-world hostile scaling.
+- A primary map mission loop with three distant objectives, mission bosses, mission-item drops, and map exit unlock after all three are secured.
+- Discoverable `Grimoire`, `Bestiary`, and `Loot Archive` codex surfaces that persist across runs and turn play into collectible knowledge.
+- Escalating authored pressure through time phases, mini-boss beats, mission bosses, post-boss difficulty spikes, and expanding enemy variety.
 - Utility pickups such as magnets, healing kits, gold, and hourglass time-stop drops to create recovery swings in otherwise chaotic fights.
-- A shell-owned game flow with `Main menu`, `New game`, `Load game`, `Growth`, `Settings`, `Game over`, `Grimoire`, and `Bestiary`.
-- A deterministic chunked world, PixiJS runtime, and local-first persistence model built for repeatable runs and rapid iteration.
+- A shell-owned game flow with `Main menu`, `New game`, `Growth`, `Settings`, `Game over`, `Victory`, `Grimoire`, `Bestiary`, and `Loot Archive`.
+- A deterministic chunked world, PixiJS runtime, generated asset pipeline, and local-first meta progression model built for repeatable runs and rapid iteration.
 
 ```mermaid
 flowchart TD
     Shell[Shell-owned flow] --> Runtime[Pixi runtime]
+    Shell --> Worlds[Five-world ladder]
     Runtime --> World[Chunked deterministic world]
-    Runtime --> Combat[Hostiles and combat]
-    Runtime --> Loot[Pickups and gold]
-    Shell --> Persistence[Local save/load]
+    Runtime --> Mission[Three-objective mission loop]
+    Runtime --> Combat[Hostiles, mini-bosses, mission bosses]
+    Runtime --> Loot[Pickups, mission items, gold]
+    Shell --> Persistence[Local meta progression]
     Shell --> Planning[Logics workflow]
 ```
 
@@ -43,34 +47,36 @@ Current release target:
 
 What `main` reflects today:
 
-- Emberwake is already playable as a full run-based survival experience rather than a bare prototype shell.
-- The current build includes meta progression, a broadened combat roster, curated fusion payoffs, codex progression, and a strong shell-driven game flow.
-- The game is deep enough to support tuning, pacing, and content iteration as the primary focus of the next waves.
-- The project remains in active balancing and content expansion, but the core loop is now strong, legible, and shipping-oriented.
+- Emberwake is already playable as a full shell-to-runtime action loop rather than a bare prototype shell.
+- The current build includes world selection, mission-gated world progression, meta progression, broadened combat/content rosters, curated fusion payoffs, and codex-style archives.
+- Generated runtime assets now cover the hero, hostiles, bosses, pickups, skill icons, and world-card presentation more directly than the earlier placeholder-first presentation.
+- The game is now in a tuning-and-content-expansion phase where mission pacing, world differentiation, readability, and progression depth are the primary focus.
 
 ```mermaid
 flowchart LR
     Release[v0.6.1 target] --> Main[main branch]
-    Main --> Playable[Playable survival loop]
+    Main --> Playable[Playable world and mission loop]
     Main --> Modular[Modular runtime ownership]
-    Main --> Next[Balance, profiling, meta progression, content expansion]
+    Main --> Next[Balance, profiling, progression, content expansion]
 ```
 
 ## Current Gameplay Slice
 
-- Drop into a run from the shell, name the character, and survive as long as possible.
-- Move through a deterministic hostile world with obstacles, friction surfaces, and readable combat space.
-- Let the build evolve through auto-firing weapons, passive items, second-wave skills, and fusion outcomes.
-- Use pickups, chest rewards, and level-up offers to stabilize the run or snowball it.
-- End each run with recap data, damage-share ranking, earned gold, and cross-run progression.
-- Reinvest that gold in permanent growth, then come back stronger for the next attempt.
+- Choose a world from the shell, name the character, and spawn into a deterministic seed derived from the player name plus the selected world.
+- Traverse a hostile map with authored mission objectives, distinct per-world objective names/placements, obstacles, friction surfaces, and readable combat space.
+- Follow the off-screen guidance arrow to mission targets, mission bosses, dropped mission items, and mini-bosses when they sit outside the camera.
+- Let the build evolve through a dual-track level-up surface: `3` active/fusion offers, `3` passive offers, a single pick, plus reroll and pass charges.
+- Use pickups, chest rewards, utility drops, and differentiated crystal tiers to stabilize the run or snowball it.
+- Finish the run by extracting after all three mission items are secured, or lose it through defeat or explicit abandonment.
+- Review the outcome, damage-share ranking, earned gold, discoveries, attempts, and world progress, then reinvest in permanent growth.
 
 ## Why It Hooks
 
-- Runs are designed to feel doomed in the best way: the better your build gets, the longer you delay the inevitable.
+- Runs are structured, not purely endless: each world gives you a route, three objectives, bosses, and a clean extraction condition.
 - Progress happens on two levels at once: immediate power inside the run, and permanent growth outside it.
-- The shell is part of the product, not just scaffolding. Growth, codex, save/load, updates, and post-run analysis all reinforce the loop.
+- The shell is part of the product, not just scaffolding. World selection, growth, codex/archive surfaces, and post-run analysis all reinforce the loop.
 - The current direction mixes survivor-like escalation with a sharper techno-shinobi presentation instead of generic fantasy horde combat.
+- The current asset pipeline makes the game increasingly authored visually instead of relying on abstract placeholders and generic debug shapes.
 
 ## Tuning Contracts
 
@@ -88,12 +94,12 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    Menu[Main menu] --> NewGame[New game or load]
-    NewGame --> Runtime[Explore and survive]
-    Runtime --> Combat[Auto cone attack vs hostiles]
-    Combat --> Loot[Pickups]
-    Runtime --> GameOver[Game over recap]
-    GameOver --> Menu
+    Menu[Main menu] --> NewGame[World select and naming]
+    NewGame --> Runtime[Explore, fight, complete mission]
+    Runtime --> Combat[Auto attacks, bosses, pickups]
+    Combat --> Outcome[Victory, defeat, or abandon]
+    Outcome --> Growth[Recap, ranking, progression]
+    Growth --> Menu
 ```
 
 ## Tech Stack
@@ -221,36 +227,56 @@ Artifacts to inspect after a run:
 ## Controls
 
 - **Mobile:** virtual stick for direct movement.
-- **Desktop:** remappable movement controls from `Settings > Desktop controls`.
-- **Shell shortcuts:** `Escape` is used for shell navigation and menu/back behavior depending on the active surface.
+- **Desktop:** remappable movement controls from `Settings > Controls`.
+- **Shell shortcuts:** `Escape` opens the in-run shell menu during runtime and remains the general shell back/menu key on shell surfaces.
 
 ```mermaid
 flowchart LR
     Mobile[Virtual stick] --> Move[Direct movement]
     Desktop[Desktop controls] --> Rebind[Remappable movement bindings]
-    Escape[Escape] --> ShellNav[Menu or back navigation]
+    Escape[Escape] --> ShellNav[In-run menu or shell back navigation]
 ```
 
 ## Persistence
 
 Current persistence is intentionally local-first:
 
-- Single-slot save/load for the active runtime session
-- Persistent meta profile for banked gold, purchased unlocks, talent ranks, bestiary discovery, and grimoire discovery
+- No player-facing mid-run save/load loop; runs are terminally resolved through victory, defeat, or abandon
+- Persistent meta profile for banked gold, purchased unlocks, talent ranks, world progression, bestiary discovery, grimoire discovery, and loot archive discovery
 - Shell preferences persisted locally
 - Desktop control bindings persisted locally
-- Runtime world reconstructed from deterministic seed and state rather than large opaque world snapshots
+- Runtime seed derived deterministically from normalized player name plus selected world profile
+- Terminal returns to the main menu clean up runtime-owned memory/state instead of keeping a resumable run alive
 
 There is currently no backend runtime or cloud-save stack in Emberwake.
 
 ```mermaid
 flowchart TD
     Local[Local storage]
-    Local --> Save[Single-slot save]
+    Local --> Meta[Meta progression]
     Local --> Prefs[Shell preferences]
     Local --> Bindings[Desktop bindings]
-    Save --> Rebuild[World rebuilt from seed and state]
+    Meta --> Worlds[World unlocks and attempts]
+    Meta --> Archives[Bestiary, Grimoire, Loot Archive]
+    Meta --> Rebuild[World rebuilt from deterministic seed]
 ```
+
+## World Ladder
+
+- `World 1`: `Ashwake Verge`
+- `World 2`: `Emberplain Reach` (`+10%` hostile health and damage)
+- `World 3`: `Glowfen Basin` (`+20%` hostile health and damage)
+- `World 4`: `Obsidian Vault` (`+30%` hostile health and damage)
+- `World 5`: `Cinderfall Crown` (`+40%` hostile health and damage)
+
+Each world card exposes its representative asset, mission progress, attempts, clears, and lock state directly in the shell.
+
+## Runtime Presentation
+
+- The main menu now uses large runtime character and enemy assets as screen-edge background silhouettes.
+- Living entities use a left/right-facing runtime posture, with vertical movement preserving the last horizontal facing.
+- Runtime readability includes dark-on-dark separation treatment, optional debug circles behind sprites, and state-reactive health bars that flare visible on health changes.
+- Bosses, crystals, pickups, and skill icons now rely on generated runtime assets instead of a mostly placeholder-first surface.
 
 ## Delivery Workflow
 

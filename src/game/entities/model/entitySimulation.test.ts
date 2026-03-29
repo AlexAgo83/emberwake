@@ -1302,6 +1302,7 @@ describe("entitySimulation", () => {
     expect(frozenHostile?.hostileControlState?.frozenUntilTick ?? 0).toBeGreaterThan(
       frozenState.tick
     );
+    expect((frozenHostile?.hostileControlState?.frozenUntilTick ?? 0) - frozenState.tick).toBe(24);
     expect(heldHostile?.velocity).toEqual({ x: 0, y: 0 });
   });
 

@@ -656,9 +656,11 @@ export const resolveAutomaticPlayerAttack = (
     };
     applyDamageToTargetIds(targetIds, runtimeStats.damage, activeSlot.weaponId, {
       freezeDurationTicks:
-        activeSlot.weaponId === "frost-nova" || activeSlot.fusionId === "event-horizon"
-          ? Math.max(36, runtimeStats.visibleTicks * 2)
-          : undefined,
+        activeSlot.weaponId === "frost-nova"
+          ? Math.max(18, runtimeStats.visibleTicks)
+          : activeSlot.fusionId === "event-horizon"
+            ? Math.max(36, runtimeStats.visibleTicks * 2)
+            : undefined,
       pickupPulseDurationTicks:
         runtimeStats.attackKind === "vacuum"
           ? runtimeStats.visibleTicks *
