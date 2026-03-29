@@ -485,6 +485,74 @@ html[data-app-display-mode="browser"] .app-shell {
     rgba(11, 17, 22, 0.72);
 }
 
+.app-meta-scene__settings-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.app-meta-scene__settings-card {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+    rgba(11, 17, 22, 0.72);
+}
+
+.app-meta-scene__settings-card-copy,
+.app-meta-scene__settings-panel-copy {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.app-meta-scene__settings-card-header,
+.app-meta-scene__settings-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.app-meta-scene__settings-card-title,
+.app-meta-scene__settings-toggle-label {
+  margin: 0;
+  color: var(--emberwake-copy);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.app-meta-scene__settings-card-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.9rem;
+  padding: 0.35rem 0.62rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--emberwake-copy-dim);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-meta-scene__settings-card-detail,
+.app-meta-scene__settings-card-note {
+  margin: 0;
+  color: var(--emberwake-copy-dim);
+  line-height: 1.5;
+}
+
+.app-meta-scene__settings-card-note {
+  font-size: 0.84rem;
+}
+
+.app-meta-scene__settings-panel {
+  gap: 1rem;
+}
+
 .app-meta-scene__lead {
   color: var(--emberwake-copy);
   font-size: 0.92rem;

@@ -614,6 +614,7 @@ export function ActiveRuntimeShellContent({
           camera={cameraState}
           combatSkillFeedbackEvents={simulationState.combatSkillFeedbackEvents}
           currentTick={simulationState.tick}
+          entityRingsVisible={preferences.entityRingsVisible}
           floatingDamageNumbers={simulationState.floatingDamageNumbers}
           onOpenSettings={onShowSettingsScene}
           onRendererError={onRendererError}

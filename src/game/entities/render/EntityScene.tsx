@@ -13,6 +13,11 @@ import {
   type FloatingDamageNumber,
   type SimulatedEntity
 } from "../model/entitySimulation";
+import {
+  resolveEntitySpriteSeparationCategory,
+  resolvePickupSpriteSizeWorldUnits,
+  shouldRenderSpriteBackedEntityRing
+} from "./entityPresentation";
 
 extend({
   Graphics,
@@ -23,6 +28,7 @@ extend({
 type EntitySceneProps = {
   camera: CameraState;
   currentTick: number;
+  entityRingsVisible: boolean;
   entities: SimulatedEntity[];
   floatingDamageNumbers: FloatingDamageNumber[];
   renderSurfaceMode: EmberwakeRenderSurfaceMode;
@@ -249,6 +255,7 @@ const drawCombatEntity =
     hitReactionProgress,
     isSelected,
     radius,
+    spriteRingVisible,
     spriteBacked,
     tint
   }: {
@@ -257,6 +264,7 @@ const drawCombatEntity =
     hitReactionProgress: number;
     isSelected: boolean;
     radius: number;
+    spriteRingVisible: boolean;
     spriteBacked: boolean;
     tint: number;
   }) =>
@@ -303,13 +311,15 @@ const drawCombatEntity =
       graphics.fill();
     }
 
-    graphics.setStrokeStyle({
-      alpha: spriteBacked ? 0.82 : 0.95,
-      color: isSelected ? 0xf6eee8 : tint,
-      width: isSelected ? 5 : spriteBacked ? 2.5 : 3
-    });
-    graphics.circle(0, 0, spriteBacked ? radius + 2 : radius);
-    graphics.stroke();
+    if (spriteRingVisible || !spriteBacked) {
+      graphics.setStrokeStyle({
+        alpha: spriteBacked ? 0.82 : 0.95,
+        color: isSelected ? 0xf6eee8 : tint,
+        width: isSelected ? 5 : spriteBacked ? 2.5 : 3
+      });
+      graphics.circle(0, 0, spriteBacked ? radius + 2 : radius);
+      graphics.stroke();
+    }
 
     if (!spriteBacked) {
       graphics.moveTo(0, 0);
@@ -384,6 +394,7 @@ function CombatEntityGraphic({
   hitReactionProgress,
   isSelected,
   radius,
+  spriteRingVisible,
   spriteBacked,
   tint
 }: {
@@ -392,6 +403,7 @@ function CombatEntityGraphic({
   hitReactionProgress: number;
   isSelected: boolean;
   radius: number;
+  spriteRingVisible: boolean;
   spriteBacked: boolean;
   tint: number;
 }) {
@@ -403,6 +415,7 @@ function CombatEntityGraphic({
         hitReactionProgress,
         isSelected,
         radius,
+        spriteRingVisible,
         spriteBacked,
         tint
       }),
@@ -412,6 +425,7 @@ function CombatEntityGraphic({
       hitReactionProgress,
       isSelected,
       radius,
+      spriteRingVisible,
       spriteBacked,
       tint
     ]
@@ -522,6 +536,7 @@ const EntitySprite = memo(function EntitySprite({
 export function EntityScene({
   camera,
   currentTick,
+  entityRingsVisible,
   entities,
   floatingDamageNumbers,
   renderSurfaceMode,
@@ -566,7 +581,11 @@ export function EntityScene({
         const entityAssetUrl = resolveAssetUrl(entityAssetId);
         const entitySpriteSize =
           assetPipeline.logicalSizing.entity.spriteLogicalSizeWorldUnits * (entity.visualScale ?? 1);
-        const pickupSpriteSize = Math.max(renderedRadius * 2.3, 76 * (entity.visualScale ?? 1));
+        const pickupSpriteSize = resolvePickupSpriteSizeWorldUnits({
+          pickupKind,
+          renderedRadius,
+          visualScale: entity.visualScale ?? 1
+        });
         const telegraphShakeOffset =
           entity.role === "hostile" && entity.hostileBehaviorState?.phase === "telegraph"
             ? {
@@ -604,22 +623,28 @@ export function EntityScene({
                     assetId={entityAssetId}
                     mirrorX={entitySpritePresentation.mirrorX}
                     rotation={entitySpritePresentation.rotation}
-                    separationCategory={entityVisualDefinition.runtimePresentation.spriteSeparationCategory}
+                    separationCategory={resolveEntitySpriteSeparationCategory({
+                      entityRingsVisible,
+                      spriteSeparationCategory:
+                        entityVisualDefinition.runtimePresentation.spriteSeparationCategory
+                    })}
                     sizeWorldUnits={pickupSpriteSize}
                     tint={tint}
                   />
-                  <pixiGraphics
-                    draw={(graphics) => {
-                      graphics.clear();
-                      graphics.setStrokeStyle({
-                        alpha: 0.18,
-                        color: 0xf6eee8,
-                        width: 1.5
-                      });
-                      graphics.circle(0, 0, renderedRadius + 4);
-                      graphics.stroke();
-                    }}
-                  />
+                  {entityRingsVisible ? (
+                    <pixiGraphics
+                      draw={(graphics) => {
+                        graphics.clear();
+                        graphics.setStrokeStyle({
+                          alpha: 0.18,
+                          color: 0xf6eee8,
+                          width: 1.5
+                        });
+                        graphics.circle(0, 0, renderedRadius + 4);
+                        graphics.stroke();
+                      }}
+                    />
+                  ) : null}
                 </>
               ) : (
                 <PickupEntityGraphic
@@ -634,7 +659,11 @@ export function EntityScene({
                   assetId={entityAssetId}
                   mirrorX={entitySpritePresentation.mirrorX}
                   rotation={entitySpritePresentation.rotation}
-                  separationCategory={entityVisualDefinition.runtimePresentation.spriteSeparationCategory}
+                  separationCategory={resolveEntitySpriteSeparationCategory({
+                    entityRingsVisible,
+                    spriteSeparationCategory:
+                      entityVisualDefinition.runtimePresentation.spriteSeparationCategory
+                  })}
                   sizeWorldUnits={entitySpriteSize}
                   tint={tint}
                 />
@@ -647,6 +676,10 @@ export function EntityScene({
                     hitReactionProgress={hitReactionProgress}
                     isSelected={isSelected}
                     radius={renderedRadius}
+                    spriteRingVisible={shouldRenderSpriteBackedEntityRing({
+                      entityRingsVisible,
+                      spriteBacked: Boolean(entityAssetUrl)
+                    })}
                     spriteBacked={Boolean(entityAssetUrl)}
                     tint={tint}
                   />

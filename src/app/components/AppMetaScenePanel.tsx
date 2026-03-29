@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { lazy, memo, Suspense } from "react";
 import type { CSSProperties } from "react";
 
@@ -37,6 +37,8 @@ type PlayerWorldPosition = {
   y: number;
 };
 
+type SettingsView = "desktop-controls" | "graphics" | "menu";
+
 const LazyDesktopControlSettingsSection = lazy(async () => {
   const module = await import("./DesktopControlSettingsSection");
 
@@ -68,6 +70,7 @@ type AppMetaScenePanelProps = {
   canSaveSession: boolean;
   characterNameError: string | null;
   desktopControlBindings: DesktopControlBindings;
+  entityRingsVisible: boolean;
   fullscreenPreferred: boolean;
   gameOverRecap?: GameOverRecap | null;
   isMobileLayout: boolean;
@@ -89,6 +92,7 @@ type AppMetaScenePanelProps = {
   onReturnToMainMenu: () => void;
   onResumeRuntime: () => void;
   onSaveGame: () => void;
+  onSetEntityRingsVisible: (visible: boolean) => void;
   pendingCharacterName: string;
   playerName: string;
   playerWorldPosition?: PlayerWorldPosition | null;
@@ -102,6 +106,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   canSaveSession,
   characterNameError,
   desktopControlBindings,
+  entityRingsVisible,
   fullscreenPreferred,
   gameOverRecap,
   isMobileLayout,
@@ -123,6 +128,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   onReturnToMainMenu,
   onResumeRuntime,
   onSaveGame,
+  onSetEntityRingsVisible,
   pendingCharacterName,
   playerName,
   playerWorldPosition,
@@ -131,6 +137,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   scene
 }: AppMetaScenePanelProps) {
   const [defeatView, setDefeatView] = useState<"recap" | "skills">("recap");
+  const [settingsView, setSettingsView] = useState<SettingsView>("menu");
   const [releaseChangelogEntries, setReleaseChangelogEntries] = useState<ReleaseChangelogEntry[] | null>(null);
   const isShellOwnedScene =
     scene === "main-menu" ||
@@ -192,7 +199,11 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
               : scene === "pause"
                 ? ""
         : scene === "settings"
-          ? ""
+          ? settingsView === "menu"
+            ? "Choose what to tune without leaving the shell."
+            : settingsView === "desktop-controls"
+              ? "Calibrate desktop movement bindings for large-screen shell layouts."
+              : "Adjust runtime presentation helpers exposed to the player."
           : scene === "defeat" && gameOverRecap
             ? gameOverRecap.defeatDetail
             : runtimeOutcome?.detail ??
@@ -204,28 +215,39 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       ? "Return to main menu"
       : scene === "victory"
         ? "Continue runtime"
-        : scene === "main-menu"
-          ? "Resume runtime"
-          : "Resume runtime";
+      : scene === "main-menu"
+        ? "Resume runtime"
+        : "Resume runtime";
   const ownershipLabel =
     scene === "defeat" || scene === "victory"
       ? `Shell scene / gameplay outcome ${runtimeOutcome?.kind ?? scene}`
       : "Shell scene / runtime state preserved";
-  const handleEscapeAction =
-    scene === "main-menu"
-      ? canResumeSession
-        ? onResumeRuntime
-        : null
-      : scene === "new-game" ||
-          scene === "changelogs" ||
-          scene === "growth" ||
-          scene === "grimoire" ||
-          scene === "bestiary" ||
-          scene === "pause" ||
-          scene === "settings" ||
-          scene === "defeat"
-        ? onReturnToMainMenu
-        : null;
+  const handleEscapeAction = useMemo(() => {
+    if (scene === "main-menu") {
+      return canResumeSession ? onResumeRuntime : null;
+    }
+
+    if (
+      scene === "new-game" ||
+      scene === "changelogs" ||
+      scene === "growth" ||
+      scene === "grimoire" ||
+      scene === "bestiary" ||
+      scene === "pause" ||
+      scene === "settings" ||
+      scene === "defeat"
+    ) {
+      if (scene === "settings" && settingsView !== "menu") {
+        return () => {
+          setSettingsView("menu");
+        };
+      }
+
+      return onReturnToMainMenu;
+    }
+
+    return null;
+  }, [canResumeSession, onResumeRuntime, onReturnToMainMenu, scene, settingsView]);
   const projectVersionLabel = `${appConfig.name} v${appConfig.version}`;
   const sceneEyebrow =
     scene === "main-menu"
@@ -235,13 +257,17 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         : scene === "changelogs"
           ? "Archive"
           : scene === "growth"
-            ? "Meta progression"
+          ? "Meta progression"
           : scene === "grimoire" || scene === "bestiary"
             ? "Codex archive"
             : scene === "pause"
               ? "Pause"
           : scene === "settings"
-            ? "Control bench"
+            ? settingsView === "graphics"
+              ? "Graphics"
+              : settingsView === "desktop-controls"
+                ? "Input calibration"
+                : "Control bench"
             : scene === "defeat"
               ? "Recovery"
               : "Outcome";
@@ -272,6 +298,17 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   useEffect(() => {
     setDefeatView("recap");
   }, [scene]);
+
+  useEffect(() => {
+    if (scene !== "settings") {
+      setSettingsView("menu");
+      return;
+    }
+
+    if (isMobileLayout && settingsView === "desktop-controls") {
+      setSettingsView("menu");
+    }
+  }, [isMobileLayout, scene, settingsView]);
 
   useEffect(() => {
     if (scene !== "changelogs") {
@@ -600,26 +637,117 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
             ) : scene === "settings" ? (
               <>
                 <div className="app-meta-scene__scene-body app-meta-scene__scene-body--settings">
-                  {isMobileLayout ? (
-                    <div className="app-meta-scene__subsurface app-meta-scene__subsurface--settings">
-                      <p className="app-meta-scene__lead">
-                        Desktop control calibration is only exposed on large-screen shell layouts.
-                      </p>
+                  {settingsView === "menu" ? (
+                    <div className="app-meta-scene__settings-grid">
+                      <article className="app-meta-scene__settings-card">
+                        <div className="app-meta-scene__settings-card-copy">
+                          <div className="app-meta-scene__settings-card-header">
+                            <h3 className="app-meta-scene__settings-card-title">Desktop controls</h3>
+                            <span className="app-meta-scene__settings-card-tag">
+                              {isMobileLayout ? "Desktop only" : "Keyboard"}
+                            </span>
+                          </div>
+                          <p className="app-meta-scene__settings-card-detail">
+                            Remap the large-screen movement bindings used by the player entity.
+                          </p>
+                        </div>
+                        <button
+                          className="shell-control shell-control--button"
+                          disabled={isMobileLayout}
+                          onClick={() => {
+                            setSettingsView("desktop-controls");
+                          }}
+                          type="button"
+                        >
+                          Desktop controls
+                        </button>
+                        {isMobileLayout ? (
+                          <p className="app-meta-scene__settings-card-note">
+                            Desktop control calibration is only exposed on large-screen shell layouts.
+                          </p>
+                        ) : null}
+                      </article>
+
+                      <article className="app-meta-scene__settings-card">
+                        <div className="app-meta-scene__settings-card-copy">
+                          <div className="app-meta-scene__settings-card-header">
+                            <h3 className="app-meta-scene__settings-card-title">Graphics</h3>
+                            <span className="app-meta-scene__settings-card-tag">
+                              {entityRingsVisible ? "Entity rings on" : "Entity rings off"}
+                            </span>
+                          </div>
+                          <p className="app-meta-scene__settings-card-detail">
+                            Tune player-facing runtime presentation helpers such as entity rings and pickup outlines.
+                          </p>
+                        </div>
+                        <button
+                          className="shell-control shell-control--button"
+                          onClick={() => {
+                            setSettingsView("graphics");
+                          }}
+                          type="button"
+                        >
+                          Graphics
+                        </button>
+                      </article>
                     </div>
+                  ) : settingsView === "desktop-controls" ? (
+                    isMobileLayout ? (
+                      <div className="app-meta-scene__subsurface app-meta-scene__subsurface--settings">
+                        <p className="app-meta-scene__lead">
+                          Desktop control calibration is only exposed on large-screen shell layouts.
+                        </p>
+                      </div>
+                    ) : (
+                      <Suspense
+                        fallback={
+                          <p className="settings-controls__status">Loading desktop control bindings…</p>
+                        }
+                      >
+                        <LazyDesktopControlSettingsSection
+                          bindings={desktopControlBindings}
+                          onApply={onApplyDesktopControlBindings}
+                        />
+                      </Suspense>
+                    )
                   ) : (
-                    <Suspense
-                      fallback={
-                        <p className="settings-controls__status">Loading desktop control bindings…</p>
-                      }
-                    >
-                      <LazyDesktopControlSettingsSection
-                        bindings={desktopControlBindings}
-                        onApply={onApplyDesktopControlBindings}
-                      />
-                    </Suspense>
+                    <div className="app-meta-scene__subsurface app-meta-scene__subsurface--settings app-meta-scene__settings-panel">
+                      <div className="app-meta-scene__settings-panel-copy">
+                        <p className="app-meta-scene__lead">
+                          Control whether sprite-backed entities and pickups keep their runtime rings and readability halos.
+                        </p>
+                        <p className="app-meta-scene__settings-card-note">
+                          Applies to sprite-backed player, hostile, and pickup ring treatment. It does not change combat arcs, bars, or pickup gameplay.
+                        </p>
+                      </div>
+                      <div className="app-meta-scene__settings-toggle-row">
+                        <span className="app-meta-scene__settings-toggle-label">Entity rings</span>
+                        <button
+                          aria-pressed={entityRingsVisible}
+                          className="shell-control shell-control--button"
+                          onClick={() => {
+                            onSetEntityRingsVisible(!entityRingsVisible);
+                          }}
+                          type="button"
+                        >
+                          {entityRingsVisible ? "Disable entity rings" : "Enable entity rings"}
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
                 <div className="app-meta-scene__actions">
+                  {settingsView !== "menu" ? (
+                    <button
+                      className="shell-control shell-control--button"
+                      onClick={() => {
+                        setSettingsView("menu");
+                      }}
+                      type="button"
+                    >
+                      Back to settings
+                    </button>
+                  ) : null}
                   <button
                     className="shell-control shell-control--button"
                     onClick={onReturnToMainMenu}

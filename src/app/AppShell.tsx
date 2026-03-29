@@ -193,6 +193,7 @@ export function AppShell() {
   const {
     preferences,
     setDebugPanelVisible,
+    setEntityRingsVisible,
     setInspectionPanelVisible,
     setLastMetaScene,
     setMovementOnboardingDismissed,
@@ -431,6 +432,7 @@ export function AppShell() {
       canSaveSession={runtimeSession.hasActiveSession}
       characterNameError={characterNameValidation.error}
       desktopControlBindings={desktopControlBindings}
+      entityRingsVisible={preferences.entityRingsVisible}
       fullscreenPreferred={preferences.prefersFullscreen}
       gameOverRecap={gameOverRecap}
       isMobileLayout={viewport.layoutMode === "mobile"}
@@ -452,6 +454,7 @@ export function AppShell() {
       onReturnToMainMenu={handleReturnToMainMenu}
       onResumeRuntime={resumeRuntime}
       onSaveGame={handleSaveGame}
+      onSetEntityRingsVisible={setEntityRingsVisible}
       pendingCharacterName={pendingCharacterName}
       playerName={runtimeSession.playerName}
       playerWorldPosition={(latestGameStateRef.current ?? sessionInitState)?.simulation.entity.worldPosition ?? null}

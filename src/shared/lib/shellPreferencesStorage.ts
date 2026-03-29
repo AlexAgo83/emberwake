@@ -6,6 +6,7 @@ import {
 
 export type ShellPreferences = {
   debugPanelVisible: boolean;
+  entityRingsVisible: boolean;
   inspectionPanelVisible: boolean;
   lastMetaScene: "none" | "pause" | "settings";
   movementOnboardingDismissed: boolean;

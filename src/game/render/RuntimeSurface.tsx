@@ -20,6 +20,7 @@ import type { ChunkCoordinate } from "../world/types";
 type RuntimeSurfaceProps = {
   camera: CameraState;
   currentTick: number;
+  entityRingsVisible: boolean;
   onRendererError?: (message: string) => void;
   onRendererReady?: () => void;
   onSurfaceElementChange?: (element: HTMLDivElement | null) => void;
@@ -43,6 +44,7 @@ type RuntimeSurfaceProps = {
 export function RuntimeSurface({
   camera,
   currentTick,
+  entityRingsVisible,
   onRendererError,
   onRendererReady,
   onSurfaceElementChange,
@@ -61,6 +63,7 @@ export function RuntimeSurface({
       <EntityScene
         camera={camera}
         currentTick={currentTick}
+        entityRingsVisible={entityRingsVisible}
         entities={visibleEntities}
         floatingDamageNumbers={floatingDamageNumbers}
         renderSurfaceMode={renderSurfaceMode}

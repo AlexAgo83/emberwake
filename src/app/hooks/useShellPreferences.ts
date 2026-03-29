@@ -16,6 +16,7 @@ export function useShellPreferences({
   const [preferences, setPreferences] = useState<ShellPreferences>(() =>
     readShellPreferences({
       debugPanelVisible: defaultDebugPanelVisible,
+      entityRingsVisible: true,
       inspectionPanelVisible: false,
       lastMetaScene: "none",
       movementOnboardingDismissed: false,
@@ -32,6 +33,12 @@ export function useShellPreferences({
     setPreferences((currentPreferences) => ({
       ...currentPreferences,
       debugPanelVisible
+    }));
+  }, []);
+  const setEntityRingsVisible = useCallback((entityRingsVisible: boolean) => {
+    setPreferences((currentPreferences) => ({
+      ...currentPreferences,
+      entityRingsVisible
     }));
   }, []);
   const setInspectionPanelVisible = useCallback((inspectionPanelVisible: boolean) => {
@@ -68,6 +75,7 @@ export function useShellPreferences({
   return {
     preferences,
     setDebugPanelVisible,
+    setEntityRingsVisible,
     setInspectionPanelVisible,
     setLastMetaScene,
     setPrefersFullscreen,

@@ -11,6 +11,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   canSaveSession: false,
   characterNameError: null,
   desktopControlBindings: createDefaultDesktopControlBindings(),
+  entityRingsVisible: true,
   fullscreenPreferred: false,
   gameOverRecap: null,
   isMobileLayout: false,
@@ -32,6 +33,7 @@ const createProps = (overrides: Partial<React.ComponentProps<typeof AppMetaScene
   onReturnToMainMenu: vi.fn(),
   onResumeRuntime: vi.fn(),
   onSaveGame: vi.fn(),
+  onSetEntityRingsVisible: vi.fn(),
   pendingCharacterName: "Wanderer",
   playerName: "",
   progressionSnapshot: null,
@@ -242,7 +244,7 @@ describe("AppMetaScenePanel", () => {
     expect(props.onResumeRuntime).toHaveBeenCalledTimes(1);
   });
 
-  it("renders settings as a compact desktop-controls surface", async () => {
+  it("renders settings as a category menu before opening sub-surfaces", () => {
     const props = createProps({
       canResumeSession: true,
       scene: "settings"
@@ -251,14 +253,57 @@ describe("AppMetaScenePanel", () => {
     render(<AppMetaScenePanel {...props} />);
 
     expect(screen.getByLabelText("Settings")).toBeInTheDocument();
-    expect(screen.queryByText(/Tune desktop controls/i)).not.toBeInTheDocument();
     expect(screen.queryByText("Session")).not.toBeInTheDocument();
     expect(screen.queryByText("Fullscreen")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Resume runtime/i })).not.toBeInTheDocument();
-    expect(await screen.findByLabelText(/Desktop controls/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Desktop controls" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Graphics" })).toBeInTheDocument();
+    expect(screen.queryByLabelText(/Desktop controls/i)).not.toBeInTheDocument();
   });
 
-  it("hides desktop control calibration from the mobile settings surface", () => {
+  it("opens desktop controls from the settings menu on large layouts", async () => {
+    const props = createProps({
+      scene: "settings"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Desktop controls" }));
+
+    expect(await screen.findByLabelText(/Desktop controls/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Back to settings/i })).toBeInTheDocument();
+  });
+
+  it("returns from a settings child surface to the settings menu on Escape", () => {
+    const props = createProps({
+      scene: "settings"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+    fireEvent.click(screen.getByRole("button", { name: "Graphics" }));
+
+    expect(screen.getByRole("button", { name: /Disable entity rings/i })).toBeInTheDocument();
+
+    fireEvent.keyDown(window, { key: "Escape" });
+
+    expect(screen.getByRole("button", { name: "Desktop controls" })).toBeInTheDocument();
+    expect(props.onReturnToMainMenu).not.toHaveBeenCalled();
+  });
+
+  it("toggles entity rings from the graphics settings surface", () => {
+    const props = createProps({
+      entityRingsVisible: true,
+      scene: "settings"
+    });
+
+    render(<AppMetaScenePanel {...props} />);
+    fireEvent.click(screen.getByRole("button", { name: "Graphics" }));
+    fireEvent.click(screen.getByRole("button", { name: /Disable entity rings/i }));
+
+    expect(props.onSetEntityRingsVisible).toHaveBeenCalledWith(false);
+  });
+
+  it("keeps desktop controls unavailable but exposes graphics on the mobile settings surface", () => {
     const props = createProps({
       isMobileLayout: true,
       scene: "settings"
@@ -266,9 +311,9 @@ describe("AppMetaScenePanel", () => {
 
     render(<AppMetaScenePanel {...props} />);
 
-    expect(
-      screen.getByText(/Desktop control calibration is only exposed on large-screen shell layouts/i)
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Desktop controls" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Graphics" })).toBeEnabled();
+    expect(screen.getByText(/Desktop control calibration is only exposed on large-screen shell layouts/i)).toBeInTheDocument();
     expect(screen.queryByText(/Loading desktop control bindings/i)).not.toBeInTheDocument();
     expect(screen.queryByLabelText(/Desktop controls/i)).not.toBeInTheDocument();
   });

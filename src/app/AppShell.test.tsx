@@ -163,6 +163,7 @@ vi.mock("./hooks/useShellPreferences", () => ({
   useShellPreferences: () => ({
     preferences: {
       debugPanelVisible: false,
+      entityRingsVisible: true,
       inspectionPanelVisible: false,
       lastMetaScene: "none",
       movementOnboardingDismissed: true,
@@ -170,6 +171,7 @@ vi.mock("./hooks/useShellPreferences", () => ({
       runtimeFeedbackVisible: true
     },
     setDebugPanelVisible: vi.fn(),
+    setEntityRingsVisible: vi.fn(),
     setInspectionPanelVisible: vi.fn(),
     setLastMetaScene: vi.fn(),
     setMovementOnboardingDismissed: vi.fn(),
