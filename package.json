@@ -18,6 +18,7 @@
     "test:watch": "vitest",
     "test:browser:smoke": "npm run build && node scripts/testing/runBrowserSmoke.mjs",
     "test:browser:profile:long": "npm run build && node scripts/testing/runLongSessionProfile.mjs",
+    "test:browser:profile:long:readable": "npm run build:profile && node scripts/testing/runLongSessionProfile.mjs",
     "test:browser:profile:analyze": "node scripts/testing/analyzeLongSessionProfile.mjs",
     "test:browser:profile:pendulum": "npm run test:browser:profile:long -- --scenario left-right-pendulum --duration 120s --loop",
     "logics:lint": "python3 logics/skills/logics-doc-linter/scripts/logics_lint.py",

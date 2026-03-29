@@ -214,6 +214,16 @@ const recoverSimulationAfterSnapshot = async ({ page, previousTick }) => {
     if (
       status.shellStatus?.activeScene === "runtime" &&
       status.shellStatus?.isMenuOpen === false &&
+      status.simulationStatus?.levelUpVisible === true
+    ) {
+      await page.evaluate(() => globalThis.window.__EMBERWAKE_PROFILING__?.chooseBuildChoice?.(0));
+      await page.waitForTimeout(100);
+      continue;
+    }
+
+    if (
+      status.shellStatus?.activeScene === "runtime" &&
+      status.shellStatus?.isMenuOpen === false &&
       status.simulationStatus?.levelUpVisible === false &&
       status.simulationStatus?.simulationPaused === true
     ) {
@@ -297,8 +307,17 @@ const summarizeSamples = (samples) => {
   const floatingDamageNumberSamples = samples
     .map((sample) => sample.runtimeMetrics?.runtimeState?.floatingDamageNumberCount ?? null)
     .filter((count) => typeof count === "number");
+  const levelUpChoiceSamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.levelUpChoiceCount ?? null)
+    .filter((count) => typeof count === "number");
   const combatSkillFeedbackSamples = samples
     .map((sample) => sample.runtimeMetrics?.runtimeState?.combatSkillFeedbackEventCount ?? null)
+    .filter((count) => typeof count === "number");
+  const trackedEntitySamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.trackedEntityCount ?? null)
+    .filter((count) => typeof count === "number");
+  const visibleEntitySamples = samples
+    .map((sample) => sample.runtimeMetrics?.runtimeState?.visibleEntityCount ?? null)
     .filter((count) => typeof count === "number");
   const ashDrifterSamples = samples
     .map((sample) => sample.runtimeMetrics?.runtimeState?.hostileProfileCounts?.ashDrifter ?? null)
@@ -354,6 +373,10 @@ const summarizeSamples = (samples) => {
       final: floatingDamageNumberSamples.at(-1) ?? null,
       max: safeMax(floatingDamageNumberSamples)
     },
+    levelUpChoiceCount: {
+      final: levelUpChoiceSamples.at(-1) ?? null,
+      max: safeMax(levelUpChoiceSamples)
+    },
     heapUsedBytes: {
       delta:
         heapSamples.length > 1
@@ -380,10 +403,18 @@ const summarizeSamples = (samples) => {
       goldStackMax: safeMax(goldPickupStackSamples),
       healingKitMax: safeMax(healingPickupSamples)
     },
+    trackedEntityCount: {
+      final: trackedEntitySamples.at(-1) ?? null,
+      max: safeMax(trackedEntitySamples)
+    },
     runtimeTick: {
       final: samples.at(-1)?.runtimeMetrics?.runtimeState?.tick ?? null,
       longestStallSamples,
       stalledSampleCount
+    },
+    visibleEntityCount: {
+      final: visibleEntitySamples.at(-1) ?? null,
+      max: safeMax(visibleEntitySamples)
     }
   };
 };
@@ -539,7 +570,19 @@ try {
   let midpointSnapshotCaptured = false;
 
   while (Date.now() - startedAt < cliOptions.durationMs) {
-    samples.push(await readProfilingSnapshot(page));
+    const sample = await readProfilingSnapshot(page);
+
+    samples.push(sample);
+
+    if (
+      sample.shellStatus?.activeScene === "runtime" &&
+      sample.shellStatus?.isMenuOpen === false &&
+      sample.simulationStatus?.levelUpVisible === true
+    ) {
+      await page.evaluate(() => globalThis.window.__EMBERWAKE_PROFILING__?.chooseBuildChoice?.(0));
+      await page.waitForTimeout(100);
+      continue;
+    }
 
     if (!midpointSnapshotCaptured && Date.now() - startedAt >= cliOptions.durationMs / 2) {
       midpointSnapshotCaptured = true;

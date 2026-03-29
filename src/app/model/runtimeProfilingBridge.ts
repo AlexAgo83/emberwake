@@ -28,6 +28,7 @@ export type RuntimeSimulationProfilingStatus = {
 };
 
 export type RuntimeProfilingBridge = {
+  chooseBuildChoice?: (choiceIndex: number) => RuntimeSimulationProfilingStatus | null;
   getConfig?: () => RuntimeProfilingConfigDraft;
   getRuntimeStatus?: () => RuntimeAutomationStatus | null;
   getShellStatus?: () => RuntimeShellProfilingStatus;

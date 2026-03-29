@@ -489,18 +489,31 @@ export function ActiveRuntimeShellContent({
       entityCount: simulationState.entities.length,
       entityRoleCounts: runtimeEntityBreakdown.entityRoleCounts,
       floatingDamageNumberCount: simulationState.floatingDamageNumbers.length,
-      hostileCount: simulationState.entities.filter((entity) => entity.role === "hostile").length,
+      hostileCount: runtimeEntityBreakdown.entityRoleCounts.hostile,
       hostileProfileCounts: runtimeEntityBreakdown.hostileProfileCounts,
-      pickupCount: simulationState.entities.filter((entity) => entity.role === "pickup").length,
+      levelUpChoiceCount: levelUpChoices.length,
+      pickupCount: runtimeEntityBreakdown.entityRoleCounts.pickup,
       pickupKindCounts: runtimeEntityBreakdown.pickupKindCounts,
       pickupStackTotals: runtimeEntityBreakdown.pickupStackTotals,
       playerHealth: simulationState.entity.combat.currentHealth,
-      tick: simulationState.tick
+      tick: simulationState.tick,
+      trackedEntityCount: entityWorld.trackedEntities.length,
+      visibleEntityCount: entityWorld.visibleEntities.length
     }
   });
 
   useEffect(() => {
     patchRuntimeProfilingBridge({
+      chooseBuildChoice: (choiceIndex) => {
+        handleSelectBuildChoice(choiceIndex);
+
+        return {
+          isMenuOpen,
+          levelUpVisible,
+          simulationPaused: simulationState.runtime.isPaused,
+          simulationTick: simulationState.tick
+        };
+      },
       getSimulationStatus: () => ({
         isMenuOpen,
         levelUpVisible,
@@ -520,9 +533,10 @@ export function ActiveRuntimeShellContent({
     });
 
     return () => {
-      clearRuntimeProfilingBridge(["getSimulationStatus", "resumeSimulation"]);
+      clearRuntimeProfilingBridge(["chooseBuildChoice", "getSimulationStatus", "resumeSimulation"]);
     };
   }, [
+    handleSelectBuildChoice,
     isMenuOpen,
     levelUpVisible,
     simulationState.controls,

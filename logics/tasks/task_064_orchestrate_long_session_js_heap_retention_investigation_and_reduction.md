@@ -1,10 +1,10 @@
 ## task_064_orchestrate_long_session_js_heap_retention_investigation_and_reduction - Orchestrate long-session JS heap retention investigation and reduction
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: In progress
+> Status: Done
 > Understanding: 100%
-> Confidence: 96%
-> Progress: 50%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: High
 > Theme: Runtime
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -36,11 +36,11 @@ flowchart LR
 
 # Plan
 - [x] 1. Confirm the current baseline, linked acceptance criteria, and profiling artifacts that anchor the wave.
-- [ ] 2. Implement the profiling isolation and retained-owner attribution slice from `item_339`.
+- [x] 2. Implement the profiling isolation and retained-owner attribution slice from `item_339`.
 - [x] 3. Implement the targeted runtime view and overlay churn-reduction slice from `item_340`.
-- [ ] 4. Implement the instrumentation and validation slice from `item_341`, rerun the long-session profiler, and compare artifacts.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: Update related Logics docs
+- [x] 4. Implement the instrumentation and validation slice from `item_341`, rerun the long-session profiler, and compare artifacts.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: Update related Logics docs
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -83,11 +83,11 @@ flowchart LR
 - `npm run logics:lint`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
 - 2026-03-29: Confirmed the current baseline from `output/playwright/long-session/latest.json`: the 120 s `left-right-pendulum` run still grows JS heap by about 98.9 MB with zero stalled samples and modest live counts (`entityCount.max = 50`, `pickupCount.max = 21`, `floatingDamageNumberCount.max = 18`).
@@ -97,3 +97,15 @@ flowchart LR
 - 2026-03-29: Reduced two proven hot-path churn points from the runtime view layer:
 - `games/emberwake/src/runtime/emberwakeGameModule.ts` no longer renormalizes gameplay and simulation state inside `present()` before every frame presentation pass, and it now builds hostile diagnostics plus render entities in a single loop.
 - `src/game/entities/hooks/useEntityWorld.ts`, `src/game/entities/render/EntityScene.tsx`, and the runtime-shell boundary now pass raw simulated entities plus a selected-entity id instead of cloning each visible entity just to carry `isSelected`.
+- 2026-03-29: Added targeted instrumentation and validation controls for the heap-retention wave:
+- `src/app/hooks/useRuntimeTelemetryBridge.ts` now exposes `trackedEntityCount`, `visibleEntityCount`, and `levelUpChoiceCount`.
+- `src/app/model/runtimeProfilingBridge.ts`, `src/app/components/ActiveRuntimeShellContent.tsx`, and `scripts/testing/runLongSessionProfile.mjs` now let the profiling harness choose a level-up option directly, which removed the observed paused-runtime stall during validation.
+- 2026-03-29 validation:
+- `npm run lint` -> passed.
+- `npm run typecheck` -> passed.
+- `npm run test -- src/game/entities/hooks/useEntityWorld.test.tsx games/emberwake/src/runtime/emberwakeRuntimeIntegration.test.ts src/app/components/AppMetaScenePanel.test.tsx games/emberwake/src/runtime/entitySimulationIntent.test.ts` -> passed (30 tests).
+- `npm run logics:lint` -> passed.
+- `node scripts/testing/runLongSessionProfile.mjs --scenario left-right-pendulum --duration 120s --loop` -> `output/playwright/long-session/left-right-pendulum-2026-03-29T11-15-46-758Z.json`; `heapUsedBytes.delta = 79,740,527`, `stalledSampleCount = 0`, `runtimeTick.final = 28,066`.
+- `node scripts/testing/runLongSessionProfile.mjs --scenario eastbound-drift --duration 120s --loop` -> `output/playwright/long-session/eastbound-drift-2026-03-29T11-18-11-699Z.json`; `heapUsedBytes.delta = 46,105,141`, `stalledSampleCount = 0`, `runtimeTick.final = 14,089`.
+- `output/playwright/long-session/latest-pendulum-analysis.json` shows the final pendulum run reduced heap growth by `19,145,261` bytes versus the earlier `left-right-pendulum-2026-03-29T10-32-48-699Z.json` baseline while keeping `stalledSampleCount = 0`.
+- `output/playwright/long-session/latest-eastbound-vs-pendulum-analysis.json` shows the reduced-pressure eastbound run coming in `33,635,386` bytes below the final pendulum run with zero stalled samples in both artifacts.

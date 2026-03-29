@@ -1,10 +1,10 @@
 ## item_340_define_targeted_runtime_view_and_overlay_churn_reduction_for_long_session_js_heap_retention - Define targeted runtime view and overlay churn reduction for long-session JS heap retention
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Runtime
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -77,3 +77,4 @@ flowchart LR
 # Notes
 - Derived from request `req_092_define_a_js_heap_retention_investigation_and_reduction_wave_for_long_runtime_profiling_sessions`.
 - This slice should follow the attribution work closely so the changed runtime surfaces are justified by evidence.
+- Completed by `task_064_orchestrate_long_session_js_heap_retention_investigation_and_reduction` on 2026-03-29 by removing redundant `present()` normalization and replacing per-visible-entity selection cloning with a selected-id render contract.

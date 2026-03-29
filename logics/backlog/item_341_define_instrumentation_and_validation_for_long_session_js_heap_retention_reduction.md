@@ -1,10 +1,10 @@
 ## item_341_define_instrumentation_and_validation_for_long_session_js_heap_retention_reduction - Define instrumentation and validation for long-session JS heap retention reduction
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Runtime
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -79,3 +79,4 @@ flowchart LR
 # Notes
 - Derived from request `req_092_define_a_js_heap_retention_investigation_and_reduction_wave_for_long_runtime_profiling_sessions`.
 - This slice should close the loop on the attribution and reduction work by proving what changed.
+- Completed by `task_064_orchestrate_long_session_js_heap_retention_investigation_and_reduction` on 2026-03-29 with new runtime counters (`trackedEntityCount`, `visibleEntityCount`, `levelUpChoiceCount`), updated long-session harness control hooks, and rerun profiling artifacts for pendulum plus eastbound comparison.

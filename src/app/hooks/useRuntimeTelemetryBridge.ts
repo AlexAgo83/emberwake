@@ -42,8 +42,11 @@ declare global {
           gold: number;
           total: number;
         };
+        levelUpChoiceCount: number;
         playerHealth: number;
+        trackedEntityCount: number;
         tick: number;
+        visibleEntityCount: number;
       };
       frameLoop: {
         catchUpFramesRatio: number;
@@ -117,8 +120,11 @@ type RuntimeTelemetryBridgeOptions = {
       gold: number;
       total: number;
     };
+    levelUpChoiceCount: number;
     playerHealth: number;
+    trackedEntityCount: number;
     tick: number;
+    visibleEntityCount: number;
   };
   rendererState: RendererState;
   runtime: {

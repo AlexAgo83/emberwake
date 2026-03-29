@@ -1,10 +1,10 @@
 ## item_339_define_long_session_runtime_profiling_isolation_and_retained_js_owner_attribution_for_heap_growth - Define long-session runtime profiling isolation and retained JS owner attribution for heap growth
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Runtime
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -77,3 +77,4 @@ flowchart LR
 # Notes
 - Derived from request `req_092_define_a_js_heap_retention_investigation_and_reduction_wave_for_long_runtime_profiling_sessions`.
 - This slice should land before or alongside the main churn-reduction slice so follow-up optimization stays evidence-led.
+- Completed by `task_064_orchestrate_long_session_js_heap_retention_investigation_and_reduction` on 2026-03-29 with the profiling analysis toolchain and constructor-family comparison artifacts under `output/playwright/long-session/`.
