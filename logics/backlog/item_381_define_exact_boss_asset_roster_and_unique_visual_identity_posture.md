@@ -1,10 +1,10 @@
 ## item_381_define_exact_boss_asset_roster_and_unique_visual_identity_posture - Define exact boss asset roster and unique visual identity posture
-> From version: 0.6.1+cad3c04
+> From version: 0.6.1+c2d57bc
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 99%
-> Confidence: 97%
-> Progress: 0%
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 5%
 > Complexity: Small
 > Theme: Graphics
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -56,7 +56,7 @@ flowchart LR
 - Product brief(s): `prod_017_graphical_asset_direction_for_runtime_readability_and_shell_identity`
 - Architecture decision(s): `adr_052_adopt_a_content_driven_graphical_asset_pipeline_for_runtime_and_shell_surfaces`
 - Request: `req_110_define_unique_generated_runtime_assets_for_every_boss_type`
-- Primary task(s): `task_072_orchestrate_unique_boss_asset_generation_and_integration_wave`
+- Primary task(s): `task_072_orchestrate_unique_boss_asset_generation_and_integration_wave`, `task_073_orchestrate_boss_cleanup_seed_archive_and_crystal_persistence_wave`
 
 # AI Context
 - Summary: Define the exact boss roster and identity posture required before generating unique boss assets.

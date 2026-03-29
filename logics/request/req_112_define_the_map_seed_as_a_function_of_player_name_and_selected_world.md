@@ -1,9 +1,9 @@
 ## req_112_define_the_map_seed_as_a_function_of_player_name_and_selected_world - Define the map seed as a function of player name and selected world
-> From version: 0.6.1+cad3c04
+> From version: 0.6.1+c2d57bc
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Understanding: 99%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: Progression
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -114,4 +114,5 @@ flowchart TD
 - `games/emberwake/src/runtime/emberwakeSession.ts`
 
 # Backlog
-- (none yet)
+- `item_386_define_player_world_seed_derivation_contract_and_input_normalization`
+- `item_387_define_runtime_session_seed_bootstrap_and_deterministic_validation`

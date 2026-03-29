@@ -1,10 +1,10 @@
 ## item_383_define_unique_boss_asset_runtime_shell_integration_and_validation - Define unique boss asset runtime, shell integration, and validation
-> From version: 0.6.1+cad3c04
+> From version: 0.6.1+c2d57bc
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 98%
-> Confidence: 96%
-> Progress: 0%
+> Understanding: 99%
+> Confidence: 97%
+> Progress: 5%
 > Complexity: Medium
 > Theme: Graphics
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -55,7 +55,7 @@ flowchart LR
 - Product brief(s): `prod_017_graphical_asset_direction_for_runtime_readability_and_shell_identity`
 - Architecture decision(s): `adr_052_adopt_a_content_driven_graphical_asset_pipeline_for_runtime_and_shell_surfaces`
 - Request: `req_110_define_unique_generated_runtime_assets_for_every_boss_type`
-- Primary task(s): `task_072_orchestrate_unique_boss_asset_generation_and_integration_wave`
+- Primary task(s): `task_072_orchestrate_unique_boss_asset_generation_and_integration_wave`, `task_073_orchestrate_boss_cleanup_seed_archive_and_crystal_persistence_wave`
 
 # AI Context
 - Summary: Define the runtime and shell integration slice for unique boss assets and validate that the bosses now read as distinct entities.

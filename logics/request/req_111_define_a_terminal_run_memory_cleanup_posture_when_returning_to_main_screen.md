@@ -1,9 +1,9 @@
 ## req_111_define_a_terminal_run_memory_cleanup_posture_when_returning_to_main_screen - Define a terminal-run memory cleanup posture when returning to main screen
-> From version: 0.6.1+cad3c04
+> From version: 0.6.1+c2d57bc
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Understanding: 99%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -113,4 +113,5 @@ flowchart TD
 - `src/shared/config/runtimePerformanceBudget.json`
 
 # Backlog
-- (none yet)
+- `item_384_define_terminal_run_cleanup_triggers_and_runtime_ownership_boundaries`
+- `item_385_define_terminal_run_cleanup_validation_and_teardown_execution_posture`

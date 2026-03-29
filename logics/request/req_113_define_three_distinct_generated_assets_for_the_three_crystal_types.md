@@ -1,9 +1,9 @@
 ## req_113_define_three_distinct_generated_assets_for_the_three_crystal_types - Define three distinct generated assets for the three crystal types
-> From version: 0.6.1+cad3c04
+> From version: 0.6.1+c2d57bc
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Understanding: 99%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: Graphics
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -104,4 +104,5 @@ flowchart TD
 - `scripts/assets/promoteFirstWaveAssets.mjs`
 
 # Backlog
-- (none yet)
+- `item_388_define_three_crystal_asset_roster_and_family_differentiation_posture`
+- `item_389_define_three_crystal_asset_generation_promotion_and_runtime_integration`

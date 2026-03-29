@@ -1,9 +1,9 @@
 ## req_114_define_a_loot_archive_screen_with_loot_gated_drop_discovery - Define a loot archive screen with loot-gated drop discovery
-> From version: 0.6.1+e144248
+> From version: 0.6.1+c2d57bc
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Understanding: 99%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -109,4 +109,5 @@ flowchart TD
 - `src/app/components/ActiveRuntimeShellContent.tsx`
 
 # Backlog
-- (none yet)
+- `item_390_define_loot_archive_roster_taxonomy_and_discovery_persistence`
+- `item_391_define_loot_archive_main_menu_entry_and_bestiary_style_shell_surface`

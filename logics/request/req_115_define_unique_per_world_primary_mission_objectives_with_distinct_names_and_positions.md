@@ -1,9 +1,9 @@
 ## req_115_define_unique_per_world_primary_mission_objectives_with_distinct_names_and_positions - Define unique per-world primary mission objectives with distinct names and positions
-> From version: 0.6.1+e144248
+> From version: 0.6.1+c2d57bc
 > Schema version: 1.0
 > Status: Draft
-> Understanding: 98%
-> Confidence: 96%
+> Understanding: 99%
+> Confidence: 97%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -106,4 +106,5 @@ flowchart TD
 - `src/app/components/AppMetaScenePanel.tsx`
 
 # Backlog
-- (none yet)
+- `item_392_define_per_world_primary_mission_objective_roster_and_naming`
+- `item_393_define_per_world_mission_objective_placement_and_guidance_integration`
