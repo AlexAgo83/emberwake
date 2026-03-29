@@ -1,10 +1,10 @@
 ## task_064_orchestrate_long_session_js_heap_retention_investigation_and_reduction - Orchestrate long-session JS heap retention investigation and reduction
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Ready
+> Status: In progress
 > Understanding: 100%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 15%
 > Complexity: High
 > Theme: Runtime
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -35,7 +35,7 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm the current baseline, linked acceptance criteria, and profiling artifacts that anchor the wave.
+- [x] 1. Confirm the current baseline, linked acceptance criteria, and profiling artifacts that anchor the wave.
 - [ ] 2. Implement the profiling isolation and retained-owner attribution slice from `item_339`.
 - [ ] 3. Implement the targeted runtime view and overlay churn-reduction slice from `item_340`.
 - [ ] 4. Implement the instrumentation and validation slice from `item_341`, rerun the long-session profiler, and compare artifacts.
@@ -90,3 +90,7 @@ flowchart LR
 - [ ] Status is `Done` and progress is `100%`.
 
 # Report
+- 2026-03-29: Confirmed the current baseline from `output/playwright/long-session/latest.json`: the 120 s `left-right-pendulum` run still grows JS heap by about 98.9 MB with zero stalled samples and modest live counts (`entityCount.max = 50`, `pickupCount.max = 21`, `floatingDamageNumberCount.max = 18`).
+- 2026-03-29: Added a bounded attribution toolchain for the next slice:
+- `npm run build:profile` now emits a readable, sourcemapped profiling bundle when `VITE_PROFILE_READABLE_BUNDLE=1`.
+- `npm run test:browser:profile:analyze` now summarizes long-session artifacts and compares `start/mid/end` heap snapshots by constructor-family growth so the next reduction wave can target proven JS churn instead of widening blindly.

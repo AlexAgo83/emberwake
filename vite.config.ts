@@ -6,6 +6,7 @@ import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 const rootDir = fileURLToPath(new URL(".", import.meta.url));
+const profilingReadableBundle = process.env.VITE_PROFILE_READABLE_BUNDLE === "1";
 
 export default defineConfig({
   resolve: {
@@ -57,6 +58,8 @@ export default defineConfig({
   ],
   build: {
     chunkSizeWarningLimit: 650,
+    minify: profilingReadableBundle ? false : undefined,
+    sourcemap: profilingReadableBundle,
     rollupOptions: {
       output: {
         manualChunks(id) {
