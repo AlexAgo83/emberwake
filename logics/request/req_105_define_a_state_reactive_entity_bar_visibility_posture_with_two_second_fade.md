@@ -1,9 +1,9 @@
 ## req_105_define_a_state_reactive_entity_bar_visibility_posture_with_two_second_fade - Define a state-reactive entity bar visibility posture with two-second fade
-> From version: 0.6.1
+> From version: 0.6.1+task071
 > Schema version: 1.0
 > Status: Ready
-> Understanding: 99%
-> Confidence: 97%
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: Runtime
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -105,3 +105,4 @@ flowchart TD
 - `src/game/entities/model/entitySimulation.ts`
 
 # Backlog
+- `item_371_define_state_reactive_runtime_entity_bar_visibility_and_fade_behavior`

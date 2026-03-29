@@ -1,9 +1,9 @@
 ## req_104_define_a_dual_track_level_up_choice_model_with_reroll_and_pass_meta_limits - Define a dual-track level-up choice model with reroll and pass meta limits
-> From version: 0.6.1
+> From version: 0.6.1+task071
 > Schema version: 1.0
 > Status: Ready
-> Understanding: 98%
-> Confidence: 96%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Progression
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -162,3 +162,6 @@ flowchart TD
 - `logics/request/req_083_define_a_missing_fusion_completion_wave_for_the_remaining_first_playable_active_passive_pairings.md`
 
 # Backlog
+- `item_368_define_dual_track_level_up_offer_generation_for_skill_fusion_and_passive_choices`
+- `item_369_define_reroll_and_pass_charge_ownership_for_level_up_choices`
+- `item_370_define_dual_track_level_up_surface_and_validation`

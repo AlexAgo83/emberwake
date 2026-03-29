@@ -1,9 +1,9 @@
 ## req_103_define_new_game_map_selection_and_mission_gated_map_unlock_progression - Define new-game map selection and mission-gated map unlock progression
-> From version: 0.6.1
+> From version: 0.6.1+task071
 > Schema version: 1.0
 > Status: Ready
-> Understanding: 98%
-> Confidence: 96%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Progression
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -135,3 +135,5 @@ flowchart TD
 - `games/emberwake/src/content/world/worldGeneration.ts`
 
 # Backlog
+- `item_366_define_authored_map_profile_and_unlock_state_contract_for_new_game_selection`
+- `item_367_define_new_game_map_selection_shell_surface_and_locked_state_presentation`

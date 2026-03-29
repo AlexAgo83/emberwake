@@ -1,9 +1,9 @@
 ## req_102_define_a_primary_map_mission_loop_with_three_target_zones_bosses_and_key_items - Define a primary map mission loop with three target zones, bosses, and key items
-> From version: 0.6.1
+> From version: 0.6.1+task071
 > Schema version: 1.0
 > Status: Ready
-> Understanding: 98%
-> Confidence: 95%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -159,3 +159,6 @@ flowchart TD
 - `src/app/AppShell.tsx`
 
 # Backlog
+- `item_363_define_primary_map_mission_zone_selection_and_boss_encounter_structure`
+- `item_364_define_primary_map_mission_item_collection_and_map_exit_unlock`
+- `item_365_define_offscreen_mission_and_miniboss_guidance_arrow_posture`

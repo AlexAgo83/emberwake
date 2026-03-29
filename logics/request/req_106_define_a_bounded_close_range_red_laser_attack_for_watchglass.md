@@ -1,9 +1,9 @@
 ## req_106_define_a_bounded_close_range_red_laser_attack_for_watchglass - Define a bounded close-range red laser attack for watchglass
-> From version: 0.6.1
+> From version: 0.6.1+task071
 > Schema version: 1.0
 > Status: Ready
-> Understanding: 98%
-> Confidence: 96%
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -106,3 +106,5 @@ flowchart TD
 - `src/game/entities/model/entitySimulation.test.ts`
 
 # Backlog
+- `item_372_define_watchglass_close_range_laser_gameplay_and_trigger_posture`
+- `item_373_define_watchglass_red_laser_feedback_and_runtime_validation`
