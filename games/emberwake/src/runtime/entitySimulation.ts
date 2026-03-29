@@ -170,6 +170,8 @@ export type RunStats = {
   missionBossDefeats: number;
   missionCompleted: boolean;
   missionItemsCollected: number;
+  shellToastMessages: string[];
+  shellToastSequence: number;
   worldProfileId: string | null;
 };
 
@@ -371,6 +373,8 @@ const createInitialRunStats = (): RunStats => ({
   missionBossDefeats: 0,
   missionCompleted: false,
   missionItemsCollected: 0,
+  shellToastMessages: [],
+  shellToastSequence: 0,
   worldProfileId: null
 });
 
@@ -1754,6 +1758,12 @@ export const advanceSimulationState = (
           )
         )
       );
+      const defeatedMiniBosses = defeatedHostiles.filter(
+        (entity) =>
+          entity.hostileProfileId !== undefined &&
+          getHostileSpawnProfile(entity.hostileProfileId).isMiniBoss &&
+          entity.id !== missionActivatedState.missionState.currentBossEntityId
+      );
       const defeatedMissionBoss = defeatedHostiles.find(
         (entity) => entity.id === missionActivatedState.missionState.currentBossEntityId
       );
@@ -1782,10 +1792,26 @@ export const advanceSimulationState = (
               )
             ]
           : [];
+      const miniBossDropEntities = defeatedMiniBosses.map((defeatedMiniBoss, miniBossIndex) =>
+        createPickupEntity(
+          pickupMaintainedState.nextPickupSequence +
+            defeatedHostiles.length * pickupContract.crystal.enemyDropCount +
+            missionDropEntities.length +
+            miniBossIndex,
+          "cache",
+          defeatedMiniBoss.worldPosition,
+          nextTick,
+          1,
+          {
+            lootArchiveId: "cache-gift",
+            tint: "#ffd79a"
+          }
+        )
+      );
 
       return mergeNewPickupEntities(
         combatResolvedState.entities,
-        [...droppedCrystalEntities, ...missionDropEntities]
+        [...droppedCrystalEntities, ...missionDropEntities, ...miniBossDropEntities]
       );
     })(),
     playerEntity,
@@ -1900,7 +1926,13 @@ export const advanceSimulationState = (
     nextPickupSequence:
       pickupMaintainedState.nextPickupSequence +
       defeatedHostileCount * pickupContract.crystal.enemyDropCount +
-      (defeatedMissionBoss ? 1 : 0),
+      (defeatedMissionBoss ? 1 : 0) +
+      defeatedHostiles.filter(
+        (entity) =>
+          entity.hostileProfileId !== undefined &&
+          getHostileSpawnProfile(entity.hostileProfileId).isMiniBoss &&
+          entity.id !== missionActivatedState.missionState.currentBossEntityId
+      ).length,
     nextHostileSequence: spawnMaintainedState.nextHostileSequence,
     pickupPulseUntilTick: pickupResolvedState.pickupPulseUntilTick,
     runStats: {

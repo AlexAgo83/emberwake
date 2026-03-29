@@ -8,6 +8,7 @@ import {
   resolveEmergencyAegisChargeCount,
   resolveExecuteThresholdRatio,
   resolveGoldGainMultiplier,
+  resolveMiniBossChestReward,
   resolveActiveWeaponRuntimeStats,
   resolvePickupRadiusMultiplier,
   resolveRetaliationDamage,
@@ -72,6 +73,12 @@ const appendDiscoveredLootId = (runStats: RunStats, lootArchiveId: LootArchiveId
     discoveredLootIds: [...runStats.discoveredLootIds, lootArchiveId]
   };
 };
+
+const appendShellToastMessage = (runStats: RunStats, message: string) => ({
+  ...runStats,
+  shellToastMessages: [message],
+  shellToastSequence: runStats.shellToastSequence + 1
+});
 
 const applyDamage = (
   entity: SimulatedEntity,
@@ -981,6 +988,7 @@ export const resolvePickupCollection = ({
 
   let nextPlayerEntity = playerEntity;
   let nextEnemyTimeStopUntilTick = enemyTimeStopUntilTick;
+  let nextBuildState = buildState;
   const nextRunStats = { ...runStats };
   const retainedEntities: SimulatedEntity[] = [];
   const goldGainMultiplier = resolveGoldGainMultiplier(buildState);
@@ -1090,17 +1098,45 @@ export const resolvePickupCollection = ({
         Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "hourglass"));
         break;
       case "cache":
-        nextRunStats.missionItemsCollected += 1;
-        Object.assign(
-          nextRunStats,
-          appendDiscoveredLootId(
+        if (entity.pickupProfile.missionItemStageIndex !== undefined) {
+          nextRunStats.missionItemsCollected += 1;
+          Object.assign(
             nextRunStats,
-            entity.pickupProfile.lootArchiveId ??
-              (entity.pickupProfile.missionItemStageIndex === undefined
-                ? "cache-gift"
-                : "cache-gift")
-          )
+            appendDiscoveredLootId(
+              nextRunStats,
+              entity.pickupProfile.lootArchiveId ?? "cache-gift"
+            )
+          );
+          break;
+        }
+
+        Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "cache-gift"));
+
+        const miniBossChestReward = resolveMiniBossChestReward(nextBuildState, tick);
+        nextBuildState = miniBossChestReward.buildState;
+
+        if (miniBossChestReward.upgradedSkillLabels.length > 0) {
+          Object.assign(
+            nextRunStats,
+            appendShellToastMessage(
+              nextRunStats,
+              `Mini-boss cache improved ${miniBossChestReward.upgradedSkillLabels.join(", ")}.`
+            )
+          );
+          break;
+        }
+
+        nextPlayerEntity = applyHealing(
+          nextPlayerEntity,
+          Math.ceil(nextPlayerEntity.combat.maxHealth * pickupContract.healingKit.healRatio)
         );
+        nextRunStats.healingKitsCollected += 1;
+        nextRunStats.goldCollected += Math.max(
+          1,
+          Math.round(pickupContract.gold.value * 3 * goldGainMultiplier)
+        );
+        Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "healing-kit"));
+        Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "gold"));
         break;
       case "magnet":
         Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "magnet"));
@@ -1109,7 +1145,7 @@ export const resolvePickupCollection = ({
   }
 
   return {
-    buildState,
+    buildState: nextBuildState,
     enemyTimeStopUntilTick: nextEnemyTimeStopUntilTick,
     entities: retainedEntities.map((entity) => {
       if (entity.id === nextPlayerEntity.id) {

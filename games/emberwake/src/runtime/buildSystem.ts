@@ -1,3 +1,5 @@
+import { sampleDeterministicSignature } from "@engine/world/worldContract";
+
 type ActiveWeaponAttackKind =
   | "auto-target"
   | "boomerang"
@@ -1470,6 +1472,101 @@ export const resolveChestReward = (buildState: BuildState, tick: number): BuildS
   return {
     ...upgradeChestCandidate(buildState, tick),
     recentFusionId: null
+  };
+};
+
+type MiniBossChestRewardResult = {
+  buildState: BuildState;
+  upgradedSkillLabels: string[];
+};
+
+const listUpgradeableChestCandidates = (buildState: BuildState) => [
+  ...buildState.activeSlots
+    .filter((activeSlot) => activeSlot.level < getActiveWeaponDefinition(activeSlot.weaponId).maxLevel)
+    .map((activeSlot) => ({
+      id: `active:${activeSlot.weaponId}`,
+      label: resolveBuildDisplayLabel(buildState, activeSlot),
+      slotKind: "active" as const
+    })),
+  ...buildState.passiveSlots
+    .filter((passiveSlot) => passiveSlot.level < getPassiveItemDefinition(passiveSlot.passiveId).maxLevel)
+    .map((passiveSlot) => ({
+      id: `passive:${passiveSlot.passiveId}`,
+      label: getPassiveItemDefinition(passiveSlot.passiveId).label,
+      slotKind: "passive" as const
+    }))
+];
+
+export const resolveMiniBossChestReward = (
+  buildState: BuildState,
+  tick: number
+): MiniBossChestRewardResult => {
+  const upgradeCountTarget =
+    1 + (sampleDeterministicSignature(`miniboss-chest:${tick}`) % 3);
+  let nextBuildState = {
+    ...buildState,
+    activeSlots: buildState.activeSlots.map((activeSlot) => ({ ...activeSlot })),
+    passiveSlots: buildState.passiveSlots.map((passiveSlot) => ({ ...passiveSlot })),
+    recentFusionId: null
+  };
+  const upgradedSkillLabels: string[] = [];
+  const seenCandidateIds = new Set<string>();
+
+  for (let rewardIndex = 0; rewardIndex < upgradeCountTarget; rewardIndex += 1) {
+    const candidate = sortDeterministically(
+      listUpgradeableChestCandidates(nextBuildState).filter(
+        (upgradeCandidate) => !seenCandidateIds.has(upgradeCandidate.id)
+      ),
+      `miniboss-chest:${tick}:${rewardIndex}`
+    )[0];
+
+    if (!candidate) {
+      break;
+    }
+
+    seenCandidateIds.add(candidate.id);
+    upgradedSkillLabels.push(candidate.label);
+
+    if (candidate.slotKind === "active") {
+      const weaponId = candidate.id.replace("active:", "") as ActiveWeaponId;
+
+      nextBuildState = {
+        ...nextBuildState,
+        activeSlots: nextBuildState.activeSlots.map((activeSlot) =>
+          activeSlot.weaponId === weaponId
+            ? {
+                ...activeSlot,
+                level: Math.min(
+                  activeSlot.level + 1,
+                  getActiveWeaponDefinition(activeSlot.weaponId).maxLevel
+                )
+              }
+            : activeSlot
+        )
+      };
+      continue;
+    }
+
+    const passiveItemId = candidate.id.replace("passive:", "") as PassiveItemId;
+    nextBuildState = {
+      ...nextBuildState,
+      passiveSlots: nextBuildState.passiveSlots.map((passiveSlot) =>
+        passiveSlot.passiveId === passiveItemId
+          ? {
+              ...passiveSlot,
+              level: Math.min(
+                passiveSlot.level + 1,
+                getPassiveItemDefinition(passiveSlot.passiveId).maxLevel
+              )
+            }
+          : passiveSlot
+      )
+    };
+  }
+
+  return {
+    buildState: nextBuildState,
+    upgradedSkillLabels
   };
 };
 

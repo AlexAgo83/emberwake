@@ -13,6 +13,7 @@ import {
   resolveBossDamageMultiplier,
   resolveBuildSummary,
   resolveChestReward,
+  resolveMiniBossChestReward,
   resolveEmergencyAegisChargeCount,
   resolveGoldGainMultiplier,
   resolvePickupRadiusMultiplier,
@@ -256,6 +257,75 @@ describe("buildSystem", () => {
     expect(afterimageStats.areaRadiusWorldUnits).toBeGreaterThan(100);
     expect(horizonStats.attackKind).toBe("vacuum");
     expect(horizonStats.areaRadiusWorldUnits).toBeGreaterThan(120);
+  });
+
+  it("upgrades one to three already-owned skills from a mini-boss chest", () => {
+    const buildState = normalizeBuildState({
+      activeSlots: [
+        {
+          fusionId: null,
+          lastAttackTick: null,
+          level: 3,
+          weaponId: "ash-lash"
+        },
+        {
+          fusionId: null,
+          lastAttackTick: null,
+          level: 2,
+          weaponId: "guided-senbon"
+        }
+      ],
+      passiveSlots: [
+        {
+          level: 1,
+          passiveId: "overclock-seal"
+        }
+      ]
+    });
+
+    const reward = resolveMiniBossChestReward(buildState, 180);
+
+    expect(reward.upgradedSkillLabels.length).toBeGreaterThanOrEqual(1);
+    expect(reward.upgradedSkillLabels.length).toBeLessThanOrEqual(3);
+    expect(reward.buildState.activeSlots.length).toBe(buildState.activeSlots.length);
+    expect(reward.buildState.passiveSlots.length).toBe(buildState.passiveSlots.length);
+    expect(
+      reward.buildState.activeSlots.some(
+        (activeSlot, index) => activeSlot.level > buildState.activeSlots[index]!.level
+      ) ||
+        reward.buildState.passiveSlots.some(
+          (passiveSlot, index) => passiveSlot.level > buildState.passiveSlots[index]!.level
+        )
+    ).toBe(true);
+  });
+
+  it("falls back cleanly when a mini-boss chest cannot upgrade any owned skill", () => {
+    const buildState = normalizeBuildState({
+      activeSlots: [
+        {
+          fusionId: "redline-ribbon",
+          lastAttackTick: null,
+          level: 8,
+          weaponId: "ash-lash"
+        }
+      ],
+      passiveSlots: [
+        {
+          level: 5,
+          passiveId: "overclock-seal"
+        }
+      ]
+    });
+
+    const reward = resolveMiniBossChestReward(buildState, 240);
+
+    expect(reward.upgradedSkillLabels).toEqual([]);
+    expect(reward.buildState).toEqual({
+      ...buildState,
+      activeSlots: buildState.activeSlots.map((activeSlot) => ({ ...activeSlot })),
+      passiveSlots: buildState.passiveSlots.map((passiveSlot) => ({ ...passiveSlot })),
+      recentFusionId: null
+    });
   });
 
   it("applies passive modifiers to resolved weapon stats", () => {

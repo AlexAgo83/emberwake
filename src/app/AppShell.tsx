@@ -72,6 +72,7 @@ const LazyActiveRuntimeShellContent = lazy(async () => {
 export function AppShell() {
   const shellRef = useRef<HTMLElement>(null);
   const latestGameStateRef = useRef<EmberwakeGameState | null>(null);
+  const latestRunToastSequenceRef = useRef(0);
   const settledRunRewardKeyRef = useRef<string | null>(null);
   const previousActiveSceneRef = useRef<AppSceneId>("main-menu");
   const [metaProfile, setMetaProfile] = useState(() =>
@@ -279,6 +280,7 @@ export function AppShell() {
   }, []);
   const clearTerminalRunMemory = useCallback(() => {
     latestGameStateRef.current = null;
+    latestRunToastSequenceRef.current = 0;
     settledRunRewardKeyRef.current = null;
     setGameOverRecap(null);
     setRuntimeOutcome(null);
@@ -352,6 +354,7 @@ export function AppShell() {
   }, [activeScene, isMenuOpen, openMenu]);
   const hasRuntimeLayer = runtimeSession.hasActiveSession;
   useEffect(() => {
+    latestRunToastSequenceRef.current = 0;
     settledRunRewardKeyRef.current = null;
   }, [runtimeSession.sessionRevision]);
   const settleConcludedRun = useCallback(
@@ -408,6 +411,16 @@ export function AppShell() {
   }, [runtimeSession.playerName]);
   const handleRuntimeStateChange = useCallback((gameState: EmberwakeGameState) => {
     latestGameStateRef.current = gameState;
+    const shellToastSequence = gameState.simulation.runStats?.shellToastSequence ?? 0;
+    const shellToastMessages = gameState.simulation.runStats?.shellToastMessages ?? [];
+
+    if (shellToastSequence > latestRunToastSequenceRef.current) {
+      latestRunToastSequenceRef.current = shellToastSequence;
+
+      for (const message of shellToastMessages) {
+        pushToast({ message, tone: "success" });
+      }
+    }
 
     if (
       gameState.systems.outcome.kind === "defeat" ||
@@ -431,7 +444,7 @@ export function AppShell() {
     ) {
       updateGameOverRecap(gameState);
     }
-  }, [runtimeSession.sessionRevision, settleConcludedRun, updateGameOverRecap]);
+  }, [pushToast, runtimeSession.sessionRevision, settleConcludedRun, updateGameOverRecap]);
   const handleAbandonRun = useCallback(() => {
     if (!runtimeSession.hasActiveSession) {
       return;
