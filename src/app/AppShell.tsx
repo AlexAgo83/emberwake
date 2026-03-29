@@ -4,6 +4,7 @@ import { AppUpdatePrompt } from "./components/AppUpdatePrompt";
 import { AppMetaScenePanel } from "./components/AppMetaScenePanel";
 import { ShellToastStack } from "./components/ShellToastStack";
 import type { GameOverRecap } from "./components/AppMetaScenePanel";
+import { clearResolvedAssetTextureCache } from "../assets/useResolvedAssetTexture";
 import { useAppScene } from "./hooks/useAppScene";
 import { useDesktopControlBindings } from "./hooks/useDesktopControlBindings";
 import { useDocumentViewportLock } from "./hooks/useDocumentViewportLock";
@@ -46,6 +47,19 @@ import type {
 import type { EmberwakeGameState } from "@game";
 import { appConfig } from "../shared/config/appConfig";
 import { readMetaProfile, writeMetaProfile } from "../shared/lib/metaProfileStorage";
+import { worldProfiles } from "../shared/model/worldProfiles";
+
+const terminalTextureRetainAssetIds = [
+  "entity.player.primary.runtime.right",
+  "entity.hostile.drifter.runtime.right",
+  "entity.hostile.rammer.runtime.right",
+  "entity.hostile.sentinel.runtime.right",
+  "entity.boss.abyss-watchglass.runtime.right",
+  "entity.boss.ruin-ram.runtime.right",
+  "entity.boss.sentinel-tyrant.runtime.right",
+  "entity.boss.watchglass-prime.runtime.right",
+  ...worldProfiles.map((worldProfile) => worldProfile.representativeAssetId)
+] as const;
 
 const LazyActiveRuntimeShellContent = lazy(async () => {
   const module = await import("./components/ActiveRuntimeShellContent");
@@ -268,6 +282,9 @@ export function AppShell() {
     settledRunRewardKeyRef.current = null;
     setGameOverRecap(null);
     setRuntimeOutcome(null);
+    clearResolvedAssetTextureCache({
+      retainAssetIds: terminalTextureRetainAssetIds
+    });
     resetRenderer();
   }, [resetRenderer]);
   const handleReturnToMainMenu = useCallback(() => {

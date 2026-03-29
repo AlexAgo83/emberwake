@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const usePwaUpdatePromptMock = vi.fn();
+const clearResolvedAssetTextureCacheMock = vi.fn();
 
 vi.mock("./components/AppMetaScenePanel", () => ({
   AppMetaScenePanel: ({
@@ -29,6 +30,10 @@ vi.mock("./components/AppMetaScenePanel", () => ({
       </button>
     </>
   )
+}));
+
+vi.mock("../assets/useResolvedAssetTexture", () => ({
+  clearResolvedAssetTextureCache: clearResolvedAssetTextureCacheMock
 }));
 
 vi.mock("./components/ActiveRuntimeShellContent", () => ({
@@ -243,6 +248,7 @@ vi.mock("./hooks/usePwaUpdatePrompt", () => ({
 
 describe("AppShell", () => {
   beforeEach(() => {
+    clearResolvedAssetTextureCacheMock.mockReset();
     usePwaUpdatePromptMock.mockReset();
     usePwaUpdatePromptMock.mockReturnValue({
       applyUpdate: vi.fn(),
@@ -263,6 +269,7 @@ describe("AppShell", () => {
     fireEvent.click(screen.getByRole("button", { name: /confirm abandon/i }));
 
     expect(await screen.findByText("Run abandoned.")).toBeInTheDocument();
+    expect(clearResolvedAssetTextureCacheMock).toHaveBeenCalledTimes(1);
   });
 
   it("renders the update prompt when a new build is ready", async () => {
@@ -315,5 +322,6 @@ describe("AppShell", () => {
     fireEvent.click(screen.getByRole("button", { name: /back to main menu/i }));
 
     expect(await screen.findByText("Scene: main-menu")).toBeInTheDocument();
+    expect(clearResolvedAssetTextureCacheMock).toHaveBeenCalledTimes(1);
   });
 });

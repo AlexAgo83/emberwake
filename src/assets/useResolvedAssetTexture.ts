@@ -6,6 +6,45 @@ import { resolveAssetUrl } from "./assetResolver";
 const textureCache = new Map<string, Texture>();
 const pendingTextureLoads = new Map<string, Promise<Texture>>();
 
+export const getResolvedAssetTextureCacheMetrics = () => ({
+  loadedTextureCount: textureCache.size,
+  pendingLoadCount: pendingTextureLoads.size
+});
+
+export const clearResolvedAssetTextureCache = ({
+  retainAssetIds = []
+}: {
+  retainAssetIds?: readonly string[];
+} = {}) => {
+  const retainedUrls = new Set(
+    retainAssetIds
+      .map((assetId) => resolveAssetUrl(assetId))
+      .filter((assetUrl): assetUrl is string => assetUrl !== null)
+  );
+
+  for (const [assetUrl, texture] of textureCache.entries()) {
+    if (retainedUrls.has(assetUrl)) {
+      continue;
+    }
+
+    textureCache.delete(assetUrl);
+
+    try {
+      texture.destroy(true);
+    } catch {
+      // Ignore partially disposed textures during shell teardown.
+    }
+  }
+
+  for (const assetUrl of pendingTextureLoads.keys()) {
+    if (retainedUrls.has(assetUrl)) {
+      continue;
+    }
+
+    pendingTextureLoads.delete(assetUrl);
+  }
+};
+
 const loadTexture = (assetUrl: string) => {
   const cachedTexture = textureCache.get(assetUrl);
 
