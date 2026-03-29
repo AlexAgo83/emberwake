@@ -3,7 +3,7 @@
 > Schema version: 1.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 99%
 > Progress: 100%
 > Complexity: High
 > Theme: UI
@@ -96,10 +96,10 @@ flowchart LR
 # Report
 - Added a repeatable first-wave asset workflow in `scripts/assets/firstWaveAssetWorkflow.mjs`, `scripts/assets/generateFirstWaveAssets.mjs`, `scripts/assets/promoteFirstWaveAssets.mjs`, and `scripts/assets/buildFirstWaveGallery.mjs`, with package scripts for generation, promotion, and gallery review.
 - Executed the first-wave pack from `spec_001` into traceable candidate sets under `output/imagegen/first-wave/candidates/`, generated a review gallery, and stored promotion choices in `output/imagegen/first-wave/selection.json`.
-- Promoted approved outputs into the live runtime contract as `.png` and `.webp` files under `src/assets/entities/runtime/`, `src/assets/map/runtime/`, and `src/assets/shell/runtime/`, replacing the covered first-wave `.svg` runtime placeholders.
+- Promoted approved outputs into the live runtime contract as `.png` and `.webp` files under `src/assets/entities/runtime/` and `src/assets/map/runtime/`, replacing the covered first-wave `.svg` runtime placeholders.
 - Added `src/assets/useResolvedAssetTexture.ts` and updated entity/world rendering so promoted raster assets resolve reliably without the heavier Pixi asset-cache posture that regressed the runtime budget gate.
-- Reduced terrain base-fill opacity when terrain textures exist and tightened Codex shell styling so the new generated terrain and banner surfaces remain visible while the shell CSS budget stays within the current performance guardrail.
-- Runtime review accepted the current wave because the player, hostile, pickup, terrain, and codex-banner assets now render in-game; the player direction cone and the XP crystal diamond silhouette remain visible, so the generated wave does not erase the key readability cues called out during review.
+- Reduced terrain base-fill opacity when terrain textures exist and tightened runtime presentation so the new generated terrain and gameplay surfaces remain visible while the current CSS and runtime budgets stay within guardrail.
+- Runtime review accepted the current wave because the player, hostile, pickup, and terrain assets now render in-game; the player direction cone and the XP crystal diamond silhouette remain visible, so the generated wave does not erase the key readability cues called out during review.
 - Validation passed with:
   `npm run logics:lint`
   `npm run lint`

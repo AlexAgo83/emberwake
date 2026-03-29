@@ -42,16 +42,6 @@ const convertToWebp = ({ inputPath, outputPath, quality = 88 }) => {
   }
 };
 
-const cropShellBanner = ({ inputPath, outputPath }) => {
-  const crop = spawnSync("sips", ["-c", "512", "1536", inputPath, "--out", outputPath], {
-    stdio: "inherit"
-  });
-
-  if (crop.status !== 0) {
-    throw new Error(`sips crop failed for ${inputPath}`);
-  }
-};
-
 const downscaleSquare = ({ inputPath, outputPath, maxDim = 512 }) => {
   const resize = spawnSync("sips", ["-Z", String(maxDim), inputPath, "--out", outputPath], {
     stdio: "inherit"
@@ -91,12 +81,7 @@ for (const entry of firstWaveAssetPlan) {
   const stagedPngPath = finalAbsolutePath.replace(/\.[^.]+$/u, ".staged.png");
   const transformedPngPath = finalAbsolutePath.replace(/\.[^.]+$/u, ".transformed.png");
   copyFileSync(selectedAbsolutePath, stagedPngPath);
-
-  if (entry.assetId.startsWith("shell.scene.codex.header")) {
-    cropShellBanner({ inputPath: stagedPngPath, outputPath: transformedPngPath });
-  } else {
-    downscaleSquare({ inputPath: stagedPngPath, outputPath: transformedPngPath });
-  }
+  downscaleSquare({ inputPath: stagedPngPath, outputPath: transformedPngPath });
 
   convertToWebp({ inputPath: transformedPngPath, outputPath: finalAbsolutePath });
   rmSync(stagedPngPath, { force: true });

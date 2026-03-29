@@ -3,7 +3,7 @@
 > Schema version: 1.0
 > Status: Done
 > Understanding: 99%
-> Confidence: 97%
+> Confidence: 98%
 > Progress: 100%
 > Complexity: Medium
 > Theme: UI
@@ -103,8 +103,8 @@ flowchart LR
 # Report
 - `logics/specs/spec_001_define_first_wave_asset_production_pack.md` now acts as the operator-facing production pack for the first graphical wave.
 - The spec defines a reusable production-sheet template with the required fields for `assetId`, surface, role, format, transparency, source canvas, destination path, composition, style, avoid-list, sidecar guidance, and prompt text.
-- The filled roster covers the first bounded wave only: player runtime silhouette, six hostile runtime silhouettes, six pickups, four terrain surfaces, and one codex archive banner.
-- The prompt posture stays aligned with the drop-in pipeline contract by mapping each entry to its exact destination path and by calling out when transparent `png` delivery is required versus opaque terrain or shell art.
+- The filled roster covers the first bounded wave only: player runtime silhouette, six hostile runtime silhouettes, six pickups, and four terrain surfaces.
+- The prompt posture stays aligned with the drop-in pipeline contract by mapping each entry to its exact destination path and by calling out when transparent `png` delivery is required versus opaque terrain art.
 - The shared style guide keeps the runtime posture readability-first and techno-shinobi without locking the pack to one external generation model.
 - Validation passed with:
 - `npm run logics:lint`

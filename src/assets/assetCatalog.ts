@@ -169,13 +169,7 @@ export const assetCatalog = {
       stage: "runtime"
     }
   },
-  shell: {
-    "shell.scene.codex.header.runtime": {
-      domain: "shell",
-      label: "Codex archive header runtime",
-      stage: "runtime"
-    }
-  }
+  shell: {}
 } as const satisfies Record<string, Record<string, AssetCatalogEntry>>;
 
 export type EntityAssetId = keyof typeof assetCatalog.entities;
@@ -197,7 +191,11 @@ export const getAssetCatalogEntry = (assetId: AssetId) => {
     return assetCatalog.overlays[assetId as OverlayAssetId];
   }
 
-  return assetCatalog.shell[assetId as ShellAssetId];
+  if (assetId in assetCatalog.shell) {
+    return assetCatalog.shell[assetId as ShellAssetId];
+  }
+
+  throw new Error(`Unknown asset id: ${assetId}`);
 };
 
 export const isAssetId = (assetId: string): assetId is AssetId =>

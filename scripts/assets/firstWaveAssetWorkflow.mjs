@@ -158,15 +158,6 @@ export const firstWaveAssetPlan = [
     finalPath: "src/assets/map/runtime/map.terrain.obsidian.runtime.webp",
     prompt:
       "Create a square terrain texture panel for a techno-shinobi survival game: obsidian biome, 1024 by 1024, seamless or near seamless, dark crystalline surface with restrained violet fracture accents, stylized and readable, low clutter, no props, no horizon, no text, no perspective."
-  },
-  {
-    assetId: "shell.scene.codex.header.runtime",
-    deliveryFormat: "webp",
-    size: "1536x1024",
-    background: "opaque",
-    finalPath: "src/assets/shell/runtime/shell.scene.codex.header.runtime.webp",
-    prompt:
-      "Create a wide shell banner for a techno-shinobi action game's codex archive, 1536 by 1024, no text baked into the image, atmospheric archive panel with luminous rails, subtle techno mysticism, central emblem and clear negative space for overlay UI copy, stylized and graphic, not photoreal, no cluttered collage, no dominant character portrait."
   }
 ];
 

@@ -3,7 +3,7 @@
 > Schema version: 1.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 97%
+> Confidence: 98%
 > Progress: 100%
 > Complexity: High
 > Theme: UI
@@ -12,13 +12,13 @@
 # Problem
 - Generated images are not useful on their own unless the approved files are actually deposited into the runtime folders, resolved by `assetId`, and reviewed in the real game.
 - A visually impressive image can still fail once scaled into combat if its silhouette, directionality, or category cues are weak, so integration and in-game readability review need their own delivery slice.
-- This backlog item exists to define how promoted generated assets are integrated into the game, how readability is reviewed on runtime and shell surfaces, and how fallback or overlay rules are preserved when a generated output is not yet strong enough.
+- This backlog item exists to define how promoted generated assets are integrated into the game, how readability is reviewed on runtime surfaces first, and how fallback or overlay rules are preserved when a generated output is not yet strong enough.
 
 # Scope
 - In:
 - define the integration posture for approved first-wave generated assets under the existing runtime folders and `assetId` contract
-- define how runtime and bounded shell surfaces should be reviewed once generated files replace placeholders
-- define the readability checks that matter in practice: silhouette recognition, orientation cues, pickup category recognition, terrain identity, and shell banner legibility
+- define how runtime surfaces should be reviewed once generated files replace placeholders
+- define the readability checks that matter in practice: silhouette recognition, orientation cues, pickup category recognition, and terrain identity
 - define when a generated asset is accepted, iterated, or rejected in favor of fallback visuals
 - keep validation aligned with the existing performance and fallback guardrails
 - Out:
@@ -39,7 +39,7 @@ flowchart LR
 # Acceptance criteria
 - AC1: The slice defines how approved first-wave generated assets are promoted into the existing `src/assets/.../runtime/` folders without breaking the shared `assetId` resolution contract.
 - AC2: The slice defines the in-game readability checks required before a generated asset is considered acceptable, including directionality when relevant and category recognition for pickups and hostiles.
-- AC3: The slice defines how shell-facing generated assets such as the codex banner are reviewed for legibility and bounded identity value rather than treated as free-floating illustrations.
+- AC3: The slice keeps the first-wave review centered on gameplay readability rather than widening the acceptance surface into shell-themed illustration work.
 - AC4: The slice defines when existing procedural overlays or placeholder fallbacks remain necessary even after a generated file exists.
 - AC5: The slice keeps validation aligned with current performance and smoke guardrails rather than treating visual replacement as exempt from runtime constraints.
 - AC6: The slice stays bounded to first-wave generated-asset integration and review rather than widening into later-wave art production.
@@ -47,14 +47,14 @@ flowchart LR
 # AC Traceability
 - AC1 -> Scope: integration under the existing runtime folders. Proof: drop-in promotion and runtime-contract notes.
 - AC2 -> Scope: gameplay readability review. Proof: explicit review checklist for runtime entities, pickups, and terrain.
-- AC3 -> Scope: shell review. Proof: bounded shell-identity validation guidance.
+- AC3 -> Scope: bounded gameplay-first review. Proof: shell-themed illustration work remains outside the accepted first-wave posture.
 - AC4 -> Scope: fallback preservation. Proof: explicit accept/reject and fallback rules.
 - AC5 -> Scope: validation posture. Proof: runtime and smoke/perf guardrails.
 - AC6 -> Scope: bounded slice. Proof: out-of-scope statements and first-wave-only target.
 
 # Decision framing
 - Product framing: Required
-- Product signals: readability, recognition, shell legibility, bounded visual acceptance
+- Product signals: readability, recognition, bounded visual acceptance
 - Product follow-up: Reuse `prod_017` so acceptance stays readability-first instead of drifting into aesthetics-only review.
 - Architecture framing: Required
 - Architecture signals: contracts and integration
@@ -80,7 +80,6 @@ flowchart LR
 - `src/assets/assetResolver.ts`
 - `src/game/entities/render/EntityScene.tsx`
 - `src/game/world/render/WorldScene.tsx`
-- `src/app/components/CodexArchiveScene.tsx`
 
 # Priority
 - Impact: High
@@ -90,4 +89,4 @@ flowchart LR
 - Split from `req_095_process_first_wave_image_generation_prompts_and_integrate_generated_assets_into_the_game`.
 - This slice assumes candidate outputs have already been produced and curated by `item_344_define_a_repeatable_first_wave_image_generation_and_asset_promotion_workflow`.
 - Delivered by promoting approved `.png` and `.webp` assets into `src/assets/.../runtime/`, replacing the first-wave runtime `.svg` placeholders for the covered roster.
-- Runtime and shell review confirmed visible player, hostile, pickup, terrain, and codex-banner assets, while preserving useful readability cues such as the player direction cone and diamond-shaped XP pickup silhouette.
+- Runtime review confirmed visible player, hostile, pickup, and terrain assets, while preserving useful readability cues such as the player direction cone and diamond-shaped XP pickup silhouette.

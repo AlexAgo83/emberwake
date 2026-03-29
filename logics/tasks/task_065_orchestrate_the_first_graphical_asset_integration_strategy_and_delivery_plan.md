@@ -3,7 +3,7 @@
 > Schema version: 1.0
 > Status: Done
 > Understanding: 99%
-> Confidence: 96%
+> Confidence: 97%
 > Progress: 100%
 > Complexity: High
 > Theme: UI
@@ -116,7 +116,7 @@ flowchart LR
 - The first runtime readability wave is live through authored drop-in assets and bounded render integration for the player, six hostile families, six pickups, and four terrain surfaces.
 - Runtime entity presentation now uses sprite-backed rendering when an authored asset exists while preserving procedural overlays, hit feedback, selection affordances, bars, and fallback drawing paths in `src/game/entities/render/EntityScene.tsx`.
 - World chunk presentation now resolves terrain art by `assetId` and layers authored chunk art under obstacle and surface-modifier readability overlays in `src/game/world/render/WorldScene.tsx` and `games/emberwake/src/content/world/chunkDebugData.ts`.
-- Shell follow-up remained bounded to codex identity: `src/app/components/CodexArchiveScene.tsx` now resolves a header banner asset and creature-card previews from the shared catalog without widening into a broader shell art pass.
+- Shell follow-up ultimately stayed out of the accepted wave scope: creature-card previews may still reuse shared entity art in `src/app/components/CodexArchiveScene.tsx`, but codex-themed banner art was intentionally removed so the graphical pack stays gameplay-first.
 - Validation passed with:
 - `npm run lint`
 - `npm run typecheck`

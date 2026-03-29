@@ -7,9 +7,6 @@ describe("assetResolver", () => {
     expect(derivePlaceholderAssetId("entity.player.primary.runtime")).toBe(
       "entity.player.primary.placeholder"
     );
-    expect(derivePlaceholderAssetId("shell.scene.codex.header.runtime")).toBe(
-      "shell.scene.codex.header.placeholder"
-    );
   });
 
   it("returns null when the asset id does not expose a lifecycle suffix", () => {
@@ -24,10 +21,10 @@ describe("assetResolver", () => {
     ]);
   });
 
-  it("keeps the candidate list stable for runtime asset ids without an explicit fallback", () => {
-    expect(resolveAssetCandidateIds("shell.scene.codex.header.runtime")).toEqual([
-      "shell.scene.codex.header.runtime",
-      "shell.scene.codex.header.placeholder"
+  it("keeps the candidate list stable for runtime asset ids outside the catalog", () => {
+    expect(resolveAssetCandidateIds("entity.custom.prototype.runtime")).toEqual([
+      "entity.custom.prototype.runtime",
+      "entity.custom.prototype.placeholder"
     ]);
   });
 });

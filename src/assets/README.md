@@ -20,6 +20,10 @@ Current naming posture:
 - keep domain first, role second, and lifecycle last
 - keep the filename stem equal to the `assetId`
 
+Default entity-facing posture:
+- authored entity assets should treat `right` as the default facing
+- directional variants should be named and reviewed relative to that `right` baseline
+
 Drop-in delivery rule:
 - list the `assetId` once in the catalog or source data
 - author the file
@@ -37,7 +41,6 @@ Examples:
 - `map.terrain.emberplain.placeholder.svg`
 - `entity.player.primary.runtime.png`
 - `overlay.system.fullscreen-button.runtime.svg`
-- `shell.scene.codex.header.runtime.webp`
 - `entity.player.primary.runtime.meta.json`
 
 Fallback contract:

@@ -5,7 +5,7 @@
 > Related request: `req_093_define_a_first_graphical_asset_integration_strategy_for_runtime_and_shell_surfaces`
 > Related backlog: `item_342_define_a_first_graphical_asset_integration_strategy_for_runtime_and_shell_surfaces`
 > Related task: `task_065_orchestrate_the_first_graphical_asset_integration_strategy_and_delivery_plan`
-> Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
+> Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc, including scope realignments.
 
 # Overview
 Emberwake should integrate graphical assets through one content-driven pipeline that keeps asset ownership explicit, fallbacks safe, and runtime plus shell surfaces aligned. The target operator workflow should be close to drop-in delivery: once an asset id is known, a correctly named file can be deposited in the expected location and resolved automatically without additional per-asset code.
@@ -56,7 +56,7 @@ flowchart LR
 - `src/assets/entities/runtime/entity.player.primary.runtime.png`
 - `src/assets/map/placeholders/map.terrain.emberplain.placeholder.svg`
 - `src/assets/overlays/runtime/overlay.system.fullscreen-button.runtime.svg`
-- `src/assets/shell/runtime/shell.scene.codex.header.runtime.webp`
+- `src/assets/shell/runtime/shell.scene.panel.runtime.png`
 - Add a shared resolver layer that maps `assetId` to the discovered file and degrades automatically to placeholder or procedural fallback when the authored file is not present.
 - Keep metadata optional for the common case. If an asset only needs the default logical size, pivot, and loading behavior, dropping the correctly named file should be enough. Introduce a manifest or sidecar metadata file only when the asset needs non-default behavior such as:
 - special pivot or anchor

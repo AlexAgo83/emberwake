@@ -3,7 +3,7 @@
 > Schema version: 1.0
 > Status: Done
 > Understanding: 100%
-> Confidence: 98%
+> Confidence: 99%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -11,8 +11,8 @@
 # Needs
 - Process the first-wave image-generation prompts into actual bitmap assets so Emberwake can move from specification-only art guidance to real in-game authored visuals.
 - Use the existing first-wave production pack as the source of truth for what must be generated, with enough batching and operator support that the team does not have to hand-run every prompt ad hoc forever.
-- Integrate the generated assets into the runtime and bounded shell surfaces through the existing drop-in asset contract, so the game actually displays the produced visuals instead of staying on placeholders.
-- Keep the rollout readable and safe: generated assets should improve player, hostile, pickup, terrain, and codex recognition without regressing startup, runtime budgets, or fallback behavior.
+- Integrate the generated assets into the runtime surfaces covered by the existing drop-in asset contract, so the game actually displays the produced visuals instead of staying on placeholders.
+- Keep the rollout readable and safe: generated assets should improve player, hostile, pickup, terrain, and codex creature recognition without regressing startup, runtime budgets, or fallback behavior.
 
 # Context
 The repository now has the prerequisite layers for this delivery wave:
@@ -32,7 +32,7 @@ This request should cover the full operator loop for the first production wave:
 3. curate or iterate outputs when readability is weak
 4. convert/export the selected outputs into the expected runtime delivery format
 5. drop them into the correct asset folders
-6. verify the assets actually improve in-game readability and shell identity
+6. verify the assets actually improve in-game readability
 
 Scope includes:
 - defining the batch or semi-batch process used to execute the first-wave prompts
@@ -66,7 +66,7 @@ flowchart TD
 - AC3: The request defines how the existing first-wave prompt pack in `spec_001` is used as the input contract for generation, including how operators handle retries or multiple variants for one `assetId`.
 - AC4: The request defines the integration path for approved generated assets into the existing drop-in runtime contract so `assetId` resolution continues to work without ad hoc code imports.
 - AC5: The request defines validation expectations inside the actual game, including checks for silhouette readability, category recognition, directionality when relevant, and preservation of useful fallback overlays.
-- AC6: The request defines a bounded first-wave delivery target centered on the already-listed player, hostile, pickup, terrain, and codex-banner assets rather than widening into an unlimited art-production backlog.
+- AC6: The request defines a bounded first-wave delivery target centered on the already-listed player, hostile, pickup, and terrain assets rather than widening into an unlimited art-production backlog.
 - AC7: The request keeps the delivery compatible with the current performance posture and explicitly requires preserving placeholder or procedural fallback behavior when a generated asset is not yet good enough.
 
 # Dependencies and risks
@@ -98,7 +98,7 @@ flowchart TD
 
 # AI Context
 - Summary: Execute the first-wave image prompt pack into real generated assets, curate the outputs, and integrate approved files into Emberwake's existing graphical asset pipeline.
-- Keywords: image generation, prompt batch, asset promotion, runtime integration, readability validation, png, shell banner
+- Keywords: image generation, prompt batch, asset promotion, runtime integration, readability validation, png
 - Use when: Use when framing scope, context, and acceptance checks for Process first-wave image-generation prompts and integrate generated assets into the game.
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
@@ -123,4 +123,4 @@ flowchart TD
 - The first-wave prompt pack was executed into a repeatable generation workflow backed by `scripts/assets/generateFirstWaveAssets.mjs`, `scripts/assets/promoteFirstWaveAssets.mjs`, and `scripts/assets/buildFirstWaveGallery.mjs`.
 - Scratch candidates, reviewable variants, and curated selections now live under `output/imagegen/first-wave/`, with `selection.json` preserving the promoted winner per `assetId`.
 - Approved first-wave assets were promoted into the runtime contract under `src/assets/.../runtime/` as `.png` and `.webp` files without introducing ad hoc imports.
-- The actual game now renders the promoted player, hostile, pickup, terrain, and codex-banner assets, and the wave was revalidated against lint, typecheck, test, performance, smoke, and Logics lint gates.
+- The actual game now renders the promoted player, hostile, pickup, and terrain assets, and the wave was revalidated against lint, typecheck, test, performance, smoke, and Logics lint gates.

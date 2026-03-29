@@ -22,7 +22,6 @@ The first wave stays readability-first and bounded. It covers:
 - core hostile family silhouettes
 - pickup silhouettes
 - terrain chunk art surfaces
-- one bounded shell archive banner
 
 The first wave does not try to finalize:
 - every shell scene
@@ -35,7 +34,7 @@ The first wave does not try to finalize:
 - Primary goal: fast silhouette recognition at small runtime sizes.
 - Background: transparent mandatory.
 - Framing: one centered subject with 10 to 14 percent safe margin.
-- Facing: east or right-facing by default for runtime entities unless the subject is radial.
+- Facing: `right` is the default authored facing for runtime entities unless the subject is radial.
 - Detail level: medium, not noisy; interior cuts are allowed, tiny texture clutter is not.
 - Lighting: crisp emissive accents, restrained shading, no photoreal rendering.
 - Line of action: stable, combat-readable, no dramatic perspective warp.
@@ -57,16 +56,6 @@ The first wave does not try to finalize:
   - perspective floors
   - high-contrast focal objects
   - bright noise that competes with pickups or enemies
-
-## Shell banner art
-- Primary goal: reinforce archive identity without replacing UI copy.
-- Background: opaque allowed.
-- Framing: wide banner, no baked text, no logos that duplicate UI labels.
-- Detail level: atmospheric and graphic, not dense key art.
-- Avoid:
-  - text baked into the image
-  - character close-ups that imply a missing narrative panel
-  - composition so busy that overlay copy becomes hard to read
 
 # Production sheet template
 Use this format for every asset entry.
@@ -94,13 +83,13 @@ Use this format for every asset entry.
 - `transparency`: required
 - `recommended source canvas`: `1024x1024`
 - `destination runtime path`: `src/assets/entities/runtime/entity.player.primary.runtime.<ext>`
-- `composition guidance`: centered single subject, readable core silhouette, east-facing, safe margin around the outer energy fins
+- `composition guidance`: centered single subject, readable core silhouette, right-facing, safe margin around the outer energy fins
 - `style guidance`: techno-shinobi ember core, compact heroic silhouette, luminous but controlled
 - `avoid list`: no background, no weapon trail, no floor shadow, no cinematic perspective
 - `sidecar metadata`: not needed unless the visual center is intentionally offset
 - `copy-paste prompt`:
 ```text
-Create a single-subject runtime game asset for a techno-shinobi action game: the player core avatar, centered on a transparent background, east-facing, crisp readable silhouette, compact ember reactor body with shard-like fins and controlled luminous accents, graphic and stylized rather than photoreal, medium detail, strong interior separation, readable at small scale, no text, no frame, no environment, no floor, no cast shadow, no perspective distortion.
+Create a single-subject runtime game asset for a techno-shinobi action game: the player core avatar, centered on a transparent background, right-facing, crisp readable silhouette, compact ember reactor body with shard-like fins and controlled luminous accents, graphic and stylized rather than photoreal, medium detail, strong interior separation, readable at small scale, no text, no frame, no environment, no floor, no cast shadow, no perspective distortion.
 ```
 
 ### `entity.hostile.anchor.runtime`
@@ -110,13 +99,13 @@ Create a single-subject runtime game asset for a techno-shinobi action game: the
 - `transparency`: required
 - `recommended source canvas`: `1024x1024`
 - `destination runtime path`: `src/assets/entities/runtime/entity.hostile.anchor.runtime.<ext>`
-- `composition guidance`: centered, broad and weighty, east-facing, grounded silhouette
+- `composition guidance`: centered, broad and weighty, right-facing, grounded silhouette
 - `style guidance`: techno-shinobi brute shell, armored anchor posture, heavy mass read
 - `avoid list`: no tiny mechanical clutter, no background FX, no gore, no side view
 - `sidecar metadata`: not needed by default
 - `copy-paste prompt`:
 ```text
-Create a transparent-background runtime enemy asset for a techno-shinobi survival game: a heavy anchor hostile, centered, east-facing, broad armored silhouette with stable weight and industrial shrine-tech geometry, medium detail, readable at small scale, strong outer shape, graphic stylization, no text, no background, no ground plane, no cinematic perspective, no clutter.
+Create a transparent-background runtime enemy asset for a techno-shinobi survival game: a heavy anchor hostile, centered, right-facing, broad armored silhouette with stable weight and industrial shrine-tech geometry, medium detail, readable at small scale, strong outer shape, graphic stylization, no text, no background, no ground plane, no cinematic perspective, no clutter.
 ```
 
 ### `entity.hostile.drifter.runtime`
@@ -126,13 +115,13 @@ Create a transparent-background runtime enemy asset for a techno-shinobi surviva
 - `transparency`: required
 - `recommended source canvas`: `1024x1024`
 - `destination runtime path`: `src/assets/entities/runtime/entity.hostile.drifter.runtime.<ext>`
-- `composition guidance`: centered, lighter asymmetrical silhouette, east-facing
+- `composition guidance`: centered, lighter asymmetrical silhouette, right-facing
 - `style guidance`: scavenger-like techno ghost frame, agile and unstable, readable fins and trailing mass
 - `avoid list`: no smoke cloud background, no extreme motion blur, no realistic anatomy
 - `sidecar metadata`: not needed by default
 - `copy-paste prompt`:
 ```text
-Create a transparent-background runtime enemy asset for a techno-shinobi survival game: a drifter hostile, centered, east-facing, agile asymmetrical silhouette with scavenger-tech shards and flowing body mass, stylized and readable, medium detail, clean silhouette first, no environment, no text, no cinematic blur, no perspective distortion.
+Create a transparent-background runtime enemy asset for a techno-shinobi survival game: a drifter hostile, centered, right-facing, agile asymmetrical silhouette with scavenger-tech shards and flowing body mass, stylized and readable, medium detail, clean silhouette first, no environment, no text, no cinematic blur, no perspective distortion.
 ```
 
 ### `entity.hostile.needle.runtime`
@@ -142,13 +131,13 @@ Create a transparent-background runtime enemy asset for a techno-shinobi surviva
 - `transparency`: required
 - `recommended source canvas`: `1024x1024`
 - `destination runtime path`: `src/assets/entities/runtime/entity.hostile.needle.runtime.<ext>`
-- `composition guidance`: centered, narrow spear-like silhouette, east-facing, aggressive forward point
+- `composition guidance`: centered, narrow spear-like silhouette, right-facing, aggressive forward point
 - `style guidance`: shard-tech assassin frame, fast and precise, minimal volume but high readability
 - `avoid list`: no background trail, no realistic weapon prop separate from the body, no tiny filigree
 - `sidecar metadata`: not needed by default
 - `copy-paste prompt`:
 ```text
-Create a transparent-background runtime enemy asset for a techno-shinobi survival game: a needle hostile, centered, east-facing, narrow spear-like silhouette with shard-tech fins and a sharp forward attack profile, highly readable at small scale, stylized, medium detail, no text, no background, no floor, no cinematic effects.
+Create a transparent-background runtime enemy asset for a techno-shinobi survival game: a needle hostile, centered, right-facing, narrow spear-like silhouette with shard-tech fins and a sharp forward attack profile, highly readable at small scale, stylized, medium detail, no text, no background, no floor, no cinematic effects.
 ```
 
 ### `entity.hostile.rammer.runtime`
@@ -158,13 +147,13 @@ Create a transparent-background runtime enemy asset for a techno-shinobi surviva
 - `transparency`: required
 - `recommended source canvas`: `1024x1024`
 - `destination runtime path`: `src/assets/entities/runtime/entity.hostile.rammer.runtime.<ext>`
-- `composition guidance`: centered, wedge-forward silhouette, east-facing, clear front-loaded impact posture
+- `composition guidance`: centered, wedge-forward silhouette, right-facing, clear front-loaded impact posture
 - `style guidance`: shock ram frame, aggressive plated geometry, charge readability over ornament
 - `avoid list`: no debris burst, no background, no rear-facing pose, no overbusy surface detailing
 - `sidecar metadata`: not needed by default
 - `copy-paste prompt`:
 ```text
-Create a transparent-background runtime enemy asset for a techno-shinobi survival game: a rammer hostile, centered, east-facing, wedge-like armored silhouette with charge-brute posture and impact-focused front geometry, stylized, readable at small scale, medium detail, no environment, no text, no cinematic effects.
+Create a transparent-background runtime enemy asset for a techno-shinobi survival game: a rammer hostile, centered, right-facing, wedge-like armored silhouette with charge-brute posture and impact-focused front geometry, stylized, readable at small scale, medium detail, no environment, no text, no cinematic effects.
 ```
 
 ### `entity.hostile.sentinel.runtime`
@@ -174,13 +163,13 @@ Create a transparent-background runtime enemy asset for a techno-shinobi surviva
 - `transparency`: required
 - `recommended source canvas`: `1024x1024`
 - `destination runtime path`: `src/assets/entities/runtime/entity.hostile.sentinel.runtime.<ext>`
-- `composition guidance`: centered, shield-like vertical silhouette, east-facing
+- `composition guidance`: centered, shield-like vertical silhouette, right-facing
 - `style guidance`: disciplined pursuit shell, husk-like armor, stable combat readability
 - `avoid list`: no banner shapes, no background glow cloud, no fine insignia
 - `sidecar metadata`: not needed by default
 - `copy-paste prompt`:
 ```text
-Create a transparent-background runtime enemy asset for a techno-shinobi survival game: a sentinel hostile, centered, east-facing, shield-like armored silhouette with disciplined pursuit posture and husk-like frame design, stylized and clean, medium detail, readable at small size, no text, no background, no cinematic camera.
+Create a transparent-background runtime enemy asset for a techno-shinobi survival game: a sentinel hostile, centered, right-facing, shield-like armored silhouette with disciplined pursuit posture and husk-like frame design, stylized and clean, medium detail, readable at small size, no text, no background, no cinematic camera.
 ```
 
 ### `entity.hostile.watcher.runtime`
@@ -190,7 +179,7 @@ Create a transparent-background runtime enemy asset for a techno-shinobi surviva
 - `transparency`: required
 - `recommended source canvas`: `1024x1024`
 - `destination runtime path`: `src/assets/entities/runtime/entity.hostile.watcher.runtime.<ext>`
-- `composition guidance`: centered, eye-like radial silhouette, readable outer fins, east-facing bias allowed
+- `composition guidance`: centered, eye-like radial silhouette, readable outer fins, right-facing bias allowed
 - `style guidance`: watchglass drone shell, surveillant and uncanny, controlled emissive core
 - `avoid list`: no realistic eyeball rendering, no background lens flare, no horror gore
 - `sidecar metadata`: not needed by default
@@ -363,26 +352,8 @@ Create a square terrain texture panel for a techno-shinobi survival game: glowfe
 Create a square terrain texture panel for a techno-shinobi survival game: obsidian biome, 512 by 512, seamless or near seamless, dark crystalline surface with restrained violet fracture accents, stylized and readable, low clutter, no props, no horizon, no text, no perspective.
 ```
 
-## Shell
-
-### `shell.scene.codex.header.runtime`
-- `surface`: shell banner
-- `role`: codex archive banner art
-- `delivery format`: `webp`
-- `transparency`: not required
-- `recommended source canvas`: `1536x512`
-- `destination runtime path`: `src/assets/shell/runtime/shell.scene.codex.header.runtime.<ext>`
-- `composition guidance`: wide banner, no text baked in, central atmospheric emblem with empty safe zones for overlay copy
-- `style guidance`: techno archive panel, moody, luminous rails, restrained archive mystique
-- `avoid list`: no baked title text, no crowded collage, no character portrait dominating the whole frame
-- `sidecar metadata`: not needed by default
-- `copy-paste prompt`:
-```text
-Create a wide shell banner for a techno-shinobi action game's codex archive, 1536 by 512, no text baked into the image, atmospheric archive panel with luminous rails, subtle techno mysticism, central emblem and clear negative space for overlay UI copy, stylized and graphic, not photoreal, no cluttered collage, no dominant character portrait.
-```
-
 # Open questions
-- Should the second wave add separate shell banners for `bestiary` and `grimoire` instead of one shared archive banner?
+- Should the second wave revisit shell-facing illustration surfaces such as `bestiary` or `grimoire` after the gameplay readability pack is stronger?
 - Which first-wave assets will eventually need animation sidecars rather than static runtime images?
 - Should future prompt packs include model-specific negative prompt variants, or stay model-agnostic by default?
 

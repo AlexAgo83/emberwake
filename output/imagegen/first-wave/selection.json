@@ -15,6 +15,5 @@
   "map.terrain.ashfield.runtime": "candidates/map.terrain.ashfield.runtime/variant-01.png",
   "map.terrain.emberplain.runtime": "candidates/map.terrain.emberplain.runtime/variant-01.png",
   "map.terrain.glowfen.runtime": "candidates/map.terrain.glowfen.runtime/variant-01.png",
-  "map.terrain.obsidian.runtime": "candidates/map.terrain.obsidian.runtime/variant-01.png",
-  "shell.scene.codex.header.runtime": "candidates/shell.scene.codex.header.runtime/variant-01.png"
+  "map.terrain.obsidian.runtime": "candidates/map.terrain.obsidian.runtime/variant-01.png"
 }

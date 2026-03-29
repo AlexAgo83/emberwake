@@ -16,7 +16,6 @@ type CodexArchiveSceneProps = {
 };
 
 export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSceneProps) {
-  const codexHeaderAssetUrl = resolveAssetUrl("shell.scene.codex.header.runtime");
   const discoveredActiveWeaponIds = new Set(progressionSnapshot?.discoveredActiveWeaponIds ?? ["ash-lash"]);
   const discoveredPassiveItemIds = new Set(progressionSnapshot?.discoveredPassiveItemIds ?? []);
   const discoveredFusionIds = new Set(progressionSnapshot?.discoveredFusionIds ?? []);
@@ -34,16 +33,6 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
   if (scene === "grimoire") {
     return (
       <div className="app-meta-scene__codex-grid">
-        {codexHeaderAssetUrl ? (
-          <div className="app-meta-scene__archive-banner">
-            <img alt="" className="app-meta-scene__archive-banner-art" src={codexHeaderAssetUrl} />
-            <div className="app-meta-scene__archive-banner-copy app-meta-scene__codex-copy">
-              <p className="app-meta-scene__eyebrow">Codex archive</p>
-              <h3>Grimoire lattice</h3>
-              <p>Logged techniques and sealed paths refracted through the shell archive.</p>
-            </div>
-          </div>
-        ) : null}
         <section className="app-meta-scene__codex-section" aria-labelledby="grimoire-actives">
           <div className="app-meta-scene__codex-section-header">
             <p className="app-meta-scene__eyebrow" id="grimoire-actives">
@@ -185,16 +174,6 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
 
   return (
     <>
-      {codexHeaderAssetUrl ? (
-        <div className="app-meta-scene__archive-banner">
-          <img alt="" className="app-meta-scene__archive-banner-art" src={codexHeaderAssetUrl} />
-          <div className="app-meta-scene__archive-banner-copy app-meta-scene__codex-copy">
-            <p className="app-meta-scene__eyebrow">Codex archive</p>
-            <h3>Bestiary trace</h3>
-            <p>Recovered silhouettes and field notes from the hostile archive.</p>
-          </div>
-        </div>
-      ) : null}
       <div className="app-meta-scene__codex-cards app-meta-scene__codex-cards--bestiary">
         {creatureCodexEntries.map((creatureEntry) => {
           const isKnown = discoveredCreatureIds.has(creatureEntry.codexId);

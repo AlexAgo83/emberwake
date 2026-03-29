@@ -27,7 +27,7 @@ export const assetPipeline = {
   },
   logicalSizing: {
     entity: {
-      defaultFacing: "east",
+      defaultFacing: "right",
       pivot: "center",
       spriteLogicalSizeWorldUnits: 128
     },
@@ -53,7 +53,7 @@ export const assetPipeline = {
       entityRuntime: "entity.player.primary.runtime.png",
       mapPlaceholder: "map.terrain.emberplain.placeholder.svg",
       overlayRuntime: "overlay.system.fullscreen-button.runtime.svg",
-      shellRuntime: "shell.scene.codex.header.runtime.webp",
+      shellRuntime: "shell.scene.panel.runtime.png",
       metadataSidecar: "entity.player.primary.runtime.meta.json"
     }
   },
