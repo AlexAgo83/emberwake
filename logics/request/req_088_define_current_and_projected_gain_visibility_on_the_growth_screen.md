@@ -1,9 +1,9 @@
 ## req_088_define_current_and_projected_gain_visibility_on_the_growth_screen - Define current and projected gain visibility on the growth screen
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 95%
-> Confidence: 92%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: Low
 > Theme: Meta progression
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -106,4 +106,5 @@ flowchart TD
 - `logics/skills/logics-ui-steering/SKILL.md`
 
 # Backlog
-- (none yet)
+- `item_333_define_owned_and_projected_talent_effect_visibility_on_the_growth_screen`
+- `item_334_define_targeted_validation_for_growth_owned_and_projected_gain_visibility`

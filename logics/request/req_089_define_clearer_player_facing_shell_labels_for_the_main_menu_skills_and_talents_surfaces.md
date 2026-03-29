@@ -1,9 +1,9 @@
 ## req_089_define_clearer_player_facing_shell_labels_for_the_main_menu_skills_and_talents_surfaces - Define clearer player-facing shell labels for the main menu skills and talents surfaces
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 94%
-> Confidence: 91%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: Low
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -107,4 +107,5 @@ flowchart TD
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
-- (none yet)
+- `item_335_define_player_facing_shell_label_replacements_for_the_main_menu_skills_and_talents_surfaces`
+- `item_336_define_targeted_validation_for_player_facing_shell_label_consistency_across_shell_surfaces`

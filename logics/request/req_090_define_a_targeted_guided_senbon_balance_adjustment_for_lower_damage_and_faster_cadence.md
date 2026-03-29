@@ -1,9 +1,9 @@
 ## req_090_define_a_targeted_guided_senbon_balance_adjustment_for_lower_damage_and_faster_cadence - Define a targeted guided senbon balance adjustment for lower damage and faster cadence
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 96%
-> Confidence: 93%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
 > Complexity: Low
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -96,4 +96,5 @@ flowchart TD
 - Skip when: Skip when the work targets another feature, repository, or workflow stage.
 
 # Backlog
-- (none yet)
+- `item_337_define_guided_senbon_damage_and_cadence_tuning_adjustment`
+- `item_338_define_targeted_validation_for_guided_senbon_lower_damage_and_faster_cadence`

@@ -80,20 +80,20 @@ const sceneStatusMap: Record<
   },
   grimoire: {
     detail: "The shell is presenting the skill archive.",
-    stateLabel: "Archive",
-    title: "Grimoire archive",
+    stateLabel: "Skills",
+    title: "Skills archive",
     tone: "neutral"
   },
   growth: {
     detail: "Persistent talents and unlock purchases live in the shell.",
-    stateLabel: "Growth",
-    title: "Meta progression",
+    stateLabel: "Talents",
+    title: "Talents",
     tone: "warm"
   },
   "main-menu": {
     detail: "The main menu is the entry and return hub.",
-    stateLabel: "Menu",
-    title: "Main menu",
+    stateLabel: "Main menu",
+    title: "Emberwake",
     tone: "neutral"
   },
   "new-game": {

@@ -215,6 +215,17 @@ describe("ShellMenu", () => {
     expect(screen.getByRole("button", { name: /Menu/i })).toHaveTextContent("Live");
   });
 
+  it("uses the renamed shell labels for main-menu and progression scenes", () => {
+    const { rerender } = render(<ShellMenu {...createProps({ activeScene: "main-menu" })} />);
+
+    expect(screen.getByText("Emberwake")).toBeInTheDocument();
+    expect(screen.getAllByText("Main menu").length).toBeGreaterThan(0);
+
+    rerender(<ShellMenu {...createProps({ activeScene: "growth" })} />);
+
+    expect(screen.getAllByText("Talents").length).toBeGreaterThan(0);
+  });
+
   it("keeps the primary action aligned with the paused shell scene without the removed context panel", () => {
     const props = createProps({
       activeScene: "pause"

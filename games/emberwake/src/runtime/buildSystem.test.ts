@@ -298,6 +298,24 @@ describe("buildSystem", () => {
     expect(vacuumStats.cooldownTicks).toBeLessThan(haloStats.cooldownTicks);
   });
 
+  it("retunes guided senbon toward lighter hits and faster cadence", () => {
+    const buildState = normalizeBuildState({
+      activeSlots: [
+        {
+          fusionId: null,
+          lastAttackTick: null,
+          level: 1,
+          weaponId: "guided-senbon"
+        }
+      ]
+    });
+
+    const senbonStats = resolveActiveWeaponRuntimeStats(buildState, buildState.activeSlots[0]!);
+
+    expect(senbonStats.damage).toBe(11);
+    expect(senbonStats.cooldownTicks).toBe(18);
+  });
+
   it("exposes economy boss and survivability passive modifiers for the second wave", () => {
     const buildState = normalizeBuildState({
       passiveSlots: [

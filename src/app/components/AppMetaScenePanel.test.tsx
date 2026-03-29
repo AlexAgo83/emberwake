@@ -54,16 +54,16 @@ describe("AppMetaScenePanel", () => {
 
     render(<AppMetaScenePanel {...props} />);
 
-    expect(screen.getByLabelText("Main menu")).toBeInTheDocument();
+    expect(screen.getByLabelText("Emberwake")).toBeInTheDocument();
     const actionButtons = screen.getAllByRole("button");
     const loadGameIndex = actionButtons.findIndex((button) => button.textContent?.match(/Load game/i));
     const newGameIndex = actionButtons.findIndex((button) => button.textContent?.match(/Start new game/i));
     expect(screen.getByRole("button", { name: /Start new game/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Load game/i })).toBeDisabled();
-    expect(screen.getByRole("button", { name: /Grimoire/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Skills/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Bestiary/i })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Changelogs/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Growth/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Talents/i })).toBeInTheDocument();
     expect(screen.queryByText(/Meta flow/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/^Session$/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Resume the run, start a new one/i)).not.toBeInTheDocument();
@@ -100,6 +100,12 @@ describe("AppMetaScenePanel", () => {
     const props = createProps({
       metaProfile: {
         ...createDefaultMetaProfile(),
+        purchasedShopUnlockIds: ["second-wave-skills"],
+        talentRanks: {
+          ...createDefaultMetaProfile().talentRanks,
+          "gold-gain": 1,
+          "max-health": 1
+        },
         goldBalance: 99
       },
       scene: "growth"
@@ -107,9 +113,14 @@ describe("AppMetaScenePanel", () => {
 
     render(<AppMetaScenePanel {...props} />);
 
-    expect(screen.getByLabelText("Growth")).toBeInTheDocument();
+    expect(screen.getByLabelText("Talents")).toBeInTheDocument();
     expect(screen.getByLabelText(/Available gold/i)).toBeInTheDocument();
     expect(screen.getByText("99")).toBeInTheDocument();
+    expect(await screen.findByText("1/3 owned • 33% complete")).toBeInTheDocument();
+    expect(screen.getByText("Owned effect: +12%")).toBeInTheDocument();
+    expect(screen.getByText("Next rank adds: +12% (to +24% total)")).toBeInTheDocument();
+    expect(screen.getByText("Owned effect: +12 HP")).toBeInTheDocument();
+    expect(screen.getByText("Next rank adds: +12 HP (to +24 HP total)")).toBeInTheDocument();
     fireEvent.click((await screen.findAllByRole("button", { name: /Unlock|Buy rank/i }))[0]!);
 
     expect(props.onPurchaseShopUnlock).toHaveBeenCalledTimes(1);

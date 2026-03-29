@@ -158,15 +158,15 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   };
   const title =
     scene === "main-menu"
-      ? "Main menu"
+      ? "Emberwake"
       : scene === "new-game"
         ? "New game"
         : scene === "changelogs"
           ? "Changelogs"
           : scene === "growth"
-            ? "Growth"
+            ? "Talents"
           : scene === "grimoire"
-            ? "Grimoire"
+            ? "Skills"
             : scene === "bestiary"
               ? "Bestiary"
               : scene === "pause"
@@ -229,7 +229,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   const projectVersionLabel = `${appConfig.name} v${appConfig.version}`;
   const sceneEyebrow =
     scene === "main-menu"
-      ? "Shell entry"
+      ? "Main menu"
       : scene === "new-game"
         ? "Run initiation"
         : scene === "changelogs"
@@ -395,7 +395,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 onClick={onOpenGrowth}
                 type="button"
               >
-                Growth
+                Talents
               </button>
               <button
                 className="shell-control shell-control--button shell-control--button-quiet"
@@ -409,7 +409,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
                 onClick={onOpenGrimoire}
                 type="button"
               >
-                Grimoire
+                Skills
               </button>
               <button
                 className="shell-control shell-control--button shell-control--button-quiet"

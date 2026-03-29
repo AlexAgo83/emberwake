@@ -3,6 +3,8 @@ import "./GrowthScene.css";
 import {
   canPurchaseShopUnlock,
   canPurchaseTalentRank,
+  resolveShopOwnershipProgress,
+  resolveTalentEffectPreview,
   resolveTalentNextCost,
   shopUnlockCatalog,
   talentCatalog
@@ -20,6 +22,8 @@ export function GrowthScene({
   onPurchaseShopUnlock,
   onPurchaseTalentRank
 }: GrowthSceneProps) {
+  const shopOwnershipProgress = resolveShopOwnershipProgress(metaProfile);
+
   return (
     <div className="app-meta-scene__scene-body app-meta-scene__scene-body--scroll">
       <div className="app-meta-scene__growth-grid">
@@ -29,7 +33,8 @@ export function GrowthScene({
               Shop
             </p>
             <span className="app-meta-scene__codex-count">
-              {metaProfile.purchasedShopUnlockIds.length}/{shopUnlockCatalog.length} owned
+              {shopOwnershipProgress.ownedCount}/{shopOwnershipProgress.totalCount} owned •{" "}
+              {shopOwnershipProgress.ownedPercentage}% complete
             </span>
           </div>
           <div className="app-meta-scene__growth-cards">
@@ -79,6 +84,7 @@ export function GrowthScene({
               const currentRank = metaProfile.talentRanks[talentDefinition.id];
               const nextCost = resolveTalentNextCost(metaProfile, talentDefinition.id);
               const canPurchase = canPurchaseTalentRank(metaProfile, talentDefinition.id);
+              const effectPreview = resolveTalentEffectPreview(metaProfile, talentDefinition.id);
 
               return (
                 <article
@@ -95,8 +101,19 @@ export function GrowthScene({
                     </div>
                     <p>{talentDefinition.description}</p>
                     <p className="app-meta-scene__growth-meta">
-                      {nextCost === null ? "Maxed out." : `Next rank: ${nextCost} gold`}
+                      Owned effect: {effectPreview.currentEffectLabel}
                     </p>
+                    {nextCost === null ? (
+                      <p className="app-meta-scene__growth-meta">Maxed out.</p>
+                    ) : (
+                      <>
+                        <p className="app-meta-scene__growth-meta">
+                          Next rank adds: {effectPreview.nextIncrementLabel} (to{" "}
+                          {effectPreview.projectedTotalLabel} total)
+                        </p>
+                        <p className="app-meta-scene__growth-meta">Next rank: {nextCost} gold</p>
+                      </>
+                    )}
                   </div>
                   <button
                     className="shell-control shell-control--button"

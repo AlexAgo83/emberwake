@@ -42,6 +42,18 @@ export type TalentDefinition = {
   label: string;
 };
 
+export type ShopOwnershipProgress = {
+  ownedCount: number;
+  ownedPercentage: number;
+  totalCount: number;
+};
+
+export type TalentEffectPreview = {
+  currentEffectLabel: string;
+  nextIncrementLabel: string | null;
+  projectedTotalLabel: string | null;
+};
+
 const firstWaveActiveWeaponIds: ActiveWeaponId[] = [
   "ash-lash",
   "guided-senbon",
@@ -173,11 +185,128 @@ export const getTalentDefinition = (talentId: MetaTalentId) =>
 export const getShopUnlockDefinition = (unlockId: ShopUnlockId) =>
   shopUnlockCatalog.find((unlock) => unlock.id === unlockId)!;
 
+const withProjectedTalentRank = (profile: MetaProfile, talentId: MetaTalentId): MetaProfile => {
+  const currentRank = profile.talentRanks[talentId];
+  const maxRank = getTalentDefinition(talentId).costCurve.length;
+
+  return {
+    ...profile,
+    talentRanks: {
+      ...profile.talentRanks,
+      [talentId]: Math.min(currentRank + 1, maxRank)
+    }
+  };
+};
+
+const formatPercentBonus = (bonusFraction: number) => `${bonusFraction >= 0 ? "+" : ""}${Math.round(bonusFraction * 100)}%`;
+
+const formatUnitBonus = (value: number, singularUnit: string, pluralUnit: string) =>
+  `${value >= 0 ? "+" : ""}${value} ${Math.abs(value) === 1 ? singularUnit : pluralUnit}`;
+
 export const resolveTalentNextCost = (profile: MetaProfile, talentId: MetaTalentId) => {
   const talentDefinition = getTalentDefinition(talentId);
   const currentRank = profile.talentRanks[talentId];
 
   return talentDefinition.costCurve[currentRank] ?? null;
+};
+
+export const resolveShopOwnershipProgress = (profile: MetaProfile): ShopOwnershipProgress => {
+  const ownedCount = profile.purchasedShopUnlockIds.length;
+  const totalCount = shopUnlockCatalog.length;
+
+  return {
+    ownedCount,
+    ownedPercentage: totalCount === 0 ? 0 : Math.round((ownedCount / totalCount) * 100),
+    totalCount
+  };
+};
+
+export const resolveTalentEffectPreview = (
+  profile: MetaProfile,
+  talentId: MetaTalentId
+): TalentEffectPreview => {
+  const currentModifiers = deriveBuildMetaProgression(profile).talentModifiers;
+  const nextCost = resolveTalentNextCost(profile, talentId);
+
+  if (talentId === "gold-gain") {
+    const currentBonus = currentModifiers.goldGainMultiplier - 1;
+
+    return {
+      currentEffectLabel: formatPercentBonus(currentBonus),
+      nextIncrementLabel: nextCost === null ? null : formatPercentBonus(0.12),
+      projectedTotalLabel:
+        nextCost === null
+          ? null
+          : formatPercentBonus(deriveBuildMetaProgression(withProjectedTalentRank(profile, talentId)).talentModifiers.goldGainMultiplier - 1)
+    };
+  }
+
+  if (talentId === "xp-gain") {
+    const currentBonus = currentModifiers.xpGainMultiplier - 1;
+
+    return {
+      currentEffectLabel: formatPercentBonus(currentBonus),
+      nextIncrementLabel: nextCost === null ? null : formatPercentBonus(0.1),
+      projectedTotalLabel:
+        nextCost === null
+          ? null
+          : formatPercentBonus(deriveBuildMetaProgression(withProjectedTalentRank(profile, talentId)).talentModifiers.xpGainMultiplier - 1)
+    };
+  }
+
+  if (talentId === "move-speed") {
+    const currentBonus = currentModifiers.moveSpeedMultiplier - 1;
+
+    return {
+      currentEffectLabel: formatPercentBonus(currentBonus),
+      nextIncrementLabel: nextCost === null ? null : formatPercentBonus(0.06),
+      projectedTotalLabel:
+        nextCost === null
+          ? null
+          : formatPercentBonus(deriveBuildMetaProgression(withProjectedTalentRank(profile, talentId)).talentModifiers.moveSpeedMultiplier - 1)
+    };
+  }
+
+  if (talentId === "pickup-radius") {
+    const currentBonus = currentModifiers.pickupRadiusMultiplier - 1;
+
+    return {
+      currentEffectLabel: formatPercentBonus(currentBonus),
+      nextIncrementLabel: nextCost === null ? null : formatPercentBonus(0.08),
+      projectedTotalLabel:
+        nextCost === null
+          ? null
+          : formatPercentBonus(deriveBuildMetaProgression(withProjectedTalentRank(profile, talentId)).talentModifiers.pickupRadiusMultiplier - 1)
+    };
+  }
+
+  if (talentId === "max-health") {
+    return {
+      currentEffectLabel: formatUnitBonus(currentModifiers.maxHealthBonus, "HP", "HP"),
+      nextIncrementLabel: nextCost === null ? null : formatUnitBonus(12, "HP", "HP"),
+      projectedTotalLabel:
+        nextCost === null
+          ? null
+          : formatUnitBonus(
+              deriveBuildMetaProgression(withProjectedTalentRank(profile, talentId)).talentModifiers.maxHealthBonus,
+              "HP",
+              "HP"
+            )
+    };
+  }
+
+  return {
+    currentEffectLabel: formatUnitBonus(currentModifiers.emergencyShieldCharges, "charge", "charges"),
+    nextIncrementLabel: nextCost === null ? null : formatUnitBonus(1, "charge", "charges"),
+    projectedTotalLabel:
+      nextCost === null
+        ? null
+        : formatUnitBonus(
+            deriveBuildMetaProgression(withProjectedTalentRank(profile, talentId)).talentModifiers.emergencyShieldCharges,
+            "charge",
+            "charges"
+          )
+  };
 };
 
 export const canPurchaseTalentRank = (profile: MetaProfile, talentId: MetaTalentId) => {
