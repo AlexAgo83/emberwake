@@ -58,6 +58,9 @@ export type ProgressionSystemState = {
   highestUnlockedTier: 0;
   healingKitsCollected: number;
   hostileDefeats: number;
+  missionCompleted: boolean;
+  missionExitUnlocked: boolean;
+  missionItemCount: number;
   nextPhaseStartsAtTick: number | null;
   nextLevelXpRequired: number;
   passiveSlotsFilled: number;
@@ -204,6 +207,9 @@ export const createInitialGameplaySystemsState = (): EmberwakeGameplaySystemsSta
     highestUnlockedTier: 0,
     healingKitsCollected: 0,
     hostileDefeats: 0,
+    missionCompleted: false,
+    missionExitUnlocked: false,
+    missionItemCount: 0,
     nextPhaseStartsAtTick: resolveNextRunProgressionPhase(0)?.startsAtTick ?? null,
     nextLevelXpRequired: resolveXpRequiredForLevel(1),
     passiveSlotsFilled: 0,
@@ -352,6 +358,9 @@ export const advanceGameplaySystemsState = ({
     goldCollected: simulationAfterUpdate.runStats.goldCollected,
     healingKitsCollected: simulationAfterUpdate.runStats.healingKitsCollected,
     hostileDefeats: simulationAfterUpdate.runStats.hostileDefeats,
+    missionCompleted: simulationAfterUpdate.runStats.missionCompleted,
+    missionExitUnlocked: simulationAfterUpdate.missionState.exitUnlocked,
+    missionItemCount: simulationAfterUpdate.runStats.missionItemsCollected,
     nextPhaseStartsAtTick: nextRunPhase?.startsAtTick ?? null,
     nextLevelXpRequired: resolveXpRequiredForLevel(simulationAfterUpdate.runStats.currentLevel),
     passiveSlotsFilled: buildSummary.passiveCount,
@@ -372,7 +381,16 @@ export const advanceGameplaySystemsState = ({
           ,
           skillPerformanceSummaries: createSkillPerformanceSummaries(simulationAfterUpdate)
         }
-      : previousState.outcome.kind === "none"
+      : simulationAfterUpdate.runStats.missionCompleted
+        ? {
+            detail: "The mission items were secured and the map exit was reached.",
+            emittedAtTick: runtimeTicksSurvived,
+            kind: "victory" as const,
+            phaseId: activeRunPhase.id,
+            shellScene: "victory" as const,
+            skillPerformanceSummaries: createSkillPerformanceSummaries(simulationAfterUpdate)
+          }
+        : previousState.outcome.kind === "none"
         ? createIdleGameplayOutcome()
         : previousState.outcome;
   const recentSignals = trimSignals([
@@ -419,6 +437,9 @@ export const createGameplaySystemDiagnostics = (
     currentXp: normalizedState.progression.currentXp,
     goldCollected: normalizedState.progression.goldCollected,
     hostileDefeats: normalizedState.progression.hostileDefeats,
+    missionCompleted: normalizedState.progression.missionCompleted,
+    missionExitUnlocked: normalizedState.progression.missionExitUnlocked,
+    missionItemCount: normalizedState.progression.missionItemCount,
     nextLevelXpRequired: normalizedState.progression.nextLevelXpRequired,
     runPhaseId: normalizedState.progression.runPhaseId,
     runPhaseLabel: normalizedState.progression.phaseLabel,

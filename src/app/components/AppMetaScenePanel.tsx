@@ -61,6 +61,29 @@ const LazyGrowthScene = lazy(async () => {
   };
 });
 
+const mainMenuEnemyRoster = [
+  {
+    assetId: "entity.hostile.drifter.runtime.right",
+    scale: 1
+  },
+  {
+    assetId: "entity.hostile.rammer.runtime.right",
+    scale: 1.08
+  },
+  {
+    assetId: "entity.hostile.sentinel.runtime.right",
+    scale: 1.04
+  },
+  {
+    assetId: "entity.hostile.watcher.runtime.right",
+    scale: 1.02
+  },
+  {
+    assetId: "entity.hostile.watcher.runtime.right",
+    scale: 1.16
+  }
+] as const;
+
 const runtimeFixedStepMs = 1000 / 60;
 
 type AppMetaScenePanelProps = {
@@ -136,6 +159,7 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
   scene,
   selectedWorldProfileId
 }: AppMetaScenePanelProps) {
+  const [mainMenuEnemyIndex, setMainMenuEnemyIndex] = useState(0);
   const [defeatView, setDefeatView] = useState<"recap" | "skills">("recap");
   const [settingsView, setSettingsView] = useState<SettingsView>("menu");
   const [releaseChangelogEntries, setReleaseChangelogEntries] = useState<ReleaseChangelogEntry[] | null>(null);
@@ -301,9 +325,27 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
       worldDescription: worldProfile.description
     };
   });
+  const mainMenuEnemyAsset = mainMenuEnemyRoster[mainMenuEnemyIndex]!;
+  const mainMenuEnemyAssetUrl = resolveAssetUrl(mainMenuEnemyAsset.assetId);
+  const mainMenuHeroAssetUrl = resolveAssetUrl("entity.player.primary.runtime.right");
 
   useEffect(() => {
     setDefeatView("recap");
+  }, [scene]);
+
+  useEffect(() => {
+    if (scene !== "main-menu") {
+      setMainMenuEnemyIndex(0);
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setMainMenuEnemyIndex((currentIndex) => (currentIndex + 1) % mainMenuEnemyRoster.length);
+    }, 10_000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
   }, [scene]);
 
   useEffect(() => {
@@ -384,6 +426,28 @@ export const AppMetaScenePanel = memo(function AppMetaScenePanel({
         data-scene={scene}
         data-tone={sceneTone}
       >
+        {scene === "main-menu" ? (
+          <div className="app-meta-scene__main-menu-backdrop" aria-hidden="true">
+            {mainMenuEnemyAssetUrl ? (
+              <img
+                className="app-meta-scene__main-menu-character app-meta-scene__main-menu-character--enemy"
+                src={mainMenuEnemyAssetUrl}
+                style={
+                  {
+                    "--main-menu-character-scale": String(mainMenuEnemyAsset.scale)
+                  } as CSSProperties
+                }
+              />
+            ) : null}
+            {mainMenuHeroAssetUrl ? (
+              <img
+                className="app-meta-scene__main-menu-character app-meta-scene__main-menu-character--hero"
+                src={mainMenuHeroAssetUrl}
+              />
+            ) : null}
+            <div className="app-meta-scene__main-menu-veil" />
+          </div>
+        ) : null}
         <div className="app-meta-scene__frame">
           <header className="app-meta-scene__header">
             <div className="app-meta-scene__header-copy">

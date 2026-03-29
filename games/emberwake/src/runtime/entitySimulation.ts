@@ -17,6 +17,15 @@ import { hostileCombatContract } from "@game/runtime/hostileCombatContract";
 import { pickupContract } from "@game/runtime/pickupContract";
 import { resolvePseudoPhysicalMovement } from "@game/runtime/pseudoPhysics";
 import {
+  createInitialMissionState,
+  getMissionStage,
+  missionExitWorldPosition,
+  missionLoopContract,
+  normalizeMissionState,
+  type MissionBossId,
+  type MissionState
+} from "@game/runtime/missionLoop";
+import {
   entityCombatPresentationContract,
   pruneFloatingDamageNumbers,
   resolveAutomaticPlayerAttack,
@@ -65,6 +74,7 @@ import {
   type HostileProfileId
 } from "@game/runtime/hostilePressure";
 import { gameplayTuning } from "@game/config/gameplayTuning";
+import { getWorldProfileBySeed } from "@shared/model/worldProfiles";
 
 export const entitySimulationContract = {
   fixedStepMs: 1000 / 60,
@@ -118,6 +128,7 @@ export type FocusState = {
 export type PickupProfile = {
   attractionState?: PickupAttractionState;
   kind: SimulatedPickupKind;
+  missionItemStageIndex?: number;
   stackCount?: number;
 };
 
@@ -182,6 +193,7 @@ export type CombatSkillFeedbackKind =
   | "slash-ribbon"
   | "kunai-fan"
   | "vacuum-pulse"
+  | "watchglass-laser"
   | "zone-seal";
 
 export type CombatSkillFeedbackEvent = {
@@ -244,6 +256,7 @@ export type EntitySimulationState = {
   entities: SimulatedEntity[];
   entity: SimulatedEntity;
   floatingDamageNumbers: FloatingDamageNumber[];
+  missionState: MissionState;
   nextPickupSequence: number;
   nextHostileSequence: number;
   pickupPulseUntilTick: number;
@@ -256,6 +269,7 @@ type LegacySimulationState = Partial<EntitySimulationState> & {
   buildState?: Partial<BuildState>;
   entity?: Partial<SimulatedEntity> & Pick<WorldEntity, "id" | "worldPosition">;
   entities?: Array<Partial<SimulatedEntity> & Pick<WorldEntity, "id" | "worldPosition">>;
+  missionState?: Partial<MissionState>;
 };
 
 export type SimulationSpeedOption = (typeof entitySimulationContract.speedOptions)[number];
@@ -407,7 +421,8 @@ const createHostileEntity = (
   worldPosition: WorldPoint,
   spawnedAtTick: number,
   phaseId: RunProgressionPhaseId,
-  bossDefeatCount: number
+  bossDefeatCount: number,
+  worldSeed: string
 ): SimulatedEntity => {
   const runPhase = resolveRunProgressionPhase(spawnedAtTick);
   const hostileProfile = resolveHostileSpawnProfile({
@@ -416,6 +431,8 @@ const createHostileEntity = (
     spawnedAtTick
   });
   const bossDefeatEscalation = resolveBossDefeatEscalation(bossDefeatCount);
+  const worldTier = getWorldProfileBySeed(worldSeed)?.tier ?? 1;
+  const worldDifficultyMultiplier = 1 + Math.max(0, worldTier - 1) * 0.1;
 
   return {
     ...createGenericMoverEntity({
@@ -438,6 +455,7 @@ const createHostileEntity = (
           hostileCombatContract.hostile.maxHealth *
             runPhase.hostileMaxHealthMultiplier *
             bossDefeatEscalation.hostileMaxHealthMultiplier *
+            worldDifficultyMultiplier *
             hostileProfile.maxHealthMultiplier
         )
       )
@@ -450,6 +468,7 @@ const createHostileEntity = (
           hostileCombatContract.hostile.contactDamage *
             runPhase.hostileContactDamageMultiplier *
             bossDefeatEscalation.hostileContactDamageMultiplier *
+            worldDifficultyMultiplier *
             hostileProfile.contactDamageMultiplier
         )
       ),
@@ -490,12 +509,125 @@ const createHostileEntity = (
   } satisfies SimulatedEntity;
 };
 
+const missionBossPresentationMap: Record<
+  MissionBossId,
+  {
+    baseProfileId: HostileProfileId;
+    tint: string;
+    visualScaleMultiplier: number;
+  }
+> = {
+  "mission-boss-rammer": {
+    baseProfileId: "shock-ram",
+    tint: "#ff6f61",
+    visualScaleMultiplier: 1.7
+  },
+  "mission-boss-sentinel": {
+    baseProfileId: "sentinel-husk",
+    tint: "#ff9f7c",
+    visualScaleMultiplier: 1.72
+  },
+  "mission-boss-watchglass": {
+    baseProfileId: "watchglass-prime",
+    tint: "#ff8a72",
+    visualScaleMultiplier: 1.74
+  }
+};
+
+const createMissionBossEntity = (
+  missionBossId: MissionBossId,
+  stageIndex: number,
+  worldPosition: WorldPoint,
+  spawnedAtTick: number,
+  bossDefeatCount: number,
+  worldSeed: string
+): SimulatedEntity => {
+  const presentation = missionBossPresentationMap[missionBossId];
+  const baseProfile = getHostileSpawnProfile(presentation.baseProfileId);
+  const worldTier = getWorldProfileBySeed(worldSeed)?.tier ?? 1;
+  const worldDifficultyMultiplier = 1 + Math.max(0, worldTier - 1) * 0.1;
+  const maxHealth = Math.max(
+    1,
+    Math.round(
+      hostileCombatContract.hostile.maxHealth *
+        resolveBossDefeatEscalation(bossDefeatCount).hostileMaxHealthMultiplier *
+        worldDifficultyMultiplier *
+        baseProfile.maxHealthMultiplier *
+        5.2
+    )
+  );
+
+  return {
+    ...createGenericMoverEntity({
+      archetype: "generic-mover",
+      footprint: {
+        radius: Math.round(baseProfile.footprintRadius * 1.28)
+      },
+      id: `entity:mission-boss:${stageIndex}`,
+      renderLayer: baseProfile.renderLayer + 4,
+      visual: {
+        kind: baseProfile.visualKind,
+        tint: presentation.tint
+      },
+      worldPosition
+    }),
+    combat: createCombatState(maxHealth),
+    contactDamageProfile: {
+      cooldownTicks: hostileCombatContract.hostile.contactDamageCooldownTicks,
+      damage: Math.max(
+        1,
+        Math.round(
+          hostileCombatContract.hostile.contactDamage *
+            resolveBossDefeatEscalation(bossDefeatCount).hostileContactDamageMultiplier *
+            worldDifficultyMultiplier *
+            baseProfile.contactDamageMultiplier *
+            1.45
+        )
+      ),
+      lastDamageTick: null
+    },
+    damageReactionState: createDamageReactionState(),
+    focusState: {
+      acquisitionRadiusWorldUnits: hostileCombatContract.hostile.acquisitionRadiusWorldUnits * 1.6,
+      targetEntityId: null
+    },
+    hostileBehaviorState:
+      baseProfile.behaviorKind === "telegraphed-charge"
+        ? {
+            chargeDirectionRadians: null,
+            cooldownUntilTick: null,
+            phase: null,
+            phaseStartedAtTick: null
+          }
+        : undefined,
+    hostileControlState: createHostileControlState(),
+    hostileProfileId: presentation.baseProfileId,
+    movementSurfaceModifier: "normal",
+    movementSpeedWorldUnitsPerSecond:
+      hostileCombatContract.hostile.moveSpeedWorldUnitsPerSecond * baseProfile.moveSpeedMultiplier * 0.92,
+    pathfindingState: {
+      lastComputedTick: null,
+      routeTiles: [],
+      targetTile: null
+    },
+    role: "hostile",
+    spawnedAtTick,
+    state: "moving",
+    velocity: {
+      x: 0,
+      y: 0
+    },
+    visualScale: presentation.visualScaleMultiplier
+  };
+};
+
 const createPickupEntity = (
   pickupSequence: number,
   pickupKind: SimulatedPickupKind,
   worldPosition: WorldPoint,
   spawnedAtTick: number,
-  stackCount = 1
+  stackCount = 1,
+  missionItemStageIndex: number | null = null
 ): SimulatedEntity => ({
   ...createGenericMoverEntity({
     id: `entity:pickup:${pickupKind}:${pickupSequence}`,
@@ -536,6 +668,7 @@ const createPickupEntity = (
   movementSurfaceModifier: "normal",
   pickupProfile: {
     kind: pickupKind,
+    missionItemStageIndex: missionItemStageIndex ?? undefined,
     stackCount
   },
   role: "pickup",
@@ -548,7 +681,9 @@ const createPickupEntity = (
 
 const isAlive = (entity: SimulatedEntity) => entity.combat.currentHealth > 0;
 const isDisabledPickupEntity = (entity: SimulatedEntity) =>
-  entity.role === "pickup" && entity.pickupProfile?.kind === "cache";
+  entity.role === "pickup" &&
+  entity.pickupProfile?.kind === "cache" &&
+  entity.pickupProfile.missionItemStageIndex === undefined;
 
 const pickupStackMergeRadiusWorldUnits = pickupContract.pickup.pickupRadiusWorldUnits * 3;
 const pickupCompactionIntervalTicks = 30;
@@ -879,6 +1014,7 @@ export const createInitialSimulationState = (options?: {
     entities: [playerEntity],
     entity: playerEntity,
     floatingDamageNumbers: [],
+    missionState: createInitialMissionState(),
     nextPickupSequence: 0,
     nextHostileSequence: 0,
     pickupPulseUntilTick: 0,
@@ -1055,6 +1191,7 @@ const normalizeSimulatedEntity = (
       pickupProfile: {
         attractionState: entity.pickupProfile?.attractionState,
         kind: inferredPickupKind,
+        missionItemStageIndex: entity.pickupProfile?.missionItemStageIndex,
         stackCount: Math.max(1, entity.pickupProfile?.stackCount ?? 1)
       },
       role,
@@ -1140,6 +1277,7 @@ export const normalizeEntitySimulationState = (
       simulationState.floatingDamageNumbers ?? [],
       simulationState.tick ?? 0
     ),
+    missionState: normalizeMissionState(simulationState.missionState),
     nextPickupSequence,
     nextHostileSequence,
     pickupPulseUntilTick: Math.max(0, simulationState.pickupPulseUntilTick ?? 0),
@@ -1159,6 +1297,79 @@ const syncPlayerAutomaticAttackToBuildState = (
   ...playerEntity,
   automaticAttack: createPlayerAutomaticAttackProfile(buildState)
 });
+
+const parseMissionBossStageIndex = (entityId: string) => {
+  const suffix = Number.parseInt(entityId.split(":").at(-1) ?? "", 10);
+  return Number.isNaN(suffix) ? null : suffix;
+};
+
+const activateMissionBossIfReached = ({
+  bossDefeatCount,
+  entities,
+  missionState,
+  nextTick,
+  playerEntity,
+  worldSeed
+}: {
+  bossDefeatCount: number;
+  entities: readonly SimulatedEntity[];
+  missionState: MissionState;
+  nextTick: number;
+  playerEntity: SimulatedEntity | undefined;
+  worldSeed: string;
+}) => {
+  if (
+    !playerEntity ||
+    missionState.completed ||
+    missionState.currentBossEntityId !== null ||
+    missionState.currentDroppedItemEntityId !== null
+  ) {
+    return {
+      entities: [...entities],
+      missionState
+    };
+  }
+
+  const activeStage = getMissionStage(missionState.itemCount);
+
+  if (!activeStage) {
+    return {
+      entities: [...entities],
+      missionState
+    };
+  }
+
+  if (
+    distanceBetweenWorldPoints(playerEntity.worldPosition, activeStage.zoneWorldPosition) >
+    missionLoopContract.zoneActivationRadiusWorldUnits
+  ) {
+    return {
+      entities: [...entities],
+      missionState: {
+        ...missionState,
+        activeStageIndex: missionState.itemCount
+      }
+    };
+  }
+
+  const missionBoss = createMissionBossEntity(
+    activeStage.bossId,
+    missionState.itemCount,
+    activeStage.zoneWorldPosition,
+    nextTick,
+    bossDefeatCount,
+    worldSeed
+  );
+
+  return {
+    entities: [...entities, missionBoss],
+    missionState: {
+      ...missionState,
+      activeStageIndex: missionState.itemCount,
+      currentBossEntityId: missionBoss.id
+    }
+  };
+};
 
 export const getScriptedEntityPhase = (tick: number): ScriptedPhase => {
   const normalizedTick = tick % totalCycleTicks;
@@ -1348,6 +1559,7 @@ export const advanceSimulationState = (
   const worldSeed = command.worldSeed ?? simulationState.worldSeed;
   const profiling = resolveRuntimeProfilingConfig(command.profiling);
   const normalizedBuildState = normalizeBuildState(simulationState.buildState);
+  const normalizedMissionState = normalizeMissionState(simulationState.missionState);
   const choiceAppliedBuildState =
     command.buildChoiceIndex !== null && command.buildChoiceIndex !== undefined
       ? applyLevelUpChoice(normalizedBuildState, command.buildChoiceIndex, simulationState.tick)
@@ -1406,7 +1618,8 @@ export const advanceSimulationState = (
         worldPosition,
         spawnedAtTick,
         activeRunProgressionPhase.id,
-        simulationState.runStats.bossDefeats
+        simulationState.runStats.bossDefeats,
+        worldSeed
       ),
     entities: pickupMaintainedState.entities,
     localPopulationCap: isMiniBossBeatTick(nextTick)
@@ -1468,9 +1681,16 @@ export const advanceSimulationState = (
       worldSeed
     })
   );
-  const supportedMovedEntities = movedEntities.filter((entity) => !isDisabledPickupEntity(entity));
+  const missionActivatedState = activateMissionBossIfReached({
+    bossDefeatCount: simulationState.runStats.bossDefeats,
+    entities: movedEntities,
+    missionState: normalizedMissionState,
+    nextTick,
+    playerEntity: getPlayerEntity(movedEntities),
+    worldSeed
+  });
   const attackResolvedState = resolveAutomaticPlayerAttack(
-    supportedMovedEntities,
+    missionActivatedState.entities.filter((entity) => !isDisabledPickupEntity(entity)),
     nextTick,
     choiceAppliedBuildState,
     simulationState.runStats,
@@ -1507,7 +1727,28 @@ export const advanceSimulationState = (
           )
         )
       );
-      return mergeNewPickupEntities(combatResolvedState.entities, droppedCrystalEntities);
+      const defeatedMissionBoss = defeatedHostiles.find(
+        (entity) => entity.id === missionActivatedState.missionState.currentBossEntityId
+      );
+      const missionDropEntities =
+        defeatedMissionBoss !== undefined
+          ? [
+              createPickupEntity(
+                pickupMaintainedState.nextPickupSequence +
+                  defeatedHostiles.length * pickupContract.crystal.enemyDropCount,
+                "cache",
+                defeatedMissionBoss.worldPosition,
+                nextTick,
+                1,
+                parseMissionBossStageIndex(defeatedMissionBoss.id)
+              )
+            ]
+          : [];
+
+      return mergeNewPickupEntities(
+        combatResolvedState.entities,
+        [...droppedCrystalEntities, ...missionDropEntities]
+      );
     })(),
     playerEntity,
     nextTick
@@ -1527,6 +1768,9 @@ export const advanceSimulationState = (
   const defeatedBossCount = defeatedHostiles.filter((entity) =>
     entity.hostileProfileId ? getHostileSpawnProfile(entity.hostileProfileId).isMiniBoss : false
   ).length;
+  const defeatedMissionBoss = defeatedHostiles.find(
+    (entity) => entity.id === missionActivatedState.missionState.currentBossEntityId
+  );
   const nextCreatureDefeatCounts = {
     ...pickupResolvedState.runStats.creatureDefeatCounts
   };
@@ -1563,6 +1807,32 @@ export const advanceSimulationState = (
     profiledPlayerEntity,
     nextBuildStateWithRewards
   );
+  const nextMissionItemCount = pickupResolvedState.runStats.missionItemsCollected;
+  const missionItemCollectedThisTick =
+    nextMissionItemCount > missionActivatedState.missionState.itemCount;
+  const exitUnlocked = nextMissionItemCount >= 3;
+  const missionCompleted =
+    exitUnlocked &&
+    distanceBetweenWorldPoints(
+      synchronizedPlayerEntity.worldPosition,
+      missionExitWorldPosition
+    ) <= missionLoopContract.exitRadiusWorldUnits;
+  const nextMissionState: MissionState = {
+    activeStageIndex: Math.min(nextMissionItemCount, 2),
+    completed: missionCompleted,
+    currentBossEntityId:
+      defeatedMissionBoss !== undefined ? null : missionActivatedState.missionState.currentBossEntityId,
+    currentDroppedItemEntityId:
+      missionItemCollectedThisTick
+        ? null
+        : missionActivatedState.missionState.currentDroppedItemEntityId !== null
+          ? missionActivatedState.missionState.currentDroppedItemEntityId
+        : defeatedMissionBoss !== undefined
+          ? `entity:pickup:cache:${pickupMaintainedState.nextPickupSequence + defeatedHostiles.length * pickupContract.crystal.enemyDropCount}`
+          : null,
+    exitUnlocked,
+    itemCount: nextMissionItemCount
+  };
 
   return {
     buildState: nextBuildStateWithRewards,
@@ -1581,22 +1851,29 @@ export const advanceSimulationState = (
     combatSkillFeedbackEvents: pruneCombatSkillFeedbackEvents(
       [
         ...simulationState.combatSkillFeedbackEvents,
-        ...attackResolvedState.combatSkillFeedbackEvents
+        ...attackResolvedState.combatSkillFeedbackEvents,
+        ...combatResolvedState.combatSkillFeedbackEvents
       ],
       nextTick
     ),
     emergencyAegisChargesSpent: combatResolvedState.emergencyAegisChargesSpent,
     enemyTimeStopUntilTick: pickupResolvedState.enemyTimeStopUntilTick,
+    missionState: nextMissionState,
     nextPickupSequence:
       pickupMaintainedState.nextPickupSequence +
-      defeatedHostileCount * pickupContract.crystal.enemyDropCount,
+      defeatedHostileCount * pickupContract.crystal.enemyDropCount +
+      (defeatedMissionBoss ? 1 : 0),
     nextHostileSequence: spawnMaintainedState.nextHostileSequence,
     pickupPulseUntilTick: pickupResolvedState.pickupPulseUntilTick,
     runStats: {
       ...pickupResolvedState.runStats,
       bossDefeats: pickupResolvedState.runStats.bossDefeats + defeatedBossCount,
       creatureDefeatCounts: nextCreatureDefeatCounts,
-      hostileDefeats: pickupResolvedState.runStats.hostileDefeats + defeatedHostileCount
+      hostileDefeats: pickupResolvedState.runStats.hostileDefeats + defeatedHostileCount,
+      missionBossDefeats:
+        pickupResolvedState.runStats.missionBossDefeats + (defeatedMissionBoss ? 1 : 0),
+      missionCompleted,
+      worldProfileId: getWorldProfileBySeed(worldSeed)?.id ?? null
     },
     tick: nextTick,
     worldSeed

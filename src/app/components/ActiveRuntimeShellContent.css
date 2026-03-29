@@ -4,6 +4,46 @@
   height: 100%;
 }
 
+.runtime-guidance-arrow {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  gap: 0.18rem;
+  justify-items: center;
+  pointer-events: none;
+}
+
+.runtime-guidance-arrow__glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.7rem;
+  height: 2.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(8, 12, 16, 0.8);
+  color: #ffd38b;
+  font-size: 1.2rem;
+  line-height: 1;
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.24);
+}
+
+.runtime-guidance-arrow[data-tone="miniboss"] .runtime-guidance-arrow__glyph {
+  color: #ff8f81;
+}
+
+.runtime-guidance-arrow__label {
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(8, 12, 16, 0.8);
+  color: var(--emberwake-copy);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .shell-menu {
   position: absolute;
   top: var(--shell-offset-top);

@@ -322,6 +322,43 @@ html[data-app-display-mode="browser"] .app-shell {
   width: min(48rem, calc(100vw - var(--shell-offset-left) - var(--shell-offset-right)));
 }
 
+.app-meta-scene__main-menu-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.app-meta-scene__main-menu-character {
+  position: absolute;
+  bottom: -1.2rem;
+  width: min(28rem, 54%);
+  max-height: 90%;
+  object-fit: contain;
+  opacity: 0.88;
+  filter: saturate(1.02) brightness(0.92);
+}
+
+.app-meta-scene__main-menu-character--enemy {
+  left: -2.4rem;
+  transform: scale(var(--main-menu-character-scale, 1));
+  transform-origin: left bottom;
+}
+
+.app-meta-scene__main-menu-character--hero {
+  right: -2rem;
+  transform: scaleX(-1);
+  transform-origin: right bottom;
+}
+
+.app-meta-scene__main-menu-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at center, rgba(6, 9, 12, 0.22), rgba(6, 9, 12, 0.62) 48%, rgba(6, 9, 12, 0.82) 100%),
+    linear-gradient(90deg, rgba(6, 9, 12, 0.62), transparent 24%, transparent 76%, rgba(6, 9, 12, 0.62));
+}
+
 .app-meta-scene__header {
   display: flex;
   align-items: start;

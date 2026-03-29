@@ -782,6 +782,7 @@ export const resolveHostileContactDamage = (
     playerInvincible?: boolean;
   }
 ): {
+  combatSkillFeedbackEvents: CombatSkillFeedbackEvent[];
   emergencyAegisChargesSpent: number;
   entities: SimulatedEntity[];
   floatingDamageNumbers: FloatingDamageNumber[];
@@ -791,6 +792,7 @@ export const resolveHostileContactDamage = (
 
   if (!playerEntity || !isAlive(playerEntity)) {
     return {
+      combatSkillFeedbackEvents: [],
       emergencyAegisChargesSpent: currentEmergencyAegisChargesSpent,
       entities: [...entities],
       floatingDamageNumbers: []
@@ -799,6 +801,7 @@ export const resolveHostileContactDamage = (
 
   if (playerInvincible || enemyDamageSuppressed) {
     return {
+      combatSkillFeedbackEvents: [],
       emergencyAegisChargesSpent: currentEmergencyAegisChargesSpent,
       entities: [...entities],
       floatingDamageNumbers: []
@@ -807,6 +810,7 @@ export const resolveHostileContactDamage = (
 
   let nextPlayerEntity = playerEntity;
   const nextEntities = entities.map((entity) => ({ ...entity }));
+  const combatSkillFeedbackEvents: CombatSkillFeedbackEvent[] = [];
   const floatingDamageNumbers: FloatingDamageNumber[] = [];
   const retaliationDamage = resolveRetaliationDamage(buildState);
   const emergencyAegisChargeCount = resolveEmergencyAegisChargeCount(buildState);
@@ -838,11 +842,49 @@ export const resolveHostileContactDamage = (
     }
 
     const { contactDamageProfile } = hostileEntity;
+    const distanceToPlayer = distanceBetweenWorldPoints(
+      hostileEntity.worldPosition,
+      nextPlayerEntity.worldPosition
+    );
 
     if (
       contactDamageProfile.lastDamageTick !== null &&
       tick - contactDamageProfile.lastDamageTick < contactDamageProfile.cooldownTicks
     ) {
+      continue;
+    }
+
+    if (hostileEntity.hostileProfileId === "watchglass" && distanceToPlayer <= 220) {
+      const laserDamage = Math.max(1, Math.round(contactDamageProfile.damage * 0.38));
+
+      nextPlayerEntity = applyDamage(nextPlayerEntity, laserDamage, tick);
+      floatingDamageNumbers.push(
+        createFloatingDamageNumber(nextPlayerEntity, laserDamage, tick)
+      );
+      nextEntities[index] = {
+        ...hostileEntity,
+        contactDamageProfile: {
+          ...contactDamageProfile,
+          lastDamageTick: tick
+        }
+      };
+      combatSkillFeedbackEvents.push({
+        arcRadians: null,
+        durationTicks: 14,
+        fusionId: null,
+        id: `hostile-skill-feedback:watchglass:${hostileEntity.id}:${tick}`,
+        kind: "watchglass-laser",
+        orientationRadians: Math.atan2(
+          nextPlayerEntity.worldPosition.y - hostileEntity.worldPosition.y,
+          nextPlayerEntity.worldPosition.x - hostileEntity.worldPosition.x
+        ),
+        originWorldPoint: hostileEntity.worldPosition,
+        radiusWorldUnits: distanceToPlayer,
+        sourceEntityId: hostileEntity.id,
+        spawnedAtTick: tick,
+        targetWorldPoints: [nextPlayerEntity.worldPosition],
+        weaponId: "guided-senbon"
+      });
       continue;
     }
 
@@ -886,6 +928,7 @@ export const resolveHostileContactDamage = (
   }
 
   return {
+    combatSkillFeedbackEvents,
     emergencyAegisChargesSpent: nextEmergencyAegisChargesSpent,
     entities: nextEntities.map((entity) =>
       entity.id === nextPlayerEntity.id ? nextPlayerEntity : entity
@@ -1023,6 +1066,9 @@ export const resolvePickupCollection = ({
           nextEnemyTimeStopUntilTick >= tick
             ? nextEnemyTimeStopUntilTick
             : tick + pickupContract.hourglass.durationTicks;
+        break;
+      case "cache":
+        nextRunStats.missionItemsCollected += 1;
         break;
       case "magnet":
         break;

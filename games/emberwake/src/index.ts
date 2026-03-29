@@ -145,6 +145,13 @@ export {
   resolveRuntimeProfilingConfig
 } from "./runtime/runtimeProfiling";
 export {
+  getHostileSpawnProfile
+} from "./runtime/hostilePressure";
+export {
+  getMissionStage,
+  missionExitWorldPosition
+} from "./runtime/missionLoop";
+export {
   initialRunProgressionPhaseId,
   resolveNextRunProgressionPhase,
   resolveRunProgressionPhase,

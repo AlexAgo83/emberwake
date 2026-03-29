@@ -239,6 +239,35 @@ const drawCombatSkillFeedback =
         }
         break;
       }
+      case "watchglass-laser": {
+        const targetWorldPoint =
+          combatSkillFeedbackEvent.targetWorldPoints[0] ?? centerWorldPoint;
+
+        graphics.setStrokeStyle({
+          alpha: 0.26 * alpha,
+          color: 0xff5a55,
+          width: 10
+        });
+        graphics.moveTo(
+          combatSkillFeedbackEvent.originWorldPoint.x,
+          combatSkillFeedbackEvent.originWorldPoint.y
+        );
+        graphics.lineTo(targetWorldPoint.x, targetWorldPoint.y);
+        graphics.stroke();
+
+        graphics.setStrokeStyle({
+          alpha: 0.92 * alpha,
+          color: 0xffd2c8,
+          width: 3
+        });
+        graphics.moveTo(
+          combatSkillFeedbackEvent.originWorldPoint.x,
+          combatSkillFeedbackEvent.originWorldPoint.y
+        );
+        graphics.lineTo(targetWorldPoint.x, targetWorldPoint.y);
+        graphics.stroke();
+        break;
+      }
       case "chain-arc":
       case "boomerang-arc": {
         const strokeWidth =

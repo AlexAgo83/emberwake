@@ -42,7 +42,10 @@ import type { BuildMetaProgression, EmberwakeGameState } from "@game";
 import type { RuntimeProfilingConfig } from "@game";
 import {
   getActiveWeaponDefinition,
+  getHostileSpawnProfile,
+  getMissionStage,
   getPassiveItemDefinition,
+  missionExitWorldPosition,
   resolveBuildDisplayLabel,
   resolveFusionReadyState
 } from "@game";
@@ -87,6 +90,41 @@ type ActiveRuntimeShellContentProps = {
   sessionInitState?: EmberwakeGameState;
   shellRequestedScene: AppSceneId;
   viewport: ReturnTypeUseLogicalViewportModel;
+};
+
+type GuidanceTarget = {
+  label: string;
+  tone: "mission" | "miniboss";
+  worldPosition: {
+    x: number;
+    y: number;
+  };
+};
+
+const projectWorldPointToScreen = ({
+  cameraState,
+  viewport,
+  worldPosition
+}: {
+  cameraState: CameraState;
+  viewport: ReturnTypeUseLogicalViewportModel;
+  worldPosition: {
+    x: number;
+    y: number;
+  };
+}) => {
+  const scale = viewport.fitScale * cameraState.zoom;
+  const deltaX = worldPosition.x - cameraState.worldPosition.x;
+  const deltaY = worldPosition.y - cameraState.worldPosition.y;
+  const cos = Math.cos(-cameraState.rotation);
+  const sin = Math.sin(-cameraState.rotation);
+
+  return {
+    x:
+      viewport.screenSize.width / 2 + (deltaX * cos - deltaY * sin) * scale,
+    y:
+      viewport.screenSize.height / 2 + (deltaX * sin + deltaY * cos) * scale
+  };
 };
 
 export function ActiveRuntimeShellContent({
@@ -232,6 +270,7 @@ export function ActiveRuntimeShellContent({
     activeScene !== "main-menu" && activeScene !== "new-game" && activeScene !== "changelogs";
   const isMobileLayout = viewport.layoutMode === "mobile";
   const buildState = simulationState.gameState.simulation.buildState;
+  const missionState = simulationState.gameState.simulation.missionState;
   const levelUpChoices = buildState.levelUpChoices;
   const levelUpVisible = activeScene === "runtime" && levelUpChoices.length > 0;
   const levelUpPassCount = buildState.levelUpPassesRemaining;
@@ -316,6 +355,104 @@ export function ActiveRuntimeShellContent({
       `${levelUpRerollCount}:${levelUpPassCount}:${levelUpChoices.map((choice) => choice.id).join("|")}`,
     [levelUpChoices, levelUpPassCount, levelUpRerollCount]
   );
+  const guidanceTarget = useMemo((): GuidanceTarget | null => {
+    const droppedMissionItem =
+      missionState.currentDroppedItemEntityId === null
+        ? null
+        : simulationState.entities.find(
+            (entity) => entity.id === missionState.currentDroppedItemEntityId
+          );
+
+    if (droppedMissionItem) {
+      return {
+        label: "Mission item",
+        tone: "mission",
+        worldPosition: droppedMissionItem.worldPosition
+      };
+    }
+
+    const activeMissionBoss =
+      missionState.currentBossEntityId === null
+        ? null
+        : simulationState.entities.find((entity) => entity.id === missionState.currentBossEntityId);
+
+    if (activeMissionBoss) {
+      return {
+        label: "Mission boss",
+        tone: "mission",
+        worldPosition: activeMissionBoss.worldPosition
+      };
+    }
+
+    if (missionState.exitUnlocked && !missionState.completed) {
+      return {
+        label: "Extraction",
+        tone: "mission",
+        worldPosition: missionExitWorldPosition
+      };
+    }
+
+    const activeMissionStage = getMissionStage(missionState.itemCount);
+
+    if (activeMissionStage && !missionState.completed) {
+      return {
+        label: activeMissionStage.label,
+        tone: "mission",
+        worldPosition: activeMissionStage.zoneWorldPosition
+      };
+    }
+
+    const firstMiniBoss = simulationState.entities.find(
+      (entity) =>
+        entity.role === "hostile" &&
+        entity.hostileProfileId !== undefined &&
+        getHostileSpawnProfile(entity.hostileProfileId).isMiniBoss
+    );
+
+    if (firstMiniBoss) {
+      return {
+        label: "Mini-boss",
+        tone: "miniboss",
+        worldPosition: firstMiniBoss.worldPosition
+      };
+    }
+
+    return null;
+  }, [missionState, simulationState.entities]);
+  const guidanceArrowPresentation = useMemo(() => {
+    if (activeScene !== "runtime" || guidanceTarget === null) {
+      return null;
+    }
+
+    const projectedTarget = projectWorldPointToScreen({
+      cameraState,
+      viewport,
+      worldPosition: guidanceTarget.worldPosition
+    });
+    const margin = 84;
+    const withinViewport =
+      projectedTarget.x >= margin &&
+      projectedTarget.x <= viewport.screenSize.width - margin &&
+      projectedTarget.y >= margin &&
+      projectedTarget.y <= viewport.screenSize.height - margin;
+
+    if (withinViewport) {
+      return null;
+    }
+
+    const centerX = viewport.screenSize.width / 2;
+    const centerY = viewport.screenSize.height / 2;
+    const angle = Math.atan2(projectedTarget.y - centerY, projectedTarget.x - centerX);
+    const orbitRadius = Math.min(viewport.screenSize.width, viewport.screenSize.height) * 0.34;
+
+    return {
+      angle,
+      label: guidanceTarget.label,
+      left: centerX + Math.cos(angle) * orbitRadius,
+      top: centerY + Math.sin(angle) * orbitRadius,
+      tone: guidanceTarget.tone
+    };
+  }, [activeScene, cameraState, guidanceTarget, viewport]);
 
   const handleToggleDiagnostics = useCallback(() => {
     onSetDebugPanelVisible(!preferences.debugPanelVisible);
@@ -713,6 +850,23 @@ export function ActiveRuntimeShellContent({
             playerName={runtimeSession.playerName || "Wanderer"}
             playerPosition={simulationState.entity.worldPosition}
           />
+        ) : null}
+
+        {guidanceArrowPresentation ? (
+          <div
+            className="runtime-guidance-arrow"
+            data-tone={guidanceArrowPresentation.tone}
+            style={{
+              left: guidanceArrowPresentation.left,
+              top: guidanceArrowPresentation.top,
+              transform: `translate(-50%, -50%) rotate(${guidanceArrowPresentation.angle}rad)`
+            }}
+          >
+            <span className="runtime-guidance-arrow__glyph">➜</span>
+            <span className="runtime-guidance-arrow__label">
+              {guidanceArrowPresentation.label}
+            </span>
+          </div>
         ) : null}
 
         {levelUpVisible ? (

@@ -332,8 +332,10 @@ export function AppShell() {
       }
     ) => {
       setMetaProfile((currentProfile) => {
-        const missionCompleted = options?.missionCompleted ?? false;
-        const missionItemCount = options?.missionItemCount ?? 0;
+        const missionCompleted =
+          options?.missionCompleted ?? gameState?.systems.progression.missionCompleted ?? false;
+        const missionItemCount =
+          options?.missionItemCount ?? gameState?.systems.progression.missionItemCount ?? 0;
         const archivedProfile = gameState
           ? mergeArchiveProgress(
               bankGoldIntoMetaProfile(currentProfile, gameState.systems.progression.goldCollected),
