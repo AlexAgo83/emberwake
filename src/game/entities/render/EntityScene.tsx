@@ -1,10 +1,11 @@
 import { extend } from "@pixi/react";
-import { Graphics, Sprite, Text, Texture } from "pixi.js";
+import { Graphics, Sprite, Text } from "pixi.js";
 import { memo, useMemo } from "react";
 
 import { WorldViewportContainer, type CameraState } from "@engine-pixi";
 import { entityVisualDefinitions, type EmberwakeRenderSurfaceMode } from "@game";
 import { resolveAssetUrl } from "@src/assets/assetResolver";
+import { useResolvedAssetTexture } from "@src/assets/useResolvedAssetTexture";
 import { assetPipeline } from "@src/shared/config/assetPipeline";
 import {
   entityCombatPresentationContract,
@@ -403,10 +404,8 @@ const EntitySprite = memo(function EntitySprite({
   tint?: number;
 }) {
   const assetUrl = resolveAssetUrl(assetId);
-  const texture = useMemo(
-    () => (assetUrl ? Texture.from(assetUrl) : null),
-    [assetUrl]
-  );
+  const tintValue = assetUrl?.endsWith(".svg") ? tint : undefined;
+  const { texture } = useResolvedAssetTexture(assetId);
 
   if (!texture) {
     return null;
@@ -419,7 +418,7 @@ const EntitySprite = memo(function EntitySprite({
       eventMode="none"
       height={sizeWorldUnits}
       texture={texture}
-      tint={tint}
+      tint={tintValue}
       width={sizeWorldUnits}
       x={0}
       y={0}

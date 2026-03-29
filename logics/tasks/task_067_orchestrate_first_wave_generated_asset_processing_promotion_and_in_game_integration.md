@@ -1,10 +1,10 @@
 ## task_067_orchestrate_first_wave_generated_asset_processing_promotion_and_in_game_integration - Orchestrate first-wave generated-asset processing promotion and in-game integration
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 95%
-> Confidence: 91%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -34,13 +34,13 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm the first-wave roster, generation workflow, and linked acceptance criteria from `req_095`, `item_344`, `item_345`, `spec_001`, and `adr_052`.
-- [ ] 2. Execute the first-wave image-generation workflow and curate candidate outputs per `assetId`, keeping scratch outputs and promoted variants distinguishable.
-- [ ] 3. Promote approved generated assets into the existing runtime folders and shell surfaces covered by the first wave without breaking the shared resolver contract.
-- [ ] 4. Validate the promoted assets in the actual game for silhouette readability, directionality when relevant, pickup and hostile recognition, terrain identity, shell legibility, and fallback preservation.
-- [ ] 5. Checkpoint the wave in commit-ready states, validate budgets and smoke posture, and update linked Logics docs with actual outcomes plus any rejected or deferred assets.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: Update related Logics docs
+- [x] 1. Confirm the first-wave roster, generation workflow, and linked acceptance criteria from `req_095`, `item_344`, `item_345`, `spec_001`, and `adr_052`.
+- [x] 2. Execute the first-wave image-generation workflow and curate candidate outputs per `assetId`, keeping scratch outputs and promoted variants distinguishable.
+- [x] 3. Promote approved generated assets into the existing runtime folders and shell surfaces covered by the first wave without breaking the shared resolver contract.
+- [x] 4. Validate the promoted assets in the actual game for silhouette readability, directionality when relevant, pickup and hostile recognition, terrain identity, shell legibility, and fallback preservation.
+- [x] 5. Checkpoint the wave in commit-ready states, validate budgets and smoke posture, and update linked Logics docs with actual outcomes plus any rejected or deferred assets.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: Update related Logics docs
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -87,10 +87,23 @@ flowchart LR
 - Manual runtime and shell review of promoted first-wave generated assets
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- Added a repeatable first-wave asset workflow in `scripts/assets/firstWaveAssetWorkflow.mjs`, `scripts/assets/generateFirstWaveAssets.mjs`, `scripts/assets/promoteFirstWaveAssets.mjs`, and `scripts/assets/buildFirstWaveGallery.mjs`, with package scripts for generation, promotion, and gallery review.
+- Executed the first-wave pack from `spec_001` into traceable candidate sets under `output/imagegen/first-wave/candidates/`, generated a review gallery, and stored promotion choices in `output/imagegen/first-wave/selection.json`.
+- Promoted approved outputs into the live runtime contract as `.png` and `.webp` files under `src/assets/entities/runtime/`, `src/assets/map/runtime/`, and `src/assets/shell/runtime/`, replacing the covered first-wave `.svg` runtime placeholders.
+- Added `src/assets/useResolvedAssetTexture.ts` and updated entity/world rendering so promoted raster assets resolve reliably without the heavier Pixi asset-cache posture that regressed the runtime budget gate.
+- Reduced terrain base-fill opacity when terrain textures exist and tightened Codex shell styling so the new generated terrain and banner surfaces remain visible while the shell CSS budget stays within the current performance guardrail.
+- Runtime review accepted the current wave because the player, hostile, pickup, terrain, and codex-banner assets now render in-game; the player direction cone and the XP crystal diamond silhouette remain visible, so the generated wave does not erase the key readability cues called out during review.
+- Validation passed with:
+  `npm run logics:lint`
+  `npm run lint`
+  `npm run typecheck`
+  `npm run test`
+  `npm run build && npm run performance:validate`
+  `npm run test:browser:smoke`

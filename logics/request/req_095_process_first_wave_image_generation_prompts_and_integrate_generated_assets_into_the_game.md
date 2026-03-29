@@ -1,9 +1,9 @@
 ## req_095_process_first_wave_image_generation_prompts_and_integrate_generated_assets_into_the_game - Process first-wave image-generation prompts and integrate generated assets into the game
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 96%
-> Confidence: 92%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -118,3 +118,9 @@ flowchart TD
 # Backlog
 - `item_344_define_a_repeatable_first_wave_image_generation_and_asset_promotion_workflow`
 - `item_345_define_first_wave_generated_asset_integration_and_in_game_readability_validation`
+
+# Outcome
+- The first-wave prompt pack was executed into a repeatable generation workflow backed by `scripts/assets/generateFirstWaveAssets.mjs`, `scripts/assets/promoteFirstWaveAssets.mjs`, and `scripts/assets/buildFirstWaveGallery.mjs`.
+- Scratch candidates, reviewable variants, and curated selections now live under `output/imagegen/first-wave/`, with `selection.json` preserving the promoted winner per `assetId`.
+- Approved first-wave assets were promoted into the runtime contract under `src/assets/.../runtime/` as `.png` and `.webp` files without introducing ad hoc imports.
+- The actual game now renders the promoted player, hostile, pickup, terrain, and codex-banner assets, and the wave was revalidated against lint, typecheck, test, performance, smoke, and Logics lint gates.

@@ -1,10 +1,10 @@
 ## item_344_define_a_repeatable_first_wave_image_generation_and_asset_promotion_workflow - Define a repeatable first-wave image-generation and asset-promotion workflow
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 95%
-> Confidence: 92%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 98%
+> Progress: 100%
 > Complexity: Medium
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -84,3 +84,5 @@ flowchart LR
 # Notes
 - Split from `req_095_process_first_wave_image_generation_prompts_and_integrate_generated_assets_into_the_game`.
 - This slice intentionally stops before in-game promotion acceptance; that follow-up lives in `item_345_define_first_wave_generated_asset_integration_and_in_game_readability_validation`.
+- Delivered with a repeatable workflow rooted in `scripts/assets/firstWaveAssetWorkflow.mjs`, `scripts/assets/generateFirstWaveAssets.mjs`, `scripts/assets/promoteFirstWaveAssets.mjs`, and `scripts/assets/buildFirstWaveGallery.mjs`.
+- Candidate outputs and review state now live under `output/imagegen/first-wave/`, with per-asset variant folders and `selection.json` preserving the approved promotion decision.

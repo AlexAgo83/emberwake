@@ -690,7 +690,6 @@ html[data-app-display-mode="browser"] .app-shell {
 }
 
 .app-meta-scene__archive-banner {
-  position: relative;
   overflow: hidden;
   display: grid;
   gap: 0.7rem;
@@ -708,29 +707,6 @@ html[data-app-display-mode="browser"] .app-shell {
   object-fit: cover;
   border-radius: 0.86rem;
   opacity: 0.94;
-}
-
-.app-meta-scene__archive-banner-copy {
-  display: grid;
-  gap: 0.22rem;
-}
-
-.app-meta-scene__archive-banner-copy h3,
-.app-meta-scene__archive-banner-copy p {
-  margin: 0;
-}
-
-.app-meta-scene__archive-banner-copy h3 {
-  color: var(--emberwake-copy);
-  font-size: 1.02rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.app-meta-scene__archive-banner-copy p {
-  color: var(--emberwake-copy-dim);
-  font-size: 0.8rem;
-  line-height: 1.5;
 }
 
 .app-meta-scene__codex-section {

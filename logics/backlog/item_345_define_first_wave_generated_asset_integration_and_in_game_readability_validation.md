@@ -1,10 +1,10 @@
 ## item_345_define_first_wave_generated_asset_integration_and_in_game_readability_validation - Define first-wave generated-asset integration and in-game readability validation
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
-> Understanding: 95%
-> Confidence: 91%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 97%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -89,3 +89,5 @@ flowchart LR
 # Notes
 - Split from `req_095_process_first_wave_image_generation_prompts_and_integrate_generated_assets_into_the_game`.
 - This slice assumes candidate outputs have already been produced and curated by `item_344_define_a_repeatable_first_wave_image_generation_and_asset_promotion_workflow`.
+- Delivered by promoting approved `.png` and `.webp` assets into `src/assets/.../runtime/`, replacing the first-wave runtime `.svg` placeholders for the covered roster.
+- Runtime and shell review confirmed visible player, hostile, pickup, terrain, and codex-banner assets, while preserving useful readability cues such as the player direction cone and diamond-shaped XP pickup silhouette.

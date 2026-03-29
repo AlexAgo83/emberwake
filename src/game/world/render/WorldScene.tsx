@@ -1,6 +1,6 @@
 import { extend } from "@pixi/react";
 import { memo, useMemo } from "react";
-import { Container, Graphics, Sprite, Text, Texture } from "pixi.js";
+import { Container, Graphics, Sprite, Text } from "pixi.js";
 
 import {
   chunkCoordinateToId,
@@ -11,7 +11,7 @@ import {
 import { WorldViewportContainer, type CameraState } from "@engine-pixi";
 import { createChunkDebugData } from "@game/content/world/chunkDebugData";
 import type { EmberwakeRenderSurfaceMode } from "@game";
-import { resolveAssetUrl } from "@src/assets/assetResolver";
+import { useResolvedAssetTexture } from "@src/assets/useResolvedAssetTexture";
 import type { ChunkCoordinate } from "../types";
 
 extend({
@@ -48,9 +48,17 @@ const drawWorldBackground = (graphics: Graphics) => {
   graphics.fill();
 };
 
-const drawChunkBase = (debugData: ReturnType<typeof createChunkDebugData>) => (graphics: Graphics) => {
+const drawChunkBase =
+  ({
+    debugData,
+    terrainBacked
+  }: {
+    debugData: ReturnType<typeof createChunkDebugData>;
+    terrainBacked: boolean;
+  }) =>
+  (graphics: Graphics) => {
   graphics.clear();
-  graphics.setFillStyle({ alpha: 0.92, color: debugData.baseColor });
+  graphics.setFillStyle({ alpha: terrainBacked ? 0.16 : 0.92, color: debugData.baseColor });
   graphics.roundRect(0, 0, chunkWorldSize, chunkWorldSize, 26);
   graphics.fill();
 
@@ -62,7 +70,7 @@ const drawChunkBase = (debugData: ReturnType<typeof createChunkDebugData>) => (g
     graphics.rect(tile.x * tileSize, tile.y * tileSize, tileSize - 2, tileSize - 2);
     graphics.fill();
   }
-};
+  };
 
 const drawChunkOverlay = (
   origin: { x: number; y: number },
@@ -96,11 +104,16 @@ const RetainedChunkBase = memo(function RetainedChunkBase({
   isVisible: boolean;
   origin: { x: number; y: number };
 }) {
-  const draw = useMemo(() => drawChunkBase(debugData), [debugData]);
-  const terrainAssetUrl = resolveAssetUrl(debugData.primaryTerrainAssetId);
-  const terrainTexture = useMemo(
-    () => (terrainAssetUrl ? Texture.from(terrainAssetUrl) : null),
-    [terrainAssetUrl]
+  const { assetUrl: terrainAssetUrl, texture: terrainTexture } = useResolvedAssetTexture(
+    debugData.primaryTerrainAssetId
+  );
+  const draw = useMemo(
+    () =>
+      drawChunkBase({
+        debugData,
+        terrainBacked: Boolean(terrainAssetUrl)
+      }),
+    [debugData, terrainAssetUrl]
   );
 
   return (
