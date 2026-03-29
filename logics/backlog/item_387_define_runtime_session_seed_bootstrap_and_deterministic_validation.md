@@ -1,10 +1,10 @@
 ## item_387_define_runtime_session_seed_bootstrap_and_deterministic_validation - Define runtime session seed bootstrap and deterministic validation
-> From version: 0.6.1+c2d57bc
+> From version: 0.6.1+fe22026
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Progression
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -68,3 +68,7 @@ flowchart LR
 - `src/app/AppShell.tsx`
 - `src/shared/lib/runtimeSessionStorage.ts`
 - `games/emberwake/src/runtime/emberwakeSession.ts`
+
+# Outcome
+- Runtime session bootstrap now stores a derived run seed when a new session starts.
+- World-profile lookup remains deterministic for derived seeds because runtime systems resolve the authored world base from the derived seed prefix.

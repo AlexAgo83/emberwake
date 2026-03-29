@@ -1,9 +1,9 @@
 ## req_112_define_the_map_seed_as_a_function_of_player_name_and_selected_world - Define the map seed as a function of player name and selected world
-> From version: 0.6.1+c2d57bc
+> From version: 0.6.1+fe22026
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 99%
-> Confidence: 97%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: Progression
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -116,3 +116,7 @@ flowchart TD
 # Backlog
 - `item_386_define_player_world_seed_derivation_contract_and_input_normalization`
 - `item_387_define_runtime_session_seed_bootstrap_and_deterministic_validation`
+
+# Outcome
+- Runtime world seeds are now derived from the normalized player name plus the selected world profile id.
+- The derived seed preserves the authored world seed as a stable base prefix so runtime systems can still resolve world profile identity from seeded runs.

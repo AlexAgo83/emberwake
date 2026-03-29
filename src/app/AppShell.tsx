@@ -256,15 +256,21 @@ export function AppShell() {
   const handleCharacterNameChange = useCallback((value: string) => {
     setPendingCharacterName(value);
   }, []);
+  const clearTerminalRunMemory = useCallback(() => {
+    latestGameStateRef.current = null;
+    settledRunRewardKeyRef.current = null;
+    setGameOverRecap(null);
+    setRuntimeOutcome(null);
+    resetRenderer();
+  }, [resetRenderer]);
   const handleReturnToMainMenu = useCallback(() => {
     if (activeScene === "defeat" || activeScene === "victory") {
       endActiveSession();
-      setGameOverRecap(null);
-      setRuntimeOutcome(null);
+      clearTerminalRunMemory();
     }
 
     showMainMenuScene();
-  }, [activeScene, endActiveSession, showMainMenuScene]);
+  }, [activeScene, clearTerminalRunMemory, endActiveSession, showMainMenuScene]);
   const handleOpenSettings = useCallback(() => {
     showSettingsScene();
   }, [showSettingsScene]);
@@ -411,14 +417,14 @@ export function AppShell() {
 
     settleConcludedRun(latestGameStateRef.current ?? sessionInitState ?? null);
     endActiveSession();
-    setGameOverRecap(null);
-    setRuntimeOutcome(null);
+    clearTerminalRunMemory();
     showMainMenuScene();
     pushToast({
       message: "Run abandoned.",
       tone: "success"
     });
   }, [
+    clearTerminalRunMemory,
     endActiveSession,
     pushToast,
     runtimeSession.hasActiveSession,

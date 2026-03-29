@@ -1,5 +1,7 @@
 import type { MapAssetId } from "@src/assets/assetCatalog";
 
+const derivedWorldSeedDelimiter = "::runner:";
+
 export type WorldProfileId =
   | "ashwake-verge"
   | "emberplain-reach"
@@ -91,7 +93,10 @@ export const getWorldProfile = (worldProfileId: WorldProfileId) =>
   worldProfiles.find((worldProfile) => worldProfile.id === worldProfileId)!;
 
 export const getWorldProfileBySeed = (worldSeed: string) =>
-  worldProfiles.find((worldProfile) => worldProfile.worldSeed === worldSeed) ?? null;
+  worldProfiles.find(
+    (worldProfile) =>
+      worldProfile.worldSeed === (worldSeed.split(derivedWorldSeedDelimiter, 1)[0] ?? worldSeed)
+  ) ?? null;
 
 export const getNextWorldProfileId = (worldProfileId: WorldProfileId): WorldProfileId | null => {
   const currentWorldIndex = worldProfiles.findIndex(

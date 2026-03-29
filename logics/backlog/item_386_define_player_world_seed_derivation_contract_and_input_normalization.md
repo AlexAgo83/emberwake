@@ -1,10 +1,10 @@
 ## item_386_define_player_world_seed_derivation_contract_and_input_normalization - Define player/world seed derivation contract and input normalization
-> From version: 0.6.1+c2d57bc
+> From version: 0.6.1+fe22026
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Small
 > Theme: Progression
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -67,3 +67,7 @@ flowchart LR
 # References
 - `src/app/model/characterName.ts`
 - `src/shared/model/worldProfiles.ts`
+
+# Outcome
+- The delivered seed contract is `derivedSeed = worldBaseSeed + "::runner:" + hash(worldProfileId + normalizedPlayerName)`.
+- The same normalized player name and selected world now deterministically reproduce the same run seed.

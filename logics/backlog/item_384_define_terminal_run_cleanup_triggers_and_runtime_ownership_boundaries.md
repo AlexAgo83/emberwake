@@ -1,10 +1,10 @@
 ## item_384_define_terminal_run_cleanup_triggers_and_runtime_ownership_boundaries - Define terminal run cleanup triggers and runtime ownership boundaries
-> From version: 0.6.1+c2d57bc
+> From version: 0.6.1+fe22026
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 96%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Small
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -68,3 +68,7 @@ flowchart LR
 - `src/app/AppShell.tsx`
 - `src/app/model/appScene.ts`
 - `src/shared/lib/runtimeSessionStorage.ts`
+
+# Outcome
+- Terminal triggers remain bounded to abandon, victory-to-main-menu, and defeat-to-main-menu.
+- Cleanup ownership now clearly targets runtime session state, renderer references, recap/outcome state, and other run-owned shell memory while preserving meta progression and world selection.

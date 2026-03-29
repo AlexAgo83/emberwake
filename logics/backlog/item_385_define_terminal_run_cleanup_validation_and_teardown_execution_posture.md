@@ -1,10 +1,10 @@
 ## item_385_define_terminal_run_cleanup_validation_and_teardown_execution_posture - Define terminal run cleanup validation and teardown execution posture
-> From version: 0.6.1+c2d57bc
+> From version: 0.6.1+fe22026
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 98%
-> Confidence: 95%
-> Progress: 0%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -69,3 +69,6 @@ flowchart LR
 - `src/app/components/ActiveRuntimeShellContent.tsx`
 - `src/shared/config/runtimePerformanceBudget.json`
 
+# Outcome
+- The teardown execution posture now resets run-owned shell memory immediately after terminal handoff and restores the session to a clean baseline for the next run.
+- Validation coverage includes `AppShell` terminal-return behavior and runtime session seed/state tests.

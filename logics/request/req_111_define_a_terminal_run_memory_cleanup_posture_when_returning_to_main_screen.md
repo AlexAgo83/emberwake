@@ -1,9 +1,9 @@
 ## req_111_define_a_terminal_run_memory_cleanup_posture_when_returning_to_main_screen - Define a terminal-run memory cleanup posture when returning to main screen
-> From version: 0.6.1+c2d57bc
+> From version: 0.6.1+fe22026
 > Schema version: 1.0
-> Status: Draft
-> Understanding: 99%
-> Confidence: 97%
+> Status: Done
+> Understanding: 100%
+> Confidence: 99%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence and references when you edit this doc.
@@ -115,3 +115,7 @@ flowchart TD
 # Backlog
 - `item_384_define_terminal_run_cleanup_triggers_and_runtime_ownership_boundaries`
 - `item_385_define_terminal_run_cleanup_validation_and_teardown_execution_posture`
+
+# Outcome
+- Terminal exits now clear run-owned shell state and renderer/runtime references on abandon plus on defeat/victory returns to the main screen.
+- `endActiveSession()` now resets the session back to a clean non-active baseline while preserving only the selected world choice for the next run.

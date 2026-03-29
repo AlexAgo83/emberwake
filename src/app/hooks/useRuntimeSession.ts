@@ -15,6 +15,7 @@ import {
 } from "../../shared/lib/savedRuntimeSessionStorage";
 import { normalizeCharacterName } from "../model/characterName";
 import { getWorldProfile, getWorldProfileBySeed, type WorldProfileId } from "../../shared/model/worldProfiles";
+import { deriveWorldSeed } from "../../shared/model/worldSeed";
 
 export function useRuntimeSession() {
   const [runtimeSession, setRuntimeSession] = useState<RuntimeSessionState>(() => {
@@ -105,17 +106,27 @@ export function useRuntimeSession() {
         playerName: normalizedPlayerName,
         sessionRevision: currentSession.sessionRevision + 1,
         worldProfileId: selectedWorldProfile.id,
-        worldSeed: selectedWorldProfile.worldSeed
+        worldSeed: deriveWorldSeed({
+          normalizedPlayerName,
+          worldProfileId: selectedWorldProfile.id
+        })
       };
     });
   }, []);
 
   const endActiveSession = useCallback(() => {
     setSessionInitState(undefined);
-    setRuntimeSession((currentSession) => ({
-      ...currentSession,
-      hasActiveSession: false
-    }));
+    setRuntimeSession((currentSession) => {
+      const defaultSession = createDefaultRuntimeSessionState();
+      const selectedWorldProfile = getWorldProfile(currentSession.worldProfileId);
+
+      return {
+        ...defaultSession,
+        sessionRevision: currentSession.sessionRevision,
+        worldProfileId: selectedWorldProfile.id,
+        worldSeed: selectedWorldProfile.worldSeed
+      };
+    });
   }, []);
 
   return {
