@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="emberplain-base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3d212d" />
+      <stop offset="100%" stop-color="#23131b" />
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" fill="url(#emberplain-base)" />
+  <g fill="none" stroke="#ff8b63" stroke-opacity="0.2" stroke-width="4">
+    <path d="M0 44c42 0 44 18 86 18s46-18 90-18 48 18 80 18" />
+    <path d="M0 118c48 0 50 20 92 20s44-20 86-20 46 20 78 20" />
+    <path d="M0 198c42 0 46 16 88 16s48-16 92-16 42 16 76 16" />
+  </g>
+  <g fill="#fff" opacity="0.04">
+    <path d="M48 92 66 60l18 32Z" />
+    <path d="M168 172 182 146l14 26Z" />
+  </g>
+</svg>

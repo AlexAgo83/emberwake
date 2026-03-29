@@ -1,9 +1,11 @@
 import {
   creatureCodexEntries,
+  entityVisualDefinitions,
   listActiveWeaponDefinitions,
   listFusionDefinitions,
   listPassiveItemDefinitions
 } from "@game";
+import { resolveAssetUrl } from "@src/assets/assetResolver";
 
 import type { CodexProgressionSnapshot } from "./AppMetaScenePanel";
 import { SkillIcon } from "./SkillIcon";
@@ -14,6 +16,7 @@ type CodexArchiveSceneProps = {
 };
 
 export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSceneProps) {
+  const codexHeaderAssetUrl = resolveAssetUrl("shell.scene.codex.header.runtime");
   const discoveredActiveWeaponIds = new Set(progressionSnapshot?.discoveredActiveWeaponIds ?? ["ash-lash"]);
   const discoveredPassiveItemIds = new Set(progressionSnapshot?.discoveredPassiveItemIds ?? []);
   const discoveredFusionIds = new Set(progressionSnapshot?.discoveredFusionIds ?? []);
@@ -31,6 +34,16 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
   if (scene === "grimoire") {
     return (
       <div className="app-meta-scene__codex-grid">
+        {codexHeaderAssetUrl ? (
+          <div className="app-meta-scene__archive-banner">
+            <img alt="" className="app-meta-scene__archive-banner-art" src={codexHeaderAssetUrl} />
+            <div className="app-meta-scene__archive-banner-copy">
+              <p className="app-meta-scene__eyebrow">Codex archive</p>
+              <h3>Grimoire lattice</h3>
+              <p>Logged techniques and sealed paths refracted through the shell archive.</p>
+            </div>
+          </div>
+        ) : null}
         <section className="app-meta-scene__codex-section" aria-labelledby="grimoire-actives">
           <div className="app-meta-scene__codex-section-header">
             <p className="app-meta-scene__eyebrow" id="grimoire-actives">
@@ -172,10 +185,23 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
 
   return (
     <>
+      {codexHeaderAssetUrl ? (
+        <div className="app-meta-scene__archive-banner">
+          <img alt="" className="app-meta-scene__archive-banner-art" src={codexHeaderAssetUrl} />
+          <div className="app-meta-scene__archive-banner-copy">
+            <p className="app-meta-scene__eyebrow">Codex archive</p>
+            <h3>Bestiary trace</h3>
+            <p>Recovered silhouettes and field notes from the hostile archive.</p>
+          </div>
+        </div>
+      ) : null}
       <div className="app-meta-scene__codex-cards app-meta-scene__codex-cards--bestiary">
         {creatureCodexEntries.map((creatureEntry) => {
           const isKnown = discoveredCreatureIds.has(creatureEntry.codexId);
           const defeatCount = progressionSnapshot?.creatureDefeatCounts?.[creatureEntry.codexId] ?? 0;
+          const creatureAssetUrl = resolveAssetUrl(
+            entityVisualDefinitions[creatureEntry.visualKind].assetId
+          );
 
           return (
             <article
@@ -184,7 +210,17 @@ export function CodexArchiveScene({ progressionSnapshot, scene }: CodexArchiveSc
               key={creatureEntry.codexId}
             >
               <div className="app-meta-scene__codex-icon" aria-hidden="true">
-                {isKnown ? creatureEntry.label.slice(0, 2).toUpperCase() : "??"}
+                {isKnown && creatureAssetUrl ? (
+                  <img
+                    alt=""
+                    className="app-meta-scene__codex-creature-asset"
+                    src={creatureAssetUrl}
+                  />
+                ) : isKnown ? (
+                  creatureEntry.label.slice(0, 2).toUpperCase()
+                ) : (
+                  "??"
+                )}
               </div>
               <div className="app-meta-scene__codex-copy">
                 <h3>{isKnown ? creatureEntry.label : "Unknown creature"}</h3>

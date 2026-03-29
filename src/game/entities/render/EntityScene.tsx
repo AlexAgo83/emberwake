@@ -1,9 +1,11 @@
 import { extend } from "@pixi/react";
-import { Graphics, Text } from "pixi.js";
+import { Graphics, Sprite, Text, Texture } from "pixi.js";
 import { memo, useMemo } from "react";
 
 import { WorldViewportContainer, type CameraState } from "@engine-pixi";
-import type { EmberwakeRenderSurfaceMode } from "@game";
+import { entityVisualDefinitions, type EmberwakeRenderSurfaceMode } from "@game";
+import { resolveAssetUrl } from "@src/assets/assetResolver";
+import { assetPipeline } from "@src/shared/config/assetPipeline";
 import {
   entityCombatPresentationContract,
   type FloatingDamageNumber,
@@ -12,6 +14,7 @@ import {
 
 extend({
   Graphics,
+  Sprite,
   Text
 });
 
@@ -198,6 +201,7 @@ const drawCombatEntity =
     hitReactionProgress,
     isSelected,
     radius,
+    spriteBacked,
     tint
   }: {
     attackArcRadians: number | null;
@@ -205,6 +209,7 @@ const drawCombatEntity =
     hitReactionProgress: number;
     isSelected: boolean;
     radius: number;
+    spriteBacked: boolean;
     tint: number;
   }) =>
   (graphics: Graphics) => {
@@ -241,24 +246,28 @@ const drawCombatEntity =
       graphics.fill();
     }
 
-    graphics.setFillStyle({
-      alpha: isSelected ? 0.38 : 0.24,
-      color: tint
-    });
-    graphics.circle(0, 0, radius);
-    graphics.fill();
+    if (!spriteBacked) {
+      graphics.setFillStyle({
+        alpha: isSelected ? 0.38 : 0.24,
+        color: tint
+      });
+      graphics.circle(0, 0, radius);
+      graphics.fill();
+    }
 
     graphics.setStrokeStyle({
-      alpha: 0.95,
+      alpha: spriteBacked ? 0.82 : 0.95,
       color: isSelected ? 0xf6eee8 : tint,
-      width: isSelected ? 5 : 3
+      width: isSelected ? 5 : spriteBacked ? 2.5 : 3
     });
-    graphics.circle(0, 0, radius);
+    graphics.circle(0, 0, spriteBacked ? radius + 2 : radius);
     graphics.stroke();
 
-    graphics.moveTo(0, 0);
-    graphics.lineTo(Math.cos(0) * orientationLength, Math.sin(0) * orientationLength);
-    graphics.stroke();
+    if (!spriteBacked) {
+      graphics.moveTo(0, 0);
+      graphics.lineTo(Math.cos(0) * orientationLength, Math.sin(0) * orientationLength);
+      graphics.stroke();
+    }
   };
 
 const drawCombatEntityBars =
@@ -327,6 +336,7 @@ function CombatEntityGraphic({
   hitReactionProgress,
   isSelected,
   radius,
+  spriteBacked,
   tint
 }: {
   attackArcRadians: number | null;
@@ -334,6 +344,7 @@ function CombatEntityGraphic({
   hitReactionProgress: number;
   isSelected: boolean;
   radius: number;
+  spriteBacked: boolean;
   tint: number;
 }) {
   const draw = useMemo(
@@ -344,6 +355,7 @@ function CombatEntityGraphic({
         hitReactionProgress,
         isSelected,
         radius,
+        spriteBacked,
         tint
       }),
     [
@@ -352,6 +364,7 @@ function CombatEntityGraphic({
       hitReactionProgress,
       isSelected,
       radius,
+      spriteBacked,
       tint
     ]
   );
@@ -378,6 +391,42 @@ const CombatEntityBars = memo(function CombatEntityBars({
   return <pixiGraphics draw={draw} />;
 });
 
+const EntitySprite = memo(function EntitySprite({
+  alpha = 1,
+  assetId,
+  sizeWorldUnits,
+  tint
+}: {
+  alpha?: number;
+  assetId: string;
+  sizeWorldUnits: number;
+  tint?: number;
+}) {
+  const assetUrl = resolveAssetUrl(assetId);
+  const texture = useMemo(
+    () => (assetUrl ? Texture.from(assetUrl) : null),
+    [assetUrl]
+  );
+
+  if (!texture) {
+    return null;
+  }
+
+  return (
+    <pixiSprite
+      alpha={alpha}
+      anchor={0.5}
+      eventMode="none"
+      height={sizeWorldUnits}
+      texture={texture}
+      tint={tint}
+      width={sizeWorldUnits}
+      x={0}
+      y={0}
+    />
+  );
+});
+
 export function EntityScene({
   camera,
   currentTick,
@@ -397,6 +446,11 @@ export function EntityScene({
         const tint = hexColorToNumber(entity.visual.tint);
         const pickupKind = entity.pickupProfile?.kind ?? null;
         const renderedRadius = entity.footprint.radius * (entity.visualScale ?? 1);
+        const entityAssetId = entityVisualDefinitions[entity.visual.kind].assetId;
+        const entityAssetUrl = resolveAssetUrl(entityAssetId);
+        const entitySpriteSize =
+          assetPipeline.logicalSizing.entity.spriteLogicalSizeWorldUnits * (entity.visualScale ?? 1);
+        const pickupSpriteSize = Math.max(renderedRadius * 2.3, 76 * (entity.visualScale ?? 1));
         const telegraphShakeOffset =
           entity.role === "hostile" && entity.hostileBehaviorState?.phase === "telegraph"
             ? {
@@ -427,13 +481,43 @@ export function EntityScene({
             y={entity.worldPosition.y + telegraphShakeOffset.y}
           >
             {entity.role === "pickup" ? (
-              <PickupEntityGraphic
-                pickupKind={pickupKind}
-                radius={renderedRadius}
-                tint={tint}
-              />
+              entityAssetUrl ? (
+                <>
+                  <EntitySprite
+                    alpha={0.98}
+                    assetId={entityAssetId}
+                    sizeWorldUnits={pickupSpriteSize}
+                    tint={tint}
+                  />
+                  <pixiGraphics
+                    draw={(graphics) => {
+                      graphics.clear();
+                      graphics.setStrokeStyle({
+                        alpha: 0.18,
+                        color: 0xf6eee8,
+                        width: 1.5
+                      });
+                      graphics.circle(0, 0, renderedRadius + 4);
+                      graphics.stroke();
+                    }}
+                  />
+                </>
+              ) : (
+                <PickupEntityGraphic
+                  pickupKind={pickupKind}
+                  radius={renderedRadius}
+                  tint={tint}
+                />
+              )
             ) : (
               <>
+                <pixiContainer rotation={entity.orientation}>
+                  <EntitySprite
+                    assetId={entityAssetId}
+                    sizeWorldUnits={entitySpriteSize}
+                    tint={tint}
+                  />
+                </pixiContainer>
                 <pixiContainer rotation={entity.orientation}>
                   <CombatEntityGraphic
                     attackArcRadians={attackArcVisible ? entity.automaticAttack?.arcRadians ?? null : null}
@@ -443,6 +527,7 @@ export function EntityScene({
                     hitReactionProgress={hitReactionProgress}
                     isSelected={isSelected}
                     radius={renderedRadius}
+                    spriteBacked={Boolean(entityAssetUrl)}
                     tint={tint}
                   />
                 </pixiContainer>

@@ -1,6 +1,6 @@
 import { extend } from "@pixi/react";
 import { memo, useMemo } from "react";
-import { Container, Graphics, Text } from "pixi.js";
+import { Container, Graphics, Sprite, Text, Texture } from "pixi.js";
 
 import {
   chunkCoordinateToId,
@@ -11,11 +11,13 @@ import {
 import { WorldViewportContainer, type CameraState } from "@engine-pixi";
 import { createChunkDebugData } from "@game/content/world/chunkDebugData";
 import type { EmberwakeRenderSurfaceMode } from "@game";
+import { resolveAssetUrl } from "@src/assets/assetResolver";
 import type { ChunkCoordinate } from "../types";
 
 extend({
   Container,
   Graphics,
+  Sprite,
   Text
 });
 
@@ -48,12 +50,15 @@ const drawWorldBackground = (graphics: Graphics) => {
 
 const drawChunkBase = (debugData: ReturnType<typeof createChunkDebugData>) => (graphics: Graphics) => {
   graphics.clear();
-  graphics.setFillStyle({ alpha: 0.96, color: debugData.baseColor });
-  graphics.rect(0, 0, chunkWorldSize, chunkWorldSize);
+  graphics.setFillStyle({ alpha: 0.92, color: debugData.baseColor });
+  graphics.roundRect(0, 0, chunkWorldSize, chunkWorldSize, 26);
   graphics.fill();
 
   for (const tile of debugData.tiles) {
-    graphics.setFillStyle({ alpha: 0.82, color: tile.color });
+    const tileAlpha =
+      tile.layer === "obstacle" ? 0.92 : tile.layer === "surface-modifier" ? 0.52 : 0.28;
+
+    graphics.setFillStyle({ alpha: tileAlpha, color: tile.color });
     graphics.rect(tile.x * tileSize, tile.y * tileSize, tileSize - 2, tileSize - 2);
     graphics.fill();
   }
@@ -92,9 +97,25 @@ const RetainedChunkBase = memo(function RetainedChunkBase({
   origin: { x: number; y: number };
 }) {
   const draw = useMemo(() => drawChunkBase(debugData), [debugData]);
+  const terrainAssetUrl = resolveAssetUrl(debugData.primaryTerrainAssetId);
+  const terrainTexture = useMemo(
+    () => (terrainAssetUrl ? Texture.from(terrainAssetUrl) : null),
+    [terrainAssetUrl]
+  );
 
   return (
     <pixiContainer visible={isVisible} x={origin.x} y={origin.y}>
+      {terrainTexture ? (
+        <pixiSprite
+          alpha={0.92}
+          eventMode="none"
+          height={chunkWorldSize}
+          texture={terrainTexture}
+          width={chunkWorldSize}
+          x={0}
+          y={0}
+        />
+      ) : null}
       <pixiGraphics draw={draw} />
     </pixiContainer>
   );

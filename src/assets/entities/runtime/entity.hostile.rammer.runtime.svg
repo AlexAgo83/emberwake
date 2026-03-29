@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <g fill="#fff">
+    <path d="M16 68 42 34h42l28 34-28 28H42Z" opacity="0.95" />
+    <path d="M54 30 74 30 64 14Z" opacity="0.68" />
+    <path d="M30 72h68l-12 14H42Z" opacity="0.45" />
+    <path d="M20 48 8 28l30 10Z" opacity="0.62" />
+    <path d="M108 48 120 28 90 10Z" opacity="0.62" transform="translate(0 10)" />
+  </g>
+</svg>

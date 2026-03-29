@@ -1,10 +1,10 @@
 ## task_065_orchestrate_the_first_graphical_asset_integration_strategy_and_delivery_plan - Orchestrate the first graphical asset integration strategy and delivery plan
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -38,26 +38,26 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Confirm the decorative inventory, linked acceptance criteria, and the first-wave priority pack from `item_342`, `prod_017`, and `adr_052`.
-- [ ] 2. Implement the shared asset ownership and resolver groundwork:
+- [x] 1. Confirm the decorative inventory, linked acceptance criteria, and the first-wave priority pack from `item_342`, `prod_017`, and `adr_052`.
+- [x] 2. Implement the shared asset ownership and resolver groundwork:
 - keep the pipeline content-driven through asset ids and metadata
 - make the common path work by file drop only when the file follows the naming contract
 - preserve placeholder and procedural fallbacks
 - keep runtime, map, overlay, and shell-facing assets explicitly separated
 - reserve manifest or sidecar metadata for non-default assets only
-- [ ] 3. Implement the first runtime readability wave:
+- [x] 3. Implement the first runtime readability wave:
 - player
 - core hostile families
 - pickups
 - projectile or hit-feedback elements
 - critical obstacle and terrain readability
-- [ ] 4. Implement the first shell identity follow-up only after the runtime wave is budget-safe:
+- [x] 4. Implement the first shell identity follow-up only after the runtime wave is budget-safe:
 - build-facing icons or illustrations that are still missing
 - codex or progression scene identity surfaces
 - bounded scene headers or artwork where it improves recognition
-- [ ] 5. Validate the wave, checkpoint it in commit-ready states, and update all linked Logics docs with the actual outcomes and follow-up needs.
-- [ ] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
-- [ ] FINAL: Update related Logics docs
+- [x] 5. Validate the wave, checkpoint it in commit-ready states, and update all linked Logics docs with the actual outcomes and follow-up needs.
+- [x] CHECKPOINT: leave the current wave commit-ready and update the linked Logics docs before continuing.
+- [x] FINAL: Update related Logics docs
 
 # Delivery checkpoints
 - Each completed wave should leave the repository in a coherent, commit-ready state.
@@ -105,10 +105,25 @@ flowchart LR
 - `npm run logics:lint`
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
 
 # Report
+- The shared resolver layer now keeps asset ownership content-driven through `assetId`, explicit catalog fallbacks, and deterministic runtime-to-placeholder candidate resolution in `src/assets/assetResolver.ts` and `src/assets/assetCatalog.ts`.
+- The first runtime readability wave is live through authored drop-in assets and bounded render integration for the player, six hostile families, six pickups, and four terrain surfaces.
+- Runtime entity presentation now uses sprite-backed rendering when an authored asset exists while preserving procedural overlays, hit feedback, selection affordances, bars, and fallback drawing paths in `src/game/entities/render/EntityScene.tsx`.
+- World chunk presentation now resolves terrain art by `assetId` and layers authored chunk art under obstacle and surface-modifier readability overlays in `src/game/world/render/WorldScene.tsx` and `games/emberwake/src/content/world/chunkDebugData.ts`.
+- Shell follow-up remained bounded to codex identity: `src/app/components/CodexArchiveScene.tsx` now resolves a header banner asset and creature-card previews from the shared catalog without widening into a broader shell art pass.
+- Validation passed with:
+- `npm run lint`
+- `npm run typecheck`
+- `npm run test`
+- `npm run performance:validate`
+- `npm run test:browser:smoke`
+- `npm run logics:lint`
+- Additional targeted validation passed with:
+- `npm run test -- src/assets/assetResolver.test.ts src/app/components/AppMetaScenePanel.test.tsx src/game/debug/data/officialDebugScenario.test.ts`
+- The wave stayed bounded: projectile or hit-feedback art remains procedural for now, which preserves the scoped readability pack and keeps future VFX work available as a dedicated follow-up slice.

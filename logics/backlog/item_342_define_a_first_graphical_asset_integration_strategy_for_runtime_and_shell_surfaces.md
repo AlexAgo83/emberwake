@@ -1,10 +1,10 @@
 ## item_342_define_a_first_graphical_asset_integration_strategy_for_runtime_and_shell_surfaces - Define a first graphical asset integration strategy for runtime and shell surfaces
 > From version: 0.6.1
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 99%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: UI
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -112,3 +112,5 @@ flowchart LR
 - Derived from request `req_093_define_a_first_graphical_asset_integration_strategy_for_runtime_and_shell_surfaces`.
 - Source file: `logics/request/req_093_define_a_first_graphical_asset_integration_strategy_for_runtime_and_shell_surfaces.md`.
 - Request context seeded into this backlog item from `logics/request/req_093_define_a_first_graphical_asset_integration_strategy_for_runtime_and_shell_surfaces.md`.
+- Completed by `task_065_orchestrate_the_first_graphical_asset_integration_strategy_and_delivery_plan`.
+- Delivery evidence includes `src/assets/assetResolver.ts`, first-wave runtime and shell asset files under `src/assets/**/runtime/`, and bounded scene integration in `src/game/entities/render/EntityScene.tsx`, `src/game/world/render/WorldScene.tsx`, and `src/app/components/CodexArchiveScene.tsx`.

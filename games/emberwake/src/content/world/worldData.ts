@@ -3,7 +3,7 @@ import { systemTuning } from "@game/config/systemTuning";
 
 export const terrainDefinitions = {
   ashfield: {
-    assetId: "map.terrain.ashfield.placeholder",
+    assetId: "map.terrain.ashfield.runtime",
     debugPalette: {
       baseColor: 0x1b1f25,
       overlayColor: 0xffc36e,
@@ -12,7 +12,7 @@ export const terrainDefinitions = {
     label: "Ashfield"
   },
   emberplain: {
-    assetId: "map.terrain.emberplain.placeholder",
+    assetId: "map.terrain.emberplain.runtime",
     debugPalette: {
       baseColor: 0x301d27,
       overlayColor: 0xff8b63,
@@ -21,7 +21,7 @@ export const terrainDefinitions = {
     label: "Emberplain"
   },
   glowfen: {
-    assetId: "map.terrain.glowfen.placeholder",
+    assetId: "map.terrain.glowfen.runtime",
     debugPalette: {
       baseColor: 0x16242f,
       overlayColor: 0x4ce2ff,
@@ -30,7 +30,7 @@ export const terrainDefinitions = {
     label: "Glowfen"
   },
   obsidian: {
-    assetId: "map.terrain.obsidian.placeholder",
+    assetId: "map.terrain.obsidian.runtime",
     debugPalette: {
       baseColor: 0x21192d,
       overlayColor: 0xd88cff,

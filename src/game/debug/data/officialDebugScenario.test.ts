@@ -19,7 +19,7 @@ describe("officialDebugScenario", () => {
       (entityBlueprint) => entityVisualDefinitions[entityBlueprint.visualKind].assetId
     );
 
-    expect(assetIds).toContain("entity.debug.anchor.placeholder");
+    expect(assetIds).toContain("entity.hostile.anchor.runtime");
     expect(() => validateOfficialDebugScenario()).not.toThrow();
   });
 });

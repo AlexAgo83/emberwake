@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="obsidian-base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#291f37" />
+      <stop offset="100%" stop-color="#171220" />
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" fill="url(#obsidian-base)" />
+  <g fill="none" stroke="#d88cff" stroke-opacity="0.18" stroke-width="3">
+    <path d="M28 28 74 74 40 118 96 166 52 224" />
+    <path d="M112 0 148 52 122 102 176 156 140 256" />
+    <path d="M208 16 246 66 214 114 252 164 220 236" />
+  </g>
+  <g fill="#fff" opacity="0.04">
+    <path d="M78 26 96 58 64 74 48 44Z" />
+    <path d="M194 142 214 170 188 190 166 162Z" />
+  </g>
+</svg>

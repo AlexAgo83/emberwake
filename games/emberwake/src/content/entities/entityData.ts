@@ -2,55 +2,55 @@ import type { EntityAssetId } from "@src/assets/assetCatalog";
 
 export const entityVisualDefinitions = {
   "ember-core": {
-    assetId: "entity.player.primary.placeholder",
+    assetId: "entity.player.primary.runtime",
     label: "Primary ember core"
   },
   "debug-anchor": {
-    assetId: "entity.debug.anchor.placeholder",
+    assetId: "entity.hostile.anchor.runtime",
     label: "Debug anchor"
   },
   "debug-drifter": {
-    assetId: "entity.debug.drifter.placeholder",
+    assetId: "entity.hostile.drifter.runtime",
     label: "Debug drifter"
   },
   "debug-needle": {
-    assetId: "entity.debug.drifter.placeholder",
+    assetId: "entity.hostile.needle.runtime",
     label: "Debug needle"
   },
   "debug-rammer": {
-    assetId: "entity.debug.sentinel.placeholder",
+    assetId: "entity.hostile.rammer.runtime",
     label: "Debug rammer"
   },
   "debug-sentinel": {
-    assetId: "entity.debug.sentinel.placeholder",
+    assetId: "entity.hostile.sentinel.runtime",
     label: "Debug sentinel"
   },
   "debug-watcher": {
-    assetId: "entity.debug.watcher.placeholder",
+    assetId: "entity.hostile.watcher.runtime",
     label: "Debug watcher"
   },
   "pickup-gold": {
-    assetId: "entity.debug.watcher.placeholder",
+    assetId: "entity.pickup.gold.runtime",
     label: "Gold pickup"
   },
   "pickup-crystal": {
-    assetId: "entity.debug.drifter.placeholder",
+    assetId: "entity.pickup.crystal.runtime",
     label: "Crystal pickup"
   },
   "pickup-cache": {
-    assetId: "entity.debug.anchor.placeholder",
+    assetId: "entity.pickup.cache.runtime",
     label: "Cache pickup"
   },
   "pickup-healing-kit": {
-    assetId: "entity.debug.anchor.placeholder",
+    assetId: "entity.pickup.healing-kit.runtime",
     label: "Healing kit pickup"
   },
   "pickup-magnet": {
-    assetId: "entity.debug.watcher.placeholder",
+    assetId: "entity.pickup.magnet.runtime",
     label: "Magnet pickup"
   },
   "pickup-hourglass": {
-    assetId: "entity.debug.anchor.placeholder",
+    assetId: "entity.pickup.hourglass.runtime",
     label: "Hourglass pickup"
   }
 } as const satisfies Record<

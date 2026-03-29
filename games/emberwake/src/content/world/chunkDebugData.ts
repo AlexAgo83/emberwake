@@ -1,3 +1,4 @@
+import type { MapAssetId } from "@src/assets/assetCatalog";
 import type { ChunkCoordinate } from "@engine/geometry/primitives";
 import { chunkCoordinateToId } from "@engine/world/worldContract";
 import { createGeneratedChunk } from "@game/content/world/worldGeneration";
@@ -9,6 +10,7 @@ import {
 
 type DebugTile = {
   color: number;
+  layer: "obstacle" | "surface-modifier" | "terrain";
   x: number;
   y: number;
 };
@@ -17,6 +19,7 @@ export type ChunkDebugData = {
   baseColor: number;
   label: string;
   overlayColor: number;
+  primaryTerrainAssetId: MapAssetId;
   tiles: DebugTile[];
 };
 
@@ -61,6 +64,12 @@ export const createChunkDebugData = (
 
     tiles.push({
       color: obstacleColor ?? surfaceAccentColor ?? terrainColors.variants[terrainTile.variant],
+      layer:
+        obstacleColor !== null
+          ? "obstacle"
+          : surfaceAccentColor !== null
+            ? "surface-modifier"
+            : "terrain",
       x: terrainTile.tileX,
       y: terrainTile.tileY
     });
@@ -70,6 +79,7 @@ export const createChunkDebugData = (
     baseColor: primaryTerrainPalette.baseColor,
     label: `${chunkCoordinate.x},${chunkCoordinate.y} ${terrainDefinitions[generatedChunk.primaryTerrain].label}`,
     overlayColor: primaryTerrainPalette.overlayColor,
+    primaryTerrainAssetId: terrainDefinitions[generatedChunk.primaryTerrain].assetId,
     tiles
   };
 
