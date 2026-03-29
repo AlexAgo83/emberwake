@@ -1,15 +1,19 @@
 import type { EntityAssetId } from "@src/assets/assetCatalog";
+import {
+  listMissionRewardDefinitions,
+  type MissionRewardLootArchiveId
+} from "./missionRewards";
 
 export type LootArchiveId =
   | "cache-gift"
-  | "cache-mission"
   | "crystal-high"
   | "crystal-low"
   | "crystal-mid"
   | "gold"
   | "healing-kit"
   | "hourglass"
-  | "magnet";
+  | "magnet"
+  | MissionRewardLootArchiveId;
 
 export type LootArchiveCategory = "mission" | "rewards" | "utilities";
 
@@ -52,13 +56,6 @@ export const lootArchiveEntries = [
   },
   {
     assetId: "entity.pickup.cache.runtime",
-    category: "mission",
-    description: "Mission reliquary secured from a primary objective boss.",
-    id: "cache-mission",
-    label: "Mission Reliquary"
-  },
-  {
-    assetId: "entity.pickup.cache.runtime",
     category: "rewards",
     description: "Field cache containing a wrapped gift-grade reward drop.",
     id: "cache-gift",
@@ -84,7 +81,14 @@ export const lootArchiveEntries = [
     description: "Pickup magnet pulse that drags nearby rewards into collection range.",
     id: "magnet",
     label: "Magnet Sigil"
-  }
+  },
+  ...listMissionRewardDefinitions().map((missionRewardDefinition) => ({
+    assetId: missionRewardDefinition.assetId,
+    category: "mission" as const,
+    description: missionRewardDefinition.description,
+    id: missionRewardDefinition.lootArchiveId,
+    label: missionRewardDefinition.label
+  }))
 ] as const satisfies readonly LootArchiveEntry[];
 
 export const lootArchiveIds = lootArchiveEntries.map((entry) => entry.id);

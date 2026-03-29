@@ -2,8 +2,35 @@ import type { EntityAssetId } from "@src/assets/assetCatalog";
 import type {
   EntityFacingMode
 } from "@src/assets/entityDirectionalRuntime";
+import {
+  listMissionRewardDefinitions,
+  type MissionRewardVisualKind
+} from "@shared/model/missionRewards";
 
 export type EntitySpriteSeparationCategory = "hostile" | "pickup" | "player";
+
+type EntityVisualDefinition = {
+  assetId: EntityAssetId;
+  label: string;
+  runtimePresentation: {
+    facingMode: EntityFacingMode;
+    spriteSeparationCategory: EntitySpriteSeparationCategory;
+  };
+};
+
+const missionRewardVisualDefinitions = Object.fromEntries(
+  listMissionRewardDefinitions().map((missionRewardDefinition) => [
+    missionRewardDefinition.visualKind,
+    {
+      assetId: missionRewardDefinition.assetId,
+      label: missionRewardDefinition.label,
+      runtimePresentation: {
+        facingMode: "static",
+        spriteSeparationCategory: "pickup"
+      }
+    }
+  ])
+) as Record<MissionRewardVisualKind, EntityVisualDefinition>;
 
 export const entityVisualDefinitions = {
   "ember-core": {
@@ -142,6 +169,7 @@ export const entityVisualDefinitions = {
       spriteSeparationCategory: "pickup"
     }
   },
+  ...missionRewardVisualDefinitions,
   "pickup-healing-kit": {
     assetId: "entity.pickup.healing-kit.runtime",
     label: "Healing kit pickup",
@@ -166,17 +194,7 @@ export const entityVisualDefinitions = {
       spriteSeparationCategory: "pickup"
     }
   }
-} as const satisfies Record<
-  string,
-  {
-    assetId: EntityAssetId;
-    label: string;
-    runtimePresentation: {
-      facingMode: EntityFacingMode;
-      spriteSeparationCategory: EntitySpriteSeparationCategory;
-    };
-  }
->;
+} as const satisfies Record<string, EntityVisualDefinition>;
 
 export type EntityVisualKind = keyof typeof entityVisualDefinitions;
 

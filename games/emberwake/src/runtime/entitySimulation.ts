@@ -133,6 +133,7 @@ export type FocusState = {
 export type PickupProfile = {
   attractionState?: PickupAttractionState;
   kind: SimulatedPickupKind;
+  lootArchiveId?: LootArchiveId;
   missionItemStageIndex?: number;
   stackCount?: number;
 };
@@ -641,14 +642,20 @@ const createPickupEntity = (
   worldPosition: WorldPoint,
   spawnedAtTick: number,
   stackCount = 1,
-  missionItemStageIndex: number | null = null
+  options?: {
+    lootArchiveId?: LootArchiveId;
+    missionItemStageIndex?: number | null;
+    tint?: string;
+    visualKind?: SimulatedEntity["visual"]["kind"];
+  }
 ): SimulatedEntity => ({
   ...createGenericMoverEntity({
     id: `entity:pickup:${pickupKind}:${pickupSequence}`,
     renderLayer: 90,
     visual: {
       kind:
-        pickupKind === "healing-kit"
+        options?.visualKind ??
+        (pickupKind === "healing-kit"
           ? "pickup-healing-kit"
           : pickupKind === "crystal"
             ? resolveCrystalPickupVisualKind(stackCount)
@@ -658,9 +665,10 @@ const createPickupEntity = (
               ? "pickup-magnet"
             : pickupKind === "cache"
               ? "pickup-cache"
-              : "pickup-gold",
+              : "pickup-gold"),
       tint:
-        pickupKind === "healing-kit"
+        options?.tint ??
+        (pickupKind === "healing-kit"
           ? "#7dff9b"
           : pickupKind === "crystal"
             ? resolveCrystalPickupTint(stackCount)
@@ -670,7 +678,7 @@ const createPickupEntity = (
               ? "#ffd1ff"
             : pickupKind === "cache"
               ? "#9ae5ff"
-              : "#ffd76c"
+              : "#ffd76c")
     },
     worldPosition
   }),
@@ -682,7 +690,8 @@ const createPickupEntity = (
   movementSurfaceModifier: "normal",
   pickupProfile: {
     kind: pickupKind,
-    missionItemStageIndex: missionItemStageIndex ?? undefined,
+    lootArchiveId: options?.lootArchiveId,
+    missionItemStageIndex: options?.missionItemStageIndex ?? undefined,
     stackCount
   },
   role: "pickup",
@@ -697,7 +706,8 @@ const isAlive = (entity: SimulatedEntity) => entity.combat.currentHealth > 0;
 const isDisabledPickupEntity = (entity: SimulatedEntity) =>
   entity.role === "pickup" &&
   entity.pickupProfile?.kind === "cache" &&
-  entity.pickupProfile.missionItemStageIndex === undefined;
+  entity.pickupProfile.missionItemStageIndex === undefined &&
+  entity.pickupProfile.lootArchiveId === undefined;
 
 const pickupStackMergeRadiusWorldUnits = pickupContract.pickup.pickupRadiusWorldUnits * 3;
 const pickupCompactionIntervalTicks = 30;
@@ -1207,6 +1217,7 @@ const normalizeSimulatedEntity = (
       pickupProfile: {
         attractionState: entity.pickupProfile?.attractionState,
         kind: inferredPickupKind,
+        lootArchiveId: entity.pickupProfile?.lootArchiveId,
         missionItemStageIndex: entity.pickupProfile?.missionItemStageIndex,
         stackCount: Math.max(1, entity.pickupProfile?.stackCount ?? 1)
       },
@@ -1746,8 +1757,14 @@ export const advanceSimulationState = (
       const defeatedMissionBoss = defeatedHostiles.find(
         (entity) => entity.id === missionActivatedState.missionState.currentBossEntityId
       );
+      const defeatedMissionBossStageIndex =
+        defeatedMissionBoss === undefined ? null : parseMissionBossStageIndex(defeatedMissionBoss.id);
+      const defeatedMissionBossStage =
+        defeatedMissionBossStageIndex === null
+          ? null
+          : getMissionStage(defeatedMissionBossStageIndex, worldSeed);
       const missionDropEntities =
-        defeatedMissionBoss !== undefined
+        defeatedMissionBoss !== undefined && defeatedMissionBossStage !== null
           ? [
               createPickupEntity(
                 pickupMaintainedState.nextPickupSequence +
@@ -1756,7 +1773,12 @@ export const advanceSimulationState = (
                 defeatedMissionBoss.worldPosition,
                 nextTick,
                 1,
-                parseMissionBossStageIndex(defeatedMissionBoss.id)
+                {
+                  lootArchiveId: defeatedMissionBossStage.rewardLootArchiveId,
+                  missionItemStageIndex: defeatedMissionBossStageIndex,
+                  tint: "#9ae5ff",
+                  visualKind: defeatedMissionBossStage.rewardVisualKind
+                }
               )
             ]
           : [];

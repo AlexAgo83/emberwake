@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import { deriveWorldSeed } from "@shared/model/worldSeed";
 import { worldProfiles } from "@shared/model/worldProfiles";
 
 import { getMissionStages, missionLoopContract } from "./missionLoop";
@@ -16,6 +17,14 @@ describe("missionLoop", () => {
     );
 
     expect(new Set(serializedMissionMaps).size).toBe(worldProfiles.length);
+  });
+
+  it("keeps mission reward items unique across the full world ladder", () => {
+    const rewardItemIds = worldProfiles.flatMap((worldProfile) =>
+      getMissionStages(worldProfile.worldSeed).map((stage) => stage.rewardItemId)
+    );
+
+    expect(new Set(rewardItemIds).size).toBe(rewardItemIds.length);
   });
 
   it("keeps minimum spacing between every objective zone in each world", () => {
@@ -42,5 +51,21 @@ describe("missionLoop", () => {
         }
       }
     }
+  });
+
+  it("derives deterministic but seed-sensitive stage placement inside a world", () => {
+    const firstSeed = deriveWorldSeed({
+      normalizedPlayerName: "Ash",
+      worldProfileId: "glowfen-basin"
+    });
+    const secondSeed = deriveWorldSeed({
+      normalizedPlayerName: "Glass",
+      worldProfileId: "glowfen-basin"
+    });
+
+    expect(getMissionStages(firstSeed)).toEqual(getMissionStages(firstSeed));
+    expect(getMissionStages(firstSeed).map((stage) => stage.zoneWorldPosition)).not.toEqual(
+      getMissionStages(secondSeed).map((stage) => stage.zoneWorldPosition)
+    );
   });
 });

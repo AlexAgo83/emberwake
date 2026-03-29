@@ -1095,7 +1095,10 @@ export const resolvePickupCollection = ({
           nextRunStats,
           appendDiscoveredLootId(
             nextRunStats,
-            entity.pickupProfile.missionItemStageIndex === undefined ? "cache-gift" : "cache-mission"
+            entity.pickupProfile.lootArchiveId ??
+              (entity.pickupProfile.missionItemStageIndex === undefined
+                ? "cache-gift"
+                : "cache-gift")
           )
         );
         break;

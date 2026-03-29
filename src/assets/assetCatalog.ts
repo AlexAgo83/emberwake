@@ -98,6 +98,96 @@ export const assetCatalog = {
       label: "Cache pickup runtime",
       stage: "runtime"
     },
+    "entity.pickup.mission.ashwake-seal.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Ashwake Seal mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.glass-cipher.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Glass Cipher mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.breach-writ.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Breach Writ mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.kiln-charter.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Kiln Charter mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.ward-sigil.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Ward Sigil mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.lantern-prism.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Lantern Prism mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.mist-lens.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Mist Lens mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.bloom-valve.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Bloom Valve mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.reed-crest.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Reed Crest mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.keystone-plate.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Keystone Plate mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.mirror-core.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Mirror Core mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.sluice-key.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Sluice Key mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.lantern-crown.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Lantern Crown mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.gate-mandate.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Gate Mandate mission pickup runtime",
+      stage: "runtime"
+    },
+    "entity.pickup.mission.cinder-writ.runtime": {
+      domain: "entities",
+      fallbackAssetId: "entity.pickup.cache.runtime",
+      label: "Cinder Writ mission pickup runtime",
+      stage: "runtime"
+    },
     "entity.pickup.crystal.high.runtime": {
       domain: "entities",
       fallbackAssetId: "entity.pickup.crystal.runtime",
