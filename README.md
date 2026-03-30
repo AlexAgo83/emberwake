@@ -9,7 +9,7 @@ Emberwake is a techno-shinobi survival action game where each run starts from an
 [![CI](https://github.com/AlexAgo83/emberwake/actions/workflows/ci.yml/badge.svg)](https://github.com/AlexAgo83/emberwake/actions/workflows/ci.yml)
 [![License](https://img.shields.io/github/license/AlexAgo83/emberwake)](LICENSE)
 [![Live Demo](https://img.shields.io/badge/live%20demo-Render-46E3B7?logo=render&logoColor=white)](https://emberwake.onrender.com/)
-![Version](https://img.shields.io/badge/version-v0.7.0-4C8BF5)
+![Version](https://img.shields.io/badge/version-v0.7.1-4C8BF5)
 ![Vite](https://img.shields.io/badge/Vite-6.2.0-646CFF?logo=vite&logoColor=white)
 ![React](https://img.shields.io/badge/React-19.0.0-61DAFB?logo=react&logoColor=black)
 
@@ -43,7 +43,7 @@ flowchart TD
 
 Current release target:
 
-- `v0.7.0`
+- `v0.7.1`
 
 What `main` reflects today:
 
@@ -54,7 +54,7 @@ What `main` reflects today:
 
 ```mermaid
 flowchart LR
-    Release[v0.7.0 target] --> Main[main branch]
+    Release[v0.7.1 target] --> Main[main branch]
     Main --> Playable[Playable world and mission loop]
     Main --> Modular[Modular runtime ownership]
     Main --> Next[Balance, profiling, progression, content expansion]
@@ -308,7 +308,7 @@ flowchart LR
 - `package.json` is the source of truth for the app version.
 - Each release must have a matching curated changelog in `changelogs/`.
 - Release tags use `vX.Y.Z`.
-- The current release changelog is [`changelogs/CHANGELOGS_0_7_0.md`](changelogs/CHANGELOGS_0_7_0.md).
+- The current release changelog is [`changelogs/CHANGELOGS_0_7_1.md`](changelogs/CHANGELOGS_0_7_1.md).
 
 ```mermaid
 flowchart LR
