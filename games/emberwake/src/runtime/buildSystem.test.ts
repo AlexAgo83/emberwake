@@ -19,6 +19,10 @@ import {
   resolvePickupRadiusMultiplier,
   resolveFusionReadyState
 } from "./buildSystem";
+import {
+  createDefaultMetaProfile,
+  deriveBuildMetaProgression
+} from "../../../../src/app/model/metaProgression";
 
 describe("buildSystem", () => {
   it("starts from a bounded starter build state", () => {
@@ -80,6 +84,59 @@ describe("buildSystem", () => {
     );
     expect(rerolledBuildState.levelUpChoices.map((choice) => choice.id).join("|")).not.toBe(
       initialSignature
+    );
+  });
+
+  it("surfaces the full active and passive roster over varied offers when the full shop is unlocked", () => {
+    const profile = createDefaultMetaProfile();
+    profile.purchasedShopUnlockIds = [
+      "second-wave-skills",
+      "second-wave-fusions",
+      "utility-drops",
+      "level-up-reroll",
+      "level-up-pass"
+    ];
+
+    const baseBuildState = normalizeBuildState({
+      metaProgression: deriveBuildMetaProgression(profile)
+    });
+    const seenCombatIds = new Set<string>();
+    const seenPassiveIds = new Set<string>();
+
+    for (let seedIndex = 0; seedIndex < 60; seedIndex += 1) {
+      let offeredBuildState = addPendingLevelUps(baseBuildState, 1, seedIndex * 37 + 24);
+
+      for (const choice of offeredBuildState.levelUpChoices) {
+        if (choice.track === "combat" && choice.selectionKind !== "fusion") {
+          seenCombatIds.add(String(choice.itemId));
+        }
+
+        if (choice.track === "passive") {
+          seenPassiveIds.add(String(choice.itemId));
+        }
+      }
+
+      for (let rerollIndex = 0; rerollIndex < 2; rerollIndex += 1) {
+        offeredBuildState = rerollLevelUpChoices(
+          offeredBuildState,
+          seedIndex * 37 + 24 + rerollIndex
+        );
+
+        for (const choice of offeredBuildState.levelUpChoices) {
+          if (choice.track === "combat" && choice.selectionKind !== "fusion") {
+            seenCombatIds.add(String(choice.itemId));
+          }
+
+          if (choice.track === "passive") {
+            seenPassiveIds.add(String(choice.itemId));
+          }
+        }
+      }
+    }
+
+    expect(seenCombatIds).toEqual(new Set(listActiveWeaponDefinitions().map((definition) => definition.id)));
+    expect(seenPassiveIds).toEqual(
+      new Set(listPassiveItemDefinitions().map((definition) => definition.id))
     );
   });
 

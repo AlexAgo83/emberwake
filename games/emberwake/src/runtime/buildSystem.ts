@@ -604,7 +604,7 @@ const deterministicHash = (value: string) => {
 const sortDeterministically = <T extends { id: string }>(items: readonly T[], salt: string) =>
   [...items].sort(
     (left, right) =>
-      deterministicHash(`${left.id}:${salt}`) - deterministicHash(`${right.id}:${salt}`)
+      deterministicHash(`${salt}:${left.id}`) - deterministicHash(`${salt}:${right.id}`)
   );
 
 const createPassiveModifierState = (buildState: BuildState): PassiveModifierState => {
