@@ -1,10 +1,10 @@
 ## item_400_define_terminal_runtime_texture_cache_release_and_asset_ownership_boundaries - Define terminal runtime texture-cache release and asset-ownership boundaries
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

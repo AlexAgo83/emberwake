@@ -1,7 +1,7 @@
 ## req_121_define_a_boss_chest_reward_flow_with_random_skill_upgrades_and_fallback_salvage - Define a boss chest reward flow with random skill upgrades and fallback salvage
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: High

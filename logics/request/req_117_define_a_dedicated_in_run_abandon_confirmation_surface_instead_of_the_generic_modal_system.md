@@ -1,7 +1,7 @@
 ## req_117_define_a_dedicated_in_run_abandon_confirmation_surface_instead_of_the_generic_modal_system - Define a dedicated in-run abandon confirmation surface instead of the generic modal system
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
 > Complexity: Medium

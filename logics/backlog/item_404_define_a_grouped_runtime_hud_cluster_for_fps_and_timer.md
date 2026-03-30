@@ -1,10 +1,10 @@
 ## item_404_define_a_grouped_runtime_hud_cluster_for_fps_and_timer - Define a grouped runtime HUD cluster for FPS and timer
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Low
 > Theme: HUD
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

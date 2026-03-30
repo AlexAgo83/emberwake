@@ -31,6 +31,15 @@ type PlayerHudCardProps = {
     x: number;
     y: number;
   };
+  runtimeTicksSurvived: number;
+};
+
+const formatRuntimeTimer = (runtimeTicksSurvived: number) => {
+  const totalSeconds = Math.max(0, Math.floor(runtimeTicksSurvived / 60));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 };
 
 export function PlayerHudCard(props: PlayerHudCardProps) {
@@ -45,7 +54,8 @@ export function PlayerHudCard(props: PlayerHudCardProps) {
     playerHealth,
     playerHealthMax,
     playerName,
-    playerPosition
+    playerPosition,
+    runtimeTicksSurvived
   } = props;
   const roundedLevel = Math.max(1, Math.round(currentLevel));
   const roundedHealth = Math.max(0, Math.round(playerHealth));
@@ -56,6 +66,7 @@ export function PlayerHudCard(props: PlayerHudCardProps) {
   const roundedPositionY = Math.round(playerPosition.y);
   const hpProgressPercent = Math.min(100, Math.round((roundedHealth / roundedHealthMax) * 100));
   const xpProgressPercent = Math.min(100, Math.round((roundedXp / roundedNextLevelXp) * 100));
+  const runtimeTimerLabel = formatRuntimeTimer(runtimeTicksSurvived);
   const activeSlots: Array<PlayerHudSlot | null> = Array.from(
     { length: buildSystemContract.activeSlotLimit },
     (_, index) => buildActives[index] ?? null
@@ -129,9 +140,14 @@ export function PlayerHudCard(props: PlayerHudCardProps) {
         </div>
       </div>
 
-      <p className="player-hud__fps" aria-label="Runtime FPS">
-        FPS {Math.max(0, Math.round(fps))}
-      </p>
+      <div className="player-hud__telemetry" aria-label="Runtime telemetry">
+        <p className="player-hud__telemetry-line" aria-label="Runtime FPS">
+          FPS {Math.max(0, Math.round(fps))}
+        </p>
+        <p className="player-hud__telemetry-line" aria-label="Runtime timer">
+          TIME {runtimeTimerLabel}
+        </p>
+      </div>
 
       <div className="player-hud__build" aria-label="Build slots">
         <div className="player-hud__build-row">

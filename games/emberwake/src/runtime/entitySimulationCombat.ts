@@ -1097,7 +1097,7 @@ export const resolvePickupCollection = ({
             : tick + pickupContract.hourglass.durationTicks;
         Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "hourglass"));
         break;
-      case "cache":
+      case "cache": {
         if (entity.pickupProfile.missionItemStageIndex !== undefined) {
           nextRunStats.missionItemsCollected += 1;
           Object.assign(
@@ -1138,6 +1138,7 @@ export const resolvePickupCollection = ({
         Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "healing-kit"));
         Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "gold"));
         break;
+      }
       case "magnet":
         Object.assign(nextRunStats, appendDiscoveredLootId(nextRunStats, "magnet"));
         break;

@@ -1,7 +1,7 @@
 ## req_118_define_a_fade_in_fade_out_transition_posture_for_main_screen_background_entity_rotation - Define a fade in/fade out transition posture for main screen background entity rotation
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
 > Complexity: Low

@@ -1,10 +1,10 @@
 ## item_399_define_seeded_world_specific_primary_mission_objective_placement - Define seeded world-specific primary mission objective placement
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

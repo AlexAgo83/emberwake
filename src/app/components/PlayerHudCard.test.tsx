@@ -35,6 +35,7 @@ describe("PlayerHudCard", () => {
         playerHealthMax={100}
         playerName="Wanderer"
         playerPosition={{ x: 128, y: -64 }}
+        runtimeTicksSurvived={3720}
       />
     );
 
@@ -46,6 +47,7 @@ describe("PlayerHudCard", () => {
     expect(screen.getByText("14")).toBeInTheDocument();
     expect(screen.getByText("128, -64")).toBeInTheDocument();
     expect(screen.getByText("FPS 59")).toBeInTheDocument();
+    expect(screen.getByText("TIME 1:02")).toBeInTheDocument();
     expect(screen.getByText("Actives")).toBeInTheDocument();
     expect(screen.getByText("Passives")).toBeInTheDocument();
     expect(screen.getByTitle("Ash Lash Lv 1/8")).toBeInTheDocument();
@@ -68,6 +70,7 @@ describe("PlayerHudCard", () => {
         playerHealthMax={100}
         playerName="Ash"
         playerPosition={{ x: 10, y: 20 }}
+        runtimeTicksSurvived={95}
       />
     );
 
@@ -76,6 +79,7 @@ describe("PlayerHudCard", () => {
     expect(screen.getAllByText("10 / 150").length).toBeGreaterThan(0);
     expect(screen.getByText("3")).toBeInTheDocument();
     expect(screen.getByText("10, 20")).toBeInTheDocument();
+    expect(screen.getByText("TIME 0:01")).toBeInTheDocument();
     expect(screen.queryByTestId("player-hud-hint")).not.toBeInTheDocument();
   });
 });

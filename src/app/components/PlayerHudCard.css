@@ -25,10 +25,15 @@
   border-radius: 0.9rem;
 }
 
-.player-hud__fps {
+.player-hud__telemetry {
   position: absolute;
   bottom: var(--shell-offset-bottom);
   left: var(--shell-offset-left);
+  display: grid;
+  gap: 0.16rem;
+}
+
+.player-hud__telemetry-line {
   margin: 0;
   color: rgba(214, 227, 233, 0.72);
   font-size: 0.66rem;
@@ -51,7 +56,7 @@
 .player-hud__name,
 .player-hud__phase-chip,
 .player-hud__level-chip,
-.player-hud__fps,
+.player-hud__telemetry-line,
 .player-hud__build-title,
 .player-hud__gold-row,
 .player-hud__position-row {
@@ -315,9 +320,13 @@
       rgba(8, 12, 16, 0.58);
   }
 
-  .player-hud__fps {
+  .player-hud__telemetry {
     bottom: var(--shell-offset-bottom);
     left: var(--shell-offset-left);
+    gap: 0.12rem;
+  }
+
+  .player-hud__telemetry-line {
     font-size: 0.58rem;
   }
 

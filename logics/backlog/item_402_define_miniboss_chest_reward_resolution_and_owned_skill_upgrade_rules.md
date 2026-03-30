@@ -1,10 +1,10 @@
 ## item_402_define_miniboss_chest_reward_resolution_and_owned_skill_upgrade_rules - Define miniboss chest reward resolution and owned-skill upgrade rules
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

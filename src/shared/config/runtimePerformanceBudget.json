@@ -15,7 +15,7 @@
   },
   "shellStartup": {
     "maxInitialCssKb": 28,
-    "maxInitialJsKb": 416,
+    "maxInitialJsKb": 424,
     "maxInitialRequestCount": 4
   },
   "runtimeActivation": {

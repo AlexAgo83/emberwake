@@ -1,7 +1,7 @@
 ## req_119_define_unique_per_world_mission_reward_items_and_seeded_objective_positions - Define unique per-world mission reward items and seeded objective positions
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 100%
 > Confidence: 98%
 > Complexity: High

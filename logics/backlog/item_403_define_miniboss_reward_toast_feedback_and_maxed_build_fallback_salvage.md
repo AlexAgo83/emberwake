@@ -1,10 +1,10 @@
 ## item_403_define_miniboss_reward_toast_feedback_and_maxed_build_fallback_salvage - Define miniboss reward toast feedback and maxed-build fallback salvage
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 96%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Gameplay
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.

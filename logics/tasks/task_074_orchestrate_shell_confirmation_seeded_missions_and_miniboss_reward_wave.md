@@ -1,10 +1,10 @@
 ## task_074_orchestrate_shell_confirmation_seeded_missions_and_miniboss_reward_wave - Orchestrate shell confirmation, seeded missions, and miniboss reward wave
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 99%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: High
 > Theme: Systems
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -38,17 +38,17 @@ flowchart LR
 ```
 
 # Plan
-- [ ] 1. Land the shell-owned abandon confirmation surface from `item_396`.
-- [ ] 2. Land the main-screen enemy fade transition from `item_397`.
-- [ ] 3. Land unique mission reward item roster and asset integration from `item_398`.
-- [ ] 4. Land seeded world-specific mission objective placement from `item_399`.
-- [ ] 5. Land terminal runtime texture-cache ownership and release seams from `item_400`.
-- [ ] 6. Land memory cleanup validation and main-screen allowlist tuning from `item_401`.
-- [ ] 7. Land mini-boss chest reward rules from `item_402`.
-- [ ] 8. Land mini-boss reward toast feedback and fallback salvage from `item_403`.
-- [ ] 9. Land grouped FPS/timer HUD posture from `item_404`.
-- [ ] CHECKPOINT: keep shell UX, mission identity/placement, runtime cleanup, mini-boss rewards, and HUD regrouping as separate commit-ready waves.
-- [ ] FINAL: Update linked Logics docs.
+- [x] 1. Land the shell-owned abandon confirmation surface from `item_396`.
+- [x] 2. Land the main-screen enemy fade transition from `item_397`.
+- [x] 3. Land unique mission reward item roster and asset integration from `item_398`.
+- [x] 4. Land seeded world-specific mission objective placement from `item_399`.
+- [x] 5. Land terminal runtime texture-cache ownership and release seams from `item_400`.
+- [x] 6. Land memory cleanup validation and main-screen allowlist tuning from `item_401`.
+- [x] 7. Land mini-boss chest reward rules from `item_402`.
+- [x] 8. Land mini-boss reward toast feedback and fallback salvage from `item_403`.
+- [x] 9. Land grouped FPS/timer HUD posture from `item_404`.
+- [x] CHECKPOINT: keep shell UX, mission identity/placement, runtime cleanup, mini-boss rewards, and HUD regrouping as separate commit-ready waves.
+- [x] FINAL: Update linked Logics docs.
 
 # Delivery checkpoints
 - Checkpoint A: shell-owned abandon confirmation plus main-screen fade (`item_396` to `item_397`)
@@ -96,8 +96,8 @@ flowchart LR
 - Manual runtime review of abandon confirmation, mini-boss reward chests, mission reward identity/placement, main-screen enemy fades, and HUD timer/FPS grouping
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.

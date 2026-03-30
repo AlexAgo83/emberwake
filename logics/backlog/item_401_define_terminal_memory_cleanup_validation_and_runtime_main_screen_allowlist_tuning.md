@@ -1,10 +1,10 @@
 ## item_401_define_terminal_memory_cleanup_validation_and_runtime_main_screen_allowlist_tuning - Define terminal memory cleanup validation and runtime main-screen allowlist tuning
 > From version: 0.7.0+1b1dda6
 > Schema version: 1.0
-> Status: Draft
+> Status: Done
 > Understanding: 98%
 > Confidence: 95%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Performance
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
