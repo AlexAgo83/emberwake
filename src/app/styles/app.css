@@ -644,9 +644,7 @@ html[data-app-display-mode="browser"] .app-shell {
   display: grid;
   gap: 0.8rem;
   min-height: 0;
-  overflow-y: auto;
   overscroll-behavior: contain;
-  padding-right: 0.2rem;
   align-content: start;
 }
 
@@ -821,7 +819,8 @@ html[data-app-display-mode="browser"] .app-shell {
   display: grid;
   gap: 0.8rem;
   min-height: 0;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 0.2rem;
   scrollbar-gutter: stable;
 }
@@ -829,6 +828,7 @@ html[data-app-display-mode="browser"] .app-shell {
 .app-meta-scene__changelog-card {
   display: grid;
   gap: 0.7rem;
+  min-width: 0;
   padding: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 0.95rem;
@@ -869,6 +869,7 @@ html[data-app-display-mode="browser"] .app-shell {
 .app-meta-scene__changelog-content {
   display: grid;
   gap: 0.72rem;
+  min-width: 0;
   color: var(--emberwake-copy-dim);
   font-size: 0.82rem;
   line-height: 1.6;
@@ -1114,6 +1115,8 @@ html[data-app-display-mode="browser"] .app-shell {
 .app-meta-scene__markdown-paragraph,
 .app-meta-scene__markdown-list {
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .app-meta-scene__markdown-heading {
@@ -1140,11 +1143,14 @@ html[data-app-display-mode="browser"] .app-shell {
   background: rgba(255, 255, 255, 0.06);
   color: var(--emberwake-copy);
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .app-meta-scene__markdown-link {
   color: var(--emberwake-accent-cold);
   text-underline-offset: 0.16rem;
+  overflow-wrap: anywhere;
 }
 
 .app-meta-scene__viewport-footer {
@@ -1397,6 +1403,27 @@ html[data-app-display-mode="browser"] .app-shell {
 
   .app-meta-scene__actions--new-game {
     grid-template-columns: 1fr;
+  }
+
+  .app-meta-scene__world-card-copy {
+    padding: 0.82rem 0.86rem;
+  }
+
+  .app-meta-scene__world-card-detail {
+    max-width: none;
+    font-size: 0.78rem;
+  }
+
+  .app-meta-scene__changelog-card {
+    padding: 0.82rem 0.86rem;
+  }
+
+  .app-meta-scene__changelog-version {
+    font-size: 0.96rem;
+  }
+
+  .app-meta-scene__changelog-content {
+    font-size: 0.78rem;
   }
 
   .app-meta-scene__skill-copy-header {

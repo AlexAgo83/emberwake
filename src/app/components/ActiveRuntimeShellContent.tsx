@@ -763,9 +763,12 @@ export function ActiveRuntimeShellContent({
   ]);
 
   useEffect(() => {
-    if (activeScene === "pause" || activeScene === "settings" || levelUpVisible) {
+    const lastMetaScene =
+      activeScene === "pause" || activeScene === "settings" ? activeScene : "none";
+
+    if (activeScene === "pause" || activeScene === "settings" || levelUpVisible || isAbandonConfirmOpen) {
       simulationState.controls.pause();
-      onSetLastMetaScene(activeScene === "runtime" ? "none" : activeScene);
+      onSetLastMetaScene(lastMetaScene);
       return;
     }
 
@@ -777,7 +780,14 @@ export function ActiveRuntimeShellContent({
 
     simulationState.controls.pause();
     onSetLastMetaScene("none");
-  }, [activeScene, isMenuOpen, levelUpVisible, onSetLastMetaScene, simulationState.controls]);
+  }, [
+    activeScene,
+    isAbandonConfirmOpen,
+    isMenuOpen,
+    levelUpVisible,
+    onSetLastMetaScene,
+    simulationState.controls
+  ]);
 
   const buildActives = useMemo(
     () =>

@@ -8,7 +8,7 @@
   position: absolute;
   z-index: 4;
   display: grid;
-  gap: 0.18rem;
+  gap: 0.12rem;
   justify-items: center;
   pointer-events: none;
 }
@@ -17,13 +17,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.7rem;
-  height: 2.7rem;
+  width: 1.35rem;
+  height: 1.35rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
-  background: rgba(8, 12, 16, 0.8);
+  background: rgba(8, 12, 16, 0.5);
   color: #ffd38b;
-  font-size: 1.2rem;
+  font-size: 0.62rem;
   line-height: 1;
   box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.24);
   transform-origin: center;
@@ -34,11 +34,11 @@
 }
 
 .runtime-guidance-arrow__label {
-  padding: 0.18rem 0.45rem;
+  padding: 0.12rem 0.32rem;
   border-radius: 999px;
-  background: rgba(8, 12, 16, 0.8);
+  background: rgba(8, 12, 16, 0.5);
   color: var(--emberwake-copy);
-  font-size: 0.62rem;
+  font-size: 0.52rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
