@@ -19,3 +19,8 @@ logics/hybrid_assist_measurements.jsonl
 .env.*
 !.env.example
 logics/mutation_audit.jsonl
+
+# Generated Logics runtime artifacts
+.env.local
+logics/.cache/hybrid_assist_audit.jsonl
+logics/.cache/hybrid_assist_measurements.jsonl
