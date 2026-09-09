@@ -1,10 +1,10 @@
 ## item_407_validate_promoted_terrain_assets_in_game_for_readability_and_biome_boundary_continuity - Validate promoted terrain assets in-game for readability and biome-boundary continuity
 > From version: 0.7.2
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Low
 > Theme: Graphics
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -74,3 +74,6 @@ flowchart LR
 - `src/assets/map/runtime/map.terrain.obsidian.runtime.webp`
 - `src/assets/map/runtime/map.terrain.ashfield.runtime.webp`
 - `logics/request/req_124_define_distinct_per_biome_terrain_asset_variation_for_emberplain_glowfen_and_obsidian.md`
+
+# Notes
+- Task `task_075_orchestrate_per_biome_terrain_asset_variation_generation_promotion_and_validation_wave` was finished via `logics-manager flow finish task` on 2026-09-09.

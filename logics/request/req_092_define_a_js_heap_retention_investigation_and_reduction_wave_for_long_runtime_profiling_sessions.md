@@ -1,7 +1,7 @@
 ## req_092_define_a_js_heap_retention_investigation_and_reduction_wave_for_long_runtime_profiling_sessions - Define a JS heap retention investigation and reduction wave for long runtime profiling sessions
 > From version: 0.6.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 96%
 > Complexity: High
