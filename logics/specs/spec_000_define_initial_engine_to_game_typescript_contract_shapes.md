@@ -1,6 +1,9 @@
 ## spec_000_define_initial_engine_to_game_typescript_contract_shapes - Define initial engine to game TypeScript contract shapes
 > Date: 2026-03-20
-> Status: Accepted
+> From version: 0.1.3
+> Status: Validated
+> Understanding: 99%
+> Confidence: 96%
 > Related request: `req_018_define_engine_and_gameplay_boundary_for_runtime_reuse`
 > Related backlog: `item_071_define_engine_to_game_contracts_for_update_render_and_input_integration`
 > Related task: `task_026_orchestrate_engine_gameplay_boundary_extraction_for_runtime_reuse`

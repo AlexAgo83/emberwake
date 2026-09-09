@@ -1,6 +1,9 @@
 ## spec_001_define_first_wave_asset_production_pack - Define first-wave asset production pack
 > Date: 2026-03-29
-> Status: Accepted
+> From version: 0.6.1
+> Status: Validated
+> Understanding: 99%
+> Confidence: 97%
 > Related request: `req_094_define_asset_production_specifications_and_prompt_packs_for_the_first_graphical_wave`
 > Related backlog: `item_343_define_asset_production_specifications_and_prompt_packs_for_the_first_graphical_wave`
 > Related task: `task_066_orchestrate_first_wave_asset_production_specifications_and_prompt_packs`
