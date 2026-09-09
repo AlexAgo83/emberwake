@@ -1,6 +1,9 @@
 ## spec_002_define_directional_entity_asset_production_pack - Define lateral entity asset production pack
 > Date: 2026-03-29
-> Status: Accepted
+> From version: 0.6.1
+> Status: Validated
+> Understanding: 100%
+> Confidence: 100%
 > Related request: `req_096_define_cardinal_directional_runtime_assets_for_player_and_hostile_entities`
 > Related backlog: `item_347_define_directional_entity_production_pack_and_generation_workflow`
 > Related task: `task_068_orchestrate_directional_entity_presentation_and_runtime_sprite_separation`

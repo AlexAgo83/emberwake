@@ -30,7 +30,7 @@
     "assets:skill-icons:generate": "node scripts/assets/generateSkillIconAssets.mjs",
     "assets:skill-icons:promote": "node scripts/assets/promoteSkillIconAssets.mjs",
     "assets:skill-icons:gallery": "node scripts/assets/buildSkillIconGallery.mjs",
-    "logics:lint": "python3 logics/skills/logics-doc-linter/scripts/logics_lint.py",
+    "logics:lint": "logics-manager lint",
     "release:ready": "node scripts/release/verifyReleaseReadiness.mjs",
     "release:ready:advisory": "node scripts/release/verifyReleaseReadiness.mjs --allow-non-release",
     "release:changelog:resolve": "node scripts/release/resolveReleaseChangelog.mjs",
@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@grifhinz/logics-manager": "^2.23.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@types/node": "^22.13.10",
