@@ -1,10 +1,10 @@
 ## task_075_orchestrate_per_biome_terrain_asset_variation_generation_promotion_and_validation_wave - Orchestrate per-biome terrain asset variation generation, promotion, and validation wave
 > From version: 0.7.2
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 97%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Graphics
 > Reminder: Update status/understanding/confidence/progress and dependencies/references when you edit this doc.
@@ -92,10 +92,17 @@ flowchart LR
 - `npm run typecheck`
 - `npm run test`
 - Manual in-game review: entity/pickup contrast on each new biome, biome-boundary continuity, world selection card distinctness
+- Finish workflow executed on 2026-09-09.
+- Linked backlog/request close verification passed.
 
 # Definition of Done (DoD)
-- [ ] Scope implemented and acceptance criteria covered.
-- [ ] Validation commands executed and results captured.
-- [ ] Linked request/backlog/task docs updated during completed waves and at closure.
-- [ ] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
-- [ ] Status is `Done` and progress is `100%`.
+- [x] Scope implemented and acceptance criteria covered.
+- [x] Validation commands executed and results captured.
+- [x] Linked request/backlog/task docs updated during completed waves and at closure.
+- [x] Each completed wave left a commit-ready checkpoint or an explicit exception is documented.
+- [x] Status is `Done` and progress is `100%`.
+
+# Report
+- Finished on 2026-09-09.
+- Linked backlog item(s): `item_405_define_per_biome_terrain_visual_direction_production_specs_and_prompt_packs`, `item_406_execute_openai_terrain_generation_curation_and_runtime_promotion_for_three_biomes`, `item_407_validate_promoted_terrain_assets_in_game_for_readability_and_biome_boundary_continuity`
+- Related request(s): `req_124_define_distinct_per_biome_terrain_asset_variation_for_emberplain_glowfen_and_obsidian`

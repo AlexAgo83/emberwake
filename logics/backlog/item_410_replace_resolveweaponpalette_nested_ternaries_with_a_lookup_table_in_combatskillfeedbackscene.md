@@ -1,10 +1,10 @@
 ## item_410_replace_resolveweaponpalette_nested_ternaries_with_a_lookup_table_in_combatskillfeedbackscene - Replace resolveWeaponPalette nested ternaries with a lookup table in CombatSkillFeedbackScene
 > From version: 0.7.2
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 99%
-> Progress: 0%
+> Progress: 100%
 > Complexity: Low
 > Theme: Delivery
 > Reminder: Update status/understanding/confidence/progress and linked task references when you edit this doc.
@@ -64,3 +64,6 @@ flowchart LR
 
 # References
 - `src/game/render/CombatSkillFeedbackScene.tsx`
+
+# Notes
+- Task `task_076_orchestrate_codebase_hygiene_wave_for_dependency_updates_component_size_policy_and_weapon_palette_refactor` was finished via `logics-manager flow finish task` on 2026-09-09.

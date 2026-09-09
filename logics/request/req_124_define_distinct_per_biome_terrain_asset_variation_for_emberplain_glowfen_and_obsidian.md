@@ -1,7 +1,7 @@
 ## req_124_define_distinct_per_biome_terrain_asset_variation_for_emberplain_glowfen_and_obsidian - Define distinct per-biome terrain asset variation for Emberplain, Glowfen, and Obsidian
 > From version: 0.7.2
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 100%
 > Confidence: 97%
 > Complexity: Medium
