@@ -1,6 +1,6 @@
 ## prod_008_active_passive_fusion_direction_for_emberwake - Active passive fusion direction for Emberwake
 > Date: 2026-03-23
-> Status: Draft
+> Status: Validated
 > Related request: `req_058_define_a_foundational_survivor_build_system_for_weapons_passives_fusions_and_run_progression`, `req_059_define_a_first_playable_techno_shinobi_build_content_wave`
 > Related backlog: `item_215_define_a_curated_first_wave_of_active_passive_fusions_and_readiness_rules`, `item_216_define_player_facing_build_choice_and_fusion_payoff_presentation_for_the_first_survivor_loop`, `item_217_define_targeted_validation_for_the_foundational_survivor_build_system`, `item_221_define_the_first_curated_techno_shinobi_fusion_delivery_and_readiness_rules`
 > Related task: `task_050_orchestrate_the_foundational_survivor_build_system_wave`, `task_051_orchestrate_the_first_playable_techno_shinobi_build_content_wave`

@@ -1,6 +1,6 @@
 ## prod_011_techno_shinobi_combat_skill_feedback_direction_for_first_playable_weapons - Techno-shinobi combat skill feedback direction for first playable weapons
 > Date: 2026-03-28
-> Status: Draft
+> Status: Validated
 > Related request: `req_061_define_a_first_combat_skill_feedback_wave_for_playable_weapons`
 > Related backlog: `TBD after request approval`
 > Related task: `TBD after request approval`

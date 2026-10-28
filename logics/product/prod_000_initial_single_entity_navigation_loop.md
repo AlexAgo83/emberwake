@@ -1,6 +1,6 @@
 ## prod_000_initial_single_entity_navigation_loop - Initial single-entity navigation loop
 > Date: 2026-03-17
-> Status: Draft
+> Status: Validated
 > Related request: `req_006_define_player_interactions_for_world_and_entities`
 > Related backlog: (none yet)
 > Related task: (none yet)

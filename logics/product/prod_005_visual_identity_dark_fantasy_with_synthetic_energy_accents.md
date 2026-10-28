@@ -1,6 +1,6 @@
 ## prod_005_visual_identity_dark_fantasy_with_synthetic_energy_accents - Visual identity dark fantasy with synthetic energy accents
 > Date: 2026-03-17
-> Status: Draft
+> Status: Validated
 > Related request: `req_005_define_asset_pipeline_for_map_and_entities`
 > Related backlog: (none yet)
 > Related task: (none yet)
