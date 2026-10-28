@@ -1,6 +1,6 @@
 ## prod_006_foundational_survivor_weapon_roster_for_emberwake - Foundational survivor weapon roster for Emberwake
 > Date: 2026-03-23
-> Status: Draft
+> Status: Validated
 > Related request: (none yet)
 > Related backlog: (none yet)
 > Related task: (none yet)

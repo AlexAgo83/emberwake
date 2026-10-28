@@ -1,6 +1,6 @@
 ## prod_004_emberwake_name_and_brand_direction - Emberwake name and brand direction
 > Date: 2026-03-17
-> Status: Draft
+> Status: Validated
 > Related request: `req_015_define_release_workflow_and_deployment_operations`
 > Related backlog: (none yet)
 > Related task: (none yet)

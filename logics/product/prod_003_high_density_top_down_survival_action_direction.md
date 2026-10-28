@@ -1,6 +1,6 @@
 ## prod_003_high_density_top_down_survival_action_direction - High-density top-down survival action direction
 > Date: 2026-03-17
-> Status: Draft
+> Status: Validated
 > Related request: `req_006_define_player_interactions_for_world_and_entities`
 > Related backlog: (none yet)
 > Related task: (none yet)

@@ -1,6 +1,6 @@
 ## prod_002_readable_world_traversal_and_presence - Readable world traversal and presence
 > Date: 2026-03-17
-> Status: Draft
+> Status: Validated
 > Related request: `req_014_define_world_occupancy_navigation_and_interaction_rules`, `req_051_define_a_shell_surface_cleanup_and_view_relative_movement_polish_wave`
 > Related backlog: (none yet)
 > Related task: (none yet)

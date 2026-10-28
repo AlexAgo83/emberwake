@@ -1,6 +1,6 @@
 ## prod_001_minimal_overlay_and_feedback_for_early_runtime - Minimal overlay and feedback for early runtime
 > Date: 2026-03-17
-> Status: Draft
+> Status: Validated
 > Related request: `req_011_define_ui_hud_and_overlay_system`
 > Related backlog: (none yet)
 > Related task: (none yet)

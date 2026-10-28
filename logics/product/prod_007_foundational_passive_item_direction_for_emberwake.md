@@ -1,6 +1,6 @@
 ## prod_007_foundational_passive_item_direction_for_emberwake - Foundational passive item direction for Emberwake
 > Date: 2026-03-23
-> Status: Draft
+> Status: Validated
 > Related request: (none yet)
 > Related backlog: (none yet)
 > Related task: (none yet)
