@@ -1,6 +1,6 @@
 ## prod_017_graphical_asset_direction_for_runtime_readability_and_shell_identity - Graphical asset direction for runtime readability and shell identity
 > Date: 2026-03-29
-> Status: Proposed
+> Status: Settled
 > Related request: `req_093_define_a_first_graphical_asset_integration_strategy_for_runtime_and_shell_surfaces`
 > Related backlog: `item_342_define_a_first_graphical_asset_integration_strategy_for_runtime_and_shell_surfaces`
 > Related task: `task_065_orchestrate_the_first_graphical_asset_integration_strategy_and_delivery_plan`
@@ -8,6 +8,8 @@
 > Reminder: Update status, linked refs, scope, decisions, success signals, and open questions when you edit this doc.
 
 # Overview
+Settled during operator cleanup on 2026-11-12: the runtime and shell asset direction is delivered through `src/assets/assetCatalog.ts`, `src/assets/assetResolver.ts`, and the authored runtime assets. Git commits `c3c89b2` and `4f97ef0` record integration and generated-asset promotion. Remaining questions are historical context; no further work is planned.
+
 Emberwake should start integrating authored graphical assets as a readability and identity program, not as a disconnected art dump. The first wave should make the runtime easier to parse in motion, then extend that visual language into shell surfaces that currently feel more placeholder than authored.
 
 ```mermaid

@@ -1,6 +1,6 @@
 ## adr_040_use_curated_active_passive_fusions_as_the_foundational_build_payoff_layer - Use curated active passive fusions as the foundational build payoff layer
 > Date: 2026-03-28
-> Status: Proposed
+> Status: Accepted
 > Drivers: Give the first build loop a strong payoff layer; keep evolutions readable and bounded; avoid combinatorial explosion while preserving genre-familiar mid-run spikes.
 > Related request: `req_058_define_a_foundational_survivor_build_system_for_weapons_passives_fusions_and_run_progression`
 > Related backlog: `item_215_define_a_curated_first_wave_of_active_passive_fusions_and_readiness_rules`
@@ -8,6 +8,8 @@
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview
+Accepted during operator cleanup on 2026-11-12: `fusionDefinitions` and `resolveFusionReadyState` in `games/emberwake/src/runtime/buildSystem.ts` implement curated pairings gated by maximum active-weapon level and passive ownership. Git commits `ba13ac2` and `0c2220c` record delivery. Follow-up text is historical context; no further work is planned.
+
 The first Emberwake build system should use a curated active + passive fusion layer as its main build payoff instead of a fully combinatorial evolution matrix.
 
 ```mermaid
