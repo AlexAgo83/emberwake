@@ -1,6 +1,6 @@
 ## adr_041_lock_the_first_playable_survivor_content_wave_to_one_character_and_a_small_curated_techno_shinobi_roster - Lock the first playable survivor content wave to one character and a small curated techno-shinobi roster
 > Date: 2026-03-28
-> Status: Proposed
+> Status: Accepted
 > Drivers: Convert the build-system direction into one concrete and testable first loop; stop content sprawl before tuning and UI are proven; keep the first release legible and theme-coherent.
 > Related request: `req_059_define_a_first_playable_techno_shinobi_build_content_wave`
 > Related backlog: `item_218_define_the_first_exact_techno_shinobi_active_roster_and_starter_weapon_delivery`, `item_219_define_the_first_exact_techno_shinobi_passive_roster_and_fusion_key_delivery`, `item_220_define_first_pass_level_up_pool_and_chest_rules_for_the_techno_shinobi_build_loop`, `item_221_define_the_first_curated_techno_shinobi_fusion_delivery_and_readiness_rules`, `item_222_define_player_facing_level_up_and_build_tracking_ui_for_the_first_techno_shinobi_loop`, `item_223_define_first_playable_tuning_and_validation_for_the_techno_shinobi_build_wave`
@@ -8,6 +8,8 @@
 > Reminder: Update status, linked refs, decision rationale, consequences, migration plan, and follow-up work when you edit this doc.
 
 # Overview
+Accepted during operator cleanup on 2026-11-12: git commit `ba13ac2` delivered the bounded first playable roster and progression UI; `games/emberwake/src/runtime/buildSystem.ts` retains the standardized Ash Lash starter and default unlocked content pools. This decision governs the delivered first wave, allowing the later expansion described below. Follow-up text is historical context; no further work is planned.
+
 The first playable survivor-like content wave in `Emberwake` should be locked to one starter character, one small curated techno-shinobi roster, and one intentionally bounded progression grammar before the project expands into multiple characters, broader unlock structures, or a larger content matrix.
 
 ```mermaid
